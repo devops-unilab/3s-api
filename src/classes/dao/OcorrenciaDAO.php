@@ -327,40 +327,38 @@ class OcorrenciaDAO extends DAO {
             $stmt->bindParam(":id", $id, PDO::PARAM_INT);
             $stmt->execute();
             $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            foreach ( $result as $linha ) {
-                $ocorrencia = new Ocorrencia();
-    	        $ocorrencia->setId( $linha ['id'] );
-    	        $ocorrencia->setIdLocal( $linha ['id_local'] );
-    	        $ocorrencia->setIdUsuarioCliente( $linha ['id_usuario_cliente'] );
-    	        $ocorrencia->setDescricao( $linha ['descricao'] );
-    	        $ocorrencia->setCampus( $linha ['campus'] );
-    	        $ocorrencia->setPatrimonio( $linha ['patrimonio'] );
-    	        $ocorrencia->setRamal( $linha ['ramal'] );
-    	        $ocorrencia->setLocal( $linha ['local'] );
-    	        $ocorrencia->setStatus( $linha ['status'] );
-    	        $ocorrencia->setSolucao( $linha ['solucao'] );
-    	        $ocorrencia->setPrioridade( $linha ['prioridade'] );
-    	        $ocorrencia->setAvaliacao( $linha ['avaliacao'] );
-    	        $ocorrencia->setEmail( $linha ['email'] );
-    	        $ocorrencia->setIdUsuarioAtendente( $linha ['id_usuario_atendente'] );
-    	        $ocorrencia->setIdUsuarioIndicado( $linha ['id_usuario_indicado'] );
-    	        $ocorrencia->setAnexo( $linha ['anexo'] );
-    	        $ocorrencia->setLocalSala( $linha ['local_sala'] );
-    			$ocorrencia->getAreaResponsavel()->setId( $linha ['id_area_responsavel_area_responsavel'] );
-    			$ocorrencia->getAreaResponsavel()->setNome( $linha ['nome_area_responsavel_area_responsavel'] );
-    			$ocorrencia->getAreaResponsavel()->setDescricao( $linha ['descricao_area_responsavel_area_responsavel'] );
-    			$ocorrencia->getAreaResponsavel()->setEmail( $linha ['email_area_responsavel_area_responsavel'] );
-    			$ocorrencia->getServico()->setId( $linha ['id_servico_servico'] );
-    			$ocorrencia->getServico()->setNome( $linha ['nome_servico_servico'] );
-    			$ocorrencia->getServico()->setDescricao( $linha ['descricao_servico_servico'] );
-    			$ocorrencia->getServico()->setTipoAtividade( $linha ['tipo_atividade_servico_servico'] );
-    			$ocorrencia->getServico()->setTempoSla( $linha ['tempo_sla_servico_servico'] );
-    			$ocorrencia->getServico()->setVisao( $linha ['visao_servico_servico'] );
-    			$ocorrencia->getServico()->setAreaResponsavel( $linha ['area_responsavel_servico_servico'] );
-    			$ocorrencia->getServico()->setGrupoServico( $linha ['grupo_servico_servico_servico'] );
-    			$lista [] = $ocorrencia;
-    			    
-            }
+            foreach ( $result as $linha ){
+		        $ocorrencia = new Ocorrencia();
+                $ocorrencia->setId( $linha ['id'] );
+                $ocorrencia->setIdLocal( $linha ['id_local'] );
+                $ocorrencia->setIdUsuarioCliente( $linha ['id_usuario_cliente'] );
+                $ocorrencia->setDescricao( $linha ['descricao'] );
+                $ocorrencia->setCampus( $linha ['campus'] );
+                $ocorrencia->setPatrimonio( $linha ['patrimonio'] );
+                $ocorrencia->setRamal( $linha ['ramal'] );
+                $ocorrencia->setLocal( $linha ['local'] );
+                $ocorrencia->setStatus( $linha ['status'] );
+                $ocorrencia->setSolucao( $linha ['solucao'] );
+                $ocorrencia->setPrioridade( $linha ['prioridade'] );
+                $ocorrencia->setAvaliacao( $linha ['avaliacao'] );
+                $ocorrencia->setEmail( $linha ['email'] );
+                $ocorrencia->setIdUsuarioAtendente( $linha ['id_usuario_atendente'] );
+                $ocorrencia->setIdUsuarioIndicado( $linha ['id_usuario_indicado'] );
+                $ocorrencia->setAnexo( $linha ['anexo'] );
+                $ocorrencia->setLocalSala( $linha ['local_sala'] );
+                $ocorrencia->getAreaResponsavel()->setId( $linha ['id_area_responsavel_area_responsavel'] );
+                $ocorrencia->getAreaResponsavel()->setNome( $linha ['nome_area_responsavel_area_responsavel'] );
+                $ocorrencia->getAreaResponsavel()->setDescricao( $linha ['descricao_area_responsavel_area_responsavel'] );
+                $ocorrencia->getAreaResponsavel()->setEmail( $linha ['email_area_responsavel_area_responsavel'] );
+                $ocorrencia->getServico()->setId( $linha ['id_servico_servico'] );
+                $ocorrencia->getServico()->setNome( $linha ['nome_servico_servico'] );
+                $ocorrencia->getServico()->setDescricao( $linha ['descricao_servico_servico'] );
+                $ocorrencia->getServico()->setTempoSla( $linha ['tempo_sla_servico_servico'] );
+                $ocorrencia->getServico()->setVisao( $linha ['visao_servico_servico'] );
+                $lista [] = $ocorrencia;
+
+	
+		    }
     			    
         } catch(PDOException $e) {
             echo $e->getMessage();
@@ -412,40 +410,38 @@ class OcorrenciaDAO extends DAO {
             $stmt->bindParam(":idLocal", $idLocal, PDO::PARAM_INT);
             $stmt->execute();
             $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            foreach ( $result as $linha ) {
-                $ocorrencia = new Ocorrencia();
-    	        $ocorrencia->setId( $linha ['id'] );
-    	        $ocorrencia->setIdLocal( $linha ['id_local'] );
-    	        $ocorrencia->setIdUsuarioCliente( $linha ['id_usuario_cliente'] );
-    	        $ocorrencia->setDescricao( $linha ['descricao'] );
-    	        $ocorrencia->setCampus( $linha ['campus'] );
-    	        $ocorrencia->setPatrimonio( $linha ['patrimonio'] );
-    	        $ocorrencia->setRamal( $linha ['ramal'] );
-    	        $ocorrencia->setLocal( $linha ['local'] );
-    	        $ocorrencia->setStatus( $linha ['status'] );
-    	        $ocorrencia->setSolucao( $linha ['solucao'] );
-    	        $ocorrencia->setPrioridade( $linha ['prioridade'] );
-    	        $ocorrencia->setAvaliacao( $linha ['avaliacao'] );
-    	        $ocorrencia->setEmail( $linha ['email'] );
-    	        $ocorrencia->setIdUsuarioAtendente( $linha ['id_usuario_atendente'] );
-    	        $ocorrencia->setIdUsuarioIndicado( $linha ['id_usuario_indicado'] );
-    	        $ocorrencia->setAnexo( $linha ['anexo'] );
-    	        $ocorrencia->setLocalSala( $linha ['local_sala'] );
-    			$ocorrencia->getAreaResponsavel()->setId( $linha ['id_area_responsavel_area_responsavel'] );
-    			$ocorrencia->getAreaResponsavel()->setNome( $linha ['nome_area_responsavel_area_responsavel'] );
-    			$ocorrencia->getAreaResponsavel()->setDescricao( $linha ['descricao_area_responsavel_area_responsavel'] );
-    			$ocorrencia->getAreaResponsavel()->setEmail( $linha ['email_area_responsavel_area_responsavel'] );
-    			$ocorrencia->getServico()->setId( $linha ['id_servico_servico'] );
-    			$ocorrencia->getServico()->setNome( $linha ['nome_servico_servico'] );
-    			$ocorrencia->getServico()->setDescricao( $linha ['descricao_servico_servico'] );
-    			$ocorrencia->getServico()->setTipoAtividade( $linha ['tipo_atividade_servico_servico'] );
-    			$ocorrencia->getServico()->setTempoSla( $linha ['tempo_sla_servico_servico'] );
-    			$ocorrencia->getServico()->setVisao( $linha ['visao_servico_servico'] );
-    			$ocorrencia->getServico()->setAreaResponsavel( $linha ['area_responsavel_servico_servico'] );
-    			$ocorrencia->getServico()->setGrupoServico( $linha ['grupo_servico_servico_servico'] );
-    			$lista [] = $ocorrencia;
-    			    
-            }
+            foreach ( $result as $linha ){
+		        $ocorrencia = new Ocorrencia();
+                $ocorrencia->setId( $linha ['id'] );
+                $ocorrencia->setIdLocal( $linha ['id_local'] );
+                $ocorrencia->setIdUsuarioCliente( $linha ['id_usuario_cliente'] );
+                $ocorrencia->setDescricao( $linha ['descricao'] );
+                $ocorrencia->setCampus( $linha ['campus'] );
+                $ocorrencia->setPatrimonio( $linha ['patrimonio'] );
+                $ocorrencia->setRamal( $linha ['ramal'] );
+                $ocorrencia->setLocal( $linha ['local'] );
+                $ocorrencia->setStatus( $linha ['status'] );
+                $ocorrencia->setSolucao( $linha ['solucao'] );
+                $ocorrencia->setPrioridade( $linha ['prioridade'] );
+                $ocorrencia->setAvaliacao( $linha ['avaliacao'] );
+                $ocorrencia->setEmail( $linha ['email'] );
+                $ocorrencia->setIdUsuarioAtendente( $linha ['id_usuario_atendente'] );
+                $ocorrencia->setIdUsuarioIndicado( $linha ['id_usuario_indicado'] );
+                $ocorrencia->setAnexo( $linha ['anexo'] );
+                $ocorrencia->setLocalSala( $linha ['local_sala'] );
+                $ocorrencia->getAreaResponsavel()->setId( $linha ['id_area_responsavel_area_responsavel'] );
+                $ocorrencia->getAreaResponsavel()->setNome( $linha ['nome_area_responsavel_area_responsavel'] );
+                $ocorrencia->getAreaResponsavel()->setDescricao( $linha ['descricao_area_responsavel_area_responsavel'] );
+                $ocorrencia->getAreaResponsavel()->setEmail( $linha ['email_area_responsavel_area_responsavel'] );
+                $ocorrencia->getServico()->setId( $linha ['id_servico_servico'] );
+                $ocorrencia->getServico()->setNome( $linha ['nome_servico_servico'] );
+                $ocorrencia->getServico()->setDescricao( $linha ['descricao_servico_servico'] );
+                $ocorrencia->getServico()->setTempoSla( $linha ['tempo_sla_servico_servico'] );
+                $ocorrencia->getServico()->setVisao( $linha ['visao_servico_servico'] );
+                $lista [] = $ocorrencia;
+
+	
+		    }
     			    
         } catch(PDOException $e) {
             echo $e->getMessage();
@@ -497,40 +493,38 @@ class OcorrenciaDAO extends DAO {
             $stmt->bindParam(":idUsuarioCliente", $idUsuarioCliente, PDO::PARAM_INT);
             $stmt->execute();
             $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            foreach ( $result as $linha ) {
-                $ocorrencia = new Ocorrencia();
-    	        $ocorrencia->setId( $linha ['id'] );
-    	        $ocorrencia->setIdLocal( $linha ['id_local'] );
-    	        $ocorrencia->setIdUsuarioCliente( $linha ['id_usuario_cliente'] );
-    	        $ocorrencia->setDescricao( $linha ['descricao'] );
-    	        $ocorrencia->setCampus( $linha ['campus'] );
-    	        $ocorrencia->setPatrimonio( $linha ['patrimonio'] );
-    	        $ocorrencia->setRamal( $linha ['ramal'] );
-    	        $ocorrencia->setLocal( $linha ['local'] );
-    	        $ocorrencia->setStatus( $linha ['status'] );
-    	        $ocorrencia->setSolucao( $linha ['solucao'] );
-    	        $ocorrencia->setPrioridade( $linha ['prioridade'] );
-    	        $ocorrencia->setAvaliacao( $linha ['avaliacao'] );
-    	        $ocorrencia->setEmail( $linha ['email'] );
-    	        $ocorrencia->setIdUsuarioAtendente( $linha ['id_usuario_atendente'] );
-    	        $ocorrencia->setIdUsuarioIndicado( $linha ['id_usuario_indicado'] );
-    	        $ocorrencia->setAnexo( $linha ['anexo'] );
-    	        $ocorrencia->setLocalSala( $linha ['local_sala'] );
-    			$ocorrencia->getAreaResponsavel()->setId( $linha ['id_area_responsavel_area_responsavel'] );
-    			$ocorrencia->getAreaResponsavel()->setNome( $linha ['nome_area_responsavel_area_responsavel'] );
-    			$ocorrencia->getAreaResponsavel()->setDescricao( $linha ['descricao_area_responsavel_area_responsavel'] );
-    			$ocorrencia->getAreaResponsavel()->setEmail( $linha ['email_area_responsavel_area_responsavel'] );
-    			$ocorrencia->getServico()->setId( $linha ['id_servico_servico'] );
-    			$ocorrencia->getServico()->setNome( $linha ['nome_servico_servico'] );
-    			$ocorrencia->getServico()->setDescricao( $linha ['descricao_servico_servico'] );
-    			$ocorrencia->getServico()->setTipoAtividade( $linha ['tipo_atividade_servico_servico'] );
-    			$ocorrencia->getServico()->setTempoSla( $linha ['tempo_sla_servico_servico'] );
-    			$ocorrencia->getServico()->setVisao( $linha ['visao_servico_servico'] );
-    			$ocorrencia->getServico()->setAreaResponsavel( $linha ['area_responsavel_servico_servico'] );
-    			$ocorrencia->getServico()->setGrupoServico( $linha ['grupo_servico_servico_servico'] );
-    			$lista [] = $ocorrencia;
-    			    
-            }
+            foreach ( $result as $linha ){
+		        $ocorrencia = new Ocorrencia();
+                $ocorrencia->setId( $linha ['id'] );
+                $ocorrencia->setIdLocal( $linha ['id_local'] );
+                $ocorrencia->setIdUsuarioCliente( $linha ['id_usuario_cliente'] );
+                $ocorrencia->setDescricao( $linha ['descricao'] );
+                $ocorrencia->setCampus( $linha ['campus'] );
+                $ocorrencia->setPatrimonio( $linha ['patrimonio'] );
+                $ocorrencia->setRamal( $linha ['ramal'] );
+                $ocorrencia->setLocal( $linha ['local'] );
+                $ocorrencia->setStatus( $linha ['status'] );
+                $ocorrencia->setSolucao( $linha ['solucao'] );
+                $ocorrencia->setPrioridade( $linha ['prioridade'] );
+                $ocorrencia->setAvaliacao( $linha ['avaliacao'] );
+                $ocorrencia->setEmail( $linha ['email'] );
+                $ocorrencia->setIdUsuarioAtendente( $linha ['id_usuario_atendente'] );
+                $ocorrencia->setIdUsuarioIndicado( $linha ['id_usuario_indicado'] );
+                $ocorrencia->setAnexo( $linha ['anexo'] );
+                $ocorrencia->setLocalSala( $linha ['local_sala'] );
+                $ocorrencia->getAreaResponsavel()->setId( $linha ['id_area_responsavel_area_responsavel'] );
+                $ocorrencia->getAreaResponsavel()->setNome( $linha ['nome_area_responsavel_area_responsavel'] );
+                $ocorrencia->getAreaResponsavel()->setDescricao( $linha ['descricao_area_responsavel_area_responsavel'] );
+                $ocorrencia->getAreaResponsavel()->setEmail( $linha ['email_area_responsavel_area_responsavel'] );
+                $ocorrencia->getServico()->setId( $linha ['id_servico_servico'] );
+                $ocorrencia->getServico()->setNome( $linha ['nome_servico_servico'] );
+                $ocorrencia->getServico()->setDescricao( $linha ['descricao_servico_servico'] );
+                $ocorrencia->getServico()->setTempoSla( $linha ['tempo_sla_servico_servico'] );
+                $ocorrencia->getServico()->setVisao( $linha ['visao_servico_servico'] );
+                $lista [] = $ocorrencia;
+
+	
+		    }
     			    
         } catch(PDOException $e) {
             echo $e->getMessage();
@@ -582,40 +576,38 @@ class OcorrenciaDAO extends DAO {
             $stmt->bindParam(":descricao", $descricao, PDO::PARAM_STR);
             $stmt->execute();
             $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            foreach ( $result as $linha ) {
-                $ocorrencia = new Ocorrencia();
-    	        $ocorrencia->setId( $linha ['id'] );
-    	        $ocorrencia->setIdLocal( $linha ['id_local'] );
-    	        $ocorrencia->setIdUsuarioCliente( $linha ['id_usuario_cliente'] );
-    	        $ocorrencia->setDescricao( $linha ['descricao'] );
-    	        $ocorrencia->setCampus( $linha ['campus'] );
-    	        $ocorrencia->setPatrimonio( $linha ['patrimonio'] );
-    	        $ocorrencia->setRamal( $linha ['ramal'] );
-    	        $ocorrencia->setLocal( $linha ['local'] );
-    	        $ocorrencia->setStatus( $linha ['status'] );
-    	        $ocorrencia->setSolucao( $linha ['solucao'] );
-    	        $ocorrencia->setPrioridade( $linha ['prioridade'] );
-    	        $ocorrencia->setAvaliacao( $linha ['avaliacao'] );
-    	        $ocorrencia->setEmail( $linha ['email'] );
-    	        $ocorrencia->setIdUsuarioAtendente( $linha ['id_usuario_atendente'] );
-    	        $ocorrencia->setIdUsuarioIndicado( $linha ['id_usuario_indicado'] );
-    	        $ocorrencia->setAnexo( $linha ['anexo'] );
-    	        $ocorrencia->setLocalSala( $linha ['local_sala'] );
-    			$ocorrencia->getAreaResponsavel()->setId( $linha ['id_area_responsavel_area_responsavel'] );
-    			$ocorrencia->getAreaResponsavel()->setNome( $linha ['nome_area_responsavel_area_responsavel'] );
-    			$ocorrencia->getAreaResponsavel()->setDescricao( $linha ['descricao_area_responsavel_area_responsavel'] );
-    			$ocorrencia->getAreaResponsavel()->setEmail( $linha ['email_area_responsavel_area_responsavel'] );
-    			$ocorrencia->getServico()->setId( $linha ['id_servico_servico'] );
-    			$ocorrencia->getServico()->setNome( $linha ['nome_servico_servico'] );
-    			$ocorrencia->getServico()->setDescricao( $linha ['descricao_servico_servico'] );
-    			$ocorrencia->getServico()->setTipoAtividade( $linha ['tipo_atividade_servico_servico'] );
-    			$ocorrencia->getServico()->setTempoSla( $linha ['tempo_sla_servico_servico'] );
-    			$ocorrencia->getServico()->setVisao( $linha ['visao_servico_servico'] );
-    			$ocorrencia->getServico()->setAreaResponsavel( $linha ['area_responsavel_servico_servico'] );
-    			$ocorrencia->getServico()->setGrupoServico( $linha ['grupo_servico_servico_servico'] );
-    			$lista [] = $ocorrencia;
-    			    
-            }
+            foreach ( $result as $linha ){
+		        $ocorrencia = new Ocorrencia();
+                $ocorrencia->setId( $linha ['id'] );
+                $ocorrencia->setIdLocal( $linha ['id_local'] );
+                $ocorrencia->setIdUsuarioCliente( $linha ['id_usuario_cliente'] );
+                $ocorrencia->setDescricao( $linha ['descricao'] );
+                $ocorrencia->setCampus( $linha ['campus'] );
+                $ocorrencia->setPatrimonio( $linha ['patrimonio'] );
+                $ocorrencia->setRamal( $linha ['ramal'] );
+                $ocorrencia->setLocal( $linha ['local'] );
+                $ocorrencia->setStatus( $linha ['status'] );
+                $ocorrencia->setSolucao( $linha ['solucao'] );
+                $ocorrencia->setPrioridade( $linha ['prioridade'] );
+                $ocorrencia->setAvaliacao( $linha ['avaliacao'] );
+                $ocorrencia->setEmail( $linha ['email'] );
+                $ocorrencia->setIdUsuarioAtendente( $linha ['id_usuario_atendente'] );
+                $ocorrencia->setIdUsuarioIndicado( $linha ['id_usuario_indicado'] );
+                $ocorrencia->setAnexo( $linha ['anexo'] );
+                $ocorrencia->setLocalSala( $linha ['local_sala'] );
+                $ocorrencia->getAreaResponsavel()->setId( $linha ['id_area_responsavel_area_responsavel'] );
+                $ocorrencia->getAreaResponsavel()->setNome( $linha ['nome_area_responsavel_area_responsavel'] );
+                $ocorrencia->getAreaResponsavel()->setDescricao( $linha ['descricao_area_responsavel_area_responsavel'] );
+                $ocorrencia->getAreaResponsavel()->setEmail( $linha ['email_area_responsavel_area_responsavel'] );
+                $ocorrencia->getServico()->setId( $linha ['id_servico_servico'] );
+                $ocorrencia->getServico()->setNome( $linha ['nome_servico_servico'] );
+                $ocorrencia->getServico()->setDescricao( $linha ['descricao_servico_servico'] );
+                $ocorrencia->getServico()->setTempoSla( $linha ['tempo_sla_servico_servico'] );
+                $ocorrencia->getServico()->setVisao( $linha ['visao_servico_servico'] );
+                $lista [] = $ocorrencia;
+
+	
+		    }
     			    
         } catch(PDOException $e) {
             echo $e->getMessage();
@@ -667,40 +659,38 @@ class OcorrenciaDAO extends DAO {
             $stmt->bindParam(":campus", $campus, PDO::PARAM_STR);
             $stmt->execute();
             $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            foreach ( $result as $linha ) {
-                $ocorrencia = new Ocorrencia();
-    	        $ocorrencia->setId( $linha ['id'] );
-    	        $ocorrencia->setIdLocal( $linha ['id_local'] );
-    	        $ocorrencia->setIdUsuarioCliente( $linha ['id_usuario_cliente'] );
-    	        $ocorrencia->setDescricao( $linha ['descricao'] );
-    	        $ocorrencia->setCampus( $linha ['campus'] );
-    	        $ocorrencia->setPatrimonio( $linha ['patrimonio'] );
-    	        $ocorrencia->setRamal( $linha ['ramal'] );
-    	        $ocorrencia->setLocal( $linha ['local'] );
-    	        $ocorrencia->setStatus( $linha ['status'] );
-    	        $ocorrencia->setSolucao( $linha ['solucao'] );
-    	        $ocorrencia->setPrioridade( $linha ['prioridade'] );
-    	        $ocorrencia->setAvaliacao( $linha ['avaliacao'] );
-    	        $ocorrencia->setEmail( $linha ['email'] );
-    	        $ocorrencia->setIdUsuarioAtendente( $linha ['id_usuario_atendente'] );
-    	        $ocorrencia->setIdUsuarioIndicado( $linha ['id_usuario_indicado'] );
-    	        $ocorrencia->setAnexo( $linha ['anexo'] );
-    	        $ocorrencia->setLocalSala( $linha ['local_sala'] );
-    			$ocorrencia->getAreaResponsavel()->setId( $linha ['id_area_responsavel_area_responsavel'] );
-    			$ocorrencia->getAreaResponsavel()->setNome( $linha ['nome_area_responsavel_area_responsavel'] );
-    			$ocorrencia->getAreaResponsavel()->setDescricao( $linha ['descricao_area_responsavel_area_responsavel'] );
-    			$ocorrencia->getAreaResponsavel()->setEmail( $linha ['email_area_responsavel_area_responsavel'] );
-    			$ocorrencia->getServico()->setId( $linha ['id_servico_servico'] );
-    			$ocorrencia->getServico()->setNome( $linha ['nome_servico_servico'] );
-    			$ocorrencia->getServico()->setDescricao( $linha ['descricao_servico_servico'] );
-    			$ocorrencia->getServico()->setTipoAtividade( $linha ['tipo_atividade_servico_servico'] );
-    			$ocorrencia->getServico()->setTempoSla( $linha ['tempo_sla_servico_servico'] );
-    			$ocorrencia->getServico()->setVisao( $linha ['visao_servico_servico'] );
-    			$ocorrencia->getServico()->setAreaResponsavel( $linha ['area_responsavel_servico_servico'] );
-    			$ocorrencia->getServico()->setGrupoServico( $linha ['grupo_servico_servico_servico'] );
-    			$lista [] = $ocorrencia;
-    			    
-            }
+            foreach ( $result as $linha ){
+		        $ocorrencia = new Ocorrencia();
+                $ocorrencia->setId( $linha ['id'] );
+                $ocorrencia->setIdLocal( $linha ['id_local'] );
+                $ocorrencia->setIdUsuarioCliente( $linha ['id_usuario_cliente'] );
+                $ocorrencia->setDescricao( $linha ['descricao'] );
+                $ocorrencia->setCampus( $linha ['campus'] );
+                $ocorrencia->setPatrimonio( $linha ['patrimonio'] );
+                $ocorrencia->setRamal( $linha ['ramal'] );
+                $ocorrencia->setLocal( $linha ['local'] );
+                $ocorrencia->setStatus( $linha ['status'] );
+                $ocorrencia->setSolucao( $linha ['solucao'] );
+                $ocorrencia->setPrioridade( $linha ['prioridade'] );
+                $ocorrencia->setAvaliacao( $linha ['avaliacao'] );
+                $ocorrencia->setEmail( $linha ['email'] );
+                $ocorrencia->setIdUsuarioAtendente( $linha ['id_usuario_atendente'] );
+                $ocorrencia->setIdUsuarioIndicado( $linha ['id_usuario_indicado'] );
+                $ocorrencia->setAnexo( $linha ['anexo'] );
+                $ocorrencia->setLocalSala( $linha ['local_sala'] );
+                $ocorrencia->getAreaResponsavel()->setId( $linha ['id_area_responsavel_area_responsavel'] );
+                $ocorrencia->getAreaResponsavel()->setNome( $linha ['nome_area_responsavel_area_responsavel'] );
+                $ocorrencia->getAreaResponsavel()->setDescricao( $linha ['descricao_area_responsavel_area_responsavel'] );
+                $ocorrencia->getAreaResponsavel()->setEmail( $linha ['email_area_responsavel_area_responsavel'] );
+                $ocorrencia->getServico()->setId( $linha ['id_servico_servico'] );
+                $ocorrencia->getServico()->setNome( $linha ['nome_servico_servico'] );
+                $ocorrencia->getServico()->setDescricao( $linha ['descricao_servico_servico'] );
+                $ocorrencia->getServico()->setTempoSla( $linha ['tempo_sla_servico_servico'] );
+                $ocorrencia->getServico()->setVisao( $linha ['visao_servico_servico'] );
+                $lista [] = $ocorrencia;
+
+	
+		    }
     			    
         } catch(PDOException $e) {
             echo $e->getMessage();
@@ -752,40 +742,38 @@ class OcorrenciaDAO extends DAO {
             $stmt->bindParam(":patrimonio", $patrimonio, PDO::PARAM_STR);
             $stmt->execute();
             $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            foreach ( $result as $linha ) {
-                $ocorrencia = new Ocorrencia();
-    	        $ocorrencia->setId( $linha ['id'] );
-    	        $ocorrencia->setIdLocal( $linha ['id_local'] );
-    	        $ocorrencia->setIdUsuarioCliente( $linha ['id_usuario_cliente'] );
-    	        $ocorrencia->setDescricao( $linha ['descricao'] );
-    	        $ocorrencia->setCampus( $linha ['campus'] );
-    	        $ocorrencia->setPatrimonio( $linha ['patrimonio'] );
-    	        $ocorrencia->setRamal( $linha ['ramal'] );
-    	        $ocorrencia->setLocal( $linha ['local'] );
-    	        $ocorrencia->setStatus( $linha ['status'] );
-    	        $ocorrencia->setSolucao( $linha ['solucao'] );
-    	        $ocorrencia->setPrioridade( $linha ['prioridade'] );
-    	        $ocorrencia->setAvaliacao( $linha ['avaliacao'] );
-    	        $ocorrencia->setEmail( $linha ['email'] );
-    	        $ocorrencia->setIdUsuarioAtendente( $linha ['id_usuario_atendente'] );
-    	        $ocorrencia->setIdUsuarioIndicado( $linha ['id_usuario_indicado'] );
-    	        $ocorrencia->setAnexo( $linha ['anexo'] );
-    	        $ocorrencia->setLocalSala( $linha ['local_sala'] );
-    			$ocorrencia->getAreaResponsavel()->setId( $linha ['id_area_responsavel_area_responsavel'] );
-    			$ocorrencia->getAreaResponsavel()->setNome( $linha ['nome_area_responsavel_area_responsavel'] );
-    			$ocorrencia->getAreaResponsavel()->setDescricao( $linha ['descricao_area_responsavel_area_responsavel'] );
-    			$ocorrencia->getAreaResponsavel()->setEmail( $linha ['email_area_responsavel_area_responsavel'] );
-    			$ocorrencia->getServico()->setId( $linha ['id_servico_servico'] );
-    			$ocorrencia->getServico()->setNome( $linha ['nome_servico_servico'] );
-    			$ocorrencia->getServico()->setDescricao( $linha ['descricao_servico_servico'] );
-    			$ocorrencia->getServico()->setTipoAtividade( $linha ['tipo_atividade_servico_servico'] );
-    			$ocorrencia->getServico()->setTempoSla( $linha ['tempo_sla_servico_servico'] );
-    			$ocorrencia->getServico()->setVisao( $linha ['visao_servico_servico'] );
-    			$ocorrencia->getServico()->setAreaResponsavel( $linha ['area_responsavel_servico_servico'] );
-    			$ocorrencia->getServico()->setGrupoServico( $linha ['grupo_servico_servico_servico'] );
-    			$lista [] = $ocorrencia;
-    			    
-            }
+            foreach ( $result as $linha ){
+		        $ocorrencia = new Ocorrencia();
+                $ocorrencia->setId( $linha ['id'] );
+                $ocorrencia->setIdLocal( $linha ['id_local'] );
+                $ocorrencia->setIdUsuarioCliente( $linha ['id_usuario_cliente'] );
+                $ocorrencia->setDescricao( $linha ['descricao'] );
+                $ocorrencia->setCampus( $linha ['campus'] );
+                $ocorrencia->setPatrimonio( $linha ['patrimonio'] );
+                $ocorrencia->setRamal( $linha ['ramal'] );
+                $ocorrencia->setLocal( $linha ['local'] );
+                $ocorrencia->setStatus( $linha ['status'] );
+                $ocorrencia->setSolucao( $linha ['solucao'] );
+                $ocorrencia->setPrioridade( $linha ['prioridade'] );
+                $ocorrencia->setAvaliacao( $linha ['avaliacao'] );
+                $ocorrencia->setEmail( $linha ['email'] );
+                $ocorrencia->setIdUsuarioAtendente( $linha ['id_usuario_atendente'] );
+                $ocorrencia->setIdUsuarioIndicado( $linha ['id_usuario_indicado'] );
+                $ocorrencia->setAnexo( $linha ['anexo'] );
+                $ocorrencia->setLocalSala( $linha ['local_sala'] );
+                $ocorrencia->getAreaResponsavel()->setId( $linha ['id_area_responsavel_area_responsavel'] );
+                $ocorrencia->getAreaResponsavel()->setNome( $linha ['nome_area_responsavel_area_responsavel'] );
+                $ocorrencia->getAreaResponsavel()->setDescricao( $linha ['descricao_area_responsavel_area_responsavel'] );
+                $ocorrencia->getAreaResponsavel()->setEmail( $linha ['email_area_responsavel_area_responsavel'] );
+                $ocorrencia->getServico()->setId( $linha ['id_servico_servico'] );
+                $ocorrencia->getServico()->setNome( $linha ['nome_servico_servico'] );
+                $ocorrencia->getServico()->setDescricao( $linha ['descricao_servico_servico'] );
+                $ocorrencia->getServico()->setTempoSla( $linha ['tempo_sla_servico_servico'] );
+                $ocorrencia->getServico()->setVisao( $linha ['visao_servico_servico'] );
+                $lista [] = $ocorrencia;
+
+	
+		    }
     			    
         } catch(PDOException $e) {
             echo $e->getMessage();
@@ -837,40 +825,38 @@ class OcorrenciaDAO extends DAO {
             $stmt->bindParam(":ramal", $ramal, PDO::PARAM_STR);
             $stmt->execute();
             $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            foreach ( $result as $linha ) {
-                $ocorrencia = new Ocorrencia();
-    	        $ocorrencia->setId( $linha ['id'] );
-    	        $ocorrencia->setIdLocal( $linha ['id_local'] );
-    	        $ocorrencia->setIdUsuarioCliente( $linha ['id_usuario_cliente'] );
-    	        $ocorrencia->setDescricao( $linha ['descricao'] );
-    	        $ocorrencia->setCampus( $linha ['campus'] );
-    	        $ocorrencia->setPatrimonio( $linha ['patrimonio'] );
-    	        $ocorrencia->setRamal( $linha ['ramal'] );
-    	        $ocorrencia->setLocal( $linha ['local'] );
-    	        $ocorrencia->setStatus( $linha ['status'] );
-    	        $ocorrencia->setSolucao( $linha ['solucao'] );
-    	        $ocorrencia->setPrioridade( $linha ['prioridade'] );
-    	        $ocorrencia->setAvaliacao( $linha ['avaliacao'] );
-    	        $ocorrencia->setEmail( $linha ['email'] );
-    	        $ocorrencia->setIdUsuarioAtendente( $linha ['id_usuario_atendente'] );
-    	        $ocorrencia->setIdUsuarioIndicado( $linha ['id_usuario_indicado'] );
-    	        $ocorrencia->setAnexo( $linha ['anexo'] );
-    	        $ocorrencia->setLocalSala( $linha ['local_sala'] );
-    			$ocorrencia->getAreaResponsavel()->setId( $linha ['id_area_responsavel_area_responsavel'] );
-    			$ocorrencia->getAreaResponsavel()->setNome( $linha ['nome_area_responsavel_area_responsavel'] );
-    			$ocorrencia->getAreaResponsavel()->setDescricao( $linha ['descricao_area_responsavel_area_responsavel'] );
-    			$ocorrencia->getAreaResponsavel()->setEmail( $linha ['email_area_responsavel_area_responsavel'] );
-    			$ocorrencia->getServico()->setId( $linha ['id_servico_servico'] );
-    			$ocorrencia->getServico()->setNome( $linha ['nome_servico_servico'] );
-    			$ocorrencia->getServico()->setDescricao( $linha ['descricao_servico_servico'] );
-    			$ocorrencia->getServico()->setTipoAtividade( $linha ['tipo_atividade_servico_servico'] );
-    			$ocorrencia->getServico()->setTempoSla( $linha ['tempo_sla_servico_servico'] );
-    			$ocorrencia->getServico()->setVisao( $linha ['visao_servico_servico'] );
-    			$ocorrencia->getServico()->setAreaResponsavel( $linha ['area_responsavel_servico_servico'] );
-    			$ocorrencia->getServico()->setGrupoServico( $linha ['grupo_servico_servico_servico'] );
-    			$lista [] = $ocorrencia;
-    			    
-            }
+            foreach ( $result as $linha ){
+		        $ocorrencia = new Ocorrencia();
+                $ocorrencia->setId( $linha ['id'] );
+                $ocorrencia->setIdLocal( $linha ['id_local'] );
+                $ocorrencia->setIdUsuarioCliente( $linha ['id_usuario_cliente'] );
+                $ocorrencia->setDescricao( $linha ['descricao'] );
+                $ocorrencia->setCampus( $linha ['campus'] );
+                $ocorrencia->setPatrimonio( $linha ['patrimonio'] );
+                $ocorrencia->setRamal( $linha ['ramal'] );
+                $ocorrencia->setLocal( $linha ['local'] );
+                $ocorrencia->setStatus( $linha ['status'] );
+                $ocorrencia->setSolucao( $linha ['solucao'] );
+                $ocorrencia->setPrioridade( $linha ['prioridade'] );
+                $ocorrencia->setAvaliacao( $linha ['avaliacao'] );
+                $ocorrencia->setEmail( $linha ['email'] );
+                $ocorrencia->setIdUsuarioAtendente( $linha ['id_usuario_atendente'] );
+                $ocorrencia->setIdUsuarioIndicado( $linha ['id_usuario_indicado'] );
+                $ocorrencia->setAnexo( $linha ['anexo'] );
+                $ocorrencia->setLocalSala( $linha ['local_sala'] );
+                $ocorrencia->getAreaResponsavel()->setId( $linha ['id_area_responsavel_area_responsavel'] );
+                $ocorrencia->getAreaResponsavel()->setNome( $linha ['nome_area_responsavel_area_responsavel'] );
+                $ocorrencia->getAreaResponsavel()->setDescricao( $linha ['descricao_area_responsavel_area_responsavel'] );
+                $ocorrencia->getAreaResponsavel()->setEmail( $linha ['email_area_responsavel_area_responsavel'] );
+                $ocorrencia->getServico()->setId( $linha ['id_servico_servico'] );
+                $ocorrencia->getServico()->setNome( $linha ['nome_servico_servico'] );
+                $ocorrencia->getServico()->setDescricao( $linha ['descricao_servico_servico'] );
+                $ocorrencia->getServico()->setTempoSla( $linha ['tempo_sla_servico_servico'] );
+                $ocorrencia->getServico()->setVisao( $linha ['visao_servico_servico'] );
+                $lista [] = $ocorrencia;
+
+	
+		    }
     			    
         } catch(PDOException $e) {
             echo $e->getMessage();
@@ -922,40 +908,38 @@ class OcorrenciaDAO extends DAO {
             $stmt->bindParam(":local", $local, PDO::PARAM_STR);
             $stmt->execute();
             $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            foreach ( $result as $linha ) {
-                $ocorrencia = new Ocorrencia();
-    	        $ocorrencia->setId( $linha ['id'] );
-    	        $ocorrencia->setIdLocal( $linha ['id_local'] );
-    	        $ocorrencia->setIdUsuarioCliente( $linha ['id_usuario_cliente'] );
-    	        $ocorrencia->setDescricao( $linha ['descricao'] );
-    	        $ocorrencia->setCampus( $linha ['campus'] );
-    	        $ocorrencia->setPatrimonio( $linha ['patrimonio'] );
-    	        $ocorrencia->setRamal( $linha ['ramal'] );
-    	        $ocorrencia->setLocal( $linha ['local'] );
-    	        $ocorrencia->setStatus( $linha ['status'] );
-    	        $ocorrencia->setSolucao( $linha ['solucao'] );
-    	        $ocorrencia->setPrioridade( $linha ['prioridade'] );
-    	        $ocorrencia->setAvaliacao( $linha ['avaliacao'] );
-    	        $ocorrencia->setEmail( $linha ['email'] );
-    	        $ocorrencia->setIdUsuarioAtendente( $linha ['id_usuario_atendente'] );
-    	        $ocorrencia->setIdUsuarioIndicado( $linha ['id_usuario_indicado'] );
-    	        $ocorrencia->setAnexo( $linha ['anexo'] );
-    	        $ocorrencia->setLocalSala( $linha ['local_sala'] );
-    			$ocorrencia->getAreaResponsavel()->setId( $linha ['id_area_responsavel_area_responsavel'] );
-    			$ocorrencia->getAreaResponsavel()->setNome( $linha ['nome_area_responsavel_area_responsavel'] );
-    			$ocorrencia->getAreaResponsavel()->setDescricao( $linha ['descricao_area_responsavel_area_responsavel'] );
-    			$ocorrencia->getAreaResponsavel()->setEmail( $linha ['email_area_responsavel_area_responsavel'] );
-    			$ocorrencia->getServico()->setId( $linha ['id_servico_servico'] );
-    			$ocorrencia->getServico()->setNome( $linha ['nome_servico_servico'] );
-    			$ocorrencia->getServico()->setDescricao( $linha ['descricao_servico_servico'] );
-    			$ocorrencia->getServico()->setTipoAtividade( $linha ['tipo_atividade_servico_servico'] );
-    			$ocorrencia->getServico()->setTempoSla( $linha ['tempo_sla_servico_servico'] );
-    			$ocorrencia->getServico()->setVisao( $linha ['visao_servico_servico'] );
-    			$ocorrencia->getServico()->setAreaResponsavel( $linha ['area_responsavel_servico_servico'] );
-    			$ocorrencia->getServico()->setGrupoServico( $linha ['grupo_servico_servico_servico'] );
-    			$lista [] = $ocorrencia;
-    			    
-            }
+            foreach ( $result as $linha ){
+		        $ocorrencia = new Ocorrencia();
+                $ocorrencia->setId( $linha ['id'] );
+                $ocorrencia->setIdLocal( $linha ['id_local'] );
+                $ocorrencia->setIdUsuarioCliente( $linha ['id_usuario_cliente'] );
+                $ocorrencia->setDescricao( $linha ['descricao'] );
+                $ocorrencia->setCampus( $linha ['campus'] );
+                $ocorrencia->setPatrimonio( $linha ['patrimonio'] );
+                $ocorrencia->setRamal( $linha ['ramal'] );
+                $ocorrencia->setLocal( $linha ['local'] );
+                $ocorrencia->setStatus( $linha ['status'] );
+                $ocorrencia->setSolucao( $linha ['solucao'] );
+                $ocorrencia->setPrioridade( $linha ['prioridade'] );
+                $ocorrencia->setAvaliacao( $linha ['avaliacao'] );
+                $ocorrencia->setEmail( $linha ['email'] );
+                $ocorrencia->setIdUsuarioAtendente( $linha ['id_usuario_atendente'] );
+                $ocorrencia->setIdUsuarioIndicado( $linha ['id_usuario_indicado'] );
+                $ocorrencia->setAnexo( $linha ['anexo'] );
+                $ocorrencia->setLocalSala( $linha ['local_sala'] );
+                $ocorrencia->getAreaResponsavel()->setId( $linha ['id_area_responsavel_area_responsavel'] );
+                $ocorrencia->getAreaResponsavel()->setNome( $linha ['nome_area_responsavel_area_responsavel'] );
+                $ocorrencia->getAreaResponsavel()->setDescricao( $linha ['descricao_area_responsavel_area_responsavel'] );
+                $ocorrencia->getAreaResponsavel()->setEmail( $linha ['email_area_responsavel_area_responsavel'] );
+                $ocorrencia->getServico()->setId( $linha ['id_servico_servico'] );
+                $ocorrencia->getServico()->setNome( $linha ['nome_servico_servico'] );
+                $ocorrencia->getServico()->setDescricao( $linha ['descricao_servico_servico'] );
+                $ocorrencia->getServico()->setTempoSla( $linha ['tempo_sla_servico_servico'] );
+                $ocorrencia->getServico()->setVisao( $linha ['visao_servico_servico'] );
+                $lista [] = $ocorrencia;
+
+	
+		    }
     			    
         } catch(PDOException $e) {
             echo $e->getMessage();
@@ -1007,40 +991,38 @@ class OcorrenciaDAO extends DAO {
             $stmt->bindParam(":status", $status, PDO::PARAM_STR);
             $stmt->execute();
             $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            foreach ( $result as $linha ) {
-                $ocorrencia = new Ocorrencia();
-    	        $ocorrencia->setId( $linha ['id'] );
-    	        $ocorrencia->setIdLocal( $linha ['id_local'] );
-    	        $ocorrencia->setIdUsuarioCliente( $linha ['id_usuario_cliente'] );
-    	        $ocorrencia->setDescricao( $linha ['descricao'] );
-    	        $ocorrencia->setCampus( $linha ['campus'] );
-    	        $ocorrencia->setPatrimonio( $linha ['patrimonio'] );
-    	        $ocorrencia->setRamal( $linha ['ramal'] );
-    	        $ocorrencia->setLocal( $linha ['local'] );
-    	        $ocorrencia->setStatus( $linha ['status'] );
-    	        $ocorrencia->setSolucao( $linha ['solucao'] );
-    	        $ocorrencia->setPrioridade( $linha ['prioridade'] );
-    	        $ocorrencia->setAvaliacao( $linha ['avaliacao'] );
-    	        $ocorrencia->setEmail( $linha ['email'] );
-    	        $ocorrencia->setIdUsuarioAtendente( $linha ['id_usuario_atendente'] );
-    	        $ocorrencia->setIdUsuarioIndicado( $linha ['id_usuario_indicado'] );
-    	        $ocorrencia->setAnexo( $linha ['anexo'] );
-    	        $ocorrencia->setLocalSala( $linha ['local_sala'] );
-    			$ocorrencia->getAreaResponsavel()->setId( $linha ['id_area_responsavel_area_responsavel'] );
-    			$ocorrencia->getAreaResponsavel()->setNome( $linha ['nome_area_responsavel_area_responsavel'] );
-    			$ocorrencia->getAreaResponsavel()->setDescricao( $linha ['descricao_area_responsavel_area_responsavel'] );
-    			$ocorrencia->getAreaResponsavel()->setEmail( $linha ['email_area_responsavel_area_responsavel'] );
-    			$ocorrencia->getServico()->setId( $linha ['id_servico_servico'] );
-    			$ocorrencia->getServico()->setNome( $linha ['nome_servico_servico'] );
-    			$ocorrencia->getServico()->setDescricao( $linha ['descricao_servico_servico'] );
-    			
-    			$ocorrencia->getServico()->setTempoSla( $linha ['tempo_sla_servico_servico'] );
-    			$ocorrencia->getServico()->setVisao( $linha ['visao_servico_servico'] );
-    			
-    			
-    			$lista [] = $ocorrencia;
-    			    
-            }
+            foreach ( $result as $linha ){
+		        $ocorrencia = new Ocorrencia();
+                $ocorrencia->setId( $linha ['id'] );
+                $ocorrencia->setIdLocal( $linha ['id_local'] );
+                $ocorrencia->setIdUsuarioCliente( $linha ['id_usuario_cliente'] );
+                $ocorrencia->setDescricao( $linha ['descricao'] );
+                $ocorrencia->setCampus( $linha ['campus'] );
+                $ocorrencia->setPatrimonio( $linha ['patrimonio'] );
+                $ocorrencia->setRamal( $linha ['ramal'] );
+                $ocorrencia->setLocal( $linha ['local'] );
+                $ocorrencia->setStatus( $linha ['status'] );
+                $ocorrencia->setSolucao( $linha ['solucao'] );
+                $ocorrencia->setPrioridade( $linha ['prioridade'] );
+                $ocorrencia->setAvaliacao( $linha ['avaliacao'] );
+                $ocorrencia->setEmail( $linha ['email'] );
+                $ocorrencia->setIdUsuarioAtendente( $linha ['id_usuario_atendente'] );
+                $ocorrencia->setIdUsuarioIndicado( $linha ['id_usuario_indicado'] );
+                $ocorrencia->setAnexo( $linha ['anexo'] );
+                $ocorrencia->setLocalSala( $linha ['local_sala'] );
+                $ocorrencia->getAreaResponsavel()->setId( $linha ['id_area_responsavel_area_responsavel'] );
+                $ocorrencia->getAreaResponsavel()->setNome( $linha ['nome_area_responsavel_area_responsavel'] );
+                $ocorrencia->getAreaResponsavel()->setDescricao( $linha ['descricao_area_responsavel_area_responsavel'] );
+                $ocorrencia->getAreaResponsavel()->setEmail( $linha ['email_area_responsavel_area_responsavel'] );
+                $ocorrencia->getServico()->setId( $linha ['id_servico_servico'] );
+                $ocorrencia->getServico()->setNome( $linha ['nome_servico_servico'] );
+                $ocorrencia->getServico()->setDescricao( $linha ['descricao_servico_servico'] );
+                $ocorrencia->getServico()->setTempoSla( $linha ['tempo_sla_servico_servico'] );
+                $ocorrencia->getServico()->setVisao( $linha ['visao_servico_servico'] );
+                $lista [] = $ocorrencia;
+
+	
+		    }
     			    
         } catch(PDOException $e) {
             echo $e->getMessage();
@@ -1092,40 +1074,38 @@ class OcorrenciaDAO extends DAO {
             $stmt->bindParam(":solucao", $solucao, PDO::PARAM_STR);
             $stmt->execute();
             $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            foreach ( $result as $linha ) {
-                $ocorrencia = new Ocorrencia();
-    	        $ocorrencia->setId( $linha ['id'] );
-    	        $ocorrencia->setIdLocal( $linha ['id_local'] );
-    	        $ocorrencia->setIdUsuarioCliente( $linha ['id_usuario_cliente'] );
-    	        $ocorrencia->setDescricao( $linha ['descricao'] );
-    	        $ocorrencia->setCampus( $linha ['campus'] );
-    	        $ocorrencia->setPatrimonio( $linha ['patrimonio'] );
-    	        $ocorrencia->setRamal( $linha ['ramal'] );
-    	        $ocorrencia->setLocal( $linha ['local'] );
-    	        $ocorrencia->setStatus( $linha ['status'] );
-    	        $ocorrencia->setSolucao( $linha ['solucao'] );
-    	        $ocorrencia->setPrioridade( $linha ['prioridade'] );
-    	        $ocorrencia->setAvaliacao( $linha ['avaliacao'] );
-    	        $ocorrencia->setEmail( $linha ['email'] );
-    	        $ocorrencia->setIdUsuarioAtendente( $linha ['id_usuario_atendente'] );
-    	        $ocorrencia->setIdUsuarioIndicado( $linha ['id_usuario_indicado'] );
-    	        $ocorrencia->setAnexo( $linha ['anexo'] );
-    	        $ocorrencia->setLocalSala( $linha ['local_sala'] );
-    			$ocorrencia->getAreaResponsavel()->setId( $linha ['id_area_responsavel_area_responsavel'] );
-    			$ocorrencia->getAreaResponsavel()->setNome( $linha ['nome_area_responsavel_area_responsavel'] );
-    			$ocorrencia->getAreaResponsavel()->setDescricao( $linha ['descricao_area_responsavel_area_responsavel'] );
-    			$ocorrencia->getAreaResponsavel()->setEmail( $linha ['email_area_responsavel_area_responsavel'] );
-    			$ocorrencia->getServico()->setId( $linha ['id_servico_servico'] );
-    			$ocorrencia->getServico()->setNome( $linha ['nome_servico_servico'] );
-    			$ocorrencia->getServico()->setDescricao( $linha ['descricao_servico_servico'] );
-    			$ocorrencia->getServico()->setTipoAtividade( $linha ['tipo_atividade_servico_servico'] );
-    			$ocorrencia->getServico()->setTempoSla( $linha ['tempo_sla_servico_servico'] );
-    			$ocorrencia->getServico()->setVisao( $linha ['visao_servico_servico'] );
-    			$ocorrencia->getServico()->setAreaResponsavel( $linha ['area_responsavel_servico_servico'] );
-    			$ocorrencia->getServico()->setGrupoServico( $linha ['grupo_servico_servico_servico'] );
-    			$lista [] = $ocorrencia;
-    			    
-            }
+            foreach ( $result as $linha ){
+		        $ocorrencia = new Ocorrencia();
+                $ocorrencia->setId( $linha ['id'] );
+                $ocorrencia->setIdLocal( $linha ['id_local'] );
+                $ocorrencia->setIdUsuarioCliente( $linha ['id_usuario_cliente'] );
+                $ocorrencia->setDescricao( $linha ['descricao'] );
+                $ocorrencia->setCampus( $linha ['campus'] );
+                $ocorrencia->setPatrimonio( $linha ['patrimonio'] );
+                $ocorrencia->setRamal( $linha ['ramal'] );
+                $ocorrencia->setLocal( $linha ['local'] );
+                $ocorrencia->setStatus( $linha ['status'] );
+                $ocorrencia->setSolucao( $linha ['solucao'] );
+                $ocorrencia->setPrioridade( $linha ['prioridade'] );
+                $ocorrencia->setAvaliacao( $linha ['avaliacao'] );
+                $ocorrencia->setEmail( $linha ['email'] );
+                $ocorrencia->setIdUsuarioAtendente( $linha ['id_usuario_atendente'] );
+                $ocorrencia->setIdUsuarioIndicado( $linha ['id_usuario_indicado'] );
+                $ocorrencia->setAnexo( $linha ['anexo'] );
+                $ocorrencia->setLocalSala( $linha ['local_sala'] );
+                $ocorrencia->getAreaResponsavel()->setId( $linha ['id_area_responsavel_area_responsavel'] );
+                $ocorrencia->getAreaResponsavel()->setNome( $linha ['nome_area_responsavel_area_responsavel'] );
+                $ocorrencia->getAreaResponsavel()->setDescricao( $linha ['descricao_area_responsavel_area_responsavel'] );
+                $ocorrencia->getAreaResponsavel()->setEmail( $linha ['email_area_responsavel_area_responsavel'] );
+                $ocorrencia->getServico()->setId( $linha ['id_servico_servico'] );
+                $ocorrencia->getServico()->setNome( $linha ['nome_servico_servico'] );
+                $ocorrencia->getServico()->setDescricao( $linha ['descricao_servico_servico'] );
+                $ocorrencia->getServico()->setTempoSla( $linha ['tempo_sla_servico_servico'] );
+                $ocorrencia->getServico()->setVisao( $linha ['visao_servico_servico'] );
+                $lista [] = $ocorrencia;
+
+	
+		    }
     			    
         } catch(PDOException $e) {
             echo $e->getMessage();
@@ -1177,40 +1157,38 @@ class OcorrenciaDAO extends DAO {
             $stmt->bindParam(":prioridade", $prioridade, PDO::PARAM_STR);
             $stmt->execute();
             $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            foreach ( $result as $linha ) {
-                $ocorrencia = new Ocorrencia();
-    	        $ocorrencia->setId( $linha ['id'] );
-    	        $ocorrencia->setIdLocal( $linha ['id_local'] );
-    	        $ocorrencia->setIdUsuarioCliente( $linha ['id_usuario_cliente'] );
-    	        $ocorrencia->setDescricao( $linha ['descricao'] );
-    	        $ocorrencia->setCampus( $linha ['campus'] );
-    	        $ocorrencia->setPatrimonio( $linha ['patrimonio'] );
-    	        $ocorrencia->setRamal( $linha ['ramal'] );
-    	        $ocorrencia->setLocal( $linha ['local'] );
-    	        $ocorrencia->setStatus( $linha ['status'] );
-    	        $ocorrencia->setSolucao( $linha ['solucao'] );
-    	        $ocorrencia->setPrioridade( $linha ['prioridade'] );
-    	        $ocorrencia->setAvaliacao( $linha ['avaliacao'] );
-    	        $ocorrencia->setEmail( $linha ['email'] );
-    	        $ocorrencia->setIdUsuarioAtendente( $linha ['id_usuario_atendente'] );
-    	        $ocorrencia->setIdUsuarioIndicado( $linha ['id_usuario_indicado'] );
-    	        $ocorrencia->setAnexo( $linha ['anexo'] );
-    	        $ocorrencia->setLocalSala( $linha ['local_sala'] );
-    			$ocorrencia->getAreaResponsavel()->setId( $linha ['id_area_responsavel_area_responsavel'] );
-    			$ocorrencia->getAreaResponsavel()->setNome( $linha ['nome_area_responsavel_area_responsavel'] );
-    			$ocorrencia->getAreaResponsavel()->setDescricao( $linha ['descricao_area_responsavel_area_responsavel'] );
-    			$ocorrencia->getAreaResponsavel()->setEmail( $linha ['email_area_responsavel_area_responsavel'] );
-    			$ocorrencia->getServico()->setId( $linha ['id_servico_servico'] );
-    			$ocorrencia->getServico()->setNome( $linha ['nome_servico_servico'] );
-    			$ocorrencia->getServico()->setDescricao( $linha ['descricao_servico_servico'] );
-    			$ocorrencia->getServico()->setTipoAtividade( $linha ['tipo_atividade_servico_servico'] );
-    			$ocorrencia->getServico()->setTempoSla( $linha ['tempo_sla_servico_servico'] );
-    			$ocorrencia->getServico()->setVisao( $linha ['visao_servico_servico'] );
-    			$ocorrencia->getServico()->setAreaResponsavel( $linha ['area_responsavel_servico_servico'] );
-    			$ocorrencia->getServico()->setGrupoServico( $linha ['grupo_servico_servico_servico'] );
-    			$lista [] = $ocorrencia;
-    			    
-            }
+            foreach ( $result as $linha ){
+		        $ocorrencia = new Ocorrencia();
+                $ocorrencia->setId( $linha ['id'] );
+                $ocorrencia->setIdLocal( $linha ['id_local'] );
+                $ocorrencia->setIdUsuarioCliente( $linha ['id_usuario_cliente'] );
+                $ocorrencia->setDescricao( $linha ['descricao'] );
+                $ocorrencia->setCampus( $linha ['campus'] );
+                $ocorrencia->setPatrimonio( $linha ['patrimonio'] );
+                $ocorrencia->setRamal( $linha ['ramal'] );
+                $ocorrencia->setLocal( $linha ['local'] );
+                $ocorrencia->setStatus( $linha ['status'] );
+                $ocorrencia->setSolucao( $linha ['solucao'] );
+                $ocorrencia->setPrioridade( $linha ['prioridade'] );
+                $ocorrencia->setAvaliacao( $linha ['avaliacao'] );
+                $ocorrencia->setEmail( $linha ['email'] );
+                $ocorrencia->setIdUsuarioAtendente( $linha ['id_usuario_atendente'] );
+                $ocorrencia->setIdUsuarioIndicado( $linha ['id_usuario_indicado'] );
+                $ocorrencia->setAnexo( $linha ['anexo'] );
+                $ocorrencia->setLocalSala( $linha ['local_sala'] );
+                $ocorrencia->getAreaResponsavel()->setId( $linha ['id_area_responsavel_area_responsavel'] );
+                $ocorrencia->getAreaResponsavel()->setNome( $linha ['nome_area_responsavel_area_responsavel'] );
+                $ocorrencia->getAreaResponsavel()->setDescricao( $linha ['descricao_area_responsavel_area_responsavel'] );
+                $ocorrencia->getAreaResponsavel()->setEmail( $linha ['email_area_responsavel_area_responsavel'] );
+                $ocorrencia->getServico()->setId( $linha ['id_servico_servico'] );
+                $ocorrencia->getServico()->setNome( $linha ['nome_servico_servico'] );
+                $ocorrencia->getServico()->setDescricao( $linha ['descricao_servico_servico'] );
+                $ocorrencia->getServico()->setTempoSla( $linha ['tempo_sla_servico_servico'] );
+                $ocorrencia->getServico()->setVisao( $linha ['visao_servico_servico'] );
+                $lista [] = $ocorrencia;
+
+	
+		    }
     			    
         } catch(PDOException $e) {
             echo $e->getMessage();
@@ -1262,40 +1240,38 @@ class OcorrenciaDAO extends DAO {
             $stmt->bindParam(":avaliacao", $avaliacao, PDO::PARAM_STR);
             $stmt->execute();
             $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            foreach ( $result as $linha ) {
-                $ocorrencia = new Ocorrencia();
-    	        $ocorrencia->setId( $linha ['id'] );
-    	        $ocorrencia->setIdLocal( $linha ['id_local'] );
-    	        $ocorrencia->setIdUsuarioCliente( $linha ['id_usuario_cliente'] );
-    	        $ocorrencia->setDescricao( $linha ['descricao'] );
-    	        $ocorrencia->setCampus( $linha ['campus'] );
-    	        $ocorrencia->setPatrimonio( $linha ['patrimonio'] );
-    	        $ocorrencia->setRamal( $linha ['ramal'] );
-    	        $ocorrencia->setLocal( $linha ['local'] );
-    	        $ocorrencia->setStatus( $linha ['status'] );
-    	        $ocorrencia->setSolucao( $linha ['solucao'] );
-    	        $ocorrencia->setPrioridade( $linha ['prioridade'] );
-    	        $ocorrencia->setAvaliacao( $linha ['avaliacao'] );
-    	        $ocorrencia->setEmail( $linha ['email'] );
-    	        $ocorrencia->setIdUsuarioAtendente( $linha ['id_usuario_atendente'] );
-    	        $ocorrencia->setIdUsuarioIndicado( $linha ['id_usuario_indicado'] );
-    	        $ocorrencia->setAnexo( $linha ['anexo'] );
-    	        $ocorrencia->setLocalSala( $linha ['local_sala'] );
-    			$ocorrencia->getAreaResponsavel()->setId( $linha ['id_area_responsavel_area_responsavel'] );
-    			$ocorrencia->getAreaResponsavel()->setNome( $linha ['nome_area_responsavel_area_responsavel'] );
-    			$ocorrencia->getAreaResponsavel()->setDescricao( $linha ['descricao_area_responsavel_area_responsavel'] );
-    			$ocorrencia->getAreaResponsavel()->setEmail( $linha ['email_area_responsavel_area_responsavel'] );
-    			$ocorrencia->getServico()->setId( $linha ['id_servico_servico'] );
-    			$ocorrencia->getServico()->setNome( $linha ['nome_servico_servico'] );
-    			$ocorrencia->getServico()->setDescricao( $linha ['descricao_servico_servico'] );
-    			$ocorrencia->getServico()->setTipoAtividade( $linha ['tipo_atividade_servico_servico'] );
-    			$ocorrencia->getServico()->setTempoSla( $linha ['tempo_sla_servico_servico'] );
-    			$ocorrencia->getServico()->setVisao( $linha ['visao_servico_servico'] );
-    			$ocorrencia->getServico()->setAreaResponsavel( $linha ['area_responsavel_servico_servico'] );
-    			$ocorrencia->getServico()->setGrupoServico( $linha ['grupo_servico_servico_servico'] );
-    			$lista [] = $ocorrencia;
-    			    
-            }
+            foreach ( $result as $linha ){
+		        $ocorrencia = new Ocorrencia();
+                $ocorrencia->setId( $linha ['id'] );
+                $ocorrencia->setIdLocal( $linha ['id_local'] );
+                $ocorrencia->setIdUsuarioCliente( $linha ['id_usuario_cliente'] );
+                $ocorrencia->setDescricao( $linha ['descricao'] );
+                $ocorrencia->setCampus( $linha ['campus'] );
+                $ocorrencia->setPatrimonio( $linha ['patrimonio'] );
+                $ocorrencia->setRamal( $linha ['ramal'] );
+                $ocorrencia->setLocal( $linha ['local'] );
+                $ocorrencia->setStatus( $linha ['status'] );
+                $ocorrencia->setSolucao( $linha ['solucao'] );
+                $ocorrencia->setPrioridade( $linha ['prioridade'] );
+                $ocorrencia->setAvaliacao( $linha ['avaliacao'] );
+                $ocorrencia->setEmail( $linha ['email'] );
+                $ocorrencia->setIdUsuarioAtendente( $linha ['id_usuario_atendente'] );
+                $ocorrencia->setIdUsuarioIndicado( $linha ['id_usuario_indicado'] );
+                $ocorrencia->setAnexo( $linha ['anexo'] );
+                $ocorrencia->setLocalSala( $linha ['local_sala'] );
+                $ocorrencia->getAreaResponsavel()->setId( $linha ['id_area_responsavel_area_responsavel'] );
+                $ocorrencia->getAreaResponsavel()->setNome( $linha ['nome_area_responsavel_area_responsavel'] );
+                $ocorrencia->getAreaResponsavel()->setDescricao( $linha ['descricao_area_responsavel_area_responsavel'] );
+                $ocorrencia->getAreaResponsavel()->setEmail( $linha ['email_area_responsavel_area_responsavel'] );
+                $ocorrencia->getServico()->setId( $linha ['id_servico_servico'] );
+                $ocorrencia->getServico()->setNome( $linha ['nome_servico_servico'] );
+                $ocorrencia->getServico()->setDescricao( $linha ['descricao_servico_servico'] );
+                $ocorrencia->getServico()->setTempoSla( $linha ['tempo_sla_servico_servico'] );
+                $ocorrencia->getServico()->setVisao( $linha ['visao_servico_servico'] );
+                $lista [] = $ocorrencia;
+
+	
+		    }
     			    
         } catch(PDOException $e) {
             echo $e->getMessage();
@@ -1347,40 +1323,38 @@ class OcorrenciaDAO extends DAO {
             $stmt->bindParam(":email", $email, PDO::PARAM_STR);
             $stmt->execute();
             $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            foreach ( $result as $linha ) {
-                $ocorrencia = new Ocorrencia();
-    	        $ocorrencia->setId( $linha ['id'] );
-    	        $ocorrencia->setIdLocal( $linha ['id_local'] );
-    	        $ocorrencia->setIdUsuarioCliente( $linha ['id_usuario_cliente'] );
-    	        $ocorrencia->setDescricao( $linha ['descricao'] );
-    	        $ocorrencia->setCampus( $linha ['campus'] );
-    	        $ocorrencia->setPatrimonio( $linha ['patrimonio'] );
-    	        $ocorrencia->setRamal( $linha ['ramal'] );
-    	        $ocorrencia->setLocal( $linha ['local'] );
-    	        $ocorrencia->setStatus( $linha ['status'] );
-    	        $ocorrencia->setSolucao( $linha ['solucao'] );
-    	        $ocorrencia->setPrioridade( $linha ['prioridade'] );
-    	        $ocorrencia->setAvaliacao( $linha ['avaliacao'] );
-    	        $ocorrencia->setEmail( $linha ['email'] );
-    	        $ocorrencia->setIdUsuarioAtendente( $linha ['id_usuario_atendente'] );
-    	        $ocorrencia->setIdUsuarioIndicado( $linha ['id_usuario_indicado'] );
-    	        $ocorrencia->setAnexo( $linha ['anexo'] );
-    	        $ocorrencia->setLocalSala( $linha ['local_sala'] );
-    			$ocorrencia->getAreaResponsavel()->setId( $linha ['id_area_responsavel_area_responsavel'] );
-    			$ocorrencia->getAreaResponsavel()->setNome( $linha ['nome_area_responsavel_area_responsavel'] );
-    			$ocorrencia->getAreaResponsavel()->setDescricao( $linha ['descricao_area_responsavel_area_responsavel'] );
-    			$ocorrencia->getAreaResponsavel()->setEmail( $linha ['email_area_responsavel_area_responsavel'] );
-    			$ocorrencia->getServico()->setId( $linha ['id_servico_servico'] );
-    			$ocorrencia->getServico()->setNome( $linha ['nome_servico_servico'] );
-    			$ocorrencia->getServico()->setDescricao( $linha ['descricao_servico_servico'] );
-    			$ocorrencia->getServico()->setTipoAtividade( $linha ['tipo_atividade_servico_servico'] );
-    			$ocorrencia->getServico()->setTempoSla( $linha ['tempo_sla_servico_servico'] );
-    			$ocorrencia->getServico()->setVisao( $linha ['visao_servico_servico'] );
-    			$ocorrencia->getServico()->setAreaResponsavel( $linha ['area_responsavel_servico_servico'] );
-    			$ocorrencia->getServico()->setGrupoServico( $linha ['grupo_servico_servico_servico'] );
-    			$lista [] = $ocorrencia;
-    			    
-            }
+            foreach ( $result as $linha ){
+		        $ocorrencia = new Ocorrencia();
+                $ocorrencia->setId( $linha ['id'] );
+                $ocorrencia->setIdLocal( $linha ['id_local'] );
+                $ocorrencia->setIdUsuarioCliente( $linha ['id_usuario_cliente'] );
+                $ocorrencia->setDescricao( $linha ['descricao'] );
+                $ocorrencia->setCampus( $linha ['campus'] );
+                $ocorrencia->setPatrimonio( $linha ['patrimonio'] );
+                $ocorrencia->setRamal( $linha ['ramal'] );
+                $ocorrencia->setLocal( $linha ['local'] );
+                $ocorrencia->setStatus( $linha ['status'] );
+                $ocorrencia->setSolucao( $linha ['solucao'] );
+                $ocorrencia->setPrioridade( $linha ['prioridade'] );
+                $ocorrencia->setAvaliacao( $linha ['avaliacao'] );
+                $ocorrencia->setEmail( $linha ['email'] );
+                $ocorrencia->setIdUsuarioAtendente( $linha ['id_usuario_atendente'] );
+                $ocorrencia->setIdUsuarioIndicado( $linha ['id_usuario_indicado'] );
+                $ocorrencia->setAnexo( $linha ['anexo'] );
+                $ocorrencia->setLocalSala( $linha ['local_sala'] );
+                $ocorrencia->getAreaResponsavel()->setId( $linha ['id_area_responsavel_area_responsavel'] );
+                $ocorrencia->getAreaResponsavel()->setNome( $linha ['nome_area_responsavel_area_responsavel'] );
+                $ocorrencia->getAreaResponsavel()->setDescricao( $linha ['descricao_area_responsavel_area_responsavel'] );
+                $ocorrencia->getAreaResponsavel()->setEmail( $linha ['email_area_responsavel_area_responsavel'] );
+                $ocorrencia->getServico()->setId( $linha ['id_servico_servico'] );
+                $ocorrencia->getServico()->setNome( $linha ['nome_servico_servico'] );
+                $ocorrencia->getServico()->setDescricao( $linha ['descricao_servico_servico'] );
+                $ocorrencia->getServico()->setTempoSla( $linha ['tempo_sla_servico_servico'] );
+                $ocorrencia->getServico()->setVisao( $linha ['visao_servico_servico'] );
+                $lista [] = $ocorrencia;
+
+	
+		    }
     			    
         } catch(PDOException $e) {
             echo $e->getMessage();
@@ -1432,40 +1406,38 @@ class OcorrenciaDAO extends DAO {
             $stmt->bindParam(":idUsuarioAtendente", $idUsuarioAtendente, PDO::PARAM_INT);
             $stmt->execute();
             $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            foreach ( $result as $linha ) {
-                $ocorrencia = new Ocorrencia();
-    	        $ocorrencia->setId( $linha ['id'] );
-    	        $ocorrencia->setIdLocal( $linha ['id_local'] );
-    	        $ocorrencia->setIdUsuarioCliente( $linha ['id_usuario_cliente'] );
-    	        $ocorrencia->setDescricao( $linha ['descricao'] );
-    	        $ocorrencia->setCampus( $linha ['campus'] );
-    	        $ocorrencia->setPatrimonio( $linha ['patrimonio'] );
-    	        $ocorrencia->setRamal( $linha ['ramal'] );
-    	        $ocorrencia->setLocal( $linha ['local'] );
-    	        $ocorrencia->setStatus( $linha ['status'] );
-    	        $ocorrencia->setSolucao( $linha ['solucao'] );
-    	        $ocorrencia->setPrioridade( $linha ['prioridade'] );
-    	        $ocorrencia->setAvaliacao( $linha ['avaliacao'] );
-    	        $ocorrencia->setEmail( $linha ['email'] );
-    	        $ocorrencia->setIdUsuarioAtendente( $linha ['id_usuario_atendente'] );
-    	        $ocorrencia->setIdUsuarioIndicado( $linha ['id_usuario_indicado'] );
-    	        $ocorrencia->setAnexo( $linha ['anexo'] );
-    	        $ocorrencia->setLocalSala( $linha ['local_sala'] );
-    			$ocorrencia->getAreaResponsavel()->setId( $linha ['id_area_responsavel_area_responsavel'] );
-    			$ocorrencia->getAreaResponsavel()->setNome( $linha ['nome_area_responsavel_area_responsavel'] );
-    			$ocorrencia->getAreaResponsavel()->setDescricao( $linha ['descricao_area_responsavel_area_responsavel'] );
-    			$ocorrencia->getAreaResponsavel()->setEmail( $linha ['email_area_responsavel_area_responsavel'] );
-    			$ocorrencia->getServico()->setId( $linha ['id_servico_servico'] );
-    			$ocorrencia->getServico()->setNome( $linha ['nome_servico_servico'] );
-    			$ocorrencia->getServico()->setDescricao( $linha ['descricao_servico_servico'] );
-    			$ocorrencia->getServico()->setTipoAtividade( $linha ['tipo_atividade_servico_servico'] );
-    			$ocorrencia->getServico()->setTempoSla( $linha ['tempo_sla_servico_servico'] );
-    			$ocorrencia->getServico()->setVisao( $linha ['visao_servico_servico'] );
-    			$ocorrencia->getServico()->setAreaResponsavel( $linha ['area_responsavel_servico_servico'] );
-    			$ocorrencia->getServico()->setGrupoServico( $linha ['grupo_servico_servico_servico'] );
-    			$lista [] = $ocorrencia;
-    			    
-            }
+            foreach ( $result as $linha ){
+		        $ocorrencia = new Ocorrencia();
+                $ocorrencia->setId( $linha ['id'] );
+                $ocorrencia->setIdLocal( $linha ['id_local'] );
+                $ocorrencia->setIdUsuarioCliente( $linha ['id_usuario_cliente'] );
+                $ocorrencia->setDescricao( $linha ['descricao'] );
+                $ocorrencia->setCampus( $linha ['campus'] );
+                $ocorrencia->setPatrimonio( $linha ['patrimonio'] );
+                $ocorrencia->setRamal( $linha ['ramal'] );
+                $ocorrencia->setLocal( $linha ['local'] );
+                $ocorrencia->setStatus( $linha ['status'] );
+                $ocorrencia->setSolucao( $linha ['solucao'] );
+                $ocorrencia->setPrioridade( $linha ['prioridade'] );
+                $ocorrencia->setAvaliacao( $linha ['avaliacao'] );
+                $ocorrencia->setEmail( $linha ['email'] );
+                $ocorrencia->setIdUsuarioAtendente( $linha ['id_usuario_atendente'] );
+                $ocorrencia->setIdUsuarioIndicado( $linha ['id_usuario_indicado'] );
+                $ocorrencia->setAnexo( $linha ['anexo'] );
+                $ocorrencia->setLocalSala( $linha ['local_sala'] );
+                $ocorrencia->getAreaResponsavel()->setId( $linha ['id_area_responsavel_area_responsavel'] );
+                $ocorrencia->getAreaResponsavel()->setNome( $linha ['nome_area_responsavel_area_responsavel'] );
+                $ocorrencia->getAreaResponsavel()->setDescricao( $linha ['descricao_area_responsavel_area_responsavel'] );
+                $ocorrencia->getAreaResponsavel()->setEmail( $linha ['email_area_responsavel_area_responsavel'] );
+                $ocorrencia->getServico()->setId( $linha ['id_servico_servico'] );
+                $ocorrencia->getServico()->setNome( $linha ['nome_servico_servico'] );
+                $ocorrencia->getServico()->setDescricao( $linha ['descricao_servico_servico'] );
+                $ocorrencia->getServico()->setTempoSla( $linha ['tempo_sla_servico_servico'] );
+                $ocorrencia->getServico()->setVisao( $linha ['visao_servico_servico'] );
+                $lista [] = $ocorrencia;
+
+	
+		    }
     			    
         } catch(PDOException $e) {
             echo $e->getMessage();
@@ -1517,40 +1489,38 @@ class OcorrenciaDAO extends DAO {
             $stmt->bindParam(":idUsuarioIndicado", $idUsuarioIndicado, PDO::PARAM_INT);
             $stmt->execute();
             $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            foreach ( $result as $linha ) {
-                $ocorrencia = new Ocorrencia();
-    	        $ocorrencia->setId( $linha ['id'] );
-    	        $ocorrencia->setIdLocal( $linha ['id_local'] );
-    	        $ocorrencia->setIdUsuarioCliente( $linha ['id_usuario_cliente'] );
-    	        $ocorrencia->setDescricao( $linha ['descricao'] );
-    	        $ocorrencia->setCampus( $linha ['campus'] );
-    	        $ocorrencia->setPatrimonio( $linha ['patrimonio'] );
-    	        $ocorrencia->setRamal( $linha ['ramal'] );
-    	        $ocorrencia->setLocal( $linha ['local'] );
-    	        $ocorrencia->setStatus( $linha ['status'] );
-    	        $ocorrencia->setSolucao( $linha ['solucao'] );
-    	        $ocorrencia->setPrioridade( $linha ['prioridade'] );
-    	        $ocorrencia->setAvaliacao( $linha ['avaliacao'] );
-    	        $ocorrencia->setEmail( $linha ['email'] );
-    	        $ocorrencia->setIdUsuarioAtendente( $linha ['id_usuario_atendente'] );
-    	        $ocorrencia->setIdUsuarioIndicado( $linha ['id_usuario_indicado'] );
-    	        $ocorrencia->setAnexo( $linha ['anexo'] );
-    	        $ocorrencia->setLocalSala( $linha ['local_sala'] );
-    			$ocorrencia->getAreaResponsavel()->setId( $linha ['id_area_responsavel_area_responsavel'] );
-    			$ocorrencia->getAreaResponsavel()->setNome( $linha ['nome_area_responsavel_area_responsavel'] );
-    			$ocorrencia->getAreaResponsavel()->setDescricao( $linha ['descricao_area_responsavel_area_responsavel'] );
-    			$ocorrencia->getAreaResponsavel()->setEmail( $linha ['email_area_responsavel_area_responsavel'] );
-    			$ocorrencia->getServico()->setId( $linha ['id_servico_servico'] );
-    			$ocorrencia->getServico()->setNome( $linha ['nome_servico_servico'] );
-    			$ocorrencia->getServico()->setDescricao( $linha ['descricao_servico_servico'] );
-    			$ocorrencia->getServico()->setTipoAtividade( $linha ['tipo_atividade_servico_servico'] );
-    			$ocorrencia->getServico()->setTempoSla( $linha ['tempo_sla_servico_servico'] );
-    			$ocorrencia->getServico()->setVisao( $linha ['visao_servico_servico'] );
-    			$ocorrencia->getServico()->setAreaResponsavel( $linha ['area_responsavel_servico_servico'] );
-    			$ocorrencia->getServico()->setGrupoServico( $linha ['grupo_servico_servico_servico'] );
-    			$lista [] = $ocorrencia;
-    			    
-            }
+            foreach ( $result as $linha ){
+		        $ocorrencia = new Ocorrencia();
+                $ocorrencia->setId( $linha ['id'] );
+                $ocorrencia->setIdLocal( $linha ['id_local'] );
+                $ocorrencia->setIdUsuarioCliente( $linha ['id_usuario_cliente'] );
+                $ocorrencia->setDescricao( $linha ['descricao'] );
+                $ocorrencia->setCampus( $linha ['campus'] );
+                $ocorrencia->setPatrimonio( $linha ['patrimonio'] );
+                $ocorrencia->setRamal( $linha ['ramal'] );
+                $ocorrencia->setLocal( $linha ['local'] );
+                $ocorrencia->setStatus( $linha ['status'] );
+                $ocorrencia->setSolucao( $linha ['solucao'] );
+                $ocorrencia->setPrioridade( $linha ['prioridade'] );
+                $ocorrencia->setAvaliacao( $linha ['avaliacao'] );
+                $ocorrencia->setEmail( $linha ['email'] );
+                $ocorrencia->setIdUsuarioAtendente( $linha ['id_usuario_atendente'] );
+                $ocorrencia->setIdUsuarioIndicado( $linha ['id_usuario_indicado'] );
+                $ocorrencia->setAnexo( $linha ['anexo'] );
+                $ocorrencia->setLocalSala( $linha ['local_sala'] );
+                $ocorrencia->getAreaResponsavel()->setId( $linha ['id_area_responsavel_area_responsavel'] );
+                $ocorrencia->getAreaResponsavel()->setNome( $linha ['nome_area_responsavel_area_responsavel'] );
+                $ocorrencia->getAreaResponsavel()->setDescricao( $linha ['descricao_area_responsavel_area_responsavel'] );
+                $ocorrencia->getAreaResponsavel()->setEmail( $linha ['email_area_responsavel_area_responsavel'] );
+                $ocorrencia->getServico()->setId( $linha ['id_servico_servico'] );
+                $ocorrencia->getServico()->setNome( $linha ['nome_servico_servico'] );
+                $ocorrencia->getServico()->setDescricao( $linha ['descricao_servico_servico'] );
+                $ocorrencia->getServico()->setTempoSla( $linha ['tempo_sla_servico_servico'] );
+                $ocorrencia->getServico()->setVisao( $linha ['visao_servico_servico'] );
+                $lista [] = $ocorrencia;
+
+	
+		    }
     			    
         } catch(PDOException $e) {
             echo $e->getMessage();
@@ -1602,40 +1572,38 @@ class OcorrenciaDAO extends DAO {
             $stmt->bindParam(":anexo", $anexo, PDO::PARAM_STR);
             $stmt->execute();
             $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            foreach ( $result as $linha ) {
-                $ocorrencia = new Ocorrencia();
-    	        $ocorrencia->setId( $linha ['id'] );
-    	        $ocorrencia->setIdLocal( $linha ['id_local'] );
-    	        $ocorrencia->setIdUsuarioCliente( $linha ['id_usuario_cliente'] );
-    	        $ocorrencia->setDescricao( $linha ['descricao'] );
-    	        $ocorrencia->setCampus( $linha ['campus'] );
-    	        $ocorrencia->setPatrimonio( $linha ['patrimonio'] );
-    	        $ocorrencia->setRamal( $linha ['ramal'] );
-    	        $ocorrencia->setLocal( $linha ['local'] );
-    	        $ocorrencia->setStatus( $linha ['status'] );
-    	        $ocorrencia->setSolucao( $linha ['solucao'] );
-    	        $ocorrencia->setPrioridade( $linha ['prioridade'] );
-    	        $ocorrencia->setAvaliacao( $linha ['avaliacao'] );
-    	        $ocorrencia->setEmail( $linha ['email'] );
-    	        $ocorrencia->setIdUsuarioAtendente( $linha ['id_usuario_atendente'] );
-    	        $ocorrencia->setIdUsuarioIndicado( $linha ['id_usuario_indicado'] );
-    	        $ocorrencia->setAnexo( $linha ['anexo'] );
-    	        $ocorrencia->setLocalSala( $linha ['local_sala'] );
-    			$ocorrencia->getAreaResponsavel()->setId( $linha ['id_area_responsavel_area_responsavel'] );
-    			$ocorrencia->getAreaResponsavel()->setNome( $linha ['nome_area_responsavel_area_responsavel'] );
-    			$ocorrencia->getAreaResponsavel()->setDescricao( $linha ['descricao_area_responsavel_area_responsavel'] );
-    			$ocorrencia->getAreaResponsavel()->setEmail( $linha ['email_area_responsavel_area_responsavel'] );
-    			$ocorrencia->getServico()->setId( $linha ['id_servico_servico'] );
-    			$ocorrencia->getServico()->setNome( $linha ['nome_servico_servico'] );
-    			$ocorrencia->getServico()->setDescricao( $linha ['descricao_servico_servico'] );
-    			$ocorrencia->getServico()->setTipoAtividade( $linha ['tipo_atividade_servico_servico'] );
-    			$ocorrencia->getServico()->setTempoSla( $linha ['tempo_sla_servico_servico'] );
-    			$ocorrencia->getServico()->setVisao( $linha ['visao_servico_servico'] );
-    			$ocorrencia->getServico()->setAreaResponsavel( $linha ['area_responsavel_servico_servico'] );
-    			$ocorrencia->getServico()->setGrupoServico( $linha ['grupo_servico_servico_servico'] );
-    			$lista [] = $ocorrencia;
-    			    
-            }
+            foreach ( $result as $linha ){
+		        $ocorrencia = new Ocorrencia();
+                $ocorrencia->setId( $linha ['id'] );
+                $ocorrencia->setIdLocal( $linha ['id_local'] );
+                $ocorrencia->setIdUsuarioCliente( $linha ['id_usuario_cliente'] );
+                $ocorrencia->setDescricao( $linha ['descricao'] );
+                $ocorrencia->setCampus( $linha ['campus'] );
+                $ocorrencia->setPatrimonio( $linha ['patrimonio'] );
+                $ocorrencia->setRamal( $linha ['ramal'] );
+                $ocorrencia->setLocal( $linha ['local'] );
+                $ocorrencia->setStatus( $linha ['status'] );
+                $ocorrencia->setSolucao( $linha ['solucao'] );
+                $ocorrencia->setPrioridade( $linha ['prioridade'] );
+                $ocorrencia->setAvaliacao( $linha ['avaliacao'] );
+                $ocorrencia->setEmail( $linha ['email'] );
+                $ocorrencia->setIdUsuarioAtendente( $linha ['id_usuario_atendente'] );
+                $ocorrencia->setIdUsuarioIndicado( $linha ['id_usuario_indicado'] );
+                $ocorrencia->setAnexo( $linha ['anexo'] );
+                $ocorrencia->setLocalSala( $linha ['local_sala'] );
+                $ocorrencia->getAreaResponsavel()->setId( $linha ['id_area_responsavel_area_responsavel'] );
+                $ocorrencia->getAreaResponsavel()->setNome( $linha ['nome_area_responsavel_area_responsavel'] );
+                $ocorrencia->getAreaResponsavel()->setDescricao( $linha ['descricao_area_responsavel_area_responsavel'] );
+                $ocorrencia->getAreaResponsavel()->setEmail( $linha ['email_area_responsavel_area_responsavel'] );
+                $ocorrencia->getServico()->setId( $linha ['id_servico_servico'] );
+                $ocorrencia->getServico()->setNome( $linha ['nome_servico_servico'] );
+                $ocorrencia->getServico()->setDescricao( $linha ['descricao_servico_servico'] );
+                $ocorrencia->getServico()->setTempoSla( $linha ['tempo_sla_servico_servico'] );
+                $ocorrencia->getServico()->setVisao( $linha ['visao_servico_servico'] );
+                $lista [] = $ocorrencia;
+
+	
+		    }
     			    
         } catch(PDOException $e) {
             echo $e->getMessage();
@@ -1687,40 +1655,38 @@ class OcorrenciaDAO extends DAO {
             $stmt->bindParam(":localSala", $localSala, PDO::PARAM_STR);
             $stmt->execute();
             $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            foreach ( $result as $linha ) {
-                $ocorrencia = new Ocorrencia();
-    	        $ocorrencia->setId( $linha ['id'] );
-    	        $ocorrencia->setIdLocal( $linha ['id_local'] );
-    	        $ocorrencia->setIdUsuarioCliente( $linha ['id_usuario_cliente'] );
-    	        $ocorrencia->setDescricao( $linha ['descricao'] );
-    	        $ocorrencia->setCampus( $linha ['campus'] );
-    	        $ocorrencia->setPatrimonio( $linha ['patrimonio'] );
-    	        $ocorrencia->setRamal( $linha ['ramal'] );
-    	        $ocorrencia->setLocal( $linha ['local'] );
-    	        $ocorrencia->setStatus( $linha ['status'] );
-    	        $ocorrencia->setSolucao( $linha ['solucao'] );
-    	        $ocorrencia->setPrioridade( $linha ['prioridade'] );
-    	        $ocorrencia->setAvaliacao( $linha ['avaliacao'] );
-    	        $ocorrencia->setEmail( $linha ['email'] );
-    	        $ocorrencia->setIdUsuarioAtendente( $linha ['id_usuario_atendente'] );
-    	        $ocorrencia->setIdUsuarioIndicado( $linha ['id_usuario_indicado'] );
-    	        $ocorrencia->setAnexo( $linha ['anexo'] );
-    	        $ocorrencia->setLocalSala( $linha ['local_sala'] );
-    			$ocorrencia->getAreaResponsavel()->setId( $linha ['id_area_responsavel_area_responsavel'] );
-    			$ocorrencia->getAreaResponsavel()->setNome( $linha ['nome_area_responsavel_area_responsavel'] );
-    			$ocorrencia->getAreaResponsavel()->setDescricao( $linha ['descricao_area_responsavel_area_responsavel'] );
-    			$ocorrencia->getAreaResponsavel()->setEmail( $linha ['email_area_responsavel_area_responsavel'] );
-    			$ocorrencia->getServico()->setId( $linha ['id_servico_servico'] );
-    			$ocorrencia->getServico()->setNome( $linha ['nome_servico_servico'] );
-    			$ocorrencia->getServico()->setDescricao( $linha ['descricao_servico_servico'] );
-    			$ocorrencia->getServico()->setTipoAtividade( $linha ['tipo_atividade_servico_servico'] );
-    			$ocorrencia->getServico()->setTempoSla( $linha ['tempo_sla_servico_servico'] );
-    			$ocorrencia->getServico()->setVisao( $linha ['visao_servico_servico'] );
-    			$ocorrencia->getServico()->setAreaResponsavel( $linha ['area_responsavel_servico_servico'] );
-    			$ocorrencia->getServico()->setGrupoServico( $linha ['grupo_servico_servico_servico'] );
-    			$lista [] = $ocorrencia;
-    			    
-            }
+            foreach ( $result as $linha ){
+		        $ocorrencia = new Ocorrencia();
+                $ocorrencia->setId( $linha ['id'] );
+                $ocorrencia->setIdLocal( $linha ['id_local'] );
+                $ocorrencia->setIdUsuarioCliente( $linha ['id_usuario_cliente'] );
+                $ocorrencia->setDescricao( $linha ['descricao'] );
+                $ocorrencia->setCampus( $linha ['campus'] );
+                $ocorrencia->setPatrimonio( $linha ['patrimonio'] );
+                $ocorrencia->setRamal( $linha ['ramal'] );
+                $ocorrencia->setLocal( $linha ['local'] );
+                $ocorrencia->setStatus( $linha ['status'] );
+                $ocorrencia->setSolucao( $linha ['solucao'] );
+                $ocorrencia->setPrioridade( $linha ['prioridade'] );
+                $ocorrencia->setAvaliacao( $linha ['avaliacao'] );
+                $ocorrencia->setEmail( $linha ['email'] );
+                $ocorrencia->setIdUsuarioAtendente( $linha ['id_usuario_atendente'] );
+                $ocorrencia->setIdUsuarioIndicado( $linha ['id_usuario_indicado'] );
+                $ocorrencia->setAnexo( $linha ['anexo'] );
+                $ocorrencia->setLocalSala( $linha ['local_sala'] );
+                $ocorrencia->getAreaResponsavel()->setId( $linha ['id_area_responsavel_area_responsavel'] );
+                $ocorrencia->getAreaResponsavel()->setNome( $linha ['nome_area_responsavel_area_responsavel'] );
+                $ocorrencia->getAreaResponsavel()->setDescricao( $linha ['descricao_area_responsavel_area_responsavel'] );
+                $ocorrencia->getAreaResponsavel()->setEmail( $linha ['email_area_responsavel_area_responsavel'] );
+                $ocorrencia->getServico()->setId( $linha ['id_servico_servico'] );
+                $ocorrencia->getServico()->setNome( $linha ['nome_servico_servico'] );
+                $ocorrencia->getServico()->setDescricao( $linha ['descricao_servico_servico'] );
+                $ocorrencia->getServico()->setTempoSla( $linha ['tempo_sla_servico_servico'] );
+                $ocorrencia->getServico()->setVisao( $linha ['visao_servico_servico'] );
+                $lista [] = $ocorrencia;
+
+	
+		    }
     			    
         } catch(PDOException $e) {
             echo $e->getMessage();

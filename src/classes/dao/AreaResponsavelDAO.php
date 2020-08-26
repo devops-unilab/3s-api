@@ -158,15 +158,16 @@ class AreaResponsavelDAO extends DAO {
             $stmt->bindParam(":id", $id, PDO::PARAM_INT);
             $stmt->execute();
             $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            foreach ( $result as $linha ) {
-                $areaResponsavel = new AreaResponsavel();
-    	        $areaResponsavel->setId( $linha ['id'] );
-    	        $areaResponsavel->setNome( $linha ['nome'] );
-    	        $areaResponsavel->setDescricao( $linha ['descricao'] );
-    	        $areaResponsavel->setEmail( $linha ['email'] );
-    			$lista [] = $areaResponsavel;
-    			    
-            }
+            foreach ( $result as $linha ){
+		        $areaResponsavel = new AreaResponsavel();
+                $areaResponsavel->setId( $linha ['id'] );
+                $areaResponsavel->setNome( $linha ['nome'] );
+                $areaResponsavel->setDescricao( $linha ['descricao'] );
+                $areaResponsavel->setEmail( $linha ['email'] );
+                $lista [] = $areaResponsavel;
+
+	
+		    }
     			    
         } catch(PDOException $e) {
             echo $e->getMessage();
@@ -194,15 +195,16 @@ class AreaResponsavelDAO extends DAO {
             $stmt->bindParam(":nome", $nome, PDO::PARAM_STR);
             $stmt->execute();
             $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            foreach ( $result as $linha ) {
-                $areaResponsavel = new AreaResponsavel();
-    	        $areaResponsavel->setId( $linha ['id'] );
-    	        $areaResponsavel->setNome( $linha ['nome'] );
-    	        $areaResponsavel->setDescricao( $linha ['descricao'] );
-    	        $areaResponsavel->setEmail( $linha ['email'] );
-    			$lista [] = $areaResponsavel;
-    			    
-            }
+            foreach ( $result as $linha ){
+		        $areaResponsavel = new AreaResponsavel();
+                $areaResponsavel->setId( $linha ['id'] );
+                $areaResponsavel->setNome( $linha ['nome'] );
+                $areaResponsavel->setDescricao( $linha ['descricao'] );
+                $areaResponsavel->setEmail( $linha ['email'] );
+                $lista [] = $areaResponsavel;
+
+	
+		    }
     			    
         } catch(PDOException $e) {
             echo $e->getMessage();
@@ -230,15 +232,16 @@ class AreaResponsavelDAO extends DAO {
             $stmt->bindParam(":descricao", $descricao, PDO::PARAM_STR);
             $stmt->execute();
             $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            foreach ( $result as $linha ) {
-                $areaResponsavel = new AreaResponsavel();
-    	        $areaResponsavel->setId( $linha ['id'] );
-    	        $areaResponsavel->setNome( $linha ['nome'] );
-    	        $areaResponsavel->setDescricao( $linha ['descricao'] );
-    	        $areaResponsavel->setEmail( $linha ['email'] );
-    			$lista [] = $areaResponsavel;
-    			    
-            }
+            foreach ( $result as $linha ){
+		        $areaResponsavel = new AreaResponsavel();
+                $areaResponsavel->setId( $linha ['id'] );
+                $areaResponsavel->setNome( $linha ['nome'] );
+                $areaResponsavel->setDescricao( $linha ['descricao'] );
+                $areaResponsavel->setEmail( $linha ['email'] );
+                $lista [] = $areaResponsavel;
+
+	
+		    }
     			    
         } catch(PDOException $e) {
             echo $e->getMessage();
@@ -266,15 +269,16 @@ class AreaResponsavelDAO extends DAO {
             $stmt->bindParam(":email", $email, PDO::PARAM_STR);
             $stmt->execute();
             $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            foreach ( $result as $linha ) {
-                $areaResponsavel = new AreaResponsavel();
-    	        $areaResponsavel->setId( $linha ['id'] );
-    	        $areaResponsavel->setNome( $linha ['nome'] );
-    	        $areaResponsavel->setDescricao( $linha ['descricao'] );
-    	        $areaResponsavel->setEmail( $linha ['email'] );
-    			$lista [] = $areaResponsavel;
-    			    
-            }
+            foreach ( $result as $linha ){
+		        $areaResponsavel = new AreaResponsavel();
+                $areaResponsavel->setId( $linha ['id'] );
+                $areaResponsavel->setNome( $linha ['nome'] );
+                $areaResponsavel->setDescricao( $linha ['descricao'] );
+                $areaResponsavel->setEmail( $linha ['email'] );
+                $lista [] = $areaResponsavel;
+
+	
+		    }
     			    
         } catch(PDOException $e) {
             echo $e->getMessage();

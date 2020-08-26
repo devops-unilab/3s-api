@@ -138,13 +138,14 @@ class GrupoServicoDAO extends DAO {
             $stmt->bindParam(":id", $id, PDO::PARAM_INT);
             $stmt->execute();
             $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            foreach ( $result as $linha ) {
-                $grupoServico = new GrupoServico();
-    	        $grupoServico->setId( $linha ['id'] );
-    	        $grupoServico->setNome( $linha ['nome'] );
-    			$lista [] = $grupoServico;
-    			    
-            }
+            foreach ( $result as $linha ){
+		        $grupoServico = new GrupoServico();
+                $grupoServico->setId( $linha ['id'] );
+                $grupoServico->setNome( $linha ['nome'] );
+                $lista [] = $grupoServico;
+
+	
+		    }
     			    
         } catch(PDOException $e) {
             echo $e->getMessage();
@@ -170,13 +171,14 @@ class GrupoServicoDAO extends DAO {
             $stmt->bindParam(":nome", $nome, PDO::PARAM_STR);
             $stmt->execute();
             $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            foreach ( $result as $linha ) {
-                $grupoServico = new GrupoServico();
-    	        $grupoServico->setId( $linha ['id'] );
-    	        $grupoServico->setNome( $linha ['nome'] );
-    			$lista [] = $grupoServico;
-    			    
-            }
+            foreach ( $result as $linha ){
+		        $grupoServico = new GrupoServico();
+                $grupoServico->setId( $linha ['id'] );
+                $grupoServico->setNome( $linha ['nome'] );
+                $lista [] = $grupoServico;
+
+	
+		    }
     			    
         } catch(PDOException $e) {
             echo $e->getMessage();

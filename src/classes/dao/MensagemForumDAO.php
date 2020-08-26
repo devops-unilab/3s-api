@@ -239,41 +239,39 @@ class MensagemForumDAO extends DAO {
             $stmt->bindParam(":id", $id, PDO::PARAM_INT);
             $stmt->execute();
             $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            foreach ( $result as $linha ) {
-                $mensagemForum = new MensagemForum();
-    	        $mensagemForum->setId( $linha ['id'] );
-    	        $mensagemForum->setTipo( $linha ['tipo'] );
-    	        $mensagemForum->setMensagem( $linha ['mensagem'] );
-    	        $mensagemForum->setDataEnvio( $linha ['data_envio'] );
-    			$mensagemForum->getOcorrencia()->setId( $linha ['id_ocorrencia_ocorrencia'] );
-    			$mensagemForum->getOcorrencia()->setAreaResponsavel( $linha ['area_responsavel_ocorrencia_ocorrencia'] );
-    			$mensagemForum->getOcorrencia()->setServico( $linha ['servico_ocorrencia_ocorrencia'] );
-    			$mensagemForum->getOcorrencia()->setIdLocal( $linha ['id_local_ocorrencia_ocorrencia'] );
-    			$mensagemForum->getOcorrencia()->setIdUsuarioCliente( $linha ['id_usuario_cliente_ocorrencia_ocorrencia'] );
-    			$mensagemForum->getOcorrencia()->setDescricao( $linha ['descricao_ocorrencia_ocorrencia'] );
-    			$mensagemForum->getOcorrencia()->setCampus( $linha ['campus_ocorrencia_ocorrencia'] );
-    			$mensagemForum->getOcorrencia()->setPatrimonio( $linha ['patrimonio_ocorrencia_ocorrencia'] );
-    			$mensagemForum->getOcorrencia()->setRamal( $linha ['ramal_ocorrencia_ocorrencia'] );
-    			$mensagemForum->getOcorrencia()->setLocal( $linha ['local_ocorrencia_ocorrencia'] );
-    			$mensagemForum->getOcorrencia()->setStatus( $linha ['status_ocorrencia_ocorrencia'] );
-    			$mensagemForum->getOcorrencia()->setSolucao( $linha ['solucao_ocorrencia_ocorrencia'] );
-    			$mensagemForum->getOcorrencia()->setPrioridade( $linha ['prioridade_ocorrencia_ocorrencia'] );
-    			$mensagemForum->getOcorrencia()->setAvaliacao( $linha ['avaliacao_ocorrencia_ocorrencia'] );
-    			$mensagemForum->getOcorrencia()->setEmail( $linha ['email_ocorrencia_ocorrencia'] );
-    			$mensagemForum->getOcorrencia()->setIdUsuarioAtendente( $linha ['id_usuario_atendente_ocorrencia_ocorrencia'] );
-    			$mensagemForum->getOcorrencia()->setIdUsuarioIndicado( $linha ['id_usuario_indicado_ocorrencia_ocorrencia'] );
-    			$mensagemForum->getOcorrencia()->setAnexo( $linha ['anexo_ocorrencia_ocorrencia'] );
-    			$mensagemForum->getOcorrencia()->setLocalSala( $linha ['local_sala_ocorrencia_ocorrencia'] );
-    			$mensagemForum->getUsuario()->setId( $linha ['id_usuario_usuario'] );
-    			$mensagemForum->getUsuario()->setNome( $linha ['nome_usuario_usuario'] );
-    			$mensagemForum->getUsuario()->setEmail( $linha ['email_usuario_usuario'] );
-    			$mensagemForum->getUsuario()->setLogin( $linha ['login_usuario_usuario'] );
-    			$mensagemForum->getUsuario()->setSenha( $linha ['senha_usuario_usuario'] );
-    			$mensagemForum->getUsuario()->setNivel( $linha ['nivel_usuario_usuario'] );
-    			$mensagemForum->getUsuario()->setSetor( $linha ['setor_usuario_usuario'] );
-    			$lista [] = $mensagemForum;
-    			    
-            }
+            foreach ( $result as $linha ){
+		        $mensagemForum = new MensagemForum();
+                $mensagemForum->setId( $linha ['id'] );
+                $mensagemForum->setTipo( $linha ['tipo'] );
+                $mensagemForum->setMensagem( $linha ['mensagem'] );
+                $mensagemForum->setDataEnvio( $linha ['data_envio'] );
+                $mensagemForum->getOcorrencia()->setId( $linha ['id_ocorrencia_ocorrencia'] );
+                $mensagemForum->getOcorrencia()->setIdLocal( $linha ['id_local_ocorrencia_ocorrencia'] );
+                $mensagemForum->getOcorrencia()->setIdUsuarioCliente( $linha ['id_usuario_cliente_ocorrencia_ocorrencia'] );
+                $mensagemForum->getOcorrencia()->setDescricao( $linha ['descricao_ocorrencia_ocorrencia'] );
+                $mensagemForum->getOcorrencia()->setCampus( $linha ['campus_ocorrencia_ocorrencia'] );
+                $mensagemForum->getOcorrencia()->setPatrimonio( $linha ['patrimonio_ocorrencia_ocorrencia'] );
+                $mensagemForum->getOcorrencia()->setRamal( $linha ['ramal_ocorrencia_ocorrencia'] );
+                $mensagemForum->getOcorrencia()->setLocal( $linha ['local_ocorrencia_ocorrencia'] );
+                $mensagemForum->getOcorrencia()->setStatus( $linha ['status_ocorrencia_ocorrencia'] );
+                $mensagemForum->getOcorrencia()->setSolucao( $linha ['solucao_ocorrencia_ocorrencia'] );
+                $mensagemForum->getOcorrencia()->setPrioridade( $linha ['prioridade_ocorrencia_ocorrencia'] );
+                $mensagemForum->getOcorrencia()->setAvaliacao( $linha ['avaliacao_ocorrencia_ocorrencia'] );
+                $mensagemForum->getOcorrencia()->setEmail( $linha ['email_ocorrencia_ocorrencia'] );
+                $mensagemForum->getOcorrencia()->setIdUsuarioAtendente( $linha ['id_usuario_atendente_ocorrencia_ocorrencia'] );
+                $mensagemForum->getOcorrencia()->setIdUsuarioIndicado( $linha ['id_usuario_indicado_ocorrencia_ocorrencia'] );
+                $mensagemForum->getOcorrencia()->setAnexo( $linha ['anexo_ocorrencia_ocorrencia'] );
+                $mensagemForum->getOcorrencia()->setLocalSala( $linha ['local_sala_ocorrencia_ocorrencia'] );
+                $mensagemForum->getUsuario()->setId( $linha ['id_usuario_usuario'] );
+                $mensagemForum->getUsuario()->setNome( $linha ['nome_usuario_usuario'] );
+                $mensagemForum->getUsuario()->setEmail( $linha ['email_usuario_usuario'] );
+                $mensagemForum->getUsuario()->setLogin( $linha ['login_usuario_usuario'] );
+                $mensagemForum->getUsuario()->setSenha( $linha ['senha_usuario_usuario'] );
+                $mensagemForum->getUsuario()->setNivel( $linha ['nivel_usuario_usuario'] );
+                $lista [] = $mensagemForum;
+
+	
+		    }
     			    
         } catch(PDOException $e) {
             echo $e->getMessage();
@@ -326,41 +324,39 @@ class MensagemForumDAO extends DAO {
             $stmt->bindParam(":tipo", $tipo, PDO::PARAM_INT);
             $stmt->execute();
             $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            foreach ( $result as $linha ) {
-                $mensagemForum = new MensagemForum();
-    	        $mensagemForum->setId( $linha ['id'] );
-    	        $mensagemForum->setTipo( $linha ['tipo'] );
-    	        $mensagemForum->setMensagem( $linha ['mensagem'] );
-    	        $mensagemForum->setDataEnvio( $linha ['data_envio'] );
-    			$mensagemForum->getOcorrencia()->setId( $linha ['id_ocorrencia_ocorrencia'] );
-    			$mensagemForum->getOcorrencia()->setAreaResponsavel( $linha ['area_responsavel_ocorrencia_ocorrencia'] );
-    			$mensagemForum->getOcorrencia()->setServico( $linha ['servico_ocorrencia_ocorrencia'] );
-    			$mensagemForum->getOcorrencia()->setIdLocal( $linha ['id_local_ocorrencia_ocorrencia'] );
-    			$mensagemForum->getOcorrencia()->setIdUsuarioCliente( $linha ['id_usuario_cliente_ocorrencia_ocorrencia'] );
-    			$mensagemForum->getOcorrencia()->setDescricao( $linha ['descricao_ocorrencia_ocorrencia'] );
-    			$mensagemForum->getOcorrencia()->setCampus( $linha ['campus_ocorrencia_ocorrencia'] );
-    			$mensagemForum->getOcorrencia()->setPatrimonio( $linha ['patrimonio_ocorrencia_ocorrencia'] );
-    			$mensagemForum->getOcorrencia()->setRamal( $linha ['ramal_ocorrencia_ocorrencia'] );
-    			$mensagemForum->getOcorrencia()->setLocal( $linha ['local_ocorrencia_ocorrencia'] );
-    			$mensagemForum->getOcorrencia()->setStatus( $linha ['status_ocorrencia_ocorrencia'] );
-    			$mensagemForum->getOcorrencia()->setSolucao( $linha ['solucao_ocorrencia_ocorrencia'] );
-    			$mensagemForum->getOcorrencia()->setPrioridade( $linha ['prioridade_ocorrencia_ocorrencia'] );
-    			$mensagemForum->getOcorrencia()->setAvaliacao( $linha ['avaliacao_ocorrencia_ocorrencia'] );
-    			$mensagemForum->getOcorrencia()->setEmail( $linha ['email_ocorrencia_ocorrencia'] );
-    			$mensagemForum->getOcorrencia()->setIdUsuarioAtendente( $linha ['id_usuario_atendente_ocorrencia_ocorrencia'] );
-    			$mensagemForum->getOcorrencia()->setIdUsuarioIndicado( $linha ['id_usuario_indicado_ocorrencia_ocorrencia'] );
-    			$mensagemForum->getOcorrencia()->setAnexo( $linha ['anexo_ocorrencia_ocorrencia'] );
-    			$mensagemForum->getOcorrencia()->setLocalSala( $linha ['local_sala_ocorrencia_ocorrencia'] );
-    			$mensagemForum->getUsuario()->setId( $linha ['id_usuario_usuario'] );
-    			$mensagemForum->getUsuario()->setNome( $linha ['nome_usuario_usuario'] );
-    			$mensagemForum->getUsuario()->setEmail( $linha ['email_usuario_usuario'] );
-    			$mensagemForum->getUsuario()->setLogin( $linha ['login_usuario_usuario'] );
-    			$mensagemForum->getUsuario()->setSenha( $linha ['senha_usuario_usuario'] );
-    			$mensagemForum->getUsuario()->setNivel( $linha ['nivel_usuario_usuario'] );
-    			$mensagemForum->getUsuario()->setSetor( $linha ['setor_usuario_usuario'] );
-    			$lista [] = $mensagemForum;
-    			    
-            }
+            foreach ( $result as $linha ){
+		        $mensagemForum = new MensagemForum();
+                $mensagemForum->setId( $linha ['id'] );
+                $mensagemForum->setTipo( $linha ['tipo'] );
+                $mensagemForum->setMensagem( $linha ['mensagem'] );
+                $mensagemForum->setDataEnvio( $linha ['data_envio'] );
+                $mensagemForum->getOcorrencia()->setId( $linha ['id_ocorrencia_ocorrencia'] );
+                $mensagemForum->getOcorrencia()->setIdLocal( $linha ['id_local_ocorrencia_ocorrencia'] );
+                $mensagemForum->getOcorrencia()->setIdUsuarioCliente( $linha ['id_usuario_cliente_ocorrencia_ocorrencia'] );
+                $mensagemForum->getOcorrencia()->setDescricao( $linha ['descricao_ocorrencia_ocorrencia'] );
+                $mensagemForum->getOcorrencia()->setCampus( $linha ['campus_ocorrencia_ocorrencia'] );
+                $mensagemForum->getOcorrencia()->setPatrimonio( $linha ['patrimonio_ocorrencia_ocorrencia'] );
+                $mensagemForum->getOcorrencia()->setRamal( $linha ['ramal_ocorrencia_ocorrencia'] );
+                $mensagemForum->getOcorrencia()->setLocal( $linha ['local_ocorrencia_ocorrencia'] );
+                $mensagemForum->getOcorrencia()->setStatus( $linha ['status_ocorrencia_ocorrencia'] );
+                $mensagemForum->getOcorrencia()->setSolucao( $linha ['solucao_ocorrencia_ocorrencia'] );
+                $mensagemForum->getOcorrencia()->setPrioridade( $linha ['prioridade_ocorrencia_ocorrencia'] );
+                $mensagemForum->getOcorrencia()->setAvaliacao( $linha ['avaliacao_ocorrencia_ocorrencia'] );
+                $mensagemForum->getOcorrencia()->setEmail( $linha ['email_ocorrencia_ocorrencia'] );
+                $mensagemForum->getOcorrencia()->setIdUsuarioAtendente( $linha ['id_usuario_atendente_ocorrencia_ocorrencia'] );
+                $mensagemForum->getOcorrencia()->setIdUsuarioIndicado( $linha ['id_usuario_indicado_ocorrencia_ocorrencia'] );
+                $mensagemForum->getOcorrencia()->setAnexo( $linha ['anexo_ocorrencia_ocorrencia'] );
+                $mensagemForum->getOcorrencia()->setLocalSala( $linha ['local_sala_ocorrencia_ocorrencia'] );
+                $mensagemForum->getUsuario()->setId( $linha ['id_usuario_usuario'] );
+                $mensagemForum->getUsuario()->setNome( $linha ['nome_usuario_usuario'] );
+                $mensagemForum->getUsuario()->setEmail( $linha ['email_usuario_usuario'] );
+                $mensagemForum->getUsuario()->setLogin( $linha ['login_usuario_usuario'] );
+                $mensagemForum->getUsuario()->setSenha( $linha ['senha_usuario_usuario'] );
+                $mensagemForum->getUsuario()->setNivel( $linha ['nivel_usuario_usuario'] );
+                $lista [] = $mensagemForum;
+
+	
+		    }
     			    
         } catch(PDOException $e) {
             echo $e->getMessage();
@@ -413,41 +409,39 @@ class MensagemForumDAO extends DAO {
             $stmt->bindParam(":mensagem", $mensagem, PDO::PARAM_STR);
             $stmt->execute();
             $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            foreach ( $result as $linha ) {
-                $mensagemForum = new MensagemForum();
-    	        $mensagemForum->setId( $linha ['id'] );
-    	        $mensagemForum->setTipo( $linha ['tipo'] );
-    	        $mensagemForum->setMensagem( $linha ['mensagem'] );
-    	        $mensagemForum->setDataEnvio( $linha ['data_envio'] );
-    			$mensagemForum->getOcorrencia()->setId( $linha ['id_ocorrencia_ocorrencia'] );
-    			$mensagemForum->getOcorrencia()->setAreaResponsavel( $linha ['area_responsavel_ocorrencia_ocorrencia'] );
-    			$mensagemForum->getOcorrencia()->setServico( $linha ['servico_ocorrencia_ocorrencia'] );
-    			$mensagemForum->getOcorrencia()->setIdLocal( $linha ['id_local_ocorrencia_ocorrencia'] );
-    			$mensagemForum->getOcorrencia()->setIdUsuarioCliente( $linha ['id_usuario_cliente_ocorrencia_ocorrencia'] );
-    			$mensagemForum->getOcorrencia()->setDescricao( $linha ['descricao_ocorrencia_ocorrencia'] );
-    			$mensagemForum->getOcorrencia()->setCampus( $linha ['campus_ocorrencia_ocorrencia'] );
-    			$mensagemForum->getOcorrencia()->setPatrimonio( $linha ['patrimonio_ocorrencia_ocorrencia'] );
-    			$mensagemForum->getOcorrencia()->setRamal( $linha ['ramal_ocorrencia_ocorrencia'] );
-    			$mensagemForum->getOcorrencia()->setLocal( $linha ['local_ocorrencia_ocorrencia'] );
-    			$mensagemForum->getOcorrencia()->setStatus( $linha ['status_ocorrencia_ocorrencia'] );
-    			$mensagemForum->getOcorrencia()->setSolucao( $linha ['solucao_ocorrencia_ocorrencia'] );
-    			$mensagemForum->getOcorrencia()->setPrioridade( $linha ['prioridade_ocorrencia_ocorrencia'] );
-    			$mensagemForum->getOcorrencia()->setAvaliacao( $linha ['avaliacao_ocorrencia_ocorrencia'] );
-    			$mensagemForum->getOcorrencia()->setEmail( $linha ['email_ocorrencia_ocorrencia'] );
-    			$mensagemForum->getOcorrencia()->setIdUsuarioAtendente( $linha ['id_usuario_atendente_ocorrencia_ocorrencia'] );
-    			$mensagemForum->getOcorrencia()->setIdUsuarioIndicado( $linha ['id_usuario_indicado_ocorrencia_ocorrencia'] );
-    			$mensagemForum->getOcorrencia()->setAnexo( $linha ['anexo_ocorrencia_ocorrencia'] );
-    			$mensagemForum->getOcorrencia()->setLocalSala( $linha ['local_sala_ocorrencia_ocorrencia'] );
-    			$mensagemForum->getUsuario()->setId( $linha ['id_usuario_usuario'] );
-    			$mensagemForum->getUsuario()->setNome( $linha ['nome_usuario_usuario'] );
-    			$mensagemForum->getUsuario()->setEmail( $linha ['email_usuario_usuario'] );
-    			$mensagemForum->getUsuario()->setLogin( $linha ['login_usuario_usuario'] );
-    			$mensagemForum->getUsuario()->setSenha( $linha ['senha_usuario_usuario'] );
-    			$mensagemForum->getUsuario()->setNivel( $linha ['nivel_usuario_usuario'] );
-    			$mensagemForum->getUsuario()->setSetor( $linha ['setor_usuario_usuario'] );
-    			$lista [] = $mensagemForum;
-    			    
-            }
+            foreach ( $result as $linha ){
+		        $mensagemForum = new MensagemForum();
+                $mensagemForum->setId( $linha ['id'] );
+                $mensagemForum->setTipo( $linha ['tipo'] );
+                $mensagemForum->setMensagem( $linha ['mensagem'] );
+                $mensagemForum->setDataEnvio( $linha ['data_envio'] );
+                $mensagemForum->getOcorrencia()->setId( $linha ['id_ocorrencia_ocorrencia'] );
+                $mensagemForum->getOcorrencia()->setIdLocal( $linha ['id_local_ocorrencia_ocorrencia'] );
+                $mensagemForum->getOcorrencia()->setIdUsuarioCliente( $linha ['id_usuario_cliente_ocorrencia_ocorrencia'] );
+                $mensagemForum->getOcorrencia()->setDescricao( $linha ['descricao_ocorrencia_ocorrencia'] );
+                $mensagemForum->getOcorrencia()->setCampus( $linha ['campus_ocorrencia_ocorrencia'] );
+                $mensagemForum->getOcorrencia()->setPatrimonio( $linha ['patrimonio_ocorrencia_ocorrencia'] );
+                $mensagemForum->getOcorrencia()->setRamal( $linha ['ramal_ocorrencia_ocorrencia'] );
+                $mensagemForum->getOcorrencia()->setLocal( $linha ['local_ocorrencia_ocorrencia'] );
+                $mensagemForum->getOcorrencia()->setStatus( $linha ['status_ocorrencia_ocorrencia'] );
+                $mensagemForum->getOcorrencia()->setSolucao( $linha ['solucao_ocorrencia_ocorrencia'] );
+                $mensagemForum->getOcorrencia()->setPrioridade( $linha ['prioridade_ocorrencia_ocorrencia'] );
+                $mensagemForum->getOcorrencia()->setAvaliacao( $linha ['avaliacao_ocorrencia_ocorrencia'] );
+                $mensagemForum->getOcorrencia()->setEmail( $linha ['email_ocorrencia_ocorrencia'] );
+                $mensagemForum->getOcorrencia()->setIdUsuarioAtendente( $linha ['id_usuario_atendente_ocorrencia_ocorrencia'] );
+                $mensagemForum->getOcorrencia()->setIdUsuarioIndicado( $linha ['id_usuario_indicado_ocorrencia_ocorrencia'] );
+                $mensagemForum->getOcorrencia()->setAnexo( $linha ['anexo_ocorrencia_ocorrencia'] );
+                $mensagemForum->getOcorrencia()->setLocalSala( $linha ['local_sala_ocorrencia_ocorrencia'] );
+                $mensagemForum->getUsuario()->setId( $linha ['id_usuario_usuario'] );
+                $mensagemForum->getUsuario()->setNome( $linha ['nome_usuario_usuario'] );
+                $mensagemForum->getUsuario()->setEmail( $linha ['email_usuario_usuario'] );
+                $mensagemForum->getUsuario()->setLogin( $linha ['login_usuario_usuario'] );
+                $mensagemForum->getUsuario()->setSenha( $linha ['senha_usuario_usuario'] );
+                $mensagemForum->getUsuario()->setNivel( $linha ['nivel_usuario_usuario'] );
+                $lista [] = $mensagemForum;
+
+	
+		    }
     			    
         } catch(PDOException $e) {
             echo $e->getMessage();
@@ -500,41 +494,39 @@ class MensagemForumDAO extends DAO {
             $stmt->bindParam(":dataEnvio", $dataEnvio, PDO::PARAM_STR);
             $stmt->execute();
             $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            foreach ( $result as $linha ) {
-                $mensagemForum = new MensagemForum();
-    	        $mensagemForum->setId( $linha ['id'] );
-    	        $mensagemForum->setTipo( $linha ['tipo'] );
-    	        $mensagemForum->setMensagem( $linha ['mensagem'] );
-    	        $mensagemForum->setDataEnvio( $linha ['data_envio'] );
-    			$mensagemForum->getOcorrencia()->setId( $linha ['id_ocorrencia_ocorrencia'] );
-    			$mensagemForum->getOcorrencia()->setAreaResponsavel( $linha ['area_responsavel_ocorrencia_ocorrencia'] );
-    			$mensagemForum->getOcorrencia()->setServico( $linha ['servico_ocorrencia_ocorrencia'] );
-    			$mensagemForum->getOcorrencia()->setIdLocal( $linha ['id_local_ocorrencia_ocorrencia'] );
-    			$mensagemForum->getOcorrencia()->setIdUsuarioCliente( $linha ['id_usuario_cliente_ocorrencia_ocorrencia'] );
-    			$mensagemForum->getOcorrencia()->setDescricao( $linha ['descricao_ocorrencia_ocorrencia'] );
-    			$mensagemForum->getOcorrencia()->setCampus( $linha ['campus_ocorrencia_ocorrencia'] );
-    			$mensagemForum->getOcorrencia()->setPatrimonio( $linha ['patrimonio_ocorrencia_ocorrencia'] );
-    			$mensagemForum->getOcorrencia()->setRamal( $linha ['ramal_ocorrencia_ocorrencia'] );
-    			$mensagemForum->getOcorrencia()->setLocal( $linha ['local_ocorrencia_ocorrencia'] );
-    			$mensagemForum->getOcorrencia()->setStatus( $linha ['status_ocorrencia_ocorrencia'] );
-    			$mensagemForum->getOcorrencia()->setSolucao( $linha ['solucao_ocorrencia_ocorrencia'] );
-    			$mensagemForum->getOcorrencia()->setPrioridade( $linha ['prioridade_ocorrencia_ocorrencia'] );
-    			$mensagemForum->getOcorrencia()->setAvaliacao( $linha ['avaliacao_ocorrencia_ocorrencia'] );
-    			$mensagemForum->getOcorrencia()->setEmail( $linha ['email_ocorrencia_ocorrencia'] );
-    			$mensagemForum->getOcorrencia()->setIdUsuarioAtendente( $linha ['id_usuario_atendente_ocorrencia_ocorrencia'] );
-    			$mensagemForum->getOcorrencia()->setIdUsuarioIndicado( $linha ['id_usuario_indicado_ocorrencia_ocorrencia'] );
-    			$mensagemForum->getOcorrencia()->setAnexo( $linha ['anexo_ocorrencia_ocorrencia'] );
-    			$mensagemForum->getOcorrencia()->setLocalSala( $linha ['local_sala_ocorrencia_ocorrencia'] );
-    			$mensagemForum->getUsuario()->setId( $linha ['id_usuario_usuario'] );
-    			$mensagemForum->getUsuario()->setNome( $linha ['nome_usuario_usuario'] );
-    			$mensagemForum->getUsuario()->setEmail( $linha ['email_usuario_usuario'] );
-    			$mensagemForum->getUsuario()->setLogin( $linha ['login_usuario_usuario'] );
-    			$mensagemForum->getUsuario()->setSenha( $linha ['senha_usuario_usuario'] );
-    			$mensagemForum->getUsuario()->setNivel( $linha ['nivel_usuario_usuario'] );
-    			$mensagemForum->getUsuario()->setSetor( $linha ['setor_usuario_usuario'] );
-    			$lista [] = $mensagemForum;
-    			    
-            }
+            foreach ( $result as $linha ){
+		        $mensagemForum = new MensagemForum();
+                $mensagemForum->setId( $linha ['id'] );
+                $mensagemForum->setTipo( $linha ['tipo'] );
+                $mensagemForum->setMensagem( $linha ['mensagem'] );
+                $mensagemForum->setDataEnvio( $linha ['data_envio'] );
+                $mensagemForum->getOcorrencia()->setId( $linha ['id_ocorrencia_ocorrencia'] );
+                $mensagemForum->getOcorrencia()->setIdLocal( $linha ['id_local_ocorrencia_ocorrencia'] );
+                $mensagemForum->getOcorrencia()->setIdUsuarioCliente( $linha ['id_usuario_cliente_ocorrencia_ocorrencia'] );
+                $mensagemForum->getOcorrencia()->setDescricao( $linha ['descricao_ocorrencia_ocorrencia'] );
+                $mensagemForum->getOcorrencia()->setCampus( $linha ['campus_ocorrencia_ocorrencia'] );
+                $mensagemForum->getOcorrencia()->setPatrimonio( $linha ['patrimonio_ocorrencia_ocorrencia'] );
+                $mensagemForum->getOcorrencia()->setRamal( $linha ['ramal_ocorrencia_ocorrencia'] );
+                $mensagemForum->getOcorrencia()->setLocal( $linha ['local_ocorrencia_ocorrencia'] );
+                $mensagemForum->getOcorrencia()->setStatus( $linha ['status_ocorrencia_ocorrencia'] );
+                $mensagemForum->getOcorrencia()->setSolucao( $linha ['solucao_ocorrencia_ocorrencia'] );
+                $mensagemForum->getOcorrencia()->setPrioridade( $linha ['prioridade_ocorrencia_ocorrencia'] );
+                $mensagemForum->getOcorrencia()->setAvaliacao( $linha ['avaliacao_ocorrencia_ocorrencia'] );
+                $mensagemForum->getOcorrencia()->setEmail( $linha ['email_ocorrencia_ocorrencia'] );
+                $mensagemForum->getOcorrencia()->setIdUsuarioAtendente( $linha ['id_usuario_atendente_ocorrencia_ocorrencia'] );
+                $mensagemForum->getOcorrencia()->setIdUsuarioIndicado( $linha ['id_usuario_indicado_ocorrencia_ocorrencia'] );
+                $mensagemForum->getOcorrencia()->setAnexo( $linha ['anexo_ocorrencia_ocorrencia'] );
+                $mensagemForum->getOcorrencia()->setLocalSala( $linha ['local_sala_ocorrencia_ocorrencia'] );
+                $mensagemForum->getUsuario()->setId( $linha ['id_usuario_usuario'] );
+                $mensagemForum->getUsuario()->setNome( $linha ['nome_usuario_usuario'] );
+                $mensagemForum->getUsuario()->setEmail( $linha ['email_usuario_usuario'] );
+                $mensagemForum->getUsuario()->setLogin( $linha ['login_usuario_usuario'] );
+                $mensagemForum->getUsuario()->setSenha( $linha ['senha_usuario_usuario'] );
+                $mensagemForum->getUsuario()->setNivel( $linha ['nivel_usuario_usuario'] );
+                $lista [] = $mensagemForum;
+
+	
+		    }
     			    
         } catch(PDOException $e) {
             echo $e->getMessage();

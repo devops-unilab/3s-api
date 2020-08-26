@@ -210,24 +210,25 @@ class ServicoDAO extends DAO {
             $stmt->bindParam(":id", $id, PDO::PARAM_INT);
             $stmt->execute();
             $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            foreach ( $result as $linha ) {
-                $servico = new Servico();
-    	        $servico->setId( $linha ['id'] );
-    	        $servico->setNome( $linha ['nome'] );
-    	        $servico->setDescricao( $linha ['descricao'] );
-    	        $servico->setTempoSla( $linha ['tempo_sla'] );
-    	        $servico->setVisao( $linha ['visao'] );
-    			$servico->getTipoAtividade()->setId( $linha ['id_tipo_atividade_tipo_atividade'] );
-    			$servico->getTipoAtividade()->setNome( $linha ['nome_tipo_atividade_tipo_atividade'] );
-    			$servico->getAreaResponsavel()->setId( $linha ['id_area_responsavel_area_responsavel'] );
-    			$servico->getAreaResponsavel()->setNome( $linha ['nome_area_responsavel_area_responsavel'] );
-    			$servico->getAreaResponsavel()->setDescricao( $linha ['descricao_area_responsavel_area_responsavel'] );
-    			$servico->getAreaResponsavel()->setEmail( $linha ['email_area_responsavel_area_responsavel'] );
-    			$servico->getGrupoServico()->setId( $linha ['id_grupo_servico_grupo_servico'] );
-    			$servico->getGrupoServico()->setNome( $linha ['nome_grupo_servico_grupo_servico'] );
-    			$lista [] = $servico;
-    			    
-            }
+            foreach ( $result as $linha ){
+		        $servico = new Servico();
+                $servico->setId( $linha ['id'] );
+                $servico->setNome( $linha ['nome'] );
+                $servico->setDescricao( $linha ['descricao'] );
+                $servico->setTempoSla( $linha ['tempo_sla'] );
+                $servico->setVisao( $linha ['visao'] );
+                $servico->getTipoAtividade()->setId( $linha ['id_tipo_atividade_tipo_atividade'] );
+                $servico->getTipoAtividade()->setNome( $linha ['nome_tipo_atividade_tipo_atividade'] );
+                $servico->getAreaResponsavel()->setId( $linha ['id_area_responsavel_area_responsavel'] );
+                $servico->getAreaResponsavel()->setNome( $linha ['nome_area_responsavel_area_responsavel'] );
+                $servico->getAreaResponsavel()->setDescricao( $linha ['descricao_area_responsavel_area_responsavel'] );
+                $servico->getAreaResponsavel()->setEmail( $linha ['email_area_responsavel_area_responsavel'] );
+                $servico->getGrupoServico()->setId( $linha ['id_grupo_servico_grupo_servico'] );
+                $servico->getGrupoServico()->setNome( $linha ['nome_grupo_servico_grupo_servico'] );
+                $lista [] = $servico;
+
+	
+		    }
     			    
         } catch(PDOException $e) {
             echo $e->getMessage();
@@ -267,24 +268,25 @@ class ServicoDAO extends DAO {
             $stmt->bindParam(":nome", $nome, PDO::PARAM_STR);
             $stmt->execute();
             $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            foreach ( $result as $linha ) {
-                $servico = new Servico();
-    	        $servico->setId( $linha ['id'] );
-    	        $servico->setNome( $linha ['nome'] );
-    	        $servico->setDescricao( $linha ['descricao'] );
-    	        $servico->setTempoSla( $linha ['tempo_sla'] );
-    	        $servico->setVisao( $linha ['visao'] );
-    			$servico->getTipoAtividade()->setId( $linha ['id_tipo_atividade_tipo_atividade'] );
-    			$servico->getTipoAtividade()->setNome( $linha ['nome_tipo_atividade_tipo_atividade'] );
-    			$servico->getAreaResponsavel()->setId( $linha ['id_area_responsavel_area_responsavel'] );
-    			$servico->getAreaResponsavel()->setNome( $linha ['nome_area_responsavel_area_responsavel'] );
-    			$servico->getAreaResponsavel()->setDescricao( $linha ['descricao_area_responsavel_area_responsavel'] );
-    			$servico->getAreaResponsavel()->setEmail( $linha ['email_area_responsavel_area_responsavel'] );
-    			$servico->getGrupoServico()->setId( $linha ['id_grupo_servico_grupo_servico'] );
-    			$servico->getGrupoServico()->setNome( $linha ['nome_grupo_servico_grupo_servico'] );
-    			$lista [] = $servico;
-    			    
-            }
+            foreach ( $result as $linha ){
+		        $servico = new Servico();
+                $servico->setId( $linha ['id'] );
+                $servico->setNome( $linha ['nome'] );
+                $servico->setDescricao( $linha ['descricao'] );
+                $servico->setTempoSla( $linha ['tempo_sla'] );
+                $servico->setVisao( $linha ['visao'] );
+                $servico->getTipoAtividade()->setId( $linha ['id_tipo_atividade_tipo_atividade'] );
+                $servico->getTipoAtividade()->setNome( $linha ['nome_tipo_atividade_tipo_atividade'] );
+                $servico->getAreaResponsavel()->setId( $linha ['id_area_responsavel_area_responsavel'] );
+                $servico->getAreaResponsavel()->setNome( $linha ['nome_area_responsavel_area_responsavel'] );
+                $servico->getAreaResponsavel()->setDescricao( $linha ['descricao_area_responsavel_area_responsavel'] );
+                $servico->getAreaResponsavel()->setEmail( $linha ['email_area_responsavel_area_responsavel'] );
+                $servico->getGrupoServico()->setId( $linha ['id_grupo_servico_grupo_servico'] );
+                $servico->getGrupoServico()->setNome( $linha ['nome_grupo_servico_grupo_servico'] );
+                $lista [] = $servico;
+
+	
+		    }
     			    
         } catch(PDOException $e) {
             echo $e->getMessage();
@@ -324,24 +326,25 @@ class ServicoDAO extends DAO {
             $stmt->bindParam(":descricao", $descricao, PDO::PARAM_STR);
             $stmt->execute();
             $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            foreach ( $result as $linha ) {
-                $servico = new Servico();
-    	        $servico->setId( $linha ['id'] );
-    	        $servico->setNome( $linha ['nome'] );
-    	        $servico->setDescricao( $linha ['descricao'] );
-    	        $servico->setTempoSla( $linha ['tempo_sla'] );
-    	        $servico->setVisao( $linha ['visao'] );
-    			$servico->getTipoAtividade()->setId( $linha ['id_tipo_atividade_tipo_atividade'] );
-    			$servico->getTipoAtividade()->setNome( $linha ['nome_tipo_atividade_tipo_atividade'] );
-    			$servico->getAreaResponsavel()->setId( $linha ['id_area_responsavel_area_responsavel'] );
-    			$servico->getAreaResponsavel()->setNome( $linha ['nome_area_responsavel_area_responsavel'] );
-    			$servico->getAreaResponsavel()->setDescricao( $linha ['descricao_area_responsavel_area_responsavel'] );
-    			$servico->getAreaResponsavel()->setEmail( $linha ['email_area_responsavel_area_responsavel'] );
-    			$servico->getGrupoServico()->setId( $linha ['id_grupo_servico_grupo_servico'] );
-    			$servico->getGrupoServico()->setNome( $linha ['nome_grupo_servico_grupo_servico'] );
-    			$lista [] = $servico;
-    			    
-            }
+            foreach ( $result as $linha ){
+		        $servico = new Servico();
+                $servico->setId( $linha ['id'] );
+                $servico->setNome( $linha ['nome'] );
+                $servico->setDescricao( $linha ['descricao'] );
+                $servico->setTempoSla( $linha ['tempo_sla'] );
+                $servico->setVisao( $linha ['visao'] );
+                $servico->getTipoAtividade()->setId( $linha ['id_tipo_atividade_tipo_atividade'] );
+                $servico->getTipoAtividade()->setNome( $linha ['nome_tipo_atividade_tipo_atividade'] );
+                $servico->getAreaResponsavel()->setId( $linha ['id_area_responsavel_area_responsavel'] );
+                $servico->getAreaResponsavel()->setNome( $linha ['nome_area_responsavel_area_responsavel'] );
+                $servico->getAreaResponsavel()->setDescricao( $linha ['descricao_area_responsavel_area_responsavel'] );
+                $servico->getAreaResponsavel()->setEmail( $linha ['email_area_responsavel_area_responsavel'] );
+                $servico->getGrupoServico()->setId( $linha ['id_grupo_servico_grupo_servico'] );
+                $servico->getGrupoServico()->setNome( $linha ['nome_grupo_servico_grupo_servico'] );
+                $lista [] = $servico;
+
+	
+		    }
     			    
         } catch(PDOException $e) {
             echo $e->getMessage();
@@ -381,24 +384,25 @@ class ServicoDAO extends DAO {
             $stmt->bindParam(":tempoSla", $tempoSla, PDO::PARAM_INT);
             $stmt->execute();
             $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            foreach ( $result as $linha ) {
-                $servico = new Servico();
-    	        $servico->setId( $linha ['id'] );
-    	        $servico->setNome( $linha ['nome'] );
-    	        $servico->setDescricao( $linha ['descricao'] );
-    	        $servico->setTempoSla( $linha ['tempo_sla'] );
-    	        $servico->setVisao( $linha ['visao'] );
-    			$servico->getTipoAtividade()->setId( $linha ['id_tipo_atividade_tipo_atividade'] );
-    			$servico->getTipoAtividade()->setNome( $linha ['nome_tipo_atividade_tipo_atividade'] );
-    			$servico->getAreaResponsavel()->setId( $linha ['id_area_responsavel_area_responsavel'] );
-    			$servico->getAreaResponsavel()->setNome( $linha ['nome_area_responsavel_area_responsavel'] );
-    			$servico->getAreaResponsavel()->setDescricao( $linha ['descricao_area_responsavel_area_responsavel'] );
-    			$servico->getAreaResponsavel()->setEmail( $linha ['email_area_responsavel_area_responsavel'] );
-    			$servico->getGrupoServico()->setId( $linha ['id_grupo_servico_grupo_servico'] );
-    			$servico->getGrupoServico()->setNome( $linha ['nome_grupo_servico_grupo_servico'] );
-    			$lista [] = $servico;
-    			    
-            }
+            foreach ( $result as $linha ){
+		        $servico = new Servico();
+                $servico->setId( $linha ['id'] );
+                $servico->setNome( $linha ['nome'] );
+                $servico->setDescricao( $linha ['descricao'] );
+                $servico->setTempoSla( $linha ['tempo_sla'] );
+                $servico->setVisao( $linha ['visao'] );
+                $servico->getTipoAtividade()->setId( $linha ['id_tipo_atividade_tipo_atividade'] );
+                $servico->getTipoAtividade()->setNome( $linha ['nome_tipo_atividade_tipo_atividade'] );
+                $servico->getAreaResponsavel()->setId( $linha ['id_area_responsavel_area_responsavel'] );
+                $servico->getAreaResponsavel()->setNome( $linha ['nome_area_responsavel_area_responsavel'] );
+                $servico->getAreaResponsavel()->setDescricao( $linha ['descricao_area_responsavel_area_responsavel'] );
+                $servico->getAreaResponsavel()->setEmail( $linha ['email_area_responsavel_area_responsavel'] );
+                $servico->getGrupoServico()->setId( $linha ['id_grupo_servico_grupo_servico'] );
+                $servico->getGrupoServico()->setNome( $linha ['nome_grupo_servico_grupo_servico'] );
+                $lista [] = $servico;
+
+	
+		    }
     			    
         } catch(PDOException $e) {
             echo $e->getMessage();
@@ -438,24 +442,25 @@ class ServicoDAO extends DAO {
             $stmt->bindParam(":visao", $visao, PDO::PARAM_INT);
             $stmt->execute();
             $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            foreach ( $result as $linha ) {
-                $servico = new Servico();
-    	        $servico->setId( $linha ['id'] );
-    	        $servico->setNome( $linha ['nome'] );
-    	        $servico->setDescricao( $linha ['descricao'] );
-    	        $servico->setTempoSla( $linha ['tempo_sla'] );
-    	        $servico->setVisao( $linha ['visao'] );
-    			$servico->getTipoAtividade()->setId( $linha ['id_tipo_atividade_tipo_atividade'] );
-    			$servico->getTipoAtividade()->setNome( $linha ['nome_tipo_atividade_tipo_atividade'] );
-    			$servico->getAreaResponsavel()->setId( $linha ['id_area_responsavel_area_responsavel'] );
-    			$servico->getAreaResponsavel()->setNome( $linha ['nome_area_responsavel_area_responsavel'] );
-    			$servico->getAreaResponsavel()->setDescricao( $linha ['descricao_area_responsavel_area_responsavel'] );
-    			$servico->getAreaResponsavel()->setEmail( $linha ['email_area_responsavel_area_responsavel'] );
-    			$servico->getGrupoServico()->setId( $linha ['id_grupo_servico_grupo_servico'] );
-    			$servico->getGrupoServico()->setNome( $linha ['nome_grupo_servico_grupo_servico'] );
-    			$lista [] = $servico;
-    			    
-            }
+            foreach ( $result as $linha ){
+		        $servico = new Servico();
+                $servico->setId( $linha ['id'] );
+                $servico->setNome( $linha ['nome'] );
+                $servico->setDescricao( $linha ['descricao'] );
+                $servico->setTempoSla( $linha ['tempo_sla'] );
+                $servico->setVisao( $linha ['visao'] );
+                $servico->getTipoAtividade()->setId( $linha ['id_tipo_atividade_tipo_atividade'] );
+                $servico->getTipoAtividade()->setNome( $linha ['nome_tipo_atividade_tipo_atividade'] );
+                $servico->getAreaResponsavel()->setId( $linha ['id_area_responsavel_area_responsavel'] );
+                $servico->getAreaResponsavel()->setNome( $linha ['nome_area_responsavel_area_responsavel'] );
+                $servico->getAreaResponsavel()->setDescricao( $linha ['descricao_area_responsavel_area_responsavel'] );
+                $servico->getAreaResponsavel()->setEmail( $linha ['email_area_responsavel_area_responsavel'] );
+                $servico->getGrupoServico()->setId( $linha ['id_grupo_servico_grupo_servico'] );
+                $servico->getGrupoServico()->setNome( $linha ['nome_grupo_servico_grupo_servico'] );
+                $lista [] = $servico;
+
+	
+		    }
     			    
         } catch(PDOException $e) {
             echo $e->getMessage();

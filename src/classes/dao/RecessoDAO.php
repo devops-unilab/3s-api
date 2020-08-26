@@ -138,13 +138,14 @@ class RecessoDAO extends DAO {
             $stmt->bindParam(":id", $id, PDO::PARAM_INT);
             $stmt->execute();
             $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            foreach ( $result as $linha ) {
-                $recesso = new Recesso();
-    	        $recesso->setId( $linha ['id'] );
-    	        $recesso->setData( $linha ['data'] );
-    			$lista [] = $recesso;
-    			    
-            }
+            foreach ( $result as $linha ){
+		        $recesso = new Recesso();
+                $recesso->setId( $linha ['id'] );
+                $recesso->setData( $linha ['data'] );
+                $lista [] = $recesso;
+
+	
+		    }
     			    
         } catch(PDOException $e) {
             echo $e->getMessage();
@@ -170,13 +171,14 @@ class RecessoDAO extends DAO {
             $stmt->bindParam(":data", $data, PDO::PARAM_STR);
             $stmt->execute();
             $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            foreach ( $result as $linha ) {
-                $recesso = new Recesso();
-    	        $recesso->setId( $linha ['id'] );
-    	        $recesso->setData( $linha ['data'] );
-    			$lista [] = $recesso;
-    			    
-            }
+            foreach ( $result as $linha ){
+		        $recesso = new Recesso();
+                $recesso->setId( $linha ['id'] );
+                $recesso->setData( $linha ['data'] );
+                $lista [] = $recesso;
+
+	
+		    }
     			    
         } catch(PDOException $e) {
             echo $e->getMessage();

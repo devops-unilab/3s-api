@@ -244,43 +244,41 @@ class StatusOcorrenciaDAO extends DAO {
             $stmt->bindParam(":id", $id, PDO::PARAM_INT);
             $stmt->execute();
             $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            foreach ( $result as $linha ) {
-                $statusOcorrencia = new StatusOcorrencia();
-    	        $statusOcorrencia->setId( $linha ['id'] );
-    	        $statusOcorrencia->setMensagem( $linha ['mensagem'] );
-    	        $statusOcorrencia->setDataMudanca( $linha ['data_mudanca'] );
-    			$statusOcorrencia->getOcorrencia()->setId( $linha ['id_ocorrencia_ocorrencia'] );
-    			$statusOcorrencia->getOcorrencia()->setAreaResponsavel( $linha ['area_responsavel_ocorrencia_ocorrencia'] );
-    			$statusOcorrencia->getOcorrencia()->setServico( $linha ['servico_ocorrencia_ocorrencia'] );
-    			$statusOcorrencia->getOcorrencia()->setIdLocal( $linha ['id_local_ocorrencia_ocorrencia'] );
-    			$statusOcorrencia->getOcorrencia()->setIdUsuarioCliente( $linha ['id_usuario_cliente_ocorrencia_ocorrencia'] );
-    			$statusOcorrencia->getOcorrencia()->setDescricao( $linha ['descricao_ocorrencia_ocorrencia'] );
-    			$statusOcorrencia->getOcorrencia()->setCampus( $linha ['campus_ocorrencia_ocorrencia'] );
-    			$statusOcorrencia->getOcorrencia()->setPatrimonio( $linha ['patrimonio_ocorrencia_ocorrencia'] );
-    			$statusOcorrencia->getOcorrencia()->setRamal( $linha ['ramal_ocorrencia_ocorrencia'] );
-    			$statusOcorrencia->getOcorrencia()->setLocal( $linha ['local_ocorrencia_ocorrencia'] );
-    			$statusOcorrencia->getOcorrencia()->setStatus( $linha ['status_ocorrencia_ocorrencia'] );
-    			$statusOcorrencia->getOcorrencia()->setSolucao( $linha ['solucao_ocorrencia_ocorrencia'] );
-    			$statusOcorrencia->getOcorrencia()->setPrioridade( $linha ['prioridade_ocorrencia_ocorrencia'] );
-    			$statusOcorrencia->getOcorrencia()->setAvaliacao( $linha ['avaliacao_ocorrencia_ocorrencia'] );
-    			$statusOcorrencia->getOcorrencia()->setEmail( $linha ['email_ocorrencia_ocorrencia'] );
-    			$statusOcorrencia->getOcorrencia()->setIdUsuarioAtendente( $linha ['id_usuario_atendente_ocorrencia_ocorrencia'] );
-    			$statusOcorrencia->getOcorrencia()->setIdUsuarioIndicado( $linha ['id_usuario_indicado_ocorrencia_ocorrencia'] );
-    			$statusOcorrencia->getOcorrencia()->setAnexo( $linha ['anexo_ocorrencia_ocorrencia'] );
-    			$statusOcorrencia->getOcorrencia()->setLocalSala( $linha ['local_sala_ocorrencia_ocorrencia'] );
-    			$statusOcorrencia->getStatus()->setId( $linha ['id_status_status'] );
-    			$statusOcorrencia->getStatus()->setSigla( $linha ['sigla_status_status'] );
-    			$statusOcorrencia->getStatus()->setNome( $linha ['nome_status_status'] );
-    			$statusOcorrencia->getUsuario()->setId( $linha ['id_usuario_usuario'] );
-    			$statusOcorrencia->getUsuario()->setNome( $linha ['nome_usuario_usuario'] );
-    			$statusOcorrencia->getUsuario()->setEmail( $linha ['email_usuario_usuario'] );
-    			$statusOcorrencia->getUsuario()->setLogin( $linha ['login_usuario_usuario'] );
-    			$statusOcorrencia->getUsuario()->setSenha( $linha ['senha_usuario_usuario'] );
-    			$statusOcorrencia->getUsuario()->setNivel( $linha ['nivel_usuario_usuario'] );
-    			$statusOcorrencia->getUsuario()->setSetor( $linha ['setor_usuario_usuario'] );
-    			$lista [] = $statusOcorrencia;
-    			    
-            }
+            foreach ( $result as $linha ){
+		        $statusOcorrencia = new StatusOcorrencia();
+                $statusOcorrencia->setId( $linha ['id'] );
+                $statusOcorrencia->setMensagem( $linha ['mensagem'] );
+                $statusOcorrencia->setDataMudanca( $linha ['data_mudanca'] );
+                $statusOcorrencia->getOcorrencia()->setId( $linha ['id_ocorrencia_ocorrencia'] );
+                $statusOcorrencia->getOcorrencia()->setIdLocal( $linha ['id_local_ocorrencia_ocorrencia'] );
+                $statusOcorrencia->getOcorrencia()->setIdUsuarioCliente( $linha ['id_usuario_cliente_ocorrencia_ocorrencia'] );
+                $statusOcorrencia->getOcorrencia()->setDescricao( $linha ['descricao_ocorrencia_ocorrencia'] );
+                $statusOcorrencia->getOcorrencia()->setCampus( $linha ['campus_ocorrencia_ocorrencia'] );
+                $statusOcorrencia->getOcorrencia()->setPatrimonio( $linha ['patrimonio_ocorrencia_ocorrencia'] );
+                $statusOcorrencia->getOcorrencia()->setRamal( $linha ['ramal_ocorrencia_ocorrencia'] );
+                $statusOcorrencia->getOcorrencia()->setLocal( $linha ['local_ocorrencia_ocorrencia'] );
+                $statusOcorrencia->getOcorrencia()->setStatus( $linha ['status_ocorrencia_ocorrencia'] );
+                $statusOcorrencia->getOcorrencia()->setSolucao( $linha ['solucao_ocorrencia_ocorrencia'] );
+                $statusOcorrencia->getOcorrencia()->setPrioridade( $linha ['prioridade_ocorrencia_ocorrencia'] );
+                $statusOcorrencia->getOcorrencia()->setAvaliacao( $linha ['avaliacao_ocorrencia_ocorrencia'] );
+                $statusOcorrencia->getOcorrencia()->setEmail( $linha ['email_ocorrencia_ocorrencia'] );
+                $statusOcorrencia->getOcorrencia()->setIdUsuarioAtendente( $linha ['id_usuario_atendente_ocorrencia_ocorrencia'] );
+                $statusOcorrencia->getOcorrencia()->setIdUsuarioIndicado( $linha ['id_usuario_indicado_ocorrencia_ocorrencia'] );
+                $statusOcorrencia->getOcorrencia()->setAnexo( $linha ['anexo_ocorrencia_ocorrencia'] );
+                $statusOcorrencia->getOcorrencia()->setLocalSala( $linha ['local_sala_ocorrencia_ocorrencia'] );
+                $statusOcorrencia->getStatus()->setId( $linha ['id_status_status'] );
+                $statusOcorrencia->getStatus()->setSigla( $linha ['sigla_status_status'] );
+                $statusOcorrencia->getStatus()->setNome( $linha ['nome_status_status'] );
+                $statusOcorrencia->getUsuario()->setId( $linha ['id_usuario_usuario'] );
+                $statusOcorrencia->getUsuario()->setNome( $linha ['nome_usuario_usuario'] );
+                $statusOcorrencia->getUsuario()->setEmail( $linha ['email_usuario_usuario'] );
+                $statusOcorrencia->getUsuario()->setLogin( $linha ['login_usuario_usuario'] );
+                $statusOcorrencia->getUsuario()->setSenha( $linha ['senha_usuario_usuario'] );
+                $statusOcorrencia->getUsuario()->setNivel( $linha ['nivel_usuario_usuario'] );
+                $lista [] = $statusOcorrencia;
+
+	
+		    }
     			    
         } catch(PDOException $e) {
             echo $e->getMessage();
@@ -336,43 +334,41 @@ class StatusOcorrenciaDAO extends DAO {
             $stmt->bindParam(":mensagem", $mensagem, PDO::PARAM_STR);
             $stmt->execute();
             $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            foreach ( $result as $linha ) {
-                $statusOcorrencia = new StatusOcorrencia();
-    	        $statusOcorrencia->setId( $linha ['id'] );
-    	        $statusOcorrencia->setMensagem( $linha ['mensagem'] );
-    	        $statusOcorrencia->setDataMudanca( $linha ['data_mudanca'] );
-    			$statusOcorrencia->getOcorrencia()->setId( $linha ['id_ocorrencia_ocorrencia'] );
-    			$statusOcorrencia->getOcorrencia()->setAreaResponsavel( $linha ['area_responsavel_ocorrencia_ocorrencia'] );
-    			$statusOcorrencia->getOcorrencia()->setServico( $linha ['servico_ocorrencia_ocorrencia'] );
-    			$statusOcorrencia->getOcorrencia()->setIdLocal( $linha ['id_local_ocorrencia_ocorrencia'] );
-    			$statusOcorrencia->getOcorrencia()->setIdUsuarioCliente( $linha ['id_usuario_cliente_ocorrencia_ocorrencia'] );
-    			$statusOcorrencia->getOcorrencia()->setDescricao( $linha ['descricao_ocorrencia_ocorrencia'] );
-    			$statusOcorrencia->getOcorrencia()->setCampus( $linha ['campus_ocorrencia_ocorrencia'] );
-    			$statusOcorrencia->getOcorrencia()->setPatrimonio( $linha ['patrimonio_ocorrencia_ocorrencia'] );
-    			$statusOcorrencia->getOcorrencia()->setRamal( $linha ['ramal_ocorrencia_ocorrencia'] );
-    			$statusOcorrencia->getOcorrencia()->setLocal( $linha ['local_ocorrencia_ocorrencia'] );
-    			$statusOcorrencia->getOcorrencia()->setStatus( $linha ['status_ocorrencia_ocorrencia'] );
-    			$statusOcorrencia->getOcorrencia()->setSolucao( $linha ['solucao_ocorrencia_ocorrencia'] );
-    			$statusOcorrencia->getOcorrencia()->setPrioridade( $linha ['prioridade_ocorrencia_ocorrencia'] );
-    			$statusOcorrencia->getOcorrencia()->setAvaliacao( $linha ['avaliacao_ocorrencia_ocorrencia'] );
-    			$statusOcorrencia->getOcorrencia()->setEmail( $linha ['email_ocorrencia_ocorrencia'] );
-    			$statusOcorrencia->getOcorrencia()->setIdUsuarioAtendente( $linha ['id_usuario_atendente_ocorrencia_ocorrencia'] );
-    			$statusOcorrencia->getOcorrencia()->setIdUsuarioIndicado( $linha ['id_usuario_indicado_ocorrencia_ocorrencia'] );
-    			$statusOcorrencia->getOcorrencia()->setAnexo( $linha ['anexo_ocorrencia_ocorrencia'] );
-    			$statusOcorrencia->getOcorrencia()->setLocalSala( $linha ['local_sala_ocorrencia_ocorrencia'] );
-    			$statusOcorrencia->getStatus()->setId( $linha ['id_status_status'] );
-    			$statusOcorrencia->getStatus()->setSigla( $linha ['sigla_status_status'] );
-    			$statusOcorrencia->getStatus()->setNome( $linha ['nome_status_status'] );
-    			$statusOcorrencia->getUsuario()->setId( $linha ['id_usuario_usuario'] );
-    			$statusOcorrencia->getUsuario()->setNome( $linha ['nome_usuario_usuario'] );
-    			$statusOcorrencia->getUsuario()->setEmail( $linha ['email_usuario_usuario'] );
-    			$statusOcorrencia->getUsuario()->setLogin( $linha ['login_usuario_usuario'] );
-    			$statusOcorrencia->getUsuario()->setSenha( $linha ['senha_usuario_usuario'] );
-    			$statusOcorrencia->getUsuario()->setNivel( $linha ['nivel_usuario_usuario'] );
-    			$statusOcorrencia->getUsuario()->setSetor( $linha ['setor_usuario_usuario'] );
-    			$lista [] = $statusOcorrencia;
-    			    
-            }
+            foreach ( $result as $linha ){
+		        $statusOcorrencia = new StatusOcorrencia();
+                $statusOcorrencia->setId( $linha ['id'] );
+                $statusOcorrencia->setMensagem( $linha ['mensagem'] );
+                $statusOcorrencia->setDataMudanca( $linha ['data_mudanca'] );
+                $statusOcorrencia->getOcorrencia()->setId( $linha ['id_ocorrencia_ocorrencia'] );
+                $statusOcorrencia->getOcorrencia()->setIdLocal( $linha ['id_local_ocorrencia_ocorrencia'] );
+                $statusOcorrencia->getOcorrencia()->setIdUsuarioCliente( $linha ['id_usuario_cliente_ocorrencia_ocorrencia'] );
+                $statusOcorrencia->getOcorrencia()->setDescricao( $linha ['descricao_ocorrencia_ocorrencia'] );
+                $statusOcorrencia->getOcorrencia()->setCampus( $linha ['campus_ocorrencia_ocorrencia'] );
+                $statusOcorrencia->getOcorrencia()->setPatrimonio( $linha ['patrimonio_ocorrencia_ocorrencia'] );
+                $statusOcorrencia->getOcorrencia()->setRamal( $linha ['ramal_ocorrencia_ocorrencia'] );
+                $statusOcorrencia->getOcorrencia()->setLocal( $linha ['local_ocorrencia_ocorrencia'] );
+                $statusOcorrencia->getOcorrencia()->setStatus( $linha ['status_ocorrencia_ocorrencia'] );
+                $statusOcorrencia->getOcorrencia()->setSolucao( $linha ['solucao_ocorrencia_ocorrencia'] );
+                $statusOcorrencia->getOcorrencia()->setPrioridade( $linha ['prioridade_ocorrencia_ocorrencia'] );
+                $statusOcorrencia->getOcorrencia()->setAvaliacao( $linha ['avaliacao_ocorrencia_ocorrencia'] );
+                $statusOcorrencia->getOcorrencia()->setEmail( $linha ['email_ocorrencia_ocorrencia'] );
+                $statusOcorrencia->getOcorrencia()->setIdUsuarioAtendente( $linha ['id_usuario_atendente_ocorrencia_ocorrencia'] );
+                $statusOcorrencia->getOcorrencia()->setIdUsuarioIndicado( $linha ['id_usuario_indicado_ocorrencia_ocorrencia'] );
+                $statusOcorrencia->getOcorrencia()->setAnexo( $linha ['anexo_ocorrencia_ocorrencia'] );
+                $statusOcorrencia->getOcorrencia()->setLocalSala( $linha ['local_sala_ocorrencia_ocorrencia'] );
+                $statusOcorrencia->getStatus()->setId( $linha ['id_status_status'] );
+                $statusOcorrencia->getStatus()->setSigla( $linha ['sigla_status_status'] );
+                $statusOcorrencia->getStatus()->setNome( $linha ['nome_status_status'] );
+                $statusOcorrencia->getUsuario()->setId( $linha ['id_usuario_usuario'] );
+                $statusOcorrencia->getUsuario()->setNome( $linha ['nome_usuario_usuario'] );
+                $statusOcorrencia->getUsuario()->setEmail( $linha ['email_usuario_usuario'] );
+                $statusOcorrencia->getUsuario()->setLogin( $linha ['login_usuario_usuario'] );
+                $statusOcorrencia->getUsuario()->setSenha( $linha ['senha_usuario_usuario'] );
+                $statusOcorrencia->getUsuario()->setNivel( $linha ['nivel_usuario_usuario'] );
+                $lista [] = $statusOcorrencia;
+
+	
+		    }
     			    
         } catch(PDOException $e) {
             echo $e->getMessage();
@@ -428,43 +424,41 @@ class StatusOcorrenciaDAO extends DAO {
             $stmt->bindParam(":dataMudanca", $dataMudanca, PDO::PARAM_STR);
             $stmt->execute();
             $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            foreach ( $result as $linha ) {
-                $statusOcorrencia = new StatusOcorrencia();
-    	        $statusOcorrencia->setId( $linha ['id'] );
-    	        $statusOcorrencia->setMensagem( $linha ['mensagem'] );
-    	        $statusOcorrencia->setDataMudanca( $linha ['data_mudanca'] );
-    			$statusOcorrencia->getOcorrencia()->setId( $linha ['id_ocorrencia_ocorrencia'] );
-    			$statusOcorrencia->getOcorrencia()->setAreaResponsavel( $linha ['area_responsavel_ocorrencia_ocorrencia'] );
-    			$statusOcorrencia->getOcorrencia()->setServico( $linha ['servico_ocorrencia_ocorrencia'] );
-    			$statusOcorrencia->getOcorrencia()->setIdLocal( $linha ['id_local_ocorrencia_ocorrencia'] );
-    			$statusOcorrencia->getOcorrencia()->setIdUsuarioCliente( $linha ['id_usuario_cliente_ocorrencia_ocorrencia'] );
-    			$statusOcorrencia->getOcorrencia()->setDescricao( $linha ['descricao_ocorrencia_ocorrencia'] );
-    			$statusOcorrencia->getOcorrencia()->setCampus( $linha ['campus_ocorrencia_ocorrencia'] );
-    			$statusOcorrencia->getOcorrencia()->setPatrimonio( $linha ['patrimonio_ocorrencia_ocorrencia'] );
-    			$statusOcorrencia->getOcorrencia()->setRamal( $linha ['ramal_ocorrencia_ocorrencia'] );
-    			$statusOcorrencia->getOcorrencia()->setLocal( $linha ['local_ocorrencia_ocorrencia'] );
-    			$statusOcorrencia->getOcorrencia()->setStatus( $linha ['status_ocorrencia_ocorrencia'] );
-    			$statusOcorrencia->getOcorrencia()->setSolucao( $linha ['solucao_ocorrencia_ocorrencia'] );
-    			$statusOcorrencia->getOcorrencia()->setPrioridade( $linha ['prioridade_ocorrencia_ocorrencia'] );
-    			$statusOcorrencia->getOcorrencia()->setAvaliacao( $linha ['avaliacao_ocorrencia_ocorrencia'] );
-    			$statusOcorrencia->getOcorrencia()->setEmail( $linha ['email_ocorrencia_ocorrencia'] );
-    			$statusOcorrencia->getOcorrencia()->setIdUsuarioAtendente( $linha ['id_usuario_atendente_ocorrencia_ocorrencia'] );
-    			$statusOcorrencia->getOcorrencia()->setIdUsuarioIndicado( $linha ['id_usuario_indicado_ocorrencia_ocorrencia'] );
-    			$statusOcorrencia->getOcorrencia()->setAnexo( $linha ['anexo_ocorrencia_ocorrencia'] );
-    			$statusOcorrencia->getOcorrencia()->setLocalSala( $linha ['local_sala_ocorrencia_ocorrencia'] );
-    			$statusOcorrencia->getStatus()->setId( $linha ['id_status_status'] );
-    			$statusOcorrencia->getStatus()->setSigla( $linha ['sigla_status_status'] );
-    			$statusOcorrencia->getStatus()->setNome( $linha ['nome_status_status'] );
-    			$statusOcorrencia->getUsuario()->setId( $linha ['id_usuario_usuario'] );
-    			$statusOcorrencia->getUsuario()->setNome( $linha ['nome_usuario_usuario'] );
-    			$statusOcorrencia->getUsuario()->setEmail( $linha ['email_usuario_usuario'] );
-    			$statusOcorrencia->getUsuario()->setLogin( $linha ['login_usuario_usuario'] );
-    			$statusOcorrencia->getUsuario()->setSenha( $linha ['senha_usuario_usuario'] );
-    			$statusOcorrencia->getUsuario()->setNivel( $linha ['nivel_usuario_usuario'] );
-    			$statusOcorrencia->getUsuario()->setSetor( $linha ['setor_usuario_usuario'] );
-    			$lista [] = $statusOcorrencia;
-    			    
-            }
+            foreach ( $result as $linha ){
+		        $statusOcorrencia = new StatusOcorrencia();
+                $statusOcorrencia->setId( $linha ['id'] );
+                $statusOcorrencia->setMensagem( $linha ['mensagem'] );
+                $statusOcorrencia->setDataMudanca( $linha ['data_mudanca'] );
+                $statusOcorrencia->getOcorrencia()->setId( $linha ['id_ocorrencia_ocorrencia'] );
+                $statusOcorrencia->getOcorrencia()->setIdLocal( $linha ['id_local_ocorrencia_ocorrencia'] );
+                $statusOcorrencia->getOcorrencia()->setIdUsuarioCliente( $linha ['id_usuario_cliente_ocorrencia_ocorrencia'] );
+                $statusOcorrencia->getOcorrencia()->setDescricao( $linha ['descricao_ocorrencia_ocorrencia'] );
+                $statusOcorrencia->getOcorrencia()->setCampus( $linha ['campus_ocorrencia_ocorrencia'] );
+                $statusOcorrencia->getOcorrencia()->setPatrimonio( $linha ['patrimonio_ocorrencia_ocorrencia'] );
+                $statusOcorrencia->getOcorrencia()->setRamal( $linha ['ramal_ocorrencia_ocorrencia'] );
+                $statusOcorrencia->getOcorrencia()->setLocal( $linha ['local_ocorrencia_ocorrencia'] );
+                $statusOcorrencia->getOcorrencia()->setStatus( $linha ['status_ocorrencia_ocorrencia'] );
+                $statusOcorrencia->getOcorrencia()->setSolucao( $linha ['solucao_ocorrencia_ocorrencia'] );
+                $statusOcorrencia->getOcorrencia()->setPrioridade( $linha ['prioridade_ocorrencia_ocorrencia'] );
+                $statusOcorrencia->getOcorrencia()->setAvaliacao( $linha ['avaliacao_ocorrencia_ocorrencia'] );
+                $statusOcorrencia->getOcorrencia()->setEmail( $linha ['email_ocorrencia_ocorrencia'] );
+                $statusOcorrencia->getOcorrencia()->setIdUsuarioAtendente( $linha ['id_usuario_atendente_ocorrencia_ocorrencia'] );
+                $statusOcorrencia->getOcorrencia()->setIdUsuarioIndicado( $linha ['id_usuario_indicado_ocorrencia_ocorrencia'] );
+                $statusOcorrencia->getOcorrencia()->setAnexo( $linha ['anexo_ocorrencia_ocorrencia'] );
+                $statusOcorrencia->getOcorrencia()->setLocalSala( $linha ['local_sala_ocorrencia_ocorrencia'] );
+                $statusOcorrencia->getStatus()->setId( $linha ['id_status_status'] );
+                $statusOcorrencia->getStatus()->setSigla( $linha ['sigla_status_status'] );
+                $statusOcorrencia->getStatus()->setNome( $linha ['nome_status_status'] );
+                $statusOcorrencia->getUsuario()->setId( $linha ['id_usuario_usuario'] );
+                $statusOcorrencia->getUsuario()->setNome( $linha ['nome_usuario_usuario'] );
+                $statusOcorrencia->getUsuario()->setEmail( $linha ['email_usuario_usuario'] );
+                $statusOcorrencia->getUsuario()->setLogin( $linha ['login_usuario_usuario'] );
+                $statusOcorrencia->getUsuario()->setSenha( $linha ['senha_usuario_usuario'] );
+                $statusOcorrencia->getUsuario()->setNivel( $linha ['nivel_usuario_usuario'] );
+                $lista [] = $statusOcorrencia;
+
+	
+		    }
     			    
         } catch(PDOException $e) {
             echo $e->getMessage();

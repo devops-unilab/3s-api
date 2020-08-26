@@ -148,14 +148,15 @@ class StatusDAO extends DAO {
             $stmt->bindParam(":id", $id, PDO::PARAM_INT);
             $stmt->execute();
             $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            foreach ( $result as $linha ) {
-                $status = new Status();
-    	        $status->setId( $linha ['id'] );
-    	        $status->setSigla( $linha ['sigla'] );
-    	        $status->setNome( $linha ['nome'] );
-    			$lista [] = $status;
-    			    
-            }
+            foreach ( $result as $linha ){
+		        $status = new Status();
+                $status->setId( $linha ['id'] );
+                $status->setSigla( $linha ['sigla'] );
+                $status->setNome( $linha ['nome'] );
+                $lista [] = $status;
+
+	
+		    }
     			    
         } catch(PDOException $e) {
             echo $e->getMessage();
@@ -182,14 +183,15 @@ class StatusDAO extends DAO {
             $stmt->bindParam(":sigla", $sigla, PDO::PARAM_STR);
             $stmt->execute();
             $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            foreach ( $result as $linha ) {
-                $status = new Status();
-    	        $status->setId( $linha ['id'] );
-    	        $status->setSigla( $linha ['sigla'] );
-    	        $status->setNome( $linha ['nome'] );
-    			$lista [] = $status;
-    			    
-            }
+            foreach ( $result as $linha ){
+		        $status = new Status();
+                $status->setId( $linha ['id'] );
+                $status->setSigla( $linha ['sigla'] );
+                $status->setNome( $linha ['nome'] );
+                $lista [] = $status;
+
+	
+		    }
     			    
         } catch(PDOException $e) {
             echo $e->getMessage();
@@ -216,14 +218,15 @@ class StatusDAO extends DAO {
             $stmt->bindParam(":nome", $nome, PDO::PARAM_STR);
             $stmt->execute();
             $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            foreach ( $result as $linha ) {
-                $status = new Status();
-    	        $status->setId( $linha ['id'] );
-    	        $status->setSigla( $linha ['sigla'] );
-    	        $status->setNome( $linha ['nome'] );
-    			$lista [] = $status;
-    			    
-            }
+            foreach ( $result as $linha ){
+		        $status = new Status();
+                $status->setId( $linha ['id'] );
+                $status->setSigla( $linha ['sigla'] );
+                $status->setNome( $linha ['nome'] );
+                $lista [] = $status;
+
+	
+		    }
     			    
         } catch(PDOException $e) {
             echo $e->getMessage();

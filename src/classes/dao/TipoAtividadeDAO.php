@@ -138,13 +138,14 @@ class TipoAtividadeDAO extends DAO {
             $stmt->bindParam(":id", $id, PDO::PARAM_INT);
             $stmt->execute();
             $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            foreach ( $result as $linha ) {
-                $tipoAtividade = new TipoAtividade();
-    	        $tipoAtividade->setId( $linha ['id'] );
-    	        $tipoAtividade->setNome( $linha ['nome'] );
-    			$lista [] = $tipoAtividade;
-    			    
-            }
+            foreach ( $result as $linha ){
+		        $tipoAtividade = new TipoAtividade();
+                $tipoAtividade->setId( $linha ['id'] );
+                $tipoAtividade->setNome( $linha ['nome'] );
+                $lista [] = $tipoAtividade;
+
+	
+		    }
     			    
         } catch(PDOException $e) {
             echo $e->getMessage();
@@ -170,13 +171,14 @@ class TipoAtividadeDAO extends DAO {
             $stmt->bindParam(":nome", $nome, PDO::PARAM_STR);
             $stmt->execute();
             $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            foreach ( $result as $linha ) {
-                $tipoAtividade = new TipoAtividade();
-    	        $tipoAtividade->setId( $linha ['id'] );
-    	        $tipoAtividade->setNome( $linha ['nome'] );
-    			$lista [] = $tipoAtividade;
-    			    
-            }
+            foreach ( $result as $linha ){
+		        $tipoAtividade = new TipoAtividade();
+                $tipoAtividade->setId( $linha ['id'] );
+                $tipoAtividade->setNome( $linha ['nome'] );
+                $lista [] = $tipoAtividade;
+
+	
+		    }
     			    
         } catch(PDOException $e) {
             echo $e->getMessage();

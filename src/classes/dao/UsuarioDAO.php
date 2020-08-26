@@ -196,21 +196,22 @@ class UsuarioDAO extends DAO {
             $stmt->bindParam(":id", $id, PDO::PARAM_INT);
             $stmt->execute();
             $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            foreach ( $result as $linha ) {
-                $usuario = new Usuario();
-    	        $usuario->setId( $linha ['id'] );
-    	        $usuario->setNome( $linha ['nome'] );
-    	        $usuario->setEmail( $linha ['email'] );
-    	        $usuario->setLogin( $linha ['login'] );
-    	        $usuario->setSenha( $linha ['senha'] );
-    	        $usuario->setNivel( $linha ['nivel'] );
-    			$usuario->getSetor()->setId( $linha ['id_area_responsavel_setor'] );
-    			$usuario->getSetor()->setNome( $linha ['nome_area_responsavel_setor'] );
-    			$usuario->getSetor()->setDescricao( $linha ['descricao_area_responsavel_setor'] );
-    			$usuario->getSetor()->setEmail( $linha ['email_area_responsavel_setor'] );
-    			$lista [] = $usuario;
-    			    
-            }
+            foreach ( $result as $linha ){
+		        $usuario = new Usuario();
+                $usuario->setId( $linha ['id'] );
+                $usuario->setNome( $linha ['nome'] );
+                $usuario->setEmail( $linha ['email'] );
+                $usuario->setLogin( $linha ['login'] );
+                $usuario->setSenha( $linha ['senha'] );
+                $usuario->setNivel( $linha ['nivel'] );
+                $usuario->getSetor()->setId( $linha ['id_area_responsavel_setor'] );
+                $usuario->getSetor()->setNome( $linha ['nome_area_responsavel_setor'] );
+                $usuario->getSetor()->setDescricao( $linha ['descricao_area_responsavel_setor'] );
+                $usuario->getSetor()->setEmail( $linha ['email_area_responsavel_setor'] );
+                $lista [] = $usuario;
+
+	
+		    }
     			    
         } catch(PDOException $e) {
             echo $e->getMessage();
@@ -245,21 +246,22 @@ class UsuarioDAO extends DAO {
             $stmt->bindParam(":nome", $nome, PDO::PARAM_STR);
             $stmt->execute();
             $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            foreach ( $result as $linha ) {
-                $usuario = new Usuario();
-    	        $usuario->setId( $linha ['id'] );
-    	        $usuario->setNome( $linha ['nome'] );
-    	        $usuario->setEmail( $linha ['email'] );
-    	        $usuario->setLogin( $linha ['login'] );
-    	        $usuario->setSenha( $linha ['senha'] );
-    	        $usuario->setNivel( $linha ['nivel'] );
-    			$usuario->getSetor()->setId( $linha ['id_area_responsavel_setor'] );
-    			$usuario->getSetor()->setNome( $linha ['nome_area_responsavel_setor'] );
-    			$usuario->getSetor()->setDescricao( $linha ['descricao_area_responsavel_setor'] );
-    			$usuario->getSetor()->setEmail( $linha ['email_area_responsavel_setor'] );
-    			$lista [] = $usuario;
-    			    
-            }
+            foreach ( $result as $linha ){
+		        $usuario = new Usuario();
+                $usuario->setId( $linha ['id'] );
+                $usuario->setNome( $linha ['nome'] );
+                $usuario->setEmail( $linha ['email'] );
+                $usuario->setLogin( $linha ['login'] );
+                $usuario->setSenha( $linha ['senha'] );
+                $usuario->setNivel( $linha ['nivel'] );
+                $usuario->getSetor()->setId( $linha ['id_area_responsavel_setor'] );
+                $usuario->getSetor()->setNome( $linha ['nome_area_responsavel_setor'] );
+                $usuario->getSetor()->setDescricao( $linha ['descricao_area_responsavel_setor'] );
+                $usuario->getSetor()->setEmail( $linha ['email_area_responsavel_setor'] );
+                $lista [] = $usuario;
+
+	
+		    }
     			    
         } catch(PDOException $e) {
             echo $e->getMessage();
@@ -294,21 +296,22 @@ class UsuarioDAO extends DAO {
             $stmt->bindParam(":email", $email, PDO::PARAM_STR);
             $stmt->execute();
             $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            foreach ( $result as $linha ) {
-                $usuario = new Usuario();
-    	        $usuario->setId( $linha ['id'] );
-    	        $usuario->setNome( $linha ['nome'] );
-    	        $usuario->setEmail( $linha ['email'] );
-    	        $usuario->setLogin( $linha ['login'] );
-    	        $usuario->setSenha( $linha ['senha'] );
-    	        $usuario->setNivel( $linha ['nivel'] );
-    			$usuario->getSetor()->setId( $linha ['id_area_responsavel_setor'] );
-    			$usuario->getSetor()->setNome( $linha ['nome_area_responsavel_setor'] );
-    			$usuario->getSetor()->setDescricao( $linha ['descricao_area_responsavel_setor'] );
-    			$usuario->getSetor()->setEmail( $linha ['email_area_responsavel_setor'] );
-    			$lista [] = $usuario;
-    			    
-            }
+            foreach ( $result as $linha ){
+		        $usuario = new Usuario();
+                $usuario->setId( $linha ['id'] );
+                $usuario->setNome( $linha ['nome'] );
+                $usuario->setEmail( $linha ['email'] );
+                $usuario->setLogin( $linha ['login'] );
+                $usuario->setSenha( $linha ['senha'] );
+                $usuario->setNivel( $linha ['nivel'] );
+                $usuario->getSetor()->setId( $linha ['id_area_responsavel_setor'] );
+                $usuario->getSetor()->setNome( $linha ['nome_area_responsavel_setor'] );
+                $usuario->getSetor()->setDescricao( $linha ['descricao_area_responsavel_setor'] );
+                $usuario->getSetor()->setEmail( $linha ['email_area_responsavel_setor'] );
+                $lista [] = $usuario;
+
+	
+		    }
     			    
         } catch(PDOException $e) {
             echo $e->getMessage();
@@ -343,21 +346,22 @@ class UsuarioDAO extends DAO {
             $stmt->bindParam(":login", $login, PDO::PARAM_STR);
             $stmt->execute();
             $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            foreach ( $result as $linha ) {
-                $usuario = new Usuario();
-    	        $usuario->setId( $linha ['id'] );
-    	        $usuario->setNome( $linha ['nome'] );
-    	        $usuario->setEmail( $linha ['email'] );
-    	        $usuario->setLogin( $linha ['login'] );
-    	        $usuario->setSenha( $linha ['senha'] );
-    	        $usuario->setNivel( $linha ['nivel'] );
-    			$usuario->getSetor()->setId( $linha ['id_area_responsavel_setor'] );
-    			$usuario->getSetor()->setNome( $linha ['nome_area_responsavel_setor'] );
-    			$usuario->getSetor()->setDescricao( $linha ['descricao_area_responsavel_setor'] );
-    			$usuario->getSetor()->setEmail( $linha ['email_area_responsavel_setor'] );
-    			$lista [] = $usuario;
-    			    
-            }
+            foreach ( $result as $linha ){
+		        $usuario = new Usuario();
+                $usuario->setId( $linha ['id'] );
+                $usuario->setNome( $linha ['nome'] );
+                $usuario->setEmail( $linha ['email'] );
+                $usuario->setLogin( $linha ['login'] );
+                $usuario->setSenha( $linha ['senha'] );
+                $usuario->setNivel( $linha ['nivel'] );
+                $usuario->getSetor()->setId( $linha ['id_area_responsavel_setor'] );
+                $usuario->getSetor()->setNome( $linha ['nome_area_responsavel_setor'] );
+                $usuario->getSetor()->setDescricao( $linha ['descricao_area_responsavel_setor'] );
+                $usuario->getSetor()->setEmail( $linha ['email_area_responsavel_setor'] );
+                $lista [] = $usuario;
+
+	
+		    }
     			    
         } catch(PDOException $e) {
             echo $e->getMessage();
@@ -392,21 +396,22 @@ class UsuarioDAO extends DAO {
             $stmt->bindParam(":senha", $senha, PDO::PARAM_STR);
             $stmt->execute();
             $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            foreach ( $result as $linha ) {
-                $usuario = new Usuario();
-    	        $usuario->setId( $linha ['id'] );
-    	        $usuario->setNome( $linha ['nome'] );
-    	        $usuario->setEmail( $linha ['email'] );
-    	        $usuario->setLogin( $linha ['login'] );
-    	        $usuario->setSenha( $linha ['senha'] );
-    	        $usuario->setNivel( $linha ['nivel'] );
-    			$usuario->getSetor()->setId( $linha ['id_area_responsavel_setor'] );
-    			$usuario->getSetor()->setNome( $linha ['nome_area_responsavel_setor'] );
-    			$usuario->getSetor()->setDescricao( $linha ['descricao_area_responsavel_setor'] );
-    			$usuario->getSetor()->setEmail( $linha ['email_area_responsavel_setor'] );
-    			$lista [] = $usuario;
-    			    
-            }
+            foreach ( $result as $linha ){
+		        $usuario = new Usuario();
+                $usuario->setId( $linha ['id'] );
+                $usuario->setNome( $linha ['nome'] );
+                $usuario->setEmail( $linha ['email'] );
+                $usuario->setLogin( $linha ['login'] );
+                $usuario->setSenha( $linha ['senha'] );
+                $usuario->setNivel( $linha ['nivel'] );
+                $usuario->getSetor()->setId( $linha ['id_area_responsavel_setor'] );
+                $usuario->getSetor()->setNome( $linha ['nome_area_responsavel_setor'] );
+                $usuario->getSetor()->setDescricao( $linha ['descricao_area_responsavel_setor'] );
+                $usuario->getSetor()->setEmail( $linha ['email_area_responsavel_setor'] );
+                $lista [] = $usuario;
+
+	
+		    }
     			    
         } catch(PDOException $e) {
             echo $e->getMessage();
@@ -441,21 +446,22 @@ class UsuarioDAO extends DAO {
             $stmt->bindParam(":nivel", $nivel, PDO::PARAM_STR);
             $stmt->execute();
             $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            foreach ( $result as $linha ) {
-                $usuario = new Usuario();
-    	        $usuario->setId( $linha ['id'] );
-    	        $usuario->setNome( $linha ['nome'] );
-    	        $usuario->setEmail( $linha ['email'] );
-    	        $usuario->setLogin( $linha ['login'] );
-    	        $usuario->setSenha( $linha ['senha'] );
-    	        $usuario->setNivel( $linha ['nivel'] );
-    			$usuario->getSetor()->setId( $linha ['id_area_responsavel_setor'] );
-    			$usuario->getSetor()->setNome( $linha ['nome_area_responsavel_setor'] );
-    			$usuario->getSetor()->setDescricao( $linha ['descricao_area_responsavel_setor'] );
-    			$usuario->getSetor()->setEmail( $linha ['email_area_responsavel_setor'] );
-    			$lista [] = $usuario;
-    			    
-            }
+            foreach ( $result as $linha ){
+		        $usuario = new Usuario();
+                $usuario->setId( $linha ['id'] );
+                $usuario->setNome( $linha ['nome'] );
+                $usuario->setEmail( $linha ['email'] );
+                $usuario->setLogin( $linha ['login'] );
+                $usuario->setSenha( $linha ['senha'] );
+                $usuario->setNivel( $linha ['nivel'] );
+                $usuario->getSetor()->setId( $linha ['id_area_responsavel_setor'] );
+                $usuario->getSetor()->setNome( $linha ['nome_area_responsavel_setor'] );
+                $usuario->getSetor()->setDescricao( $linha ['descricao_area_responsavel_setor'] );
+                $usuario->getSetor()->setEmail( $linha ['email_area_responsavel_setor'] );
+                $lista [] = $usuario;
+
+	
+		    }
     			    
         } catch(PDOException $e) {
             echo $e->getMessage();
