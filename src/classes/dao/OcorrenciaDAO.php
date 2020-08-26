@@ -1033,11 +1033,11 @@ class OcorrenciaDAO extends DAO {
     			$ocorrencia->getServico()->setId( $linha ['id_servico_servico'] );
     			$ocorrencia->getServico()->setNome( $linha ['nome_servico_servico'] );
     			$ocorrencia->getServico()->setDescricao( $linha ['descricao_servico_servico'] );
-    			$ocorrencia->getServico()->setTipoAtividade( $linha ['tipo_atividade_servico_servico'] );
+    			
     			$ocorrencia->getServico()->setTempoSla( $linha ['tempo_sla_servico_servico'] );
     			$ocorrencia->getServico()->setVisao( $linha ['visao_servico_servico'] );
-    			$ocorrencia->getServico()->setAreaResponsavel( $linha ['area_responsavel_servico_servico'] );
-    			$ocorrencia->getServico()->setGrupoServico( $linha ['grupo_servico_servico_servico'] );
+    			
+    			
     			$lista [] = $ocorrencia;
     			    
             }

@@ -169,11 +169,11 @@ class OcorrenciaCustomController  extends OcorrenciaController {
 	
 	public function listar()
 	{
-	    echo "Teste";
+	    
 	    $ocorrencia = new Ocorrencia();
 	    $ocorrencia->setStatus('a');
 	    $lista = $this->dao->pesquisaPorStatus($ocorrencia);
-	    print_r($lista);
+	    
 	    $this->view->exibirLista($lista);
 	}
 }
