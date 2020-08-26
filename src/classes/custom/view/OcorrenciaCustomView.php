@@ -8,7 +8,7 @@
 class OcorrenciaCustomView extends OcorrenciaView {
 
     
-    public function mostraFormInserir($listaAreaResponsavel, $listaServico){
+    public function mostraFormInserir2($listaServico){
         echo '
             
 <div class="collapse" id="collapseExample">
