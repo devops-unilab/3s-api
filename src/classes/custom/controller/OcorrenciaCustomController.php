@@ -167,6 +167,13 @@ class OcorrenciaCustomController  extends OcorrenciaController {
 	    echo '<META HTTP-EQUIV="REFRESH" CONTENT="3; URL=index.php?pagina=ocorrencia">';
 	}
 	
-	        
+	public function listar()
+	{
+	    echo "Teste";
+	    $ocorrencia = new Ocorrencia();
+	    $ocorrencia->setStatus('a');
+	    $lista = $this->dao->pesquisaPorStatus($ocorrencia);
+	    $this->view->exibirLista($lista);
+	}
 }
 ?>
