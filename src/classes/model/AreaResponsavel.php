@@ -14,7 +14,6 @@ class AreaResponsavel {
 	private $nome;
 	private $descricao;
 	private $email;
-	private $idAdmin;
     public function __construct(){
 
     }
@@ -46,15 +45,8 @@ class AreaResponsavel {
 	public function getEmail() {
 		return $this->email;
 	}
-	public function setIdAdmin($idAdmin) {
-		$this->idAdmin = $idAdmin;
-	}
-		    
-	public function getIdAdmin() {
-		return $this->idAdmin;
-	}
 	public function __toString(){
-	    return $this->id.' - '.$this->nome.' - '.$this->descricao.' - '.$this->email.' - '.$this->idAdmin;
+	    return $this->id.' - '.$this->nome.' - '.$this->descricao.' - '.$this->email;
 	}
                 
 

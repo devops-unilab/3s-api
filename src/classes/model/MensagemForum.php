@@ -11,14 +11,15 @@
 
 class MensagemForum {
 	private $id;
+	private $ocorrencia;
 	private $tipo;
 	private $mensagem;
-	private $idUser;
-	private $dtEnvio;
-	private $origem;
-	private $ativo;
+	private $usuario;
+	private $dataEnvio;
     public function __construct(){
 
+        $this->ocorrencia = new Ocorrencia();
+        $this->usuario = new Usuario();
     }
 	public function setId($id) {
 		$this->id = $id;
@@ -26,6 +27,13 @@ class MensagemForum {
 		    
 	public function getId() {
 		return $this->id;
+	}
+	public function setOcorrencia(Ocorrencia $ocorrencia) {
+		$this->ocorrencia = $ocorrencia;
+	}
+		    
+	public function getOcorrencia() {
+		return $this->ocorrencia;
 	}
 	public function setTipo($tipo) {
 		$this->tipo = $tipo;
@@ -41,36 +49,22 @@ class MensagemForum {
 	public function getMensagem() {
 		return $this->mensagem;
 	}
-	public function setIdUser($idUser) {
-		$this->idUser = $idUser;
+	public function setUsuario(Usuario $usuario) {
+		$this->usuario = $usuario;
 	}
 		    
-	public function getIdUser() {
-		return $this->idUser;
+	public function getUsuario() {
+		return $this->usuario;
 	}
-	public function setDtEnvio($dtEnvio) {
-		$this->dtEnvio = $dtEnvio;
-	}
-		    
-	public function getDtEnvio() {
-		return $this->dtEnvio;
-	}
-	public function setOrigem($origem) {
-		$this->origem = $origem;
+	public function setDataEnvio($dataEnvio) {
+		$this->dataEnvio = $dataEnvio;
 	}
 		    
-	public function getOrigem() {
-		return $this->origem;
-	}
-	public function setAtivo($ativo) {
-		$this->ativo = $ativo;
-	}
-		    
-	public function getAtivo() {
-		return $this->ativo;
+	public function getDataEnvio() {
+		return $this->dataEnvio;
 	}
 	public function __toString(){
-	    return $this->id.' - '.$this->tipo.' - '.$this->mensagem.' - '.$this->idUser.' - '.$this->dtEnvio.' - '.$this->origem.' - '.$this->ativo;
+	    return $this->id.' - '.$this->ocorrencia.' - '.$this->tipo.' - '.$this->mensagem.' - '.$this->usuario.' - '.$this->dataEnvio;
 	}
                 
 

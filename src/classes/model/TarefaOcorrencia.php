@@ -11,12 +11,14 @@
 
 class TarefaOcorrencia {
 	private $id;
-	private $idOcorrencia;
+	private $ocorrencia;
 	private $tarefa;
-	private $idUser;
-	private $dtInclusao;
+	private $usuario;
+	private $dataInclusao;
     public function __construct(){
 
+        $this->ocorrencia = new Ocorrencia();
+        $this->usuario = new Usuario();
     }
 	public function setId($id) {
 		$this->id = $id;
@@ -25,12 +27,12 @@ class TarefaOcorrencia {
 	public function getId() {
 		return $this->id;
 	}
-	public function setIdOcorrencia($idOcorrencia) {
-		$this->idOcorrencia = $idOcorrencia;
+	public function setOcorrencia(Ocorrencia $ocorrencia) {
+		$this->ocorrencia = $ocorrencia;
 	}
 		    
-	public function getIdOcorrencia() {
-		return $this->idOcorrencia;
+	public function getOcorrencia() {
+		return $this->ocorrencia;
 	}
 	public function setTarefa($tarefa) {
 		$this->tarefa = $tarefa;
@@ -39,22 +41,22 @@ class TarefaOcorrencia {
 	public function getTarefa() {
 		return $this->tarefa;
 	}
-	public function setIdUser($idUser) {
-		$this->idUser = $idUser;
+	public function setUsuario(Usuario $usuario) {
+		$this->usuario = $usuario;
 	}
 		    
-	public function getIdUser() {
-		return $this->idUser;
+	public function getUsuario() {
+		return $this->usuario;
 	}
-	public function setDtInclusao($dtInclusao) {
-		$this->dtInclusao = $dtInclusao;
+	public function setDataInclusao($dataInclusao) {
+		$this->dataInclusao = $dataInclusao;
 	}
 		    
-	public function getDtInclusao() {
-		return $this->dtInclusao;
+	public function getDataInclusao() {
+		return $this->dataInclusao;
 	}
 	public function __toString(){
-	    return $this->id.' - '.$this->idOcorrencia.' - '.$this->tarefa.' - '.$this->idUser.' - '.$this->dtInclusao;
+	    return $this->id.' - '.$this->ocorrencia.' - '.$this->tarefa.' - '.$this->usuario.' - '.$this->dataInclusao;
 	}
                 
 

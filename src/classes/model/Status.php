@@ -13,8 +13,6 @@ class Status {
 	private $id;
 	private $sigla;
 	private $nome;
-	private $icone;
-	private $cor;
     public function __construct(){
 
     }
@@ -39,22 +37,8 @@ class Status {
 	public function getNome() {
 		return $this->nome;
 	}
-	public function setIcone($icone) {
-		$this->icone = $icone;
-	}
-		    
-	public function getIcone() {
-		return $this->icone;
-	}
-	public function setCor($cor) {
-		$this->cor = $cor;
-	}
-		    
-	public function getCor() {
-		return $this->cor;
-	}
 	public function __toString(){
-	    return $this->id.' - '.$this->sigla.' - '.$this->nome.' - '.$this->icone.' - '.$this->cor;
+	    return $this->id.' - '.$this->sigla.' - '.$this->nome;
 	}
                 
 

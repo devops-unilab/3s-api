@@ -56,13 +56,19 @@ class StatusOcorrenciaController {
 	public function cadastrar() {
             
         if(!isset($_POST['enviar_status_ocorrencia'])){
+            $ocorrenciaDao = new OcorrenciaDAO($this->dao->getConexao());
+            $listaOcorrencia = $ocorrenciaDao->retornaLista();
+
             $statusDao = new StatusDAO($this->dao->getConexao());
             $listaStatus = $statusDao->retornaLista();
 
-            $this->view->mostraFormInserir($listaStatus);
+            $usuarioDao = new UsuarioDAO($this->dao->getConexao());
+            $listaUsuario = $usuarioDao->retornaLista();
+
+            $this->view->mostraFormInserir($listaOcorrencia, $listaStatus, $listaUsuario);
 		    return;
 		}
-		if (! ( isset ( $_POST ['mensagem'] ) && isset ( $_POST ['id_user'] ) && isset ( $_POST ['dt_mudanca'] ) &&  isset($_POST ['status']))) {
+		if (! ( isset ( $_POST ['mensagem'] ) && isset ( $_POST ['data_mudanca'] ) &&  isset($_POST ['ocorrencia']) &&  isset($_POST ['status']) &&  isset($_POST ['usuario']))) {
 			echo '
                 <div class="alert alert-danger" role="alert">
                     Falha ao cadastrar. Algum campo deve estar faltando. 
@@ -74,9 +80,10 @@ class StatusOcorrenciaController {
             
 		$statusOcorrencia = new StatusOcorrencia ();
 		$statusOcorrencia->setMensagem ( $_POST ['mensagem'] );
-		$statusOcorrencia->setIdUser ( $_POST ['id_user'] );
-		$statusOcorrencia->setDtMudanca ( $_POST ['dt_mudanca'] );
+		$statusOcorrencia->setDataMudanca ( $_POST ['data_mudanca'] );
+		$statusOcorrencia->getOcorrencia()->setId ( $_POST ['ocorrencia'] );
 		$statusOcorrencia->getStatus()->setId ( $_POST ['status'] );
+		$statusOcorrencia->getUsuario()->setId ( $_POST ['usuario'] );
             
 		if ($this->dao->inserir ( $statusOcorrencia ))
         {
@@ -111,21 +118,26 @@ class StatusOcorrenciaController {
 	    $this->dao->preenchePorId($selecionado);
 	        
         if(!isset($_POST['editar_status_ocorrencia'])){
+            $ocorrenciaDao = new OcorrenciaDAO($this->dao->getConexao());
+            $listaOcorrencia = $ocorrenciaDao->retornaLista();
+
             $statusDao = new StatusDAO($this->dao->getConexao());
             $listaStatus = $statusDao->retornaLista();
 
-            $this->view->mostraFormEditar($listaStatus, $selecionado);
+            $usuarioDao = new UsuarioDAO($this->dao->getConexao());
+            $listaUsuario = $usuarioDao->retornaLista();
+
+            $this->view->mostraFormEditar($listaOcorrencia, $listaStatus, $listaUsuario, $selecionado);
             return;
         }
             
-		if (! ( isset ( $_POST ['mensagem'] ) && isset ( $_POST ['id_user'] ) && isset ( $_POST ['dt_mudanca'] ) &&  isset($_POST ['status']))) {
+		if (! ( isset ( $_POST ['mensagem'] ) && isset ( $_POST ['data_mudanca'] ) &&  isset($_POST ['ocorrencia']) &&  isset($_POST ['status']) &&  isset($_POST ['usuario']))) {
 			echo "Incompleto";
 			return;
 		}
 
 		$selecionado->setMensagem ( $_POST ['mensagem'] );
-		$selecionado->setIdUser ( $_POST ['id_user'] );
-		$selecionado->setDtMudanca ( $_POST ['dt_mudanca'] );
+		$selecionado->setDataMudanca ( $_POST ['data_mudanca'] );
             
 		if ($this->dao->atualizar ($selecionado ))
         {
@@ -235,8 +247,7 @@ class StatusOcorrenciaController {
             $pesquisado = array(
 					'id' => $pesquisado->getId (), 
 					'mensagem' => $pesquisado->getMensagem (), 
-					'idUser' => $pesquisado->getIdUser (), 
-					'dtMudanca' => $pesquisado->getDtMudanca (), 
+					'dataMudanca' => $pesquisado->getDataMudanca (), 
             
             
 			);
@@ -249,8 +260,7 @@ class StatusOcorrenciaController {
 			$listagem ['lista'] [] = array (
 					'id' => $linha->getId (), 
 					'mensagem' => $linha->getMensagem (), 
-					'idUser' => $linha->getIdUser (), 
-					'dtMudanca' => $linha->getDtMudanca (), 
+					'dataMudanca' => $linha->getDataMudanca (), 
             
             
 			);
@@ -348,13 +358,8 @@ class StatusOcorrenciaController {
         }
                     
 
-        if (isset($jsonBody['id_user'])) {
-            $pesquisado->setIdUser($jsonBody['id_user']);
-        }
-                    
-
-        if (isset($jsonBody['dt_mudanca'])) {
-            $pesquisado->setDtMudanca($jsonBody['dt_mudanca']);
+        if (isset($jsonBody['data_mudanca'])) {
+            $pesquisado->setDataMudanca($jsonBody['data_mudanca']);
         }
                     
 
@@ -385,7 +390,7 @@ class StatusOcorrenciaController {
         $body = file_get_contents('php://input');
         $jsonBody = json_decode($body, true);
 
-        if (! ( isset ( $jsonBody ['mensagem'] ) && isset ( $jsonBody ['idUser'] ) && isset ( $jsonBody ['dtMudanca'] ) &&  isset($_POST ['status']))) {
+        if (! ( isset ( $jsonBody ['mensagem'] ) && isset ( $jsonBody ['dataMudanca'] ) &&  isset($_POST ['ocorrencia']) &&  isset($_POST ['status']) &&  isset($_POST ['usuario']))) {
 			echo "Incompleto";
 			return;
 		}
@@ -395,9 +400,7 @@ class StatusOcorrenciaController {
 
         $adicionado->setMensagem($jsonBody['mensagem']);
 
-        $adicionado->setIdUser($jsonBody['id_user']);
-
-        $adicionado->setDtMudanca($jsonBody['dt_mudanca']);
+        $adicionado->setDataMudanca($jsonBody['data_mudanca']);
 
         if ($this->dao->inserir($adicionado)) {
             echo "Sucesso";

@@ -6,7 +6,7 @@
  *
  */
 class MensagemForumView {
-    public function mostraFormInserir() {
+    public function mostraFormInserir($listaOcorrencia, $listaUsuario) {
 		echo '
 <!-- Button trigger modal -->
 <button type="button" class="btn btn-primary m-3" data-toggle="modal" data-target="#modalAddMensagemForum">
@@ -43,29 +43,33 @@ class MensagemForumView {
                                         </div>
 
                                         <div class="form-group">
-                                            <label for="id_user">Id User</label>
-                                            <input type="number" class="form-control"  name="id_user" id="id_user" placeholder="Id User">
+                                            <label for="data_envio">Data Envio</label>
+                                            <input type="datetime-local" class="form-control"  name="data_envio" id="data_envio" placeholder="Data Envio">
                                         </div>
-
                                         <div class="form-group">
-                                            <label for="dt_envio">Dt Envio</label>
-                                            <input type="datetime-local" class="form-control"  name="dt_envio" id="dt_envio" placeholder="Dt Envio">
-                                        </div>
-
+                                          <label for="ocorrencia">Ocorrencia</label>
+                						  <select class="form-control" id="ocorrencia" name="ocorrencia">
+                                            <option value="">Selecione o Ocorrencia</option>';
+                                                
+        foreach( $listaOcorrencia as $elemento){
+            echo '<option value="'.$elemento->getId().'">'.$elemento.'</option>';
+        }
+            
+        echo '
+                                          </select>
+                						</div>
                                         <div class="form-group">
-                                            <label for="origem">Origem</label>
-                                            <input type="number" class="form-control"  name="origem" id="origem" placeholder="Origem">
-                                        </div>
-
-                                        <div class="form-group">
-                                            <label for="ativo">Ativo</label>
-                                            
-                    <select class="form-control" id="ativo" name="ativo">
-                        <option value="">Selecione Um Valor</option>
-                          <option value="1">Sim</option>
-                          <option value="0">Não</option>
-                    </select>
-                                        </div>
+                                          <label for="usuario">Usuario</label>
+                						  <select class="form-control" id="usuario" name="usuario">
+                                            <option value="">Selecione o Usuario</option>';
+                                                
+        foreach( $listaUsuario as $elemento){
+            echo '<option value="'.$elemento->getId().'">'.$elemento.'</option>';
+        }
+            
+        echo '
+                                          </select>
+                						</div>
 
 						              </form>
 
@@ -109,7 +113,9 @@ class MensagemForumView {
 						<th>Id</th>
 						<th>Tipo</th>
 						<th>Mensagem</th>
-						<th>Id User</th>
+						<th>Data Envio</th>
+						<th>Ocorrencia</th>
+						<th>Usuario</th>
                         <th>Ações</th>
 					</tr>
 				</thead>
@@ -118,7 +124,9 @@ class MensagemForumView {
                         <th>Id</th>
                         <th>Tipo</th>
                         <th>Mensagem</th>
-                        <th>Id User</th>
+                        <th>Data Envio</th>
+						<th>Ocorrencia</th>
+						<th>Usuario</th>
                         <th>Ações</th>
 					</tr>
 				</tfoot>
@@ -129,7 +137,9 @@ class MensagemForumView {
                 echo '<td>'.$elemento->getId().'</td>';
                 echo '<td>'.$elemento->getTipo().'</td>';
                 echo '<td>'.$elemento->getMensagem().'</td>';
-                echo '<td>'.$elemento->getIdUser().'</td>';
+                echo '<td>'.$elemento->getDataEnvio().'</td>';
+                echo '<td>'.$elemento->getOcorrencia().'</td>';
+                echo '<td>'.$elemento->getUsuario().'</td>';
                 echo '<td>
                         <a href="?pagina=mensagem_forum&selecionar='.$elemento->getId().'" class="btn btn-info text-white">Selecionar</a>
                         <a href="?pagina=mensagem_forum&editar='.$elemento->getId().'" class="btn btn-success text-white">Editar</a>
@@ -167,10 +177,9 @@ class MensagemForumView {
                 Id: '.$mensagemforum->getId().'<br>
                 Tipo: '.$mensagemforum->getTipo().'<br>
                 Mensagem: '.$mensagemforum->getMensagem().'<br>
-                Id User: '.$mensagemforum->getIdUser().'<br>
-                Dt Envio: '.$mensagemforum->getDtEnvio().'<br>
-                Origem: '.$mensagemforum->getOrigem().'<br>
-                Ativo: '.$mensagemforum->getAtivo().'<br>
+                Data Envio: '.$mensagemforum->getDataEnvio().'<br>
+                Ocorrencia: '.$mensagemforum->getOcorrencia().'<br>
+                Usuario: '.$mensagemforum->getUsuario().'<br>
             
             </div>
         </div>
@@ -182,7 +191,7 @@ class MensagemForumView {
 
 
             
-	public function mostraFormEditar(MensagemForum $selecionado) {
+	public function mostraFormEditar($listaOcorrencia, $listaUsuario, MensagemForum $selecionado) {
 		echo '
 	    
 	    
@@ -206,25 +215,32 @@ class MensagemForumView {
                                             <input type="text" class="form-control" value="'.$selecionado->getMensagem().'"  name="mensagem" id="mensagem" placeholder="Mensagem">
                 						</div>
                                         <div class="form-group">
-                                            <label for="id_user">Id User</label>
-                                            <input type="number" class="form-control" value="'.$selecionado->getIdUser().'"  name="id_user" id="id_user" placeholder="Id User">
+                                            <label for="data_envio">Data Envio</label>
+                                            <input type="datetime-local" class="form-control" value="'.$selecionado->getDataEnvio().'"  name="data_envio" id="data_envio" placeholder="Data Envio">
                 						</div>
                                         <div class="form-group">
-                                            <label for="dt_envio">Dt Envio</label>
-                                            <input type="datetime-local" class="form-control" value="'.$selecionado->getDtEnvio().'"  name="dt_envio" id="dt_envio" placeholder="Dt Envio">
+                                          <label for="ocorrencia">Ocorrencia</label>
+                						  <select class="form-control" id="ocorrencia" name="ocorrencia">
+                                            <option value="">Selecione o Ocorrencia</option>';
+                                                
+        foreach( $listaOcorrencia as $elemento){
+            echo '<option value="'.$elemento->getId().'">'.$elemento.'</option>';
+        }
+            
+        echo '
+                                          </select>
                 						</div>
                                         <div class="form-group">
-                                            <label for="origem">Origem</label>
-                                            <input type="number" class="form-control" value="'.$selecionado->getOrigem().'"  name="origem" id="origem" placeholder="Origem">
-                						</div>
-                                        <div class="form-group">
-                                            <label for="ativo">Ativo</label>
-                                            
-                    <select class="form-control" id="ativo" name="ativo" required>
-                        <option value="">Selecione Um Valor</option>
-                          <option value="1">Sim</option>
-                          <option value="0">Não</option>
-                    </select>
+                                          <label for="usuario">Usuario</label>
+                						  <select class="form-control" id="usuario" name="usuario">
+                                            <option value="">Selecione o Usuario</option>';
+                                                
+        foreach( $listaUsuario as $elemento){
+            echo '<option value="'.$elemento->getId().'">'.$elemento.'</option>';
+        }
+            
+        echo '
+                                          </select>
                 						</div>
                                         <input type="submit" class="btn btn-primary btn-user btn-block" value="Alterar" name="editar_mensagem_forum">
                                         <hr>

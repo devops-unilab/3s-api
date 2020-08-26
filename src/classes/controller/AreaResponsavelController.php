@@ -59,7 +59,7 @@ class AreaResponsavelController {
             $this->view->mostraFormInserir();
 		    return;
 		}
-		if (! ( isset ( $_POST ['nome'] ) && isset ( $_POST ['descricao'] ) && isset ( $_POST ['email'] ) && isset ( $_POST ['id_admin'] ))) {
+		if (! ( isset ( $_POST ['nome'] ) && isset ( $_POST ['descricao'] ) && isset ( $_POST ['email'] ))) {
 			echo '
                 <div class="alert alert-danger" role="alert">
                     Falha ao cadastrar. Algum campo deve estar faltando. 
@@ -73,7 +73,6 @@ class AreaResponsavelController {
 		$areaResponsavel->setNome ( $_POST ['nome'] );
 		$areaResponsavel->setDescricao ( $_POST ['descricao'] );
 		$areaResponsavel->setEmail ( $_POST ['email'] );
-		$areaResponsavel->setIdAdmin ( $_POST ['id_admin'] );
             
 		if ($this->dao->inserir ( $areaResponsavel ))
         {
@@ -112,7 +111,7 @@ class AreaResponsavelController {
             return;
         }
             
-		if (! ( isset ( $_POST ['nome'] ) && isset ( $_POST ['descricao'] ) && isset ( $_POST ['email'] ) && isset ( $_POST ['id_admin'] ))) {
+		if (! ( isset ( $_POST ['nome'] ) && isset ( $_POST ['descricao'] ) && isset ( $_POST ['email'] ))) {
 			echo "Incompleto";
 			return;
 		}
@@ -120,7 +119,6 @@ class AreaResponsavelController {
 		$selecionado->setNome ( $_POST ['nome'] );
 		$selecionado->setDescricao ( $_POST ['descricao'] );
 		$selecionado->setEmail ( $_POST ['email'] );
-		$selecionado->setIdAdmin ( $_POST ['id_admin'] );
             
 		if ($this->dao->atualizar ($selecionado ))
         {
@@ -231,8 +229,7 @@ class AreaResponsavelController {
 					'id' => $pesquisado->getId (), 
 					'nome' => $pesquisado->getNome (), 
 					'descricao' => $pesquisado->getDescricao (), 
-					'email' => $pesquisado->getEmail (), 
-					'idAdmin' => $pesquisado->getIdAdmin ()
+					'email' => $pesquisado->getEmail ()
             
             
 			);
@@ -246,8 +243,7 @@ class AreaResponsavelController {
 					'id' => $linha->getId (), 
 					'nome' => $linha->getNome (), 
 					'descricao' => $linha->getDescricao (), 
-					'email' => $linha->getEmail (), 
-					'idAdmin' => $linha->getIdAdmin ()
+					'email' => $linha->getEmail ()
             
             
 			);
@@ -355,11 +351,6 @@ class AreaResponsavelController {
         }
                     
 
-        if (isset($jsonBody['id_admin'])) {
-            $pesquisado->setIdAdmin($jsonBody['id_admin']);
-        }
-                    
-
         if ($this->dao->atualizar($pesquisado)) {
             echo "Sucesso";
         } else {
@@ -387,7 +378,7 @@ class AreaResponsavelController {
         $body = file_get_contents('php://input');
         $jsonBody = json_decode($body, true);
 
-        if (! ( isset ( $jsonBody ['nome'] ) && isset ( $jsonBody ['descricao'] ) && isset ( $jsonBody ['email'] ) && isset ( $jsonBody ['idAdmin'] ))) {
+        if (! ( isset ( $jsonBody ['nome'] ) && isset ( $jsonBody ['descricao'] ) && isset ( $jsonBody ['email'] ))) {
 			echo "Incompleto";
 			return;
 		}
@@ -400,8 +391,6 @@ class AreaResponsavelController {
         $adicionado->setDescricao($jsonBody['descricao']);
 
         $adicionado->setEmail($jsonBody['email']);
-
-        $adicionado->setIdAdmin($jsonBody['id_admin']);
 
         if ($this->dao->inserir($adicionado)) {
             echo "Sucesso";

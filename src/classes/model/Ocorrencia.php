@@ -14,39 +14,28 @@ class Ocorrencia {
 	private $areaResponsavel;
 	private $servico;
 	private $idLocal;
-	private $idFuncionario;
-	private $descProblema;
+	private $usuarioCliente;
+	private $descricao;
 	private $campus;
-	private $etiqEquipamento;
-	private $contato;
+	private $patrimonio;
 	private $ramal;
 	private $local;
-	private $funcionario;
 	private $status;
-	private $obs;
+	private $solucao;
 	private $prioridade;
 	private $avaliacao;
 	private $email;
-	private $fechaConfirmado;
-	private $reaberto;
-	private $dtAbertura;
-	private $dtAtendimento;
-	private $dtFechamento;
-	private $dtFechaConfirmado;
-	private $dtCancelamento;
-	private $idAtendente;
-	private $idTecnicoIndicado;
-	private $dtLiberacao;
+	private $usuarioAtendente;
+	private $usuarioIndicado;
 	private $anexo;
-	private $dtEspera;
-	private $dtAguardandoUsuario;
 	private $localSala;
-	private $listaStatus;
     public function __construct(){
 
         $this->areaResponsavel = new AreaResponsavel();
         $this->servico = new Servico();
-        $this->listaStatus = array();
+        $this->usuarioCliente = new Usuario();
+        $this->usuarioAtendente = new Usuario();
+        $this->usuarioIndicado = new Usuario();
     }
 	public function setId($id) {
 		$this->id = $id;
@@ -76,19 +65,19 @@ class Ocorrencia {
 	public function getIdLocal() {
 		return $this->idLocal;
 	}
-	public function setIdFuncionario($idFuncionario) {
-		$this->idFuncionario = $idFuncionario;
+	public function setUsuarioCliente(Usuario $usuario) {
+		$this->usuarioCliente = $usuario;
 	}
 		    
-	public function getIdFuncionario() {
-		return $this->idFuncionario;
+	public function getUsuarioCliente() {
+		return $this->usuarioCliente;
 	}
-	public function setDescProblema($descProblema) {
-		$this->descProblema = $descProblema;
+	public function setDescricao($descricao) {
+		$this->descricao = $descricao;
 	}
 		    
-	public function getDescProblema() {
-		return $this->descProblema;
+	public function getDescricao() {
+		return $this->descricao;
 	}
 	public function setCampus($campus) {
 		$this->campus = $campus;
@@ -97,19 +86,12 @@ class Ocorrencia {
 	public function getCampus() {
 		return $this->campus;
 	}
-	public function setEtiqEquipamento($etiqEquipamento) {
-		$this->etiqEquipamento = $etiqEquipamento;
+	public function setPatrimonio($patrimonio) {
+		$this->patrimonio = $patrimonio;
 	}
 		    
-	public function getEtiqEquipamento() {
-		return $this->etiqEquipamento;
-	}
-	public function setContato($contato) {
-		$this->contato = $contato;
-	}
-		    
-	public function getContato() {
-		return $this->contato;
+	public function getPatrimonio() {
+		return $this->patrimonio;
 	}
 	public function setRamal($ramal) {
 		$this->ramal = $ramal;
@@ -125,13 +107,6 @@ class Ocorrencia {
 	public function getLocal() {
 		return $this->local;
 	}
-	public function setFuncionario($funcionario) {
-		$this->funcionario = $funcionario;
-	}
-		    
-	public function getFuncionario() {
-		return $this->funcionario;
-	}
 	public function setStatus($status) {
 		$this->status = $status;
 	}
@@ -139,12 +114,12 @@ class Ocorrencia {
 	public function getStatus() {
 		return $this->status;
 	}
-	public function setObs($obs) {
-		$this->obs = $obs;
+	public function setSolucao($solucao) {
+		$this->solucao = $solucao;
 	}
 		    
-	public function getObs() {
-		return $this->obs;
+	public function getSolucao() {
+		return $this->solucao;
 	}
 	public function setPrioridade($prioridade) {
 		$this->prioridade = $prioridade;
@@ -167,75 +142,19 @@ class Ocorrencia {
 	public function getEmail() {
 		return $this->email;
 	}
-	public function setFechaConfirmado($fechaConfirmado) {
-		$this->fechaConfirmado = $fechaConfirmado;
+	public function setUsuarioAtendente(Usuario $usuario) {
+		$this->usuarioAtendente = $usuario;
 	}
 		    
-	public function getFechaConfirmado() {
-		return $this->fechaConfirmado;
+	public function getUsuarioAtendente() {
+		return $this->usuarioAtendente;
 	}
-	public function setReaberto($reaberto) {
-		$this->reaberto = $reaberto;
-	}
-		    
-	public function getReaberto() {
-		return $this->reaberto;
-	}
-	public function setDtAbertura($dtAbertura) {
-		$this->dtAbertura = $dtAbertura;
+	public function setUsuarioIndicado(Usuario $usuario) {
+		$this->usuarioIndicado = $usuario;
 	}
 		    
-	public function getDtAbertura() {
-		return $this->dtAbertura;
-	}
-	public function setDtAtendimento($dtAtendimento) {
-		$this->dtAtendimento = $dtAtendimento;
-	}
-		    
-	public function getDtAtendimento() {
-		return $this->dtAtendimento;
-	}
-	public function setDtFechamento($dtFechamento) {
-		$this->dtFechamento = $dtFechamento;
-	}
-		    
-	public function getDtFechamento() {
-		return $this->dtFechamento;
-	}
-	public function setDtFechaConfirmado($dtFechaConfirmado) {
-		$this->dtFechaConfirmado = $dtFechaConfirmado;
-	}
-		    
-	public function getDtFechaConfirmado() {
-		return $this->dtFechaConfirmado;
-	}
-	public function setDtCancelamento($dtCancelamento) {
-		$this->dtCancelamento = $dtCancelamento;
-	}
-		    
-	public function getDtCancelamento() {
-		return $this->dtCancelamento;
-	}
-	public function setIdAtendente($idAtendente) {
-		$this->idAtendente = $idAtendente;
-	}
-		    
-	public function getIdAtendente() {
-		return $this->idAtendente;
-	}
-	public function setIdTecnicoIndicado($idTecnicoIndicado) {
-		$this->idTecnicoIndicado = $idTecnicoIndicado;
-	}
-		    
-	public function getIdTecnicoIndicado() {
-		return $this->idTecnicoIndicado;
-	}
-	public function setDtLiberacao($dtLiberacao) {
-		$this->dtLiberacao = $dtLiberacao;
-	}
-		    
-	public function getDtLiberacao() {
-		return $this->dtLiberacao;
+	public function getUsuarioIndicado() {
+		return $this->usuarioIndicado;
 	}
 	public function setAnexo($anexo) {
 		$this->anexo = $anexo;
@@ -244,20 +163,6 @@ class Ocorrencia {
 	public function getAnexo() {
 		return $this->anexo;
 	}
-	public function setDtEspera($dtEspera) {
-		$this->dtEspera = $dtEspera;
-	}
-		    
-	public function getDtEspera() {
-		return $this->dtEspera;
-	}
-	public function setDtAguardandoUsuario($dtAguardandoUsuario) {
-		$this->dtAguardandoUsuario = $dtAguardandoUsuario;
-	}
-		    
-	public function getDtAguardandoUsuario() {
-		return $this->dtAguardandoUsuario;
-	}
 	public function setLocalSala($localSala) {
 		$this->localSala = $localSala;
 	}
@@ -265,16 +170,8 @@ class Ocorrencia {
 	public function getLocalSala() {
 		return $this->localSala;
 	}
-                            
-    public function addStatus(Status $status){
-        $this->listaStatus[] = $status;
-            
-    }
-	public function getListaStatus() {
-		return $this->listaStatus;
-	}
 	public function __toString(){
-	    return $this->id.' - '.$this->areaResponsavel.' - '.$this->servico.' - '.$this->idLocal.' - '.$this->idFuncionario.' - '.$this->descProblema.' - '.$this->campus.' - '.$this->etiqEquipamento.' - '.$this->contato.' - '.$this->ramal.' - '.$this->local.' - '.$this->funcionario.' - '.$this->status.' - '.$this->obs.' - '.$this->prioridade.' - '.$this->avaliacao.' - '.$this->email.' - '.$this->fechaConfirmado.' - '.$this->reaberto.' - '.$this->dtAbertura.' - '.$this->dtAtendimento.' - '.$this->dtFechamento.' - '.$this->dtFechaConfirmado.' - '.$this->dtCancelamento.' - '.$this->idAtendente.' - '.$this->idTecnicoIndicado.' - '.$this->dtLiberacao.' - '.$this->anexo.' - '.$this->dtEspera.' - '.$this->dtAguardandoUsuario.' - '.$this->localSala.' - '.'Lista: '.implode(", ", $this->listaStatus);
+	    return $this->id.' - '.$this->areaResponsavel.' - '.$this->servico.' - '.$this->idLocal.' - '.$this->usuarioCliente.' - '.$this->descricao.' - '.$this->campus.' - '.$this->patrimonio.' - '.$this->ramal.' - '.$this->local.' - '.$this->status.' - '.$this->solucao.' - '.$this->prioridade.' - '.$this->avaliacao.' - '.$this->email.' - '.$this->usuarioAtendente.' - '.$this->usuarioIndicado.' - '.$this->anexo.' - '.$this->localSala;
 	}
                 
 

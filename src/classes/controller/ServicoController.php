@@ -56,19 +56,19 @@ class ServicoController {
 	public function cadastrar() {
             
         if(!isset($_POST['enviar_servico'])){
+            $tipoatividadeDao = new TipoAtividadeDAO($this->dao->getConexao());
+            $listaTipoAtividade = $tipoatividadeDao->retornaLista();
+
             $arearesponsavelDao = new AreaResponsavelDAO($this->dao->getConexao());
             $listaAreaResponsavel = $arearesponsavelDao->retornaLista();
 
             $gruposervicoDao = new GrupoServicoDAO($this->dao->getConexao());
             $listaGrupoServico = $gruposervicoDao->retornaLista();
 
-            $tipoatividadeDao = new TipoAtividadeDAO($this->dao->getConexao());
-            $listaTipoAtividade = $tipoatividadeDao->retornaLista();
-
-            $this->view->mostraFormInserir($listaAreaResponsavel, $listaGrupoServico, $listaTipoAtividade);
+            $this->view->mostraFormInserir($listaTipoAtividade, $listaAreaResponsavel, $listaGrupoServico);
 		    return;
 		}
-		if (! ( isset ( $_POST ['nome'] ) && isset ( $_POST ['descricao'] ) && isset ( $_POST ['ativo'] ) && isset ( $_POST ['tempo_sla'] ) &&  isset($_POST ['area_responsavel']) &&  isset($_POST ['grupo_servico']) &&  isset($_POST ['tipo_atividade']))) {
+		if (! ( isset ( $_POST ['nome'] ) && isset ( $_POST ['descricao'] ) && isset ( $_POST ['tempo_sla'] ) && isset ( $_POST ['visao'] ) &&  isset($_POST ['tipo_atividade']) &&  isset($_POST ['area_responsavel']) &&  isset($_POST ['grupo_servico']))) {
 			echo '
                 <div class="alert alert-danger" role="alert">
                     Falha ao cadastrar. Algum campo deve estar faltando. 
@@ -81,11 +81,11 @@ class ServicoController {
 		$servico = new Servico ();
 		$servico->setNome ( $_POST ['nome'] );
 		$servico->setDescricao ( $_POST ['descricao'] );
-		$servico->setAtivo ( $_POST ['ativo'] );
 		$servico->setTempoSla ( $_POST ['tempo_sla'] );
+		$servico->setVisao ( $_POST ['visao'] );
+		$servico->getTipoAtividade()->setId ( $_POST ['tipo_atividade'] );
 		$servico->getAreaResponsavel()->setId ( $_POST ['area_responsavel'] );
 		$servico->getGrupoServico()->setId ( $_POST ['grupo_servico'] );
-		$servico->getTipoAtividade()->setId ( $_POST ['tipo_atividade'] );
             
 		if ($this->dao->inserir ( $servico ))
         {
@@ -120,28 +120,28 @@ class ServicoController {
 	    $this->dao->preenchePorId($selecionado);
 	        
         if(!isset($_POST['editar_servico'])){
+            $tipoatividadeDao = new TipoAtividadeDAO($this->dao->getConexao());
+            $listaTipoAtividade = $tipoatividadeDao->retornaLista();
+
             $arearesponsavelDao = new AreaResponsavelDAO($this->dao->getConexao());
             $listaAreaResponsavel = $arearesponsavelDao->retornaLista();
 
             $gruposervicoDao = new GrupoServicoDAO($this->dao->getConexao());
             $listaGrupoServico = $gruposervicoDao->retornaLista();
 
-            $tipoatividadeDao = new TipoAtividadeDAO($this->dao->getConexao());
-            $listaTipoAtividade = $tipoatividadeDao->retornaLista();
-
-            $this->view->mostraFormEditar($listaAreaResponsavel, $listaGrupoServico, $listaTipoAtividade, $selecionado);
+            $this->view->mostraFormEditar($listaTipoAtividade, $listaAreaResponsavel, $listaGrupoServico, $selecionado);
             return;
         }
             
-		if (! ( isset ( $_POST ['nome'] ) && isset ( $_POST ['descricao'] ) && isset ( $_POST ['ativo'] ) && isset ( $_POST ['tempo_sla'] ) &&  isset($_POST ['area_responsavel']) &&  isset($_POST ['grupo_servico']) &&  isset($_POST ['tipo_atividade']))) {
+		if (! ( isset ( $_POST ['nome'] ) && isset ( $_POST ['descricao'] ) && isset ( $_POST ['tempo_sla'] ) && isset ( $_POST ['visao'] ) &&  isset($_POST ['tipo_atividade']) &&  isset($_POST ['area_responsavel']) &&  isset($_POST ['grupo_servico']))) {
 			echo "Incompleto";
 			return;
 		}
 
 		$selecionado->setNome ( $_POST ['nome'] );
 		$selecionado->setDescricao ( $_POST ['descricao'] );
-		$selecionado->setAtivo ( $_POST ['ativo'] );
 		$selecionado->setTempoSla ( $_POST ['tempo_sla'] );
+		$selecionado->setVisao ( $_POST ['visao'] );
             
 		if ($this->dao->atualizar ($selecionado ))
         {
@@ -252,8 +252,8 @@ class ServicoController {
 					'id' => $pesquisado->getId (), 
 					'nome' => $pesquisado->getNome (), 
 					'descricao' => $pesquisado->getDescricao (), 
-					'ativo' => $pesquisado->getAtivo (), 
 					'tempoSla' => $pesquisado->getTempoSla (), 
+					'visao' => $pesquisado->getVisao (), 
             
             
 			);
@@ -267,8 +267,8 @@ class ServicoController {
 					'id' => $linha->getId (), 
 					'nome' => $linha->getNome (), 
 					'descricao' => $linha->getDescricao (), 
-					'ativo' => $linha->getAtivo (), 
 					'tempoSla' => $linha->getTempoSla (), 
+					'visao' => $linha->getVisao (), 
             
             
 			);
@@ -371,13 +371,13 @@ class ServicoController {
         }
                     
 
-        if (isset($jsonBody['ativo'])) {
-            $pesquisado->setAtivo($jsonBody['ativo']);
+        if (isset($jsonBody['tempo_sla'])) {
+            $pesquisado->setTempoSla($jsonBody['tempo_sla']);
         }
                     
 
-        if (isset($jsonBody['tempo_sla'])) {
-            $pesquisado->setTempoSla($jsonBody['tempo_sla']);
+        if (isset($jsonBody['visao'])) {
+            $pesquisado->setVisao($jsonBody['visao']);
         }
                     
 
@@ -408,7 +408,7 @@ class ServicoController {
         $body = file_get_contents('php://input');
         $jsonBody = json_decode($body, true);
 
-        if (! ( isset ( $jsonBody ['nome'] ) && isset ( $jsonBody ['descricao'] ) && isset ( $jsonBody ['ativo'] ) && isset ( $jsonBody ['tempoSla'] ) &&  isset($_POST ['area_responsavel']) &&  isset($_POST ['grupo_servico']) &&  isset($_POST ['tipo_atividade']))) {
+        if (! ( isset ( $jsonBody ['nome'] ) && isset ( $jsonBody ['descricao'] ) && isset ( $jsonBody ['tempoSla'] ) && isset ( $jsonBody ['visao'] ) &&  isset($_POST ['tipo_atividade']) &&  isset($_POST ['area_responsavel']) &&  isset($_POST ['grupo_servico']))) {
 			echo "Incompleto";
 			return;
 		}
@@ -420,9 +420,9 @@ class ServicoController {
 
         $adicionado->setDescricao($jsonBody['descricao']);
 
-        $adicionado->setAtivo($jsonBody['ativo']);
-
         $adicionado->setTempoSla($jsonBody['tempo_sla']);
+
+        $adicionado->setVisao($jsonBody['visao']);
 
         if ($this->dao->inserir($adicionado)) {
             echo "Sucesso";

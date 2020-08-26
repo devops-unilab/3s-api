@@ -24,61 +24,31 @@ class OcorrenciaDAO extends DAO {
         $sql = "UPDATE ocorrencia
                 SET
                 id_local = :idLocal,
-                id_funcionario = :idFuncionario,
-                desc_problema = :descProblema,
+                descricao = :descricao,
                 campus = :campus,
-                etiq_equipamento = :etiqEquipamento,
-                contato = :contato,
+                patrimonio = :patrimonio,
                 ramal = :ramal,
                 local = :local,
-                funcionario = :funcionario,
                 status = :status,
-                obs = :obs,
+                solucao = :solucao,
                 prioridade = :prioridade,
                 avaliacao = :avaliacao,
                 email = :email,
-                fecha_confirmado = :fechaConfirmado,
-                reaberto = :reaberto,
-                dt_abertura = :dtAbertura,
-                dt_atendimento = :dtAtendimento,
-                dt_fechamento = :dtFechamento,
-                dt_fecha_confirmado = :dtFechaConfirmado,
-                dt_cancelamento = :dtCancelamento,
-                id_atendente = :idAtendente,
-                id_tecnico_indicado = :idTecnicoIndicado,
-                dt_liberacao = :dtLiberacao,
                 anexo = :anexo,
-                dt_espera = :dtEspera,
-                dt_aguardando_usuario = :dtAguardandoUsuario,
                 local_sala = :localSala
                 WHERE ocorrencia.id = :id;";
 			$idLocal = $ocorrencia->getIdLocal();
-			$idFuncionario = $ocorrencia->getIdFuncionario();
-			$descProblema = $ocorrencia->getDescProblema();
+			$descricao = $ocorrencia->getDescricao();
 			$campus = $ocorrencia->getCampus();
-			$etiqEquipamento = $ocorrencia->getEtiqEquipamento();
-			$contato = $ocorrencia->getContato();
+			$patrimonio = $ocorrencia->getPatrimonio();
 			$ramal = $ocorrencia->getRamal();
 			$local = $ocorrencia->getLocal();
-			$funcionario = $ocorrencia->getFuncionario();
 			$status = $ocorrencia->getStatus();
-			$obs = $ocorrencia->getObs();
+			$solucao = $ocorrencia->getSolucao();
 			$prioridade = $ocorrencia->getPrioridade();
 			$avaliacao = $ocorrencia->getAvaliacao();
 			$email = $ocorrencia->getEmail();
-			$fechaConfirmado = $ocorrencia->getFechaConfirmado();
-			$reaberto = $ocorrencia->getReaberto();
-			$dtAbertura = $ocorrencia->getDtAbertura();
-			$dtAtendimento = $ocorrencia->getDtAtendimento();
-			$dtFechamento = $ocorrencia->getDtFechamento();
-			$dtFechaConfirmado = $ocorrencia->getDtFechaConfirmado();
-			$dtCancelamento = $ocorrencia->getDtCancelamento();
-			$idAtendente = $ocorrencia->getIdAtendente();
-			$idTecnicoIndicado = $ocorrencia->getIdTecnicoIndicado();
-			$dtLiberacao = $ocorrencia->getDtLiberacao();
 			$anexo = $ocorrencia->getAnexo();
-			$dtEspera = $ocorrencia->getDtEspera();
-			$dtAguardandoUsuario = $ocorrencia->getDtAguardandoUsuario();
 			$localSala = $ocorrencia->getLocalSala();
             
         try {
@@ -86,32 +56,17 @@ class OcorrenciaDAO extends DAO {
             $stmt = $this->getConexao()->prepare($sql);
 			$stmt->bindParam(":id", $id, PDO::PARAM_INT);
 			$stmt->bindParam(":idLocal", $idLocal, PDO::PARAM_INT);
-			$stmt->bindParam(":idFuncionario", $idFuncionario, PDO::PARAM_INT);
-			$stmt->bindParam(":descProblema", $descProblema, PDO::PARAM_STR);
+			$stmt->bindParam(":descricao", $descricao, PDO::PARAM_STR);
 			$stmt->bindParam(":campus", $campus, PDO::PARAM_STR);
-			$stmt->bindParam(":etiqEquipamento", $etiqEquipamento, PDO::PARAM_STR);
-			$stmt->bindParam(":contato", $contato, PDO::PARAM_STR);
+			$stmt->bindParam(":patrimonio", $patrimonio, PDO::PARAM_STR);
 			$stmt->bindParam(":ramal", $ramal, PDO::PARAM_STR);
 			$stmt->bindParam(":local", $local, PDO::PARAM_STR);
-			$stmt->bindParam(":funcionario", $funcionario, PDO::PARAM_STR);
 			$stmt->bindParam(":status", $status, PDO::PARAM_STR);
-			$stmt->bindParam(":obs", $obs, PDO::PARAM_STR);
+			$stmt->bindParam(":solucao", $solucao, PDO::PARAM_STR);
 			$stmt->bindParam(":prioridade", $prioridade, PDO::PARAM_STR);
 			$stmt->bindParam(":avaliacao", $avaliacao, PDO::PARAM_STR);
 			$stmt->bindParam(":email", $email, PDO::PARAM_STR);
-			$stmt->bindParam(":fechaConfirmado", $fechaConfirmado, PDO::PARAM_STR);
-			$stmt->bindParam(":reaberto", $reaberto, PDO::PARAM_STR);
-			$stmt->bindParam(":dtAbertura", $dtAbertura, PDO::PARAM_STR);
-			$stmt->bindParam(":dtAtendimento", $dtAtendimento, PDO::PARAM_STR);
-			$stmt->bindParam(":dtFechamento", $dtFechamento, PDO::PARAM_STR);
-			$stmt->bindParam(":dtFechaConfirmado", $dtFechaConfirmado, PDO::PARAM_STR);
-			$stmt->bindParam(":dtCancelamento", $dtCancelamento, PDO::PARAM_STR);
-			$stmt->bindParam(":idAtendente", $idAtendente, PDO::PARAM_INT);
-			$stmt->bindParam(":idTecnicoIndicado", $idTecnicoIndicado, PDO::PARAM_INT);
-			$stmt->bindParam(":dtLiberacao", $dtLiberacao, PDO::PARAM_STR);
 			$stmt->bindParam(":anexo", $anexo, PDO::PARAM_STR);
-			$stmt->bindParam(":dtEspera", $dtEspera, PDO::PARAM_STR);
-			$stmt->bindParam(":dtAguardandoUsuario", $dtAguardandoUsuario, PDO::PARAM_STR);
 			$stmt->bindParam(":localSala", $localSala, PDO::PARAM_STR);
             
             return $stmt->execute();
@@ -124,36 +79,24 @@ class OcorrenciaDAO extends DAO {
             
 
     public function inserir(Ocorrencia $ocorrencia){
-        $sql = "INSERT INTO ocorrencia(id_area_responsavel, id_servico, id_local, id_funcionario, desc_problema, campus, etiq_equipamento, contato, ramal, local, funcionario, status, obs, prioridade, avaliacao, email, fecha_confirmado, reaberto, dt_abertura, dt_atendimento, dt_fechamento, dt_fecha_confirmado, dt_cancelamento, id_atendente, id_tecnico_indicado, dt_liberacao, anexo, dt_espera, dt_aguardando_usuario, local_sala) VALUES (:areaResponsavel, :servico, :idLocal, :idFuncionario, :descProblema, :campus, :etiqEquipamento, :contato, :ramal, :local, :funcionario, :status, :obs, :prioridade, :avaliacao, :email, :fechaConfirmado, :reaberto, :dtAbertura, :dtAtendimento, :dtFechamento, :dtFechaConfirmado, :dtCancelamento, :idAtendente, :idTecnicoIndicado, :dtLiberacao, :anexo, :dtEspera, :dtAguardandoUsuario, :localSala);";
+        $sql = "INSERT INTO ocorrencia(id_area_responsavel, id_servico, id_local, id_usuario_cliente, descricao, campus, patrimonio, ramal, local, status, solucao, prioridade, avaliacao, email, id_usuario_atendente, id_usuario_indicado, anexo, local_sala) VALUES (:areaResponsavel, :servico, :idLocal, :usuarioCliente, :descricao, :campus, :patrimonio, :ramal, :local, :status, :solucao, :prioridade, :avaliacao, :email, :usuarioAtendente, :usuarioIndicado, :anexo, :localSala);";
 		$areaResponsavel = $ocorrencia->getAreaResponsavel()->getId();
 		$servico = $ocorrencia->getServico()->getId();
 		$idLocal = $ocorrencia->getIdLocal();
-		$idFuncionario = $ocorrencia->getIdFuncionario();
-		$descProblema = $ocorrencia->getDescProblema();
+		$usuarioCliente = $ocorrencia->getUsuarioCliente()->getId();
+		$descricao = $ocorrencia->getDescricao();
 		$campus = $ocorrencia->getCampus();
-		$etiqEquipamento = $ocorrencia->getEtiqEquipamento();
-		$contato = $ocorrencia->getContato();
+		$patrimonio = $ocorrencia->getPatrimonio();
 		$ramal = $ocorrencia->getRamal();
 		$local = $ocorrencia->getLocal();
-		$funcionario = $ocorrencia->getFuncionario();
 		$status = $ocorrencia->getStatus();
-		$obs = $ocorrencia->getObs();
+		$solucao = $ocorrencia->getSolucao();
 		$prioridade = $ocorrencia->getPrioridade();
 		$avaliacao = $ocorrencia->getAvaliacao();
 		$email = $ocorrencia->getEmail();
-		$fechaConfirmado = $ocorrencia->getFechaConfirmado();
-		$reaberto = $ocorrencia->getReaberto();
-		$dtAbertura = $ocorrencia->getDtAbertura();
-		$dtAtendimento = $ocorrencia->getDtAtendimento();
-		$dtFechamento = $ocorrencia->getDtFechamento();
-		$dtFechaConfirmado = $ocorrencia->getDtFechaConfirmado();
-		$dtCancelamento = $ocorrencia->getDtCancelamento();
-		$idAtendente = $ocorrencia->getIdAtendente();
-		$idTecnicoIndicado = $ocorrencia->getIdTecnicoIndicado();
-		$dtLiberacao = $ocorrencia->getDtLiberacao();
+		$usuarioAtendente = $ocorrencia->getUsuarioAtendente()->getId();
+		$usuarioIndicado = $ocorrencia->getUsuarioIndicado()->getId();
 		$anexo = $ocorrencia->getAnexo();
-		$dtEspera = $ocorrencia->getDtEspera();
-		$dtAguardandoUsuario = $ocorrencia->getDtAguardandoUsuario();
 		$localSala = $ocorrencia->getLocalSala();
 		try {
 			$db = $this->getConexao();
@@ -161,32 +104,20 @@ class OcorrenciaDAO extends DAO {
 			$stmt->bindParam(":areaResponsavel", $areaResponsavel, PDO::PARAM_INT);
 			$stmt->bindParam(":servico", $servico, PDO::PARAM_INT);
 			$stmt->bindParam(":idLocal", $idLocal, PDO::PARAM_INT);
-			$stmt->bindParam(":idFuncionario", $idFuncionario, PDO::PARAM_INT);
-			$stmt->bindParam(":descProblema", $descProblema, PDO::PARAM_STR);
+			$stmt->bindParam(":usuarioCliente", $usuarioCliente, PDO::PARAM_INT);
+			$stmt->bindParam(":descricao", $descricao, PDO::PARAM_STR);
 			$stmt->bindParam(":campus", $campus, PDO::PARAM_STR);
-			$stmt->bindParam(":etiqEquipamento", $etiqEquipamento, PDO::PARAM_STR);
-			$stmt->bindParam(":contato", $contato, PDO::PARAM_STR);
+			$stmt->bindParam(":patrimonio", $patrimonio, PDO::PARAM_STR);
 			$stmt->bindParam(":ramal", $ramal, PDO::PARAM_STR);
 			$stmt->bindParam(":local", $local, PDO::PARAM_STR);
-			$stmt->bindParam(":funcionario", $funcionario, PDO::PARAM_STR);
 			$stmt->bindParam(":status", $status, PDO::PARAM_STR);
-			$stmt->bindParam(":obs", $obs, PDO::PARAM_STR);
+			$stmt->bindParam(":solucao", $solucao, PDO::PARAM_STR);
 			$stmt->bindParam(":prioridade", $prioridade, PDO::PARAM_STR);
 			$stmt->bindParam(":avaliacao", $avaliacao, PDO::PARAM_STR);
 			$stmt->bindParam(":email", $email, PDO::PARAM_STR);
-			$stmt->bindParam(":fechaConfirmado", $fechaConfirmado, PDO::PARAM_STR);
-			$stmt->bindParam(":reaberto", $reaberto, PDO::PARAM_STR);
-			$stmt->bindParam(":dtAbertura", $dtAbertura, PDO::PARAM_STR);
-			$stmt->bindParam(":dtAtendimento", $dtAtendimento, PDO::PARAM_STR);
-			$stmt->bindParam(":dtFechamento", $dtFechamento, PDO::PARAM_STR);
-			$stmt->bindParam(":dtFechaConfirmado", $dtFechaConfirmado, PDO::PARAM_STR);
-			$stmt->bindParam(":dtCancelamento", $dtCancelamento, PDO::PARAM_STR);
-			$stmt->bindParam(":idAtendente", $idAtendente, PDO::PARAM_INT);
-			$stmt->bindParam(":idTecnicoIndicado", $idTecnicoIndicado, PDO::PARAM_INT);
-			$stmt->bindParam(":dtLiberacao", $dtLiberacao, PDO::PARAM_STR);
+			$stmt->bindParam(":usuarioAtendente", $usuarioAtendente, PDO::PARAM_INT);
+			$stmt->bindParam(":usuarioIndicado", $usuarioIndicado, PDO::PARAM_INT);
 			$stmt->bindParam(":anexo", $anexo, PDO::PARAM_STR);
-			$stmt->bindParam(":dtEspera", $dtEspera, PDO::PARAM_STR);
-			$stmt->bindParam(":dtAguardandoUsuario", $dtAguardandoUsuario, PDO::PARAM_STR);
 			$stmt->bindParam(":localSala", $localSala, PDO::PARAM_STR);
 			return $stmt->execute();
 		} catch(PDOException $e) {
@@ -195,37 +126,25 @@ class OcorrenciaDAO extends DAO {
             
     }
     public function inserirComPK(Ocorrencia $ocorrencia){
-        $sql = "INSERT INTO ocorrencia(id, id_area_responsavel_area_responsavel, id_servico_servico, id_local, id_funcionario, desc_problema, campus, etiq_equipamento, contato, ramal, local, funcionario, status, obs, prioridade, avaliacao, email, fecha_confirmado, reaberto, dt_abertura, dt_atendimento, dt_fechamento, dt_fecha_confirmado, dt_cancelamento, id_atendente, id_tecnico_indicado, dt_liberacao, anexo, dt_espera, dt_aguardando_usuario, local_sala) VALUES (:id, :areaResponsavel, :servico, :idLocal, :idFuncionario, :descProblema, :campus, :etiqEquipamento, :contato, :ramal, :local, :funcionario, :status, :obs, :prioridade, :avaliacao, :email, :fechaConfirmado, :reaberto, :dtAbertura, :dtAtendimento, :dtFechamento, :dtFechaConfirmado, :dtCancelamento, :idAtendente, :idTecnicoIndicado, :dtLiberacao, :anexo, :dtEspera, :dtAguardandoUsuario, :localSala);";
+        $sql = "INSERT INTO ocorrencia(id, id_area_responsavel_area_responsavel, id_servico_servico, id_local, id_usuario_usuario_cliente, descricao, campus, patrimonio, ramal, local, status, solucao, prioridade, avaliacao, email, id_usuario_usuario_atendente, id_usuario_usuario_indicado, anexo, local_sala) VALUES (:id, :areaResponsavel, :servico, :idLocal, :usuarioCliente, :descricao, :campus, :patrimonio, :ramal, :local, :status, :solucao, :prioridade, :avaliacao, :email, :usuarioAtendente, :usuarioIndicado, :anexo, :localSala);";
 		$id = $ocorrencia->getId();
 		$areaResponsavel = $ocorrencia->getAreaResponsavel()->getId();
 		$servico = $ocorrencia->getServico()->getId();
 		$idLocal = $ocorrencia->getIdLocal();
-		$idFuncionario = $ocorrencia->getIdFuncionario();
-		$descProblema = $ocorrencia->getDescProblema();
+		$usuarioCliente = $ocorrencia->getUsuarioCliente()->getId();
+		$descricao = $ocorrencia->getDescricao();
 		$campus = $ocorrencia->getCampus();
-		$etiqEquipamento = $ocorrencia->getEtiqEquipamento();
-		$contato = $ocorrencia->getContato();
+		$patrimonio = $ocorrencia->getPatrimonio();
 		$ramal = $ocorrencia->getRamal();
 		$local = $ocorrencia->getLocal();
-		$funcionario = $ocorrencia->getFuncionario();
 		$status = $ocorrencia->getStatus();
-		$obs = $ocorrencia->getObs();
+		$solucao = $ocorrencia->getSolucao();
 		$prioridade = $ocorrencia->getPrioridade();
 		$avaliacao = $ocorrencia->getAvaliacao();
 		$email = $ocorrencia->getEmail();
-		$fechaConfirmado = $ocorrencia->getFechaConfirmado();
-		$reaberto = $ocorrencia->getReaberto();
-		$dtAbertura = $ocorrencia->getDtAbertura();
-		$dtAtendimento = $ocorrencia->getDtAtendimento();
-		$dtFechamento = $ocorrencia->getDtFechamento();
-		$dtFechaConfirmado = $ocorrencia->getDtFechaConfirmado();
-		$dtCancelamento = $ocorrencia->getDtCancelamento();
-		$idAtendente = $ocorrencia->getIdAtendente();
-		$idTecnicoIndicado = $ocorrencia->getIdTecnicoIndicado();
-		$dtLiberacao = $ocorrencia->getDtLiberacao();
+		$usuarioAtendente = $ocorrencia->getUsuarioAtendente()->getId();
+		$usuarioIndicado = $ocorrencia->getUsuarioIndicado()->getId();
 		$anexo = $ocorrencia->getAnexo();
-		$dtEspera = $ocorrencia->getDtEspera();
-		$dtAguardandoUsuario = $ocorrencia->getDtAguardandoUsuario();
 		$localSala = $ocorrencia->getLocalSala();
 		try {
 			$db = $this->getConexao();
@@ -234,32 +153,20 @@ class OcorrenciaDAO extends DAO {
 			$stmt->bindParam(":areaResponsavel", $areaResponsavel, PDO::PARAM_INT);
 			$stmt->bindParam(":servico", $servico, PDO::PARAM_INT);
 			$stmt->bindParam(":idLocal", $idLocal, PDO::PARAM_INT);
-			$stmt->bindParam(":idFuncionario", $idFuncionario, PDO::PARAM_INT);
-			$stmt->bindParam(":descProblema", $descProblema, PDO::PARAM_STR);
+			$stmt->bindParam(":usuarioCliente", $usuarioCliente, PDO::PARAM_INT);
+			$stmt->bindParam(":descricao", $descricao, PDO::PARAM_STR);
 			$stmt->bindParam(":campus", $campus, PDO::PARAM_STR);
-			$stmt->bindParam(":etiqEquipamento", $etiqEquipamento, PDO::PARAM_STR);
-			$stmt->bindParam(":contato", $contato, PDO::PARAM_STR);
+			$stmt->bindParam(":patrimonio", $patrimonio, PDO::PARAM_STR);
 			$stmt->bindParam(":ramal", $ramal, PDO::PARAM_STR);
 			$stmt->bindParam(":local", $local, PDO::PARAM_STR);
-			$stmt->bindParam(":funcionario", $funcionario, PDO::PARAM_STR);
 			$stmt->bindParam(":status", $status, PDO::PARAM_STR);
-			$stmt->bindParam(":obs", $obs, PDO::PARAM_STR);
+			$stmt->bindParam(":solucao", $solucao, PDO::PARAM_STR);
 			$stmt->bindParam(":prioridade", $prioridade, PDO::PARAM_STR);
 			$stmt->bindParam(":avaliacao", $avaliacao, PDO::PARAM_STR);
 			$stmt->bindParam(":email", $email, PDO::PARAM_STR);
-			$stmt->bindParam(":fechaConfirmado", $fechaConfirmado, PDO::PARAM_STR);
-			$stmt->bindParam(":reaberto", $reaberto, PDO::PARAM_STR);
-			$stmt->bindParam(":dtAbertura", $dtAbertura, PDO::PARAM_STR);
-			$stmt->bindParam(":dtAtendimento", $dtAtendimento, PDO::PARAM_STR);
-			$stmt->bindParam(":dtFechamento", $dtFechamento, PDO::PARAM_STR);
-			$stmt->bindParam(":dtFechaConfirmado", $dtFechaConfirmado, PDO::PARAM_STR);
-			$stmt->bindParam(":dtCancelamento", $dtCancelamento, PDO::PARAM_STR);
-			$stmt->bindParam(":idAtendente", $idAtendente, PDO::PARAM_INT);
-			$stmt->bindParam(":idTecnicoIndicado", $idTecnicoIndicado, PDO::PARAM_INT);
-			$stmt->bindParam(":dtLiberacao", $dtLiberacao, PDO::PARAM_STR);
+			$stmt->bindParam(":usuarioAtendente", $usuarioAtendente, PDO::PARAM_INT);
+			$stmt->bindParam(":usuarioIndicado", $usuarioIndicado, PDO::PARAM_INT);
 			$stmt->bindParam(":anexo", $anexo, PDO::PARAM_STR);
-			$stmt->bindParam(":dtEspera", $dtEspera, PDO::PARAM_STR);
-			$stmt->bindParam(":dtAguardandoUsuario", $dtAguardandoUsuario, PDO::PARAM_STR);
 			$stmt->bindParam(":localSala", $localSala, PDO::PARAM_STR);
 			return $stmt->execute();
 		} catch(PDOException $e) {
@@ -290,48 +197,52 @@ class OcorrenciaDAO extends DAO {
 		SELECT
         ocorrencia.id, 
         ocorrencia.id_local, 
-        ocorrencia.id_funcionario, 
-        ocorrencia.desc_problema, 
+        ocorrencia.descricao, 
         ocorrencia.campus, 
-        ocorrencia.etiq_equipamento, 
-        ocorrencia.contato, 
+        ocorrencia.patrimonio, 
         ocorrencia.ramal, 
         ocorrencia.local, 
-        ocorrencia.funcionario, 
         ocorrencia.status, 
-        ocorrencia.obs, 
+        ocorrencia.solucao, 
         ocorrencia.prioridade, 
         ocorrencia.avaliacao, 
         ocorrencia.email, 
-        ocorrencia.fecha_confirmado, 
-        ocorrencia.reaberto, 
-        ocorrencia.dt_abertura, 
-        ocorrencia.dt_atendimento, 
-        ocorrencia.dt_fechamento, 
-        ocorrencia.dt_fecha_confirmado, 
-        ocorrencia.dt_cancelamento, 
-        ocorrencia.id_atendente, 
-        ocorrencia.id_tecnico_indicado, 
-        ocorrencia.dt_liberacao, 
         ocorrencia.anexo, 
-        ocorrencia.dt_espera, 
-        ocorrencia.dt_aguardando_usuario, 
         ocorrencia.local_sala, 
         area_responsavel.id as id_area_responsavel_area_responsavel, 
         area_responsavel.nome as nome_area_responsavel_area_responsavel, 
         area_responsavel.descricao as descricao_area_responsavel_area_responsavel, 
         area_responsavel.email as email_area_responsavel_area_responsavel, 
-        area_responsavel.id_admin as id_admin_area_responsavel_area_responsavel, 
         servico.id as id_servico_servico, 
         servico.nome as nome_servico_servico, 
         servico.descricao as descricao_servico_servico, 
-        servico.ativo as ativo_servico_servico, 
-        servico.tempo_sla as tempo_sla_servico_servico
+        servico.tempo_sla as tempo_sla_servico_servico, 
+        servico.visao as visao_servico_servico, 
+        usuario_cliente.id as id_usuario_usuario_cliente, 
+        usuario_cliente.nome as nome_usuario_usuario_cliente, 
+        usuario_cliente.email as email_usuario_usuario_cliente, 
+        usuario_cliente.login as login_usuario_usuario_cliente, 
+        usuario_cliente.senha as senha_usuario_usuario_cliente, 
+        usuario_cliente.nivel as nivel_usuario_usuario_cliente, 
+        usuario_atendente.id as id_usuario_usuario_atendente, 
+        usuario_atendente.nome as nome_usuario_usuario_atendente, 
+        usuario_atendente.email as email_usuario_usuario_atendente, 
+        usuario_atendente.login as login_usuario_usuario_atendente, 
+        usuario_atendente.senha as senha_usuario_usuario_atendente, 
+        usuario_atendente.nivel as nivel_usuario_usuario_atendente, 
+        usuario_indicado.id as id_usuario_usuario_indicado, 
+        usuario_indicado.nome as nome_usuario_usuario_indicado, 
+        usuario_indicado.email as email_usuario_usuario_indicado, 
+        usuario_indicado.login as login_usuario_usuario_indicado, 
+        usuario_indicado.senha as senha_usuario_usuario_indicado, 
+        usuario_indicado.nivel as nivel_usuario_usuario_indicado
 		FROM ocorrencia
 		INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel
 		INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico
-        ORDER BY id DESC
-                 LIMIT 10";
+		INNER JOIN usuario as usuario_cliente ON usuario_cliente.id = ocorrencia.id_usuario_cliente
+		INNER JOIN usuario as usuario_atendente ON usuario_atendente.id = ocorrencia.id_usuario_atendente
+		INNER JOIN usuario as usuario_indicado ON usuario_indicado.id = ocorrencia.id_usuario_indicado
+                 LIMIT 1000";
 
         try {
             $stmt = $this->conexao->prepare($sql);
@@ -347,43 +258,45 @@ class OcorrenciaDAO extends DAO {
 		        $ocorrencia = new Ocorrencia();
                 $ocorrencia->setId( $linha ['id'] );
                 $ocorrencia->setIdLocal( $linha ['id_local'] );
-                $ocorrencia->setIdFuncionario( $linha ['id_funcionario'] );
-                $ocorrencia->setDescProblema( $linha ['desc_problema'] );
+                $ocorrencia->setDescricao( $linha ['descricao'] );
                 $ocorrencia->setCampus( $linha ['campus'] );
-                $ocorrencia->setEtiqEquipamento( $linha ['etiq_equipamento'] );
-                $ocorrencia->setContato( $linha ['contato'] );
+                $ocorrencia->setPatrimonio( $linha ['patrimonio'] );
                 $ocorrencia->setRamal( $linha ['ramal'] );
                 $ocorrencia->setLocal( $linha ['local'] );
-                $ocorrencia->setFuncionario( $linha ['funcionario'] );
                 $ocorrencia->setStatus( $linha ['status'] );
-                $ocorrencia->setObs( $linha ['obs'] );
+                $ocorrencia->setSolucao( $linha ['solucao'] );
                 $ocorrencia->setPrioridade( $linha ['prioridade'] );
                 $ocorrencia->setAvaliacao( $linha ['avaliacao'] );
                 $ocorrencia->setEmail( $linha ['email'] );
-                $ocorrencia->setFechaConfirmado( $linha ['fecha_confirmado'] );
-                $ocorrencia->setReaberto( $linha ['reaberto'] );
-                $ocorrencia->setDtAbertura( $linha ['dt_abertura'] );
-                $ocorrencia->setDtAtendimento( $linha ['dt_atendimento'] );
-                $ocorrencia->setDtFechamento( $linha ['dt_fechamento'] );
-                $ocorrencia->setDtFechaConfirmado( $linha ['dt_fecha_confirmado'] );
-                $ocorrencia->setDtCancelamento( $linha ['dt_cancelamento'] );
-                $ocorrencia->setIdAtendente( $linha ['id_atendente'] );
-                $ocorrencia->setIdTecnicoIndicado( $linha ['id_tecnico_indicado'] );
-                $ocorrencia->setDtLiberacao( $linha ['dt_liberacao'] );
                 $ocorrencia->setAnexo( $linha ['anexo'] );
-                $ocorrencia->setDtEspera( $linha ['dt_espera'] );
-                $ocorrencia->setDtAguardandoUsuario( $linha ['dt_aguardando_usuario'] );
                 $ocorrencia->setLocalSala( $linha ['local_sala'] );
                 $ocorrencia->getAreaResponsavel()->setId( $linha ['id_area_responsavel_area_responsavel'] );
                 $ocorrencia->getAreaResponsavel()->setNome( $linha ['nome_area_responsavel_area_responsavel'] );
                 $ocorrencia->getAreaResponsavel()->setDescricao( $linha ['descricao_area_responsavel_area_responsavel'] );
                 $ocorrencia->getAreaResponsavel()->setEmail( $linha ['email_area_responsavel_area_responsavel'] );
-                $ocorrencia->getAreaResponsavel()->setIdAdmin( $linha ['id_admin_area_responsavel_area_responsavel'] );
                 $ocorrencia->getServico()->setId( $linha ['id_servico_servico'] );
                 $ocorrencia->getServico()->setNome( $linha ['nome_servico_servico'] );
                 $ocorrencia->getServico()->setDescricao( $linha ['descricao_servico_servico'] );
-                $ocorrencia->getServico()->setAtivo( $linha ['ativo_servico_servico'] );
                 $ocorrencia->getServico()->setTempoSla( $linha ['tempo_sla_servico_servico'] );
+                $ocorrencia->getServico()->setVisao( $linha ['visao_servico_servico'] );
+                $ocorrencia->getUsuarioCliente()->setId( $linha ['id_usuario_usuario_cliente'] );
+                $ocorrencia->getUsuarioCliente()->setNome( $linha ['nome_usuario_usuario_cliente'] );
+                $ocorrencia->getUsuarioCliente()->setEmail( $linha ['email_usuario_usuario_cliente'] );
+                $ocorrencia->getUsuarioCliente()->setLogin( $linha ['login_usuario_usuario_cliente'] );
+                $ocorrencia->getUsuarioCliente()->setSenha( $linha ['senha_usuario_usuario_cliente'] );
+                $ocorrencia->getUsuarioCliente()->setNivel( $linha ['nivel_usuario_usuario_cliente'] );
+                $ocorrencia->getUsuarioAtendente()->setId( $linha ['id_usuario_usuario_atendente'] );
+                $ocorrencia->getUsuarioAtendente()->setNome( $linha ['nome_usuario_usuario_atendente'] );
+                $ocorrencia->getUsuarioAtendente()->setEmail( $linha ['email_usuario_usuario_atendente'] );
+                $ocorrencia->getUsuarioAtendente()->setLogin( $linha ['login_usuario_usuario_atendente'] );
+                $ocorrencia->getUsuarioAtendente()->setSenha( $linha ['senha_usuario_usuario_atendente'] );
+                $ocorrencia->getUsuarioAtendente()->setNivel( $linha ['nivel_usuario_usuario_atendente'] );
+                $ocorrencia->getUsuarioIndicado()->setId( $linha ['id_usuario_usuario_indicado'] );
+                $ocorrencia->getUsuarioIndicado()->setNome( $linha ['nome_usuario_usuario_indicado'] );
+                $ocorrencia->getUsuarioIndicado()->setEmail( $linha ['email_usuario_usuario_indicado'] );
+                $ocorrencia->getUsuarioIndicado()->setLogin( $linha ['login_usuario_usuario_indicado'] );
+                $ocorrencia->getUsuarioIndicado()->setSenha( $linha ['senha_usuario_usuario_indicado'] );
+                $ocorrencia->getUsuarioIndicado()->setNivel( $linha ['nivel_usuario_usuario_indicado'] );
                 $lista [] = $ocorrencia;
 
 	
@@ -403,46 +316,51 @@ class OcorrenciaDAO extends DAO {
 		SELECT
         ocorrencia.id, 
         ocorrencia.id_local, 
-        ocorrencia.id_funcionario, 
-        ocorrencia.desc_problema, 
+        ocorrencia.descricao, 
         ocorrencia.campus, 
-        ocorrencia.etiq_equipamento, 
-        ocorrencia.contato, 
+        ocorrencia.patrimonio, 
         ocorrencia.ramal, 
         ocorrencia.local, 
-        ocorrencia.funcionario, 
         ocorrencia.status, 
-        ocorrencia.obs, 
+        ocorrencia.solucao, 
         ocorrencia.prioridade, 
         ocorrencia.avaliacao, 
         ocorrencia.email, 
-        ocorrencia.fecha_confirmado, 
-        ocorrencia.reaberto, 
-        ocorrencia.dt_abertura, 
-        ocorrencia.dt_atendimento, 
-        ocorrencia.dt_fechamento, 
-        ocorrencia.dt_fecha_confirmado, 
-        ocorrencia.dt_cancelamento, 
-        ocorrencia.id_atendente, 
-        ocorrencia.id_tecnico_indicado, 
-        ocorrencia.dt_liberacao, 
         ocorrencia.anexo, 
-        ocorrencia.dt_espera, 
-        ocorrencia.dt_aguardando_usuario, 
         ocorrencia.local_sala, 
         area_responsavel.id as id_area_responsavel_area_responsavel, 
         area_responsavel.nome as nome_area_responsavel_area_responsavel, 
         area_responsavel.descricao as descricao_area_responsavel_area_responsavel, 
         area_responsavel.email as email_area_responsavel_area_responsavel, 
-        area_responsavel.id_admin as id_admin_area_responsavel_area_responsavel, 
         servico.id as id_servico_servico, 
         servico.nome as nome_servico_servico, 
         servico.descricao as descricao_servico_servico, 
-        servico.ativo as ativo_servico_servico, 
-        servico.tempo_sla as tempo_sla_servico_servico
+        servico.tempo_sla as tempo_sla_servico_servico, 
+        servico.visao as visao_servico_servico, 
+        usuario_cliente.id as id_usuario_usuario_cliente, 
+        usuario_cliente.nome as nome_usuario_usuario_cliente, 
+        usuario_cliente.email as email_usuario_usuario_cliente, 
+        usuario_cliente.login as login_usuario_usuario_cliente, 
+        usuario_cliente.senha as senha_usuario_usuario_cliente, 
+        usuario_cliente.nivel as nivel_usuario_usuario_cliente, 
+        usuario_atendente.id as id_usuario_usuario_atendente, 
+        usuario_atendente.nome as nome_usuario_usuario_atendente, 
+        usuario_atendente.email as email_usuario_usuario_atendente, 
+        usuario_atendente.login as login_usuario_usuario_atendente, 
+        usuario_atendente.senha as senha_usuario_usuario_atendente, 
+        usuario_atendente.nivel as nivel_usuario_usuario_atendente, 
+        usuario_indicado.id as id_usuario_usuario_indicado, 
+        usuario_indicado.nome as nome_usuario_usuario_indicado, 
+        usuario_indicado.email as email_usuario_usuario_indicado, 
+        usuario_indicado.login as login_usuario_usuario_indicado, 
+        usuario_indicado.senha as senha_usuario_usuario_indicado, 
+        usuario_indicado.nivel as nivel_usuario_usuario_indicado
 		FROM ocorrencia
 		INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel
 		INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico
+		INNER JOIN usuario as usuario_cliente ON usuario_cliente.id = ocorrencia.id_usuario_cliente
+		INNER JOIN usuario as usuario_atendente ON usuario_atendente.id = ocorrencia.id_usuario_atendente
+		INNER JOIN usuario as usuario_indicado ON usuario_indicado.id = ocorrencia.id_usuario_indicado
             WHERE ocorrencia.id = :id";
                 
         try {
@@ -455,46 +373,51 @@ class OcorrenciaDAO extends DAO {
                 $ocorrencia = new Ocorrencia();
     	        $ocorrencia->setId( $linha ['id'] );
     	        $ocorrencia->setIdLocal( $linha ['id_local'] );
-    	        $ocorrencia->setIdFuncionario( $linha ['id_funcionario'] );
-    	        $ocorrencia->setDescProblema( $linha ['desc_problema'] );
+    	        $ocorrencia->setDescricao( $linha ['descricao'] );
     	        $ocorrencia->setCampus( $linha ['campus'] );
-    	        $ocorrencia->setEtiqEquipamento( $linha ['etiq_equipamento'] );
-    	        $ocorrencia->setContato( $linha ['contato'] );
+    	        $ocorrencia->setPatrimonio( $linha ['patrimonio'] );
     	        $ocorrencia->setRamal( $linha ['ramal'] );
     	        $ocorrencia->setLocal( $linha ['local'] );
-    	        $ocorrencia->setFuncionario( $linha ['funcionario'] );
     	        $ocorrencia->setStatus( $linha ['status'] );
-    	        $ocorrencia->setObs( $linha ['obs'] );
+    	        $ocorrencia->setSolucao( $linha ['solucao'] );
     	        $ocorrencia->setPrioridade( $linha ['prioridade'] );
     	        $ocorrencia->setAvaliacao( $linha ['avaliacao'] );
     	        $ocorrencia->setEmail( $linha ['email'] );
-    	        $ocorrencia->setFechaConfirmado( $linha ['fecha_confirmado'] );
-    	        $ocorrencia->setReaberto( $linha ['reaberto'] );
-    	        $ocorrencia->setDtAbertura( $linha ['dt_abertura'] );
-    	        $ocorrencia->setDtAtendimento( $linha ['dt_atendimento'] );
-    	        $ocorrencia->setDtFechamento( $linha ['dt_fechamento'] );
-    	        $ocorrencia->setDtFechaConfirmado( $linha ['dt_fecha_confirmado'] );
-    	        $ocorrencia->setDtCancelamento( $linha ['dt_cancelamento'] );
-    	        $ocorrencia->setIdAtendente( $linha ['id_atendente'] );
-    	        $ocorrencia->setIdTecnicoIndicado( $linha ['id_tecnico_indicado'] );
-    	        $ocorrencia->setDtLiberacao( $linha ['dt_liberacao'] );
     	        $ocorrencia->setAnexo( $linha ['anexo'] );
-    	        $ocorrencia->setDtEspera( $linha ['dt_espera'] );
-    	        $ocorrencia->setDtAguardandoUsuario( $linha ['dt_aguardando_usuario'] );
     	        $ocorrencia->setLocalSala( $linha ['local_sala'] );
     			$ocorrencia->getAreaResponsavel()->setId( $linha ['id_area_responsavel_area_responsavel'] );
     			$ocorrencia->getAreaResponsavel()->setNome( $linha ['nome_area_responsavel_area_responsavel'] );
     			$ocorrencia->getAreaResponsavel()->setDescricao( $linha ['descricao_area_responsavel_area_responsavel'] );
     			$ocorrencia->getAreaResponsavel()->setEmail( $linha ['email_area_responsavel_area_responsavel'] );
-    			$ocorrencia->getAreaResponsavel()->setIdAdmin( $linha ['id_admin_area_responsavel_area_responsavel'] );
     			$ocorrencia->getServico()->setId( $linha ['id_servico_servico'] );
     			$ocorrencia->getServico()->setNome( $linha ['nome_servico_servico'] );
     			$ocorrencia->getServico()->setDescricao( $linha ['descricao_servico_servico'] );
-    			$ocorrencia->getServico()->setAtivo( $linha ['ativo_servico_servico'] );
+    			$ocorrencia->getServico()->setTipoAtividade( $linha ['tipo_atividade_servico_servico'] );
     			$ocorrencia->getServico()->setTempoSla( $linha ['tempo_sla_servico_servico'] );
+    			$ocorrencia->getServico()->setVisao( $linha ['visao_servico_servico'] );
     			$ocorrencia->getServico()->setAreaResponsavel( $linha ['area_responsavel_servico_servico'] );
     			$ocorrencia->getServico()->setGrupoServico( $linha ['grupo_servico_servico_servico'] );
-    			$ocorrencia->getServico()->setTipoAtividade( $linha ['tipo_atividade_servico_servico'] );
+    			$ocorrencia->getUsuarioCliente()->setId( $linha ['id_usuario_usuario_cliente'] );
+    			$ocorrencia->getUsuarioCliente()->setNome( $linha ['nome_usuario_usuario_cliente'] );
+    			$ocorrencia->getUsuarioCliente()->setEmail( $linha ['email_usuario_usuario_cliente'] );
+    			$ocorrencia->getUsuarioCliente()->setLogin( $linha ['login_usuario_usuario_cliente'] );
+    			$ocorrencia->getUsuarioCliente()->setSenha( $linha ['senha_usuario_usuario_cliente'] );
+    			$ocorrencia->getUsuarioCliente()->setNivel( $linha ['nivel_usuario_usuario_cliente'] );
+    			$ocorrencia->getUsuarioCliente()->setSetor( $linha ['setor_usuario_usuario_cliente'] );
+    			$ocorrencia->getUsuarioAtendente()->setId( $linha ['id_usuario_usuario_atendente'] );
+    			$ocorrencia->getUsuarioAtendente()->setNome( $linha ['nome_usuario_usuario_atendente'] );
+    			$ocorrencia->getUsuarioAtendente()->setEmail( $linha ['email_usuario_usuario_atendente'] );
+    			$ocorrencia->getUsuarioAtendente()->setLogin( $linha ['login_usuario_usuario_atendente'] );
+    			$ocorrencia->getUsuarioAtendente()->setSenha( $linha ['senha_usuario_usuario_atendente'] );
+    			$ocorrencia->getUsuarioAtendente()->setNivel( $linha ['nivel_usuario_usuario_atendente'] );
+    			$ocorrencia->getUsuarioAtendente()->setSetor( $linha ['setor_usuario_usuario_atendente'] );
+    			$ocorrencia->getUsuarioIndicado()->setId( $linha ['id_usuario_usuario_indicado'] );
+    			$ocorrencia->getUsuarioIndicado()->setNome( $linha ['nome_usuario_usuario_indicado'] );
+    			$ocorrencia->getUsuarioIndicado()->setEmail( $linha ['email_usuario_usuario_indicado'] );
+    			$ocorrencia->getUsuarioIndicado()->setLogin( $linha ['login_usuario_usuario_indicado'] );
+    			$ocorrencia->getUsuarioIndicado()->setSenha( $linha ['senha_usuario_usuario_indicado'] );
+    			$ocorrencia->getUsuarioIndicado()->setNivel( $linha ['nivel_usuario_usuario_indicado'] );
+    			$ocorrencia->getUsuarioIndicado()->setSetor( $linha ['setor_usuario_usuario_indicado'] );
     			$lista [] = $ocorrencia;
     			    
             }
@@ -514,46 +437,51 @@ class OcorrenciaDAO extends DAO {
 		SELECT
         ocorrencia.id, 
         ocorrencia.id_local, 
-        ocorrencia.id_funcionario, 
-        ocorrencia.desc_problema, 
+        ocorrencia.descricao, 
         ocorrencia.campus, 
-        ocorrencia.etiq_equipamento, 
-        ocorrencia.contato, 
+        ocorrencia.patrimonio, 
         ocorrencia.ramal, 
         ocorrencia.local, 
-        ocorrencia.funcionario, 
         ocorrencia.status, 
-        ocorrencia.obs, 
+        ocorrencia.solucao, 
         ocorrencia.prioridade, 
         ocorrencia.avaliacao, 
         ocorrencia.email, 
-        ocorrencia.fecha_confirmado, 
-        ocorrencia.reaberto, 
-        ocorrencia.dt_abertura, 
-        ocorrencia.dt_atendimento, 
-        ocorrencia.dt_fechamento, 
-        ocorrencia.dt_fecha_confirmado, 
-        ocorrencia.dt_cancelamento, 
-        ocorrencia.id_atendente, 
-        ocorrencia.id_tecnico_indicado, 
-        ocorrencia.dt_liberacao, 
         ocorrencia.anexo, 
-        ocorrencia.dt_espera, 
-        ocorrencia.dt_aguardando_usuario, 
         ocorrencia.local_sala, 
         area_responsavel.id as id_area_responsavel_area_responsavel, 
         area_responsavel.nome as nome_area_responsavel_area_responsavel, 
         area_responsavel.descricao as descricao_area_responsavel_area_responsavel, 
         area_responsavel.email as email_area_responsavel_area_responsavel, 
-        area_responsavel.id_admin as id_admin_area_responsavel_area_responsavel, 
         servico.id as id_servico_servico, 
         servico.nome as nome_servico_servico, 
         servico.descricao as descricao_servico_servico, 
-        servico.ativo as ativo_servico_servico, 
-        servico.tempo_sla as tempo_sla_servico_servico
+        servico.tempo_sla as tempo_sla_servico_servico, 
+        servico.visao as visao_servico_servico, 
+        usuario_cliente.id as id_usuario_usuario_cliente, 
+        usuario_cliente.nome as nome_usuario_usuario_cliente, 
+        usuario_cliente.email as email_usuario_usuario_cliente, 
+        usuario_cliente.login as login_usuario_usuario_cliente, 
+        usuario_cliente.senha as senha_usuario_usuario_cliente, 
+        usuario_cliente.nivel as nivel_usuario_usuario_cliente, 
+        usuario_atendente.id as id_usuario_usuario_atendente, 
+        usuario_atendente.nome as nome_usuario_usuario_atendente, 
+        usuario_atendente.email as email_usuario_usuario_atendente, 
+        usuario_atendente.login as login_usuario_usuario_atendente, 
+        usuario_atendente.senha as senha_usuario_usuario_atendente, 
+        usuario_atendente.nivel as nivel_usuario_usuario_atendente, 
+        usuario_indicado.id as id_usuario_usuario_indicado, 
+        usuario_indicado.nome as nome_usuario_usuario_indicado, 
+        usuario_indicado.email as email_usuario_usuario_indicado, 
+        usuario_indicado.login as login_usuario_usuario_indicado, 
+        usuario_indicado.senha as senha_usuario_usuario_indicado, 
+        usuario_indicado.nivel as nivel_usuario_usuario_indicado
 		FROM ocorrencia
 		INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel
 		INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico
+		INNER JOIN usuario as usuario_cliente ON usuario_cliente.id = ocorrencia.id_usuario_cliente
+		INNER JOIN usuario as usuario_atendente ON usuario_atendente.id = ocorrencia.id_usuario_atendente
+		INNER JOIN usuario as usuario_indicado ON usuario_indicado.id = ocorrencia.id_usuario_indicado
             WHERE ocorrencia.id_local = :idLocal";
                 
         try {
@@ -566,46 +494,51 @@ class OcorrenciaDAO extends DAO {
                 $ocorrencia = new Ocorrencia();
     	        $ocorrencia->setId( $linha ['id'] );
     	        $ocorrencia->setIdLocal( $linha ['id_local'] );
-    	        $ocorrencia->setIdFuncionario( $linha ['id_funcionario'] );
-    	        $ocorrencia->setDescProblema( $linha ['desc_problema'] );
+    	        $ocorrencia->setDescricao( $linha ['descricao'] );
     	        $ocorrencia->setCampus( $linha ['campus'] );
-    	        $ocorrencia->setEtiqEquipamento( $linha ['etiq_equipamento'] );
-    	        $ocorrencia->setContato( $linha ['contato'] );
+    	        $ocorrencia->setPatrimonio( $linha ['patrimonio'] );
     	        $ocorrencia->setRamal( $linha ['ramal'] );
     	        $ocorrencia->setLocal( $linha ['local'] );
-    	        $ocorrencia->setFuncionario( $linha ['funcionario'] );
     	        $ocorrencia->setStatus( $linha ['status'] );
-    	        $ocorrencia->setObs( $linha ['obs'] );
+    	        $ocorrencia->setSolucao( $linha ['solucao'] );
     	        $ocorrencia->setPrioridade( $linha ['prioridade'] );
     	        $ocorrencia->setAvaliacao( $linha ['avaliacao'] );
     	        $ocorrencia->setEmail( $linha ['email'] );
-    	        $ocorrencia->setFechaConfirmado( $linha ['fecha_confirmado'] );
-    	        $ocorrencia->setReaberto( $linha ['reaberto'] );
-    	        $ocorrencia->setDtAbertura( $linha ['dt_abertura'] );
-    	        $ocorrencia->setDtAtendimento( $linha ['dt_atendimento'] );
-    	        $ocorrencia->setDtFechamento( $linha ['dt_fechamento'] );
-    	        $ocorrencia->setDtFechaConfirmado( $linha ['dt_fecha_confirmado'] );
-    	        $ocorrencia->setDtCancelamento( $linha ['dt_cancelamento'] );
-    	        $ocorrencia->setIdAtendente( $linha ['id_atendente'] );
-    	        $ocorrencia->setIdTecnicoIndicado( $linha ['id_tecnico_indicado'] );
-    	        $ocorrencia->setDtLiberacao( $linha ['dt_liberacao'] );
     	        $ocorrencia->setAnexo( $linha ['anexo'] );
-    	        $ocorrencia->setDtEspera( $linha ['dt_espera'] );
-    	        $ocorrencia->setDtAguardandoUsuario( $linha ['dt_aguardando_usuario'] );
     	        $ocorrencia->setLocalSala( $linha ['local_sala'] );
     			$ocorrencia->getAreaResponsavel()->setId( $linha ['id_area_responsavel_area_responsavel'] );
     			$ocorrencia->getAreaResponsavel()->setNome( $linha ['nome_area_responsavel_area_responsavel'] );
     			$ocorrencia->getAreaResponsavel()->setDescricao( $linha ['descricao_area_responsavel_area_responsavel'] );
     			$ocorrencia->getAreaResponsavel()->setEmail( $linha ['email_area_responsavel_area_responsavel'] );
-    			$ocorrencia->getAreaResponsavel()->setIdAdmin( $linha ['id_admin_area_responsavel_area_responsavel'] );
     			$ocorrencia->getServico()->setId( $linha ['id_servico_servico'] );
     			$ocorrencia->getServico()->setNome( $linha ['nome_servico_servico'] );
     			$ocorrencia->getServico()->setDescricao( $linha ['descricao_servico_servico'] );
-    			$ocorrencia->getServico()->setAtivo( $linha ['ativo_servico_servico'] );
+    			$ocorrencia->getServico()->setTipoAtividade( $linha ['tipo_atividade_servico_servico'] );
     			$ocorrencia->getServico()->setTempoSla( $linha ['tempo_sla_servico_servico'] );
+    			$ocorrencia->getServico()->setVisao( $linha ['visao_servico_servico'] );
     			$ocorrencia->getServico()->setAreaResponsavel( $linha ['area_responsavel_servico_servico'] );
     			$ocorrencia->getServico()->setGrupoServico( $linha ['grupo_servico_servico_servico'] );
-    			$ocorrencia->getServico()->setTipoAtividade( $linha ['tipo_atividade_servico_servico'] );
+    			$ocorrencia->getUsuarioCliente()->setId( $linha ['id_usuario_usuario_cliente'] );
+    			$ocorrencia->getUsuarioCliente()->setNome( $linha ['nome_usuario_usuario_cliente'] );
+    			$ocorrencia->getUsuarioCliente()->setEmail( $linha ['email_usuario_usuario_cliente'] );
+    			$ocorrencia->getUsuarioCliente()->setLogin( $linha ['login_usuario_usuario_cliente'] );
+    			$ocorrencia->getUsuarioCliente()->setSenha( $linha ['senha_usuario_usuario_cliente'] );
+    			$ocorrencia->getUsuarioCliente()->setNivel( $linha ['nivel_usuario_usuario_cliente'] );
+    			$ocorrencia->getUsuarioCliente()->setSetor( $linha ['setor_usuario_usuario_cliente'] );
+    			$ocorrencia->getUsuarioAtendente()->setId( $linha ['id_usuario_usuario_atendente'] );
+    			$ocorrencia->getUsuarioAtendente()->setNome( $linha ['nome_usuario_usuario_atendente'] );
+    			$ocorrencia->getUsuarioAtendente()->setEmail( $linha ['email_usuario_usuario_atendente'] );
+    			$ocorrencia->getUsuarioAtendente()->setLogin( $linha ['login_usuario_usuario_atendente'] );
+    			$ocorrencia->getUsuarioAtendente()->setSenha( $linha ['senha_usuario_usuario_atendente'] );
+    			$ocorrencia->getUsuarioAtendente()->setNivel( $linha ['nivel_usuario_usuario_atendente'] );
+    			$ocorrencia->getUsuarioAtendente()->setSetor( $linha ['setor_usuario_usuario_atendente'] );
+    			$ocorrencia->getUsuarioIndicado()->setId( $linha ['id_usuario_usuario_indicado'] );
+    			$ocorrencia->getUsuarioIndicado()->setNome( $linha ['nome_usuario_usuario_indicado'] );
+    			$ocorrencia->getUsuarioIndicado()->setEmail( $linha ['email_usuario_usuario_indicado'] );
+    			$ocorrencia->getUsuarioIndicado()->setLogin( $linha ['login_usuario_usuario_indicado'] );
+    			$ocorrencia->getUsuarioIndicado()->setSenha( $linha ['senha_usuario_usuario_indicado'] );
+    			$ocorrencia->getUsuarioIndicado()->setNivel( $linha ['nivel_usuario_usuario_indicado'] );
+    			$ocorrencia->getUsuarioIndicado()->setSetor( $linha ['setor_usuario_usuario_indicado'] );
     			$lista [] = $ocorrencia;
     			    
             }
@@ -617,217 +550,116 @@ class OcorrenciaDAO extends DAO {
 		return $lista;
     }
                 
-    public function pesquisaPorIdFuncionario(Ocorrencia $ocorrencia) {
+    public function pesquisaPorDescricao(Ocorrencia $ocorrencia) {
         $lista = array();
-	    $idFuncionario = $ocorrencia->getIdFuncionario();
+	    $descricao = $ocorrencia->getDescricao();
                 
         $sql = "
 		SELECT
         ocorrencia.id, 
         ocorrencia.id_local, 
-        ocorrencia.id_funcionario, 
-        ocorrencia.desc_problema, 
+        ocorrencia.descricao, 
         ocorrencia.campus, 
-        ocorrencia.etiq_equipamento, 
-        ocorrencia.contato, 
+        ocorrencia.patrimonio, 
         ocorrencia.ramal, 
         ocorrencia.local, 
-        ocorrencia.funcionario, 
         ocorrencia.status, 
-        ocorrencia.obs, 
+        ocorrencia.solucao, 
         ocorrencia.prioridade, 
         ocorrencia.avaliacao, 
         ocorrencia.email, 
-        ocorrencia.fecha_confirmado, 
-        ocorrencia.reaberto, 
-        ocorrencia.dt_abertura, 
-        ocorrencia.dt_atendimento, 
-        ocorrencia.dt_fechamento, 
-        ocorrencia.dt_fecha_confirmado, 
-        ocorrencia.dt_cancelamento, 
-        ocorrencia.id_atendente, 
-        ocorrencia.id_tecnico_indicado, 
-        ocorrencia.dt_liberacao, 
         ocorrencia.anexo, 
-        ocorrencia.dt_espera, 
-        ocorrencia.dt_aguardando_usuario, 
         ocorrencia.local_sala, 
         area_responsavel.id as id_area_responsavel_area_responsavel, 
         area_responsavel.nome as nome_area_responsavel_area_responsavel, 
         area_responsavel.descricao as descricao_area_responsavel_area_responsavel, 
         area_responsavel.email as email_area_responsavel_area_responsavel, 
-        area_responsavel.id_admin as id_admin_area_responsavel_area_responsavel, 
         servico.id as id_servico_servico, 
         servico.nome as nome_servico_servico, 
         servico.descricao as descricao_servico_servico, 
-        servico.ativo as ativo_servico_servico, 
-        servico.tempo_sla as tempo_sla_servico_servico
+        servico.tempo_sla as tempo_sla_servico_servico, 
+        servico.visao as visao_servico_servico, 
+        usuario_cliente.id as id_usuario_usuario_cliente, 
+        usuario_cliente.nome as nome_usuario_usuario_cliente, 
+        usuario_cliente.email as email_usuario_usuario_cliente, 
+        usuario_cliente.login as login_usuario_usuario_cliente, 
+        usuario_cliente.senha as senha_usuario_usuario_cliente, 
+        usuario_cliente.nivel as nivel_usuario_usuario_cliente, 
+        usuario_atendente.id as id_usuario_usuario_atendente, 
+        usuario_atendente.nome as nome_usuario_usuario_atendente, 
+        usuario_atendente.email as email_usuario_usuario_atendente, 
+        usuario_atendente.login as login_usuario_usuario_atendente, 
+        usuario_atendente.senha as senha_usuario_usuario_atendente, 
+        usuario_atendente.nivel as nivel_usuario_usuario_atendente, 
+        usuario_indicado.id as id_usuario_usuario_indicado, 
+        usuario_indicado.nome as nome_usuario_usuario_indicado, 
+        usuario_indicado.email as email_usuario_usuario_indicado, 
+        usuario_indicado.login as login_usuario_usuario_indicado, 
+        usuario_indicado.senha as senha_usuario_usuario_indicado, 
+        usuario_indicado.nivel as nivel_usuario_usuario_indicado
 		FROM ocorrencia
 		INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel
 		INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico
-            WHERE ocorrencia.id_funcionario = :idFuncionario";
+		INNER JOIN usuario as usuario_cliente ON usuario_cliente.id = ocorrencia.id_usuario_cliente
+		INNER JOIN usuario as usuario_atendente ON usuario_atendente.id = ocorrencia.id_usuario_atendente
+		INNER JOIN usuario as usuario_indicado ON usuario_indicado.id = ocorrencia.id_usuario_indicado
+            WHERE ocorrencia.descricao like :descricao";
                 
         try {
                 
             $stmt = $this->conexao->prepare($sql);
-            $stmt->bindParam(":idFuncionario", $idFuncionario, PDO::PARAM_INT);
+            $stmt->bindParam(":descricao", $descricao, PDO::PARAM_STR);
             $stmt->execute();
             $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
             foreach ( $result as $linha ) {
                 $ocorrencia = new Ocorrencia();
     	        $ocorrencia->setId( $linha ['id'] );
     	        $ocorrencia->setIdLocal( $linha ['id_local'] );
-    	        $ocorrencia->setIdFuncionario( $linha ['id_funcionario'] );
-    	        $ocorrencia->setDescProblema( $linha ['desc_problema'] );
+    	        $ocorrencia->setDescricao( $linha ['descricao'] );
     	        $ocorrencia->setCampus( $linha ['campus'] );
-    	        $ocorrencia->setEtiqEquipamento( $linha ['etiq_equipamento'] );
-    	        $ocorrencia->setContato( $linha ['contato'] );
+    	        $ocorrencia->setPatrimonio( $linha ['patrimonio'] );
     	        $ocorrencia->setRamal( $linha ['ramal'] );
     	        $ocorrencia->setLocal( $linha ['local'] );
-    	        $ocorrencia->setFuncionario( $linha ['funcionario'] );
     	        $ocorrencia->setStatus( $linha ['status'] );
-    	        $ocorrencia->setObs( $linha ['obs'] );
+    	        $ocorrencia->setSolucao( $linha ['solucao'] );
     	        $ocorrencia->setPrioridade( $linha ['prioridade'] );
     	        $ocorrencia->setAvaliacao( $linha ['avaliacao'] );
     	        $ocorrencia->setEmail( $linha ['email'] );
-    	        $ocorrencia->setFechaConfirmado( $linha ['fecha_confirmado'] );
-    	        $ocorrencia->setReaberto( $linha ['reaberto'] );
-    	        $ocorrencia->setDtAbertura( $linha ['dt_abertura'] );
-    	        $ocorrencia->setDtAtendimento( $linha ['dt_atendimento'] );
-    	        $ocorrencia->setDtFechamento( $linha ['dt_fechamento'] );
-    	        $ocorrencia->setDtFechaConfirmado( $linha ['dt_fecha_confirmado'] );
-    	        $ocorrencia->setDtCancelamento( $linha ['dt_cancelamento'] );
-    	        $ocorrencia->setIdAtendente( $linha ['id_atendente'] );
-    	        $ocorrencia->setIdTecnicoIndicado( $linha ['id_tecnico_indicado'] );
-    	        $ocorrencia->setDtLiberacao( $linha ['dt_liberacao'] );
     	        $ocorrencia->setAnexo( $linha ['anexo'] );
-    	        $ocorrencia->setDtEspera( $linha ['dt_espera'] );
-    	        $ocorrencia->setDtAguardandoUsuario( $linha ['dt_aguardando_usuario'] );
     	        $ocorrencia->setLocalSala( $linha ['local_sala'] );
     			$ocorrencia->getAreaResponsavel()->setId( $linha ['id_area_responsavel_area_responsavel'] );
     			$ocorrencia->getAreaResponsavel()->setNome( $linha ['nome_area_responsavel_area_responsavel'] );
     			$ocorrencia->getAreaResponsavel()->setDescricao( $linha ['descricao_area_responsavel_area_responsavel'] );
     			$ocorrencia->getAreaResponsavel()->setEmail( $linha ['email_area_responsavel_area_responsavel'] );
-    			$ocorrencia->getAreaResponsavel()->setIdAdmin( $linha ['id_admin_area_responsavel_area_responsavel'] );
     			$ocorrencia->getServico()->setId( $linha ['id_servico_servico'] );
     			$ocorrencia->getServico()->setNome( $linha ['nome_servico_servico'] );
     			$ocorrencia->getServico()->setDescricao( $linha ['descricao_servico_servico'] );
-    			$ocorrencia->getServico()->setAtivo( $linha ['ativo_servico_servico'] );
+    			$ocorrencia->getServico()->setTipoAtividade( $linha ['tipo_atividade_servico_servico'] );
     			$ocorrencia->getServico()->setTempoSla( $linha ['tempo_sla_servico_servico'] );
+    			$ocorrencia->getServico()->setVisao( $linha ['visao_servico_servico'] );
     			$ocorrencia->getServico()->setAreaResponsavel( $linha ['area_responsavel_servico_servico'] );
     			$ocorrencia->getServico()->setGrupoServico( $linha ['grupo_servico_servico_servico'] );
-    			$ocorrencia->getServico()->setTipoAtividade( $linha ['tipo_atividade_servico_servico'] );
-    			$lista [] = $ocorrencia;
-    			    
-            }
-    			    
-        } catch(PDOException $e) {
-            echo $e->getMessage();
-    			    
-        }
-		return $lista;
-    }
-                
-    public function pesquisaPorDescProblema(Ocorrencia $ocorrencia) {
-        $lista = array();
-	    $descProblema = $ocorrencia->getDescProblema();
-                
-        $sql = "
-		SELECT
-        ocorrencia.id, 
-        ocorrencia.id_local, 
-        ocorrencia.id_funcionario, 
-        ocorrencia.desc_problema, 
-        ocorrencia.campus, 
-        ocorrencia.etiq_equipamento, 
-        ocorrencia.contato, 
-        ocorrencia.ramal, 
-        ocorrencia.local, 
-        ocorrencia.funcionario, 
-        ocorrencia.status, 
-        ocorrencia.obs, 
-        ocorrencia.prioridade, 
-        ocorrencia.avaliacao, 
-        ocorrencia.email, 
-        ocorrencia.fecha_confirmado, 
-        ocorrencia.reaberto, 
-        ocorrencia.dt_abertura, 
-        ocorrencia.dt_atendimento, 
-        ocorrencia.dt_fechamento, 
-        ocorrencia.dt_fecha_confirmado, 
-        ocorrencia.dt_cancelamento, 
-        ocorrencia.id_atendente, 
-        ocorrencia.id_tecnico_indicado, 
-        ocorrencia.dt_liberacao, 
-        ocorrencia.anexo, 
-        ocorrencia.dt_espera, 
-        ocorrencia.dt_aguardando_usuario, 
-        ocorrencia.local_sala, 
-        area_responsavel.id as id_area_responsavel_area_responsavel, 
-        area_responsavel.nome as nome_area_responsavel_area_responsavel, 
-        area_responsavel.descricao as descricao_area_responsavel_area_responsavel, 
-        area_responsavel.email as email_area_responsavel_area_responsavel, 
-        area_responsavel.id_admin as id_admin_area_responsavel_area_responsavel, 
-        servico.id as id_servico_servico, 
-        servico.nome as nome_servico_servico, 
-        servico.descricao as descricao_servico_servico, 
-        servico.ativo as ativo_servico_servico, 
-        servico.tempo_sla as tempo_sla_servico_servico
-		FROM ocorrencia
-		INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel
-		INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico
-            WHERE ocorrencia.desc_problema like :descProblema";
-                
-        try {
-                
-            $stmt = $this->conexao->prepare($sql);
-            $stmt->bindParam(":descProblema", $descProblema, PDO::PARAM_STR);
-            $stmt->execute();
-            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            foreach ( $result as $linha ) {
-                $ocorrencia = new Ocorrencia();
-    	        $ocorrencia->setId( $linha ['id'] );
-    	        $ocorrencia->setIdLocal( $linha ['id_local'] );
-    	        $ocorrencia->setIdFuncionario( $linha ['id_funcionario'] );
-    	        $ocorrencia->setDescProblema( $linha ['desc_problema'] );
-    	        $ocorrencia->setCampus( $linha ['campus'] );
-    	        $ocorrencia->setEtiqEquipamento( $linha ['etiq_equipamento'] );
-    	        $ocorrencia->setContato( $linha ['contato'] );
-    	        $ocorrencia->setRamal( $linha ['ramal'] );
-    	        $ocorrencia->setLocal( $linha ['local'] );
-    	        $ocorrencia->setFuncionario( $linha ['funcionario'] );
-    	        $ocorrencia->setStatus( $linha ['status'] );
-    	        $ocorrencia->setObs( $linha ['obs'] );
-    	        $ocorrencia->setPrioridade( $linha ['prioridade'] );
-    	        $ocorrencia->setAvaliacao( $linha ['avaliacao'] );
-    	        $ocorrencia->setEmail( $linha ['email'] );
-    	        $ocorrencia->setFechaConfirmado( $linha ['fecha_confirmado'] );
-    	        $ocorrencia->setReaberto( $linha ['reaberto'] );
-    	        $ocorrencia->setDtAbertura( $linha ['dt_abertura'] );
-    	        $ocorrencia->setDtAtendimento( $linha ['dt_atendimento'] );
-    	        $ocorrencia->setDtFechamento( $linha ['dt_fechamento'] );
-    	        $ocorrencia->setDtFechaConfirmado( $linha ['dt_fecha_confirmado'] );
-    	        $ocorrencia->setDtCancelamento( $linha ['dt_cancelamento'] );
-    	        $ocorrencia->setIdAtendente( $linha ['id_atendente'] );
-    	        $ocorrencia->setIdTecnicoIndicado( $linha ['id_tecnico_indicado'] );
-    	        $ocorrencia->setDtLiberacao( $linha ['dt_liberacao'] );
-    	        $ocorrencia->setAnexo( $linha ['anexo'] );
-    	        $ocorrencia->setDtEspera( $linha ['dt_espera'] );
-    	        $ocorrencia->setDtAguardandoUsuario( $linha ['dt_aguardando_usuario'] );
-    	        $ocorrencia->setLocalSala( $linha ['local_sala'] );
-    			$ocorrencia->getAreaResponsavel()->setId( $linha ['id_area_responsavel_area_responsavel'] );
-    			$ocorrencia->getAreaResponsavel()->setNome( $linha ['nome_area_responsavel_area_responsavel'] );
-    			$ocorrencia->getAreaResponsavel()->setDescricao( $linha ['descricao_area_responsavel_area_responsavel'] );
-    			$ocorrencia->getAreaResponsavel()->setEmail( $linha ['email_area_responsavel_area_responsavel'] );
-    			$ocorrencia->getAreaResponsavel()->setIdAdmin( $linha ['id_admin_area_responsavel_area_responsavel'] );
-    			$ocorrencia->getServico()->setId( $linha ['id_servico_servico'] );
-    			$ocorrencia->getServico()->setNome( $linha ['nome_servico_servico'] );
-    			$ocorrencia->getServico()->setDescricao( $linha ['descricao_servico_servico'] );
-    			$ocorrencia->getServico()->setAtivo( $linha ['ativo_servico_servico'] );
-    			$ocorrencia->getServico()->setTempoSla( $linha ['tempo_sla_servico_servico'] );
-    			$ocorrencia->getServico()->setAreaResponsavel( $linha ['area_responsavel_servico_servico'] );
-    			$ocorrencia->getServico()->setGrupoServico( $linha ['grupo_servico_servico_servico'] );
-    			$ocorrencia->getServico()->setTipoAtividade( $linha ['tipo_atividade_servico_servico'] );
+    			$ocorrencia->getUsuarioCliente()->setId( $linha ['id_usuario_usuario_cliente'] );
+    			$ocorrencia->getUsuarioCliente()->setNome( $linha ['nome_usuario_usuario_cliente'] );
+    			$ocorrencia->getUsuarioCliente()->setEmail( $linha ['email_usuario_usuario_cliente'] );
+    			$ocorrencia->getUsuarioCliente()->setLogin( $linha ['login_usuario_usuario_cliente'] );
+    			$ocorrencia->getUsuarioCliente()->setSenha( $linha ['senha_usuario_usuario_cliente'] );
+    			$ocorrencia->getUsuarioCliente()->setNivel( $linha ['nivel_usuario_usuario_cliente'] );
+    			$ocorrencia->getUsuarioCliente()->setSetor( $linha ['setor_usuario_usuario_cliente'] );
+    			$ocorrencia->getUsuarioAtendente()->setId( $linha ['id_usuario_usuario_atendente'] );
+    			$ocorrencia->getUsuarioAtendente()->setNome( $linha ['nome_usuario_usuario_atendente'] );
+    			$ocorrencia->getUsuarioAtendente()->setEmail( $linha ['email_usuario_usuario_atendente'] );
+    			$ocorrencia->getUsuarioAtendente()->setLogin( $linha ['login_usuario_usuario_atendente'] );
+    			$ocorrencia->getUsuarioAtendente()->setSenha( $linha ['senha_usuario_usuario_atendente'] );
+    			$ocorrencia->getUsuarioAtendente()->setNivel( $linha ['nivel_usuario_usuario_atendente'] );
+    			$ocorrencia->getUsuarioAtendente()->setSetor( $linha ['setor_usuario_usuario_atendente'] );
+    			$ocorrencia->getUsuarioIndicado()->setId( $linha ['id_usuario_usuario_indicado'] );
+    			$ocorrencia->getUsuarioIndicado()->setNome( $linha ['nome_usuario_usuario_indicado'] );
+    			$ocorrencia->getUsuarioIndicado()->setEmail( $linha ['email_usuario_usuario_indicado'] );
+    			$ocorrencia->getUsuarioIndicado()->setLogin( $linha ['login_usuario_usuario_indicado'] );
+    			$ocorrencia->getUsuarioIndicado()->setSenha( $linha ['senha_usuario_usuario_indicado'] );
+    			$ocorrencia->getUsuarioIndicado()->setNivel( $linha ['nivel_usuario_usuario_indicado'] );
+    			$ocorrencia->getUsuarioIndicado()->setSetor( $linha ['setor_usuario_usuario_indicado'] );
     			$lista [] = $ocorrencia;
     			    
             }
@@ -847,46 +679,51 @@ class OcorrenciaDAO extends DAO {
 		SELECT
         ocorrencia.id, 
         ocorrencia.id_local, 
-        ocorrencia.id_funcionario, 
-        ocorrencia.desc_problema, 
+        ocorrencia.descricao, 
         ocorrencia.campus, 
-        ocorrencia.etiq_equipamento, 
-        ocorrencia.contato, 
+        ocorrencia.patrimonio, 
         ocorrencia.ramal, 
         ocorrencia.local, 
-        ocorrencia.funcionario, 
         ocorrencia.status, 
-        ocorrencia.obs, 
+        ocorrencia.solucao, 
         ocorrencia.prioridade, 
         ocorrencia.avaliacao, 
         ocorrencia.email, 
-        ocorrencia.fecha_confirmado, 
-        ocorrencia.reaberto, 
-        ocorrencia.dt_abertura, 
-        ocorrencia.dt_atendimento, 
-        ocorrencia.dt_fechamento, 
-        ocorrencia.dt_fecha_confirmado, 
-        ocorrencia.dt_cancelamento, 
-        ocorrencia.id_atendente, 
-        ocorrencia.id_tecnico_indicado, 
-        ocorrencia.dt_liberacao, 
         ocorrencia.anexo, 
-        ocorrencia.dt_espera, 
-        ocorrencia.dt_aguardando_usuario, 
         ocorrencia.local_sala, 
         area_responsavel.id as id_area_responsavel_area_responsavel, 
         area_responsavel.nome as nome_area_responsavel_area_responsavel, 
         area_responsavel.descricao as descricao_area_responsavel_area_responsavel, 
         area_responsavel.email as email_area_responsavel_area_responsavel, 
-        area_responsavel.id_admin as id_admin_area_responsavel_area_responsavel, 
         servico.id as id_servico_servico, 
         servico.nome as nome_servico_servico, 
         servico.descricao as descricao_servico_servico, 
-        servico.ativo as ativo_servico_servico, 
-        servico.tempo_sla as tempo_sla_servico_servico
+        servico.tempo_sla as tempo_sla_servico_servico, 
+        servico.visao as visao_servico_servico, 
+        usuario_cliente.id as id_usuario_usuario_cliente, 
+        usuario_cliente.nome as nome_usuario_usuario_cliente, 
+        usuario_cliente.email as email_usuario_usuario_cliente, 
+        usuario_cliente.login as login_usuario_usuario_cliente, 
+        usuario_cliente.senha as senha_usuario_usuario_cliente, 
+        usuario_cliente.nivel as nivel_usuario_usuario_cliente, 
+        usuario_atendente.id as id_usuario_usuario_atendente, 
+        usuario_atendente.nome as nome_usuario_usuario_atendente, 
+        usuario_atendente.email as email_usuario_usuario_atendente, 
+        usuario_atendente.login as login_usuario_usuario_atendente, 
+        usuario_atendente.senha as senha_usuario_usuario_atendente, 
+        usuario_atendente.nivel as nivel_usuario_usuario_atendente, 
+        usuario_indicado.id as id_usuario_usuario_indicado, 
+        usuario_indicado.nome as nome_usuario_usuario_indicado, 
+        usuario_indicado.email as email_usuario_usuario_indicado, 
+        usuario_indicado.login as login_usuario_usuario_indicado, 
+        usuario_indicado.senha as senha_usuario_usuario_indicado, 
+        usuario_indicado.nivel as nivel_usuario_usuario_indicado
 		FROM ocorrencia
 		INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel
 		INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico
+		INNER JOIN usuario as usuario_cliente ON usuario_cliente.id = ocorrencia.id_usuario_cliente
+		INNER JOIN usuario as usuario_atendente ON usuario_atendente.id = ocorrencia.id_usuario_atendente
+		INNER JOIN usuario as usuario_indicado ON usuario_indicado.id = ocorrencia.id_usuario_indicado
             WHERE ocorrencia.campus like :campus";
                 
         try {
@@ -899,46 +736,51 @@ class OcorrenciaDAO extends DAO {
                 $ocorrencia = new Ocorrencia();
     	        $ocorrencia->setId( $linha ['id'] );
     	        $ocorrencia->setIdLocal( $linha ['id_local'] );
-    	        $ocorrencia->setIdFuncionario( $linha ['id_funcionario'] );
-    	        $ocorrencia->setDescProblema( $linha ['desc_problema'] );
+    	        $ocorrencia->setDescricao( $linha ['descricao'] );
     	        $ocorrencia->setCampus( $linha ['campus'] );
-    	        $ocorrencia->setEtiqEquipamento( $linha ['etiq_equipamento'] );
-    	        $ocorrencia->setContato( $linha ['contato'] );
+    	        $ocorrencia->setPatrimonio( $linha ['patrimonio'] );
     	        $ocorrencia->setRamal( $linha ['ramal'] );
     	        $ocorrencia->setLocal( $linha ['local'] );
-    	        $ocorrencia->setFuncionario( $linha ['funcionario'] );
     	        $ocorrencia->setStatus( $linha ['status'] );
-    	        $ocorrencia->setObs( $linha ['obs'] );
+    	        $ocorrencia->setSolucao( $linha ['solucao'] );
     	        $ocorrencia->setPrioridade( $linha ['prioridade'] );
     	        $ocorrencia->setAvaliacao( $linha ['avaliacao'] );
     	        $ocorrencia->setEmail( $linha ['email'] );
-    	        $ocorrencia->setFechaConfirmado( $linha ['fecha_confirmado'] );
-    	        $ocorrencia->setReaberto( $linha ['reaberto'] );
-    	        $ocorrencia->setDtAbertura( $linha ['dt_abertura'] );
-    	        $ocorrencia->setDtAtendimento( $linha ['dt_atendimento'] );
-    	        $ocorrencia->setDtFechamento( $linha ['dt_fechamento'] );
-    	        $ocorrencia->setDtFechaConfirmado( $linha ['dt_fecha_confirmado'] );
-    	        $ocorrencia->setDtCancelamento( $linha ['dt_cancelamento'] );
-    	        $ocorrencia->setIdAtendente( $linha ['id_atendente'] );
-    	        $ocorrencia->setIdTecnicoIndicado( $linha ['id_tecnico_indicado'] );
-    	        $ocorrencia->setDtLiberacao( $linha ['dt_liberacao'] );
     	        $ocorrencia->setAnexo( $linha ['anexo'] );
-    	        $ocorrencia->setDtEspera( $linha ['dt_espera'] );
-    	        $ocorrencia->setDtAguardandoUsuario( $linha ['dt_aguardando_usuario'] );
     	        $ocorrencia->setLocalSala( $linha ['local_sala'] );
     			$ocorrencia->getAreaResponsavel()->setId( $linha ['id_area_responsavel_area_responsavel'] );
     			$ocorrencia->getAreaResponsavel()->setNome( $linha ['nome_area_responsavel_area_responsavel'] );
     			$ocorrencia->getAreaResponsavel()->setDescricao( $linha ['descricao_area_responsavel_area_responsavel'] );
     			$ocorrencia->getAreaResponsavel()->setEmail( $linha ['email_area_responsavel_area_responsavel'] );
-    			$ocorrencia->getAreaResponsavel()->setIdAdmin( $linha ['id_admin_area_responsavel_area_responsavel'] );
     			$ocorrencia->getServico()->setId( $linha ['id_servico_servico'] );
     			$ocorrencia->getServico()->setNome( $linha ['nome_servico_servico'] );
     			$ocorrencia->getServico()->setDescricao( $linha ['descricao_servico_servico'] );
-    			$ocorrencia->getServico()->setAtivo( $linha ['ativo_servico_servico'] );
+    			$ocorrencia->getServico()->setTipoAtividade( $linha ['tipo_atividade_servico_servico'] );
     			$ocorrencia->getServico()->setTempoSla( $linha ['tempo_sla_servico_servico'] );
+    			$ocorrencia->getServico()->setVisao( $linha ['visao_servico_servico'] );
     			$ocorrencia->getServico()->setAreaResponsavel( $linha ['area_responsavel_servico_servico'] );
     			$ocorrencia->getServico()->setGrupoServico( $linha ['grupo_servico_servico_servico'] );
-    			$ocorrencia->getServico()->setTipoAtividade( $linha ['tipo_atividade_servico_servico'] );
+    			$ocorrencia->getUsuarioCliente()->setId( $linha ['id_usuario_usuario_cliente'] );
+    			$ocorrencia->getUsuarioCliente()->setNome( $linha ['nome_usuario_usuario_cliente'] );
+    			$ocorrencia->getUsuarioCliente()->setEmail( $linha ['email_usuario_usuario_cliente'] );
+    			$ocorrencia->getUsuarioCliente()->setLogin( $linha ['login_usuario_usuario_cliente'] );
+    			$ocorrencia->getUsuarioCliente()->setSenha( $linha ['senha_usuario_usuario_cliente'] );
+    			$ocorrencia->getUsuarioCliente()->setNivel( $linha ['nivel_usuario_usuario_cliente'] );
+    			$ocorrencia->getUsuarioCliente()->setSetor( $linha ['setor_usuario_usuario_cliente'] );
+    			$ocorrencia->getUsuarioAtendente()->setId( $linha ['id_usuario_usuario_atendente'] );
+    			$ocorrencia->getUsuarioAtendente()->setNome( $linha ['nome_usuario_usuario_atendente'] );
+    			$ocorrencia->getUsuarioAtendente()->setEmail( $linha ['email_usuario_usuario_atendente'] );
+    			$ocorrencia->getUsuarioAtendente()->setLogin( $linha ['login_usuario_usuario_atendente'] );
+    			$ocorrencia->getUsuarioAtendente()->setSenha( $linha ['senha_usuario_usuario_atendente'] );
+    			$ocorrencia->getUsuarioAtendente()->setNivel( $linha ['nivel_usuario_usuario_atendente'] );
+    			$ocorrencia->getUsuarioAtendente()->setSetor( $linha ['setor_usuario_usuario_atendente'] );
+    			$ocorrencia->getUsuarioIndicado()->setId( $linha ['id_usuario_usuario_indicado'] );
+    			$ocorrencia->getUsuarioIndicado()->setNome( $linha ['nome_usuario_usuario_indicado'] );
+    			$ocorrencia->getUsuarioIndicado()->setEmail( $linha ['email_usuario_usuario_indicado'] );
+    			$ocorrencia->getUsuarioIndicado()->setLogin( $linha ['login_usuario_usuario_indicado'] );
+    			$ocorrencia->getUsuarioIndicado()->setSenha( $linha ['senha_usuario_usuario_indicado'] );
+    			$ocorrencia->getUsuarioIndicado()->setNivel( $linha ['nivel_usuario_usuario_indicado'] );
+    			$ocorrencia->getUsuarioIndicado()->setSetor( $linha ['setor_usuario_usuario_indicado'] );
     			$lista [] = $ocorrencia;
     			    
             }
@@ -950,217 +792,116 @@ class OcorrenciaDAO extends DAO {
 		return $lista;
     }
                 
-    public function pesquisaPorEtiqEquipamento(Ocorrencia $ocorrencia) {
+    public function pesquisaPorPatrimonio(Ocorrencia $ocorrencia) {
         $lista = array();
-	    $etiqEquipamento = $ocorrencia->getEtiqEquipamento();
+	    $patrimonio = $ocorrencia->getPatrimonio();
                 
         $sql = "
 		SELECT
         ocorrencia.id, 
         ocorrencia.id_local, 
-        ocorrencia.id_funcionario, 
-        ocorrencia.desc_problema, 
+        ocorrencia.descricao, 
         ocorrencia.campus, 
-        ocorrencia.etiq_equipamento, 
-        ocorrencia.contato, 
+        ocorrencia.patrimonio, 
         ocorrencia.ramal, 
         ocorrencia.local, 
-        ocorrencia.funcionario, 
         ocorrencia.status, 
-        ocorrencia.obs, 
+        ocorrencia.solucao, 
         ocorrencia.prioridade, 
         ocorrencia.avaliacao, 
         ocorrencia.email, 
-        ocorrencia.fecha_confirmado, 
-        ocorrencia.reaberto, 
-        ocorrencia.dt_abertura, 
-        ocorrencia.dt_atendimento, 
-        ocorrencia.dt_fechamento, 
-        ocorrencia.dt_fecha_confirmado, 
-        ocorrencia.dt_cancelamento, 
-        ocorrencia.id_atendente, 
-        ocorrencia.id_tecnico_indicado, 
-        ocorrencia.dt_liberacao, 
         ocorrencia.anexo, 
-        ocorrencia.dt_espera, 
-        ocorrencia.dt_aguardando_usuario, 
         ocorrencia.local_sala, 
         area_responsavel.id as id_area_responsavel_area_responsavel, 
         area_responsavel.nome as nome_area_responsavel_area_responsavel, 
         area_responsavel.descricao as descricao_area_responsavel_area_responsavel, 
         area_responsavel.email as email_area_responsavel_area_responsavel, 
-        area_responsavel.id_admin as id_admin_area_responsavel_area_responsavel, 
         servico.id as id_servico_servico, 
         servico.nome as nome_servico_servico, 
         servico.descricao as descricao_servico_servico, 
-        servico.ativo as ativo_servico_servico, 
-        servico.tempo_sla as tempo_sla_servico_servico
+        servico.tempo_sla as tempo_sla_servico_servico, 
+        servico.visao as visao_servico_servico, 
+        usuario_cliente.id as id_usuario_usuario_cliente, 
+        usuario_cliente.nome as nome_usuario_usuario_cliente, 
+        usuario_cliente.email as email_usuario_usuario_cliente, 
+        usuario_cliente.login as login_usuario_usuario_cliente, 
+        usuario_cliente.senha as senha_usuario_usuario_cliente, 
+        usuario_cliente.nivel as nivel_usuario_usuario_cliente, 
+        usuario_atendente.id as id_usuario_usuario_atendente, 
+        usuario_atendente.nome as nome_usuario_usuario_atendente, 
+        usuario_atendente.email as email_usuario_usuario_atendente, 
+        usuario_atendente.login as login_usuario_usuario_atendente, 
+        usuario_atendente.senha as senha_usuario_usuario_atendente, 
+        usuario_atendente.nivel as nivel_usuario_usuario_atendente, 
+        usuario_indicado.id as id_usuario_usuario_indicado, 
+        usuario_indicado.nome as nome_usuario_usuario_indicado, 
+        usuario_indicado.email as email_usuario_usuario_indicado, 
+        usuario_indicado.login as login_usuario_usuario_indicado, 
+        usuario_indicado.senha as senha_usuario_usuario_indicado, 
+        usuario_indicado.nivel as nivel_usuario_usuario_indicado
 		FROM ocorrencia
 		INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel
 		INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico
-            WHERE ocorrencia.etiq_equipamento like :etiqEquipamento";
+		INNER JOIN usuario as usuario_cliente ON usuario_cliente.id = ocorrencia.id_usuario_cliente
+		INNER JOIN usuario as usuario_atendente ON usuario_atendente.id = ocorrencia.id_usuario_atendente
+		INNER JOIN usuario as usuario_indicado ON usuario_indicado.id = ocorrencia.id_usuario_indicado
+            WHERE ocorrencia.patrimonio like :patrimonio";
                 
         try {
                 
             $stmt = $this->conexao->prepare($sql);
-            $stmt->bindParam(":etiqEquipamento", $etiqEquipamento, PDO::PARAM_STR);
+            $stmt->bindParam(":patrimonio", $patrimonio, PDO::PARAM_STR);
             $stmt->execute();
             $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
             foreach ( $result as $linha ) {
                 $ocorrencia = new Ocorrencia();
     	        $ocorrencia->setId( $linha ['id'] );
     	        $ocorrencia->setIdLocal( $linha ['id_local'] );
-    	        $ocorrencia->setIdFuncionario( $linha ['id_funcionario'] );
-    	        $ocorrencia->setDescProblema( $linha ['desc_problema'] );
+    	        $ocorrencia->setDescricao( $linha ['descricao'] );
     	        $ocorrencia->setCampus( $linha ['campus'] );
-    	        $ocorrencia->setEtiqEquipamento( $linha ['etiq_equipamento'] );
-    	        $ocorrencia->setContato( $linha ['contato'] );
+    	        $ocorrencia->setPatrimonio( $linha ['patrimonio'] );
     	        $ocorrencia->setRamal( $linha ['ramal'] );
     	        $ocorrencia->setLocal( $linha ['local'] );
-    	        $ocorrencia->setFuncionario( $linha ['funcionario'] );
     	        $ocorrencia->setStatus( $linha ['status'] );
-    	        $ocorrencia->setObs( $linha ['obs'] );
+    	        $ocorrencia->setSolucao( $linha ['solucao'] );
     	        $ocorrencia->setPrioridade( $linha ['prioridade'] );
     	        $ocorrencia->setAvaliacao( $linha ['avaliacao'] );
     	        $ocorrencia->setEmail( $linha ['email'] );
-    	        $ocorrencia->setFechaConfirmado( $linha ['fecha_confirmado'] );
-    	        $ocorrencia->setReaberto( $linha ['reaberto'] );
-    	        $ocorrencia->setDtAbertura( $linha ['dt_abertura'] );
-    	        $ocorrencia->setDtAtendimento( $linha ['dt_atendimento'] );
-    	        $ocorrencia->setDtFechamento( $linha ['dt_fechamento'] );
-    	        $ocorrencia->setDtFechaConfirmado( $linha ['dt_fecha_confirmado'] );
-    	        $ocorrencia->setDtCancelamento( $linha ['dt_cancelamento'] );
-    	        $ocorrencia->setIdAtendente( $linha ['id_atendente'] );
-    	        $ocorrencia->setIdTecnicoIndicado( $linha ['id_tecnico_indicado'] );
-    	        $ocorrencia->setDtLiberacao( $linha ['dt_liberacao'] );
     	        $ocorrencia->setAnexo( $linha ['anexo'] );
-    	        $ocorrencia->setDtEspera( $linha ['dt_espera'] );
-    	        $ocorrencia->setDtAguardandoUsuario( $linha ['dt_aguardando_usuario'] );
     	        $ocorrencia->setLocalSala( $linha ['local_sala'] );
     			$ocorrencia->getAreaResponsavel()->setId( $linha ['id_area_responsavel_area_responsavel'] );
     			$ocorrencia->getAreaResponsavel()->setNome( $linha ['nome_area_responsavel_area_responsavel'] );
     			$ocorrencia->getAreaResponsavel()->setDescricao( $linha ['descricao_area_responsavel_area_responsavel'] );
     			$ocorrencia->getAreaResponsavel()->setEmail( $linha ['email_area_responsavel_area_responsavel'] );
-    			$ocorrencia->getAreaResponsavel()->setIdAdmin( $linha ['id_admin_area_responsavel_area_responsavel'] );
     			$ocorrencia->getServico()->setId( $linha ['id_servico_servico'] );
     			$ocorrencia->getServico()->setNome( $linha ['nome_servico_servico'] );
     			$ocorrencia->getServico()->setDescricao( $linha ['descricao_servico_servico'] );
-    			$ocorrencia->getServico()->setAtivo( $linha ['ativo_servico_servico'] );
+    			$ocorrencia->getServico()->setTipoAtividade( $linha ['tipo_atividade_servico_servico'] );
     			$ocorrencia->getServico()->setTempoSla( $linha ['tempo_sla_servico_servico'] );
+    			$ocorrencia->getServico()->setVisao( $linha ['visao_servico_servico'] );
     			$ocorrencia->getServico()->setAreaResponsavel( $linha ['area_responsavel_servico_servico'] );
     			$ocorrencia->getServico()->setGrupoServico( $linha ['grupo_servico_servico_servico'] );
-    			$ocorrencia->getServico()->setTipoAtividade( $linha ['tipo_atividade_servico_servico'] );
-    			$lista [] = $ocorrencia;
-    			    
-            }
-    			    
-        } catch(PDOException $e) {
-            echo $e->getMessage();
-    			    
-        }
-		return $lista;
-    }
-                
-    public function pesquisaPorContato(Ocorrencia $ocorrencia) {
-        $lista = array();
-	    $contato = $ocorrencia->getContato();
-                
-        $sql = "
-		SELECT
-        ocorrencia.id, 
-        ocorrencia.id_local, 
-        ocorrencia.id_funcionario, 
-        ocorrencia.desc_problema, 
-        ocorrencia.campus, 
-        ocorrencia.etiq_equipamento, 
-        ocorrencia.contato, 
-        ocorrencia.ramal, 
-        ocorrencia.local, 
-        ocorrencia.funcionario, 
-        ocorrencia.status, 
-        ocorrencia.obs, 
-        ocorrencia.prioridade, 
-        ocorrencia.avaliacao, 
-        ocorrencia.email, 
-        ocorrencia.fecha_confirmado, 
-        ocorrencia.reaberto, 
-        ocorrencia.dt_abertura, 
-        ocorrencia.dt_atendimento, 
-        ocorrencia.dt_fechamento, 
-        ocorrencia.dt_fecha_confirmado, 
-        ocorrencia.dt_cancelamento, 
-        ocorrencia.id_atendente, 
-        ocorrencia.id_tecnico_indicado, 
-        ocorrencia.dt_liberacao, 
-        ocorrencia.anexo, 
-        ocorrencia.dt_espera, 
-        ocorrencia.dt_aguardando_usuario, 
-        ocorrencia.local_sala, 
-        area_responsavel.id as id_area_responsavel_area_responsavel, 
-        area_responsavel.nome as nome_area_responsavel_area_responsavel, 
-        area_responsavel.descricao as descricao_area_responsavel_area_responsavel, 
-        area_responsavel.email as email_area_responsavel_area_responsavel, 
-        area_responsavel.id_admin as id_admin_area_responsavel_area_responsavel, 
-        servico.id as id_servico_servico, 
-        servico.nome as nome_servico_servico, 
-        servico.descricao as descricao_servico_servico, 
-        servico.ativo as ativo_servico_servico, 
-        servico.tempo_sla as tempo_sla_servico_servico
-		FROM ocorrencia
-		INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel
-		INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico
-            WHERE ocorrencia.contato like :contato";
-                
-        try {
-                
-            $stmt = $this->conexao->prepare($sql);
-            $stmt->bindParam(":contato", $contato, PDO::PARAM_STR);
-            $stmt->execute();
-            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            foreach ( $result as $linha ) {
-                $ocorrencia = new Ocorrencia();
-    	        $ocorrencia->setId( $linha ['id'] );
-    	        $ocorrencia->setIdLocal( $linha ['id_local'] );
-    	        $ocorrencia->setIdFuncionario( $linha ['id_funcionario'] );
-    	        $ocorrencia->setDescProblema( $linha ['desc_problema'] );
-    	        $ocorrencia->setCampus( $linha ['campus'] );
-    	        $ocorrencia->setEtiqEquipamento( $linha ['etiq_equipamento'] );
-    	        $ocorrencia->setContato( $linha ['contato'] );
-    	        $ocorrencia->setRamal( $linha ['ramal'] );
-    	        $ocorrencia->setLocal( $linha ['local'] );
-    	        $ocorrencia->setFuncionario( $linha ['funcionario'] );
-    	        $ocorrencia->setStatus( $linha ['status'] );
-    	        $ocorrencia->setObs( $linha ['obs'] );
-    	        $ocorrencia->setPrioridade( $linha ['prioridade'] );
-    	        $ocorrencia->setAvaliacao( $linha ['avaliacao'] );
-    	        $ocorrencia->setEmail( $linha ['email'] );
-    	        $ocorrencia->setFechaConfirmado( $linha ['fecha_confirmado'] );
-    	        $ocorrencia->setReaberto( $linha ['reaberto'] );
-    	        $ocorrencia->setDtAbertura( $linha ['dt_abertura'] );
-    	        $ocorrencia->setDtAtendimento( $linha ['dt_atendimento'] );
-    	        $ocorrencia->setDtFechamento( $linha ['dt_fechamento'] );
-    	        $ocorrencia->setDtFechaConfirmado( $linha ['dt_fecha_confirmado'] );
-    	        $ocorrencia->setDtCancelamento( $linha ['dt_cancelamento'] );
-    	        $ocorrencia->setIdAtendente( $linha ['id_atendente'] );
-    	        $ocorrencia->setIdTecnicoIndicado( $linha ['id_tecnico_indicado'] );
-    	        $ocorrencia->setDtLiberacao( $linha ['dt_liberacao'] );
-    	        $ocorrencia->setAnexo( $linha ['anexo'] );
-    	        $ocorrencia->setDtEspera( $linha ['dt_espera'] );
-    	        $ocorrencia->setDtAguardandoUsuario( $linha ['dt_aguardando_usuario'] );
-    	        $ocorrencia->setLocalSala( $linha ['local_sala'] );
-    			$ocorrencia->getAreaResponsavel()->setId( $linha ['id_area_responsavel_area_responsavel'] );
-    			$ocorrencia->getAreaResponsavel()->setNome( $linha ['nome_area_responsavel_area_responsavel'] );
-    			$ocorrencia->getAreaResponsavel()->setDescricao( $linha ['descricao_area_responsavel_area_responsavel'] );
-    			$ocorrencia->getAreaResponsavel()->setEmail( $linha ['email_area_responsavel_area_responsavel'] );
-    			$ocorrencia->getAreaResponsavel()->setIdAdmin( $linha ['id_admin_area_responsavel_area_responsavel'] );
-    			$ocorrencia->getServico()->setId( $linha ['id_servico_servico'] );
-    			$ocorrencia->getServico()->setNome( $linha ['nome_servico_servico'] );
-    			$ocorrencia->getServico()->setDescricao( $linha ['descricao_servico_servico'] );
-    			$ocorrencia->getServico()->setAtivo( $linha ['ativo_servico_servico'] );
-    			$ocorrencia->getServico()->setTempoSla( $linha ['tempo_sla_servico_servico'] );
-    			$ocorrencia->getServico()->setAreaResponsavel( $linha ['area_responsavel_servico_servico'] );
-    			$ocorrencia->getServico()->setGrupoServico( $linha ['grupo_servico_servico_servico'] );
-    			$ocorrencia->getServico()->setTipoAtividade( $linha ['tipo_atividade_servico_servico'] );
+    			$ocorrencia->getUsuarioCliente()->setId( $linha ['id_usuario_usuario_cliente'] );
+    			$ocorrencia->getUsuarioCliente()->setNome( $linha ['nome_usuario_usuario_cliente'] );
+    			$ocorrencia->getUsuarioCliente()->setEmail( $linha ['email_usuario_usuario_cliente'] );
+    			$ocorrencia->getUsuarioCliente()->setLogin( $linha ['login_usuario_usuario_cliente'] );
+    			$ocorrencia->getUsuarioCliente()->setSenha( $linha ['senha_usuario_usuario_cliente'] );
+    			$ocorrencia->getUsuarioCliente()->setNivel( $linha ['nivel_usuario_usuario_cliente'] );
+    			$ocorrencia->getUsuarioCliente()->setSetor( $linha ['setor_usuario_usuario_cliente'] );
+    			$ocorrencia->getUsuarioAtendente()->setId( $linha ['id_usuario_usuario_atendente'] );
+    			$ocorrencia->getUsuarioAtendente()->setNome( $linha ['nome_usuario_usuario_atendente'] );
+    			$ocorrencia->getUsuarioAtendente()->setEmail( $linha ['email_usuario_usuario_atendente'] );
+    			$ocorrencia->getUsuarioAtendente()->setLogin( $linha ['login_usuario_usuario_atendente'] );
+    			$ocorrencia->getUsuarioAtendente()->setSenha( $linha ['senha_usuario_usuario_atendente'] );
+    			$ocorrencia->getUsuarioAtendente()->setNivel( $linha ['nivel_usuario_usuario_atendente'] );
+    			$ocorrencia->getUsuarioAtendente()->setSetor( $linha ['setor_usuario_usuario_atendente'] );
+    			$ocorrencia->getUsuarioIndicado()->setId( $linha ['id_usuario_usuario_indicado'] );
+    			$ocorrencia->getUsuarioIndicado()->setNome( $linha ['nome_usuario_usuario_indicado'] );
+    			$ocorrencia->getUsuarioIndicado()->setEmail( $linha ['email_usuario_usuario_indicado'] );
+    			$ocorrencia->getUsuarioIndicado()->setLogin( $linha ['login_usuario_usuario_indicado'] );
+    			$ocorrencia->getUsuarioIndicado()->setSenha( $linha ['senha_usuario_usuario_indicado'] );
+    			$ocorrencia->getUsuarioIndicado()->setNivel( $linha ['nivel_usuario_usuario_indicado'] );
+    			$ocorrencia->getUsuarioIndicado()->setSetor( $linha ['setor_usuario_usuario_indicado'] );
     			$lista [] = $ocorrencia;
     			    
             }
@@ -1180,46 +921,51 @@ class OcorrenciaDAO extends DAO {
 		SELECT
         ocorrencia.id, 
         ocorrencia.id_local, 
-        ocorrencia.id_funcionario, 
-        ocorrencia.desc_problema, 
+        ocorrencia.descricao, 
         ocorrencia.campus, 
-        ocorrencia.etiq_equipamento, 
-        ocorrencia.contato, 
+        ocorrencia.patrimonio, 
         ocorrencia.ramal, 
         ocorrencia.local, 
-        ocorrencia.funcionario, 
         ocorrencia.status, 
-        ocorrencia.obs, 
+        ocorrencia.solucao, 
         ocorrencia.prioridade, 
         ocorrencia.avaliacao, 
         ocorrencia.email, 
-        ocorrencia.fecha_confirmado, 
-        ocorrencia.reaberto, 
-        ocorrencia.dt_abertura, 
-        ocorrencia.dt_atendimento, 
-        ocorrencia.dt_fechamento, 
-        ocorrencia.dt_fecha_confirmado, 
-        ocorrencia.dt_cancelamento, 
-        ocorrencia.id_atendente, 
-        ocorrencia.id_tecnico_indicado, 
-        ocorrencia.dt_liberacao, 
         ocorrencia.anexo, 
-        ocorrencia.dt_espera, 
-        ocorrencia.dt_aguardando_usuario, 
         ocorrencia.local_sala, 
         area_responsavel.id as id_area_responsavel_area_responsavel, 
         area_responsavel.nome as nome_area_responsavel_area_responsavel, 
         area_responsavel.descricao as descricao_area_responsavel_area_responsavel, 
         area_responsavel.email as email_area_responsavel_area_responsavel, 
-        area_responsavel.id_admin as id_admin_area_responsavel_area_responsavel, 
         servico.id as id_servico_servico, 
         servico.nome as nome_servico_servico, 
         servico.descricao as descricao_servico_servico, 
-        servico.ativo as ativo_servico_servico, 
-        servico.tempo_sla as tempo_sla_servico_servico
+        servico.tempo_sla as tempo_sla_servico_servico, 
+        servico.visao as visao_servico_servico, 
+        usuario_cliente.id as id_usuario_usuario_cliente, 
+        usuario_cliente.nome as nome_usuario_usuario_cliente, 
+        usuario_cliente.email as email_usuario_usuario_cliente, 
+        usuario_cliente.login as login_usuario_usuario_cliente, 
+        usuario_cliente.senha as senha_usuario_usuario_cliente, 
+        usuario_cliente.nivel as nivel_usuario_usuario_cliente, 
+        usuario_atendente.id as id_usuario_usuario_atendente, 
+        usuario_atendente.nome as nome_usuario_usuario_atendente, 
+        usuario_atendente.email as email_usuario_usuario_atendente, 
+        usuario_atendente.login as login_usuario_usuario_atendente, 
+        usuario_atendente.senha as senha_usuario_usuario_atendente, 
+        usuario_atendente.nivel as nivel_usuario_usuario_atendente, 
+        usuario_indicado.id as id_usuario_usuario_indicado, 
+        usuario_indicado.nome as nome_usuario_usuario_indicado, 
+        usuario_indicado.email as email_usuario_usuario_indicado, 
+        usuario_indicado.login as login_usuario_usuario_indicado, 
+        usuario_indicado.senha as senha_usuario_usuario_indicado, 
+        usuario_indicado.nivel as nivel_usuario_usuario_indicado
 		FROM ocorrencia
 		INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel
 		INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico
+		INNER JOIN usuario as usuario_cliente ON usuario_cliente.id = ocorrencia.id_usuario_cliente
+		INNER JOIN usuario as usuario_atendente ON usuario_atendente.id = ocorrencia.id_usuario_atendente
+		INNER JOIN usuario as usuario_indicado ON usuario_indicado.id = ocorrencia.id_usuario_indicado
             WHERE ocorrencia.ramal like :ramal";
                 
         try {
@@ -1232,46 +978,51 @@ class OcorrenciaDAO extends DAO {
                 $ocorrencia = new Ocorrencia();
     	        $ocorrencia->setId( $linha ['id'] );
     	        $ocorrencia->setIdLocal( $linha ['id_local'] );
-    	        $ocorrencia->setIdFuncionario( $linha ['id_funcionario'] );
-    	        $ocorrencia->setDescProblema( $linha ['desc_problema'] );
+    	        $ocorrencia->setDescricao( $linha ['descricao'] );
     	        $ocorrencia->setCampus( $linha ['campus'] );
-    	        $ocorrencia->setEtiqEquipamento( $linha ['etiq_equipamento'] );
-    	        $ocorrencia->setContato( $linha ['contato'] );
+    	        $ocorrencia->setPatrimonio( $linha ['patrimonio'] );
     	        $ocorrencia->setRamal( $linha ['ramal'] );
     	        $ocorrencia->setLocal( $linha ['local'] );
-    	        $ocorrencia->setFuncionario( $linha ['funcionario'] );
     	        $ocorrencia->setStatus( $linha ['status'] );
-    	        $ocorrencia->setObs( $linha ['obs'] );
+    	        $ocorrencia->setSolucao( $linha ['solucao'] );
     	        $ocorrencia->setPrioridade( $linha ['prioridade'] );
     	        $ocorrencia->setAvaliacao( $linha ['avaliacao'] );
     	        $ocorrencia->setEmail( $linha ['email'] );
-    	        $ocorrencia->setFechaConfirmado( $linha ['fecha_confirmado'] );
-    	        $ocorrencia->setReaberto( $linha ['reaberto'] );
-    	        $ocorrencia->setDtAbertura( $linha ['dt_abertura'] );
-    	        $ocorrencia->setDtAtendimento( $linha ['dt_atendimento'] );
-    	        $ocorrencia->setDtFechamento( $linha ['dt_fechamento'] );
-    	        $ocorrencia->setDtFechaConfirmado( $linha ['dt_fecha_confirmado'] );
-    	        $ocorrencia->setDtCancelamento( $linha ['dt_cancelamento'] );
-    	        $ocorrencia->setIdAtendente( $linha ['id_atendente'] );
-    	        $ocorrencia->setIdTecnicoIndicado( $linha ['id_tecnico_indicado'] );
-    	        $ocorrencia->setDtLiberacao( $linha ['dt_liberacao'] );
     	        $ocorrencia->setAnexo( $linha ['anexo'] );
-    	        $ocorrencia->setDtEspera( $linha ['dt_espera'] );
-    	        $ocorrencia->setDtAguardandoUsuario( $linha ['dt_aguardando_usuario'] );
     	        $ocorrencia->setLocalSala( $linha ['local_sala'] );
     			$ocorrencia->getAreaResponsavel()->setId( $linha ['id_area_responsavel_area_responsavel'] );
     			$ocorrencia->getAreaResponsavel()->setNome( $linha ['nome_area_responsavel_area_responsavel'] );
     			$ocorrencia->getAreaResponsavel()->setDescricao( $linha ['descricao_area_responsavel_area_responsavel'] );
     			$ocorrencia->getAreaResponsavel()->setEmail( $linha ['email_area_responsavel_area_responsavel'] );
-    			$ocorrencia->getAreaResponsavel()->setIdAdmin( $linha ['id_admin_area_responsavel_area_responsavel'] );
     			$ocorrencia->getServico()->setId( $linha ['id_servico_servico'] );
     			$ocorrencia->getServico()->setNome( $linha ['nome_servico_servico'] );
     			$ocorrencia->getServico()->setDescricao( $linha ['descricao_servico_servico'] );
-    			$ocorrencia->getServico()->setAtivo( $linha ['ativo_servico_servico'] );
+    			$ocorrencia->getServico()->setTipoAtividade( $linha ['tipo_atividade_servico_servico'] );
     			$ocorrencia->getServico()->setTempoSla( $linha ['tempo_sla_servico_servico'] );
+    			$ocorrencia->getServico()->setVisao( $linha ['visao_servico_servico'] );
     			$ocorrencia->getServico()->setAreaResponsavel( $linha ['area_responsavel_servico_servico'] );
     			$ocorrencia->getServico()->setGrupoServico( $linha ['grupo_servico_servico_servico'] );
-    			$ocorrencia->getServico()->setTipoAtividade( $linha ['tipo_atividade_servico_servico'] );
+    			$ocorrencia->getUsuarioCliente()->setId( $linha ['id_usuario_usuario_cliente'] );
+    			$ocorrencia->getUsuarioCliente()->setNome( $linha ['nome_usuario_usuario_cliente'] );
+    			$ocorrencia->getUsuarioCliente()->setEmail( $linha ['email_usuario_usuario_cliente'] );
+    			$ocorrencia->getUsuarioCliente()->setLogin( $linha ['login_usuario_usuario_cliente'] );
+    			$ocorrencia->getUsuarioCliente()->setSenha( $linha ['senha_usuario_usuario_cliente'] );
+    			$ocorrencia->getUsuarioCliente()->setNivel( $linha ['nivel_usuario_usuario_cliente'] );
+    			$ocorrencia->getUsuarioCliente()->setSetor( $linha ['setor_usuario_usuario_cliente'] );
+    			$ocorrencia->getUsuarioAtendente()->setId( $linha ['id_usuario_usuario_atendente'] );
+    			$ocorrencia->getUsuarioAtendente()->setNome( $linha ['nome_usuario_usuario_atendente'] );
+    			$ocorrencia->getUsuarioAtendente()->setEmail( $linha ['email_usuario_usuario_atendente'] );
+    			$ocorrencia->getUsuarioAtendente()->setLogin( $linha ['login_usuario_usuario_atendente'] );
+    			$ocorrencia->getUsuarioAtendente()->setSenha( $linha ['senha_usuario_usuario_atendente'] );
+    			$ocorrencia->getUsuarioAtendente()->setNivel( $linha ['nivel_usuario_usuario_atendente'] );
+    			$ocorrencia->getUsuarioAtendente()->setSetor( $linha ['setor_usuario_usuario_atendente'] );
+    			$ocorrencia->getUsuarioIndicado()->setId( $linha ['id_usuario_usuario_indicado'] );
+    			$ocorrencia->getUsuarioIndicado()->setNome( $linha ['nome_usuario_usuario_indicado'] );
+    			$ocorrencia->getUsuarioIndicado()->setEmail( $linha ['email_usuario_usuario_indicado'] );
+    			$ocorrencia->getUsuarioIndicado()->setLogin( $linha ['login_usuario_usuario_indicado'] );
+    			$ocorrencia->getUsuarioIndicado()->setSenha( $linha ['senha_usuario_usuario_indicado'] );
+    			$ocorrencia->getUsuarioIndicado()->setNivel( $linha ['nivel_usuario_usuario_indicado'] );
+    			$ocorrencia->getUsuarioIndicado()->setSetor( $linha ['setor_usuario_usuario_indicado'] );
     			$lista [] = $ocorrencia;
     			    
             }
@@ -1291,46 +1042,51 @@ class OcorrenciaDAO extends DAO {
 		SELECT
         ocorrencia.id, 
         ocorrencia.id_local, 
-        ocorrencia.id_funcionario, 
-        ocorrencia.desc_problema, 
+        ocorrencia.descricao, 
         ocorrencia.campus, 
-        ocorrencia.etiq_equipamento, 
-        ocorrencia.contato, 
+        ocorrencia.patrimonio, 
         ocorrencia.ramal, 
         ocorrencia.local, 
-        ocorrencia.funcionario, 
         ocorrencia.status, 
-        ocorrencia.obs, 
+        ocorrencia.solucao, 
         ocorrencia.prioridade, 
         ocorrencia.avaliacao, 
         ocorrencia.email, 
-        ocorrencia.fecha_confirmado, 
-        ocorrencia.reaberto, 
-        ocorrencia.dt_abertura, 
-        ocorrencia.dt_atendimento, 
-        ocorrencia.dt_fechamento, 
-        ocorrencia.dt_fecha_confirmado, 
-        ocorrencia.dt_cancelamento, 
-        ocorrencia.id_atendente, 
-        ocorrencia.id_tecnico_indicado, 
-        ocorrencia.dt_liberacao, 
         ocorrencia.anexo, 
-        ocorrencia.dt_espera, 
-        ocorrencia.dt_aguardando_usuario, 
         ocorrencia.local_sala, 
         area_responsavel.id as id_area_responsavel_area_responsavel, 
         area_responsavel.nome as nome_area_responsavel_area_responsavel, 
         area_responsavel.descricao as descricao_area_responsavel_area_responsavel, 
         area_responsavel.email as email_area_responsavel_area_responsavel, 
-        area_responsavel.id_admin as id_admin_area_responsavel_area_responsavel, 
         servico.id as id_servico_servico, 
         servico.nome as nome_servico_servico, 
         servico.descricao as descricao_servico_servico, 
-        servico.ativo as ativo_servico_servico, 
-        servico.tempo_sla as tempo_sla_servico_servico
+        servico.tempo_sla as tempo_sla_servico_servico, 
+        servico.visao as visao_servico_servico, 
+        usuario_cliente.id as id_usuario_usuario_cliente, 
+        usuario_cliente.nome as nome_usuario_usuario_cliente, 
+        usuario_cliente.email as email_usuario_usuario_cliente, 
+        usuario_cliente.login as login_usuario_usuario_cliente, 
+        usuario_cliente.senha as senha_usuario_usuario_cliente, 
+        usuario_cliente.nivel as nivel_usuario_usuario_cliente, 
+        usuario_atendente.id as id_usuario_usuario_atendente, 
+        usuario_atendente.nome as nome_usuario_usuario_atendente, 
+        usuario_atendente.email as email_usuario_usuario_atendente, 
+        usuario_atendente.login as login_usuario_usuario_atendente, 
+        usuario_atendente.senha as senha_usuario_usuario_atendente, 
+        usuario_atendente.nivel as nivel_usuario_usuario_atendente, 
+        usuario_indicado.id as id_usuario_usuario_indicado, 
+        usuario_indicado.nome as nome_usuario_usuario_indicado, 
+        usuario_indicado.email as email_usuario_usuario_indicado, 
+        usuario_indicado.login as login_usuario_usuario_indicado, 
+        usuario_indicado.senha as senha_usuario_usuario_indicado, 
+        usuario_indicado.nivel as nivel_usuario_usuario_indicado
 		FROM ocorrencia
 		INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel
 		INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico
+		INNER JOIN usuario as usuario_cliente ON usuario_cliente.id = ocorrencia.id_usuario_cliente
+		INNER JOIN usuario as usuario_atendente ON usuario_atendente.id = ocorrencia.id_usuario_atendente
+		INNER JOIN usuario as usuario_indicado ON usuario_indicado.id = ocorrencia.id_usuario_indicado
             WHERE ocorrencia.local like :local";
                 
         try {
@@ -1343,157 +1099,51 @@ class OcorrenciaDAO extends DAO {
                 $ocorrencia = new Ocorrencia();
     	        $ocorrencia->setId( $linha ['id'] );
     	        $ocorrencia->setIdLocal( $linha ['id_local'] );
-    	        $ocorrencia->setIdFuncionario( $linha ['id_funcionario'] );
-    	        $ocorrencia->setDescProblema( $linha ['desc_problema'] );
+    	        $ocorrencia->setDescricao( $linha ['descricao'] );
     	        $ocorrencia->setCampus( $linha ['campus'] );
-    	        $ocorrencia->setEtiqEquipamento( $linha ['etiq_equipamento'] );
-    	        $ocorrencia->setContato( $linha ['contato'] );
+    	        $ocorrencia->setPatrimonio( $linha ['patrimonio'] );
     	        $ocorrencia->setRamal( $linha ['ramal'] );
     	        $ocorrencia->setLocal( $linha ['local'] );
-    	        $ocorrencia->setFuncionario( $linha ['funcionario'] );
     	        $ocorrencia->setStatus( $linha ['status'] );
-    	        $ocorrencia->setObs( $linha ['obs'] );
+    	        $ocorrencia->setSolucao( $linha ['solucao'] );
     	        $ocorrencia->setPrioridade( $linha ['prioridade'] );
     	        $ocorrencia->setAvaliacao( $linha ['avaliacao'] );
     	        $ocorrencia->setEmail( $linha ['email'] );
-    	        $ocorrencia->setFechaConfirmado( $linha ['fecha_confirmado'] );
-    	        $ocorrencia->setReaberto( $linha ['reaberto'] );
-    	        $ocorrencia->setDtAbertura( $linha ['dt_abertura'] );
-    	        $ocorrencia->setDtAtendimento( $linha ['dt_atendimento'] );
-    	        $ocorrencia->setDtFechamento( $linha ['dt_fechamento'] );
-    	        $ocorrencia->setDtFechaConfirmado( $linha ['dt_fecha_confirmado'] );
-    	        $ocorrencia->setDtCancelamento( $linha ['dt_cancelamento'] );
-    	        $ocorrencia->setIdAtendente( $linha ['id_atendente'] );
-    	        $ocorrencia->setIdTecnicoIndicado( $linha ['id_tecnico_indicado'] );
-    	        $ocorrencia->setDtLiberacao( $linha ['dt_liberacao'] );
     	        $ocorrencia->setAnexo( $linha ['anexo'] );
-    	        $ocorrencia->setDtEspera( $linha ['dt_espera'] );
-    	        $ocorrencia->setDtAguardandoUsuario( $linha ['dt_aguardando_usuario'] );
     	        $ocorrencia->setLocalSala( $linha ['local_sala'] );
     			$ocorrencia->getAreaResponsavel()->setId( $linha ['id_area_responsavel_area_responsavel'] );
     			$ocorrencia->getAreaResponsavel()->setNome( $linha ['nome_area_responsavel_area_responsavel'] );
     			$ocorrencia->getAreaResponsavel()->setDescricao( $linha ['descricao_area_responsavel_area_responsavel'] );
     			$ocorrencia->getAreaResponsavel()->setEmail( $linha ['email_area_responsavel_area_responsavel'] );
-    			$ocorrencia->getAreaResponsavel()->setIdAdmin( $linha ['id_admin_area_responsavel_area_responsavel'] );
     			$ocorrencia->getServico()->setId( $linha ['id_servico_servico'] );
     			$ocorrencia->getServico()->setNome( $linha ['nome_servico_servico'] );
     			$ocorrencia->getServico()->setDescricao( $linha ['descricao_servico_servico'] );
-    			$ocorrencia->getServico()->setAtivo( $linha ['ativo_servico_servico'] );
+    			$ocorrencia->getServico()->setTipoAtividade( $linha ['tipo_atividade_servico_servico'] );
     			$ocorrencia->getServico()->setTempoSla( $linha ['tempo_sla_servico_servico'] );
+    			$ocorrencia->getServico()->setVisao( $linha ['visao_servico_servico'] );
     			$ocorrencia->getServico()->setAreaResponsavel( $linha ['area_responsavel_servico_servico'] );
     			$ocorrencia->getServico()->setGrupoServico( $linha ['grupo_servico_servico_servico'] );
-    			$ocorrencia->getServico()->setTipoAtividade( $linha ['tipo_atividade_servico_servico'] );
-    			$lista [] = $ocorrencia;
-    			    
-            }
-    			    
-        } catch(PDOException $e) {
-            echo $e->getMessage();
-    			    
-        }
-		return $lista;
-    }
-                
-    public function pesquisaPorFuncionario(Ocorrencia $ocorrencia) {
-        $lista = array();
-	    $funcionario = $ocorrencia->getFuncionario();
-                
-        $sql = "
-		SELECT
-        ocorrencia.id, 
-        ocorrencia.id_local, 
-        ocorrencia.id_funcionario, 
-        ocorrencia.desc_problema, 
-        ocorrencia.campus, 
-        ocorrencia.etiq_equipamento, 
-        ocorrencia.contato, 
-        ocorrencia.ramal, 
-        ocorrencia.local, 
-        ocorrencia.funcionario, 
-        ocorrencia.status, 
-        ocorrencia.obs, 
-        ocorrencia.prioridade, 
-        ocorrencia.avaliacao, 
-        ocorrencia.email, 
-        ocorrencia.fecha_confirmado, 
-        ocorrencia.reaberto, 
-        ocorrencia.dt_abertura, 
-        ocorrencia.dt_atendimento, 
-        ocorrencia.dt_fechamento, 
-        ocorrencia.dt_fecha_confirmado, 
-        ocorrencia.dt_cancelamento, 
-        ocorrencia.id_atendente, 
-        ocorrencia.id_tecnico_indicado, 
-        ocorrencia.dt_liberacao, 
-        ocorrencia.anexo, 
-        ocorrencia.dt_espera, 
-        ocorrencia.dt_aguardando_usuario, 
-        ocorrencia.local_sala, 
-        area_responsavel.id as id_area_responsavel_area_responsavel, 
-        area_responsavel.nome as nome_area_responsavel_area_responsavel, 
-        area_responsavel.descricao as descricao_area_responsavel_area_responsavel, 
-        area_responsavel.email as email_area_responsavel_area_responsavel, 
-        area_responsavel.id_admin as id_admin_area_responsavel_area_responsavel, 
-        servico.id as id_servico_servico, 
-        servico.nome as nome_servico_servico, 
-        servico.descricao as descricao_servico_servico, 
-        servico.ativo as ativo_servico_servico, 
-        servico.tempo_sla as tempo_sla_servico_servico
-		FROM ocorrencia
-		INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel
-		INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico
-            WHERE ocorrencia.funcionario like :funcionario";
-                
-        try {
-                
-            $stmt = $this->conexao->prepare($sql);
-            $stmt->bindParam(":funcionario", $funcionario, PDO::PARAM_STR);
-            $stmt->execute();
-            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            foreach ( $result as $linha ) {
-                $ocorrencia = new Ocorrencia();
-    	        $ocorrencia->setId( $linha ['id'] );
-    	        $ocorrencia->setIdLocal( $linha ['id_local'] );
-    	        $ocorrencia->setIdFuncionario( $linha ['id_funcionario'] );
-    	        $ocorrencia->setDescProblema( $linha ['desc_problema'] );
-    	        $ocorrencia->setCampus( $linha ['campus'] );
-    	        $ocorrencia->setEtiqEquipamento( $linha ['etiq_equipamento'] );
-    	        $ocorrencia->setContato( $linha ['contato'] );
-    	        $ocorrencia->setRamal( $linha ['ramal'] );
-    	        $ocorrencia->setLocal( $linha ['local'] );
-    	        $ocorrencia->setFuncionario( $linha ['funcionario'] );
-    	        $ocorrencia->setStatus( $linha ['status'] );
-    	        $ocorrencia->setObs( $linha ['obs'] );
-    	        $ocorrencia->setPrioridade( $linha ['prioridade'] );
-    	        $ocorrencia->setAvaliacao( $linha ['avaliacao'] );
-    	        $ocorrencia->setEmail( $linha ['email'] );
-    	        $ocorrencia->setFechaConfirmado( $linha ['fecha_confirmado'] );
-    	        $ocorrencia->setReaberto( $linha ['reaberto'] );
-    	        $ocorrencia->setDtAbertura( $linha ['dt_abertura'] );
-    	        $ocorrencia->setDtAtendimento( $linha ['dt_atendimento'] );
-    	        $ocorrencia->setDtFechamento( $linha ['dt_fechamento'] );
-    	        $ocorrencia->setDtFechaConfirmado( $linha ['dt_fecha_confirmado'] );
-    	        $ocorrencia->setDtCancelamento( $linha ['dt_cancelamento'] );
-    	        $ocorrencia->setIdAtendente( $linha ['id_atendente'] );
-    	        $ocorrencia->setIdTecnicoIndicado( $linha ['id_tecnico_indicado'] );
-    	        $ocorrencia->setDtLiberacao( $linha ['dt_liberacao'] );
-    	        $ocorrencia->setAnexo( $linha ['anexo'] );
-    	        $ocorrencia->setDtEspera( $linha ['dt_espera'] );
-    	        $ocorrencia->setDtAguardandoUsuario( $linha ['dt_aguardando_usuario'] );
-    	        $ocorrencia->setLocalSala( $linha ['local_sala'] );
-    			$ocorrencia->getAreaResponsavel()->setId( $linha ['id_area_responsavel_area_responsavel'] );
-    			$ocorrencia->getAreaResponsavel()->setNome( $linha ['nome_area_responsavel_area_responsavel'] );
-    			$ocorrencia->getAreaResponsavel()->setDescricao( $linha ['descricao_area_responsavel_area_responsavel'] );
-    			$ocorrencia->getAreaResponsavel()->setEmail( $linha ['email_area_responsavel_area_responsavel'] );
-    			$ocorrencia->getAreaResponsavel()->setIdAdmin( $linha ['id_admin_area_responsavel_area_responsavel'] );
-    			$ocorrencia->getServico()->setId( $linha ['id_servico_servico'] );
-    			$ocorrencia->getServico()->setNome( $linha ['nome_servico_servico'] );
-    			$ocorrencia->getServico()->setDescricao( $linha ['descricao_servico_servico'] );
-    			$ocorrencia->getServico()->setAtivo( $linha ['ativo_servico_servico'] );
-    			$ocorrencia->getServico()->setTempoSla( $linha ['tempo_sla_servico_servico'] );
-    			$ocorrencia->getServico()->setAreaResponsavel( $linha ['area_responsavel_servico_servico'] );
-    			$ocorrencia->getServico()->setGrupoServico( $linha ['grupo_servico_servico_servico'] );
-    			$ocorrencia->getServico()->setTipoAtividade( $linha ['tipo_atividade_servico_servico'] );
+    			$ocorrencia->getUsuarioCliente()->setId( $linha ['id_usuario_usuario_cliente'] );
+    			$ocorrencia->getUsuarioCliente()->setNome( $linha ['nome_usuario_usuario_cliente'] );
+    			$ocorrencia->getUsuarioCliente()->setEmail( $linha ['email_usuario_usuario_cliente'] );
+    			$ocorrencia->getUsuarioCliente()->setLogin( $linha ['login_usuario_usuario_cliente'] );
+    			$ocorrencia->getUsuarioCliente()->setSenha( $linha ['senha_usuario_usuario_cliente'] );
+    			$ocorrencia->getUsuarioCliente()->setNivel( $linha ['nivel_usuario_usuario_cliente'] );
+    			$ocorrencia->getUsuarioCliente()->setSetor( $linha ['setor_usuario_usuario_cliente'] );
+    			$ocorrencia->getUsuarioAtendente()->setId( $linha ['id_usuario_usuario_atendente'] );
+    			$ocorrencia->getUsuarioAtendente()->setNome( $linha ['nome_usuario_usuario_atendente'] );
+    			$ocorrencia->getUsuarioAtendente()->setEmail( $linha ['email_usuario_usuario_atendente'] );
+    			$ocorrencia->getUsuarioAtendente()->setLogin( $linha ['login_usuario_usuario_atendente'] );
+    			$ocorrencia->getUsuarioAtendente()->setSenha( $linha ['senha_usuario_usuario_atendente'] );
+    			$ocorrencia->getUsuarioAtendente()->setNivel( $linha ['nivel_usuario_usuario_atendente'] );
+    			$ocorrencia->getUsuarioAtendente()->setSetor( $linha ['setor_usuario_usuario_atendente'] );
+    			$ocorrencia->getUsuarioIndicado()->setId( $linha ['id_usuario_usuario_indicado'] );
+    			$ocorrencia->getUsuarioIndicado()->setNome( $linha ['nome_usuario_usuario_indicado'] );
+    			$ocorrencia->getUsuarioIndicado()->setEmail( $linha ['email_usuario_usuario_indicado'] );
+    			$ocorrencia->getUsuarioIndicado()->setLogin( $linha ['login_usuario_usuario_indicado'] );
+    			$ocorrencia->getUsuarioIndicado()->setSenha( $linha ['senha_usuario_usuario_indicado'] );
+    			$ocorrencia->getUsuarioIndicado()->setNivel( $linha ['nivel_usuario_usuario_indicado'] );
+    			$ocorrencia->getUsuarioIndicado()->setSetor( $linha ['setor_usuario_usuario_indicado'] );
     			$lista [] = $ocorrencia;
     			    
             }
@@ -1513,46 +1163,51 @@ class OcorrenciaDAO extends DAO {
 		SELECT
         ocorrencia.id, 
         ocorrencia.id_local, 
-        ocorrencia.id_funcionario, 
-        ocorrencia.desc_problema, 
+        ocorrencia.descricao, 
         ocorrencia.campus, 
-        ocorrencia.etiq_equipamento, 
-        ocorrencia.contato, 
+        ocorrencia.patrimonio, 
         ocorrencia.ramal, 
         ocorrencia.local, 
-        ocorrencia.funcionario, 
         ocorrencia.status, 
-        ocorrencia.obs, 
+        ocorrencia.solucao, 
         ocorrencia.prioridade, 
         ocorrencia.avaliacao, 
         ocorrencia.email, 
-        ocorrencia.fecha_confirmado, 
-        ocorrencia.reaberto, 
-        ocorrencia.dt_abertura, 
-        ocorrencia.dt_atendimento, 
-        ocorrencia.dt_fechamento, 
-        ocorrencia.dt_fecha_confirmado, 
-        ocorrencia.dt_cancelamento, 
-        ocorrencia.id_atendente, 
-        ocorrencia.id_tecnico_indicado, 
-        ocorrencia.dt_liberacao, 
         ocorrencia.anexo, 
-        ocorrencia.dt_espera, 
-        ocorrencia.dt_aguardando_usuario, 
         ocorrencia.local_sala, 
         area_responsavel.id as id_area_responsavel_area_responsavel, 
         area_responsavel.nome as nome_area_responsavel_area_responsavel, 
         area_responsavel.descricao as descricao_area_responsavel_area_responsavel, 
         area_responsavel.email as email_area_responsavel_area_responsavel, 
-        area_responsavel.id_admin as id_admin_area_responsavel_area_responsavel, 
         servico.id as id_servico_servico, 
         servico.nome as nome_servico_servico, 
         servico.descricao as descricao_servico_servico, 
-        servico.ativo as ativo_servico_servico, 
-        servico.tempo_sla as tempo_sla_servico_servico
+        servico.tempo_sla as tempo_sla_servico_servico, 
+        servico.visao as visao_servico_servico, 
+        usuario_cliente.id as id_usuario_usuario_cliente, 
+        usuario_cliente.nome as nome_usuario_usuario_cliente, 
+        usuario_cliente.email as email_usuario_usuario_cliente, 
+        usuario_cliente.login as login_usuario_usuario_cliente, 
+        usuario_cliente.senha as senha_usuario_usuario_cliente, 
+        usuario_cliente.nivel as nivel_usuario_usuario_cliente, 
+        usuario_atendente.id as id_usuario_usuario_atendente, 
+        usuario_atendente.nome as nome_usuario_usuario_atendente, 
+        usuario_atendente.email as email_usuario_usuario_atendente, 
+        usuario_atendente.login as login_usuario_usuario_atendente, 
+        usuario_atendente.senha as senha_usuario_usuario_atendente, 
+        usuario_atendente.nivel as nivel_usuario_usuario_atendente, 
+        usuario_indicado.id as id_usuario_usuario_indicado, 
+        usuario_indicado.nome as nome_usuario_usuario_indicado, 
+        usuario_indicado.email as email_usuario_usuario_indicado, 
+        usuario_indicado.login as login_usuario_usuario_indicado, 
+        usuario_indicado.senha as senha_usuario_usuario_indicado, 
+        usuario_indicado.nivel as nivel_usuario_usuario_indicado
 		FROM ocorrencia
 		INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel
 		INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico
+		INNER JOIN usuario as usuario_cliente ON usuario_cliente.id = ocorrencia.id_usuario_cliente
+		INNER JOIN usuario as usuario_atendente ON usuario_atendente.id = ocorrencia.id_usuario_atendente
+		INNER JOIN usuario as usuario_indicado ON usuario_indicado.id = ocorrencia.id_usuario_indicado
             WHERE ocorrencia.status like :status";
                 
         try {
@@ -1565,46 +1220,51 @@ class OcorrenciaDAO extends DAO {
                 $ocorrencia = new Ocorrencia();
     	        $ocorrencia->setId( $linha ['id'] );
     	        $ocorrencia->setIdLocal( $linha ['id_local'] );
-    	        $ocorrencia->setIdFuncionario( $linha ['id_funcionario'] );
-    	        $ocorrencia->setDescProblema( $linha ['desc_problema'] );
+    	        $ocorrencia->setDescricao( $linha ['descricao'] );
     	        $ocorrencia->setCampus( $linha ['campus'] );
-    	        $ocorrencia->setEtiqEquipamento( $linha ['etiq_equipamento'] );
-    	        $ocorrencia->setContato( $linha ['contato'] );
+    	        $ocorrencia->setPatrimonio( $linha ['patrimonio'] );
     	        $ocorrencia->setRamal( $linha ['ramal'] );
     	        $ocorrencia->setLocal( $linha ['local'] );
-    	        $ocorrencia->setFuncionario( $linha ['funcionario'] );
     	        $ocorrencia->setStatus( $linha ['status'] );
-    	        $ocorrencia->setObs( $linha ['obs'] );
+    	        $ocorrencia->setSolucao( $linha ['solucao'] );
     	        $ocorrencia->setPrioridade( $linha ['prioridade'] );
     	        $ocorrencia->setAvaliacao( $linha ['avaliacao'] );
     	        $ocorrencia->setEmail( $linha ['email'] );
-    	        $ocorrencia->setFechaConfirmado( $linha ['fecha_confirmado'] );
-    	        $ocorrencia->setReaberto( $linha ['reaberto'] );
-    	        $ocorrencia->setDtAbertura( $linha ['dt_abertura'] );
-    	        $ocorrencia->setDtAtendimento( $linha ['dt_atendimento'] );
-    	        $ocorrencia->setDtFechamento( $linha ['dt_fechamento'] );
-    	        $ocorrencia->setDtFechaConfirmado( $linha ['dt_fecha_confirmado'] );
-    	        $ocorrencia->setDtCancelamento( $linha ['dt_cancelamento'] );
-    	        $ocorrencia->setIdAtendente( $linha ['id_atendente'] );
-    	        $ocorrencia->setIdTecnicoIndicado( $linha ['id_tecnico_indicado'] );
-    	        $ocorrencia->setDtLiberacao( $linha ['dt_liberacao'] );
     	        $ocorrencia->setAnexo( $linha ['anexo'] );
-    	        $ocorrencia->setDtEspera( $linha ['dt_espera'] );
-    	        $ocorrencia->setDtAguardandoUsuario( $linha ['dt_aguardando_usuario'] );
     	        $ocorrencia->setLocalSala( $linha ['local_sala'] );
     			$ocorrencia->getAreaResponsavel()->setId( $linha ['id_area_responsavel_area_responsavel'] );
     			$ocorrencia->getAreaResponsavel()->setNome( $linha ['nome_area_responsavel_area_responsavel'] );
     			$ocorrencia->getAreaResponsavel()->setDescricao( $linha ['descricao_area_responsavel_area_responsavel'] );
     			$ocorrencia->getAreaResponsavel()->setEmail( $linha ['email_area_responsavel_area_responsavel'] );
-    			$ocorrencia->getAreaResponsavel()->setIdAdmin( $linha ['id_admin_area_responsavel_area_responsavel'] );
     			$ocorrencia->getServico()->setId( $linha ['id_servico_servico'] );
     			$ocorrencia->getServico()->setNome( $linha ['nome_servico_servico'] );
     			$ocorrencia->getServico()->setDescricao( $linha ['descricao_servico_servico'] );
-    			$ocorrencia->getServico()->setAtivo( $linha ['ativo_servico_servico'] );
+    			$ocorrencia->getServico()->setTipoAtividade( $linha ['tipo_atividade_servico_servico'] );
     			$ocorrencia->getServico()->setTempoSla( $linha ['tempo_sla_servico_servico'] );
+    			$ocorrencia->getServico()->setVisao( $linha ['visao_servico_servico'] );
     			$ocorrencia->getServico()->setAreaResponsavel( $linha ['area_responsavel_servico_servico'] );
     			$ocorrencia->getServico()->setGrupoServico( $linha ['grupo_servico_servico_servico'] );
-    			$ocorrencia->getServico()->setTipoAtividade( $linha ['tipo_atividade_servico_servico'] );
+    			$ocorrencia->getUsuarioCliente()->setId( $linha ['id_usuario_usuario_cliente'] );
+    			$ocorrencia->getUsuarioCliente()->setNome( $linha ['nome_usuario_usuario_cliente'] );
+    			$ocorrencia->getUsuarioCliente()->setEmail( $linha ['email_usuario_usuario_cliente'] );
+    			$ocorrencia->getUsuarioCliente()->setLogin( $linha ['login_usuario_usuario_cliente'] );
+    			$ocorrencia->getUsuarioCliente()->setSenha( $linha ['senha_usuario_usuario_cliente'] );
+    			$ocorrencia->getUsuarioCliente()->setNivel( $linha ['nivel_usuario_usuario_cliente'] );
+    			$ocorrencia->getUsuarioCliente()->setSetor( $linha ['setor_usuario_usuario_cliente'] );
+    			$ocorrencia->getUsuarioAtendente()->setId( $linha ['id_usuario_usuario_atendente'] );
+    			$ocorrencia->getUsuarioAtendente()->setNome( $linha ['nome_usuario_usuario_atendente'] );
+    			$ocorrencia->getUsuarioAtendente()->setEmail( $linha ['email_usuario_usuario_atendente'] );
+    			$ocorrencia->getUsuarioAtendente()->setLogin( $linha ['login_usuario_usuario_atendente'] );
+    			$ocorrencia->getUsuarioAtendente()->setSenha( $linha ['senha_usuario_usuario_atendente'] );
+    			$ocorrencia->getUsuarioAtendente()->setNivel( $linha ['nivel_usuario_usuario_atendente'] );
+    			$ocorrencia->getUsuarioAtendente()->setSetor( $linha ['setor_usuario_usuario_atendente'] );
+    			$ocorrencia->getUsuarioIndicado()->setId( $linha ['id_usuario_usuario_indicado'] );
+    			$ocorrencia->getUsuarioIndicado()->setNome( $linha ['nome_usuario_usuario_indicado'] );
+    			$ocorrencia->getUsuarioIndicado()->setEmail( $linha ['email_usuario_usuario_indicado'] );
+    			$ocorrencia->getUsuarioIndicado()->setLogin( $linha ['login_usuario_usuario_indicado'] );
+    			$ocorrencia->getUsuarioIndicado()->setSenha( $linha ['senha_usuario_usuario_indicado'] );
+    			$ocorrencia->getUsuarioIndicado()->setNivel( $linha ['nivel_usuario_usuario_indicado'] );
+    			$ocorrencia->getUsuarioIndicado()->setSetor( $linha ['setor_usuario_usuario_indicado'] );
     			$lista [] = $ocorrencia;
     			    
             }
@@ -1616,106 +1276,116 @@ class OcorrenciaDAO extends DAO {
 		return $lista;
     }
                 
-    public function pesquisaPorObs(Ocorrencia $ocorrencia) {
+    public function pesquisaPorSolucao(Ocorrencia $ocorrencia) {
         $lista = array();
-	    $obs = $ocorrencia->getObs();
+	    $solucao = $ocorrencia->getSolucao();
                 
         $sql = "
 		SELECT
         ocorrencia.id, 
         ocorrencia.id_local, 
-        ocorrencia.id_funcionario, 
-        ocorrencia.desc_problema, 
+        ocorrencia.descricao, 
         ocorrencia.campus, 
-        ocorrencia.etiq_equipamento, 
-        ocorrencia.contato, 
+        ocorrencia.patrimonio, 
         ocorrencia.ramal, 
         ocorrencia.local, 
-        ocorrencia.funcionario, 
         ocorrencia.status, 
-        ocorrencia.obs, 
+        ocorrencia.solucao, 
         ocorrencia.prioridade, 
         ocorrencia.avaliacao, 
         ocorrencia.email, 
-        ocorrencia.fecha_confirmado, 
-        ocorrencia.reaberto, 
-        ocorrencia.dt_abertura, 
-        ocorrencia.dt_atendimento, 
-        ocorrencia.dt_fechamento, 
-        ocorrencia.dt_fecha_confirmado, 
-        ocorrencia.dt_cancelamento, 
-        ocorrencia.id_atendente, 
-        ocorrencia.id_tecnico_indicado, 
-        ocorrencia.dt_liberacao, 
         ocorrencia.anexo, 
-        ocorrencia.dt_espera, 
-        ocorrencia.dt_aguardando_usuario, 
         ocorrencia.local_sala, 
         area_responsavel.id as id_area_responsavel_area_responsavel, 
         area_responsavel.nome as nome_area_responsavel_area_responsavel, 
         area_responsavel.descricao as descricao_area_responsavel_area_responsavel, 
         area_responsavel.email as email_area_responsavel_area_responsavel, 
-        area_responsavel.id_admin as id_admin_area_responsavel_area_responsavel, 
         servico.id as id_servico_servico, 
         servico.nome as nome_servico_servico, 
         servico.descricao as descricao_servico_servico, 
-        servico.ativo as ativo_servico_servico, 
-        servico.tempo_sla as tempo_sla_servico_servico
+        servico.tempo_sla as tempo_sla_servico_servico, 
+        servico.visao as visao_servico_servico, 
+        usuario_cliente.id as id_usuario_usuario_cliente, 
+        usuario_cliente.nome as nome_usuario_usuario_cliente, 
+        usuario_cliente.email as email_usuario_usuario_cliente, 
+        usuario_cliente.login as login_usuario_usuario_cliente, 
+        usuario_cliente.senha as senha_usuario_usuario_cliente, 
+        usuario_cliente.nivel as nivel_usuario_usuario_cliente, 
+        usuario_atendente.id as id_usuario_usuario_atendente, 
+        usuario_atendente.nome as nome_usuario_usuario_atendente, 
+        usuario_atendente.email as email_usuario_usuario_atendente, 
+        usuario_atendente.login as login_usuario_usuario_atendente, 
+        usuario_atendente.senha as senha_usuario_usuario_atendente, 
+        usuario_atendente.nivel as nivel_usuario_usuario_atendente, 
+        usuario_indicado.id as id_usuario_usuario_indicado, 
+        usuario_indicado.nome as nome_usuario_usuario_indicado, 
+        usuario_indicado.email as email_usuario_usuario_indicado, 
+        usuario_indicado.login as login_usuario_usuario_indicado, 
+        usuario_indicado.senha as senha_usuario_usuario_indicado, 
+        usuario_indicado.nivel as nivel_usuario_usuario_indicado
 		FROM ocorrencia
 		INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel
 		INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico
-            WHERE ocorrencia.obs like :obs";
+		INNER JOIN usuario as usuario_cliente ON usuario_cliente.id = ocorrencia.id_usuario_cliente
+		INNER JOIN usuario as usuario_atendente ON usuario_atendente.id = ocorrencia.id_usuario_atendente
+		INNER JOIN usuario as usuario_indicado ON usuario_indicado.id = ocorrencia.id_usuario_indicado
+            WHERE ocorrencia.solucao like :solucao";
                 
         try {
                 
             $stmt = $this->conexao->prepare($sql);
-            $stmt->bindParam(":obs", $obs, PDO::PARAM_STR);
+            $stmt->bindParam(":solucao", $solucao, PDO::PARAM_STR);
             $stmt->execute();
             $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
             foreach ( $result as $linha ) {
                 $ocorrencia = new Ocorrencia();
     	        $ocorrencia->setId( $linha ['id'] );
     	        $ocorrencia->setIdLocal( $linha ['id_local'] );
-    	        $ocorrencia->setIdFuncionario( $linha ['id_funcionario'] );
-    	        $ocorrencia->setDescProblema( $linha ['desc_problema'] );
+    	        $ocorrencia->setDescricao( $linha ['descricao'] );
     	        $ocorrencia->setCampus( $linha ['campus'] );
-    	        $ocorrencia->setEtiqEquipamento( $linha ['etiq_equipamento'] );
-    	        $ocorrencia->setContato( $linha ['contato'] );
+    	        $ocorrencia->setPatrimonio( $linha ['patrimonio'] );
     	        $ocorrencia->setRamal( $linha ['ramal'] );
     	        $ocorrencia->setLocal( $linha ['local'] );
-    	        $ocorrencia->setFuncionario( $linha ['funcionario'] );
     	        $ocorrencia->setStatus( $linha ['status'] );
-    	        $ocorrencia->setObs( $linha ['obs'] );
+    	        $ocorrencia->setSolucao( $linha ['solucao'] );
     	        $ocorrencia->setPrioridade( $linha ['prioridade'] );
     	        $ocorrencia->setAvaliacao( $linha ['avaliacao'] );
     	        $ocorrencia->setEmail( $linha ['email'] );
-    	        $ocorrencia->setFechaConfirmado( $linha ['fecha_confirmado'] );
-    	        $ocorrencia->setReaberto( $linha ['reaberto'] );
-    	        $ocorrencia->setDtAbertura( $linha ['dt_abertura'] );
-    	        $ocorrencia->setDtAtendimento( $linha ['dt_atendimento'] );
-    	        $ocorrencia->setDtFechamento( $linha ['dt_fechamento'] );
-    	        $ocorrencia->setDtFechaConfirmado( $linha ['dt_fecha_confirmado'] );
-    	        $ocorrencia->setDtCancelamento( $linha ['dt_cancelamento'] );
-    	        $ocorrencia->setIdAtendente( $linha ['id_atendente'] );
-    	        $ocorrencia->setIdTecnicoIndicado( $linha ['id_tecnico_indicado'] );
-    	        $ocorrencia->setDtLiberacao( $linha ['dt_liberacao'] );
     	        $ocorrencia->setAnexo( $linha ['anexo'] );
-    	        $ocorrencia->setDtEspera( $linha ['dt_espera'] );
-    	        $ocorrencia->setDtAguardandoUsuario( $linha ['dt_aguardando_usuario'] );
     	        $ocorrencia->setLocalSala( $linha ['local_sala'] );
     			$ocorrencia->getAreaResponsavel()->setId( $linha ['id_area_responsavel_area_responsavel'] );
     			$ocorrencia->getAreaResponsavel()->setNome( $linha ['nome_area_responsavel_area_responsavel'] );
     			$ocorrencia->getAreaResponsavel()->setDescricao( $linha ['descricao_area_responsavel_area_responsavel'] );
     			$ocorrencia->getAreaResponsavel()->setEmail( $linha ['email_area_responsavel_area_responsavel'] );
-    			$ocorrencia->getAreaResponsavel()->setIdAdmin( $linha ['id_admin_area_responsavel_area_responsavel'] );
     			$ocorrencia->getServico()->setId( $linha ['id_servico_servico'] );
     			$ocorrencia->getServico()->setNome( $linha ['nome_servico_servico'] );
     			$ocorrencia->getServico()->setDescricao( $linha ['descricao_servico_servico'] );
-    			$ocorrencia->getServico()->setAtivo( $linha ['ativo_servico_servico'] );
+    			$ocorrencia->getServico()->setTipoAtividade( $linha ['tipo_atividade_servico_servico'] );
     			$ocorrencia->getServico()->setTempoSla( $linha ['tempo_sla_servico_servico'] );
+    			$ocorrencia->getServico()->setVisao( $linha ['visao_servico_servico'] );
     			$ocorrencia->getServico()->setAreaResponsavel( $linha ['area_responsavel_servico_servico'] );
     			$ocorrencia->getServico()->setGrupoServico( $linha ['grupo_servico_servico_servico'] );
-    			$ocorrencia->getServico()->setTipoAtividade( $linha ['tipo_atividade_servico_servico'] );
+    			$ocorrencia->getUsuarioCliente()->setId( $linha ['id_usuario_usuario_cliente'] );
+    			$ocorrencia->getUsuarioCliente()->setNome( $linha ['nome_usuario_usuario_cliente'] );
+    			$ocorrencia->getUsuarioCliente()->setEmail( $linha ['email_usuario_usuario_cliente'] );
+    			$ocorrencia->getUsuarioCliente()->setLogin( $linha ['login_usuario_usuario_cliente'] );
+    			$ocorrencia->getUsuarioCliente()->setSenha( $linha ['senha_usuario_usuario_cliente'] );
+    			$ocorrencia->getUsuarioCliente()->setNivel( $linha ['nivel_usuario_usuario_cliente'] );
+    			$ocorrencia->getUsuarioCliente()->setSetor( $linha ['setor_usuario_usuario_cliente'] );
+    			$ocorrencia->getUsuarioAtendente()->setId( $linha ['id_usuario_usuario_atendente'] );
+    			$ocorrencia->getUsuarioAtendente()->setNome( $linha ['nome_usuario_usuario_atendente'] );
+    			$ocorrencia->getUsuarioAtendente()->setEmail( $linha ['email_usuario_usuario_atendente'] );
+    			$ocorrencia->getUsuarioAtendente()->setLogin( $linha ['login_usuario_usuario_atendente'] );
+    			$ocorrencia->getUsuarioAtendente()->setSenha( $linha ['senha_usuario_usuario_atendente'] );
+    			$ocorrencia->getUsuarioAtendente()->setNivel( $linha ['nivel_usuario_usuario_atendente'] );
+    			$ocorrencia->getUsuarioAtendente()->setSetor( $linha ['setor_usuario_usuario_atendente'] );
+    			$ocorrencia->getUsuarioIndicado()->setId( $linha ['id_usuario_usuario_indicado'] );
+    			$ocorrencia->getUsuarioIndicado()->setNome( $linha ['nome_usuario_usuario_indicado'] );
+    			$ocorrencia->getUsuarioIndicado()->setEmail( $linha ['email_usuario_usuario_indicado'] );
+    			$ocorrencia->getUsuarioIndicado()->setLogin( $linha ['login_usuario_usuario_indicado'] );
+    			$ocorrencia->getUsuarioIndicado()->setSenha( $linha ['senha_usuario_usuario_indicado'] );
+    			$ocorrencia->getUsuarioIndicado()->setNivel( $linha ['nivel_usuario_usuario_indicado'] );
+    			$ocorrencia->getUsuarioIndicado()->setSetor( $linha ['setor_usuario_usuario_indicado'] );
     			$lista [] = $ocorrencia;
     			    
             }
@@ -1735,46 +1405,51 @@ class OcorrenciaDAO extends DAO {
 		SELECT
         ocorrencia.id, 
         ocorrencia.id_local, 
-        ocorrencia.id_funcionario, 
-        ocorrencia.desc_problema, 
+        ocorrencia.descricao, 
         ocorrencia.campus, 
-        ocorrencia.etiq_equipamento, 
-        ocorrencia.contato, 
+        ocorrencia.patrimonio, 
         ocorrencia.ramal, 
         ocorrencia.local, 
-        ocorrencia.funcionario, 
         ocorrencia.status, 
-        ocorrencia.obs, 
+        ocorrencia.solucao, 
         ocorrencia.prioridade, 
         ocorrencia.avaliacao, 
         ocorrencia.email, 
-        ocorrencia.fecha_confirmado, 
-        ocorrencia.reaberto, 
-        ocorrencia.dt_abertura, 
-        ocorrencia.dt_atendimento, 
-        ocorrencia.dt_fechamento, 
-        ocorrencia.dt_fecha_confirmado, 
-        ocorrencia.dt_cancelamento, 
-        ocorrencia.id_atendente, 
-        ocorrencia.id_tecnico_indicado, 
-        ocorrencia.dt_liberacao, 
         ocorrencia.anexo, 
-        ocorrencia.dt_espera, 
-        ocorrencia.dt_aguardando_usuario, 
         ocorrencia.local_sala, 
         area_responsavel.id as id_area_responsavel_area_responsavel, 
         area_responsavel.nome as nome_area_responsavel_area_responsavel, 
         area_responsavel.descricao as descricao_area_responsavel_area_responsavel, 
         area_responsavel.email as email_area_responsavel_area_responsavel, 
-        area_responsavel.id_admin as id_admin_area_responsavel_area_responsavel, 
         servico.id as id_servico_servico, 
         servico.nome as nome_servico_servico, 
         servico.descricao as descricao_servico_servico, 
-        servico.ativo as ativo_servico_servico, 
-        servico.tempo_sla as tempo_sla_servico_servico
+        servico.tempo_sla as tempo_sla_servico_servico, 
+        servico.visao as visao_servico_servico, 
+        usuario_cliente.id as id_usuario_usuario_cliente, 
+        usuario_cliente.nome as nome_usuario_usuario_cliente, 
+        usuario_cliente.email as email_usuario_usuario_cliente, 
+        usuario_cliente.login as login_usuario_usuario_cliente, 
+        usuario_cliente.senha as senha_usuario_usuario_cliente, 
+        usuario_cliente.nivel as nivel_usuario_usuario_cliente, 
+        usuario_atendente.id as id_usuario_usuario_atendente, 
+        usuario_atendente.nome as nome_usuario_usuario_atendente, 
+        usuario_atendente.email as email_usuario_usuario_atendente, 
+        usuario_atendente.login as login_usuario_usuario_atendente, 
+        usuario_atendente.senha as senha_usuario_usuario_atendente, 
+        usuario_atendente.nivel as nivel_usuario_usuario_atendente, 
+        usuario_indicado.id as id_usuario_usuario_indicado, 
+        usuario_indicado.nome as nome_usuario_usuario_indicado, 
+        usuario_indicado.email as email_usuario_usuario_indicado, 
+        usuario_indicado.login as login_usuario_usuario_indicado, 
+        usuario_indicado.senha as senha_usuario_usuario_indicado, 
+        usuario_indicado.nivel as nivel_usuario_usuario_indicado
 		FROM ocorrencia
 		INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel
 		INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico
+		INNER JOIN usuario as usuario_cliente ON usuario_cliente.id = ocorrencia.id_usuario_cliente
+		INNER JOIN usuario as usuario_atendente ON usuario_atendente.id = ocorrencia.id_usuario_atendente
+		INNER JOIN usuario as usuario_indicado ON usuario_indicado.id = ocorrencia.id_usuario_indicado
             WHERE ocorrencia.prioridade like :prioridade";
                 
         try {
@@ -1787,46 +1462,51 @@ class OcorrenciaDAO extends DAO {
                 $ocorrencia = new Ocorrencia();
     	        $ocorrencia->setId( $linha ['id'] );
     	        $ocorrencia->setIdLocal( $linha ['id_local'] );
-    	        $ocorrencia->setIdFuncionario( $linha ['id_funcionario'] );
-    	        $ocorrencia->setDescProblema( $linha ['desc_problema'] );
+    	        $ocorrencia->setDescricao( $linha ['descricao'] );
     	        $ocorrencia->setCampus( $linha ['campus'] );
-    	        $ocorrencia->setEtiqEquipamento( $linha ['etiq_equipamento'] );
-    	        $ocorrencia->setContato( $linha ['contato'] );
+    	        $ocorrencia->setPatrimonio( $linha ['patrimonio'] );
     	        $ocorrencia->setRamal( $linha ['ramal'] );
     	        $ocorrencia->setLocal( $linha ['local'] );
-    	        $ocorrencia->setFuncionario( $linha ['funcionario'] );
     	        $ocorrencia->setStatus( $linha ['status'] );
-    	        $ocorrencia->setObs( $linha ['obs'] );
+    	        $ocorrencia->setSolucao( $linha ['solucao'] );
     	        $ocorrencia->setPrioridade( $linha ['prioridade'] );
     	        $ocorrencia->setAvaliacao( $linha ['avaliacao'] );
     	        $ocorrencia->setEmail( $linha ['email'] );
-    	        $ocorrencia->setFechaConfirmado( $linha ['fecha_confirmado'] );
-    	        $ocorrencia->setReaberto( $linha ['reaberto'] );
-    	        $ocorrencia->setDtAbertura( $linha ['dt_abertura'] );
-    	        $ocorrencia->setDtAtendimento( $linha ['dt_atendimento'] );
-    	        $ocorrencia->setDtFechamento( $linha ['dt_fechamento'] );
-    	        $ocorrencia->setDtFechaConfirmado( $linha ['dt_fecha_confirmado'] );
-    	        $ocorrencia->setDtCancelamento( $linha ['dt_cancelamento'] );
-    	        $ocorrencia->setIdAtendente( $linha ['id_atendente'] );
-    	        $ocorrencia->setIdTecnicoIndicado( $linha ['id_tecnico_indicado'] );
-    	        $ocorrencia->setDtLiberacao( $linha ['dt_liberacao'] );
     	        $ocorrencia->setAnexo( $linha ['anexo'] );
-    	        $ocorrencia->setDtEspera( $linha ['dt_espera'] );
-    	        $ocorrencia->setDtAguardandoUsuario( $linha ['dt_aguardando_usuario'] );
     	        $ocorrencia->setLocalSala( $linha ['local_sala'] );
     			$ocorrencia->getAreaResponsavel()->setId( $linha ['id_area_responsavel_area_responsavel'] );
     			$ocorrencia->getAreaResponsavel()->setNome( $linha ['nome_area_responsavel_area_responsavel'] );
     			$ocorrencia->getAreaResponsavel()->setDescricao( $linha ['descricao_area_responsavel_area_responsavel'] );
     			$ocorrencia->getAreaResponsavel()->setEmail( $linha ['email_area_responsavel_area_responsavel'] );
-    			$ocorrencia->getAreaResponsavel()->setIdAdmin( $linha ['id_admin_area_responsavel_area_responsavel'] );
     			$ocorrencia->getServico()->setId( $linha ['id_servico_servico'] );
     			$ocorrencia->getServico()->setNome( $linha ['nome_servico_servico'] );
     			$ocorrencia->getServico()->setDescricao( $linha ['descricao_servico_servico'] );
-    			$ocorrencia->getServico()->setAtivo( $linha ['ativo_servico_servico'] );
+    			$ocorrencia->getServico()->setTipoAtividade( $linha ['tipo_atividade_servico_servico'] );
     			$ocorrencia->getServico()->setTempoSla( $linha ['tempo_sla_servico_servico'] );
+    			$ocorrencia->getServico()->setVisao( $linha ['visao_servico_servico'] );
     			$ocorrencia->getServico()->setAreaResponsavel( $linha ['area_responsavel_servico_servico'] );
     			$ocorrencia->getServico()->setGrupoServico( $linha ['grupo_servico_servico_servico'] );
-    			$ocorrencia->getServico()->setTipoAtividade( $linha ['tipo_atividade_servico_servico'] );
+    			$ocorrencia->getUsuarioCliente()->setId( $linha ['id_usuario_usuario_cliente'] );
+    			$ocorrencia->getUsuarioCliente()->setNome( $linha ['nome_usuario_usuario_cliente'] );
+    			$ocorrencia->getUsuarioCliente()->setEmail( $linha ['email_usuario_usuario_cliente'] );
+    			$ocorrencia->getUsuarioCliente()->setLogin( $linha ['login_usuario_usuario_cliente'] );
+    			$ocorrencia->getUsuarioCliente()->setSenha( $linha ['senha_usuario_usuario_cliente'] );
+    			$ocorrencia->getUsuarioCliente()->setNivel( $linha ['nivel_usuario_usuario_cliente'] );
+    			$ocorrencia->getUsuarioCliente()->setSetor( $linha ['setor_usuario_usuario_cliente'] );
+    			$ocorrencia->getUsuarioAtendente()->setId( $linha ['id_usuario_usuario_atendente'] );
+    			$ocorrencia->getUsuarioAtendente()->setNome( $linha ['nome_usuario_usuario_atendente'] );
+    			$ocorrencia->getUsuarioAtendente()->setEmail( $linha ['email_usuario_usuario_atendente'] );
+    			$ocorrencia->getUsuarioAtendente()->setLogin( $linha ['login_usuario_usuario_atendente'] );
+    			$ocorrencia->getUsuarioAtendente()->setSenha( $linha ['senha_usuario_usuario_atendente'] );
+    			$ocorrencia->getUsuarioAtendente()->setNivel( $linha ['nivel_usuario_usuario_atendente'] );
+    			$ocorrencia->getUsuarioAtendente()->setSetor( $linha ['setor_usuario_usuario_atendente'] );
+    			$ocorrencia->getUsuarioIndicado()->setId( $linha ['id_usuario_usuario_indicado'] );
+    			$ocorrencia->getUsuarioIndicado()->setNome( $linha ['nome_usuario_usuario_indicado'] );
+    			$ocorrencia->getUsuarioIndicado()->setEmail( $linha ['email_usuario_usuario_indicado'] );
+    			$ocorrencia->getUsuarioIndicado()->setLogin( $linha ['login_usuario_usuario_indicado'] );
+    			$ocorrencia->getUsuarioIndicado()->setSenha( $linha ['senha_usuario_usuario_indicado'] );
+    			$ocorrencia->getUsuarioIndicado()->setNivel( $linha ['nivel_usuario_usuario_indicado'] );
+    			$ocorrencia->getUsuarioIndicado()->setSetor( $linha ['setor_usuario_usuario_indicado'] );
     			$lista [] = $ocorrencia;
     			    
             }
@@ -1846,46 +1526,51 @@ class OcorrenciaDAO extends DAO {
 		SELECT
         ocorrencia.id, 
         ocorrencia.id_local, 
-        ocorrencia.id_funcionario, 
-        ocorrencia.desc_problema, 
+        ocorrencia.descricao, 
         ocorrencia.campus, 
-        ocorrencia.etiq_equipamento, 
-        ocorrencia.contato, 
+        ocorrencia.patrimonio, 
         ocorrencia.ramal, 
         ocorrencia.local, 
-        ocorrencia.funcionario, 
         ocorrencia.status, 
-        ocorrencia.obs, 
+        ocorrencia.solucao, 
         ocorrencia.prioridade, 
         ocorrencia.avaliacao, 
         ocorrencia.email, 
-        ocorrencia.fecha_confirmado, 
-        ocorrencia.reaberto, 
-        ocorrencia.dt_abertura, 
-        ocorrencia.dt_atendimento, 
-        ocorrencia.dt_fechamento, 
-        ocorrencia.dt_fecha_confirmado, 
-        ocorrencia.dt_cancelamento, 
-        ocorrencia.id_atendente, 
-        ocorrencia.id_tecnico_indicado, 
-        ocorrencia.dt_liberacao, 
         ocorrencia.anexo, 
-        ocorrencia.dt_espera, 
-        ocorrencia.dt_aguardando_usuario, 
         ocorrencia.local_sala, 
         area_responsavel.id as id_area_responsavel_area_responsavel, 
         area_responsavel.nome as nome_area_responsavel_area_responsavel, 
         area_responsavel.descricao as descricao_area_responsavel_area_responsavel, 
         area_responsavel.email as email_area_responsavel_area_responsavel, 
-        area_responsavel.id_admin as id_admin_area_responsavel_area_responsavel, 
         servico.id as id_servico_servico, 
         servico.nome as nome_servico_servico, 
         servico.descricao as descricao_servico_servico, 
-        servico.ativo as ativo_servico_servico, 
-        servico.tempo_sla as tempo_sla_servico_servico
+        servico.tempo_sla as tempo_sla_servico_servico, 
+        servico.visao as visao_servico_servico, 
+        usuario_cliente.id as id_usuario_usuario_cliente, 
+        usuario_cliente.nome as nome_usuario_usuario_cliente, 
+        usuario_cliente.email as email_usuario_usuario_cliente, 
+        usuario_cliente.login as login_usuario_usuario_cliente, 
+        usuario_cliente.senha as senha_usuario_usuario_cliente, 
+        usuario_cliente.nivel as nivel_usuario_usuario_cliente, 
+        usuario_atendente.id as id_usuario_usuario_atendente, 
+        usuario_atendente.nome as nome_usuario_usuario_atendente, 
+        usuario_atendente.email as email_usuario_usuario_atendente, 
+        usuario_atendente.login as login_usuario_usuario_atendente, 
+        usuario_atendente.senha as senha_usuario_usuario_atendente, 
+        usuario_atendente.nivel as nivel_usuario_usuario_atendente, 
+        usuario_indicado.id as id_usuario_usuario_indicado, 
+        usuario_indicado.nome as nome_usuario_usuario_indicado, 
+        usuario_indicado.email as email_usuario_usuario_indicado, 
+        usuario_indicado.login as login_usuario_usuario_indicado, 
+        usuario_indicado.senha as senha_usuario_usuario_indicado, 
+        usuario_indicado.nivel as nivel_usuario_usuario_indicado
 		FROM ocorrencia
 		INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel
 		INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico
+		INNER JOIN usuario as usuario_cliente ON usuario_cliente.id = ocorrencia.id_usuario_cliente
+		INNER JOIN usuario as usuario_atendente ON usuario_atendente.id = ocorrencia.id_usuario_atendente
+		INNER JOIN usuario as usuario_indicado ON usuario_indicado.id = ocorrencia.id_usuario_indicado
             WHERE ocorrencia.avaliacao like :avaliacao";
                 
         try {
@@ -1898,46 +1583,51 @@ class OcorrenciaDAO extends DAO {
                 $ocorrencia = new Ocorrencia();
     	        $ocorrencia->setId( $linha ['id'] );
     	        $ocorrencia->setIdLocal( $linha ['id_local'] );
-    	        $ocorrencia->setIdFuncionario( $linha ['id_funcionario'] );
-    	        $ocorrencia->setDescProblema( $linha ['desc_problema'] );
+    	        $ocorrencia->setDescricao( $linha ['descricao'] );
     	        $ocorrencia->setCampus( $linha ['campus'] );
-    	        $ocorrencia->setEtiqEquipamento( $linha ['etiq_equipamento'] );
-    	        $ocorrencia->setContato( $linha ['contato'] );
+    	        $ocorrencia->setPatrimonio( $linha ['patrimonio'] );
     	        $ocorrencia->setRamal( $linha ['ramal'] );
     	        $ocorrencia->setLocal( $linha ['local'] );
-    	        $ocorrencia->setFuncionario( $linha ['funcionario'] );
     	        $ocorrencia->setStatus( $linha ['status'] );
-    	        $ocorrencia->setObs( $linha ['obs'] );
+    	        $ocorrencia->setSolucao( $linha ['solucao'] );
     	        $ocorrencia->setPrioridade( $linha ['prioridade'] );
     	        $ocorrencia->setAvaliacao( $linha ['avaliacao'] );
     	        $ocorrencia->setEmail( $linha ['email'] );
-    	        $ocorrencia->setFechaConfirmado( $linha ['fecha_confirmado'] );
-    	        $ocorrencia->setReaberto( $linha ['reaberto'] );
-    	        $ocorrencia->setDtAbertura( $linha ['dt_abertura'] );
-    	        $ocorrencia->setDtAtendimento( $linha ['dt_atendimento'] );
-    	        $ocorrencia->setDtFechamento( $linha ['dt_fechamento'] );
-    	        $ocorrencia->setDtFechaConfirmado( $linha ['dt_fecha_confirmado'] );
-    	        $ocorrencia->setDtCancelamento( $linha ['dt_cancelamento'] );
-    	        $ocorrencia->setIdAtendente( $linha ['id_atendente'] );
-    	        $ocorrencia->setIdTecnicoIndicado( $linha ['id_tecnico_indicado'] );
-    	        $ocorrencia->setDtLiberacao( $linha ['dt_liberacao'] );
     	        $ocorrencia->setAnexo( $linha ['anexo'] );
-    	        $ocorrencia->setDtEspera( $linha ['dt_espera'] );
-    	        $ocorrencia->setDtAguardandoUsuario( $linha ['dt_aguardando_usuario'] );
     	        $ocorrencia->setLocalSala( $linha ['local_sala'] );
     			$ocorrencia->getAreaResponsavel()->setId( $linha ['id_area_responsavel_area_responsavel'] );
     			$ocorrencia->getAreaResponsavel()->setNome( $linha ['nome_area_responsavel_area_responsavel'] );
     			$ocorrencia->getAreaResponsavel()->setDescricao( $linha ['descricao_area_responsavel_area_responsavel'] );
     			$ocorrencia->getAreaResponsavel()->setEmail( $linha ['email_area_responsavel_area_responsavel'] );
-    			$ocorrencia->getAreaResponsavel()->setIdAdmin( $linha ['id_admin_area_responsavel_area_responsavel'] );
     			$ocorrencia->getServico()->setId( $linha ['id_servico_servico'] );
     			$ocorrencia->getServico()->setNome( $linha ['nome_servico_servico'] );
     			$ocorrencia->getServico()->setDescricao( $linha ['descricao_servico_servico'] );
-    			$ocorrencia->getServico()->setAtivo( $linha ['ativo_servico_servico'] );
+    			$ocorrencia->getServico()->setTipoAtividade( $linha ['tipo_atividade_servico_servico'] );
     			$ocorrencia->getServico()->setTempoSla( $linha ['tempo_sla_servico_servico'] );
+    			$ocorrencia->getServico()->setVisao( $linha ['visao_servico_servico'] );
     			$ocorrencia->getServico()->setAreaResponsavel( $linha ['area_responsavel_servico_servico'] );
     			$ocorrencia->getServico()->setGrupoServico( $linha ['grupo_servico_servico_servico'] );
-    			$ocorrencia->getServico()->setTipoAtividade( $linha ['tipo_atividade_servico_servico'] );
+    			$ocorrencia->getUsuarioCliente()->setId( $linha ['id_usuario_usuario_cliente'] );
+    			$ocorrencia->getUsuarioCliente()->setNome( $linha ['nome_usuario_usuario_cliente'] );
+    			$ocorrencia->getUsuarioCliente()->setEmail( $linha ['email_usuario_usuario_cliente'] );
+    			$ocorrencia->getUsuarioCliente()->setLogin( $linha ['login_usuario_usuario_cliente'] );
+    			$ocorrencia->getUsuarioCliente()->setSenha( $linha ['senha_usuario_usuario_cliente'] );
+    			$ocorrencia->getUsuarioCliente()->setNivel( $linha ['nivel_usuario_usuario_cliente'] );
+    			$ocorrencia->getUsuarioCliente()->setSetor( $linha ['setor_usuario_usuario_cliente'] );
+    			$ocorrencia->getUsuarioAtendente()->setId( $linha ['id_usuario_usuario_atendente'] );
+    			$ocorrencia->getUsuarioAtendente()->setNome( $linha ['nome_usuario_usuario_atendente'] );
+    			$ocorrencia->getUsuarioAtendente()->setEmail( $linha ['email_usuario_usuario_atendente'] );
+    			$ocorrencia->getUsuarioAtendente()->setLogin( $linha ['login_usuario_usuario_atendente'] );
+    			$ocorrencia->getUsuarioAtendente()->setSenha( $linha ['senha_usuario_usuario_atendente'] );
+    			$ocorrencia->getUsuarioAtendente()->setNivel( $linha ['nivel_usuario_usuario_atendente'] );
+    			$ocorrencia->getUsuarioAtendente()->setSetor( $linha ['setor_usuario_usuario_atendente'] );
+    			$ocorrencia->getUsuarioIndicado()->setId( $linha ['id_usuario_usuario_indicado'] );
+    			$ocorrencia->getUsuarioIndicado()->setNome( $linha ['nome_usuario_usuario_indicado'] );
+    			$ocorrencia->getUsuarioIndicado()->setEmail( $linha ['email_usuario_usuario_indicado'] );
+    			$ocorrencia->getUsuarioIndicado()->setLogin( $linha ['login_usuario_usuario_indicado'] );
+    			$ocorrencia->getUsuarioIndicado()->setSenha( $linha ['senha_usuario_usuario_indicado'] );
+    			$ocorrencia->getUsuarioIndicado()->setNivel( $linha ['nivel_usuario_usuario_indicado'] );
+    			$ocorrencia->getUsuarioIndicado()->setSetor( $linha ['setor_usuario_usuario_indicado'] );
     			$lista [] = $ocorrencia;
     			    
             }
@@ -1957,46 +1647,51 @@ class OcorrenciaDAO extends DAO {
 		SELECT
         ocorrencia.id, 
         ocorrencia.id_local, 
-        ocorrencia.id_funcionario, 
-        ocorrencia.desc_problema, 
+        ocorrencia.descricao, 
         ocorrencia.campus, 
-        ocorrencia.etiq_equipamento, 
-        ocorrencia.contato, 
+        ocorrencia.patrimonio, 
         ocorrencia.ramal, 
         ocorrencia.local, 
-        ocorrencia.funcionario, 
         ocorrencia.status, 
-        ocorrencia.obs, 
+        ocorrencia.solucao, 
         ocorrencia.prioridade, 
         ocorrencia.avaliacao, 
         ocorrencia.email, 
-        ocorrencia.fecha_confirmado, 
-        ocorrencia.reaberto, 
-        ocorrencia.dt_abertura, 
-        ocorrencia.dt_atendimento, 
-        ocorrencia.dt_fechamento, 
-        ocorrencia.dt_fecha_confirmado, 
-        ocorrencia.dt_cancelamento, 
-        ocorrencia.id_atendente, 
-        ocorrencia.id_tecnico_indicado, 
-        ocorrencia.dt_liberacao, 
         ocorrencia.anexo, 
-        ocorrencia.dt_espera, 
-        ocorrencia.dt_aguardando_usuario, 
         ocorrencia.local_sala, 
         area_responsavel.id as id_area_responsavel_area_responsavel, 
         area_responsavel.nome as nome_area_responsavel_area_responsavel, 
         area_responsavel.descricao as descricao_area_responsavel_area_responsavel, 
         area_responsavel.email as email_area_responsavel_area_responsavel, 
-        area_responsavel.id_admin as id_admin_area_responsavel_area_responsavel, 
         servico.id as id_servico_servico, 
         servico.nome as nome_servico_servico, 
         servico.descricao as descricao_servico_servico, 
-        servico.ativo as ativo_servico_servico, 
-        servico.tempo_sla as tempo_sla_servico_servico
+        servico.tempo_sla as tempo_sla_servico_servico, 
+        servico.visao as visao_servico_servico, 
+        usuario_cliente.id as id_usuario_usuario_cliente, 
+        usuario_cliente.nome as nome_usuario_usuario_cliente, 
+        usuario_cliente.email as email_usuario_usuario_cliente, 
+        usuario_cliente.login as login_usuario_usuario_cliente, 
+        usuario_cliente.senha as senha_usuario_usuario_cliente, 
+        usuario_cliente.nivel as nivel_usuario_usuario_cliente, 
+        usuario_atendente.id as id_usuario_usuario_atendente, 
+        usuario_atendente.nome as nome_usuario_usuario_atendente, 
+        usuario_atendente.email as email_usuario_usuario_atendente, 
+        usuario_atendente.login as login_usuario_usuario_atendente, 
+        usuario_atendente.senha as senha_usuario_usuario_atendente, 
+        usuario_atendente.nivel as nivel_usuario_usuario_atendente, 
+        usuario_indicado.id as id_usuario_usuario_indicado, 
+        usuario_indicado.nome as nome_usuario_usuario_indicado, 
+        usuario_indicado.email as email_usuario_usuario_indicado, 
+        usuario_indicado.login as login_usuario_usuario_indicado, 
+        usuario_indicado.senha as senha_usuario_usuario_indicado, 
+        usuario_indicado.nivel as nivel_usuario_usuario_indicado
 		FROM ocorrencia
 		INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel
 		INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico
+		INNER JOIN usuario as usuario_cliente ON usuario_cliente.id = ocorrencia.id_usuario_cliente
+		INNER JOIN usuario as usuario_atendente ON usuario_atendente.id = ocorrencia.id_usuario_atendente
+		INNER JOIN usuario as usuario_indicado ON usuario_indicado.id = ocorrencia.id_usuario_indicado
             WHERE ocorrencia.email like :email";
                 
         try {
@@ -2009,1156 +1704,51 @@ class OcorrenciaDAO extends DAO {
                 $ocorrencia = new Ocorrencia();
     	        $ocorrencia->setId( $linha ['id'] );
     	        $ocorrencia->setIdLocal( $linha ['id_local'] );
-    	        $ocorrencia->setIdFuncionario( $linha ['id_funcionario'] );
-    	        $ocorrencia->setDescProblema( $linha ['desc_problema'] );
+    	        $ocorrencia->setDescricao( $linha ['descricao'] );
     	        $ocorrencia->setCampus( $linha ['campus'] );
-    	        $ocorrencia->setEtiqEquipamento( $linha ['etiq_equipamento'] );
-    	        $ocorrencia->setContato( $linha ['contato'] );
+    	        $ocorrencia->setPatrimonio( $linha ['patrimonio'] );
     	        $ocorrencia->setRamal( $linha ['ramal'] );
     	        $ocorrencia->setLocal( $linha ['local'] );
-    	        $ocorrencia->setFuncionario( $linha ['funcionario'] );
     	        $ocorrencia->setStatus( $linha ['status'] );
-    	        $ocorrencia->setObs( $linha ['obs'] );
+    	        $ocorrencia->setSolucao( $linha ['solucao'] );
     	        $ocorrencia->setPrioridade( $linha ['prioridade'] );
     	        $ocorrencia->setAvaliacao( $linha ['avaliacao'] );
     	        $ocorrencia->setEmail( $linha ['email'] );
-    	        $ocorrencia->setFechaConfirmado( $linha ['fecha_confirmado'] );
-    	        $ocorrencia->setReaberto( $linha ['reaberto'] );
-    	        $ocorrencia->setDtAbertura( $linha ['dt_abertura'] );
-    	        $ocorrencia->setDtAtendimento( $linha ['dt_atendimento'] );
-    	        $ocorrencia->setDtFechamento( $linha ['dt_fechamento'] );
-    	        $ocorrencia->setDtFechaConfirmado( $linha ['dt_fecha_confirmado'] );
-    	        $ocorrencia->setDtCancelamento( $linha ['dt_cancelamento'] );
-    	        $ocorrencia->setIdAtendente( $linha ['id_atendente'] );
-    	        $ocorrencia->setIdTecnicoIndicado( $linha ['id_tecnico_indicado'] );
-    	        $ocorrencia->setDtLiberacao( $linha ['dt_liberacao'] );
     	        $ocorrencia->setAnexo( $linha ['anexo'] );
-    	        $ocorrencia->setDtEspera( $linha ['dt_espera'] );
-    	        $ocorrencia->setDtAguardandoUsuario( $linha ['dt_aguardando_usuario'] );
     	        $ocorrencia->setLocalSala( $linha ['local_sala'] );
     			$ocorrencia->getAreaResponsavel()->setId( $linha ['id_area_responsavel_area_responsavel'] );
     			$ocorrencia->getAreaResponsavel()->setNome( $linha ['nome_area_responsavel_area_responsavel'] );
     			$ocorrencia->getAreaResponsavel()->setDescricao( $linha ['descricao_area_responsavel_area_responsavel'] );
     			$ocorrencia->getAreaResponsavel()->setEmail( $linha ['email_area_responsavel_area_responsavel'] );
-    			$ocorrencia->getAreaResponsavel()->setIdAdmin( $linha ['id_admin_area_responsavel_area_responsavel'] );
     			$ocorrencia->getServico()->setId( $linha ['id_servico_servico'] );
     			$ocorrencia->getServico()->setNome( $linha ['nome_servico_servico'] );
     			$ocorrencia->getServico()->setDescricao( $linha ['descricao_servico_servico'] );
-    			$ocorrencia->getServico()->setAtivo( $linha ['ativo_servico_servico'] );
+    			$ocorrencia->getServico()->setTipoAtividade( $linha ['tipo_atividade_servico_servico'] );
     			$ocorrencia->getServico()->setTempoSla( $linha ['tempo_sla_servico_servico'] );
+    			$ocorrencia->getServico()->setVisao( $linha ['visao_servico_servico'] );
     			$ocorrencia->getServico()->setAreaResponsavel( $linha ['area_responsavel_servico_servico'] );
     			$ocorrencia->getServico()->setGrupoServico( $linha ['grupo_servico_servico_servico'] );
-    			$ocorrencia->getServico()->setTipoAtividade( $linha ['tipo_atividade_servico_servico'] );
-    			$lista [] = $ocorrencia;
-    			    
-            }
-    			    
-        } catch(PDOException $e) {
-            echo $e->getMessage();
-    			    
-        }
-		return $lista;
-    }
-                
-    public function pesquisaPorFechaConfirmado(Ocorrencia $ocorrencia) {
-        $lista = array();
-	    $fechaConfirmado = $ocorrencia->getFechaConfirmado();
-                
-        $sql = "
-		SELECT
-        ocorrencia.id, 
-        ocorrencia.id_local, 
-        ocorrencia.id_funcionario, 
-        ocorrencia.desc_problema, 
-        ocorrencia.campus, 
-        ocorrencia.etiq_equipamento, 
-        ocorrencia.contato, 
-        ocorrencia.ramal, 
-        ocorrencia.local, 
-        ocorrencia.funcionario, 
-        ocorrencia.status, 
-        ocorrencia.obs, 
-        ocorrencia.prioridade, 
-        ocorrencia.avaliacao, 
-        ocorrencia.email, 
-        ocorrencia.fecha_confirmado, 
-        ocorrencia.reaberto, 
-        ocorrencia.dt_abertura, 
-        ocorrencia.dt_atendimento, 
-        ocorrencia.dt_fechamento, 
-        ocorrencia.dt_fecha_confirmado, 
-        ocorrencia.dt_cancelamento, 
-        ocorrencia.id_atendente, 
-        ocorrencia.id_tecnico_indicado, 
-        ocorrencia.dt_liberacao, 
-        ocorrencia.anexo, 
-        ocorrencia.dt_espera, 
-        ocorrencia.dt_aguardando_usuario, 
-        ocorrencia.local_sala, 
-        area_responsavel.id as id_area_responsavel_area_responsavel, 
-        area_responsavel.nome as nome_area_responsavel_area_responsavel, 
-        area_responsavel.descricao as descricao_area_responsavel_area_responsavel, 
-        area_responsavel.email as email_area_responsavel_area_responsavel, 
-        area_responsavel.id_admin as id_admin_area_responsavel_area_responsavel, 
-        servico.id as id_servico_servico, 
-        servico.nome as nome_servico_servico, 
-        servico.descricao as descricao_servico_servico, 
-        servico.ativo as ativo_servico_servico, 
-        servico.tempo_sla as tempo_sla_servico_servico
-		FROM ocorrencia
-		INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel
-		INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico
-            WHERE ocorrencia.fecha_confirmado like :fechaConfirmado";
-                
-        try {
-                
-            $stmt = $this->conexao->prepare($sql);
-            $stmt->bindParam(":fechaConfirmado", $fechaConfirmado, PDO::PARAM_STR);
-            $stmt->execute();
-            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            foreach ( $result as $linha ) {
-                $ocorrencia = new Ocorrencia();
-    	        $ocorrencia->setId( $linha ['id'] );
-    	        $ocorrencia->setIdLocal( $linha ['id_local'] );
-    	        $ocorrencia->setIdFuncionario( $linha ['id_funcionario'] );
-    	        $ocorrencia->setDescProblema( $linha ['desc_problema'] );
-    	        $ocorrencia->setCampus( $linha ['campus'] );
-    	        $ocorrencia->setEtiqEquipamento( $linha ['etiq_equipamento'] );
-    	        $ocorrencia->setContato( $linha ['contato'] );
-    	        $ocorrencia->setRamal( $linha ['ramal'] );
-    	        $ocorrencia->setLocal( $linha ['local'] );
-    	        $ocorrencia->setFuncionario( $linha ['funcionario'] );
-    	        $ocorrencia->setStatus( $linha ['status'] );
-    	        $ocorrencia->setObs( $linha ['obs'] );
-    	        $ocorrencia->setPrioridade( $linha ['prioridade'] );
-    	        $ocorrencia->setAvaliacao( $linha ['avaliacao'] );
-    	        $ocorrencia->setEmail( $linha ['email'] );
-    	        $ocorrencia->setFechaConfirmado( $linha ['fecha_confirmado'] );
-    	        $ocorrencia->setReaberto( $linha ['reaberto'] );
-    	        $ocorrencia->setDtAbertura( $linha ['dt_abertura'] );
-    	        $ocorrencia->setDtAtendimento( $linha ['dt_atendimento'] );
-    	        $ocorrencia->setDtFechamento( $linha ['dt_fechamento'] );
-    	        $ocorrencia->setDtFechaConfirmado( $linha ['dt_fecha_confirmado'] );
-    	        $ocorrencia->setDtCancelamento( $linha ['dt_cancelamento'] );
-    	        $ocorrencia->setIdAtendente( $linha ['id_atendente'] );
-    	        $ocorrencia->setIdTecnicoIndicado( $linha ['id_tecnico_indicado'] );
-    	        $ocorrencia->setDtLiberacao( $linha ['dt_liberacao'] );
-    	        $ocorrencia->setAnexo( $linha ['anexo'] );
-    	        $ocorrencia->setDtEspera( $linha ['dt_espera'] );
-    	        $ocorrencia->setDtAguardandoUsuario( $linha ['dt_aguardando_usuario'] );
-    	        $ocorrencia->setLocalSala( $linha ['local_sala'] );
-    			$ocorrencia->getAreaResponsavel()->setId( $linha ['id_area_responsavel_area_responsavel'] );
-    			$ocorrencia->getAreaResponsavel()->setNome( $linha ['nome_area_responsavel_area_responsavel'] );
-    			$ocorrencia->getAreaResponsavel()->setDescricao( $linha ['descricao_area_responsavel_area_responsavel'] );
-    			$ocorrencia->getAreaResponsavel()->setEmail( $linha ['email_area_responsavel_area_responsavel'] );
-    			$ocorrencia->getAreaResponsavel()->setIdAdmin( $linha ['id_admin_area_responsavel_area_responsavel'] );
-    			$ocorrencia->getServico()->setId( $linha ['id_servico_servico'] );
-    			$ocorrencia->getServico()->setNome( $linha ['nome_servico_servico'] );
-    			$ocorrencia->getServico()->setDescricao( $linha ['descricao_servico_servico'] );
-    			$ocorrencia->getServico()->setAtivo( $linha ['ativo_servico_servico'] );
-    			$ocorrencia->getServico()->setTempoSla( $linha ['tempo_sla_servico_servico'] );
-    			$ocorrencia->getServico()->setAreaResponsavel( $linha ['area_responsavel_servico_servico'] );
-    			$ocorrencia->getServico()->setGrupoServico( $linha ['grupo_servico_servico_servico'] );
-    			$ocorrencia->getServico()->setTipoAtividade( $linha ['tipo_atividade_servico_servico'] );
-    			$lista [] = $ocorrencia;
-    			    
-            }
-    			    
-        } catch(PDOException $e) {
-            echo $e->getMessage();
-    			    
-        }
-		return $lista;
-    }
-                
-    public function pesquisaPorReaberto(Ocorrencia $ocorrencia) {
-        $lista = array();
-	    $reaberto = $ocorrencia->getReaberto();
-                
-        $sql = "
-		SELECT
-        ocorrencia.id, 
-        ocorrencia.id_local, 
-        ocorrencia.id_funcionario, 
-        ocorrencia.desc_problema, 
-        ocorrencia.campus, 
-        ocorrencia.etiq_equipamento, 
-        ocorrencia.contato, 
-        ocorrencia.ramal, 
-        ocorrencia.local, 
-        ocorrencia.funcionario, 
-        ocorrencia.status, 
-        ocorrencia.obs, 
-        ocorrencia.prioridade, 
-        ocorrencia.avaliacao, 
-        ocorrencia.email, 
-        ocorrencia.fecha_confirmado, 
-        ocorrencia.reaberto, 
-        ocorrencia.dt_abertura, 
-        ocorrencia.dt_atendimento, 
-        ocorrencia.dt_fechamento, 
-        ocorrencia.dt_fecha_confirmado, 
-        ocorrencia.dt_cancelamento, 
-        ocorrencia.id_atendente, 
-        ocorrencia.id_tecnico_indicado, 
-        ocorrencia.dt_liberacao, 
-        ocorrencia.anexo, 
-        ocorrencia.dt_espera, 
-        ocorrencia.dt_aguardando_usuario, 
-        ocorrencia.local_sala, 
-        area_responsavel.id as id_area_responsavel_area_responsavel, 
-        area_responsavel.nome as nome_area_responsavel_area_responsavel, 
-        area_responsavel.descricao as descricao_area_responsavel_area_responsavel, 
-        area_responsavel.email as email_area_responsavel_area_responsavel, 
-        area_responsavel.id_admin as id_admin_area_responsavel_area_responsavel, 
-        servico.id as id_servico_servico, 
-        servico.nome as nome_servico_servico, 
-        servico.descricao as descricao_servico_servico, 
-        servico.ativo as ativo_servico_servico, 
-        servico.tempo_sla as tempo_sla_servico_servico
-		FROM ocorrencia
-		INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel
-		INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico
-            WHERE ocorrencia.reaberto like :reaberto";
-                
-        try {
-                
-            $stmt = $this->conexao->prepare($sql);
-            $stmt->bindParam(":reaberto", $reaberto, PDO::PARAM_STR);
-            $stmt->execute();
-            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            foreach ( $result as $linha ) {
-                $ocorrencia = new Ocorrencia();
-    	        $ocorrencia->setId( $linha ['id'] );
-    	        $ocorrencia->setIdLocal( $linha ['id_local'] );
-    	        $ocorrencia->setIdFuncionario( $linha ['id_funcionario'] );
-    	        $ocorrencia->setDescProblema( $linha ['desc_problema'] );
-    	        $ocorrencia->setCampus( $linha ['campus'] );
-    	        $ocorrencia->setEtiqEquipamento( $linha ['etiq_equipamento'] );
-    	        $ocorrencia->setContato( $linha ['contato'] );
-    	        $ocorrencia->setRamal( $linha ['ramal'] );
-    	        $ocorrencia->setLocal( $linha ['local'] );
-    	        $ocorrencia->setFuncionario( $linha ['funcionario'] );
-    	        $ocorrencia->setStatus( $linha ['status'] );
-    	        $ocorrencia->setObs( $linha ['obs'] );
-    	        $ocorrencia->setPrioridade( $linha ['prioridade'] );
-    	        $ocorrencia->setAvaliacao( $linha ['avaliacao'] );
-    	        $ocorrencia->setEmail( $linha ['email'] );
-    	        $ocorrencia->setFechaConfirmado( $linha ['fecha_confirmado'] );
-    	        $ocorrencia->setReaberto( $linha ['reaberto'] );
-    	        $ocorrencia->setDtAbertura( $linha ['dt_abertura'] );
-    	        $ocorrencia->setDtAtendimento( $linha ['dt_atendimento'] );
-    	        $ocorrencia->setDtFechamento( $linha ['dt_fechamento'] );
-    	        $ocorrencia->setDtFechaConfirmado( $linha ['dt_fecha_confirmado'] );
-    	        $ocorrencia->setDtCancelamento( $linha ['dt_cancelamento'] );
-    	        $ocorrencia->setIdAtendente( $linha ['id_atendente'] );
-    	        $ocorrencia->setIdTecnicoIndicado( $linha ['id_tecnico_indicado'] );
-    	        $ocorrencia->setDtLiberacao( $linha ['dt_liberacao'] );
-    	        $ocorrencia->setAnexo( $linha ['anexo'] );
-    	        $ocorrencia->setDtEspera( $linha ['dt_espera'] );
-    	        $ocorrencia->setDtAguardandoUsuario( $linha ['dt_aguardando_usuario'] );
-    	        $ocorrencia->setLocalSala( $linha ['local_sala'] );
-    			$ocorrencia->getAreaResponsavel()->setId( $linha ['id_area_responsavel_area_responsavel'] );
-    			$ocorrencia->getAreaResponsavel()->setNome( $linha ['nome_area_responsavel_area_responsavel'] );
-    			$ocorrencia->getAreaResponsavel()->setDescricao( $linha ['descricao_area_responsavel_area_responsavel'] );
-    			$ocorrencia->getAreaResponsavel()->setEmail( $linha ['email_area_responsavel_area_responsavel'] );
-    			$ocorrencia->getAreaResponsavel()->setIdAdmin( $linha ['id_admin_area_responsavel_area_responsavel'] );
-    			$ocorrencia->getServico()->setId( $linha ['id_servico_servico'] );
-    			$ocorrencia->getServico()->setNome( $linha ['nome_servico_servico'] );
-    			$ocorrencia->getServico()->setDescricao( $linha ['descricao_servico_servico'] );
-    			$ocorrencia->getServico()->setAtivo( $linha ['ativo_servico_servico'] );
-    			$ocorrencia->getServico()->setTempoSla( $linha ['tempo_sla_servico_servico'] );
-    			$ocorrencia->getServico()->setAreaResponsavel( $linha ['area_responsavel_servico_servico'] );
-    			$ocorrencia->getServico()->setGrupoServico( $linha ['grupo_servico_servico_servico'] );
-    			$ocorrencia->getServico()->setTipoAtividade( $linha ['tipo_atividade_servico_servico'] );
-    			$lista [] = $ocorrencia;
-    			    
-            }
-    			    
-        } catch(PDOException $e) {
-            echo $e->getMessage();
-    			    
-        }
-		return $lista;
-    }
-                
-    public function pesquisaPorDtAbertura(Ocorrencia $ocorrencia) {
-        $lista = array();
-	    $dtAbertura = $ocorrencia->getDtAbertura();
-                
-        $sql = "
-		SELECT
-        ocorrencia.id, 
-        ocorrencia.id_local, 
-        ocorrencia.id_funcionario, 
-        ocorrencia.desc_problema, 
-        ocorrencia.campus, 
-        ocorrencia.etiq_equipamento, 
-        ocorrencia.contato, 
-        ocorrencia.ramal, 
-        ocorrencia.local, 
-        ocorrencia.funcionario, 
-        ocorrencia.status, 
-        ocorrencia.obs, 
-        ocorrencia.prioridade, 
-        ocorrencia.avaliacao, 
-        ocorrencia.email, 
-        ocorrencia.fecha_confirmado, 
-        ocorrencia.reaberto, 
-        ocorrencia.dt_abertura, 
-        ocorrencia.dt_atendimento, 
-        ocorrencia.dt_fechamento, 
-        ocorrencia.dt_fecha_confirmado, 
-        ocorrencia.dt_cancelamento, 
-        ocorrencia.id_atendente, 
-        ocorrencia.id_tecnico_indicado, 
-        ocorrencia.dt_liberacao, 
-        ocorrencia.anexo, 
-        ocorrencia.dt_espera, 
-        ocorrencia.dt_aguardando_usuario, 
-        ocorrencia.local_sala, 
-        area_responsavel.id as id_area_responsavel_area_responsavel, 
-        area_responsavel.nome as nome_area_responsavel_area_responsavel, 
-        area_responsavel.descricao as descricao_area_responsavel_area_responsavel, 
-        area_responsavel.email as email_area_responsavel_area_responsavel, 
-        area_responsavel.id_admin as id_admin_area_responsavel_area_responsavel, 
-        servico.id as id_servico_servico, 
-        servico.nome as nome_servico_servico, 
-        servico.descricao as descricao_servico_servico, 
-        servico.ativo as ativo_servico_servico, 
-        servico.tempo_sla as tempo_sla_servico_servico
-		FROM ocorrencia
-		INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel
-		INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico
-            WHERE ocorrencia.dt_abertura like :dtAbertura";
-                
-        try {
-                
-            $stmt = $this->conexao->prepare($sql);
-            $stmt->bindParam(":dtAbertura", $dtAbertura, PDO::PARAM_STR);
-            $stmt->execute();
-            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            foreach ( $result as $linha ) {
-                $ocorrencia = new Ocorrencia();
-    	        $ocorrencia->setId( $linha ['id'] );
-    	        $ocorrencia->setIdLocal( $linha ['id_local'] );
-    	        $ocorrencia->setIdFuncionario( $linha ['id_funcionario'] );
-    	        $ocorrencia->setDescProblema( $linha ['desc_problema'] );
-    	        $ocorrencia->setCampus( $linha ['campus'] );
-    	        $ocorrencia->setEtiqEquipamento( $linha ['etiq_equipamento'] );
-    	        $ocorrencia->setContato( $linha ['contato'] );
-    	        $ocorrencia->setRamal( $linha ['ramal'] );
-    	        $ocorrencia->setLocal( $linha ['local'] );
-    	        $ocorrencia->setFuncionario( $linha ['funcionario'] );
-    	        $ocorrencia->setStatus( $linha ['status'] );
-    	        $ocorrencia->setObs( $linha ['obs'] );
-    	        $ocorrencia->setPrioridade( $linha ['prioridade'] );
-    	        $ocorrencia->setAvaliacao( $linha ['avaliacao'] );
-    	        $ocorrencia->setEmail( $linha ['email'] );
-    	        $ocorrencia->setFechaConfirmado( $linha ['fecha_confirmado'] );
-    	        $ocorrencia->setReaberto( $linha ['reaberto'] );
-    	        $ocorrencia->setDtAbertura( $linha ['dt_abertura'] );
-    	        $ocorrencia->setDtAtendimento( $linha ['dt_atendimento'] );
-    	        $ocorrencia->setDtFechamento( $linha ['dt_fechamento'] );
-    	        $ocorrencia->setDtFechaConfirmado( $linha ['dt_fecha_confirmado'] );
-    	        $ocorrencia->setDtCancelamento( $linha ['dt_cancelamento'] );
-    	        $ocorrencia->setIdAtendente( $linha ['id_atendente'] );
-    	        $ocorrencia->setIdTecnicoIndicado( $linha ['id_tecnico_indicado'] );
-    	        $ocorrencia->setDtLiberacao( $linha ['dt_liberacao'] );
-    	        $ocorrencia->setAnexo( $linha ['anexo'] );
-    	        $ocorrencia->setDtEspera( $linha ['dt_espera'] );
-    	        $ocorrencia->setDtAguardandoUsuario( $linha ['dt_aguardando_usuario'] );
-    	        $ocorrencia->setLocalSala( $linha ['local_sala'] );
-    			$ocorrencia->getAreaResponsavel()->setId( $linha ['id_area_responsavel_area_responsavel'] );
-    			$ocorrencia->getAreaResponsavel()->setNome( $linha ['nome_area_responsavel_area_responsavel'] );
-    			$ocorrencia->getAreaResponsavel()->setDescricao( $linha ['descricao_area_responsavel_area_responsavel'] );
-    			$ocorrencia->getAreaResponsavel()->setEmail( $linha ['email_area_responsavel_area_responsavel'] );
-    			$ocorrencia->getAreaResponsavel()->setIdAdmin( $linha ['id_admin_area_responsavel_area_responsavel'] );
-    			$ocorrencia->getServico()->setId( $linha ['id_servico_servico'] );
-    			$ocorrencia->getServico()->setNome( $linha ['nome_servico_servico'] );
-    			$ocorrencia->getServico()->setDescricao( $linha ['descricao_servico_servico'] );
-    			$ocorrencia->getServico()->setAtivo( $linha ['ativo_servico_servico'] );
-    			$ocorrencia->getServico()->setTempoSla( $linha ['tempo_sla_servico_servico'] );
-    			$ocorrencia->getServico()->setAreaResponsavel( $linha ['area_responsavel_servico_servico'] );
-    			$ocorrencia->getServico()->setGrupoServico( $linha ['grupo_servico_servico_servico'] );
-    			$ocorrencia->getServico()->setTipoAtividade( $linha ['tipo_atividade_servico_servico'] );
-    			$lista [] = $ocorrencia;
-    			    
-            }
-    			    
-        } catch(PDOException $e) {
-            echo $e->getMessage();
-    			    
-        }
-		return $lista;
-    }
-                
-    public function pesquisaPorDtAtendimento(Ocorrencia $ocorrencia) {
-        $lista = array();
-	    $dtAtendimento = $ocorrencia->getDtAtendimento();
-                
-        $sql = "
-		SELECT
-        ocorrencia.id, 
-        ocorrencia.id_local, 
-        ocorrencia.id_funcionario, 
-        ocorrencia.desc_problema, 
-        ocorrencia.campus, 
-        ocorrencia.etiq_equipamento, 
-        ocorrencia.contato, 
-        ocorrencia.ramal, 
-        ocorrencia.local, 
-        ocorrencia.funcionario, 
-        ocorrencia.status, 
-        ocorrencia.obs, 
-        ocorrencia.prioridade, 
-        ocorrencia.avaliacao, 
-        ocorrencia.email, 
-        ocorrencia.fecha_confirmado, 
-        ocorrencia.reaberto, 
-        ocorrencia.dt_abertura, 
-        ocorrencia.dt_atendimento, 
-        ocorrencia.dt_fechamento, 
-        ocorrencia.dt_fecha_confirmado, 
-        ocorrencia.dt_cancelamento, 
-        ocorrencia.id_atendente, 
-        ocorrencia.id_tecnico_indicado, 
-        ocorrencia.dt_liberacao, 
-        ocorrencia.anexo, 
-        ocorrencia.dt_espera, 
-        ocorrencia.dt_aguardando_usuario, 
-        ocorrencia.local_sala, 
-        area_responsavel.id as id_area_responsavel_area_responsavel, 
-        area_responsavel.nome as nome_area_responsavel_area_responsavel, 
-        area_responsavel.descricao as descricao_area_responsavel_area_responsavel, 
-        area_responsavel.email as email_area_responsavel_area_responsavel, 
-        area_responsavel.id_admin as id_admin_area_responsavel_area_responsavel, 
-        servico.id as id_servico_servico, 
-        servico.nome as nome_servico_servico, 
-        servico.descricao as descricao_servico_servico, 
-        servico.ativo as ativo_servico_servico, 
-        servico.tempo_sla as tempo_sla_servico_servico
-		FROM ocorrencia
-		INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel
-		INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico
-            WHERE ocorrencia.dt_atendimento like :dtAtendimento";
-                
-        try {
-                
-            $stmt = $this->conexao->prepare($sql);
-            $stmt->bindParam(":dtAtendimento", $dtAtendimento, PDO::PARAM_STR);
-            $stmt->execute();
-            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            foreach ( $result as $linha ) {
-                $ocorrencia = new Ocorrencia();
-    	        $ocorrencia->setId( $linha ['id'] );
-    	        $ocorrencia->setIdLocal( $linha ['id_local'] );
-    	        $ocorrencia->setIdFuncionario( $linha ['id_funcionario'] );
-    	        $ocorrencia->setDescProblema( $linha ['desc_problema'] );
-    	        $ocorrencia->setCampus( $linha ['campus'] );
-    	        $ocorrencia->setEtiqEquipamento( $linha ['etiq_equipamento'] );
-    	        $ocorrencia->setContato( $linha ['contato'] );
-    	        $ocorrencia->setRamal( $linha ['ramal'] );
-    	        $ocorrencia->setLocal( $linha ['local'] );
-    	        $ocorrencia->setFuncionario( $linha ['funcionario'] );
-    	        $ocorrencia->setStatus( $linha ['status'] );
-    	        $ocorrencia->setObs( $linha ['obs'] );
-    	        $ocorrencia->setPrioridade( $linha ['prioridade'] );
-    	        $ocorrencia->setAvaliacao( $linha ['avaliacao'] );
-    	        $ocorrencia->setEmail( $linha ['email'] );
-    	        $ocorrencia->setFechaConfirmado( $linha ['fecha_confirmado'] );
-    	        $ocorrencia->setReaberto( $linha ['reaberto'] );
-    	        $ocorrencia->setDtAbertura( $linha ['dt_abertura'] );
-    	        $ocorrencia->setDtAtendimento( $linha ['dt_atendimento'] );
-    	        $ocorrencia->setDtFechamento( $linha ['dt_fechamento'] );
-    	        $ocorrencia->setDtFechaConfirmado( $linha ['dt_fecha_confirmado'] );
-    	        $ocorrencia->setDtCancelamento( $linha ['dt_cancelamento'] );
-    	        $ocorrencia->setIdAtendente( $linha ['id_atendente'] );
-    	        $ocorrencia->setIdTecnicoIndicado( $linha ['id_tecnico_indicado'] );
-    	        $ocorrencia->setDtLiberacao( $linha ['dt_liberacao'] );
-    	        $ocorrencia->setAnexo( $linha ['anexo'] );
-    	        $ocorrencia->setDtEspera( $linha ['dt_espera'] );
-    	        $ocorrencia->setDtAguardandoUsuario( $linha ['dt_aguardando_usuario'] );
-    	        $ocorrencia->setLocalSala( $linha ['local_sala'] );
-    			$ocorrencia->getAreaResponsavel()->setId( $linha ['id_area_responsavel_area_responsavel'] );
-    			$ocorrencia->getAreaResponsavel()->setNome( $linha ['nome_area_responsavel_area_responsavel'] );
-    			$ocorrencia->getAreaResponsavel()->setDescricao( $linha ['descricao_area_responsavel_area_responsavel'] );
-    			$ocorrencia->getAreaResponsavel()->setEmail( $linha ['email_area_responsavel_area_responsavel'] );
-    			$ocorrencia->getAreaResponsavel()->setIdAdmin( $linha ['id_admin_area_responsavel_area_responsavel'] );
-    			$ocorrencia->getServico()->setId( $linha ['id_servico_servico'] );
-    			$ocorrencia->getServico()->setNome( $linha ['nome_servico_servico'] );
-    			$ocorrencia->getServico()->setDescricao( $linha ['descricao_servico_servico'] );
-    			$ocorrencia->getServico()->setAtivo( $linha ['ativo_servico_servico'] );
-    			$ocorrencia->getServico()->setTempoSla( $linha ['tempo_sla_servico_servico'] );
-    			$ocorrencia->getServico()->setAreaResponsavel( $linha ['area_responsavel_servico_servico'] );
-    			$ocorrencia->getServico()->setGrupoServico( $linha ['grupo_servico_servico_servico'] );
-    			$ocorrencia->getServico()->setTipoAtividade( $linha ['tipo_atividade_servico_servico'] );
-    			$lista [] = $ocorrencia;
-    			    
-            }
-    			    
-        } catch(PDOException $e) {
-            echo $e->getMessage();
-    			    
-        }
-		return $lista;
-    }
-                
-    public function pesquisaPorDtFechamento(Ocorrencia $ocorrencia) {
-        $lista = array();
-	    $dtFechamento = $ocorrencia->getDtFechamento();
-                
-        $sql = "
-		SELECT
-        ocorrencia.id, 
-        ocorrencia.id_local, 
-        ocorrencia.id_funcionario, 
-        ocorrencia.desc_problema, 
-        ocorrencia.campus, 
-        ocorrencia.etiq_equipamento, 
-        ocorrencia.contato, 
-        ocorrencia.ramal, 
-        ocorrencia.local, 
-        ocorrencia.funcionario, 
-        ocorrencia.status, 
-        ocorrencia.obs, 
-        ocorrencia.prioridade, 
-        ocorrencia.avaliacao, 
-        ocorrencia.email, 
-        ocorrencia.fecha_confirmado, 
-        ocorrencia.reaberto, 
-        ocorrencia.dt_abertura, 
-        ocorrencia.dt_atendimento, 
-        ocorrencia.dt_fechamento, 
-        ocorrencia.dt_fecha_confirmado, 
-        ocorrencia.dt_cancelamento, 
-        ocorrencia.id_atendente, 
-        ocorrencia.id_tecnico_indicado, 
-        ocorrencia.dt_liberacao, 
-        ocorrencia.anexo, 
-        ocorrencia.dt_espera, 
-        ocorrencia.dt_aguardando_usuario, 
-        ocorrencia.local_sala, 
-        area_responsavel.id as id_area_responsavel_area_responsavel, 
-        area_responsavel.nome as nome_area_responsavel_area_responsavel, 
-        area_responsavel.descricao as descricao_area_responsavel_area_responsavel, 
-        area_responsavel.email as email_area_responsavel_area_responsavel, 
-        area_responsavel.id_admin as id_admin_area_responsavel_area_responsavel, 
-        servico.id as id_servico_servico, 
-        servico.nome as nome_servico_servico, 
-        servico.descricao as descricao_servico_servico, 
-        servico.ativo as ativo_servico_servico, 
-        servico.tempo_sla as tempo_sla_servico_servico
-		FROM ocorrencia
-		INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel
-		INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico
-            WHERE ocorrencia.dt_fechamento like :dtFechamento";
-                
-        try {
-                
-            $stmt = $this->conexao->prepare($sql);
-            $stmt->bindParam(":dtFechamento", $dtFechamento, PDO::PARAM_STR);
-            $stmt->execute();
-            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            foreach ( $result as $linha ) {
-                $ocorrencia = new Ocorrencia();
-    	        $ocorrencia->setId( $linha ['id'] );
-    	        $ocorrencia->setIdLocal( $linha ['id_local'] );
-    	        $ocorrencia->setIdFuncionario( $linha ['id_funcionario'] );
-    	        $ocorrencia->setDescProblema( $linha ['desc_problema'] );
-    	        $ocorrencia->setCampus( $linha ['campus'] );
-    	        $ocorrencia->setEtiqEquipamento( $linha ['etiq_equipamento'] );
-    	        $ocorrencia->setContato( $linha ['contato'] );
-    	        $ocorrencia->setRamal( $linha ['ramal'] );
-    	        $ocorrencia->setLocal( $linha ['local'] );
-    	        $ocorrencia->setFuncionario( $linha ['funcionario'] );
-    	        $ocorrencia->setStatus( $linha ['status'] );
-    	        $ocorrencia->setObs( $linha ['obs'] );
-    	        $ocorrencia->setPrioridade( $linha ['prioridade'] );
-    	        $ocorrencia->setAvaliacao( $linha ['avaliacao'] );
-    	        $ocorrencia->setEmail( $linha ['email'] );
-    	        $ocorrencia->setFechaConfirmado( $linha ['fecha_confirmado'] );
-    	        $ocorrencia->setReaberto( $linha ['reaberto'] );
-    	        $ocorrencia->setDtAbertura( $linha ['dt_abertura'] );
-    	        $ocorrencia->setDtAtendimento( $linha ['dt_atendimento'] );
-    	        $ocorrencia->setDtFechamento( $linha ['dt_fechamento'] );
-    	        $ocorrencia->setDtFechaConfirmado( $linha ['dt_fecha_confirmado'] );
-    	        $ocorrencia->setDtCancelamento( $linha ['dt_cancelamento'] );
-    	        $ocorrencia->setIdAtendente( $linha ['id_atendente'] );
-    	        $ocorrencia->setIdTecnicoIndicado( $linha ['id_tecnico_indicado'] );
-    	        $ocorrencia->setDtLiberacao( $linha ['dt_liberacao'] );
-    	        $ocorrencia->setAnexo( $linha ['anexo'] );
-    	        $ocorrencia->setDtEspera( $linha ['dt_espera'] );
-    	        $ocorrencia->setDtAguardandoUsuario( $linha ['dt_aguardando_usuario'] );
-    	        $ocorrencia->setLocalSala( $linha ['local_sala'] );
-    			$ocorrencia->getAreaResponsavel()->setId( $linha ['id_area_responsavel_area_responsavel'] );
-    			$ocorrencia->getAreaResponsavel()->setNome( $linha ['nome_area_responsavel_area_responsavel'] );
-    			$ocorrencia->getAreaResponsavel()->setDescricao( $linha ['descricao_area_responsavel_area_responsavel'] );
-    			$ocorrencia->getAreaResponsavel()->setEmail( $linha ['email_area_responsavel_area_responsavel'] );
-    			$ocorrencia->getAreaResponsavel()->setIdAdmin( $linha ['id_admin_area_responsavel_area_responsavel'] );
-    			$ocorrencia->getServico()->setId( $linha ['id_servico_servico'] );
-    			$ocorrencia->getServico()->setNome( $linha ['nome_servico_servico'] );
-    			$ocorrencia->getServico()->setDescricao( $linha ['descricao_servico_servico'] );
-    			$ocorrencia->getServico()->setAtivo( $linha ['ativo_servico_servico'] );
-    			$ocorrencia->getServico()->setTempoSla( $linha ['tempo_sla_servico_servico'] );
-    			$ocorrencia->getServico()->setAreaResponsavel( $linha ['area_responsavel_servico_servico'] );
-    			$ocorrencia->getServico()->setGrupoServico( $linha ['grupo_servico_servico_servico'] );
-    			$ocorrencia->getServico()->setTipoAtividade( $linha ['tipo_atividade_servico_servico'] );
-    			$lista [] = $ocorrencia;
-    			    
-            }
-    			    
-        } catch(PDOException $e) {
-            echo $e->getMessage();
-    			    
-        }
-		return $lista;
-    }
-                
-    public function pesquisaPorDtFechaConfirmado(Ocorrencia $ocorrencia) {
-        $lista = array();
-	    $dtFechaConfirmado = $ocorrencia->getDtFechaConfirmado();
-                
-        $sql = "
-		SELECT
-        ocorrencia.id, 
-        ocorrencia.id_local, 
-        ocorrencia.id_funcionario, 
-        ocorrencia.desc_problema, 
-        ocorrencia.campus, 
-        ocorrencia.etiq_equipamento, 
-        ocorrencia.contato, 
-        ocorrencia.ramal, 
-        ocorrencia.local, 
-        ocorrencia.funcionario, 
-        ocorrencia.status, 
-        ocorrencia.obs, 
-        ocorrencia.prioridade, 
-        ocorrencia.avaliacao, 
-        ocorrencia.email, 
-        ocorrencia.fecha_confirmado, 
-        ocorrencia.reaberto, 
-        ocorrencia.dt_abertura, 
-        ocorrencia.dt_atendimento, 
-        ocorrencia.dt_fechamento, 
-        ocorrencia.dt_fecha_confirmado, 
-        ocorrencia.dt_cancelamento, 
-        ocorrencia.id_atendente, 
-        ocorrencia.id_tecnico_indicado, 
-        ocorrencia.dt_liberacao, 
-        ocorrencia.anexo, 
-        ocorrencia.dt_espera, 
-        ocorrencia.dt_aguardando_usuario, 
-        ocorrencia.local_sala, 
-        area_responsavel.id as id_area_responsavel_area_responsavel, 
-        area_responsavel.nome as nome_area_responsavel_area_responsavel, 
-        area_responsavel.descricao as descricao_area_responsavel_area_responsavel, 
-        area_responsavel.email as email_area_responsavel_area_responsavel, 
-        area_responsavel.id_admin as id_admin_area_responsavel_area_responsavel, 
-        servico.id as id_servico_servico, 
-        servico.nome as nome_servico_servico, 
-        servico.descricao as descricao_servico_servico, 
-        servico.ativo as ativo_servico_servico, 
-        servico.tempo_sla as tempo_sla_servico_servico
-		FROM ocorrencia
-		INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel
-		INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico
-            WHERE ocorrencia.dt_fecha_confirmado like :dtFechaConfirmado";
-                
-        try {
-                
-            $stmt = $this->conexao->prepare($sql);
-            $stmt->bindParam(":dtFechaConfirmado", $dtFechaConfirmado, PDO::PARAM_STR);
-            $stmt->execute();
-            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            foreach ( $result as $linha ) {
-                $ocorrencia = new Ocorrencia();
-    	        $ocorrencia->setId( $linha ['id'] );
-    	        $ocorrencia->setIdLocal( $linha ['id_local'] );
-    	        $ocorrencia->setIdFuncionario( $linha ['id_funcionario'] );
-    	        $ocorrencia->setDescProblema( $linha ['desc_problema'] );
-    	        $ocorrencia->setCampus( $linha ['campus'] );
-    	        $ocorrencia->setEtiqEquipamento( $linha ['etiq_equipamento'] );
-    	        $ocorrencia->setContato( $linha ['contato'] );
-    	        $ocorrencia->setRamal( $linha ['ramal'] );
-    	        $ocorrencia->setLocal( $linha ['local'] );
-    	        $ocorrencia->setFuncionario( $linha ['funcionario'] );
-    	        $ocorrencia->setStatus( $linha ['status'] );
-    	        $ocorrencia->setObs( $linha ['obs'] );
-    	        $ocorrencia->setPrioridade( $linha ['prioridade'] );
-    	        $ocorrencia->setAvaliacao( $linha ['avaliacao'] );
-    	        $ocorrencia->setEmail( $linha ['email'] );
-    	        $ocorrencia->setFechaConfirmado( $linha ['fecha_confirmado'] );
-    	        $ocorrencia->setReaberto( $linha ['reaberto'] );
-    	        $ocorrencia->setDtAbertura( $linha ['dt_abertura'] );
-    	        $ocorrencia->setDtAtendimento( $linha ['dt_atendimento'] );
-    	        $ocorrencia->setDtFechamento( $linha ['dt_fechamento'] );
-    	        $ocorrencia->setDtFechaConfirmado( $linha ['dt_fecha_confirmado'] );
-    	        $ocorrencia->setDtCancelamento( $linha ['dt_cancelamento'] );
-    	        $ocorrencia->setIdAtendente( $linha ['id_atendente'] );
-    	        $ocorrencia->setIdTecnicoIndicado( $linha ['id_tecnico_indicado'] );
-    	        $ocorrencia->setDtLiberacao( $linha ['dt_liberacao'] );
-    	        $ocorrencia->setAnexo( $linha ['anexo'] );
-    	        $ocorrencia->setDtEspera( $linha ['dt_espera'] );
-    	        $ocorrencia->setDtAguardandoUsuario( $linha ['dt_aguardando_usuario'] );
-    	        $ocorrencia->setLocalSala( $linha ['local_sala'] );
-    			$ocorrencia->getAreaResponsavel()->setId( $linha ['id_area_responsavel_area_responsavel'] );
-    			$ocorrencia->getAreaResponsavel()->setNome( $linha ['nome_area_responsavel_area_responsavel'] );
-    			$ocorrencia->getAreaResponsavel()->setDescricao( $linha ['descricao_area_responsavel_area_responsavel'] );
-    			$ocorrencia->getAreaResponsavel()->setEmail( $linha ['email_area_responsavel_area_responsavel'] );
-    			$ocorrencia->getAreaResponsavel()->setIdAdmin( $linha ['id_admin_area_responsavel_area_responsavel'] );
-    			$ocorrencia->getServico()->setId( $linha ['id_servico_servico'] );
-    			$ocorrencia->getServico()->setNome( $linha ['nome_servico_servico'] );
-    			$ocorrencia->getServico()->setDescricao( $linha ['descricao_servico_servico'] );
-    			$ocorrencia->getServico()->setAtivo( $linha ['ativo_servico_servico'] );
-    			$ocorrencia->getServico()->setTempoSla( $linha ['tempo_sla_servico_servico'] );
-    			$ocorrencia->getServico()->setAreaResponsavel( $linha ['area_responsavel_servico_servico'] );
-    			$ocorrencia->getServico()->setGrupoServico( $linha ['grupo_servico_servico_servico'] );
-    			$ocorrencia->getServico()->setTipoAtividade( $linha ['tipo_atividade_servico_servico'] );
-    			$lista [] = $ocorrencia;
-    			    
-            }
-    			    
-        } catch(PDOException $e) {
-            echo $e->getMessage();
-    			    
-        }
-		return $lista;
-    }
-                
-    public function pesquisaPorDtCancelamento(Ocorrencia $ocorrencia) {
-        $lista = array();
-	    $dtCancelamento = $ocorrencia->getDtCancelamento();
-                
-        $sql = "
-		SELECT
-        ocorrencia.id, 
-        ocorrencia.id_local, 
-        ocorrencia.id_funcionario, 
-        ocorrencia.desc_problema, 
-        ocorrencia.campus, 
-        ocorrencia.etiq_equipamento, 
-        ocorrencia.contato, 
-        ocorrencia.ramal, 
-        ocorrencia.local, 
-        ocorrencia.funcionario, 
-        ocorrencia.status, 
-        ocorrencia.obs, 
-        ocorrencia.prioridade, 
-        ocorrencia.avaliacao, 
-        ocorrencia.email, 
-        ocorrencia.fecha_confirmado, 
-        ocorrencia.reaberto, 
-        ocorrencia.dt_abertura, 
-        ocorrencia.dt_atendimento, 
-        ocorrencia.dt_fechamento, 
-        ocorrencia.dt_fecha_confirmado, 
-        ocorrencia.dt_cancelamento, 
-        ocorrencia.id_atendente, 
-        ocorrencia.id_tecnico_indicado, 
-        ocorrencia.dt_liberacao, 
-        ocorrencia.anexo, 
-        ocorrencia.dt_espera, 
-        ocorrencia.dt_aguardando_usuario, 
-        ocorrencia.local_sala, 
-        area_responsavel.id as id_area_responsavel_area_responsavel, 
-        area_responsavel.nome as nome_area_responsavel_area_responsavel, 
-        area_responsavel.descricao as descricao_area_responsavel_area_responsavel, 
-        area_responsavel.email as email_area_responsavel_area_responsavel, 
-        area_responsavel.id_admin as id_admin_area_responsavel_area_responsavel, 
-        servico.id as id_servico_servico, 
-        servico.nome as nome_servico_servico, 
-        servico.descricao as descricao_servico_servico, 
-        servico.ativo as ativo_servico_servico, 
-        servico.tempo_sla as tempo_sla_servico_servico
-		FROM ocorrencia
-		INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel
-		INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico
-            WHERE ocorrencia.dt_cancelamento like :dtCancelamento";
-                
-        try {
-                
-            $stmt = $this->conexao->prepare($sql);
-            $stmt->bindParam(":dtCancelamento", $dtCancelamento, PDO::PARAM_STR);
-            $stmt->execute();
-            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            foreach ( $result as $linha ) {
-                $ocorrencia = new Ocorrencia();
-    	        $ocorrencia->setId( $linha ['id'] );
-    	        $ocorrencia->setIdLocal( $linha ['id_local'] );
-    	        $ocorrencia->setIdFuncionario( $linha ['id_funcionario'] );
-    	        $ocorrencia->setDescProblema( $linha ['desc_problema'] );
-    	        $ocorrencia->setCampus( $linha ['campus'] );
-    	        $ocorrencia->setEtiqEquipamento( $linha ['etiq_equipamento'] );
-    	        $ocorrencia->setContato( $linha ['contato'] );
-    	        $ocorrencia->setRamal( $linha ['ramal'] );
-    	        $ocorrencia->setLocal( $linha ['local'] );
-    	        $ocorrencia->setFuncionario( $linha ['funcionario'] );
-    	        $ocorrencia->setStatus( $linha ['status'] );
-    	        $ocorrencia->setObs( $linha ['obs'] );
-    	        $ocorrencia->setPrioridade( $linha ['prioridade'] );
-    	        $ocorrencia->setAvaliacao( $linha ['avaliacao'] );
-    	        $ocorrencia->setEmail( $linha ['email'] );
-    	        $ocorrencia->setFechaConfirmado( $linha ['fecha_confirmado'] );
-    	        $ocorrencia->setReaberto( $linha ['reaberto'] );
-    	        $ocorrencia->setDtAbertura( $linha ['dt_abertura'] );
-    	        $ocorrencia->setDtAtendimento( $linha ['dt_atendimento'] );
-    	        $ocorrencia->setDtFechamento( $linha ['dt_fechamento'] );
-    	        $ocorrencia->setDtFechaConfirmado( $linha ['dt_fecha_confirmado'] );
-    	        $ocorrencia->setDtCancelamento( $linha ['dt_cancelamento'] );
-    	        $ocorrencia->setIdAtendente( $linha ['id_atendente'] );
-    	        $ocorrencia->setIdTecnicoIndicado( $linha ['id_tecnico_indicado'] );
-    	        $ocorrencia->setDtLiberacao( $linha ['dt_liberacao'] );
-    	        $ocorrencia->setAnexo( $linha ['anexo'] );
-    	        $ocorrencia->setDtEspera( $linha ['dt_espera'] );
-    	        $ocorrencia->setDtAguardandoUsuario( $linha ['dt_aguardando_usuario'] );
-    	        $ocorrencia->setLocalSala( $linha ['local_sala'] );
-    			$ocorrencia->getAreaResponsavel()->setId( $linha ['id_area_responsavel_area_responsavel'] );
-    			$ocorrencia->getAreaResponsavel()->setNome( $linha ['nome_area_responsavel_area_responsavel'] );
-    			$ocorrencia->getAreaResponsavel()->setDescricao( $linha ['descricao_area_responsavel_area_responsavel'] );
-    			$ocorrencia->getAreaResponsavel()->setEmail( $linha ['email_area_responsavel_area_responsavel'] );
-    			$ocorrencia->getAreaResponsavel()->setIdAdmin( $linha ['id_admin_area_responsavel_area_responsavel'] );
-    			$ocorrencia->getServico()->setId( $linha ['id_servico_servico'] );
-    			$ocorrencia->getServico()->setNome( $linha ['nome_servico_servico'] );
-    			$ocorrencia->getServico()->setDescricao( $linha ['descricao_servico_servico'] );
-    			$ocorrencia->getServico()->setAtivo( $linha ['ativo_servico_servico'] );
-    			$ocorrencia->getServico()->setTempoSla( $linha ['tempo_sla_servico_servico'] );
-    			$ocorrencia->getServico()->setAreaResponsavel( $linha ['area_responsavel_servico_servico'] );
-    			$ocorrencia->getServico()->setGrupoServico( $linha ['grupo_servico_servico_servico'] );
-    			$ocorrencia->getServico()->setTipoAtividade( $linha ['tipo_atividade_servico_servico'] );
-    			$lista [] = $ocorrencia;
-    			    
-            }
-    			    
-        } catch(PDOException $e) {
-            echo $e->getMessage();
-    			    
-        }
-		return $lista;
-    }
-                
-    public function pesquisaPorIdAtendente(Ocorrencia $ocorrencia) {
-        $lista = array();
-	    $idAtendente = $ocorrencia->getIdAtendente();
-                
-        $sql = "
-		SELECT
-        ocorrencia.id, 
-        ocorrencia.id_local, 
-        ocorrencia.id_funcionario, 
-        ocorrencia.desc_problema, 
-        ocorrencia.campus, 
-        ocorrencia.etiq_equipamento, 
-        ocorrencia.contato, 
-        ocorrencia.ramal, 
-        ocorrencia.local, 
-        ocorrencia.funcionario, 
-        ocorrencia.status, 
-        ocorrencia.obs, 
-        ocorrencia.prioridade, 
-        ocorrencia.avaliacao, 
-        ocorrencia.email, 
-        ocorrencia.fecha_confirmado, 
-        ocorrencia.reaberto, 
-        ocorrencia.dt_abertura, 
-        ocorrencia.dt_atendimento, 
-        ocorrencia.dt_fechamento, 
-        ocorrencia.dt_fecha_confirmado, 
-        ocorrencia.dt_cancelamento, 
-        ocorrencia.id_atendente, 
-        ocorrencia.id_tecnico_indicado, 
-        ocorrencia.dt_liberacao, 
-        ocorrencia.anexo, 
-        ocorrencia.dt_espera, 
-        ocorrencia.dt_aguardando_usuario, 
-        ocorrencia.local_sala, 
-        area_responsavel.id as id_area_responsavel_area_responsavel, 
-        area_responsavel.nome as nome_area_responsavel_area_responsavel, 
-        area_responsavel.descricao as descricao_area_responsavel_area_responsavel, 
-        area_responsavel.email as email_area_responsavel_area_responsavel, 
-        area_responsavel.id_admin as id_admin_area_responsavel_area_responsavel, 
-        servico.id as id_servico_servico, 
-        servico.nome as nome_servico_servico, 
-        servico.descricao as descricao_servico_servico, 
-        servico.ativo as ativo_servico_servico, 
-        servico.tempo_sla as tempo_sla_servico_servico
-		FROM ocorrencia
-		INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel
-		INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico
-            WHERE ocorrencia.id_atendente = :idAtendente";
-                
-        try {
-                
-            $stmt = $this->conexao->prepare($sql);
-            $stmt->bindParam(":idAtendente", $idAtendente, PDO::PARAM_INT);
-            $stmt->execute();
-            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            foreach ( $result as $linha ) {
-                $ocorrencia = new Ocorrencia();
-    	        $ocorrencia->setId( $linha ['id'] );
-    	        $ocorrencia->setIdLocal( $linha ['id_local'] );
-    	        $ocorrencia->setIdFuncionario( $linha ['id_funcionario'] );
-    	        $ocorrencia->setDescProblema( $linha ['desc_problema'] );
-    	        $ocorrencia->setCampus( $linha ['campus'] );
-    	        $ocorrencia->setEtiqEquipamento( $linha ['etiq_equipamento'] );
-    	        $ocorrencia->setContato( $linha ['contato'] );
-    	        $ocorrencia->setRamal( $linha ['ramal'] );
-    	        $ocorrencia->setLocal( $linha ['local'] );
-    	        $ocorrencia->setFuncionario( $linha ['funcionario'] );
-    	        $ocorrencia->setStatus( $linha ['status'] );
-    	        $ocorrencia->setObs( $linha ['obs'] );
-    	        $ocorrencia->setPrioridade( $linha ['prioridade'] );
-    	        $ocorrencia->setAvaliacao( $linha ['avaliacao'] );
-    	        $ocorrencia->setEmail( $linha ['email'] );
-    	        $ocorrencia->setFechaConfirmado( $linha ['fecha_confirmado'] );
-    	        $ocorrencia->setReaberto( $linha ['reaberto'] );
-    	        $ocorrencia->setDtAbertura( $linha ['dt_abertura'] );
-    	        $ocorrencia->setDtAtendimento( $linha ['dt_atendimento'] );
-    	        $ocorrencia->setDtFechamento( $linha ['dt_fechamento'] );
-    	        $ocorrencia->setDtFechaConfirmado( $linha ['dt_fecha_confirmado'] );
-    	        $ocorrencia->setDtCancelamento( $linha ['dt_cancelamento'] );
-    	        $ocorrencia->setIdAtendente( $linha ['id_atendente'] );
-    	        $ocorrencia->setIdTecnicoIndicado( $linha ['id_tecnico_indicado'] );
-    	        $ocorrencia->setDtLiberacao( $linha ['dt_liberacao'] );
-    	        $ocorrencia->setAnexo( $linha ['anexo'] );
-    	        $ocorrencia->setDtEspera( $linha ['dt_espera'] );
-    	        $ocorrencia->setDtAguardandoUsuario( $linha ['dt_aguardando_usuario'] );
-    	        $ocorrencia->setLocalSala( $linha ['local_sala'] );
-    			$ocorrencia->getAreaResponsavel()->setId( $linha ['id_area_responsavel_area_responsavel'] );
-    			$ocorrencia->getAreaResponsavel()->setNome( $linha ['nome_area_responsavel_area_responsavel'] );
-    			$ocorrencia->getAreaResponsavel()->setDescricao( $linha ['descricao_area_responsavel_area_responsavel'] );
-    			$ocorrencia->getAreaResponsavel()->setEmail( $linha ['email_area_responsavel_area_responsavel'] );
-    			$ocorrencia->getAreaResponsavel()->setIdAdmin( $linha ['id_admin_area_responsavel_area_responsavel'] );
-    			$ocorrencia->getServico()->setId( $linha ['id_servico_servico'] );
-    			$ocorrencia->getServico()->setNome( $linha ['nome_servico_servico'] );
-    			$ocorrencia->getServico()->setDescricao( $linha ['descricao_servico_servico'] );
-    			$ocorrencia->getServico()->setAtivo( $linha ['ativo_servico_servico'] );
-    			$ocorrencia->getServico()->setTempoSla( $linha ['tempo_sla_servico_servico'] );
-    			$ocorrencia->getServico()->setAreaResponsavel( $linha ['area_responsavel_servico_servico'] );
-    			$ocorrencia->getServico()->setGrupoServico( $linha ['grupo_servico_servico_servico'] );
-    			$ocorrencia->getServico()->setTipoAtividade( $linha ['tipo_atividade_servico_servico'] );
-    			$lista [] = $ocorrencia;
-    			    
-            }
-    			    
-        } catch(PDOException $e) {
-            echo $e->getMessage();
-    			    
-        }
-		return $lista;
-    }
-                
-    public function pesquisaPorIdTecnicoIndicado(Ocorrencia $ocorrencia) {
-        $lista = array();
-	    $idTecnicoIndicado = $ocorrencia->getIdTecnicoIndicado();
-                
-        $sql = "
-		SELECT
-        ocorrencia.id, 
-        ocorrencia.id_local, 
-        ocorrencia.id_funcionario, 
-        ocorrencia.desc_problema, 
-        ocorrencia.campus, 
-        ocorrencia.etiq_equipamento, 
-        ocorrencia.contato, 
-        ocorrencia.ramal, 
-        ocorrencia.local, 
-        ocorrencia.funcionario, 
-        ocorrencia.status, 
-        ocorrencia.obs, 
-        ocorrencia.prioridade, 
-        ocorrencia.avaliacao, 
-        ocorrencia.email, 
-        ocorrencia.fecha_confirmado, 
-        ocorrencia.reaberto, 
-        ocorrencia.dt_abertura, 
-        ocorrencia.dt_atendimento, 
-        ocorrencia.dt_fechamento, 
-        ocorrencia.dt_fecha_confirmado, 
-        ocorrencia.dt_cancelamento, 
-        ocorrencia.id_atendente, 
-        ocorrencia.id_tecnico_indicado, 
-        ocorrencia.dt_liberacao, 
-        ocorrencia.anexo, 
-        ocorrencia.dt_espera, 
-        ocorrencia.dt_aguardando_usuario, 
-        ocorrencia.local_sala, 
-        area_responsavel.id as id_area_responsavel_area_responsavel, 
-        area_responsavel.nome as nome_area_responsavel_area_responsavel, 
-        area_responsavel.descricao as descricao_area_responsavel_area_responsavel, 
-        area_responsavel.email as email_area_responsavel_area_responsavel, 
-        area_responsavel.id_admin as id_admin_area_responsavel_area_responsavel, 
-        servico.id as id_servico_servico, 
-        servico.nome as nome_servico_servico, 
-        servico.descricao as descricao_servico_servico, 
-        servico.ativo as ativo_servico_servico, 
-        servico.tempo_sla as tempo_sla_servico_servico
-		FROM ocorrencia
-		INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel
-		INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico
-            WHERE ocorrencia.id_tecnico_indicado = :idTecnicoIndicado";
-                
-        try {
-                
-            $stmt = $this->conexao->prepare($sql);
-            $stmt->bindParam(":idTecnicoIndicado", $idTecnicoIndicado, PDO::PARAM_INT);
-            $stmt->execute();
-            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            foreach ( $result as $linha ) {
-                $ocorrencia = new Ocorrencia();
-    	        $ocorrencia->setId( $linha ['id'] );
-    	        $ocorrencia->setIdLocal( $linha ['id_local'] );
-    	        $ocorrencia->setIdFuncionario( $linha ['id_funcionario'] );
-    	        $ocorrencia->setDescProblema( $linha ['desc_problema'] );
-    	        $ocorrencia->setCampus( $linha ['campus'] );
-    	        $ocorrencia->setEtiqEquipamento( $linha ['etiq_equipamento'] );
-    	        $ocorrencia->setContato( $linha ['contato'] );
-    	        $ocorrencia->setRamal( $linha ['ramal'] );
-    	        $ocorrencia->setLocal( $linha ['local'] );
-    	        $ocorrencia->setFuncionario( $linha ['funcionario'] );
-    	        $ocorrencia->setStatus( $linha ['status'] );
-    	        $ocorrencia->setObs( $linha ['obs'] );
-    	        $ocorrencia->setPrioridade( $linha ['prioridade'] );
-    	        $ocorrencia->setAvaliacao( $linha ['avaliacao'] );
-    	        $ocorrencia->setEmail( $linha ['email'] );
-    	        $ocorrencia->setFechaConfirmado( $linha ['fecha_confirmado'] );
-    	        $ocorrencia->setReaberto( $linha ['reaberto'] );
-    	        $ocorrencia->setDtAbertura( $linha ['dt_abertura'] );
-    	        $ocorrencia->setDtAtendimento( $linha ['dt_atendimento'] );
-    	        $ocorrencia->setDtFechamento( $linha ['dt_fechamento'] );
-    	        $ocorrencia->setDtFechaConfirmado( $linha ['dt_fecha_confirmado'] );
-    	        $ocorrencia->setDtCancelamento( $linha ['dt_cancelamento'] );
-    	        $ocorrencia->setIdAtendente( $linha ['id_atendente'] );
-    	        $ocorrencia->setIdTecnicoIndicado( $linha ['id_tecnico_indicado'] );
-    	        $ocorrencia->setDtLiberacao( $linha ['dt_liberacao'] );
-    	        $ocorrencia->setAnexo( $linha ['anexo'] );
-    	        $ocorrencia->setDtEspera( $linha ['dt_espera'] );
-    	        $ocorrencia->setDtAguardandoUsuario( $linha ['dt_aguardando_usuario'] );
-    	        $ocorrencia->setLocalSala( $linha ['local_sala'] );
-    			$ocorrencia->getAreaResponsavel()->setId( $linha ['id_area_responsavel_area_responsavel'] );
-    			$ocorrencia->getAreaResponsavel()->setNome( $linha ['nome_area_responsavel_area_responsavel'] );
-    			$ocorrencia->getAreaResponsavel()->setDescricao( $linha ['descricao_area_responsavel_area_responsavel'] );
-    			$ocorrencia->getAreaResponsavel()->setEmail( $linha ['email_area_responsavel_area_responsavel'] );
-    			$ocorrencia->getAreaResponsavel()->setIdAdmin( $linha ['id_admin_area_responsavel_area_responsavel'] );
-    			$ocorrencia->getServico()->setId( $linha ['id_servico_servico'] );
-    			$ocorrencia->getServico()->setNome( $linha ['nome_servico_servico'] );
-    			$ocorrencia->getServico()->setDescricao( $linha ['descricao_servico_servico'] );
-    			$ocorrencia->getServico()->setAtivo( $linha ['ativo_servico_servico'] );
-    			$ocorrencia->getServico()->setTempoSla( $linha ['tempo_sla_servico_servico'] );
-    			$ocorrencia->getServico()->setAreaResponsavel( $linha ['area_responsavel_servico_servico'] );
-    			$ocorrencia->getServico()->setGrupoServico( $linha ['grupo_servico_servico_servico'] );
-    			$ocorrencia->getServico()->setTipoAtividade( $linha ['tipo_atividade_servico_servico'] );
-    			$lista [] = $ocorrencia;
-    			    
-            }
-    			    
-        } catch(PDOException $e) {
-            echo $e->getMessage();
-    			    
-        }
-		return $lista;
-    }
-                
-    public function pesquisaPorDtLiberacao(Ocorrencia $ocorrencia) {
-        $lista = array();
-	    $dtLiberacao = $ocorrencia->getDtLiberacao();
-                
-        $sql = "
-		SELECT
-        ocorrencia.id, 
-        ocorrencia.id_local, 
-        ocorrencia.id_funcionario, 
-        ocorrencia.desc_problema, 
-        ocorrencia.campus, 
-        ocorrencia.etiq_equipamento, 
-        ocorrencia.contato, 
-        ocorrencia.ramal, 
-        ocorrencia.local, 
-        ocorrencia.funcionario, 
-        ocorrencia.status, 
-        ocorrencia.obs, 
-        ocorrencia.prioridade, 
-        ocorrencia.avaliacao, 
-        ocorrencia.email, 
-        ocorrencia.fecha_confirmado, 
-        ocorrencia.reaberto, 
-        ocorrencia.dt_abertura, 
-        ocorrencia.dt_atendimento, 
-        ocorrencia.dt_fechamento, 
-        ocorrencia.dt_fecha_confirmado, 
-        ocorrencia.dt_cancelamento, 
-        ocorrencia.id_atendente, 
-        ocorrencia.id_tecnico_indicado, 
-        ocorrencia.dt_liberacao, 
-        ocorrencia.anexo, 
-        ocorrencia.dt_espera, 
-        ocorrencia.dt_aguardando_usuario, 
-        ocorrencia.local_sala, 
-        area_responsavel.id as id_area_responsavel_area_responsavel, 
-        area_responsavel.nome as nome_area_responsavel_area_responsavel, 
-        area_responsavel.descricao as descricao_area_responsavel_area_responsavel, 
-        area_responsavel.email as email_area_responsavel_area_responsavel, 
-        area_responsavel.id_admin as id_admin_area_responsavel_area_responsavel, 
-        servico.id as id_servico_servico, 
-        servico.nome as nome_servico_servico, 
-        servico.descricao as descricao_servico_servico, 
-        servico.ativo as ativo_servico_servico, 
-        servico.tempo_sla as tempo_sla_servico_servico
-		FROM ocorrencia
-		INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel
-		INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico
-            WHERE ocorrencia.dt_liberacao like :dtLiberacao";
-                
-        try {
-                
-            $stmt = $this->conexao->prepare($sql);
-            $stmt->bindParam(":dtLiberacao", $dtLiberacao, PDO::PARAM_STR);
-            $stmt->execute();
-            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            foreach ( $result as $linha ) {
-                $ocorrencia = new Ocorrencia();
-    	        $ocorrencia->setId( $linha ['id'] );
-    	        $ocorrencia->setIdLocal( $linha ['id_local'] );
-    	        $ocorrencia->setIdFuncionario( $linha ['id_funcionario'] );
-    	        $ocorrencia->setDescProblema( $linha ['desc_problema'] );
-    	        $ocorrencia->setCampus( $linha ['campus'] );
-    	        $ocorrencia->setEtiqEquipamento( $linha ['etiq_equipamento'] );
-    	        $ocorrencia->setContato( $linha ['contato'] );
-    	        $ocorrencia->setRamal( $linha ['ramal'] );
-    	        $ocorrencia->setLocal( $linha ['local'] );
-    	        $ocorrencia->setFuncionario( $linha ['funcionario'] );
-    	        $ocorrencia->setStatus( $linha ['status'] );
-    	        $ocorrencia->setObs( $linha ['obs'] );
-    	        $ocorrencia->setPrioridade( $linha ['prioridade'] );
-    	        $ocorrencia->setAvaliacao( $linha ['avaliacao'] );
-    	        $ocorrencia->setEmail( $linha ['email'] );
-    	        $ocorrencia->setFechaConfirmado( $linha ['fecha_confirmado'] );
-    	        $ocorrencia->setReaberto( $linha ['reaberto'] );
-    	        $ocorrencia->setDtAbertura( $linha ['dt_abertura'] );
-    	        $ocorrencia->setDtAtendimento( $linha ['dt_atendimento'] );
-    	        $ocorrencia->setDtFechamento( $linha ['dt_fechamento'] );
-    	        $ocorrencia->setDtFechaConfirmado( $linha ['dt_fecha_confirmado'] );
-    	        $ocorrencia->setDtCancelamento( $linha ['dt_cancelamento'] );
-    	        $ocorrencia->setIdAtendente( $linha ['id_atendente'] );
-    	        $ocorrencia->setIdTecnicoIndicado( $linha ['id_tecnico_indicado'] );
-    	        $ocorrencia->setDtLiberacao( $linha ['dt_liberacao'] );
-    	        $ocorrencia->setAnexo( $linha ['anexo'] );
-    	        $ocorrencia->setDtEspera( $linha ['dt_espera'] );
-    	        $ocorrencia->setDtAguardandoUsuario( $linha ['dt_aguardando_usuario'] );
-    	        $ocorrencia->setLocalSala( $linha ['local_sala'] );
-    			$ocorrencia->getAreaResponsavel()->setId( $linha ['id_area_responsavel_area_responsavel'] );
-    			$ocorrencia->getAreaResponsavel()->setNome( $linha ['nome_area_responsavel_area_responsavel'] );
-    			$ocorrencia->getAreaResponsavel()->setDescricao( $linha ['descricao_area_responsavel_area_responsavel'] );
-    			$ocorrencia->getAreaResponsavel()->setEmail( $linha ['email_area_responsavel_area_responsavel'] );
-    			$ocorrencia->getAreaResponsavel()->setIdAdmin( $linha ['id_admin_area_responsavel_area_responsavel'] );
-    			$ocorrencia->getServico()->setId( $linha ['id_servico_servico'] );
-    			$ocorrencia->getServico()->setNome( $linha ['nome_servico_servico'] );
-    			$ocorrencia->getServico()->setDescricao( $linha ['descricao_servico_servico'] );
-    			$ocorrencia->getServico()->setAtivo( $linha ['ativo_servico_servico'] );
-    			$ocorrencia->getServico()->setTempoSla( $linha ['tempo_sla_servico_servico'] );
-    			$ocorrencia->getServico()->setAreaResponsavel( $linha ['area_responsavel_servico_servico'] );
-    			$ocorrencia->getServico()->setGrupoServico( $linha ['grupo_servico_servico_servico'] );
-    			$ocorrencia->getServico()->setTipoAtividade( $linha ['tipo_atividade_servico_servico'] );
+    			$ocorrencia->getUsuarioCliente()->setId( $linha ['id_usuario_usuario_cliente'] );
+    			$ocorrencia->getUsuarioCliente()->setNome( $linha ['nome_usuario_usuario_cliente'] );
+    			$ocorrencia->getUsuarioCliente()->setEmail( $linha ['email_usuario_usuario_cliente'] );
+    			$ocorrencia->getUsuarioCliente()->setLogin( $linha ['login_usuario_usuario_cliente'] );
+    			$ocorrencia->getUsuarioCliente()->setSenha( $linha ['senha_usuario_usuario_cliente'] );
+    			$ocorrencia->getUsuarioCliente()->setNivel( $linha ['nivel_usuario_usuario_cliente'] );
+    			$ocorrencia->getUsuarioCliente()->setSetor( $linha ['setor_usuario_usuario_cliente'] );
+    			$ocorrencia->getUsuarioAtendente()->setId( $linha ['id_usuario_usuario_atendente'] );
+    			$ocorrencia->getUsuarioAtendente()->setNome( $linha ['nome_usuario_usuario_atendente'] );
+    			$ocorrencia->getUsuarioAtendente()->setEmail( $linha ['email_usuario_usuario_atendente'] );
+    			$ocorrencia->getUsuarioAtendente()->setLogin( $linha ['login_usuario_usuario_atendente'] );
+    			$ocorrencia->getUsuarioAtendente()->setSenha( $linha ['senha_usuario_usuario_atendente'] );
+    			$ocorrencia->getUsuarioAtendente()->setNivel( $linha ['nivel_usuario_usuario_atendente'] );
+    			$ocorrencia->getUsuarioAtendente()->setSetor( $linha ['setor_usuario_usuario_atendente'] );
+    			$ocorrencia->getUsuarioIndicado()->setId( $linha ['id_usuario_usuario_indicado'] );
+    			$ocorrencia->getUsuarioIndicado()->setNome( $linha ['nome_usuario_usuario_indicado'] );
+    			$ocorrencia->getUsuarioIndicado()->setEmail( $linha ['email_usuario_usuario_indicado'] );
+    			$ocorrencia->getUsuarioIndicado()->setLogin( $linha ['login_usuario_usuario_indicado'] );
+    			$ocorrencia->getUsuarioIndicado()->setSenha( $linha ['senha_usuario_usuario_indicado'] );
+    			$ocorrencia->getUsuarioIndicado()->setNivel( $linha ['nivel_usuario_usuario_indicado'] );
+    			$ocorrencia->getUsuarioIndicado()->setSetor( $linha ['setor_usuario_usuario_indicado'] );
     			$lista [] = $ocorrencia;
     			    
             }
@@ -3178,46 +1768,51 @@ class OcorrenciaDAO extends DAO {
 		SELECT
         ocorrencia.id, 
         ocorrencia.id_local, 
-        ocorrencia.id_funcionario, 
-        ocorrencia.desc_problema, 
+        ocorrencia.descricao, 
         ocorrencia.campus, 
-        ocorrencia.etiq_equipamento, 
-        ocorrencia.contato, 
+        ocorrencia.patrimonio, 
         ocorrencia.ramal, 
         ocorrencia.local, 
-        ocorrencia.funcionario, 
         ocorrencia.status, 
-        ocorrencia.obs, 
+        ocorrencia.solucao, 
         ocorrencia.prioridade, 
         ocorrencia.avaliacao, 
         ocorrencia.email, 
-        ocorrencia.fecha_confirmado, 
-        ocorrencia.reaberto, 
-        ocorrencia.dt_abertura, 
-        ocorrencia.dt_atendimento, 
-        ocorrencia.dt_fechamento, 
-        ocorrencia.dt_fecha_confirmado, 
-        ocorrencia.dt_cancelamento, 
-        ocorrencia.id_atendente, 
-        ocorrencia.id_tecnico_indicado, 
-        ocorrencia.dt_liberacao, 
         ocorrencia.anexo, 
-        ocorrencia.dt_espera, 
-        ocorrencia.dt_aguardando_usuario, 
         ocorrencia.local_sala, 
         area_responsavel.id as id_area_responsavel_area_responsavel, 
         area_responsavel.nome as nome_area_responsavel_area_responsavel, 
         area_responsavel.descricao as descricao_area_responsavel_area_responsavel, 
         area_responsavel.email as email_area_responsavel_area_responsavel, 
-        area_responsavel.id_admin as id_admin_area_responsavel_area_responsavel, 
         servico.id as id_servico_servico, 
         servico.nome as nome_servico_servico, 
         servico.descricao as descricao_servico_servico, 
-        servico.ativo as ativo_servico_servico, 
-        servico.tempo_sla as tempo_sla_servico_servico
+        servico.tempo_sla as tempo_sla_servico_servico, 
+        servico.visao as visao_servico_servico, 
+        usuario_cliente.id as id_usuario_usuario_cliente, 
+        usuario_cliente.nome as nome_usuario_usuario_cliente, 
+        usuario_cliente.email as email_usuario_usuario_cliente, 
+        usuario_cliente.login as login_usuario_usuario_cliente, 
+        usuario_cliente.senha as senha_usuario_usuario_cliente, 
+        usuario_cliente.nivel as nivel_usuario_usuario_cliente, 
+        usuario_atendente.id as id_usuario_usuario_atendente, 
+        usuario_atendente.nome as nome_usuario_usuario_atendente, 
+        usuario_atendente.email as email_usuario_usuario_atendente, 
+        usuario_atendente.login as login_usuario_usuario_atendente, 
+        usuario_atendente.senha as senha_usuario_usuario_atendente, 
+        usuario_atendente.nivel as nivel_usuario_usuario_atendente, 
+        usuario_indicado.id as id_usuario_usuario_indicado, 
+        usuario_indicado.nome as nome_usuario_usuario_indicado, 
+        usuario_indicado.email as email_usuario_usuario_indicado, 
+        usuario_indicado.login as login_usuario_usuario_indicado, 
+        usuario_indicado.senha as senha_usuario_usuario_indicado, 
+        usuario_indicado.nivel as nivel_usuario_usuario_indicado
 		FROM ocorrencia
 		INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel
 		INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico
+		INNER JOIN usuario as usuario_cliente ON usuario_cliente.id = ocorrencia.id_usuario_cliente
+		INNER JOIN usuario as usuario_atendente ON usuario_atendente.id = ocorrencia.id_usuario_atendente
+		INNER JOIN usuario as usuario_indicado ON usuario_indicado.id = ocorrencia.id_usuario_indicado
             WHERE ocorrencia.anexo like :anexo";
                 
         try {
@@ -3230,268 +1825,51 @@ class OcorrenciaDAO extends DAO {
                 $ocorrencia = new Ocorrencia();
     	        $ocorrencia->setId( $linha ['id'] );
     	        $ocorrencia->setIdLocal( $linha ['id_local'] );
-    	        $ocorrencia->setIdFuncionario( $linha ['id_funcionario'] );
-    	        $ocorrencia->setDescProblema( $linha ['desc_problema'] );
+    	        $ocorrencia->setDescricao( $linha ['descricao'] );
     	        $ocorrencia->setCampus( $linha ['campus'] );
-    	        $ocorrencia->setEtiqEquipamento( $linha ['etiq_equipamento'] );
-    	        $ocorrencia->setContato( $linha ['contato'] );
+    	        $ocorrencia->setPatrimonio( $linha ['patrimonio'] );
     	        $ocorrencia->setRamal( $linha ['ramal'] );
     	        $ocorrencia->setLocal( $linha ['local'] );
-    	        $ocorrencia->setFuncionario( $linha ['funcionario'] );
     	        $ocorrencia->setStatus( $linha ['status'] );
-    	        $ocorrencia->setObs( $linha ['obs'] );
+    	        $ocorrencia->setSolucao( $linha ['solucao'] );
     	        $ocorrencia->setPrioridade( $linha ['prioridade'] );
     	        $ocorrencia->setAvaliacao( $linha ['avaliacao'] );
     	        $ocorrencia->setEmail( $linha ['email'] );
-    	        $ocorrencia->setFechaConfirmado( $linha ['fecha_confirmado'] );
-    	        $ocorrencia->setReaberto( $linha ['reaberto'] );
-    	        $ocorrencia->setDtAbertura( $linha ['dt_abertura'] );
-    	        $ocorrencia->setDtAtendimento( $linha ['dt_atendimento'] );
-    	        $ocorrencia->setDtFechamento( $linha ['dt_fechamento'] );
-    	        $ocorrencia->setDtFechaConfirmado( $linha ['dt_fecha_confirmado'] );
-    	        $ocorrencia->setDtCancelamento( $linha ['dt_cancelamento'] );
-    	        $ocorrencia->setIdAtendente( $linha ['id_atendente'] );
-    	        $ocorrencia->setIdTecnicoIndicado( $linha ['id_tecnico_indicado'] );
-    	        $ocorrencia->setDtLiberacao( $linha ['dt_liberacao'] );
     	        $ocorrencia->setAnexo( $linha ['anexo'] );
-    	        $ocorrencia->setDtEspera( $linha ['dt_espera'] );
-    	        $ocorrencia->setDtAguardandoUsuario( $linha ['dt_aguardando_usuario'] );
     	        $ocorrencia->setLocalSala( $linha ['local_sala'] );
     			$ocorrencia->getAreaResponsavel()->setId( $linha ['id_area_responsavel_area_responsavel'] );
     			$ocorrencia->getAreaResponsavel()->setNome( $linha ['nome_area_responsavel_area_responsavel'] );
     			$ocorrencia->getAreaResponsavel()->setDescricao( $linha ['descricao_area_responsavel_area_responsavel'] );
     			$ocorrencia->getAreaResponsavel()->setEmail( $linha ['email_area_responsavel_area_responsavel'] );
-    			$ocorrencia->getAreaResponsavel()->setIdAdmin( $linha ['id_admin_area_responsavel_area_responsavel'] );
     			$ocorrencia->getServico()->setId( $linha ['id_servico_servico'] );
     			$ocorrencia->getServico()->setNome( $linha ['nome_servico_servico'] );
     			$ocorrencia->getServico()->setDescricao( $linha ['descricao_servico_servico'] );
-    			$ocorrencia->getServico()->setAtivo( $linha ['ativo_servico_servico'] );
+    			$ocorrencia->getServico()->setTipoAtividade( $linha ['tipo_atividade_servico_servico'] );
     			$ocorrencia->getServico()->setTempoSla( $linha ['tempo_sla_servico_servico'] );
+    			$ocorrencia->getServico()->setVisao( $linha ['visao_servico_servico'] );
     			$ocorrencia->getServico()->setAreaResponsavel( $linha ['area_responsavel_servico_servico'] );
     			$ocorrencia->getServico()->setGrupoServico( $linha ['grupo_servico_servico_servico'] );
-    			$ocorrencia->getServico()->setTipoAtividade( $linha ['tipo_atividade_servico_servico'] );
-    			$lista [] = $ocorrencia;
-    			    
-            }
-    			    
-        } catch(PDOException $e) {
-            echo $e->getMessage();
-    			    
-        }
-		return $lista;
-    }
-                
-    public function pesquisaPorDtEspera(Ocorrencia $ocorrencia) {
-        $lista = array();
-	    $dtEspera = $ocorrencia->getDtEspera();
-                
-        $sql = "
-		SELECT
-        ocorrencia.id, 
-        ocorrencia.id_local, 
-        ocorrencia.id_funcionario, 
-        ocorrencia.desc_problema, 
-        ocorrencia.campus, 
-        ocorrencia.etiq_equipamento, 
-        ocorrencia.contato, 
-        ocorrencia.ramal, 
-        ocorrencia.local, 
-        ocorrencia.funcionario, 
-        ocorrencia.status, 
-        ocorrencia.obs, 
-        ocorrencia.prioridade, 
-        ocorrencia.avaliacao, 
-        ocorrencia.email, 
-        ocorrencia.fecha_confirmado, 
-        ocorrencia.reaberto, 
-        ocorrencia.dt_abertura, 
-        ocorrencia.dt_atendimento, 
-        ocorrencia.dt_fechamento, 
-        ocorrencia.dt_fecha_confirmado, 
-        ocorrencia.dt_cancelamento, 
-        ocorrencia.id_atendente, 
-        ocorrencia.id_tecnico_indicado, 
-        ocorrencia.dt_liberacao, 
-        ocorrencia.anexo, 
-        ocorrencia.dt_espera, 
-        ocorrencia.dt_aguardando_usuario, 
-        ocorrencia.local_sala, 
-        area_responsavel.id as id_area_responsavel_area_responsavel, 
-        area_responsavel.nome as nome_area_responsavel_area_responsavel, 
-        area_responsavel.descricao as descricao_area_responsavel_area_responsavel, 
-        area_responsavel.email as email_area_responsavel_area_responsavel, 
-        area_responsavel.id_admin as id_admin_area_responsavel_area_responsavel, 
-        servico.id as id_servico_servico, 
-        servico.nome as nome_servico_servico, 
-        servico.descricao as descricao_servico_servico, 
-        servico.ativo as ativo_servico_servico, 
-        servico.tempo_sla as tempo_sla_servico_servico
-		FROM ocorrencia
-		INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel
-		INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico
-            WHERE ocorrencia.dt_espera like :dtEspera";
-                
-        try {
-                
-            $stmt = $this->conexao->prepare($sql);
-            $stmt->bindParam(":dtEspera", $dtEspera, PDO::PARAM_STR);
-            $stmt->execute();
-            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            foreach ( $result as $linha ) {
-                $ocorrencia = new Ocorrencia();
-    	        $ocorrencia->setId( $linha ['id'] );
-    	        $ocorrencia->setIdLocal( $linha ['id_local'] );
-    	        $ocorrencia->setIdFuncionario( $linha ['id_funcionario'] );
-    	        $ocorrencia->setDescProblema( $linha ['desc_problema'] );
-    	        $ocorrencia->setCampus( $linha ['campus'] );
-    	        $ocorrencia->setEtiqEquipamento( $linha ['etiq_equipamento'] );
-    	        $ocorrencia->setContato( $linha ['contato'] );
-    	        $ocorrencia->setRamal( $linha ['ramal'] );
-    	        $ocorrencia->setLocal( $linha ['local'] );
-    	        $ocorrencia->setFuncionario( $linha ['funcionario'] );
-    	        $ocorrencia->setStatus( $linha ['status'] );
-    	        $ocorrencia->setObs( $linha ['obs'] );
-    	        $ocorrencia->setPrioridade( $linha ['prioridade'] );
-    	        $ocorrencia->setAvaliacao( $linha ['avaliacao'] );
-    	        $ocorrencia->setEmail( $linha ['email'] );
-    	        $ocorrencia->setFechaConfirmado( $linha ['fecha_confirmado'] );
-    	        $ocorrencia->setReaberto( $linha ['reaberto'] );
-    	        $ocorrencia->setDtAbertura( $linha ['dt_abertura'] );
-    	        $ocorrencia->setDtAtendimento( $linha ['dt_atendimento'] );
-    	        $ocorrencia->setDtFechamento( $linha ['dt_fechamento'] );
-    	        $ocorrencia->setDtFechaConfirmado( $linha ['dt_fecha_confirmado'] );
-    	        $ocorrencia->setDtCancelamento( $linha ['dt_cancelamento'] );
-    	        $ocorrencia->setIdAtendente( $linha ['id_atendente'] );
-    	        $ocorrencia->setIdTecnicoIndicado( $linha ['id_tecnico_indicado'] );
-    	        $ocorrencia->setDtLiberacao( $linha ['dt_liberacao'] );
-    	        $ocorrencia->setAnexo( $linha ['anexo'] );
-    	        $ocorrencia->setDtEspera( $linha ['dt_espera'] );
-    	        $ocorrencia->setDtAguardandoUsuario( $linha ['dt_aguardando_usuario'] );
-    	        $ocorrencia->setLocalSala( $linha ['local_sala'] );
-    			$ocorrencia->getAreaResponsavel()->setId( $linha ['id_area_responsavel_area_responsavel'] );
-    			$ocorrencia->getAreaResponsavel()->setNome( $linha ['nome_area_responsavel_area_responsavel'] );
-    			$ocorrencia->getAreaResponsavel()->setDescricao( $linha ['descricao_area_responsavel_area_responsavel'] );
-    			$ocorrencia->getAreaResponsavel()->setEmail( $linha ['email_area_responsavel_area_responsavel'] );
-    			$ocorrencia->getAreaResponsavel()->setIdAdmin( $linha ['id_admin_area_responsavel_area_responsavel'] );
-    			$ocorrencia->getServico()->setId( $linha ['id_servico_servico'] );
-    			$ocorrencia->getServico()->setNome( $linha ['nome_servico_servico'] );
-    			$ocorrencia->getServico()->setDescricao( $linha ['descricao_servico_servico'] );
-    			$ocorrencia->getServico()->setAtivo( $linha ['ativo_servico_servico'] );
-    			$ocorrencia->getServico()->setTempoSla( $linha ['tempo_sla_servico_servico'] );
-    			$ocorrencia->getServico()->setAreaResponsavel( $linha ['area_responsavel_servico_servico'] );
-    			$ocorrencia->getServico()->setGrupoServico( $linha ['grupo_servico_servico_servico'] );
-    			$ocorrencia->getServico()->setTipoAtividade( $linha ['tipo_atividade_servico_servico'] );
-    			$lista [] = $ocorrencia;
-    			    
-            }
-    			    
-        } catch(PDOException $e) {
-            echo $e->getMessage();
-    			    
-        }
-		return $lista;
-    }
-                
-    public function pesquisaPorDtAguardandoUsuario(Ocorrencia $ocorrencia) {
-        $lista = array();
-	    $dtAguardandoUsuario = $ocorrencia->getDtAguardandoUsuario();
-                
-        $sql = "
-		SELECT
-        ocorrencia.id, 
-        ocorrencia.id_local, 
-        ocorrencia.id_funcionario, 
-        ocorrencia.desc_problema, 
-        ocorrencia.campus, 
-        ocorrencia.etiq_equipamento, 
-        ocorrencia.contato, 
-        ocorrencia.ramal, 
-        ocorrencia.local, 
-        ocorrencia.funcionario, 
-        ocorrencia.status, 
-        ocorrencia.obs, 
-        ocorrencia.prioridade, 
-        ocorrencia.avaliacao, 
-        ocorrencia.email, 
-        ocorrencia.fecha_confirmado, 
-        ocorrencia.reaberto, 
-        ocorrencia.dt_abertura, 
-        ocorrencia.dt_atendimento, 
-        ocorrencia.dt_fechamento, 
-        ocorrencia.dt_fecha_confirmado, 
-        ocorrencia.dt_cancelamento, 
-        ocorrencia.id_atendente, 
-        ocorrencia.id_tecnico_indicado, 
-        ocorrencia.dt_liberacao, 
-        ocorrencia.anexo, 
-        ocorrencia.dt_espera, 
-        ocorrencia.dt_aguardando_usuario, 
-        ocorrencia.local_sala, 
-        area_responsavel.id as id_area_responsavel_area_responsavel, 
-        area_responsavel.nome as nome_area_responsavel_area_responsavel, 
-        area_responsavel.descricao as descricao_area_responsavel_area_responsavel, 
-        area_responsavel.email as email_area_responsavel_area_responsavel, 
-        area_responsavel.id_admin as id_admin_area_responsavel_area_responsavel, 
-        servico.id as id_servico_servico, 
-        servico.nome as nome_servico_servico, 
-        servico.descricao as descricao_servico_servico, 
-        servico.ativo as ativo_servico_servico, 
-        servico.tempo_sla as tempo_sla_servico_servico
-		FROM ocorrencia
-		INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel
-		INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico
-            WHERE ocorrencia.dt_aguardando_usuario like :dtAguardandoUsuario";
-                
-        try {
-                
-            $stmt = $this->conexao->prepare($sql);
-            $stmt->bindParam(":dtAguardandoUsuario", $dtAguardandoUsuario, PDO::PARAM_STR);
-            $stmt->execute();
-            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            foreach ( $result as $linha ) {
-                $ocorrencia = new Ocorrencia();
-    	        $ocorrencia->setId( $linha ['id'] );
-    	        $ocorrencia->setIdLocal( $linha ['id_local'] );
-    	        $ocorrencia->setIdFuncionario( $linha ['id_funcionario'] );
-    	        $ocorrencia->setDescProblema( $linha ['desc_problema'] );
-    	        $ocorrencia->setCampus( $linha ['campus'] );
-    	        $ocorrencia->setEtiqEquipamento( $linha ['etiq_equipamento'] );
-    	        $ocorrencia->setContato( $linha ['contato'] );
-    	        $ocorrencia->setRamal( $linha ['ramal'] );
-    	        $ocorrencia->setLocal( $linha ['local'] );
-    	        $ocorrencia->setFuncionario( $linha ['funcionario'] );
-    	        $ocorrencia->setStatus( $linha ['status'] );
-    	        $ocorrencia->setObs( $linha ['obs'] );
-    	        $ocorrencia->setPrioridade( $linha ['prioridade'] );
-    	        $ocorrencia->setAvaliacao( $linha ['avaliacao'] );
-    	        $ocorrencia->setEmail( $linha ['email'] );
-    	        $ocorrencia->setFechaConfirmado( $linha ['fecha_confirmado'] );
-    	        $ocorrencia->setReaberto( $linha ['reaberto'] );
-    	        $ocorrencia->setDtAbertura( $linha ['dt_abertura'] );
-    	        $ocorrencia->setDtAtendimento( $linha ['dt_atendimento'] );
-    	        $ocorrencia->setDtFechamento( $linha ['dt_fechamento'] );
-    	        $ocorrencia->setDtFechaConfirmado( $linha ['dt_fecha_confirmado'] );
-    	        $ocorrencia->setDtCancelamento( $linha ['dt_cancelamento'] );
-    	        $ocorrencia->setIdAtendente( $linha ['id_atendente'] );
-    	        $ocorrencia->setIdTecnicoIndicado( $linha ['id_tecnico_indicado'] );
-    	        $ocorrencia->setDtLiberacao( $linha ['dt_liberacao'] );
-    	        $ocorrencia->setAnexo( $linha ['anexo'] );
-    	        $ocorrencia->setDtEspera( $linha ['dt_espera'] );
-    	        $ocorrencia->setDtAguardandoUsuario( $linha ['dt_aguardando_usuario'] );
-    	        $ocorrencia->setLocalSala( $linha ['local_sala'] );
-    			$ocorrencia->getAreaResponsavel()->setId( $linha ['id_area_responsavel_area_responsavel'] );
-    			$ocorrencia->getAreaResponsavel()->setNome( $linha ['nome_area_responsavel_area_responsavel'] );
-    			$ocorrencia->getAreaResponsavel()->setDescricao( $linha ['descricao_area_responsavel_area_responsavel'] );
-    			$ocorrencia->getAreaResponsavel()->setEmail( $linha ['email_area_responsavel_area_responsavel'] );
-    			$ocorrencia->getAreaResponsavel()->setIdAdmin( $linha ['id_admin_area_responsavel_area_responsavel'] );
-    			$ocorrencia->getServico()->setId( $linha ['id_servico_servico'] );
-    			$ocorrencia->getServico()->setNome( $linha ['nome_servico_servico'] );
-    			$ocorrencia->getServico()->setDescricao( $linha ['descricao_servico_servico'] );
-    			$ocorrencia->getServico()->setAtivo( $linha ['ativo_servico_servico'] );
-    			$ocorrencia->getServico()->setTempoSla( $linha ['tempo_sla_servico_servico'] );
-    			$ocorrencia->getServico()->setAreaResponsavel( $linha ['area_responsavel_servico_servico'] );
-    			$ocorrencia->getServico()->setGrupoServico( $linha ['grupo_servico_servico_servico'] );
-    			$ocorrencia->getServico()->setTipoAtividade( $linha ['tipo_atividade_servico_servico'] );
+    			$ocorrencia->getUsuarioCliente()->setId( $linha ['id_usuario_usuario_cliente'] );
+    			$ocorrencia->getUsuarioCliente()->setNome( $linha ['nome_usuario_usuario_cliente'] );
+    			$ocorrencia->getUsuarioCliente()->setEmail( $linha ['email_usuario_usuario_cliente'] );
+    			$ocorrencia->getUsuarioCliente()->setLogin( $linha ['login_usuario_usuario_cliente'] );
+    			$ocorrencia->getUsuarioCliente()->setSenha( $linha ['senha_usuario_usuario_cliente'] );
+    			$ocorrencia->getUsuarioCliente()->setNivel( $linha ['nivel_usuario_usuario_cliente'] );
+    			$ocorrencia->getUsuarioCliente()->setSetor( $linha ['setor_usuario_usuario_cliente'] );
+    			$ocorrencia->getUsuarioAtendente()->setId( $linha ['id_usuario_usuario_atendente'] );
+    			$ocorrencia->getUsuarioAtendente()->setNome( $linha ['nome_usuario_usuario_atendente'] );
+    			$ocorrencia->getUsuarioAtendente()->setEmail( $linha ['email_usuario_usuario_atendente'] );
+    			$ocorrencia->getUsuarioAtendente()->setLogin( $linha ['login_usuario_usuario_atendente'] );
+    			$ocorrencia->getUsuarioAtendente()->setSenha( $linha ['senha_usuario_usuario_atendente'] );
+    			$ocorrencia->getUsuarioAtendente()->setNivel( $linha ['nivel_usuario_usuario_atendente'] );
+    			$ocorrencia->getUsuarioAtendente()->setSetor( $linha ['setor_usuario_usuario_atendente'] );
+    			$ocorrencia->getUsuarioIndicado()->setId( $linha ['id_usuario_usuario_indicado'] );
+    			$ocorrencia->getUsuarioIndicado()->setNome( $linha ['nome_usuario_usuario_indicado'] );
+    			$ocorrencia->getUsuarioIndicado()->setEmail( $linha ['email_usuario_usuario_indicado'] );
+    			$ocorrencia->getUsuarioIndicado()->setLogin( $linha ['login_usuario_usuario_indicado'] );
+    			$ocorrencia->getUsuarioIndicado()->setSenha( $linha ['senha_usuario_usuario_indicado'] );
+    			$ocorrencia->getUsuarioIndicado()->setNivel( $linha ['nivel_usuario_usuario_indicado'] );
+    			$ocorrencia->getUsuarioIndicado()->setSetor( $linha ['setor_usuario_usuario_indicado'] );
     			$lista [] = $ocorrencia;
     			    
             }
@@ -3511,46 +1889,51 @@ class OcorrenciaDAO extends DAO {
 		SELECT
         ocorrencia.id, 
         ocorrencia.id_local, 
-        ocorrencia.id_funcionario, 
-        ocorrencia.desc_problema, 
+        ocorrencia.descricao, 
         ocorrencia.campus, 
-        ocorrencia.etiq_equipamento, 
-        ocorrencia.contato, 
+        ocorrencia.patrimonio, 
         ocorrencia.ramal, 
         ocorrencia.local, 
-        ocorrencia.funcionario, 
         ocorrencia.status, 
-        ocorrencia.obs, 
+        ocorrencia.solucao, 
         ocorrencia.prioridade, 
         ocorrencia.avaliacao, 
         ocorrencia.email, 
-        ocorrencia.fecha_confirmado, 
-        ocorrencia.reaberto, 
-        ocorrencia.dt_abertura, 
-        ocorrencia.dt_atendimento, 
-        ocorrencia.dt_fechamento, 
-        ocorrencia.dt_fecha_confirmado, 
-        ocorrencia.dt_cancelamento, 
-        ocorrencia.id_atendente, 
-        ocorrencia.id_tecnico_indicado, 
-        ocorrencia.dt_liberacao, 
         ocorrencia.anexo, 
-        ocorrencia.dt_espera, 
-        ocorrencia.dt_aguardando_usuario, 
         ocorrencia.local_sala, 
         area_responsavel.id as id_area_responsavel_area_responsavel, 
         area_responsavel.nome as nome_area_responsavel_area_responsavel, 
         area_responsavel.descricao as descricao_area_responsavel_area_responsavel, 
         area_responsavel.email as email_area_responsavel_area_responsavel, 
-        area_responsavel.id_admin as id_admin_area_responsavel_area_responsavel, 
         servico.id as id_servico_servico, 
         servico.nome as nome_servico_servico, 
         servico.descricao as descricao_servico_servico, 
-        servico.ativo as ativo_servico_servico, 
-        servico.tempo_sla as tempo_sla_servico_servico
+        servico.tempo_sla as tempo_sla_servico_servico, 
+        servico.visao as visao_servico_servico, 
+        usuario_cliente.id as id_usuario_usuario_cliente, 
+        usuario_cliente.nome as nome_usuario_usuario_cliente, 
+        usuario_cliente.email as email_usuario_usuario_cliente, 
+        usuario_cliente.login as login_usuario_usuario_cliente, 
+        usuario_cliente.senha as senha_usuario_usuario_cliente, 
+        usuario_cliente.nivel as nivel_usuario_usuario_cliente, 
+        usuario_atendente.id as id_usuario_usuario_atendente, 
+        usuario_atendente.nome as nome_usuario_usuario_atendente, 
+        usuario_atendente.email as email_usuario_usuario_atendente, 
+        usuario_atendente.login as login_usuario_usuario_atendente, 
+        usuario_atendente.senha as senha_usuario_usuario_atendente, 
+        usuario_atendente.nivel as nivel_usuario_usuario_atendente, 
+        usuario_indicado.id as id_usuario_usuario_indicado, 
+        usuario_indicado.nome as nome_usuario_usuario_indicado, 
+        usuario_indicado.email as email_usuario_usuario_indicado, 
+        usuario_indicado.login as login_usuario_usuario_indicado, 
+        usuario_indicado.senha as senha_usuario_usuario_indicado, 
+        usuario_indicado.nivel as nivel_usuario_usuario_indicado
 		FROM ocorrencia
 		INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel
 		INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico
+		INNER JOIN usuario as usuario_cliente ON usuario_cliente.id = ocorrencia.id_usuario_cliente
+		INNER JOIN usuario as usuario_atendente ON usuario_atendente.id = ocorrencia.id_usuario_atendente
+		INNER JOIN usuario as usuario_indicado ON usuario_indicado.id = ocorrencia.id_usuario_indicado
             WHERE ocorrencia.local_sala like :localSala";
                 
         try {
@@ -3563,46 +1946,51 @@ class OcorrenciaDAO extends DAO {
                 $ocorrencia = new Ocorrencia();
     	        $ocorrencia->setId( $linha ['id'] );
     	        $ocorrencia->setIdLocal( $linha ['id_local'] );
-    	        $ocorrencia->setIdFuncionario( $linha ['id_funcionario'] );
-    	        $ocorrencia->setDescProblema( $linha ['desc_problema'] );
+    	        $ocorrencia->setDescricao( $linha ['descricao'] );
     	        $ocorrencia->setCampus( $linha ['campus'] );
-    	        $ocorrencia->setEtiqEquipamento( $linha ['etiq_equipamento'] );
-    	        $ocorrencia->setContato( $linha ['contato'] );
+    	        $ocorrencia->setPatrimonio( $linha ['patrimonio'] );
     	        $ocorrencia->setRamal( $linha ['ramal'] );
     	        $ocorrencia->setLocal( $linha ['local'] );
-    	        $ocorrencia->setFuncionario( $linha ['funcionario'] );
     	        $ocorrencia->setStatus( $linha ['status'] );
-    	        $ocorrencia->setObs( $linha ['obs'] );
+    	        $ocorrencia->setSolucao( $linha ['solucao'] );
     	        $ocorrencia->setPrioridade( $linha ['prioridade'] );
     	        $ocorrencia->setAvaliacao( $linha ['avaliacao'] );
     	        $ocorrencia->setEmail( $linha ['email'] );
-    	        $ocorrencia->setFechaConfirmado( $linha ['fecha_confirmado'] );
-    	        $ocorrencia->setReaberto( $linha ['reaberto'] );
-    	        $ocorrencia->setDtAbertura( $linha ['dt_abertura'] );
-    	        $ocorrencia->setDtAtendimento( $linha ['dt_atendimento'] );
-    	        $ocorrencia->setDtFechamento( $linha ['dt_fechamento'] );
-    	        $ocorrencia->setDtFechaConfirmado( $linha ['dt_fecha_confirmado'] );
-    	        $ocorrencia->setDtCancelamento( $linha ['dt_cancelamento'] );
-    	        $ocorrencia->setIdAtendente( $linha ['id_atendente'] );
-    	        $ocorrencia->setIdTecnicoIndicado( $linha ['id_tecnico_indicado'] );
-    	        $ocorrencia->setDtLiberacao( $linha ['dt_liberacao'] );
     	        $ocorrencia->setAnexo( $linha ['anexo'] );
-    	        $ocorrencia->setDtEspera( $linha ['dt_espera'] );
-    	        $ocorrencia->setDtAguardandoUsuario( $linha ['dt_aguardando_usuario'] );
     	        $ocorrencia->setLocalSala( $linha ['local_sala'] );
     			$ocorrencia->getAreaResponsavel()->setId( $linha ['id_area_responsavel_area_responsavel'] );
     			$ocorrencia->getAreaResponsavel()->setNome( $linha ['nome_area_responsavel_area_responsavel'] );
     			$ocorrencia->getAreaResponsavel()->setDescricao( $linha ['descricao_area_responsavel_area_responsavel'] );
     			$ocorrencia->getAreaResponsavel()->setEmail( $linha ['email_area_responsavel_area_responsavel'] );
-    			$ocorrencia->getAreaResponsavel()->setIdAdmin( $linha ['id_admin_area_responsavel_area_responsavel'] );
     			$ocorrencia->getServico()->setId( $linha ['id_servico_servico'] );
     			$ocorrencia->getServico()->setNome( $linha ['nome_servico_servico'] );
     			$ocorrencia->getServico()->setDescricao( $linha ['descricao_servico_servico'] );
-    			$ocorrencia->getServico()->setAtivo( $linha ['ativo_servico_servico'] );
+    			$ocorrencia->getServico()->setTipoAtividade( $linha ['tipo_atividade_servico_servico'] );
     			$ocorrencia->getServico()->setTempoSla( $linha ['tempo_sla_servico_servico'] );
+    			$ocorrencia->getServico()->setVisao( $linha ['visao_servico_servico'] );
     			$ocorrencia->getServico()->setAreaResponsavel( $linha ['area_responsavel_servico_servico'] );
     			$ocorrencia->getServico()->setGrupoServico( $linha ['grupo_servico_servico_servico'] );
-    			$ocorrencia->getServico()->setTipoAtividade( $linha ['tipo_atividade_servico_servico'] );
+    			$ocorrencia->getUsuarioCliente()->setId( $linha ['id_usuario_usuario_cliente'] );
+    			$ocorrencia->getUsuarioCliente()->setNome( $linha ['nome_usuario_usuario_cliente'] );
+    			$ocorrencia->getUsuarioCliente()->setEmail( $linha ['email_usuario_usuario_cliente'] );
+    			$ocorrencia->getUsuarioCliente()->setLogin( $linha ['login_usuario_usuario_cliente'] );
+    			$ocorrencia->getUsuarioCliente()->setSenha( $linha ['senha_usuario_usuario_cliente'] );
+    			$ocorrencia->getUsuarioCliente()->setNivel( $linha ['nivel_usuario_usuario_cliente'] );
+    			$ocorrencia->getUsuarioCliente()->setSetor( $linha ['setor_usuario_usuario_cliente'] );
+    			$ocorrencia->getUsuarioAtendente()->setId( $linha ['id_usuario_usuario_atendente'] );
+    			$ocorrencia->getUsuarioAtendente()->setNome( $linha ['nome_usuario_usuario_atendente'] );
+    			$ocorrencia->getUsuarioAtendente()->setEmail( $linha ['email_usuario_usuario_atendente'] );
+    			$ocorrencia->getUsuarioAtendente()->setLogin( $linha ['login_usuario_usuario_atendente'] );
+    			$ocorrencia->getUsuarioAtendente()->setSenha( $linha ['senha_usuario_usuario_atendente'] );
+    			$ocorrencia->getUsuarioAtendente()->setNivel( $linha ['nivel_usuario_usuario_atendente'] );
+    			$ocorrencia->getUsuarioAtendente()->setSetor( $linha ['setor_usuario_usuario_atendente'] );
+    			$ocorrencia->getUsuarioIndicado()->setId( $linha ['id_usuario_usuario_indicado'] );
+    			$ocorrencia->getUsuarioIndicado()->setNome( $linha ['nome_usuario_usuario_indicado'] );
+    			$ocorrencia->getUsuarioIndicado()->setEmail( $linha ['email_usuario_usuario_indicado'] );
+    			$ocorrencia->getUsuarioIndicado()->setLogin( $linha ['login_usuario_usuario_indicado'] );
+    			$ocorrencia->getUsuarioIndicado()->setSenha( $linha ['senha_usuario_usuario_indicado'] );
+    			$ocorrencia->getUsuarioIndicado()->setNivel( $linha ['nivel_usuario_usuario_indicado'] );
+    			$ocorrencia->getUsuarioIndicado()->setSetor( $linha ['setor_usuario_usuario_indicado'] );
     			$lista [] = $ocorrencia;
     			    
             }
@@ -3621,46 +2009,51 @@ class OcorrenciaDAO extends DAO {
 		SELECT
         ocorrencia.id, 
         ocorrencia.id_local, 
-        ocorrencia.id_funcionario, 
-        ocorrencia.desc_problema, 
+        ocorrencia.descricao, 
         ocorrencia.campus, 
-        ocorrencia.etiq_equipamento, 
-        ocorrencia.contato, 
+        ocorrencia.patrimonio, 
         ocorrencia.ramal, 
         ocorrencia.local, 
-        ocorrencia.funcionario, 
         ocorrencia.status, 
-        ocorrencia.obs, 
+        ocorrencia.solucao, 
         ocorrencia.prioridade, 
         ocorrencia.avaliacao, 
         ocorrencia.email, 
-        ocorrencia.fecha_confirmado, 
-        ocorrencia.reaberto, 
-        ocorrencia.dt_abertura, 
-        ocorrencia.dt_atendimento, 
-        ocorrencia.dt_fechamento, 
-        ocorrencia.dt_fecha_confirmado, 
-        ocorrencia.dt_cancelamento, 
-        ocorrencia.id_atendente, 
-        ocorrencia.id_tecnico_indicado, 
-        ocorrencia.dt_liberacao, 
         ocorrencia.anexo, 
-        ocorrencia.dt_espera, 
-        ocorrencia.dt_aguardando_usuario, 
         ocorrencia.local_sala, 
         area_responsavel.id as id_area_responsavel_area_responsavel, 
         area_responsavel.nome as nome_area_responsavel_area_responsavel, 
         area_responsavel.descricao as descricao_area_responsavel_area_responsavel, 
         area_responsavel.email as email_area_responsavel_area_responsavel, 
-        area_responsavel.id_admin as id_admin_area_responsavel_area_responsavel, 
         servico.id as id_servico_servico, 
         servico.nome as nome_servico_servico, 
         servico.descricao as descricao_servico_servico, 
-        servico.ativo as ativo_servico_servico, 
-        servico.tempo_sla as tempo_sla_servico_servico
+        servico.tempo_sla as tempo_sla_servico_servico, 
+        servico.visao as visao_servico_servico, 
+        usuario_cliente.id as id_usuario_usuario_cliente, 
+        usuario_cliente.nome as nome_usuario_usuario_cliente, 
+        usuario_cliente.email as email_usuario_usuario_cliente, 
+        usuario_cliente.login as login_usuario_usuario_cliente, 
+        usuario_cliente.senha as senha_usuario_usuario_cliente, 
+        usuario_cliente.nivel as nivel_usuario_usuario_cliente, 
+        usuario_atendente.id as id_usuario_usuario_atendente, 
+        usuario_atendente.nome as nome_usuario_usuario_atendente, 
+        usuario_atendente.email as email_usuario_usuario_atendente, 
+        usuario_atendente.login as login_usuario_usuario_atendente, 
+        usuario_atendente.senha as senha_usuario_usuario_atendente, 
+        usuario_atendente.nivel as nivel_usuario_usuario_atendente, 
+        usuario_indicado.id as id_usuario_usuario_indicado, 
+        usuario_indicado.nome as nome_usuario_usuario_indicado, 
+        usuario_indicado.email as email_usuario_usuario_indicado, 
+        usuario_indicado.login as login_usuario_usuario_indicado, 
+        usuario_indicado.senha as senha_usuario_usuario_indicado, 
+        usuario_indicado.nivel as nivel_usuario_usuario_indicado
 		FROM ocorrencia
 		INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel
 		INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico
+		INNER JOIN usuario as usuario_cliente ON usuario_cliente.id = ocorrencia.id_usuario_cliente
+		INNER JOIN usuario as usuario_atendente ON usuario_atendente.id = ocorrencia.id_usuario_atendente
+		INNER JOIN usuario as usuario_indicado ON usuario_indicado.id = ocorrencia.id_usuario_indicado
                 WHERE ocorrencia.id = :id
                  LIMIT 1000";
                 
@@ -3677,43 +2070,45 @@ class OcorrenciaDAO extends DAO {
             {
                 $ocorrencia->setId( $linha ['id'] );
                 $ocorrencia->setIdLocal( $linha ['id_local'] );
-                $ocorrencia->setIdFuncionario( $linha ['id_funcionario'] );
-                $ocorrencia->setDescProblema( $linha ['desc_problema'] );
+                $ocorrencia->setDescricao( $linha ['descricao'] );
                 $ocorrencia->setCampus( $linha ['campus'] );
-                $ocorrencia->setEtiqEquipamento( $linha ['etiq_equipamento'] );
-                $ocorrencia->setContato( $linha ['contato'] );
+                $ocorrencia->setPatrimonio( $linha ['patrimonio'] );
                 $ocorrencia->setRamal( $linha ['ramal'] );
                 $ocorrencia->setLocal( $linha ['local'] );
-                $ocorrencia->setFuncionario( $linha ['funcionario'] );
                 $ocorrencia->setStatus( $linha ['status'] );
-                $ocorrencia->setObs( $linha ['obs'] );
+                $ocorrencia->setSolucao( $linha ['solucao'] );
                 $ocorrencia->setPrioridade( $linha ['prioridade'] );
                 $ocorrencia->setAvaliacao( $linha ['avaliacao'] );
                 $ocorrencia->setEmail( $linha ['email'] );
-                $ocorrencia->setFechaConfirmado( $linha ['fecha_confirmado'] );
-                $ocorrencia->setReaberto( $linha ['reaberto'] );
-                $ocorrencia->setDtAbertura( $linha ['dt_abertura'] );
-                $ocorrencia->setDtAtendimento( $linha ['dt_atendimento'] );
-                $ocorrencia->setDtFechamento( $linha ['dt_fechamento'] );
-                $ocorrencia->setDtFechaConfirmado( $linha ['dt_fecha_confirmado'] );
-                $ocorrencia->setDtCancelamento( $linha ['dt_cancelamento'] );
-                $ocorrencia->setIdAtendente( $linha ['id_atendente'] );
-                $ocorrencia->setIdTecnicoIndicado( $linha ['id_tecnico_indicado'] );
-                $ocorrencia->setDtLiberacao( $linha ['dt_liberacao'] );
                 $ocorrencia->setAnexo( $linha ['anexo'] );
-                $ocorrencia->setDtEspera( $linha ['dt_espera'] );
-                $ocorrencia->setDtAguardandoUsuario( $linha ['dt_aguardando_usuario'] );
                 $ocorrencia->setLocalSala( $linha ['local_sala'] );
                 $ocorrencia->getAreaResponsavel()->setId( $linha ['id_area_responsavel_area_responsavel'] );
                 $ocorrencia->getAreaResponsavel()->setNome( $linha ['nome_area_responsavel_area_responsavel'] );
                 $ocorrencia->getAreaResponsavel()->setDescricao( $linha ['descricao_area_responsavel_area_responsavel'] );
                 $ocorrencia->getAreaResponsavel()->setEmail( $linha ['email_area_responsavel_area_responsavel'] );
-                $ocorrencia->getAreaResponsavel()->setIdAdmin( $linha ['id_admin_area_responsavel_area_responsavel'] );
                 $ocorrencia->getServico()->setId( $linha ['id_servico_servico'] );
                 $ocorrencia->getServico()->setNome( $linha ['nome_servico_servico'] );
                 $ocorrencia->getServico()->setDescricao( $linha ['descricao_servico_servico'] );
-                $ocorrencia->getServico()->setAtivo( $linha ['ativo_servico_servico'] );
                 $ocorrencia->getServico()->setTempoSla( $linha ['tempo_sla_servico_servico'] );
+                $ocorrencia->getServico()->setVisao( $linha ['visao_servico_servico'] );
+                $ocorrencia->getUsuarioCliente()->setId( $linha ['id_usuario_usuario_cliente'] );
+                $ocorrencia->getUsuarioCliente()->setNome( $linha ['nome_usuario_usuario_cliente'] );
+                $ocorrencia->getUsuarioCliente()->setEmail( $linha ['email_usuario_usuario_cliente'] );
+                $ocorrencia->getUsuarioCliente()->setLogin( $linha ['login_usuario_usuario_cliente'] );
+                $ocorrencia->getUsuarioCliente()->setSenha( $linha ['senha_usuario_usuario_cliente'] );
+                $ocorrencia->getUsuarioCliente()->setNivel( $linha ['nivel_usuario_usuario_cliente'] );
+                $ocorrencia->getUsuarioAtendente()->setId( $linha ['id_usuario_usuario_atendente'] );
+                $ocorrencia->getUsuarioAtendente()->setNome( $linha ['nome_usuario_usuario_atendente'] );
+                $ocorrencia->getUsuarioAtendente()->setEmail( $linha ['email_usuario_usuario_atendente'] );
+                $ocorrencia->getUsuarioAtendente()->setLogin( $linha ['login_usuario_usuario_atendente'] );
+                $ocorrencia->getUsuarioAtendente()->setSenha( $linha ['senha_usuario_usuario_atendente'] );
+                $ocorrencia->getUsuarioAtendente()->setNivel( $linha ['nivel_usuario_usuario_atendente'] );
+                $ocorrencia->getUsuarioIndicado()->setId( $linha ['id_usuario_usuario_indicado'] );
+                $ocorrencia->getUsuarioIndicado()->setNome( $linha ['nome_usuario_usuario_indicado'] );
+                $ocorrencia->getUsuarioIndicado()->setEmail( $linha ['email_usuario_usuario_indicado'] );
+                $ocorrencia->getUsuarioIndicado()->setLogin( $linha ['login_usuario_usuario_indicado'] );
+                $ocorrencia->getUsuarioIndicado()->setSenha( $linha ['senha_usuario_usuario_indicado'] );
+                $ocorrencia->getUsuarioIndicado()->setNivel( $linha ['nivel_usuario_usuario_indicado'] );
                 
                 
 		    }
@@ -3730,46 +2125,51 @@ class OcorrenciaDAO extends DAO {
 		SELECT
         ocorrencia.id, 
         ocorrencia.id_local, 
-        ocorrencia.id_funcionario, 
-        ocorrencia.desc_problema, 
+        ocorrencia.descricao, 
         ocorrencia.campus, 
-        ocorrencia.etiq_equipamento, 
-        ocorrencia.contato, 
+        ocorrencia.patrimonio, 
         ocorrencia.ramal, 
         ocorrencia.local, 
-        ocorrencia.funcionario, 
         ocorrencia.status, 
-        ocorrencia.obs, 
+        ocorrencia.solucao, 
         ocorrencia.prioridade, 
         ocorrencia.avaliacao, 
         ocorrencia.email, 
-        ocorrencia.fecha_confirmado, 
-        ocorrencia.reaberto, 
-        ocorrencia.dt_abertura, 
-        ocorrencia.dt_atendimento, 
-        ocorrencia.dt_fechamento, 
-        ocorrencia.dt_fecha_confirmado, 
-        ocorrencia.dt_cancelamento, 
-        ocorrencia.id_atendente, 
-        ocorrencia.id_tecnico_indicado, 
-        ocorrencia.dt_liberacao, 
         ocorrencia.anexo, 
-        ocorrencia.dt_espera, 
-        ocorrencia.dt_aguardando_usuario, 
         ocorrencia.local_sala, 
         area_responsavel.id as id_area_responsavel_area_responsavel, 
         area_responsavel.nome as nome_area_responsavel_area_responsavel, 
         area_responsavel.descricao as descricao_area_responsavel_area_responsavel, 
         area_responsavel.email as email_area_responsavel_area_responsavel, 
-        area_responsavel.id_admin as id_admin_area_responsavel_area_responsavel, 
         servico.id as id_servico_servico, 
         servico.nome as nome_servico_servico, 
         servico.descricao as descricao_servico_servico, 
-        servico.ativo as ativo_servico_servico, 
-        servico.tempo_sla as tempo_sla_servico_servico
+        servico.tempo_sla as tempo_sla_servico_servico, 
+        servico.visao as visao_servico_servico, 
+        usuario_cliente.id as id_usuario_usuario_cliente, 
+        usuario_cliente.nome as nome_usuario_usuario_cliente, 
+        usuario_cliente.email as email_usuario_usuario_cliente, 
+        usuario_cliente.login as login_usuario_usuario_cliente, 
+        usuario_cliente.senha as senha_usuario_usuario_cliente, 
+        usuario_cliente.nivel as nivel_usuario_usuario_cliente, 
+        usuario_atendente.id as id_usuario_usuario_atendente, 
+        usuario_atendente.nome as nome_usuario_usuario_atendente, 
+        usuario_atendente.email as email_usuario_usuario_atendente, 
+        usuario_atendente.login as login_usuario_usuario_atendente, 
+        usuario_atendente.senha as senha_usuario_usuario_atendente, 
+        usuario_atendente.nivel as nivel_usuario_usuario_atendente, 
+        usuario_indicado.id as id_usuario_usuario_indicado, 
+        usuario_indicado.nome as nome_usuario_usuario_indicado, 
+        usuario_indicado.email as email_usuario_usuario_indicado, 
+        usuario_indicado.login as login_usuario_usuario_indicado, 
+        usuario_indicado.senha as senha_usuario_usuario_indicado, 
+        usuario_indicado.nivel as nivel_usuario_usuario_indicado
 		FROM ocorrencia
 		INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel
 		INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico
+		INNER JOIN usuario as usuario_cliente ON usuario_cliente.id = ocorrencia.id_usuario_cliente
+		INNER JOIN usuario as usuario_atendente ON usuario_atendente.id = ocorrencia.id_usuario_atendente
+		INNER JOIN usuario as usuario_indicado ON usuario_indicado.id = ocorrencia.id_usuario_indicado
                 WHERE ocorrencia.id_local = :idLocal
                  LIMIT 1000";
                 
@@ -3786,43 +2186,45 @@ class OcorrenciaDAO extends DAO {
             {
                 $ocorrencia->setId( $linha ['id'] );
                 $ocorrencia->setIdLocal( $linha ['id_local'] );
-                $ocorrencia->setIdFuncionario( $linha ['id_funcionario'] );
-                $ocorrencia->setDescProblema( $linha ['desc_problema'] );
+                $ocorrencia->setDescricao( $linha ['descricao'] );
                 $ocorrencia->setCampus( $linha ['campus'] );
-                $ocorrencia->setEtiqEquipamento( $linha ['etiq_equipamento'] );
-                $ocorrencia->setContato( $linha ['contato'] );
+                $ocorrencia->setPatrimonio( $linha ['patrimonio'] );
                 $ocorrencia->setRamal( $linha ['ramal'] );
                 $ocorrencia->setLocal( $linha ['local'] );
-                $ocorrencia->setFuncionario( $linha ['funcionario'] );
                 $ocorrencia->setStatus( $linha ['status'] );
-                $ocorrencia->setObs( $linha ['obs'] );
+                $ocorrencia->setSolucao( $linha ['solucao'] );
                 $ocorrencia->setPrioridade( $linha ['prioridade'] );
                 $ocorrencia->setAvaliacao( $linha ['avaliacao'] );
                 $ocorrencia->setEmail( $linha ['email'] );
-                $ocorrencia->setFechaConfirmado( $linha ['fecha_confirmado'] );
-                $ocorrencia->setReaberto( $linha ['reaberto'] );
-                $ocorrencia->setDtAbertura( $linha ['dt_abertura'] );
-                $ocorrencia->setDtAtendimento( $linha ['dt_atendimento'] );
-                $ocorrencia->setDtFechamento( $linha ['dt_fechamento'] );
-                $ocorrencia->setDtFechaConfirmado( $linha ['dt_fecha_confirmado'] );
-                $ocorrencia->setDtCancelamento( $linha ['dt_cancelamento'] );
-                $ocorrencia->setIdAtendente( $linha ['id_atendente'] );
-                $ocorrencia->setIdTecnicoIndicado( $linha ['id_tecnico_indicado'] );
-                $ocorrencia->setDtLiberacao( $linha ['dt_liberacao'] );
                 $ocorrencia->setAnexo( $linha ['anexo'] );
-                $ocorrencia->setDtEspera( $linha ['dt_espera'] );
-                $ocorrencia->setDtAguardandoUsuario( $linha ['dt_aguardando_usuario'] );
                 $ocorrencia->setLocalSala( $linha ['local_sala'] );
                 $ocorrencia->getAreaResponsavel()->setId( $linha ['id_area_responsavel_area_responsavel'] );
                 $ocorrencia->getAreaResponsavel()->setNome( $linha ['nome_area_responsavel_area_responsavel'] );
                 $ocorrencia->getAreaResponsavel()->setDescricao( $linha ['descricao_area_responsavel_area_responsavel'] );
                 $ocorrencia->getAreaResponsavel()->setEmail( $linha ['email_area_responsavel_area_responsavel'] );
-                $ocorrencia->getAreaResponsavel()->setIdAdmin( $linha ['id_admin_area_responsavel_area_responsavel'] );
                 $ocorrencia->getServico()->setId( $linha ['id_servico_servico'] );
                 $ocorrencia->getServico()->setNome( $linha ['nome_servico_servico'] );
                 $ocorrencia->getServico()->setDescricao( $linha ['descricao_servico_servico'] );
-                $ocorrencia->getServico()->setAtivo( $linha ['ativo_servico_servico'] );
                 $ocorrencia->getServico()->setTempoSla( $linha ['tempo_sla_servico_servico'] );
+                $ocorrencia->getServico()->setVisao( $linha ['visao_servico_servico'] );
+                $ocorrencia->getUsuarioCliente()->setId( $linha ['id_usuario_usuario_cliente'] );
+                $ocorrencia->getUsuarioCliente()->setNome( $linha ['nome_usuario_usuario_cliente'] );
+                $ocorrencia->getUsuarioCliente()->setEmail( $linha ['email_usuario_usuario_cliente'] );
+                $ocorrencia->getUsuarioCliente()->setLogin( $linha ['login_usuario_usuario_cliente'] );
+                $ocorrencia->getUsuarioCliente()->setSenha( $linha ['senha_usuario_usuario_cliente'] );
+                $ocorrencia->getUsuarioCliente()->setNivel( $linha ['nivel_usuario_usuario_cliente'] );
+                $ocorrencia->getUsuarioAtendente()->setId( $linha ['id_usuario_usuario_atendente'] );
+                $ocorrencia->getUsuarioAtendente()->setNome( $linha ['nome_usuario_usuario_atendente'] );
+                $ocorrencia->getUsuarioAtendente()->setEmail( $linha ['email_usuario_usuario_atendente'] );
+                $ocorrencia->getUsuarioAtendente()->setLogin( $linha ['login_usuario_usuario_atendente'] );
+                $ocorrencia->getUsuarioAtendente()->setSenha( $linha ['senha_usuario_usuario_atendente'] );
+                $ocorrencia->getUsuarioAtendente()->setNivel( $linha ['nivel_usuario_usuario_atendente'] );
+                $ocorrencia->getUsuarioIndicado()->setId( $linha ['id_usuario_usuario_indicado'] );
+                $ocorrencia->getUsuarioIndicado()->setNome( $linha ['nome_usuario_usuario_indicado'] );
+                $ocorrencia->getUsuarioIndicado()->setEmail( $linha ['email_usuario_usuario_indicado'] );
+                $ocorrencia->getUsuarioIndicado()->setLogin( $linha ['login_usuario_usuario_indicado'] );
+                $ocorrencia->getUsuarioIndicado()->setSenha( $linha ['senha_usuario_usuario_indicado'] );
+                $ocorrencia->getUsuarioIndicado()->setNivel( $linha ['nivel_usuario_usuario_indicado'] );
                 
                 
 		    }
@@ -3832,54 +2234,59 @@ class OcorrenciaDAO extends DAO {
 		return $ocorrencia;
     }
                 
-    public function preenchePorIdFuncionario(Ocorrencia $ocorrencia) {
+    public function preenchePorDescricao(Ocorrencia $ocorrencia) {
         
-	    $idFuncionario = $ocorrencia->getIdFuncionario();
+	    $descricao = $ocorrencia->getDescricao();
 	    $sql = "
 		SELECT
         ocorrencia.id, 
         ocorrencia.id_local, 
-        ocorrencia.id_funcionario, 
-        ocorrencia.desc_problema, 
+        ocorrencia.descricao, 
         ocorrencia.campus, 
-        ocorrencia.etiq_equipamento, 
-        ocorrencia.contato, 
+        ocorrencia.patrimonio, 
         ocorrencia.ramal, 
         ocorrencia.local, 
-        ocorrencia.funcionario, 
         ocorrencia.status, 
-        ocorrencia.obs, 
+        ocorrencia.solucao, 
         ocorrencia.prioridade, 
         ocorrencia.avaliacao, 
         ocorrencia.email, 
-        ocorrencia.fecha_confirmado, 
-        ocorrencia.reaberto, 
-        ocorrencia.dt_abertura, 
-        ocorrencia.dt_atendimento, 
-        ocorrencia.dt_fechamento, 
-        ocorrencia.dt_fecha_confirmado, 
-        ocorrencia.dt_cancelamento, 
-        ocorrencia.id_atendente, 
-        ocorrencia.id_tecnico_indicado, 
-        ocorrencia.dt_liberacao, 
         ocorrencia.anexo, 
-        ocorrencia.dt_espera, 
-        ocorrencia.dt_aguardando_usuario, 
         ocorrencia.local_sala, 
         area_responsavel.id as id_area_responsavel_area_responsavel, 
         area_responsavel.nome as nome_area_responsavel_area_responsavel, 
         area_responsavel.descricao as descricao_area_responsavel_area_responsavel, 
         area_responsavel.email as email_area_responsavel_area_responsavel, 
-        area_responsavel.id_admin as id_admin_area_responsavel_area_responsavel, 
         servico.id as id_servico_servico, 
         servico.nome as nome_servico_servico, 
         servico.descricao as descricao_servico_servico, 
-        servico.ativo as ativo_servico_servico, 
-        servico.tempo_sla as tempo_sla_servico_servico
+        servico.tempo_sla as tempo_sla_servico_servico, 
+        servico.visao as visao_servico_servico, 
+        usuario_cliente.id as id_usuario_usuario_cliente, 
+        usuario_cliente.nome as nome_usuario_usuario_cliente, 
+        usuario_cliente.email as email_usuario_usuario_cliente, 
+        usuario_cliente.login as login_usuario_usuario_cliente, 
+        usuario_cliente.senha as senha_usuario_usuario_cliente, 
+        usuario_cliente.nivel as nivel_usuario_usuario_cliente, 
+        usuario_atendente.id as id_usuario_usuario_atendente, 
+        usuario_atendente.nome as nome_usuario_usuario_atendente, 
+        usuario_atendente.email as email_usuario_usuario_atendente, 
+        usuario_atendente.login as login_usuario_usuario_atendente, 
+        usuario_atendente.senha as senha_usuario_usuario_atendente, 
+        usuario_atendente.nivel as nivel_usuario_usuario_atendente, 
+        usuario_indicado.id as id_usuario_usuario_indicado, 
+        usuario_indicado.nome as nome_usuario_usuario_indicado, 
+        usuario_indicado.email as email_usuario_usuario_indicado, 
+        usuario_indicado.login as login_usuario_usuario_indicado, 
+        usuario_indicado.senha as senha_usuario_usuario_indicado, 
+        usuario_indicado.nivel as nivel_usuario_usuario_indicado
 		FROM ocorrencia
 		INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel
 		INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico
-                WHERE ocorrencia.id_funcionario = :idFuncionario
+		INNER JOIN usuario as usuario_cliente ON usuario_cliente.id = ocorrencia.id_usuario_cliente
+		INNER JOIN usuario as usuario_atendente ON usuario_atendente.id = ocorrencia.id_usuario_atendente
+		INNER JOIN usuario as usuario_indicado ON usuario_indicado.id = ocorrencia.id_usuario_indicado
+                WHERE ocorrencia.descricao = :descricao
                  LIMIT 1000";
                 
         try {
@@ -3888,159 +2295,52 @@ class OcorrenciaDAO extends DAO {
 		    if(!$stmt){
                 echo "<br>Mensagem de erro retornada: ".$this->conexao->errorInfo()[2]."<br>";
 		    }
-            $stmt->bindParam(":idFuncionario", $idFuncionario, PDO::PARAM_INT);
+            $stmt->bindParam(":descricao", $descricao, PDO::PARAM_STR);
             $stmt->execute();
 		    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 		    foreach ( $result as $linha )
             {
                 $ocorrencia->setId( $linha ['id'] );
                 $ocorrencia->setIdLocal( $linha ['id_local'] );
-                $ocorrencia->setIdFuncionario( $linha ['id_funcionario'] );
-                $ocorrencia->setDescProblema( $linha ['desc_problema'] );
+                $ocorrencia->setDescricao( $linha ['descricao'] );
                 $ocorrencia->setCampus( $linha ['campus'] );
-                $ocorrencia->setEtiqEquipamento( $linha ['etiq_equipamento'] );
-                $ocorrencia->setContato( $linha ['contato'] );
+                $ocorrencia->setPatrimonio( $linha ['patrimonio'] );
                 $ocorrencia->setRamal( $linha ['ramal'] );
                 $ocorrencia->setLocal( $linha ['local'] );
-                $ocorrencia->setFuncionario( $linha ['funcionario'] );
                 $ocorrencia->setStatus( $linha ['status'] );
-                $ocorrencia->setObs( $linha ['obs'] );
+                $ocorrencia->setSolucao( $linha ['solucao'] );
                 $ocorrencia->setPrioridade( $linha ['prioridade'] );
                 $ocorrencia->setAvaliacao( $linha ['avaliacao'] );
                 $ocorrencia->setEmail( $linha ['email'] );
-                $ocorrencia->setFechaConfirmado( $linha ['fecha_confirmado'] );
-                $ocorrencia->setReaberto( $linha ['reaberto'] );
-                $ocorrencia->setDtAbertura( $linha ['dt_abertura'] );
-                $ocorrencia->setDtAtendimento( $linha ['dt_atendimento'] );
-                $ocorrencia->setDtFechamento( $linha ['dt_fechamento'] );
-                $ocorrencia->setDtFechaConfirmado( $linha ['dt_fecha_confirmado'] );
-                $ocorrencia->setDtCancelamento( $linha ['dt_cancelamento'] );
-                $ocorrencia->setIdAtendente( $linha ['id_atendente'] );
-                $ocorrencia->setIdTecnicoIndicado( $linha ['id_tecnico_indicado'] );
-                $ocorrencia->setDtLiberacao( $linha ['dt_liberacao'] );
                 $ocorrencia->setAnexo( $linha ['anexo'] );
-                $ocorrencia->setDtEspera( $linha ['dt_espera'] );
-                $ocorrencia->setDtAguardandoUsuario( $linha ['dt_aguardando_usuario'] );
                 $ocorrencia->setLocalSala( $linha ['local_sala'] );
                 $ocorrencia->getAreaResponsavel()->setId( $linha ['id_area_responsavel_area_responsavel'] );
                 $ocorrencia->getAreaResponsavel()->setNome( $linha ['nome_area_responsavel_area_responsavel'] );
                 $ocorrencia->getAreaResponsavel()->setDescricao( $linha ['descricao_area_responsavel_area_responsavel'] );
                 $ocorrencia->getAreaResponsavel()->setEmail( $linha ['email_area_responsavel_area_responsavel'] );
-                $ocorrencia->getAreaResponsavel()->setIdAdmin( $linha ['id_admin_area_responsavel_area_responsavel'] );
                 $ocorrencia->getServico()->setId( $linha ['id_servico_servico'] );
                 $ocorrencia->getServico()->setNome( $linha ['nome_servico_servico'] );
                 $ocorrencia->getServico()->setDescricao( $linha ['descricao_servico_servico'] );
-                $ocorrencia->getServico()->setAtivo( $linha ['ativo_servico_servico'] );
                 $ocorrencia->getServico()->setTempoSla( $linha ['tempo_sla_servico_servico'] );
-                
-                
-		    }
-		} catch(PDOException $e) {
-		    echo $e->getMessage();
- 		}
-		return $ocorrencia;
-    }
-                
-    public function preenchePorDescProblema(Ocorrencia $ocorrencia) {
-        
-	    $descProblema = $ocorrencia->getDescProblema();
-	    $sql = "
-		SELECT
-        ocorrencia.id, 
-        ocorrencia.id_local, 
-        ocorrencia.id_funcionario, 
-        ocorrencia.desc_problema, 
-        ocorrencia.campus, 
-        ocorrencia.etiq_equipamento, 
-        ocorrencia.contato, 
-        ocorrencia.ramal, 
-        ocorrencia.local, 
-        ocorrencia.funcionario, 
-        ocorrencia.status, 
-        ocorrencia.obs, 
-        ocorrencia.prioridade, 
-        ocorrencia.avaliacao, 
-        ocorrencia.email, 
-        ocorrencia.fecha_confirmado, 
-        ocorrencia.reaberto, 
-        ocorrencia.dt_abertura, 
-        ocorrencia.dt_atendimento, 
-        ocorrencia.dt_fechamento, 
-        ocorrencia.dt_fecha_confirmado, 
-        ocorrencia.dt_cancelamento, 
-        ocorrencia.id_atendente, 
-        ocorrencia.id_tecnico_indicado, 
-        ocorrencia.dt_liberacao, 
-        ocorrencia.anexo, 
-        ocorrencia.dt_espera, 
-        ocorrencia.dt_aguardando_usuario, 
-        ocorrencia.local_sala, 
-        area_responsavel.id as id_area_responsavel_area_responsavel, 
-        area_responsavel.nome as nome_area_responsavel_area_responsavel, 
-        area_responsavel.descricao as descricao_area_responsavel_area_responsavel, 
-        area_responsavel.email as email_area_responsavel_area_responsavel, 
-        area_responsavel.id_admin as id_admin_area_responsavel_area_responsavel, 
-        servico.id as id_servico_servico, 
-        servico.nome as nome_servico_servico, 
-        servico.descricao as descricao_servico_servico, 
-        servico.ativo as ativo_servico_servico, 
-        servico.tempo_sla as tempo_sla_servico_servico
-		FROM ocorrencia
-		INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel
-		INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico
-                WHERE ocorrencia.desc_problema = :descProblema
-                 LIMIT 1000";
-                
-        try {
-            $stmt = $this->conexao->prepare($sql);
-                
-		    if(!$stmt){
-                echo "<br>Mensagem de erro retornada: ".$this->conexao->errorInfo()[2]."<br>";
-		    }
-            $stmt->bindParam(":descProblema", $descProblema, PDO::PARAM_STR);
-            $stmt->execute();
-		    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-		    foreach ( $result as $linha )
-            {
-                $ocorrencia->setId( $linha ['id'] );
-                $ocorrencia->setIdLocal( $linha ['id_local'] );
-                $ocorrencia->setIdFuncionario( $linha ['id_funcionario'] );
-                $ocorrencia->setDescProblema( $linha ['desc_problema'] );
-                $ocorrencia->setCampus( $linha ['campus'] );
-                $ocorrencia->setEtiqEquipamento( $linha ['etiq_equipamento'] );
-                $ocorrencia->setContato( $linha ['contato'] );
-                $ocorrencia->setRamal( $linha ['ramal'] );
-                $ocorrencia->setLocal( $linha ['local'] );
-                $ocorrencia->setFuncionario( $linha ['funcionario'] );
-                $ocorrencia->setStatus( $linha ['status'] );
-                $ocorrencia->setObs( $linha ['obs'] );
-                $ocorrencia->setPrioridade( $linha ['prioridade'] );
-                $ocorrencia->setAvaliacao( $linha ['avaliacao'] );
-                $ocorrencia->setEmail( $linha ['email'] );
-                $ocorrencia->setFechaConfirmado( $linha ['fecha_confirmado'] );
-                $ocorrencia->setReaberto( $linha ['reaberto'] );
-                $ocorrencia->setDtAbertura( $linha ['dt_abertura'] );
-                $ocorrencia->setDtAtendimento( $linha ['dt_atendimento'] );
-                $ocorrencia->setDtFechamento( $linha ['dt_fechamento'] );
-                $ocorrencia->setDtFechaConfirmado( $linha ['dt_fecha_confirmado'] );
-                $ocorrencia->setDtCancelamento( $linha ['dt_cancelamento'] );
-                $ocorrencia->setIdAtendente( $linha ['id_atendente'] );
-                $ocorrencia->setIdTecnicoIndicado( $linha ['id_tecnico_indicado'] );
-                $ocorrencia->setDtLiberacao( $linha ['dt_liberacao'] );
-                $ocorrencia->setAnexo( $linha ['anexo'] );
-                $ocorrencia->setDtEspera( $linha ['dt_espera'] );
-                $ocorrencia->setDtAguardandoUsuario( $linha ['dt_aguardando_usuario'] );
-                $ocorrencia->setLocalSala( $linha ['local_sala'] );
-                $ocorrencia->getAreaResponsavel()->setId( $linha ['id_area_responsavel_area_responsavel'] );
-                $ocorrencia->getAreaResponsavel()->setNome( $linha ['nome_area_responsavel_area_responsavel'] );
-                $ocorrencia->getAreaResponsavel()->setDescricao( $linha ['descricao_area_responsavel_area_responsavel'] );
-                $ocorrencia->getAreaResponsavel()->setEmail( $linha ['email_area_responsavel_area_responsavel'] );
-                $ocorrencia->getAreaResponsavel()->setIdAdmin( $linha ['id_admin_area_responsavel_area_responsavel'] );
-                $ocorrencia->getServico()->setId( $linha ['id_servico_servico'] );
-                $ocorrencia->getServico()->setNome( $linha ['nome_servico_servico'] );
-                $ocorrencia->getServico()->setDescricao( $linha ['descricao_servico_servico'] );
-                $ocorrencia->getServico()->setAtivo( $linha ['ativo_servico_servico'] );
-                $ocorrencia->getServico()->setTempoSla( $linha ['tempo_sla_servico_servico'] );
+                $ocorrencia->getServico()->setVisao( $linha ['visao_servico_servico'] );
+                $ocorrencia->getUsuarioCliente()->setId( $linha ['id_usuario_usuario_cliente'] );
+                $ocorrencia->getUsuarioCliente()->setNome( $linha ['nome_usuario_usuario_cliente'] );
+                $ocorrencia->getUsuarioCliente()->setEmail( $linha ['email_usuario_usuario_cliente'] );
+                $ocorrencia->getUsuarioCliente()->setLogin( $linha ['login_usuario_usuario_cliente'] );
+                $ocorrencia->getUsuarioCliente()->setSenha( $linha ['senha_usuario_usuario_cliente'] );
+                $ocorrencia->getUsuarioCliente()->setNivel( $linha ['nivel_usuario_usuario_cliente'] );
+                $ocorrencia->getUsuarioAtendente()->setId( $linha ['id_usuario_usuario_atendente'] );
+                $ocorrencia->getUsuarioAtendente()->setNome( $linha ['nome_usuario_usuario_atendente'] );
+                $ocorrencia->getUsuarioAtendente()->setEmail( $linha ['email_usuario_usuario_atendente'] );
+                $ocorrencia->getUsuarioAtendente()->setLogin( $linha ['login_usuario_usuario_atendente'] );
+                $ocorrencia->getUsuarioAtendente()->setSenha( $linha ['senha_usuario_usuario_atendente'] );
+                $ocorrencia->getUsuarioAtendente()->setNivel( $linha ['nivel_usuario_usuario_atendente'] );
+                $ocorrencia->getUsuarioIndicado()->setId( $linha ['id_usuario_usuario_indicado'] );
+                $ocorrencia->getUsuarioIndicado()->setNome( $linha ['nome_usuario_usuario_indicado'] );
+                $ocorrencia->getUsuarioIndicado()->setEmail( $linha ['email_usuario_usuario_indicado'] );
+                $ocorrencia->getUsuarioIndicado()->setLogin( $linha ['login_usuario_usuario_indicado'] );
+                $ocorrencia->getUsuarioIndicado()->setSenha( $linha ['senha_usuario_usuario_indicado'] );
+                $ocorrencia->getUsuarioIndicado()->setNivel( $linha ['nivel_usuario_usuario_indicado'] );
                 
                 
 		    }
@@ -4057,46 +2357,51 @@ class OcorrenciaDAO extends DAO {
 		SELECT
         ocorrencia.id, 
         ocorrencia.id_local, 
-        ocorrencia.id_funcionario, 
-        ocorrencia.desc_problema, 
+        ocorrencia.descricao, 
         ocorrencia.campus, 
-        ocorrencia.etiq_equipamento, 
-        ocorrencia.contato, 
+        ocorrencia.patrimonio, 
         ocorrencia.ramal, 
         ocorrencia.local, 
-        ocorrencia.funcionario, 
         ocorrencia.status, 
-        ocorrencia.obs, 
+        ocorrencia.solucao, 
         ocorrencia.prioridade, 
         ocorrencia.avaliacao, 
         ocorrencia.email, 
-        ocorrencia.fecha_confirmado, 
-        ocorrencia.reaberto, 
-        ocorrencia.dt_abertura, 
-        ocorrencia.dt_atendimento, 
-        ocorrencia.dt_fechamento, 
-        ocorrencia.dt_fecha_confirmado, 
-        ocorrencia.dt_cancelamento, 
-        ocorrencia.id_atendente, 
-        ocorrencia.id_tecnico_indicado, 
-        ocorrencia.dt_liberacao, 
         ocorrencia.anexo, 
-        ocorrencia.dt_espera, 
-        ocorrencia.dt_aguardando_usuario, 
         ocorrencia.local_sala, 
         area_responsavel.id as id_area_responsavel_area_responsavel, 
         area_responsavel.nome as nome_area_responsavel_area_responsavel, 
         area_responsavel.descricao as descricao_area_responsavel_area_responsavel, 
         area_responsavel.email as email_area_responsavel_area_responsavel, 
-        area_responsavel.id_admin as id_admin_area_responsavel_area_responsavel, 
         servico.id as id_servico_servico, 
         servico.nome as nome_servico_servico, 
         servico.descricao as descricao_servico_servico, 
-        servico.ativo as ativo_servico_servico, 
-        servico.tempo_sla as tempo_sla_servico_servico
+        servico.tempo_sla as tempo_sla_servico_servico, 
+        servico.visao as visao_servico_servico, 
+        usuario_cliente.id as id_usuario_usuario_cliente, 
+        usuario_cliente.nome as nome_usuario_usuario_cliente, 
+        usuario_cliente.email as email_usuario_usuario_cliente, 
+        usuario_cliente.login as login_usuario_usuario_cliente, 
+        usuario_cliente.senha as senha_usuario_usuario_cliente, 
+        usuario_cliente.nivel as nivel_usuario_usuario_cliente, 
+        usuario_atendente.id as id_usuario_usuario_atendente, 
+        usuario_atendente.nome as nome_usuario_usuario_atendente, 
+        usuario_atendente.email as email_usuario_usuario_atendente, 
+        usuario_atendente.login as login_usuario_usuario_atendente, 
+        usuario_atendente.senha as senha_usuario_usuario_atendente, 
+        usuario_atendente.nivel as nivel_usuario_usuario_atendente, 
+        usuario_indicado.id as id_usuario_usuario_indicado, 
+        usuario_indicado.nome as nome_usuario_usuario_indicado, 
+        usuario_indicado.email as email_usuario_usuario_indicado, 
+        usuario_indicado.login as login_usuario_usuario_indicado, 
+        usuario_indicado.senha as senha_usuario_usuario_indicado, 
+        usuario_indicado.nivel as nivel_usuario_usuario_indicado
 		FROM ocorrencia
 		INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel
 		INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico
+		INNER JOIN usuario as usuario_cliente ON usuario_cliente.id = ocorrencia.id_usuario_cliente
+		INNER JOIN usuario as usuario_atendente ON usuario_atendente.id = ocorrencia.id_usuario_atendente
+		INNER JOIN usuario as usuario_indicado ON usuario_indicado.id = ocorrencia.id_usuario_indicado
                 WHERE ocorrencia.campus = :campus
                  LIMIT 1000";
                 
@@ -4113,43 +2418,45 @@ class OcorrenciaDAO extends DAO {
             {
                 $ocorrencia->setId( $linha ['id'] );
                 $ocorrencia->setIdLocal( $linha ['id_local'] );
-                $ocorrencia->setIdFuncionario( $linha ['id_funcionario'] );
-                $ocorrencia->setDescProblema( $linha ['desc_problema'] );
+                $ocorrencia->setDescricao( $linha ['descricao'] );
                 $ocorrencia->setCampus( $linha ['campus'] );
-                $ocorrencia->setEtiqEquipamento( $linha ['etiq_equipamento'] );
-                $ocorrencia->setContato( $linha ['contato'] );
+                $ocorrencia->setPatrimonio( $linha ['patrimonio'] );
                 $ocorrencia->setRamal( $linha ['ramal'] );
                 $ocorrencia->setLocal( $linha ['local'] );
-                $ocorrencia->setFuncionario( $linha ['funcionario'] );
                 $ocorrencia->setStatus( $linha ['status'] );
-                $ocorrencia->setObs( $linha ['obs'] );
+                $ocorrencia->setSolucao( $linha ['solucao'] );
                 $ocorrencia->setPrioridade( $linha ['prioridade'] );
                 $ocorrencia->setAvaliacao( $linha ['avaliacao'] );
                 $ocorrencia->setEmail( $linha ['email'] );
-                $ocorrencia->setFechaConfirmado( $linha ['fecha_confirmado'] );
-                $ocorrencia->setReaberto( $linha ['reaberto'] );
-                $ocorrencia->setDtAbertura( $linha ['dt_abertura'] );
-                $ocorrencia->setDtAtendimento( $linha ['dt_atendimento'] );
-                $ocorrencia->setDtFechamento( $linha ['dt_fechamento'] );
-                $ocorrencia->setDtFechaConfirmado( $linha ['dt_fecha_confirmado'] );
-                $ocorrencia->setDtCancelamento( $linha ['dt_cancelamento'] );
-                $ocorrencia->setIdAtendente( $linha ['id_atendente'] );
-                $ocorrencia->setIdTecnicoIndicado( $linha ['id_tecnico_indicado'] );
-                $ocorrencia->setDtLiberacao( $linha ['dt_liberacao'] );
                 $ocorrencia->setAnexo( $linha ['anexo'] );
-                $ocorrencia->setDtEspera( $linha ['dt_espera'] );
-                $ocorrencia->setDtAguardandoUsuario( $linha ['dt_aguardando_usuario'] );
                 $ocorrencia->setLocalSala( $linha ['local_sala'] );
                 $ocorrencia->getAreaResponsavel()->setId( $linha ['id_area_responsavel_area_responsavel'] );
                 $ocorrencia->getAreaResponsavel()->setNome( $linha ['nome_area_responsavel_area_responsavel'] );
                 $ocorrencia->getAreaResponsavel()->setDescricao( $linha ['descricao_area_responsavel_area_responsavel'] );
                 $ocorrencia->getAreaResponsavel()->setEmail( $linha ['email_area_responsavel_area_responsavel'] );
-                $ocorrencia->getAreaResponsavel()->setIdAdmin( $linha ['id_admin_area_responsavel_area_responsavel'] );
                 $ocorrencia->getServico()->setId( $linha ['id_servico_servico'] );
                 $ocorrencia->getServico()->setNome( $linha ['nome_servico_servico'] );
                 $ocorrencia->getServico()->setDescricao( $linha ['descricao_servico_servico'] );
-                $ocorrencia->getServico()->setAtivo( $linha ['ativo_servico_servico'] );
                 $ocorrencia->getServico()->setTempoSla( $linha ['tempo_sla_servico_servico'] );
+                $ocorrencia->getServico()->setVisao( $linha ['visao_servico_servico'] );
+                $ocorrencia->getUsuarioCliente()->setId( $linha ['id_usuario_usuario_cliente'] );
+                $ocorrencia->getUsuarioCliente()->setNome( $linha ['nome_usuario_usuario_cliente'] );
+                $ocorrencia->getUsuarioCliente()->setEmail( $linha ['email_usuario_usuario_cliente'] );
+                $ocorrencia->getUsuarioCliente()->setLogin( $linha ['login_usuario_usuario_cliente'] );
+                $ocorrencia->getUsuarioCliente()->setSenha( $linha ['senha_usuario_usuario_cliente'] );
+                $ocorrencia->getUsuarioCliente()->setNivel( $linha ['nivel_usuario_usuario_cliente'] );
+                $ocorrencia->getUsuarioAtendente()->setId( $linha ['id_usuario_usuario_atendente'] );
+                $ocorrencia->getUsuarioAtendente()->setNome( $linha ['nome_usuario_usuario_atendente'] );
+                $ocorrencia->getUsuarioAtendente()->setEmail( $linha ['email_usuario_usuario_atendente'] );
+                $ocorrencia->getUsuarioAtendente()->setLogin( $linha ['login_usuario_usuario_atendente'] );
+                $ocorrencia->getUsuarioAtendente()->setSenha( $linha ['senha_usuario_usuario_atendente'] );
+                $ocorrencia->getUsuarioAtendente()->setNivel( $linha ['nivel_usuario_usuario_atendente'] );
+                $ocorrencia->getUsuarioIndicado()->setId( $linha ['id_usuario_usuario_indicado'] );
+                $ocorrencia->getUsuarioIndicado()->setNome( $linha ['nome_usuario_usuario_indicado'] );
+                $ocorrencia->getUsuarioIndicado()->setEmail( $linha ['email_usuario_usuario_indicado'] );
+                $ocorrencia->getUsuarioIndicado()->setLogin( $linha ['login_usuario_usuario_indicado'] );
+                $ocorrencia->getUsuarioIndicado()->setSenha( $linha ['senha_usuario_usuario_indicado'] );
+                $ocorrencia->getUsuarioIndicado()->setNivel( $linha ['nivel_usuario_usuario_indicado'] );
                 
                 
 		    }
@@ -4159,54 +2466,59 @@ class OcorrenciaDAO extends DAO {
 		return $ocorrencia;
     }
                 
-    public function preenchePorEtiqEquipamento(Ocorrencia $ocorrencia) {
+    public function preenchePorPatrimonio(Ocorrencia $ocorrencia) {
         
-	    $etiqEquipamento = $ocorrencia->getEtiqEquipamento();
+	    $patrimonio = $ocorrencia->getPatrimonio();
 	    $sql = "
 		SELECT
         ocorrencia.id, 
         ocorrencia.id_local, 
-        ocorrencia.id_funcionario, 
-        ocorrencia.desc_problema, 
+        ocorrencia.descricao, 
         ocorrencia.campus, 
-        ocorrencia.etiq_equipamento, 
-        ocorrencia.contato, 
+        ocorrencia.patrimonio, 
         ocorrencia.ramal, 
         ocorrencia.local, 
-        ocorrencia.funcionario, 
         ocorrencia.status, 
-        ocorrencia.obs, 
+        ocorrencia.solucao, 
         ocorrencia.prioridade, 
         ocorrencia.avaliacao, 
         ocorrencia.email, 
-        ocorrencia.fecha_confirmado, 
-        ocorrencia.reaberto, 
-        ocorrencia.dt_abertura, 
-        ocorrencia.dt_atendimento, 
-        ocorrencia.dt_fechamento, 
-        ocorrencia.dt_fecha_confirmado, 
-        ocorrencia.dt_cancelamento, 
-        ocorrencia.id_atendente, 
-        ocorrencia.id_tecnico_indicado, 
-        ocorrencia.dt_liberacao, 
         ocorrencia.anexo, 
-        ocorrencia.dt_espera, 
-        ocorrencia.dt_aguardando_usuario, 
         ocorrencia.local_sala, 
         area_responsavel.id as id_area_responsavel_area_responsavel, 
         area_responsavel.nome as nome_area_responsavel_area_responsavel, 
         area_responsavel.descricao as descricao_area_responsavel_area_responsavel, 
         area_responsavel.email as email_area_responsavel_area_responsavel, 
-        area_responsavel.id_admin as id_admin_area_responsavel_area_responsavel, 
         servico.id as id_servico_servico, 
         servico.nome as nome_servico_servico, 
         servico.descricao as descricao_servico_servico, 
-        servico.ativo as ativo_servico_servico, 
-        servico.tempo_sla as tempo_sla_servico_servico
+        servico.tempo_sla as tempo_sla_servico_servico, 
+        servico.visao as visao_servico_servico, 
+        usuario_cliente.id as id_usuario_usuario_cliente, 
+        usuario_cliente.nome as nome_usuario_usuario_cliente, 
+        usuario_cliente.email as email_usuario_usuario_cliente, 
+        usuario_cliente.login as login_usuario_usuario_cliente, 
+        usuario_cliente.senha as senha_usuario_usuario_cliente, 
+        usuario_cliente.nivel as nivel_usuario_usuario_cliente, 
+        usuario_atendente.id as id_usuario_usuario_atendente, 
+        usuario_atendente.nome as nome_usuario_usuario_atendente, 
+        usuario_atendente.email as email_usuario_usuario_atendente, 
+        usuario_atendente.login as login_usuario_usuario_atendente, 
+        usuario_atendente.senha as senha_usuario_usuario_atendente, 
+        usuario_atendente.nivel as nivel_usuario_usuario_atendente, 
+        usuario_indicado.id as id_usuario_usuario_indicado, 
+        usuario_indicado.nome as nome_usuario_usuario_indicado, 
+        usuario_indicado.email as email_usuario_usuario_indicado, 
+        usuario_indicado.login as login_usuario_usuario_indicado, 
+        usuario_indicado.senha as senha_usuario_usuario_indicado, 
+        usuario_indicado.nivel as nivel_usuario_usuario_indicado
 		FROM ocorrencia
 		INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel
 		INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico
-                WHERE ocorrencia.etiq_equipamento = :etiqEquipamento
+		INNER JOIN usuario as usuario_cliente ON usuario_cliente.id = ocorrencia.id_usuario_cliente
+		INNER JOIN usuario as usuario_atendente ON usuario_atendente.id = ocorrencia.id_usuario_atendente
+		INNER JOIN usuario as usuario_indicado ON usuario_indicado.id = ocorrencia.id_usuario_indicado
+                WHERE ocorrencia.patrimonio = :patrimonio
                  LIMIT 1000";
                 
         try {
@@ -4215,159 +2527,52 @@ class OcorrenciaDAO extends DAO {
 		    if(!$stmt){
                 echo "<br>Mensagem de erro retornada: ".$this->conexao->errorInfo()[2]."<br>";
 		    }
-            $stmt->bindParam(":etiqEquipamento", $etiqEquipamento, PDO::PARAM_STR);
+            $stmt->bindParam(":patrimonio", $patrimonio, PDO::PARAM_STR);
             $stmt->execute();
 		    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 		    foreach ( $result as $linha )
             {
                 $ocorrencia->setId( $linha ['id'] );
                 $ocorrencia->setIdLocal( $linha ['id_local'] );
-                $ocorrencia->setIdFuncionario( $linha ['id_funcionario'] );
-                $ocorrencia->setDescProblema( $linha ['desc_problema'] );
+                $ocorrencia->setDescricao( $linha ['descricao'] );
                 $ocorrencia->setCampus( $linha ['campus'] );
-                $ocorrencia->setEtiqEquipamento( $linha ['etiq_equipamento'] );
-                $ocorrencia->setContato( $linha ['contato'] );
+                $ocorrencia->setPatrimonio( $linha ['patrimonio'] );
                 $ocorrencia->setRamal( $linha ['ramal'] );
                 $ocorrencia->setLocal( $linha ['local'] );
-                $ocorrencia->setFuncionario( $linha ['funcionario'] );
                 $ocorrencia->setStatus( $linha ['status'] );
-                $ocorrencia->setObs( $linha ['obs'] );
+                $ocorrencia->setSolucao( $linha ['solucao'] );
                 $ocorrencia->setPrioridade( $linha ['prioridade'] );
                 $ocorrencia->setAvaliacao( $linha ['avaliacao'] );
                 $ocorrencia->setEmail( $linha ['email'] );
-                $ocorrencia->setFechaConfirmado( $linha ['fecha_confirmado'] );
-                $ocorrencia->setReaberto( $linha ['reaberto'] );
-                $ocorrencia->setDtAbertura( $linha ['dt_abertura'] );
-                $ocorrencia->setDtAtendimento( $linha ['dt_atendimento'] );
-                $ocorrencia->setDtFechamento( $linha ['dt_fechamento'] );
-                $ocorrencia->setDtFechaConfirmado( $linha ['dt_fecha_confirmado'] );
-                $ocorrencia->setDtCancelamento( $linha ['dt_cancelamento'] );
-                $ocorrencia->setIdAtendente( $linha ['id_atendente'] );
-                $ocorrencia->setIdTecnicoIndicado( $linha ['id_tecnico_indicado'] );
-                $ocorrencia->setDtLiberacao( $linha ['dt_liberacao'] );
                 $ocorrencia->setAnexo( $linha ['anexo'] );
-                $ocorrencia->setDtEspera( $linha ['dt_espera'] );
-                $ocorrencia->setDtAguardandoUsuario( $linha ['dt_aguardando_usuario'] );
                 $ocorrencia->setLocalSala( $linha ['local_sala'] );
                 $ocorrencia->getAreaResponsavel()->setId( $linha ['id_area_responsavel_area_responsavel'] );
                 $ocorrencia->getAreaResponsavel()->setNome( $linha ['nome_area_responsavel_area_responsavel'] );
                 $ocorrencia->getAreaResponsavel()->setDescricao( $linha ['descricao_area_responsavel_area_responsavel'] );
                 $ocorrencia->getAreaResponsavel()->setEmail( $linha ['email_area_responsavel_area_responsavel'] );
-                $ocorrencia->getAreaResponsavel()->setIdAdmin( $linha ['id_admin_area_responsavel_area_responsavel'] );
                 $ocorrencia->getServico()->setId( $linha ['id_servico_servico'] );
                 $ocorrencia->getServico()->setNome( $linha ['nome_servico_servico'] );
                 $ocorrencia->getServico()->setDescricao( $linha ['descricao_servico_servico'] );
-                $ocorrencia->getServico()->setAtivo( $linha ['ativo_servico_servico'] );
                 $ocorrencia->getServico()->setTempoSla( $linha ['tempo_sla_servico_servico'] );
-                
-                
-		    }
-		} catch(PDOException $e) {
-		    echo $e->getMessage();
- 		}
-		return $ocorrencia;
-    }
-                
-    public function preenchePorContato(Ocorrencia $ocorrencia) {
-        
-	    $contato = $ocorrencia->getContato();
-	    $sql = "
-		SELECT
-        ocorrencia.id, 
-        ocorrencia.id_local, 
-        ocorrencia.id_funcionario, 
-        ocorrencia.desc_problema, 
-        ocorrencia.campus, 
-        ocorrencia.etiq_equipamento, 
-        ocorrencia.contato, 
-        ocorrencia.ramal, 
-        ocorrencia.local, 
-        ocorrencia.funcionario, 
-        ocorrencia.status, 
-        ocorrencia.obs, 
-        ocorrencia.prioridade, 
-        ocorrencia.avaliacao, 
-        ocorrencia.email, 
-        ocorrencia.fecha_confirmado, 
-        ocorrencia.reaberto, 
-        ocorrencia.dt_abertura, 
-        ocorrencia.dt_atendimento, 
-        ocorrencia.dt_fechamento, 
-        ocorrencia.dt_fecha_confirmado, 
-        ocorrencia.dt_cancelamento, 
-        ocorrencia.id_atendente, 
-        ocorrencia.id_tecnico_indicado, 
-        ocorrencia.dt_liberacao, 
-        ocorrencia.anexo, 
-        ocorrencia.dt_espera, 
-        ocorrencia.dt_aguardando_usuario, 
-        ocorrencia.local_sala, 
-        area_responsavel.id as id_area_responsavel_area_responsavel, 
-        area_responsavel.nome as nome_area_responsavel_area_responsavel, 
-        area_responsavel.descricao as descricao_area_responsavel_area_responsavel, 
-        area_responsavel.email as email_area_responsavel_area_responsavel, 
-        area_responsavel.id_admin as id_admin_area_responsavel_area_responsavel, 
-        servico.id as id_servico_servico, 
-        servico.nome as nome_servico_servico, 
-        servico.descricao as descricao_servico_servico, 
-        servico.ativo as ativo_servico_servico, 
-        servico.tempo_sla as tempo_sla_servico_servico
-		FROM ocorrencia
-		INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel
-		INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico
-                WHERE ocorrencia.contato = :contato
-                 LIMIT 1000";
-                
-        try {
-            $stmt = $this->conexao->prepare($sql);
-                
-		    if(!$stmt){
-                echo "<br>Mensagem de erro retornada: ".$this->conexao->errorInfo()[2]."<br>";
-		    }
-            $stmt->bindParam(":contato", $contato, PDO::PARAM_STR);
-            $stmt->execute();
-		    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-		    foreach ( $result as $linha )
-            {
-                $ocorrencia->setId( $linha ['id'] );
-                $ocorrencia->setIdLocal( $linha ['id_local'] );
-                $ocorrencia->setIdFuncionario( $linha ['id_funcionario'] );
-                $ocorrencia->setDescProblema( $linha ['desc_problema'] );
-                $ocorrencia->setCampus( $linha ['campus'] );
-                $ocorrencia->setEtiqEquipamento( $linha ['etiq_equipamento'] );
-                $ocorrencia->setContato( $linha ['contato'] );
-                $ocorrencia->setRamal( $linha ['ramal'] );
-                $ocorrencia->setLocal( $linha ['local'] );
-                $ocorrencia->setFuncionario( $linha ['funcionario'] );
-                $ocorrencia->setStatus( $linha ['status'] );
-                $ocorrencia->setObs( $linha ['obs'] );
-                $ocorrencia->setPrioridade( $linha ['prioridade'] );
-                $ocorrencia->setAvaliacao( $linha ['avaliacao'] );
-                $ocorrencia->setEmail( $linha ['email'] );
-                $ocorrencia->setFechaConfirmado( $linha ['fecha_confirmado'] );
-                $ocorrencia->setReaberto( $linha ['reaberto'] );
-                $ocorrencia->setDtAbertura( $linha ['dt_abertura'] );
-                $ocorrencia->setDtAtendimento( $linha ['dt_atendimento'] );
-                $ocorrencia->setDtFechamento( $linha ['dt_fechamento'] );
-                $ocorrencia->setDtFechaConfirmado( $linha ['dt_fecha_confirmado'] );
-                $ocorrencia->setDtCancelamento( $linha ['dt_cancelamento'] );
-                $ocorrencia->setIdAtendente( $linha ['id_atendente'] );
-                $ocorrencia->setIdTecnicoIndicado( $linha ['id_tecnico_indicado'] );
-                $ocorrencia->setDtLiberacao( $linha ['dt_liberacao'] );
-                $ocorrencia->setAnexo( $linha ['anexo'] );
-                $ocorrencia->setDtEspera( $linha ['dt_espera'] );
-                $ocorrencia->setDtAguardandoUsuario( $linha ['dt_aguardando_usuario'] );
-                $ocorrencia->setLocalSala( $linha ['local_sala'] );
-                $ocorrencia->getAreaResponsavel()->setId( $linha ['id_area_responsavel_area_responsavel'] );
-                $ocorrencia->getAreaResponsavel()->setNome( $linha ['nome_area_responsavel_area_responsavel'] );
-                $ocorrencia->getAreaResponsavel()->setDescricao( $linha ['descricao_area_responsavel_area_responsavel'] );
-                $ocorrencia->getAreaResponsavel()->setEmail( $linha ['email_area_responsavel_area_responsavel'] );
-                $ocorrencia->getAreaResponsavel()->setIdAdmin( $linha ['id_admin_area_responsavel_area_responsavel'] );
-                $ocorrencia->getServico()->setId( $linha ['id_servico_servico'] );
-                $ocorrencia->getServico()->setNome( $linha ['nome_servico_servico'] );
-                $ocorrencia->getServico()->setDescricao( $linha ['descricao_servico_servico'] );
-                $ocorrencia->getServico()->setAtivo( $linha ['ativo_servico_servico'] );
-                $ocorrencia->getServico()->setTempoSla( $linha ['tempo_sla_servico_servico'] );
+                $ocorrencia->getServico()->setVisao( $linha ['visao_servico_servico'] );
+                $ocorrencia->getUsuarioCliente()->setId( $linha ['id_usuario_usuario_cliente'] );
+                $ocorrencia->getUsuarioCliente()->setNome( $linha ['nome_usuario_usuario_cliente'] );
+                $ocorrencia->getUsuarioCliente()->setEmail( $linha ['email_usuario_usuario_cliente'] );
+                $ocorrencia->getUsuarioCliente()->setLogin( $linha ['login_usuario_usuario_cliente'] );
+                $ocorrencia->getUsuarioCliente()->setSenha( $linha ['senha_usuario_usuario_cliente'] );
+                $ocorrencia->getUsuarioCliente()->setNivel( $linha ['nivel_usuario_usuario_cliente'] );
+                $ocorrencia->getUsuarioAtendente()->setId( $linha ['id_usuario_usuario_atendente'] );
+                $ocorrencia->getUsuarioAtendente()->setNome( $linha ['nome_usuario_usuario_atendente'] );
+                $ocorrencia->getUsuarioAtendente()->setEmail( $linha ['email_usuario_usuario_atendente'] );
+                $ocorrencia->getUsuarioAtendente()->setLogin( $linha ['login_usuario_usuario_atendente'] );
+                $ocorrencia->getUsuarioAtendente()->setSenha( $linha ['senha_usuario_usuario_atendente'] );
+                $ocorrencia->getUsuarioAtendente()->setNivel( $linha ['nivel_usuario_usuario_atendente'] );
+                $ocorrencia->getUsuarioIndicado()->setId( $linha ['id_usuario_usuario_indicado'] );
+                $ocorrencia->getUsuarioIndicado()->setNome( $linha ['nome_usuario_usuario_indicado'] );
+                $ocorrencia->getUsuarioIndicado()->setEmail( $linha ['email_usuario_usuario_indicado'] );
+                $ocorrencia->getUsuarioIndicado()->setLogin( $linha ['login_usuario_usuario_indicado'] );
+                $ocorrencia->getUsuarioIndicado()->setSenha( $linha ['senha_usuario_usuario_indicado'] );
+                $ocorrencia->getUsuarioIndicado()->setNivel( $linha ['nivel_usuario_usuario_indicado'] );
                 
                 
 		    }
@@ -4384,46 +2589,51 @@ class OcorrenciaDAO extends DAO {
 		SELECT
         ocorrencia.id, 
         ocorrencia.id_local, 
-        ocorrencia.id_funcionario, 
-        ocorrencia.desc_problema, 
+        ocorrencia.descricao, 
         ocorrencia.campus, 
-        ocorrencia.etiq_equipamento, 
-        ocorrencia.contato, 
+        ocorrencia.patrimonio, 
         ocorrencia.ramal, 
         ocorrencia.local, 
-        ocorrencia.funcionario, 
         ocorrencia.status, 
-        ocorrencia.obs, 
+        ocorrencia.solucao, 
         ocorrencia.prioridade, 
         ocorrencia.avaliacao, 
         ocorrencia.email, 
-        ocorrencia.fecha_confirmado, 
-        ocorrencia.reaberto, 
-        ocorrencia.dt_abertura, 
-        ocorrencia.dt_atendimento, 
-        ocorrencia.dt_fechamento, 
-        ocorrencia.dt_fecha_confirmado, 
-        ocorrencia.dt_cancelamento, 
-        ocorrencia.id_atendente, 
-        ocorrencia.id_tecnico_indicado, 
-        ocorrencia.dt_liberacao, 
         ocorrencia.anexo, 
-        ocorrencia.dt_espera, 
-        ocorrencia.dt_aguardando_usuario, 
         ocorrencia.local_sala, 
         area_responsavel.id as id_area_responsavel_area_responsavel, 
         area_responsavel.nome as nome_area_responsavel_area_responsavel, 
         area_responsavel.descricao as descricao_area_responsavel_area_responsavel, 
         area_responsavel.email as email_area_responsavel_area_responsavel, 
-        area_responsavel.id_admin as id_admin_area_responsavel_area_responsavel, 
         servico.id as id_servico_servico, 
         servico.nome as nome_servico_servico, 
         servico.descricao as descricao_servico_servico, 
-        servico.ativo as ativo_servico_servico, 
-        servico.tempo_sla as tempo_sla_servico_servico
+        servico.tempo_sla as tempo_sla_servico_servico, 
+        servico.visao as visao_servico_servico, 
+        usuario_cliente.id as id_usuario_usuario_cliente, 
+        usuario_cliente.nome as nome_usuario_usuario_cliente, 
+        usuario_cliente.email as email_usuario_usuario_cliente, 
+        usuario_cliente.login as login_usuario_usuario_cliente, 
+        usuario_cliente.senha as senha_usuario_usuario_cliente, 
+        usuario_cliente.nivel as nivel_usuario_usuario_cliente, 
+        usuario_atendente.id as id_usuario_usuario_atendente, 
+        usuario_atendente.nome as nome_usuario_usuario_atendente, 
+        usuario_atendente.email as email_usuario_usuario_atendente, 
+        usuario_atendente.login as login_usuario_usuario_atendente, 
+        usuario_atendente.senha as senha_usuario_usuario_atendente, 
+        usuario_atendente.nivel as nivel_usuario_usuario_atendente, 
+        usuario_indicado.id as id_usuario_usuario_indicado, 
+        usuario_indicado.nome as nome_usuario_usuario_indicado, 
+        usuario_indicado.email as email_usuario_usuario_indicado, 
+        usuario_indicado.login as login_usuario_usuario_indicado, 
+        usuario_indicado.senha as senha_usuario_usuario_indicado, 
+        usuario_indicado.nivel as nivel_usuario_usuario_indicado
 		FROM ocorrencia
 		INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel
 		INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico
+		INNER JOIN usuario as usuario_cliente ON usuario_cliente.id = ocorrencia.id_usuario_cliente
+		INNER JOIN usuario as usuario_atendente ON usuario_atendente.id = ocorrencia.id_usuario_atendente
+		INNER JOIN usuario as usuario_indicado ON usuario_indicado.id = ocorrencia.id_usuario_indicado
                 WHERE ocorrencia.ramal = :ramal
                  LIMIT 1000";
                 
@@ -4440,43 +2650,45 @@ class OcorrenciaDAO extends DAO {
             {
                 $ocorrencia->setId( $linha ['id'] );
                 $ocorrencia->setIdLocal( $linha ['id_local'] );
-                $ocorrencia->setIdFuncionario( $linha ['id_funcionario'] );
-                $ocorrencia->setDescProblema( $linha ['desc_problema'] );
+                $ocorrencia->setDescricao( $linha ['descricao'] );
                 $ocorrencia->setCampus( $linha ['campus'] );
-                $ocorrencia->setEtiqEquipamento( $linha ['etiq_equipamento'] );
-                $ocorrencia->setContato( $linha ['contato'] );
+                $ocorrencia->setPatrimonio( $linha ['patrimonio'] );
                 $ocorrencia->setRamal( $linha ['ramal'] );
                 $ocorrencia->setLocal( $linha ['local'] );
-                $ocorrencia->setFuncionario( $linha ['funcionario'] );
                 $ocorrencia->setStatus( $linha ['status'] );
-                $ocorrencia->setObs( $linha ['obs'] );
+                $ocorrencia->setSolucao( $linha ['solucao'] );
                 $ocorrencia->setPrioridade( $linha ['prioridade'] );
                 $ocorrencia->setAvaliacao( $linha ['avaliacao'] );
                 $ocorrencia->setEmail( $linha ['email'] );
-                $ocorrencia->setFechaConfirmado( $linha ['fecha_confirmado'] );
-                $ocorrencia->setReaberto( $linha ['reaberto'] );
-                $ocorrencia->setDtAbertura( $linha ['dt_abertura'] );
-                $ocorrencia->setDtAtendimento( $linha ['dt_atendimento'] );
-                $ocorrencia->setDtFechamento( $linha ['dt_fechamento'] );
-                $ocorrencia->setDtFechaConfirmado( $linha ['dt_fecha_confirmado'] );
-                $ocorrencia->setDtCancelamento( $linha ['dt_cancelamento'] );
-                $ocorrencia->setIdAtendente( $linha ['id_atendente'] );
-                $ocorrencia->setIdTecnicoIndicado( $linha ['id_tecnico_indicado'] );
-                $ocorrencia->setDtLiberacao( $linha ['dt_liberacao'] );
                 $ocorrencia->setAnexo( $linha ['anexo'] );
-                $ocorrencia->setDtEspera( $linha ['dt_espera'] );
-                $ocorrencia->setDtAguardandoUsuario( $linha ['dt_aguardando_usuario'] );
                 $ocorrencia->setLocalSala( $linha ['local_sala'] );
                 $ocorrencia->getAreaResponsavel()->setId( $linha ['id_area_responsavel_area_responsavel'] );
                 $ocorrencia->getAreaResponsavel()->setNome( $linha ['nome_area_responsavel_area_responsavel'] );
                 $ocorrencia->getAreaResponsavel()->setDescricao( $linha ['descricao_area_responsavel_area_responsavel'] );
                 $ocorrencia->getAreaResponsavel()->setEmail( $linha ['email_area_responsavel_area_responsavel'] );
-                $ocorrencia->getAreaResponsavel()->setIdAdmin( $linha ['id_admin_area_responsavel_area_responsavel'] );
                 $ocorrencia->getServico()->setId( $linha ['id_servico_servico'] );
                 $ocorrencia->getServico()->setNome( $linha ['nome_servico_servico'] );
                 $ocorrencia->getServico()->setDescricao( $linha ['descricao_servico_servico'] );
-                $ocorrencia->getServico()->setAtivo( $linha ['ativo_servico_servico'] );
                 $ocorrencia->getServico()->setTempoSla( $linha ['tempo_sla_servico_servico'] );
+                $ocorrencia->getServico()->setVisao( $linha ['visao_servico_servico'] );
+                $ocorrencia->getUsuarioCliente()->setId( $linha ['id_usuario_usuario_cliente'] );
+                $ocorrencia->getUsuarioCliente()->setNome( $linha ['nome_usuario_usuario_cliente'] );
+                $ocorrencia->getUsuarioCliente()->setEmail( $linha ['email_usuario_usuario_cliente'] );
+                $ocorrencia->getUsuarioCliente()->setLogin( $linha ['login_usuario_usuario_cliente'] );
+                $ocorrencia->getUsuarioCliente()->setSenha( $linha ['senha_usuario_usuario_cliente'] );
+                $ocorrencia->getUsuarioCliente()->setNivel( $linha ['nivel_usuario_usuario_cliente'] );
+                $ocorrencia->getUsuarioAtendente()->setId( $linha ['id_usuario_usuario_atendente'] );
+                $ocorrencia->getUsuarioAtendente()->setNome( $linha ['nome_usuario_usuario_atendente'] );
+                $ocorrencia->getUsuarioAtendente()->setEmail( $linha ['email_usuario_usuario_atendente'] );
+                $ocorrencia->getUsuarioAtendente()->setLogin( $linha ['login_usuario_usuario_atendente'] );
+                $ocorrencia->getUsuarioAtendente()->setSenha( $linha ['senha_usuario_usuario_atendente'] );
+                $ocorrencia->getUsuarioAtendente()->setNivel( $linha ['nivel_usuario_usuario_atendente'] );
+                $ocorrencia->getUsuarioIndicado()->setId( $linha ['id_usuario_usuario_indicado'] );
+                $ocorrencia->getUsuarioIndicado()->setNome( $linha ['nome_usuario_usuario_indicado'] );
+                $ocorrencia->getUsuarioIndicado()->setEmail( $linha ['email_usuario_usuario_indicado'] );
+                $ocorrencia->getUsuarioIndicado()->setLogin( $linha ['login_usuario_usuario_indicado'] );
+                $ocorrencia->getUsuarioIndicado()->setSenha( $linha ['senha_usuario_usuario_indicado'] );
+                $ocorrencia->getUsuarioIndicado()->setNivel( $linha ['nivel_usuario_usuario_indicado'] );
                 
                 
 		    }
@@ -4493,46 +2705,51 @@ class OcorrenciaDAO extends DAO {
 		SELECT
         ocorrencia.id, 
         ocorrencia.id_local, 
-        ocorrencia.id_funcionario, 
-        ocorrencia.desc_problema, 
+        ocorrencia.descricao, 
         ocorrencia.campus, 
-        ocorrencia.etiq_equipamento, 
-        ocorrencia.contato, 
+        ocorrencia.patrimonio, 
         ocorrencia.ramal, 
         ocorrencia.local, 
-        ocorrencia.funcionario, 
         ocorrencia.status, 
-        ocorrencia.obs, 
+        ocorrencia.solucao, 
         ocorrencia.prioridade, 
         ocorrencia.avaliacao, 
         ocorrencia.email, 
-        ocorrencia.fecha_confirmado, 
-        ocorrencia.reaberto, 
-        ocorrencia.dt_abertura, 
-        ocorrencia.dt_atendimento, 
-        ocorrencia.dt_fechamento, 
-        ocorrencia.dt_fecha_confirmado, 
-        ocorrencia.dt_cancelamento, 
-        ocorrencia.id_atendente, 
-        ocorrencia.id_tecnico_indicado, 
-        ocorrencia.dt_liberacao, 
         ocorrencia.anexo, 
-        ocorrencia.dt_espera, 
-        ocorrencia.dt_aguardando_usuario, 
         ocorrencia.local_sala, 
         area_responsavel.id as id_area_responsavel_area_responsavel, 
         area_responsavel.nome as nome_area_responsavel_area_responsavel, 
         area_responsavel.descricao as descricao_area_responsavel_area_responsavel, 
         area_responsavel.email as email_area_responsavel_area_responsavel, 
-        area_responsavel.id_admin as id_admin_area_responsavel_area_responsavel, 
         servico.id as id_servico_servico, 
         servico.nome as nome_servico_servico, 
         servico.descricao as descricao_servico_servico, 
-        servico.ativo as ativo_servico_servico, 
-        servico.tempo_sla as tempo_sla_servico_servico
+        servico.tempo_sla as tempo_sla_servico_servico, 
+        servico.visao as visao_servico_servico, 
+        usuario_cliente.id as id_usuario_usuario_cliente, 
+        usuario_cliente.nome as nome_usuario_usuario_cliente, 
+        usuario_cliente.email as email_usuario_usuario_cliente, 
+        usuario_cliente.login as login_usuario_usuario_cliente, 
+        usuario_cliente.senha as senha_usuario_usuario_cliente, 
+        usuario_cliente.nivel as nivel_usuario_usuario_cliente, 
+        usuario_atendente.id as id_usuario_usuario_atendente, 
+        usuario_atendente.nome as nome_usuario_usuario_atendente, 
+        usuario_atendente.email as email_usuario_usuario_atendente, 
+        usuario_atendente.login as login_usuario_usuario_atendente, 
+        usuario_atendente.senha as senha_usuario_usuario_atendente, 
+        usuario_atendente.nivel as nivel_usuario_usuario_atendente, 
+        usuario_indicado.id as id_usuario_usuario_indicado, 
+        usuario_indicado.nome as nome_usuario_usuario_indicado, 
+        usuario_indicado.email as email_usuario_usuario_indicado, 
+        usuario_indicado.login as login_usuario_usuario_indicado, 
+        usuario_indicado.senha as senha_usuario_usuario_indicado, 
+        usuario_indicado.nivel as nivel_usuario_usuario_indicado
 		FROM ocorrencia
 		INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel
 		INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico
+		INNER JOIN usuario as usuario_cliente ON usuario_cliente.id = ocorrencia.id_usuario_cliente
+		INNER JOIN usuario as usuario_atendente ON usuario_atendente.id = ocorrencia.id_usuario_atendente
+		INNER JOIN usuario as usuario_indicado ON usuario_indicado.id = ocorrencia.id_usuario_indicado
                 WHERE ocorrencia.local = :local
                  LIMIT 1000";
                 
@@ -4549,152 +2766,45 @@ class OcorrenciaDAO extends DAO {
             {
                 $ocorrencia->setId( $linha ['id'] );
                 $ocorrencia->setIdLocal( $linha ['id_local'] );
-                $ocorrencia->setIdFuncionario( $linha ['id_funcionario'] );
-                $ocorrencia->setDescProblema( $linha ['desc_problema'] );
+                $ocorrencia->setDescricao( $linha ['descricao'] );
                 $ocorrencia->setCampus( $linha ['campus'] );
-                $ocorrencia->setEtiqEquipamento( $linha ['etiq_equipamento'] );
-                $ocorrencia->setContato( $linha ['contato'] );
+                $ocorrencia->setPatrimonio( $linha ['patrimonio'] );
                 $ocorrencia->setRamal( $linha ['ramal'] );
                 $ocorrencia->setLocal( $linha ['local'] );
-                $ocorrencia->setFuncionario( $linha ['funcionario'] );
                 $ocorrencia->setStatus( $linha ['status'] );
-                $ocorrencia->setObs( $linha ['obs'] );
+                $ocorrencia->setSolucao( $linha ['solucao'] );
                 $ocorrencia->setPrioridade( $linha ['prioridade'] );
                 $ocorrencia->setAvaliacao( $linha ['avaliacao'] );
                 $ocorrencia->setEmail( $linha ['email'] );
-                $ocorrencia->setFechaConfirmado( $linha ['fecha_confirmado'] );
-                $ocorrencia->setReaberto( $linha ['reaberto'] );
-                $ocorrencia->setDtAbertura( $linha ['dt_abertura'] );
-                $ocorrencia->setDtAtendimento( $linha ['dt_atendimento'] );
-                $ocorrencia->setDtFechamento( $linha ['dt_fechamento'] );
-                $ocorrencia->setDtFechaConfirmado( $linha ['dt_fecha_confirmado'] );
-                $ocorrencia->setDtCancelamento( $linha ['dt_cancelamento'] );
-                $ocorrencia->setIdAtendente( $linha ['id_atendente'] );
-                $ocorrencia->setIdTecnicoIndicado( $linha ['id_tecnico_indicado'] );
-                $ocorrencia->setDtLiberacao( $linha ['dt_liberacao'] );
                 $ocorrencia->setAnexo( $linha ['anexo'] );
-                $ocorrencia->setDtEspera( $linha ['dt_espera'] );
-                $ocorrencia->setDtAguardandoUsuario( $linha ['dt_aguardando_usuario'] );
                 $ocorrencia->setLocalSala( $linha ['local_sala'] );
                 $ocorrencia->getAreaResponsavel()->setId( $linha ['id_area_responsavel_area_responsavel'] );
                 $ocorrencia->getAreaResponsavel()->setNome( $linha ['nome_area_responsavel_area_responsavel'] );
                 $ocorrencia->getAreaResponsavel()->setDescricao( $linha ['descricao_area_responsavel_area_responsavel'] );
                 $ocorrencia->getAreaResponsavel()->setEmail( $linha ['email_area_responsavel_area_responsavel'] );
-                $ocorrencia->getAreaResponsavel()->setIdAdmin( $linha ['id_admin_area_responsavel_area_responsavel'] );
                 $ocorrencia->getServico()->setId( $linha ['id_servico_servico'] );
                 $ocorrencia->getServico()->setNome( $linha ['nome_servico_servico'] );
                 $ocorrencia->getServico()->setDescricao( $linha ['descricao_servico_servico'] );
-                $ocorrencia->getServico()->setAtivo( $linha ['ativo_servico_servico'] );
                 $ocorrencia->getServico()->setTempoSla( $linha ['tempo_sla_servico_servico'] );
-                
-                
-		    }
-		} catch(PDOException $e) {
-		    echo $e->getMessage();
- 		}
-		return $ocorrencia;
-    }
-                
-    public function preenchePorFuncionario(Ocorrencia $ocorrencia) {
-        
-	    $funcionario = $ocorrencia->getFuncionario();
-	    $sql = "
-		SELECT
-        ocorrencia.id, 
-        ocorrencia.id_local, 
-        ocorrencia.id_funcionario, 
-        ocorrencia.desc_problema, 
-        ocorrencia.campus, 
-        ocorrencia.etiq_equipamento, 
-        ocorrencia.contato, 
-        ocorrencia.ramal, 
-        ocorrencia.local, 
-        ocorrencia.funcionario, 
-        ocorrencia.status, 
-        ocorrencia.obs, 
-        ocorrencia.prioridade, 
-        ocorrencia.avaliacao, 
-        ocorrencia.email, 
-        ocorrencia.fecha_confirmado, 
-        ocorrencia.reaberto, 
-        ocorrencia.dt_abertura, 
-        ocorrencia.dt_atendimento, 
-        ocorrencia.dt_fechamento, 
-        ocorrencia.dt_fecha_confirmado, 
-        ocorrencia.dt_cancelamento, 
-        ocorrencia.id_atendente, 
-        ocorrencia.id_tecnico_indicado, 
-        ocorrencia.dt_liberacao, 
-        ocorrencia.anexo, 
-        ocorrencia.dt_espera, 
-        ocorrencia.dt_aguardando_usuario, 
-        ocorrencia.local_sala, 
-        area_responsavel.id as id_area_responsavel_area_responsavel, 
-        area_responsavel.nome as nome_area_responsavel_area_responsavel, 
-        area_responsavel.descricao as descricao_area_responsavel_area_responsavel, 
-        area_responsavel.email as email_area_responsavel_area_responsavel, 
-        area_responsavel.id_admin as id_admin_area_responsavel_area_responsavel, 
-        servico.id as id_servico_servico, 
-        servico.nome as nome_servico_servico, 
-        servico.descricao as descricao_servico_servico, 
-        servico.ativo as ativo_servico_servico, 
-        servico.tempo_sla as tempo_sla_servico_servico
-		FROM ocorrencia
-		INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel
-		INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico
-                WHERE ocorrencia.funcionario = :funcionario
-                 LIMIT 1000";
-                
-        try {
-            $stmt = $this->conexao->prepare($sql);
-                
-		    if(!$stmt){
-                echo "<br>Mensagem de erro retornada: ".$this->conexao->errorInfo()[2]."<br>";
-		    }
-            $stmt->bindParam(":funcionario", $funcionario, PDO::PARAM_STR);
-            $stmt->execute();
-		    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-		    foreach ( $result as $linha )
-            {
-                $ocorrencia->setId( $linha ['id'] );
-                $ocorrencia->setIdLocal( $linha ['id_local'] );
-                $ocorrencia->setIdFuncionario( $linha ['id_funcionario'] );
-                $ocorrencia->setDescProblema( $linha ['desc_problema'] );
-                $ocorrencia->setCampus( $linha ['campus'] );
-                $ocorrencia->setEtiqEquipamento( $linha ['etiq_equipamento'] );
-                $ocorrencia->setContato( $linha ['contato'] );
-                $ocorrencia->setRamal( $linha ['ramal'] );
-                $ocorrencia->setLocal( $linha ['local'] );
-                $ocorrencia->setFuncionario( $linha ['funcionario'] );
-                $ocorrencia->setStatus( $linha ['status'] );
-                $ocorrencia->setObs( $linha ['obs'] );
-                $ocorrencia->setPrioridade( $linha ['prioridade'] );
-                $ocorrencia->setAvaliacao( $linha ['avaliacao'] );
-                $ocorrencia->setEmail( $linha ['email'] );
-                $ocorrencia->setFechaConfirmado( $linha ['fecha_confirmado'] );
-                $ocorrencia->setReaberto( $linha ['reaberto'] );
-                $ocorrencia->setDtAbertura( $linha ['dt_abertura'] );
-                $ocorrencia->setDtAtendimento( $linha ['dt_atendimento'] );
-                $ocorrencia->setDtFechamento( $linha ['dt_fechamento'] );
-                $ocorrencia->setDtFechaConfirmado( $linha ['dt_fecha_confirmado'] );
-                $ocorrencia->setDtCancelamento( $linha ['dt_cancelamento'] );
-                $ocorrencia->setIdAtendente( $linha ['id_atendente'] );
-                $ocorrencia->setIdTecnicoIndicado( $linha ['id_tecnico_indicado'] );
-                $ocorrencia->setDtLiberacao( $linha ['dt_liberacao'] );
-                $ocorrencia->setAnexo( $linha ['anexo'] );
-                $ocorrencia->setDtEspera( $linha ['dt_espera'] );
-                $ocorrencia->setDtAguardandoUsuario( $linha ['dt_aguardando_usuario'] );
-                $ocorrencia->setLocalSala( $linha ['local_sala'] );
-                $ocorrencia->getAreaResponsavel()->setId( $linha ['id_area_responsavel_area_responsavel'] );
-                $ocorrencia->getAreaResponsavel()->setNome( $linha ['nome_area_responsavel_area_responsavel'] );
-                $ocorrencia->getAreaResponsavel()->setDescricao( $linha ['descricao_area_responsavel_area_responsavel'] );
-                $ocorrencia->getAreaResponsavel()->setEmail( $linha ['email_area_responsavel_area_responsavel'] );
-                $ocorrencia->getAreaResponsavel()->setIdAdmin( $linha ['id_admin_area_responsavel_area_responsavel'] );
-                $ocorrencia->getServico()->setId( $linha ['id_servico_servico'] );
-                $ocorrencia->getServico()->setNome( $linha ['nome_servico_servico'] );
-                $ocorrencia->getServico()->setDescricao( $linha ['descricao_servico_servico'] );
-                $ocorrencia->getServico()->setAtivo( $linha ['ativo_servico_servico'] );
-                $ocorrencia->getServico()->setTempoSla( $linha ['tempo_sla_servico_servico'] );
+                $ocorrencia->getServico()->setVisao( $linha ['visao_servico_servico'] );
+                $ocorrencia->getUsuarioCliente()->setId( $linha ['id_usuario_usuario_cliente'] );
+                $ocorrencia->getUsuarioCliente()->setNome( $linha ['nome_usuario_usuario_cliente'] );
+                $ocorrencia->getUsuarioCliente()->setEmail( $linha ['email_usuario_usuario_cliente'] );
+                $ocorrencia->getUsuarioCliente()->setLogin( $linha ['login_usuario_usuario_cliente'] );
+                $ocorrencia->getUsuarioCliente()->setSenha( $linha ['senha_usuario_usuario_cliente'] );
+                $ocorrencia->getUsuarioCliente()->setNivel( $linha ['nivel_usuario_usuario_cliente'] );
+                $ocorrencia->getUsuarioAtendente()->setId( $linha ['id_usuario_usuario_atendente'] );
+                $ocorrencia->getUsuarioAtendente()->setNome( $linha ['nome_usuario_usuario_atendente'] );
+                $ocorrencia->getUsuarioAtendente()->setEmail( $linha ['email_usuario_usuario_atendente'] );
+                $ocorrencia->getUsuarioAtendente()->setLogin( $linha ['login_usuario_usuario_atendente'] );
+                $ocorrencia->getUsuarioAtendente()->setSenha( $linha ['senha_usuario_usuario_atendente'] );
+                $ocorrencia->getUsuarioAtendente()->setNivel( $linha ['nivel_usuario_usuario_atendente'] );
+                $ocorrencia->getUsuarioIndicado()->setId( $linha ['id_usuario_usuario_indicado'] );
+                $ocorrencia->getUsuarioIndicado()->setNome( $linha ['nome_usuario_usuario_indicado'] );
+                $ocorrencia->getUsuarioIndicado()->setEmail( $linha ['email_usuario_usuario_indicado'] );
+                $ocorrencia->getUsuarioIndicado()->setLogin( $linha ['login_usuario_usuario_indicado'] );
+                $ocorrencia->getUsuarioIndicado()->setSenha( $linha ['senha_usuario_usuario_indicado'] );
+                $ocorrencia->getUsuarioIndicado()->setNivel( $linha ['nivel_usuario_usuario_indicado'] );
                 
                 
 		    }
@@ -4711,46 +2821,51 @@ class OcorrenciaDAO extends DAO {
 		SELECT
         ocorrencia.id, 
         ocorrencia.id_local, 
-        ocorrencia.id_funcionario, 
-        ocorrencia.desc_problema, 
+        ocorrencia.descricao, 
         ocorrencia.campus, 
-        ocorrencia.etiq_equipamento, 
-        ocorrencia.contato, 
+        ocorrencia.patrimonio, 
         ocorrencia.ramal, 
         ocorrencia.local, 
-        ocorrencia.funcionario, 
         ocorrencia.status, 
-        ocorrencia.obs, 
+        ocorrencia.solucao, 
         ocorrencia.prioridade, 
         ocorrencia.avaliacao, 
         ocorrencia.email, 
-        ocorrencia.fecha_confirmado, 
-        ocorrencia.reaberto, 
-        ocorrencia.dt_abertura, 
-        ocorrencia.dt_atendimento, 
-        ocorrencia.dt_fechamento, 
-        ocorrencia.dt_fecha_confirmado, 
-        ocorrencia.dt_cancelamento, 
-        ocorrencia.id_atendente, 
-        ocorrencia.id_tecnico_indicado, 
-        ocorrencia.dt_liberacao, 
         ocorrencia.anexo, 
-        ocorrencia.dt_espera, 
-        ocorrencia.dt_aguardando_usuario, 
         ocorrencia.local_sala, 
         area_responsavel.id as id_area_responsavel_area_responsavel, 
         area_responsavel.nome as nome_area_responsavel_area_responsavel, 
         area_responsavel.descricao as descricao_area_responsavel_area_responsavel, 
         area_responsavel.email as email_area_responsavel_area_responsavel, 
-        area_responsavel.id_admin as id_admin_area_responsavel_area_responsavel, 
         servico.id as id_servico_servico, 
         servico.nome as nome_servico_servico, 
         servico.descricao as descricao_servico_servico, 
-        servico.ativo as ativo_servico_servico, 
-        servico.tempo_sla as tempo_sla_servico_servico
+        servico.tempo_sla as tempo_sla_servico_servico, 
+        servico.visao as visao_servico_servico, 
+        usuario_cliente.id as id_usuario_usuario_cliente, 
+        usuario_cliente.nome as nome_usuario_usuario_cliente, 
+        usuario_cliente.email as email_usuario_usuario_cliente, 
+        usuario_cliente.login as login_usuario_usuario_cliente, 
+        usuario_cliente.senha as senha_usuario_usuario_cliente, 
+        usuario_cliente.nivel as nivel_usuario_usuario_cliente, 
+        usuario_atendente.id as id_usuario_usuario_atendente, 
+        usuario_atendente.nome as nome_usuario_usuario_atendente, 
+        usuario_atendente.email as email_usuario_usuario_atendente, 
+        usuario_atendente.login as login_usuario_usuario_atendente, 
+        usuario_atendente.senha as senha_usuario_usuario_atendente, 
+        usuario_atendente.nivel as nivel_usuario_usuario_atendente, 
+        usuario_indicado.id as id_usuario_usuario_indicado, 
+        usuario_indicado.nome as nome_usuario_usuario_indicado, 
+        usuario_indicado.email as email_usuario_usuario_indicado, 
+        usuario_indicado.login as login_usuario_usuario_indicado, 
+        usuario_indicado.senha as senha_usuario_usuario_indicado, 
+        usuario_indicado.nivel as nivel_usuario_usuario_indicado
 		FROM ocorrencia
 		INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel
 		INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico
+		INNER JOIN usuario as usuario_cliente ON usuario_cliente.id = ocorrencia.id_usuario_cliente
+		INNER JOIN usuario as usuario_atendente ON usuario_atendente.id = ocorrencia.id_usuario_atendente
+		INNER JOIN usuario as usuario_indicado ON usuario_indicado.id = ocorrencia.id_usuario_indicado
                 WHERE ocorrencia.status = :status
                  LIMIT 1000";
                 
@@ -4767,43 +2882,45 @@ class OcorrenciaDAO extends DAO {
             {
                 $ocorrencia->setId( $linha ['id'] );
                 $ocorrencia->setIdLocal( $linha ['id_local'] );
-                $ocorrencia->setIdFuncionario( $linha ['id_funcionario'] );
-                $ocorrencia->setDescProblema( $linha ['desc_problema'] );
+                $ocorrencia->setDescricao( $linha ['descricao'] );
                 $ocorrencia->setCampus( $linha ['campus'] );
-                $ocorrencia->setEtiqEquipamento( $linha ['etiq_equipamento'] );
-                $ocorrencia->setContato( $linha ['contato'] );
+                $ocorrencia->setPatrimonio( $linha ['patrimonio'] );
                 $ocorrencia->setRamal( $linha ['ramal'] );
                 $ocorrencia->setLocal( $linha ['local'] );
-                $ocorrencia->setFuncionario( $linha ['funcionario'] );
                 $ocorrencia->setStatus( $linha ['status'] );
-                $ocorrencia->setObs( $linha ['obs'] );
+                $ocorrencia->setSolucao( $linha ['solucao'] );
                 $ocorrencia->setPrioridade( $linha ['prioridade'] );
                 $ocorrencia->setAvaliacao( $linha ['avaliacao'] );
                 $ocorrencia->setEmail( $linha ['email'] );
-                $ocorrencia->setFechaConfirmado( $linha ['fecha_confirmado'] );
-                $ocorrencia->setReaberto( $linha ['reaberto'] );
-                $ocorrencia->setDtAbertura( $linha ['dt_abertura'] );
-                $ocorrencia->setDtAtendimento( $linha ['dt_atendimento'] );
-                $ocorrencia->setDtFechamento( $linha ['dt_fechamento'] );
-                $ocorrencia->setDtFechaConfirmado( $linha ['dt_fecha_confirmado'] );
-                $ocorrencia->setDtCancelamento( $linha ['dt_cancelamento'] );
-                $ocorrencia->setIdAtendente( $linha ['id_atendente'] );
-                $ocorrencia->setIdTecnicoIndicado( $linha ['id_tecnico_indicado'] );
-                $ocorrencia->setDtLiberacao( $linha ['dt_liberacao'] );
                 $ocorrencia->setAnexo( $linha ['anexo'] );
-                $ocorrencia->setDtEspera( $linha ['dt_espera'] );
-                $ocorrencia->setDtAguardandoUsuario( $linha ['dt_aguardando_usuario'] );
                 $ocorrencia->setLocalSala( $linha ['local_sala'] );
                 $ocorrencia->getAreaResponsavel()->setId( $linha ['id_area_responsavel_area_responsavel'] );
                 $ocorrencia->getAreaResponsavel()->setNome( $linha ['nome_area_responsavel_area_responsavel'] );
                 $ocorrencia->getAreaResponsavel()->setDescricao( $linha ['descricao_area_responsavel_area_responsavel'] );
                 $ocorrencia->getAreaResponsavel()->setEmail( $linha ['email_area_responsavel_area_responsavel'] );
-                $ocorrencia->getAreaResponsavel()->setIdAdmin( $linha ['id_admin_area_responsavel_area_responsavel'] );
                 $ocorrencia->getServico()->setId( $linha ['id_servico_servico'] );
                 $ocorrencia->getServico()->setNome( $linha ['nome_servico_servico'] );
                 $ocorrencia->getServico()->setDescricao( $linha ['descricao_servico_servico'] );
-                $ocorrencia->getServico()->setAtivo( $linha ['ativo_servico_servico'] );
                 $ocorrencia->getServico()->setTempoSla( $linha ['tempo_sla_servico_servico'] );
+                $ocorrencia->getServico()->setVisao( $linha ['visao_servico_servico'] );
+                $ocorrencia->getUsuarioCliente()->setId( $linha ['id_usuario_usuario_cliente'] );
+                $ocorrencia->getUsuarioCliente()->setNome( $linha ['nome_usuario_usuario_cliente'] );
+                $ocorrencia->getUsuarioCliente()->setEmail( $linha ['email_usuario_usuario_cliente'] );
+                $ocorrencia->getUsuarioCliente()->setLogin( $linha ['login_usuario_usuario_cliente'] );
+                $ocorrencia->getUsuarioCliente()->setSenha( $linha ['senha_usuario_usuario_cliente'] );
+                $ocorrencia->getUsuarioCliente()->setNivel( $linha ['nivel_usuario_usuario_cliente'] );
+                $ocorrencia->getUsuarioAtendente()->setId( $linha ['id_usuario_usuario_atendente'] );
+                $ocorrencia->getUsuarioAtendente()->setNome( $linha ['nome_usuario_usuario_atendente'] );
+                $ocorrencia->getUsuarioAtendente()->setEmail( $linha ['email_usuario_usuario_atendente'] );
+                $ocorrencia->getUsuarioAtendente()->setLogin( $linha ['login_usuario_usuario_atendente'] );
+                $ocorrencia->getUsuarioAtendente()->setSenha( $linha ['senha_usuario_usuario_atendente'] );
+                $ocorrencia->getUsuarioAtendente()->setNivel( $linha ['nivel_usuario_usuario_atendente'] );
+                $ocorrencia->getUsuarioIndicado()->setId( $linha ['id_usuario_usuario_indicado'] );
+                $ocorrencia->getUsuarioIndicado()->setNome( $linha ['nome_usuario_usuario_indicado'] );
+                $ocorrencia->getUsuarioIndicado()->setEmail( $linha ['email_usuario_usuario_indicado'] );
+                $ocorrencia->getUsuarioIndicado()->setLogin( $linha ['login_usuario_usuario_indicado'] );
+                $ocorrencia->getUsuarioIndicado()->setSenha( $linha ['senha_usuario_usuario_indicado'] );
+                $ocorrencia->getUsuarioIndicado()->setNivel( $linha ['nivel_usuario_usuario_indicado'] );
                 
                 
 		    }
@@ -4813,54 +2930,59 @@ class OcorrenciaDAO extends DAO {
 		return $ocorrencia;
     }
                 
-    public function preenchePorObs(Ocorrencia $ocorrencia) {
+    public function preenchePorSolucao(Ocorrencia $ocorrencia) {
         
-	    $obs = $ocorrencia->getObs();
+	    $solucao = $ocorrencia->getSolucao();
 	    $sql = "
 		SELECT
         ocorrencia.id, 
         ocorrencia.id_local, 
-        ocorrencia.id_funcionario, 
-        ocorrencia.desc_problema, 
+        ocorrencia.descricao, 
         ocorrencia.campus, 
-        ocorrencia.etiq_equipamento, 
-        ocorrencia.contato, 
+        ocorrencia.patrimonio, 
         ocorrencia.ramal, 
         ocorrencia.local, 
-        ocorrencia.funcionario, 
         ocorrencia.status, 
-        ocorrencia.obs, 
+        ocorrencia.solucao, 
         ocorrencia.prioridade, 
         ocorrencia.avaliacao, 
         ocorrencia.email, 
-        ocorrencia.fecha_confirmado, 
-        ocorrencia.reaberto, 
-        ocorrencia.dt_abertura, 
-        ocorrencia.dt_atendimento, 
-        ocorrencia.dt_fechamento, 
-        ocorrencia.dt_fecha_confirmado, 
-        ocorrencia.dt_cancelamento, 
-        ocorrencia.id_atendente, 
-        ocorrencia.id_tecnico_indicado, 
-        ocorrencia.dt_liberacao, 
         ocorrencia.anexo, 
-        ocorrencia.dt_espera, 
-        ocorrencia.dt_aguardando_usuario, 
         ocorrencia.local_sala, 
         area_responsavel.id as id_area_responsavel_area_responsavel, 
         area_responsavel.nome as nome_area_responsavel_area_responsavel, 
         area_responsavel.descricao as descricao_area_responsavel_area_responsavel, 
         area_responsavel.email as email_area_responsavel_area_responsavel, 
-        area_responsavel.id_admin as id_admin_area_responsavel_area_responsavel, 
         servico.id as id_servico_servico, 
         servico.nome as nome_servico_servico, 
         servico.descricao as descricao_servico_servico, 
-        servico.ativo as ativo_servico_servico, 
-        servico.tempo_sla as tempo_sla_servico_servico
+        servico.tempo_sla as tempo_sla_servico_servico, 
+        servico.visao as visao_servico_servico, 
+        usuario_cliente.id as id_usuario_usuario_cliente, 
+        usuario_cliente.nome as nome_usuario_usuario_cliente, 
+        usuario_cliente.email as email_usuario_usuario_cliente, 
+        usuario_cliente.login as login_usuario_usuario_cliente, 
+        usuario_cliente.senha as senha_usuario_usuario_cliente, 
+        usuario_cliente.nivel as nivel_usuario_usuario_cliente, 
+        usuario_atendente.id as id_usuario_usuario_atendente, 
+        usuario_atendente.nome as nome_usuario_usuario_atendente, 
+        usuario_atendente.email as email_usuario_usuario_atendente, 
+        usuario_atendente.login as login_usuario_usuario_atendente, 
+        usuario_atendente.senha as senha_usuario_usuario_atendente, 
+        usuario_atendente.nivel as nivel_usuario_usuario_atendente, 
+        usuario_indicado.id as id_usuario_usuario_indicado, 
+        usuario_indicado.nome as nome_usuario_usuario_indicado, 
+        usuario_indicado.email as email_usuario_usuario_indicado, 
+        usuario_indicado.login as login_usuario_usuario_indicado, 
+        usuario_indicado.senha as senha_usuario_usuario_indicado, 
+        usuario_indicado.nivel as nivel_usuario_usuario_indicado
 		FROM ocorrencia
 		INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel
 		INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico
-                WHERE ocorrencia.obs = :obs
+		INNER JOIN usuario as usuario_cliente ON usuario_cliente.id = ocorrencia.id_usuario_cliente
+		INNER JOIN usuario as usuario_atendente ON usuario_atendente.id = ocorrencia.id_usuario_atendente
+		INNER JOIN usuario as usuario_indicado ON usuario_indicado.id = ocorrencia.id_usuario_indicado
+                WHERE ocorrencia.solucao = :solucao
                  LIMIT 1000";
                 
         try {
@@ -4869,50 +2991,52 @@ class OcorrenciaDAO extends DAO {
 		    if(!$stmt){
                 echo "<br>Mensagem de erro retornada: ".$this->conexao->errorInfo()[2]."<br>";
 		    }
-            $stmt->bindParam(":obs", $obs, PDO::PARAM_STR);
+            $stmt->bindParam(":solucao", $solucao, PDO::PARAM_STR);
             $stmt->execute();
 		    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 		    foreach ( $result as $linha )
             {
                 $ocorrencia->setId( $linha ['id'] );
                 $ocorrencia->setIdLocal( $linha ['id_local'] );
-                $ocorrencia->setIdFuncionario( $linha ['id_funcionario'] );
-                $ocorrencia->setDescProblema( $linha ['desc_problema'] );
+                $ocorrencia->setDescricao( $linha ['descricao'] );
                 $ocorrencia->setCampus( $linha ['campus'] );
-                $ocorrencia->setEtiqEquipamento( $linha ['etiq_equipamento'] );
-                $ocorrencia->setContato( $linha ['contato'] );
+                $ocorrencia->setPatrimonio( $linha ['patrimonio'] );
                 $ocorrencia->setRamal( $linha ['ramal'] );
                 $ocorrencia->setLocal( $linha ['local'] );
-                $ocorrencia->setFuncionario( $linha ['funcionario'] );
                 $ocorrencia->setStatus( $linha ['status'] );
-                $ocorrencia->setObs( $linha ['obs'] );
+                $ocorrencia->setSolucao( $linha ['solucao'] );
                 $ocorrencia->setPrioridade( $linha ['prioridade'] );
                 $ocorrencia->setAvaliacao( $linha ['avaliacao'] );
                 $ocorrencia->setEmail( $linha ['email'] );
-                $ocorrencia->setFechaConfirmado( $linha ['fecha_confirmado'] );
-                $ocorrencia->setReaberto( $linha ['reaberto'] );
-                $ocorrencia->setDtAbertura( $linha ['dt_abertura'] );
-                $ocorrencia->setDtAtendimento( $linha ['dt_atendimento'] );
-                $ocorrencia->setDtFechamento( $linha ['dt_fechamento'] );
-                $ocorrencia->setDtFechaConfirmado( $linha ['dt_fecha_confirmado'] );
-                $ocorrencia->setDtCancelamento( $linha ['dt_cancelamento'] );
-                $ocorrencia->setIdAtendente( $linha ['id_atendente'] );
-                $ocorrencia->setIdTecnicoIndicado( $linha ['id_tecnico_indicado'] );
-                $ocorrencia->setDtLiberacao( $linha ['dt_liberacao'] );
                 $ocorrencia->setAnexo( $linha ['anexo'] );
-                $ocorrencia->setDtEspera( $linha ['dt_espera'] );
-                $ocorrencia->setDtAguardandoUsuario( $linha ['dt_aguardando_usuario'] );
                 $ocorrencia->setLocalSala( $linha ['local_sala'] );
                 $ocorrencia->getAreaResponsavel()->setId( $linha ['id_area_responsavel_area_responsavel'] );
                 $ocorrencia->getAreaResponsavel()->setNome( $linha ['nome_area_responsavel_area_responsavel'] );
                 $ocorrencia->getAreaResponsavel()->setDescricao( $linha ['descricao_area_responsavel_area_responsavel'] );
                 $ocorrencia->getAreaResponsavel()->setEmail( $linha ['email_area_responsavel_area_responsavel'] );
-                $ocorrencia->getAreaResponsavel()->setIdAdmin( $linha ['id_admin_area_responsavel_area_responsavel'] );
                 $ocorrencia->getServico()->setId( $linha ['id_servico_servico'] );
                 $ocorrencia->getServico()->setNome( $linha ['nome_servico_servico'] );
                 $ocorrencia->getServico()->setDescricao( $linha ['descricao_servico_servico'] );
-                $ocorrencia->getServico()->setAtivo( $linha ['ativo_servico_servico'] );
                 $ocorrencia->getServico()->setTempoSla( $linha ['tempo_sla_servico_servico'] );
+                $ocorrencia->getServico()->setVisao( $linha ['visao_servico_servico'] );
+                $ocorrencia->getUsuarioCliente()->setId( $linha ['id_usuario_usuario_cliente'] );
+                $ocorrencia->getUsuarioCliente()->setNome( $linha ['nome_usuario_usuario_cliente'] );
+                $ocorrencia->getUsuarioCliente()->setEmail( $linha ['email_usuario_usuario_cliente'] );
+                $ocorrencia->getUsuarioCliente()->setLogin( $linha ['login_usuario_usuario_cliente'] );
+                $ocorrencia->getUsuarioCliente()->setSenha( $linha ['senha_usuario_usuario_cliente'] );
+                $ocorrencia->getUsuarioCliente()->setNivel( $linha ['nivel_usuario_usuario_cliente'] );
+                $ocorrencia->getUsuarioAtendente()->setId( $linha ['id_usuario_usuario_atendente'] );
+                $ocorrencia->getUsuarioAtendente()->setNome( $linha ['nome_usuario_usuario_atendente'] );
+                $ocorrencia->getUsuarioAtendente()->setEmail( $linha ['email_usuario_usuario_atendente'] );
+                $ocorrencia->getUsuarioAtendente()->setLogin( $linha ['login_usuario_usuario_atendente'] );
+                $ocorrencia->getUsuarioAtendente()->setSenha( $linha ['senha_usuario_usuario_atendente'] );
+                $ocorrencia->getUsuarioAtendente()->setNivel( $linha ['nivel_usuario_usuario_atendente'] );
+                $ocorrencia->getUsuarioIndicado()->setId( $linha ['id_usuario_usuario_indicado'] );
+                $ocorrencia->getUsuarioIndicado()->setNome( $linha ['nome_usuario_usuario_indicado'] );
+                $ocorrencia->getUsuarioIndicado()->setEmail( $linha ['email_usuario_usuario_indicado'] );
+                $ocorrencia->getUsuarioIndicado()->setLogin( $linha ['login_usuario_usuario_indicado'] );
+                $ocorrencia->getUsuarioIndicado()->setSenha( $linha ['senha_usuario_usuario_indicado'] );
+                $ocorrencia->getUsuarioIndicado()->setNivel( $linha ['nivel_usuario_usuario_indicado'] );
                 
                 
 		    }
@@ -4929,46 +3053,51 @@ class OcorrenciaDAO extends DAO {
 		SELECT
         ocorrencia.id, 
         ocorrencia.id_local, 
-        ocorrencia.id_funcionario, 
-        ocorrencia.desc_problema, 
+        ocorrencia.descricao, 
         ocorrencia.campus, 
-        ocorrencia.etiq_equipamento, 
-        ocorrencia.contato, 
+        ocorrencia.patrimonio, 
         ocorrencia.ramal, 
         ocorrencia.local, 
-        ocorrencia.funcionario, 
         ocorrencia.status, 
-        ocorrencia.obs, 
+        ocorrencia.solucao, 
         ocorrencia.prioridade, 
         ocorrencia.avaliacao, 
         ocorrencia.email, 
-        ocorrencia.fecha_confirmado, 
-        ocorrencia.reaberto, 
-        ocorrencia.dt_abertura, 
-        ocorrencia.dt_atendimento, 
-        ocorrencia.dt_fechamento, 
-        ocorrencia.dt_fecha_confirmado, 
-        ocorrencia.dt_cancelamento, 
-        ocorrencia.id_atendente, 
-        ocorrencia.id_tecnico_indicado, 
-        ocorrencia.dt_liberacao, 
         ocorrencia.anexo, 
-        ocorrencia.dt_espera, 
-        ocorrencia.dt_aguardando_usuario, 
         ocorrencia.local_sala, 
         area_responsavel.id as id_area_responsavel_area_responsavel, 
         area_responsavel.nome as nome_area_responsavel_area_responsavel, 
         area_responsavel.descricao as descricao_area_responsavel_area_responsavel, 
         area_responsavel.email as email_area_responsavel_area_responsavel, 
-        area_responsavel.id_admin as id_admin_area_responsavel_area_responsavel, 
         servico.id as id_servico_servico, 
         servico.nome as nome_servico_servico, 
         servico.descricao as descricao_servico_servico, 
-        servico.ativo as ativo_servico_servico, 
-        servico.tempo_sla as tempo_sla_servico_servico
+        servico.tempo_sla as tempo_sla_servico_servico, 
+        servico.visao as visao_servico_servico, 
+        usuario_cliente.id as id_usuario_usuario_cliente, 
+        usuario_cliente.nome as nome_usuario_usuario_cliente, 
+        usuario_cliente.email as email_usuario_usuario_cliente, 
+        usuario_cliente.login as login_usuario_usuario_cliente, 
+        usuario_cliente.senha as senha_usuario_usuario_cliente, 
+        usuario_cliente.nivel as nivel_usuario_usuario_cliente, 
+        usuario_atendente.id as id_usuario_usuario_atendente, 
+        usuario_atendente.nome as nome_usuario_usuario_atendente, 
+        usuario_atendente.email as email_usuario_usuario_atendente, 
+        usuario_atendente.login as login_usuario_usuario_atendente, 
+        usuario_atendente.senha as senha_usuario_usuario_atendente, 
+        usuario_atendente.nivel as nivel_usuario_usuario_atendente, 
+        usuario_indicado.id as id_usuario_usuario_indicado, 
+        usuario_indicado.nome as nome_usuario_usuario_indicado, 
+        usuario_indicado.email as email_usuario_usuario_indicado, 
+        usuario_indicado.login as login_usuario_usuario_indicado, 
+        usuario_indicado.senha as senha_usuario_usuario_indicado, 
+        usuario_indicado.nivel as nivel_usuario_usuario_indicado
 		FROM ocorrencia
 		INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel
 		INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico
+		INNER JOIN usuario as usuario_cliente ON usuario_cliente.id = ocorrencia.id_usuario_cliente
+		INNER JOIN usuario as usuario_atendente ON usuario_atendente.id = ocorrencia.id_usuario_atendente
+		INNER JOIN usuario as usuario_indicado ON usuario_indicado.id = ocorrencia.id_usuario_indicado
                 WHERE ocorrencia.prioridade = :prioridade
                  LIMIT 1000";
                 
@@ -4985,43 +3114,45 @@ class OcorrenciaDAO extends DAO {
             {
                 $ocorrencia->setId( $linha ['id'] );
                 $ocorrencia->setIdLocal( $linha ['id_local'] );
-                $ocorrencia->setIdFuncionario( $linha ['id_funcionario'] );
-                $ocorrencia->setDescProblema( $linha ['desc_problema'] );
+                $ocorrencia->setDescricao( $linha ['descricao'] );
                 $ocorrencia->setCampus( $linha ['campus'] );
-                $ocorrencia->setEtiqEquipamento( $linha ['etiq_equipamento'] );
-                $ocorrencia->setContato( $linha ['contato'] );
+                $ocorrencia->setPatrimonio( $linha ['patrimonio'] );
                 $ocorrencia->setRamal( $linha ['ramal'] );
                 $ocorrencia->setLocal( $linha ['local'] );
-                $ocorrencia->setFuncionario( $linha ['funcionario'] );
                 $ocorrencia->setStatus( $linha ['status'] );
-                $ocorrencia->setObs( $linha ['obs'] );
+                $ocorrencia->setSolucao( $linha ['solucao'] );
                 $ocorrencia->setPrioridade( $linha ['prioridade'] );
                 $ocorrencia->setAvaliacao( $linha ['avaliacao'] );
                 $ocorrencia->setEmail( $linha ['email'] );
-                $ocorrencia->setFechaConfirmado( $linha ['fecha_confirmado'] );
-                $ocorrencia->setReaberto( $linha ['reaberto'] );
-                $ocorrencia->setDtAbertura( $linha ['dt_abertura'] );
-                $ocorrencia->setDtAtendimento( $linha ['dt_atendimento'] );
-                $ocorrencia->setDtFechamento( $linha ['dt_fechamento'] );
-                $ocorrencia->setDtFechaConfirmado( $linha ['dt_fecha_confirmado'] );
-                $ocorrencia->setDtCancelamento( $linha ['dt_cancelamento'] );
-                $ocorrencia->setIdAtendente( $linha ['id_atendente'] );
-                $ocorrencia->setIdTecnicoIndicado( $linha ['id_tecnico_indicado'] );
-                $ocorrencia->setDtLiberacao( $linha ['dt_liberacao'] );
                 $ocorrencia->setAnexo( $linha ['anexo'] );
-                $ocorrencia->setDtEspera( $linha ['dt_espera'] );
-                $ocorrencia->setDtAguardandoUsuario( $linha ['dt_aguardando_usuario'] );
                 $ocorrencia->setLocalSala( $linha ['local_sala'] );
                 $ocorrencia->getAreaResponsavel()->setId( $linha ['id_area_responsavel_area_responsavel'] );
                 $ocorrencia->getAreaResponsavel()->setNome( $linha ['nome_area_responsavel_area_responsavel'] );
                 $ocorrencia->getAreaResponsavel()->setDescricao( $linha ['descricao_area_responsavel_area_responsavel'] );
                 $ocorrencia->getAreaResponsavel()->setEmail( $linha ['email_area_responsavel_area_responsavel'] );
-                $ocorrencia->getAreaResponsavel()->setIdAdmin( $linha ['id_admin_area_responsavel_area_responsavel'] );
                 $ocorrencia->getServico()->setId( $linha ['id_servico_servico'] );
                 $ocorrencia->getServico()->setNome( $linha ['nome_servico_servico'] );
                 $ocorrencia->getServico()->setDescricao( $linha ['descricao_servico_servico'] );
-                $ocorrencia->getServico()->setAtivo( $linha ['ativo_servico_servico'] );
                 $ocorrencia->getServico()->setTempoSla( $linha ['tempo_sla_servico_servico'] );
+                $ocorrencia->getServico()->setVisao( $linha ['visao_servico_servico'] );
+                $ocorrencia->getUsuarioCliente()->setId( $linha ['id_usuario_usuario_cliente'] );
+                $ocorrencia->getUsuarioCliente()->setNome( $linha ['nome_usuario_usuario_cliente'] );
+                $ocorrencia->getUsuarioCliente()->setEmail( $linha ['email_usuario_usuario_cliente'] );
+                $ocorrencia->getUsuarioCliente()->setLogin( $linha ['login_usuario_usuario_cliente'] );
+                $ocorrencia->getUsuarioCliente()->setSenha( $linha ['senha_usuario_usuario_cliente'] );
+                $ocorrencia->getUsuarioCliente()->setNivel( $linha ['nivel_usuario_usuario_cliente'] );
+                $ocorrencia->getUsuarioAtendente()->setId( $linha ['id_usuario_usuario_atendente'] );
+                $ocorrencia->getUsuarioAtendente()->setNome( $linha ['nome_usuario_usuario_atendente'] );
+                $ocorrencia->getUsuarioAtendente()->setEmail( $linha ['email_usuario_usuario_atendente'] );
+                $ocorrencia->getUsuarioAtendente()->setLogin( $linha ['login_usuario_usuario_atendente'] );
+                $ocorrencia->getUsuarioAtendente()->setSenha( $linha ['senha_usuario_usuario_atendente'] );
+                $ocorrencia->getUsuarioAtendente()->setNivel( $linha ['nivel_usuario_usuario_atendente'] );
+                $ocorrencia->getUsuarioIndicado()->setId( $linha ['id_usuario_usuario_indicado'] );
+                $ocorrencia->getUsuarioIndicado()->setNome( $linha ['nome_usuario_usuario_indicado'] );
+                $ocorrencia->getUsuarioIndicado()->setEmail( $linha ['email_usuario_usuario_indicado'] );
+                $ocorrencia->getUsuarioIndicado()->setLogin( $linha ['login_usuario_usuario_indicado'] );
+                $ocorrencia->getUsuarioIndicado()->setSenha( $linha ['senha_usuario_usuario_indicado'] );
+                $ocorrencia->getUsuarioIndicado()->setNivel( $linha ['nivel_usuario_usuario_indicado'] );
                 
                 
 		    }
@@ -5038,46 +3169,51 @@ class OcorrenciaDAO extends DAO {
 		SELECT
         ocorrencia.id, 
         ocorrencia.id_local, 
-        ocorrencia.id_funcionario, 
-        ocorrencia.desc_problema, 
+        ocorrencia.descricao, 
         ocorrencia.campus, 
-        ocorrencia.etiq_equipamento, 
-        ocorrencia.contato, 
+        ocorrencia.patrimonio, 
         ocorrencia.ramal, 
         ocorrencia.local, 
-        ocorrencia.funcionario, 
         ocorrencia.status, 
-        ocorrencia.obs, 
+        ocorrencia.solucao, 
         ocorrencia.prioridade, 
         ocorrencia.avaliacao, 
         ocorrencia.email, 
-        ocorrencia.fecha_confirmado, 
-        ocorrencia.reaberto, 
-        ocorrencia.dt_abertura, 
-        ocorrencia.dt_atendimento, 
-        ocorrencia.dt_fechamento, 
-        ocorrencia.dt_fecha_confirmado, 
-        ocorrencia.dt_cancelamento, 
-        ocorrencia.id_atendente, 
-        ocorrencia.id_tecnico_indicado, 
-        ocorrencia.dt_liberacao, 
         ocorrencia.anexo, 
-        ocorrencia.dt_espera, 
-        ocorrencia.dt_aguardando_usuario, 
         ocorrencia.local_sala, 
         area_responsavel.id as id_area_responsavel_area_responsavel, 
         area_responsavel.nome as nome_area_responsavel_area_responsavel, 
         area_responsavel.descricao as descricao_area_responsavel_area_responsavel, 
         area_responsavel.email as email_area_responsavel_area_responsavel, 
-        area_responsavel.id_admin as id_admin_area_responsavel_area_responsavel, 
         servico.id as id_servico_servico, 
         servico.nome as nome_servico_servico, 
         servico.descricao as descricao_servico_servico, 
-        servico.ativo as ativo_servico_servico, 
-        servico.tempo_sla as tempo_sla_servico_servico
+        servico.tempo_sla as tempo_sla_servico_servico, 
+        servico.visao as visao_servico_servico, 
+        usuario_cliente.id as id_usuario_usuario_cliente, 
+        usuario_cliente.nome as nome_usuario_usuario_cliente, 
+        usuario_cliente.email as email_usuario_usuario_cliente, 
+        usuario_cliente.login as login_usuario_usuario_cliente, 
+        usuario_cliente.senha as senha_usuario_usuario_cliente, 
+        usuario_cliente.nivel as nivel_usuario_usuario_cliente, 
+        usuario_atendente.id as id_usuario_usuario_atendente, 
+        usuario_atendente.nome as nome_usuario_usuario_atendente, 
+        usuario_atendente.email as email_usuario_usuario_atendente, 
+        usuario_atendente.login as login_usuario_usuario_atendente, 
+        usuario_atendente.senha as senha_usuario_usuario_atendente, 
+        usuario_atendente.nivel as nivel_usuario_usuario_atendente, 
+        usuario_indicado.id as id_usuario_usuario_indicado, 
+        usuario_indicado.nome as nome_usuario_usuario_indicado, 
+        usuario_indicado.email as email_usuario_usuario_indicado, 
+        usuario_indicado.login as login_usuario_usuario_indicado, 
+        usuario_indicado.senha as senha_usuario_usuario_indicado, 
+        usuario_indicado.nivel as nivel_usuario_usuario_indicado
 		FROM ocorrencia
 		INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel
 		INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico
+		INNER JOIN usuario as usuario_cliente ON usuario_cliente.id = ocorrencia.id_usuario_cliente
+		INNER JOIN usuario as usuario_atendente ON usuario_atendente.id = ocorrencia.id_usuario_atendente
+		INNER JOIN usuario as usuario_indicado ON usuario_indicado.id = ocorrencia.id_usuario_indicado
                 WHERE ocorrencia.avaliacao = :avaliacao
                  LIMIT 1000";
                 
@@ -5094,43 +3230,45 @@ class OcorrenciaDAO extends DAO {
             {
                 $ocorrencia->setId( $linha ['id'] );
                 $ocorrencia->setIdLocal( $linha ['id_local'] );
-                $ocorrencia->setIdFuncionario( $linha ['id_funcionario'] );
-                $ocorrencia->setDescProblema( $linha ['desc_problema'] );
+                $ocorrencia->setDescricao( $linha ['descricao'] );
                 $ocorrencia->setCampus( $linha ['campus'] );
-                $ocorrencia->setEtiqEquipamento( $linha ['etiq_equipamento'] );
-                $ocorrencia->setContato( $linha ['contato'] );
+                $ocorrencia->setPatrimonio( $linha ['patrimonio'] );
                 $ocorrencia->setRamal( $linha ['ramal'] );
                 $ocorrencia->setLocal( $linha ['local'] );
-                $ocorrencia->setFuncionario( $linha ['funcionario'] );
                 $ocorrencia->setStatus( $linha ['status'] );
-                $ocorrencia->setObs( $linha ['obs'] );
+                $ocorrencia->setSolucao( $linha ['solucao'] );
                 $ocorrencia->setPrioridade( $linha ['prioridade'] );
                 $ocorrencia->setAvaliacao( $linha ['avaliacao'] );
                 $ocorrencia->setEmail( $linha ['email'] );
-                $ocorrencia->setFechaConfirmado( $linha ['fecha_confirmado'] );
-                $ocorrencia->setReaberto( $linha ['reaberto'] );
-                $ocorrencia->setDtAbertura( $linha ['dt_abertura'] );
-                $ocorrencia->setDtAtendimento( $linha ['dt_atendimento'] );
-                $ocorrencia->setDtFechamento( $linha ['dt_fechamento'] );
-                $ocorrencia->setDtFechaConfirmado( $linha ['dt_fecha_confirmado'] );
-                $ocorrencia->setDtCancelamento( $linha ['dt_cancelamento'] );
-                $ocorrencia->setIdAtendente( $linha ['id_atendente'] );
-                $ocorrencia->setIdTecnicoIndicado( $linha ['id_tecnico_indicado'] );
-                $ocorrencia->setDtLiberacao( $linha ['dt_liberacao'] );
                 $ocorrencia->setAnexo( $linha ['anexo'] );
-                $ocorrencia->setDtEspera( $linha ['dt_espera'] );
-                $ocorrencia->setDtAguardandoUsuario( $linha ['dt_aguardando_usuario'] );
                 $ocorrencia->setLocalSala( $linha ['local_sala'] );
                 $ocorrencia->getAreaResponsavel()->setId( $linha ['id_area_responsavel_area_responsavel'] );
                 $ocorrencia->getAreaResponsavel()->setNome( $linha ['nome_area_responsavel_area_responsavel'] );
                 $ocorrencia->getAreaResponsavel()->setDescricao( $linha ['descricao_area_responsavel_area_responsavel'] );
                 $ocorrencia->getAreaResponsavel()->setEmail( $linha ['email_area_responsavel_area_responsavel'] );
-                $ocorrencia->getAreaResponsavel()->setIdAdmin( $linha ['id_admin_area_responsavel_area_responsavel'] );
                 $ocorrencia->getServico()->setId( $linha ['id_servico_servico'] );
                 $ocorrencia->getServico()->setNome( $linha ['nome_servico_servico'] );
                 $ocorrencia->getServico()->setDescricao( $linha ['descricao_servico_servico'] );
-                $ocorrencia->getServico()->setAtivo( $linha ['ativo_servico_servico'] );
                 $ocorrencia->getServico()->setTempoSla( $linha ['tempo_sla_servico_servico'] );
+                $ocorrencia->getServico()->setVisao( $linha ['visao_servico_servico'] );
+                $ocorrencia->getUsuarioCliente()->setId( $linha ['id_usuario_usuario_cliente'] );
+                $ocorrencia->getUsuarioCliente()->setNome( $linha ['nome_usuario_usuario_cliente'] );
+                $ocorrencia->getUsuarioCliente()->setEmail( $linha ['email_usuario_usuario_cliente'] );
+                $ocorrencia->getUsuarioCliente()->setLogin( $linha ['login_usuario_usuario_cliente'] );
+                $ocorrencia->getUsuarioCliente()->setSenha( $linha ['senha_usuario_usuario_cliente'] );
+                $ocorrencia->getUsuarioCliente()->setNivel( $linha ['nivel_usuario_usuario_cliente'] );
+                $ocorrencia->getUsuarioAtendente()->setId( $linha ['id_usuario_usuario_atendente'] );
+                $ocorrencia->getUsuarioAtendente()->setNome( $linha ['nome_usuario_usuario_atendente'] );
+                $ocorrencia->getUsuarioAtendente()->setEmail( $linha ['email_usuario_usuario_atendente'] );
+                $ocorrencia->getUsuarioAtendente()->setLogin( $linha ['login_usuario_usuario_atendente'] );
+                $ocorrencia->getUsuarioAtendente()->setSenha( $linha ['senha_usuario_usuario_atendente'] );
+                $ocorrencia->getUsuarioAtendente()->setNivel( $linha ['nivel_usuario_usuario_atendente'] );
+                $ocorrencia->getUsuarioIndicado()->setId( $linha ['id_usuario_usuario_indicado'] );
+                $ocorrencia->getUsuarioIndicado()->setNome( $linha ['nome_usuario_usuario_indicado'] );
+                $ocorrencia->getUsuarioIndicado()->setEmail( $linha ['email_usuario_usuario_indicado'] );
+                $ocorrencia->getUsuarioIndicado()->setLogin( $linha ['login_usuario_usuario_indicado'] );
+                $ocorrencia->getUsuarioIndicado()->setSenha( $linha ['senha_usuario_usuario_indicado'] );
+                $ocorrencia->getUsuarioIndicado()->setNivel( $linha ['nivel_usuario_usuario_indicado'] );
                 
                 
 		    }
@@ -5147,46 +3285,51 @@ class OcorrenciaDAO extends DAO {
 		SELECT
         ocorrencia.id, 
         ocorrencia.id_local, 
-        ocorrencia.id_funcionario, 
-        ocorrencia.desc_problema, 
+        ocorrencia.descricao, 
         ocorrencia.campus, 
-        ocorrencia.etiq_equipamento, 
-        ocorrencia.contato, 
+        ocorrencia.patrimonio, 
         ocorrencia.ramal, 
         ocorrencia.local, 
-        ocorrencia.funcionario, 
         ocorrencia.status, 
-        ocorrencia.obs, 
+        ocorrencia.solucao, 
         ocorrencia.prioridade, 
         ocorrencia.avaliacao, 
         ocorrencia.email, 
-        ocorrencia.fecha_confirmado, 
-        ocorrencia.reaberto, 
-        ocorrencia.dt_abertura, 
-        ocorrencia.dt_atendimento, 
-        ocorrencia.dt_fechamento, 
-        ocorrencia.dt_fecha_confirmado, 
-        ocorrencia.dt_cancelamento, 
-        ocorrencia.id_atendente, 
-        ocorrencia.id_tecnico_indicado, 
-        ocorrencia.dt_liberacao, 
         ocorrencia.anexo, 
-        ocorrencia.dt_espera, 
-        ocorrencia.dt_aguardando_usuario, 
         ocorrencia.local_sala, 
         area_responsavel.id as id_area_responsavel_area_responsavel, 
         area_responsavel.nome as nome_area_responsavel_area_responsavel, 
         area_responsavel.descricao as descricao_area_responsavel_area_responsavel, 
         area_responsavel.email as email_area_responsavel_area_responsavel, 
-        area_responsavel.id_admin as id_admin_area_responsavel_area_responsavel, 
         servico.id as id_servico_servico, 
         servico.nome as nome_servico_servico, 
         servico.descricao as descricao_servico_servico, 
-        servico.ativo as ativo_servico_servico, 
-        servico.tempo_sla as tempo_sla_servico_servico
+        servico.tempo_sla as tempo_sla_servico_servico, 
+        servico.visao as visao_servico_servico, 
+        usuario_cliente.id as id_usuario_usuario_cliente, 
+        usuario_cliente.nome as nome_usuario_usuario_cliente, 
+        usuario_cliente.email as email_usuario_usuario_cliente, 
+        usuario_cliente.login as login_usuario_usuario_cliente, 
+        usuario_cliente.senha as senha_usuario_usuario_cliente, 
+        usuario_cliente.nivel as nivel_usuario_usuario_cliente, 
+        usuario_atendente.id as id_usuario_usuario_atendente, 
+        usuario_atendente.nome as nome_usuario_usuario_atendente, 
+        usuario_atendente.email as email_usuario_usuario_atendente, 
+        usuario_atendente.login as login_usuario_usuario_atendente, 
+        usuario_atendente.senha as senha_usuario_usuario_atendente, 
+        usuario_atendente.nivel as nivel_usuario_usuario_atendente, 
+        usuario_indicado.id as id_usuario_usuario_indicado, 
+        usuario_indicado.nome as nome_usuario_usuario_indicado, 
+        usuario_indicado.email as email_usuario_usuario_indicado, 
+        usuario_indicado.login as login_usuario_usuario_indicado, 
+        usuario_indicado.senha as senha_usuario_usuario_indicado, 
+        usuario_indicado.nivel as nivel_usuario_usuario_indicado
 		FROM ocorrencia
 		INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel
 		INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico
+		INNER JOIN usuario as usuario_cliente ON usuario_cliente.id = ocorrencia.id_usuario_cliente
+		INNER JOIN usuario as usuario_atendente ON usuario_atendente.id = ocorrencia.id_usuario_atendente
+		INNER JOIN usuario as usuario_indicado ON usuario_indicado.id = ocorrencia.id_usuario_indicado
                 WHERE ocorrencia.email = :email
                  LIMIT 1000";
                 
@@ -5203,1133 +3346,45 @@ class OcorrenciaDAO extends DAO {
             {
                 $ocorrencia->setId( $linha ['id'] );
                 $ocorrencia->setIdLocal( $linha ['id_local'] );
-                $ocorrencia->setIdFuncionario( $linha ['id_funcionario'] );
-                $ocorrencia->setDescProblema( $linha ['desc_problema'] );
+                $ocorrencia->setDescricao( $linha ['descricao'] );
                 $ocorrencia->setCampus( $linha ['campus'] );
-                $ocorrencia->setEtiqEquipamento( $linha ['etiq_equipamento'] );
-                $ocorrencia->setContato( $linha ['contato'] );
+                $ocorrencia->setPatrimonio( $linha ['patrimonio'] );
                 $ocorrencia->setRamal( $linha ['ramal'] );
                 $ocorrencia->setLocal( $linha ['local'] );
-                $ocorrencia->setFuncionario( $linha ['funcionario'] );
                 $ocorrencia->setStatus( $linha ['status'] );
-                $ocorrencia->setObs( $linha ['obs'] );
+                $ocorrencia->setSolucao( $linha ['solucao'] );
                 $ocorrencia->setPrioridade( $linha ['prioridade'] );
                 $ocorrencia->setAvaliacao( $linha ['avaliacao'] );
                 $ocorrencia->setEmail( $linha ['email'] );
-                $ocorrencia->setFechaConfirmado( $linha ['fecha_confirmado'] );
-                $ocorrencia->setReaberto( $linha ['reaberto'] );
-                $ocorrencia->setDtAbertura( $linha ['dt_abertura'] );
-                $ocorrencia->setDtAtendimento( $linha ['dt_atendimento'] );
-                $ocorrencia->setDtFechamento( $linha ['dt_fechamento'] );
-                $ocorrencia->setDtFechaConfirmado( $linha ['dt_fecha_confirmado'] );
-                $ocorrencia->setDtCancelamento( $linha ['dt_cancelamento'] );
-                $ocorrencia->setIdAtendente( $linha ['id_atendente'] );
-                $ocorrencia->setIdTecnicoIndicado( $linha ['id_tecnico_indicado'] );
-                $ocorrencia->setDtLiberacao( $linha ['dt_liberacao'] );
                 $ocorrencia->setAnexo( $linha ['anexo'] );
-                $ocorrencia->setDtEspera( $linha ['dt_espera'] );
-                $ocorrencia->setDtAguardandoUsuario( $linha ['dt_aguardando_usuario'] );
                 $ocorrencia->setLocalSala( $linha ['local_sala'] );
                 $ocorrencia->getAreaResponsavel()->setId( $linha ['id_area_responsavel_area_responsavel'] );
                 $ocorrencia->getAreaResponsavel()->setNome( $linha ['nome_area_responsavel_area_responsavel'] );
                 $ocorrencia->getAreaResponsavel()->setDescricao( $linha ['descricao_area_responsavel_area_responsavel'] );
                 $ocorrencia->getAreaResponsavel()->setEmail( $linha ['email_area_responsavel_area_responsavel'] );
-                $ocorrencia->getAreaResponsavel()->setIdAdmin( $linha ['id_admin_area_responsavel_area_responsavel'] );
                 $ocorrencia->getServico()->setId( $linha ['id_servico_servico'] );
                 $ocorrencia->getServico()->setNome( $linha ['nome_servico_servico'] );
                 $ocorrencia->getServico()->setDescricao( $linha ['descricao_servico_servico'] );
-                $ocorrencia->getServico()->setAtivo( $linha ['ativo_servico_servico'] );
                 $ocorrencia->getServico()->setTempoSla( $linha ['tempo_sla_servico_servico'] );
-                
-                
-		    }
-		} catch(PDOException $e) {
-		    echo $e->getMessage();
- 		}
-		return $ocorrencia;
-    }
-                
-    public function preenchePorFechaConfirmado(Ocorrencia $ocorrencia) {
-        
-	    $fechaConfirmado = $ocorrencia->getFechaConfirmado();
-	    $sql = "
-		SELECT
-        ocorrencia.id, 
-        ocorrencia.id_local, 
-        ocorrencia.id_funcionario, 
-        ocorrencia.desc_problema, 
-        ocorrencia.campus, 
-        ocorrencia.etiq_equipamento, 
-        ocorrencia.contato, 
-        ocorrencia.ramal, 
-        ocorrencia.local, 
-        ocorrencia.funcionario, 
-        ocorrencia.status, 
-        ocorrencia.obs, 
-        ocorrencia.prioridade, 
-        ocorrencia.avaliacao, 
-        ocorrencia.email, 
-        ocorrencia.fecha_confirmado, 
-        ocorrencia.reaberto, 
-        ocorrencia.dt_abertura, 
-        ocorrencia.dt_atendimento, 
-        ocorrencia.dt_fechamento, 
-        ocorrencia.dt_fecha_confirmado, 
-        ocorrencia.dt_cancelamento, 
-        ocorrencia.id_atendente, 
-        ocorrencia.id_tecnico_indicado, 
-        ocorrencia.dt_liberacao, 
-        ocorrencia.anexo, 
-        ocorrencia.dt_espera, 
-        ocorrencia.dt_aguardando_usuario, 
-        ocorrencia.local_sala, 
-        area_responsavel.id as id_area_responsavel_area_responsavel, 
-        area_responsavel.nome as nome_area_responsavel_area_responsavel, 
-        area_responsavel.descricao as descricao_area_responsavel_area_responsavel, 
-        area_responsavel.email as email_area_responsavel_area_responsavel, 
-        area_responsavel.id_admin as id_admin_area_responsavel_area_responsavel, 
-        servico.id as id_servico_servico, 
-        servico.nome as nome_servico_servico, 
-        servico.descricao as descricao_servico_servico, 
-        servico.ativo as ativo_servico_servico, 
-        servico.tempo_sla as tempo_sla_servico_servico
-		FROM ocorrencia
-		INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel
-		INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico
-                WHERE ocorrencia.fecha_confirmado = :fechaConfirmado
-                 LIMIT 1000";
-                
-        try {
-            $stmt = $this->conexao->prepare($sql);
-                
-		    if(!$stmt){
-                echo "<br>Mensagem de erro retornada: ".$this->conexao->errorInfo()[2]."<br>";
-		    }
-            $stmt->bindParam(":fechaConfirmado", $fechaConfirmado, PDO::PARAM_STR);
-            $stmt->execute();
-		    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-		    foreach ( $result as $linha )
-            {
-                $ocorrencia->setId( $linha ['id'] );
-                $ocorrencia->setIdLocal( $linha ['id_local'] );
-                $ocorrencia->setIdFuncionario( $linha ['id_funcionario'] );
-                $ocorrencia->setDescProblema( $linha ['desc_problema'] );
-                $ocorrencia->setCampus( $linha ['campus'] );
-                $ocorrencia->setEtiqEquipamento( $linha ['etiq_equipamento'] );
-                $ocorrencia->setContato( $linha ['contato'] );
-                $ocorrencia->setRamal( $linha ['ramal'] );
-                $ocorrencia->setLocal( $linha ['local'] );
-                $ocorrencia->setFuncionario( $linha ['funcionario'] );
-                $ocorrencia->setStatus( $linha ['status'] );
-                $ocorrencia->setObs( $linha ['obs'] );
-                $ocorrencia->setPrioridade( $linha ['prioridade'] );
-                $ocorrencia->setAvaliacao( $linha ['avaliacao'] );
-                $ocorrencia->setEmail( $linha ['email'] );
-                $ocorrencia->setFechaConfirmado( $linha ['fecha_confirmado'] );
-                $ocorrencia->setReaberto( $linha ['reaberto'] );
-                $ocorrencia->setDtAbertura( $linha ['dt_abertura'] );
-                $ocorrencia->setDtAtendimento( $linha ['dt_atendimento'] );
-                $ocorrencia->setDtFechamento( $linha ['dt_fechamento'] );
-                $ocorrencia->setDtFechaConfirmado( $linha ['dt_fecha_confirmado'] );
-                $ocorrencia->setDtCancelamento( $linha ['dt_cancelamento'] );
-                $ocorrencia->setIdAtendente( $linha ['id_atendente'] );
-                $ocorrencia->setIdTecnicoIndicado( $linha ['id_tecnico_indicado'] );
-                $ocorrencia->setDtLiberacao( $linha ['dt_liberacao'] );
-                $ocorrencia->setAnexo( $linha ['anexo'] );
-                $ocorrencia->setDtEspera( $linha ['dt_espera'] );
-                $ocorrencia->setDtAguardandoUsuario( $linha ['dt_aguardando_usuario'] );
-                $ocorrencia->setLocalSala( $linha ['local_sala'] );
-                $ocorrencia->getAreaResponsavel()->setId( $linha ['id_area_responsavel_area_responsavel'] );
-                $ocorrencia->getAreaResponsavel()->setNome( $linha ['nome_area_responsavel_area_responsavel'] );
-                $ocorrencia->getAreaResponsavel()->setDescricao( $linha ['descricao_area_responsavel_area_responsavel'] );
-                $ocorrencia->getAreaResponsavel()->setEmail( $linha ['email_area_responsavel_area_responsavel'] );
-                $ocorrencia->getAreaResponsavel()->setIdAdmin( $linha ['id_admin_area_responsavel_area_responsavel'] );
-                $ocorrencia->getServico()->setId( $linha ['id_servico_servico'] );
-                $ocorrencia->getServico()->setNome( $linha ['nome_servico_servico'] );
-                $ocorrencia->getServico()->setDescricao( $linha ['descricao_servico_servico'] );
-                $ocorrencia->getServico()->setAtivo( $linha ['ativo_servico_servico'] );
-                $ocorrencia->getServico()->setTempoSla( $linha ['tempo_sla_servico_servico'] );
-                
-                
-		    }
-		} catch(PDOException $e) {
-		    echo $e->getMessage();
- 		}
-		return $ocorrencia;
-    }
-                
-    public function preenchePorReaberto(Ocorrencia $ocorrencia) {
-        
-	    $reaberto = $ocorrencia->getReaberto();
-	    $sql = "
-		SELECT
-        ocorrencia.id, 
-        ocorrencia.id_local, 
-        ocorrencia.id_funcionario, 
-        ocorrencia.desc_problema, 
-        ocorrencia.campus, 
-        ocorrencia.etiq_equipamento, 
-        ocorrencia.contato, 
-        ocorrencia.ramal, 
-        ocorrencia.local, 
-        ocorrencia.funcionario, 
-        ocorrencia.status, 
-        ocorrencia.obs, 
-        ocorrencia.prioridade, 
-        ocorrencia.avaliacao, 
-        ocorrencia.email, 
-        ocorrencia.fecha_confirmado, 
-        ocorrencia.reaberto, 
-        ocorrencia.dt_abertura, 
-        ocorrencia.dt_atendimento, 
-        ocorrencia.dt_fechamento, 
-        ocorrencia.dt_fecha_confirmado, 
-        ocorrencia.dt_cancelamento, 
-        ocorrencia.id_atendente, 
-        ocorrencia.id_tecnico_indicado, 
-        ocorrencia.dt_liberacao, 
-        ocorrencia.anexo, 
-        ocorrencia.dt_espera, 
-        ocorrencia.dt_aguardando_usuario, 
-        ocorrencia.local_sala, 
-        area_responsavel.id as id_area_responsavel_area_responsavel, 
-        area_responsavel.nome as nome_area_responsavel_area_responsavel, 
-        area_responsavel.descricao as descricao_area_responsavel_area_responsavel, 
-        area_responsavel.email as email_area_responsavel_area_responsavel, 
-        area_responsavel.id_admin as id_admin_area_responsavel_area_responsavel, 
-        servico.id as id_servico_servico, 
-        servico.nome as nome_servico_servico, 
-        servico.descricao as descricao_servico_servico, 
-        servico.ativo as ativo_servico_servico, 
-        servico.tempo_sla as tempo_sla_servico_servico
-		FROM ocorrencia
-		INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel
-		INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico
-                WHERE ocorrencia.reaberto = :reaberto
-                 LIMIT 1000";
-                
-        try {
-            $stmt = $this->conexao->prepare($sql);
-                
-		    if(!$stmt){
-                echo "<br>Mensagem de erro retornada: ".$this->conexao->errorInfo()[2]."<br>";
-		    }
-            $stmt->bindParam(":reaberto", $reaberto, PDO::PARAM_STR);
-            $stmt->execute();
-		    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-		    foreach ( $result as $linha )
-            {
-                $ocorrencia->setId( $linha ['id'] );
-                $ocorrencia->setIdLocal( $linha ['id_local'] );
-                $ocorrencia->setIdFuncionario( $linha ['id_funcionario'] );
-                $ocorrencia->setDescProblema( $linha ['desc_problema'] );
-                $ocorrencia->setCampus( $linha ['campus'] );
-                $ocorrencia->setEtiqEquipamento( $linha ['etiq_equipamento'] );
-                $ocorrencia->setContato( $linha ['contato'] );
-                $ocorrencia->setRamal( $linha ['ramal'] );
-                $ocorrencia->setLocal( $linha ['local'] );
-                $ocorrencia->setFuncionario( $linha ['funcionario'] );
-                $ocorrencia->setStatus( $linha ['status'] );
-                $ocorrencia->setObs( $linha ['obs'] );
-                $ocorrencia->setPrioridade( $linha ['prioridade'] );
-                $ocorrencia->setAvaliacao( $linha ['avaliacao'] );
-                $ocorrencia->setEmail( $linha ['email'] );
-                $ocorrencia->setFechaConfirmado( $linha ['fecha_confirmado'] );
-                $ocorrencia->setReaberto( $linha ['reaberto'] );
-                $ocorrencia->setDtAbertura( $linha ['dt_abertura'] );
-                $ocorrencia->setDtAtendimento( $linha ['dt_atendimento'] );
-                $ocorrencia->setDtFechamento( $linha ['dt_fechamento'] );
-                $ocorrencia->setDtFechaConfirmado( $linha ['dt_fecha_confirmado'] );
-                $ocorrencia->setDtCancelamento( $linha ['dt_cancelamento'] );
-                $ocorrencia->setIdAtendente( $linha ['id_atendente'] );
-                $ocorrencia->setIdTecnicoIndicado( $linha ['id_tecnico_indicado'] );
-                $ocorrencia->setDtLiberacao( $linha ['dt_liberacao'] );
-                $ocorrencia->setAnexo( $linha ['anexo'] );
-                $ocorrencia->setDtEspera( $linha ['dt_espera'] );
-                $ocorrencia->setDtAguardandoUsuario( $linha ['dt_aguardando_usuario'] );
-                $ocorrencia->setLocalSala( $linha ['local_sala'] );
-                $ocorrencia->getAreaResponsavel()->setId( $linha ['id_area_responsavel_area_responsavel'] );
-                $ocorrencia->getAreaResponsavel()->setNome( $linha ['nome_area_responsavel_area_responsavel'] );
-                $ocorrencia->getAreaResponsavel()->setDescricao( $linha ['descricao_area_responsavel_area_responsavel'] );
-                $ocorrencia->getAreaResponsavel()->setEmail( $linha ['email_area_responsavel_area_responsavel'] );
-                $ocorrencia->getAreaResponsavel()->setIdAdmin( $linha ['id_admin_area_responsavel_area_responsavel'] );
-                $ocorrencia->getServico()->setId( $linha ['id_servico_servico'] );
-                $ocorrencia->getServico()->setNome( $linha ['nome_servico_servico'] );
-                $ocorrencia->getServico()->setDescricao( $linha ['descricao_servico_servico'] );
-                $ocorrencia->getServico()->setAtivo( $linha ['ativo_servico_servico'] );
-                $ocorrencia->getServico()->setTempoSla( $linha ['tempo_sla_servico_servico'] );
-                
-                
-		    }
-		} catch(PDOException $e) {
-		    echo $e->getMessage();
- 		}
-		return $ocorrencia;
-    }
-                
-    public function preenchePorDtAbertura(Ocorrencia $ocorrencia) {
-        
-	    $dtAbertura = $ocorrencia->getDtAbertura();
-	    $sql = "
-		SELECT
-        ocorrencia.id, 
-        ocorrencia.id_local, 
-        ocorrencia.id_funcionario, 
-        ocorrencia.desc_problema, 
-        ocorrencia.campus, 
-        ocorrencia.etiq_equipamento, 
-        ocorrencia.contato, 
-        ocorrencia.ramal, 
-        ocorrencia.local, 
-        ocorrencia.funcionario, 
-        ocorrencia.status, 
-        ocorrencia.obs, 
-        ocorrencia.prioridade, 
-        ocorrencia.avaliacao, 
-        ocorrencia.email, 
-        ocorrencia.fecha_confirmado, 
-        ocorrencia.reaberto, 
-        ocorrencia.dt_abertura, 
-        ocorrencia.dt_atendimento, 
-        ocorrencia.dt_fechamento, 
-        ocorrencia.dt_fecha_confirmado, 
-        ocorrencia.dt_cancelamento, 
-        ocorrencia.id_atendente, 
-        ocorrencia.id_tecnico_indicado, 
-        ocorrencia.dt_liberacao, 
-        ocorrencia.anexo, 
-        ocorrencia.dt_espera, 
-        ocorrencia.dt_aguardando_usuario, 
-        ocorrencia.local_sala, 
-        area_responsavel.id as id_area_responsavel_area_responsavel, 
-        area_responsavel.nome as nome_area_responsavel_area_responsavel, 
-        area_responsavel.descricao as descricao_area_responsavel_area_responsavel, 
-        area_responsavel.email as email_area_responsavel_area_responsavel, 
-        area_responsavel.id_admin as id_admin_area_responsavel_area_responsavel, 
-        servico.id as id_servico_servico, 
-        servico.nome as nome_servico_servico, 
-        servico.descricao as descricao_servico_servico, 
-        servico.ativo as ativo_servico_servico, 
-        servico.tempo_sla as tempo_sla_servico_servico
-		FROM ocorrencia
-		INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel
-		INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico
-                WHERE ocorrencia.dt_abertura = :dtAbertura
-                 LIMIT 1000";
-                
-        try {
-            $stmt = $this->conexao->prepare($sql);
-                
-		    if(!$stmt){
-                echo "<br>Mensagem de erro retornada: ".$this->conexao->errorInfo()[2]."<br>";
-		    }
-            $stmt->bindParam(":dtAbertura", $dtAbertura, PDO::PARAM_STR);
-            $stmt->execute();
-		    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-		    foreach ( $result as $linha )
-            {
-                $ocorrencia->setId( $linha ['id'] );
-                $ocorrencia->setIdLocal( $linha ['id_local'] );
-                $ocorrencia->setIdFuncionario( $linha ['id_funcionario'] );
-                $ocorrencia->setDescProblema( $linha ['desc_problema'] );
-                $ocorrencia->setCampus( $linha ['campus'] );
-                $ocorrencia->setEtiqEquipamento( $linha ['etiq_equipamento'] );
-                $ocorrencia->setContato( $linha ['contato'] );
-                $ocorrencia->setRamal( $linha ['ramal'] );
-                $ocorrencia->setLocal( $linha ['local'] );
-                $ocorrencia->setFuncionario( $linha ['funcionario'] );
-                $ocorrencia->setStatus( $linha ['status'] );
-                $ocorrencia->setObs( $linha ['obs'] );
-                $ocorrencia->setPrioridade( $linha ['prioridade'] );
-                $ocorrencia->setAvaliacao( $linha ['avaliacao'] );
-                $ocorrencia->setEmail( $linha ['email'] );
-                $ocorrencia->setFechaConfirmado( $linha ['fecha_confirmado'] );
-                $ocorrencia->setReaberto( $linha ['reaberto'] );
-                $ocorrencia->setDtAbertura( $linha ['dt_abertura'] );
-                $ocorrencia->setDtAtendimento( $linha ['dt_atendimento'] );
-                $ocorrencia->setDtFechamento( $linha ['dt_fechamento'] );
-                $ocorrencia->setDtFechaConfirmado( $linha ['dt_fecha_confirmado'] );
-                $ocorrencia->setDtCancelamento( $linha ['dt_cancelamento'] );
-                $ocorrencia->setIdAtendente( $linha ['id_atendente'] );
-                $ocorrencia->setIdTecnicoIndicado( $linha ['id_tecnico_indicado'] );
-                $ocorrencia->setDtLiberacao( $linha ['dt_liberacao'] );
-                $ocorrencia->setAnexo( $linha ['anexo'] );
-                $ocorrencia->setDtEspera( $linha ['dt_espera'] );
-                $ocorrencia->setDtAguardandoUsuario( $linha ['dt_aguardando_usuario'] );
-                $ocorrencia->setLocalSala( $linha ['local_sala'] );
-                $ocorrencia->getAreaResponsavel()->setId( $linha ['id_area_responsavel_area_responsavel'] );
-                $ocorrencia->getAreaResponsavel()->setNome( $linha ['nome_area_responsavel_area_responsavel'] );
-                $ocorrencia->getAreaResponsavel()->setDescricao( $linha ['descricao_area_responsavel_area_responsavel'] );
-                $ocorrencia->getAreaResponsavel()->setEmail( $linha ['email_area_responsavel_area_responsavel'] );
-                $ocorrencia->getAreaResponsavel()->setIdAdmin( $linha ['id_admin_area_responsavel_area_responsavel'] );
-                $ocorrencia->getServico()->setId( $linha ['id_servico_servico'] );
-                $ocorrencia->getServico()->setNome( $linha ['nome_servico_servico'] );
-                $ocorrencia->getServico()->setDescricao( $linha ['descricao_servico_servico'] );
-                $ocorrencia->getServico()->setAtivo( $linha ['ativo_servico_servico'] );
-                $ocorrencia->getServico()->setTempoSla( $linha ['tempo_sla_servico_servico'] );
-                
-                
-		    }
-		} catch(PDOException $e) {
-		    echo $e->getMessage();
- 		}
-		return $ocorrencia;
-    }
-                
-    public function preenchePorDtAtendimento(Ocorrencia $ocorrencia) {
-        
-	    $dtAtendimento = $ocorrencia->getDtAtendimento();
-	    $sql = "
-		SELECT
-        ocorrencia.id, 
-        ocorrencia.id_local, 
-        ocorrencia.id_funcionario, 
-        ocorrencia.desc_problema, 
-        ocorrencia.campus, 
-        ocorrencia.etiq_equipamento, 
-        ocorrencia.contato, 
-        ocorrencia.ramal, 
-        ocorrencia.local, 
-        ocorrencia.funcionario, 
-        ocorrencia.status, 
-        ocorrencia.obs, 
-        ocorrencia.prioridade, 
-        ocorrencia.avaliacao, 
-        ocorrencia.email, 
-        ocorrencia.fecha_confirmado, 
-        ocorrencia.reaberto, 
-        ocorrencia.dt_abertura, 
-        ocorrencia.dt_atendimento, 
-        ocorrencia.dt_fechamento, 
-        ocorrencia.dt_fecha_confirmado, 
-        ocorrencia.dt_cancelamento, 
-        ocorrencia.id_atendente, 
-        ocorrencia.id_tecnico_indicado, 
-        ocorrencia.dt_liberacao, 
-        ocorrencia.anexo, 
-        ocorrencia.dt_espera, 
-        ocorrencia.dt_aguardando_usuario, 
-        ocorrencia.local_sala, 
-        area_responsavel.id as id_area_responsavel_area_responsavel, 
-        area_responsavel.nome as nome_area_responsavel_area_responsavel, 
-        area_responsavel.descricao as descricao_area_responsavel_area_responsavel, 
-        area_responsavel.email as email_area_responsavel_area_responsavel, 
-        area_responsavel.id_admin as id_admin_area_responsavel_area_responsavel, 
-        servico.id as id_servico_servico, 
-        servico.nome as nome_servico_servico, 
-        servico.descricao as descricao_servico_servico, 
-        servico.ativo as ativo_servico_servico, 
-        servico.tempo_sla as tempo_sla_servico_servico
-		FROM ocorrencia
-		INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel
-		INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico
-                WHERE ocorrencia.dt_atendimento = :dtAtendimento
-                 LIMIT 1000";
-                
-        try {
-            $stmt = $this->conexao->prepare($sql);
-                
-		    if(!$stmt){
-                echo "<br>Mensagem de erro retornada: ".$this->conexao->errorInfo()[2]."<br>";
-		    }
-            $stmt->bindParam(":dtAtendimento", $dtAtendimento, PDO::PARAM_STR);
-            $stmt->execute();
-		    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-		    foreach ( $result as $linha )
-            {
-                $ocorrencia->setId( $linha ['id'] );
-                $ocorrencia->setIdLocal( $linha ['id_local'] );
-                $ocorrencia->setIdFuncionario( $linha ['id_funcionario'] );
-                $ocorrencia->setDescProblema( $linha ['desc_problema'] );
-                $ocorrencia->setCampus( $linha ['campus'] );
-                $ocorrencia->setEtiqEquipamento( $linha ['etiq_equipamento'] );
-                $ocorrencia->setContato( $linha ['contato'] );
-                $ocorrencia->setRamal( $linha ['ramal'] );
-                $ocorrencia->setLocal( $linha ['local'] );
-                $ocorrencia->setFuncionario( $linha ['funcionario'] );
-                $ocorrencia->setStatus( $linha ['status'] );
-                $ocorrencia->setObs( $linha ['obs'] );
-                $ocorrencia->setPrioridade( $linha ['prioridade'] );
-                $ocorrencia->setAvaliacao( $linha ['avaliacao'] );
-                $ocorrencia->setEmail( $linha ['email'] );
-                $ocorrencia->setFechaConfirmado( $linha ['fecha_confirmado'] );
-                $ocorrencia->setReaberto( $linha ['reaberto'] );
-                $ocorrencia->setDtAbertura( $linha ['dt_abertura'] );
-                $ocorrencia->setDtAtendimento( $linha ['dt_atendimento'] );
-                $ocorrencia->setDtFechamento( $linha ['dt_fechamento'] );
-                $ocorrencia->setDtFechaConfirmado( $linha ['dt_fecha_confirmado'] );
-                $ocorrencia->setDtCancelamento( $linha ['dt_cancelamento'] );
-                $ocorrencia->setIdAtendente( $linha ['id_atendente'] );
-                $ocorrencia->setIdTecnicoIndicado( $linha ['id_tecnico_indicado'] );
-                $ocorrencia->setDtLiberacao( $linha ['dt_liberacao'] );
-                $ocorrencia->setAnexo( $linha ['anexo'] );
-                $ocorrencia->setDtEspera( $linha ['dt_espera'] );
-                $ocorrencia->setDtAguardandoUsuario( $linha ['dt_aguardando_usuario'] );
-                $ocorrencia->setLocalSala( $linha ['local_sala'] );
-                $ocorrencia->getAreaResponsavel()->setId( $linha ['id_area_responsavel_area_responsavel'] );
-                $ocorrencia->getAreaResponsavel()->setNome( $linha ['nome_area_responsavel_area_responsavel'] );
-                $ocorrencia->getAreaResponsavel()->setDescricao( $linha ['descricao_area_responsavel_area_responsavel'] );
-                $ocorrencia->getAreaResponsavel()->setEmail( $linha ['email_area_responsavel_area_responsavel'] );
-                $ocorrencia->getAreaResponsavel()->setIdAdmin( $linha ['id_admin_area_responsavel_area_responsavel'] );
-                $ocorrencia->getServico()->setId( $linha ['id_servico_servico'] );
-                $ocorrencia->getServico()->setNome( $linha ['nome_servico_servico'] );
-                $ocorrencia->getServico()->setDescricao( $linha ['descricao_servico_servico'] );
-                $ocorrencia->getServico()->setAtivo( $linha ['ativo_servico_servico'] );
-                $ocorrencia->getServico()->setTempoSla( $linha ['tempo_sla_servico_servico'] );
-                
-                
-		    }
-		} catch(PDOException $e) {
-		    echo $e->getMessage();
- 		}
-		return $ocorrencia;
-    }
-                
-    public function preenchePorDtFechamento(Ocorrencia $ocorrencia) {
-        
-	    $dtFechamento = $ocorrencia->getDtFechamento();
-	    $sql = "
-		SELECT
-        ocorrencia.id, 
-        ocorrencia.id_local, 
-        ocorrencia.id_funcionario, 
-        ocorrencia.desc_problema, 
-        ocorrencia.campus, 
-        ocorrencia.etiq_equipamento, 
-        ocorrencia.contato, 
-        ocorrencia.ramal, 
-        ocorrencia.local, 
-        ocorrencia.funcionario, 
-        ocorrencia.status, 
-        ocorrencia.obs, 
-        ocorrencia.prioridade, 
-        ocorrencia.avaliacao, 
-        ocorrencia.email, 
-        ocorrencia.fecha_confirmado, 
-        ocorrencia.reaberto, 
-        ocorrencia.dt_abertura, 
-        ocorrencia.dt_atendimento, 
-        ocorrencia.dt_fechamento, 
-        ocorrencia.dt_fecha_confirmado, 
-        ocorrencia.dt_cancelamento, 
-        ocorrencia.id_atendente, 
-        ocorrencia.id_tecnico_indicado, 
-        ocorrencia.dt_liberacao, 
-        ocorrencia.anexo, 
-        ocorrencia.dt_espera, 
-        ocorrencia.dt_aguardando_usuario, 
-        ocorrencia.local_sala, 
-        area_responsavel.id as id_area_responsavel_area_responsavel, 
-        area_responsavel.nome as nome_area_responsavel_area_responsavel, 
-        area_responsavel.descricao as descricao_area_responsavel_area_responsavel, 
-        area_responsavel.email as email_area_responsavel_area_responsavel, 
-        area_responsavel.id_admin as id_admin_area_responsavel_area_responsavel, 
-        servico.id as id_servico_servico, 
-        servico.nome as nome_servico_servico, 
-        servico.descricao as descricao_servico_servico, 
-        servico.ativo as ativo_servico_servico, 
-        servico.tempo_sla as tempo_sla_servico_servico
-		FROM ocorrencia
-		INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel
-		INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico
-                WHERE ocorrencia.dt_fechamento = :dtFechamento
-                 LIMIT 1000";
-                
-        try {
-            $stmt = $this->conexao->prepare($sql);
-                
-		    if(!$stmt){
-                echo "<br>Mensagem de erro retornada: ".$this->conexao->errorInfo()[2]."<br>";
-		    }
-            $stmt->bindParam(":dtFechamento", $dtFechamento, PDO::PARAM_STR);
-            $stmt->execute();
-		    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-		    foreach ( $result as $linha )
-            {
-                $ocorrencia->setId( $linha ['id'] );
-                $ocorrencia->setIdLocal( $linha ['id_local'] );
-                $ocorrencia->setIdFuncionario( $linha ['id_funcionario'] );
-                $ocorrencia->setDescProblema( $linha ['desc_problema'] );
-                $ocorrencia->setCampus( $linha ['campus'] );
-                $ocorrencia->setEtiqEquipamento( $linha ['etiq_equipamento'] );
-                $ocorrencia->setContato( $linha ['contato'] );
-                $ocorrencia->setRamal( $linha ['ramal'] );
-                $ocorrencia->setLocal( $linha ['local'] );
-                $ocorrencia->setFuncionario( $linha ['funcionario'] );
-                $ocorrencia->setStatus( $linha ['status'] );
-                $ocorrencia->setObs( $linha ['obs'] );
-                $ocorrencia->setPrioridade( $linha ['prioridade'] );
-                $ocorrencia->setAvaliacao( $linha ['avaliacao'] );
-                $ocorrencia->setEmail( $linha ['email'] );
-                $ocorrencia->setFechaConfirmado( $linha ['fecha_confirmado'] );
-                $ocorrencia->setReaberto( $linha ['reaberto'] );
-                $ocorrencia->setDtAbertura( $linha ['dt_abertura'] );
-                $ocorrencia->setDtAtendimento( $linha ['dt_atendimento'] );
-                $ocorrencia->setDtFechamento( $linha ['dt_fechamento'] );
-                $ocorrencia->setDtFechaConfirmado( $linha ['dt_fecha_confirmado'] );
-                $ocorrencia->setDtCancelamento( $linha ['dt_cancelamento'] );
-                $ocorrencia->setIdAtendente( $linha ['id_atendente'] );
-                $ocorrencia->setIdTecnicoIndicado( $linha ['id_tecnico_indicado'] );
-                $ocorrencia->setDtLiberacao( $linha ['dt_liberacao'] );
-                $ocorrencia->setAnexo( $linha ['anexo'] );
-                $ocorrencia->setDtEspera( $linha ['dt_espera'] );
-                $ocorrencia->setDtAguardandoUsuario( $linha ['dt_aguardando_usuario'] );
-                $ocorrencia->setLocalSala( $linha ['local_sala'] );
-                $ocorrencia->getAreaResponsavel()->setId( $linha ['id_area_responsavel_area_responsavel'] );
-                $ocorrencia->getAreaResponsavel()->setNome( $linha ['nome_area_responsavel_area_responsavel'] );
-                $ocorrencia->getAreaResponsavel()->setDescricao( $linha ['descricao_area_responsavel_area_responsavel'] );
-                $ocorrencia->getAreaResponsavel()->setEmail( $linha ['email_area_responsavel_area_responsavel'] );
-                $ocorrencia->getAreaResponsavel()->setIdAdmin( $linha ['id_admin_area_responsavel_area_responsavel'] );
-                $ocorrencia->getServico()->setId( $linha ['id_servico_servico'] );
-                $ocorrencia->getServico()->setNome( $linha ['nome_servico_servico'] );
-                $ocorrencia->getServico()->setDescricao( $linha ['descricao_servico_servico'] );
-                $ocorrencia->getServico()->setAtivo( $linha ['ativo_servico_servico'] );
-                $ocorrencia->getServico()->setTempoSla( $linha ['tempo_sla_servico_servico'] );
-                
-                
-		    }
-		} catch(PDOException $e) {
-		    echo $e->getMessage();
- 		}
-		return $ocorrencia;
-    }
-                
-    public function preenchePorDtFechaConfirmado(Ocorrencia $ocorrencia) {
-        
-	    $dtFechaConfirmado = $ocorrencia->getDtFechaConfirmado();
-	    $sql = "
-		SELECT
-        ocorrencia.id, 
-        ocorrencia.id_local, 
-        ocorrencia.id_funcionario, 
-        ocorrencia.desc_problema, 
-        ocorrencia.campus, 
-        ocorrencia.etiq_equipamento, 
-        ocorrencia.contato, 
-        ocorrencia.ramal, 
-        ocorrencia.local, 
-        ocorrencia.funcionario, 
-        ocorrencia.status, 
-        ocorrencia.obs, 
-        ocorrencia.prioridade, 
-        ocorrencia.avaliacao, 
-        ocorrencia.email, 
-        ocorrencia.fecha_confirmado, 
-        ocorrencia.reaberto, 
-        ocorrencia.dt_abertura, 
-        ocorrencia.dt_atendimento, 
-        ocorrencia.dt_fechamento, 
-        ocorrencia.dt_fecha_confirmado, 
-        ocorrencia.dt_cancelamento, 
-        ocorrencia.id_atendente, 
-        ocorrencia.id_tecnico_indicado, 
-        ocorrencia.dt_liberacao, 
-        ocorrencia.anexo, 
-        ocorrencia.dt_espera, 
-        ocorrencia.dt_aguardando_usuario, 
-        ocorrencia.local_sala, 
-        area_responsavel.id as id_area_responsavel_area_responsavel, 
-        area_responsavel.nome as nome_area_responsavel_area_responsavel, 
-        area_responsavel.descricao as descricao_area_responsavel_area_responsavel, 
-        area_responsavel.email as email_area_responsavel_area_responsavel, 
-        area_responsavel.id_admin as id_admin_area_responsavel_area_responsavel, 
-        servico.id as id_servico_servico, 
-        servico.nome as nome_servico_servico, 
-        servico.descricao as descricao_servico_servico, 
-        servico.ativo as ativo_servico_servico, 
-        servico.tempo_sla as tempo_sla_servico_servico
-		FROM ocorrencia
-		INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel
-		INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico
-                WHERE ocorrencia.dt_fecha_confirmado = :dtFechaConfirmado
-                 LIMIT 1000";
-                
-        try {
-            $stmt = $this->conexao->prepare($sql);
-                
-		    if(!$stmt){
-                echo "<br>Mensagem de erro retornada: ".$this->conexao->errorInfo()[2]."<br>";
-		    }
-            $stmt->bindParam(":dtFechaConfirmado", $dtFechaConfirmado, PDO::PARAM_STR);
-            $stmt->execute();
-		    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-		    foreach ( $result as $linha )
-            {
-                $ocorrencia->setId( $linha ['id'] );
-                $ocorrencia->setIdLocal( $linha ['id_local'] );
-                $ocorrencia->setIdFuncionario( $linha ['id_funcionario'] );
-                $ocorrencia->setDescProblema( $linha ['desc_problema'] );
-                $ocorrencia->setCampus( $linha ['campus'] );
-                $ocorrencia->setEtiqEquipamento( $linha ['etiq_equipamento'] );
-                $ocorrencia->setContato( $linha ['contato'] );
-                $ocorrencia->setRamal( $linha ['ramal'] );
-                $ocorrencia->setLocal( $linha ['local'] );
-                $ocorrencia->setFuncionario( $linha ['funcionario'] );
-                $ocorrencia->setStatus( $linha ['status'] );
-                $ocorrencia->setObs( $linha ['obs'] );
-                $ocorrencia->setPrioridade( $linha ['prioridade'] );
-                $ocorrencia->setAvaliacao( $linha ['avaliacao'] );
-                $ocorrencia->setEmail( $linha ['email'] );
-                $ocorrencia->setFechaConfirmado( $linha ['fecha_confirmado'] );
-                $ocorrencia->setReaberto( $linha ['reaberto'] );
-                $ocorrencia->setDtAbertura( $linha ['dt_abertura'] );
-                $ocorrencia->setDtAtendimento( $linha ['dt_atendimento'] );
-                $ocorrencia->setDtFechamento( $linha ['dt_fechamento'] );
-                $ocorrencia->setDtFechaConfirmado( $linha ['dt_fecha_confirmado'] );
-                $ocorrencia->setDtCancelamento( $linha ['dt_cancelamento'] );
-                $ocorrencia->setIdAtendente( $linha ['id_atendente'] );
-                $ocorrencia->setIdTecnicoIndicado( $linha ['id_tecnico_indicado'] );
-                $ocorrencia->setDtLiberacao( $linha ['dt_liberacao'] );
-                $ocorrencia->setAnexo( $linha ['anexo'] );
-                $ocorrencia->setDtEspera( $linha ['dt_espera'] );
-                $ocorrencia->setDtAguardandoUsuario( $linha ['dt_aguardando_usuario'] );
-                $ocorrencia->setLocalSala( $linha ['local_sala'] );
-                $ocorrencia->getAreaResponsavel()->setId( $linha ['id_area_responsavel_area_responsavel'] );
-                $ocorrencia->getAreaResponsavel()->setNome( $linha ['nome_area_responsavel_area_responsavel'] );
-                $ocorrencia->getAreaResponsavel()->setDescricao( $linha ['descricao_area_responsavel_area_responsavel'] );
-                $ocorrencia->getAreaResponsavel()->setEmail( $linha ['email_area_responsavel_area_responsavel'] );
-                $ocorrencia->getAreaResponsavel()->setIdAdmin( $linha ['id_admin_area_responsavel_area_responsavel'] );
-                $ocorrencia->getServico()->setId( $linha ['id_servico_servico'] );
-                $ocorrencia->getServico()->setNome( $linha ['nome_servico_servico'] );
-                $ocorrencia->getServico()->setDescricao( $linha ['descricao_servico_servico'] );
-                $ocorrencia->getServico()->setAtivo( $linha ['ativo_servico_servico'] );
-                $ocorrencia->getServico()->setTempoSla( $linha ['tempo_sla_servico_servico'] );
-                
-                
-		    }
-		} catch(PDOException $e) {
-		    echo $e->getMessage();
- 		}
-		return $ocorrencia;
-    }
-                
-    public function preenchePorDtCancelamento(Ocorrencia $ocorrencia) {
-        
-	    $dtCancelamento = $ocorrencia->getDtCancelamento();
-	    $sql = "
-		SELECT
-        ocorrencia.id, 
-        ocorrencia.id_local, 
-        ocorrencia.id_funcionario, 
-        ocorrencia.desc_problema, 
-        ocorrencia.campus, 
-        ocorrencia.etiq_equipamento, 
-        ocorrencia.contato, 
-        ocorrencia.ramal, 
-        ocorrencia.local, 
-        ocorrencia.funcionario, 
-        ocorrencia.status, 
-        ocorrencia.obs, 
-        ocorrencia.prioridade, 
-        ocorrencia.avaliacao, 
-        ocorrencia.email, 
-        ocorrencia.fecha_confirmado, 
-        ocorrencia.reaberto, 
-        ocorrencia.dt_abertura, 
-        ocorrencia.dt_atendimento, 
-        ocorrencia.dt_fechamento, 
-        ocorrencia.dt_fecha_confirmado, 
-        ocorrencia.dt_cancelamento, 
-        ocorrencia.id_atendente, 
-        ocorrencia.id_tecnico_indicado, 
-        ocorrencia.dt_liberacao, 
-        ocorrencia.anexo, 
-        ocorrencia.dt_espera, 
-        ocorrencia.dt_aguardando_usuario, 
-        ocorrencia.local_sala, 
-        area_responsavel.id as id_area_responsavel_area_responsavel, 
-        area_responsavel.nome as nome_area_responsavel_area_responsavel, 
-        area_responsavel.descricao as descricao_area_responsavel_area_responsavel, 
-        area_responsavel.email as email_area_responsavel_area_responsavel, 
-        area_responsavel.id_admin as id_admin_area_responsavel_area_responsavel, 
-        servico.id as id_servico_servico, 
-        servico.nome as nome_servico_servico, 
-        servico.descricao as descricao_servico_servico, 
-        servico.ativo as ativo_servico_servico, 
-        servico.tempo_sla as tempo_sla_servico_servico
-		FROM ocorrencia
-		INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel
-		INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico
-                WHERE ocorrencia.dt_cancelamento = :dtCancelamento
-                 LIMIT 1000";
-                
-        try {
-            $stmt = $this->conexao->prepare($sql);
-                
-		    if(!$stmt){
-                echo "<br>Mensagem de erro retornada: ".$this->conexao->errorInfo()[2]."<br>";
-		    }
-            $stmt->bindParam(":dtCancelamento", $dtCancelamento, PDO::PARAM_STR);
-            $stmt->execute();
-		    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-		    foreach ( $result as $linha )
-            {
-                $ocorrencia->setId( $linha ['id'] );
-                $ocorrencia->setIdLocal( $linha ['id_local'] );
-                $ocorrencia->setIdFuncionario( $linha ['id_funcionario'] );
-                $ocorrencia->setDescProblema( $linha ['desc_problema'] );
-                $ocorrencia->setCampus( $linha ['campus'] );
-                $ocorrencia->setEtiqEquipamento( $linha ['etiq_equipamento'] );
-                $ocorrencia->setContato( $linha ['contato'] );
-                $ocorrencia->setRamal( $linha ['ramal'] );
-                $ocorrencia->setLocal( $linha ['local'] );
-                $ocorrencia->setFuncionario( $linha ['funcionario'] );
-                $ocorrencia->setStatus( $linha ['status'] );
-                $ocorrencia->setObs( $linha ['obs'] );
-                $ocorrencia->setPrioridade( $linha ['prioridade'] );
-                $ocorrencia->setAvaliacao( $linha ['avaliacao'] );
-                $ocorrencia->setEmail( $linha ['email'] );
-                $ocorrencia->setFechaConfirmado( $linha ['fecha_confirmado'] );
-                $ocorrencia->setReaberto( $linha ['reaberto'] );
-                $ocorrencia->setDtAbertura( $linha ['dt_abertura'] );
-                $ocorrencia->setDtAtendimento( $linha ['dt_atendimento'] );
-                $ocorrencia->setDtFechamento( $linha ['dt_fechamento'] );
-                $ocorrencia->setDtFechaConfirmado( $linha ['dt_fecha_confirmado'] );
-                $ocorrencia->setDtCancelamento( $linha ['dt_cancelamento'] );
-                $ocorrencia->setIdAtendente( $linha ['id_atendente'] );
-                $ocorrencia->setIdTecnicoIndicado( $linha ['id_tecnico_indicado'] );
-                $ocorrencia->setDtLiberacao( $linha ['dt_liberacao'] );
-                $ocorrencia->setAnexo( $linha ['anexo'] );
-                $ocorrencia->setDtEspera( $linha ['dt_espera'] );
-                $ocorrencia->setDtAguardandoUsuario( $linha ['dt_aguardando_usuario'] );
-                $ocorrencia->setLocalSala( $linha ['local_sala'] );
-                $ocorrencia->getAreaResponsavel()->setId( $linha ['id_area_responsavel_area_responsavel'] );
-                $ocorrencia->getAreaResponsavel()->setNome( $linha ['nome_area_responsavel_area_responsavel'] );
-                $ocorrencia->getAreaResponsavel()->setDescricao( $linha ['descricao_area_responsavel_area_responsavel'] );
-                $ocorrencia->getAreaResponsavel()->setEmail( $linha ['email_area_responsavel_area_responsavel'] );
-                $ocorrencia->getAreaResponsavel()->setIdAdmin( $linha ['id_admin_area_responsavel_area_responsavel'] );
-                $ocorrencia->getServico()->setId( $linha ['id_servico_servico'] );
-                $ocorrencia->getServico()->setNome( $linha ['nome_servico_servico'] );
-                $ocorrencia->getServico()->setDescricao( $linha ['descricao_servico_servico'] );
-                $ocorrencia->getServico()->setAtivo( $linha ['ativo_servico_servico'] );
-                $ocorrencia->getServico()->setTempoSla( $linha ['tempo_sla_servico_servico'] );
-                
-                
-		    }
-		} catch(PDOException $e) {
-		    echo $e->getMessage();
- 		}
-		return $ocorrencia;
-    }
-                
-    public function preenchePorIdAtendente(Ocorrencia $ocorrencia) {
-        
-	    $idAtendente = $ocorrencia->getIdAtendente();
-	    $sql = "
-		SELECT
-        ocorrencia.id, 
-        ocorrencia.id_local, 
-        ocorrencia.id_funcionario, 
-        ocorrencia.desc_problema, 
-        ocorrencia.campus, 
-        ocorrencia.etiq_equipamento, 
-        ocorrencia.contato, 
-        ocorrencia.ramal, 
-        ocorrencia.local, 
-        ocorrencia.funcionario, 
-        ocorrencia.status, 
-        ocorrencia.obs, 
-        ocorrencia.prioridade, 
-        ocorrencia.avaliacao, 
-        ocorrencia.email, 
-        ocorrencia.fecha_confirmado, 
-        ocorrencia.reaberto, 
-        ocorrencia.dt_abertura, 
-        ocorrencia.dt_atendimento, 
-        ocorrencia.dt_fechamento, 
-        ocorrencia.dt_fecha_confirmado, 
-        ocorrencia.dt_cancelamento, 
-        ocorrencia.id_atendente, 
-        ocorrencia.id_tecnico_indicado, 
-        ocorrencia.dt_liberacao, 
-        ocorrencia.anexo, 
-        ocorrencia.dt_espera, 
-        ocorrencia.dt_aguardando_usuario, 
-        ocorrencia.local_sala, 
-        area_responsavel.id as id_area_responsavel_area_responsavel, 
-        area_responsavel.nome as nome_area_responsavel_area_responsavel, 
-        area_responsavel.descricao as descricao_area_responsavel_area_responsavel, 
-        area_responsavel.email as email_area_responsavel_area_responsavel, 
-        area_responsavel.id_admin as id_admin_area_responsavel_area_responsavel, 
-        servico.id as id_servico_servico, 
-        servico.nome as nome_servico_servico, 
-        servico.descricao as descricao_servico_servico, 
-        servico.ativo as ativo_servico_servico, 
-        servico.tempo_sla as tempo_sla_servico_servico
-		FROM ocorrencia
-		INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel
-		INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico
-                WHERE ocorrencia.id_atendente = :idAtendente
-                 LIMIT 1000";
-                
-        try {
-            $stmt = $this->conexao->prepare($sql);
-                
-		    if(!$stmt){
-                echo "<br>Mensagem de erro retornada: ".$this->conexao->errorInfo()[2]."<br>";
-		    }
-            $stmt->bindParam(":idAtendente", $idAtendente, PDO::PARAM_INT);
-            $stmt->execute();
-		    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-		    foreach ( $result as $linha )
-            {
-                $ocorrencia->setId( $linha ['id'] );
-                $ocorrencia->setIdLocal( $linha ['id_local'] );
-                $ocorrencia->setIdFuncionario( $linha ['id_funcionario'] );
-                $ocorrencia->setDescProblema( $linha ['desc_problema'] );
-                $ocorrencia->setCampus( $linha ['campus'] );
-                $ocorrencia->setEtiqEquipamento( $linha ['etiq_equipamento'] );
-                $ocorrencia->setContato( $linha ['contato'] );
-                $ocorrencia->setRamal( $linha ['ramal'] );
-                $ocorrencia->setLocal( $linha ['local'] );
-                $ocorrencia->setFuncionario( $linha ['funcionario'] );
-                $ocorrencia->setStatus( $linha ['status'] );
-                $ocorrencia->setObs( $linha ['obs'] );
-                $ocorrencia->setPrioridade( $linha ['prioridade'] );
-                $ocorrencia->setAvaliacao( $linha ['avaliacao'] );
-                $ocorrencia->setEmail( $linha ['email'] );
-                $ocorrencia->setFechaConfirmado( $linha ['fecha_confirmado'] );
-                $ocorrencia->setReaberto( $linha ['reaberto'] );
-                $ocorrencia->setDtAbertura( $linha ['dt_abertura'] );
-                $ocorrencia->setDtAtendimento( $linha ['dt_atendimento'] );
-                $ocorrencia->setDtFechamento( $linha ['dt_fechamento'] );
-                $ocorrencia->setDtFechaConfirmado( $linha ['dt_fecha_confirmado'] );
-                $ocorrencia->setDtCancelamento( $linha ['dt_cancelamento'] );
-                $ocorrencia->setIdAtendente( $linha ['id_atendente'] );
-                $ocorrencia->setIdTecnicoIndicado( $linha ['id_tecnico_indicado'] );
-                $ocorrencia->setDtLiberacao( $linha ['dt_liberacao'] );
-                $ocorrencia->setAnexo( $linha ['anexo'] );
-                $ocorrencia->setDtEspera( $linha ['dt_espera'] );
-                $ocorrencia->setDtAguardandoUsuario( $linha ['dt_aguardando_usuario'] );
-                $ocorrencia->setLocalSala( $linha ['local_sala'] );
-                $ocorrencia->getAreaResponsavel()->setId( $linha ['id_area_responsavel_area_responsavel'] );
-                $ocorrencia->getAreaResponsavel()->setNome( $linha ['nome_area_responsavel_area_responsavel'] );
-                $ocorrencia->getAreaResponsavel()->setDescricao( $linha ['descricao_area_responsavel_area_responsavel'] );
-                $ocorrencia->getAreaResponsavel()->setEmail( $linha ['email_area_responsavel_area_responsavel'] );
-                $ocorrencia->getAreaResponsavel()->setIdAdmin( $linha ['id_admin_area_responsavel_area_responsavel'] );
-                $ocorrencia->getServico()->setId( $linha ['id_servico_servico'] );
-                $ocorrencia->getServico()->setNome( $linha ['nome_servico_servico'] );
-                $ocorrencia->getServico()->setDescricao( $linha ['descricao_servico_servico'] );
-                $ocorrencia->getServico()->setAtivo( $linha ['ativo_servico_servico'] );
-                $ocorrencia->getServico()->setTempoSla( $linha ['tempo_sla_servico_servico'] );
-                
-                
-		    }
-		} catch(PDOException $e) {
-		    echo $e->getMessage();
- 		}
-		return $ocorrencia;
-    }
-                
-    public function preenchePorIdTecnicoIndicado(Ocorrencia $ocorrencia) {
-        
-	    $idTecnicoIndicado = $ocorrencia->getIdTecnicoIndicado();
-	    $sql = "
-		SELECT
-        ocorrencia.id, 
-        ocorrencia.id_local, 
-        ocorrencia.id_funcionario, 
-        ocorrencia.desc_problema, 
-        ocorrencia.campus, 
-        ocorrencia.etiq_equipamento, 
-        ocorrencia.contato, 
-        ocorrencia.ramal, 
-        ocorrencia.local, 
-        ocorrencia.funcionario, 
-        ocorrencia.status, 
-        ocorrencia.obs, 
-        ocorrencia.prioridade, 
-        ocorrencia.avaliacao, 
-        ocorrencia.email, 
-        ocorrencia.fecha_confirmado, 
-        ocorrencia.reaberto, 
-        ocorrencia.dt_abertura, 
-        ocorrencia.dt_atendimento, 
-        ocorrencia.dt_fechamento, 
-        ocorrencia.dt_fecha_confirmado, 
-        ocorrencia.dt_cancelamento, 
-        ocorrencia.id_atendente, 
-        ocorrencia.id_tecnico_indicado, 
-        ocorrencia.dt_liberacao, 
-        ocorrencia.anexo, 
-        ocorrencia.dt_espera, 
-        ocorrencia.dt_aguardando_usuario, 
-        ocorrencia.local_sala, 
-        area_responsavel.id as id_area_responsavel_area_responsavel, 
-        area_responsavel.nome as nome_area_responsavel_area_responsavel, 
-        area_responsavel.descricao as descricao_area_responsavel_area_responsavel, 
-        area_responsavel.email as email_area_responsavel_area_responsavel, 
-        area_responsavel.id_admin as id_admin_area_responsavel_area_responsavel, 
-        servico.id as id_servico_servico, 
-        servico.nome as nome_servico_servico, 
-        servico.descricao as descricao_servico_servico, 
-        servico.ativo as ativo_servico_servico, 
-        servico.tempo_sla as tempo_sla_servico_servico
-		FROM ocorrencia
-		INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel
-		INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico
-                WHERE ocorrencia.id_tecnico_indicado = :idTecnicoIndicado
-                 LIMIT 1000";
-                
-        try {
-            $stmt = $this->conexao->prepare($sql);
-                
-		    if(!$stmt){
-                echo "<br>Mensagem de erro retornada: ".$this->conexao->errorInfo()[2]."<br>";
-		    }
-            $stmt->bindParam(":idTecnicoIndicado", $idTecnicoIndicado, PDO::PARAM_INT);
-            $stmt->execute();
-		    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-		    foreach ( $result as $linha )
-            {
-                $ocorrencia->setId( $linha ['id'] );
-                $ocorrencia->setIdLocal( $linha ['id_local'] );
-                $ocorrencia->setIdFuncionario( $linha ['id_funcionario'] );
-                $ocorrencia->setDescProblema( $linha ['desc_problema'] );
-                $ocorrencia->setCampus( $linha ['campus'] );
-                $ocorrencia->setEtiqEquipamento( $linha ['etiq_equipamento'] );
-                $ocorrencia->setContato( $linha ['contato'] );
-                $ocorrencia->setRamal( $linha ['ramal'] );
-                $ocorrencia->setLocal( $linha ['local'] );
-                $ocorrencia->setFuncionario( $linha ['funcionario'] );
-                $ocorrencia->setStatus( $linha ['status'] );
-                $ocorrencia->setObs( $linha ['obs'] );
-                $ocorrencia->setPrioridade( $linha ['prioridade'] );
-                $ocorrencia->setAvaliacao( $linha ['avaliacao'] );
-                $ocorrencia->setEmail( $linha ['email'] );
-                $ocorrencia->setFechaConfirmado( $linha ['fecha_confirmado'] );
-                $ocorrencia->setReaberto( $linha ['reaberto'] );
-                $ocorrencia->setDtAbertura( $linha ['dt_abertura'] );
-                $ocorrencia->setDtAtendimento( $linha ['dt_atendimento'] );
-                $ocorrencia->setDtFechamento( $linha ['dt_fechamento'] );
-                $ocorrencia->setDtFechaConfirmado( $linha ['dt_fecha_confirmado'] );
-                $ocorrencia->setDtCancelamento( $linha ['dt_cancelamento'] );
-                $ocorrencia->setIdAtendente( $linha ['id_atendente'] );
-                $ocorrencia->setIdTecnicoIndicado( $linha ['id_tecnico_indicado'] );
-                $ocorrencia->setDtLiberacao( $linha ['dt_liberacao'] );
-                $ocorrencia->setAnexo( $linha ['anexo'] );
-                $ocorrencia->setDtEspera( $linha ['dt_espera'] );
-                $ocorrencia->setDtAguardandoUsuario( $linha ['dt_aguardando_usuario'] );
-                $ocorrencia->setLocalSala( $linha ['local_sala'] );
-                $ocorrencia->getAreaResponsavel()->setId( $linha ['id_area_responsavel_area_responsavel'] );
-                $ocorrencia->getAreaResponsavel()->setNome( $linha ['nome_area_responsavel_area_responsavel'] );
-                $ocorrencia->getAreaResponsavel()->setDescricao( $linha ['descricao_area_responsavel_area_responsavel'] );
-                $ocorrencia->getAreaResponsavel()->setEmail( $linha ['email_area_responsavel_area_responsavel'] );
-                $ocorrencia->getAreaResponsavel()->setIdAdmin( $linha ['id_admin_area_responsavel_area_responsavel'] );
-                $ocorrencia->getServico()->setId( $linha ['id_servico_servico'] );
-                $ocorrencia->getServico()->setNome( $linha ['nome_servico_servico'] );
-                $ocorrencia->getServico()->setDescricao( $linha ['descricao_servico_servico'] );
-                $ocorrencia->getServico()->setAtivo( $linha ['ativo_servico_servico'] );
-                $ocorrencia->getServico()->setTempoSla( $linha ['tempo_sla_servico_servico'] );
-                
-                
-		    }
-		} catch(PDOException $e) {
-		    echo $e->getMessage();
- 		}
-		return $ocorrencia;
-    }
-                
-    public function preenchePorDtLiberacao(Ocorrencia $ocorrencia) {
-        
-	    $dtLiberacao = $ocorrencia->getDtLiberacao();
-	    $sql = "
-		SELECT
-        ocorrencia.id, 
-        ocorrencia.id_local, 
-        ocorrencia.id_funcionario, 
-        ocorrencia.desc_problema, 
-        ocorrencia.campus, 
-        ocorrencia.etiq_equipamento, 
-        ocorrencia.contato, 
-        ocorrencia.ramal, 
-        ocorrencia.local, 
-        ocorrencia.funcionario, 
-        ocorrencia.status, 
-        ocorrencia.obs, 
-        ocorrencia.prioridade, 
-        ocorrencia.avaliacao, 
-        ocorrencia.email, 
-        ocorrencia.fecha_confirmado, 
-        ocorrencia.reaberto, 
-        ocorrencia.dt_abertura, 
-        ocorrencia.dt_atendimento, 
-        ocorrencia.dt_fechamento, 
-        ocorrencia.dt_fecha_confirmado, 
-        ocorrencia.dt_cancelamento, 
-        ocorrencia.id_atendente, 
-        ocorrencia.id_tecnico_indicado, 
-        ocorrencia.dt_liberacao, 
-        ocorrencia.anexo, 
-        ocorrencia.dt_espera, 
-        ocorrencia.dt_aguardando_usuario, 
-        ocorrencia.local_sala, 
-        area_responsavel.id as id_area_responsavel_area_responsavel, 
-        area_responsavel.nome as nome_area_responsavel_area_responsavel, 
-        area_responsavel.descricao as descricao_area_responsavel_area_responsavel, 
-        area_responsavel.email as email_area_responsavel_area_responsavel, 
-        area_responsavel.id_admin as id_admin_area_responsavel_area_responsavel, 
-        servico.id as id_servico_servico, 
-        servico.nome as nome_servico_servico, 
-        servico.descricao as descricao_servico_servico, 
-        servico.ativo as ativo_servico_servico, 
-        servico.tempo_sla as tempo_sla_servico_servico
-		FROM ocorrencia
-		INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel
-		INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico
-                WHERE ocorrencia.dt_liberacao = :dtLiberacao
-                 LIMIT 1000";
-                
-        try {
-            $stmt = $this->conexao->prepare($sql);
-                
-		    if(!$stmt){
-                echo "<br>Mensagem de erro retornada: ".$this->conexao->errorInfo()[2]."<br>";
-		    }
-            $stmt->bindParam(":dtLiberacao", $dtLiberacao, PDO::PARAM_STR);
-            $stmt->execute();
-		    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-		    foreach ( $result as $linha )
-            {
-                $ocorrencia->setId( $linha ['id'] );
-                $ocorrencia->setIdLocal( $linha ['id_local'] );
-                $ocorrencia->setIdFuncionario( $linha ['id_funcionario'] );
-                $ocorrencia->setDescProblema( $linha ['desc_problema'] );
-                $ocorrencia->setCampus( $linha ['campus'] );
-                $ocorrencia->setEtiqEquipamento( $linha ['etiq_equipamento'] );
-                $ocorrencia->setContato( $linha ['contato'] );
-                $ocorrencia->setRamal( $linha ['ramal'] );
-                $ocorrencia->setLocal( $linha ['local'] );
-                $ocorrencia->setFuncionario( $linha ['funcionario'] );
-                $ocorrencia->setStatus( $linha ['status'] );
-                $ocorrencia->setObs( $linha ['obs'] );
-                $ocorrencia->setPrioridade( $linha ['prioridade'] );
-                $ocorrencia->setAvaliacao( $linha ['avaliacao'] );
-                $ocorrencia->setEmail( $linha ['email'] );
-                $ocorrencia->setFechaConfirmado( $linha ['fecha_confirmado'] );
-                $ocorrencia->setReaberto( $linha ['reaberto'] );
-                $ocorrencia->setDtAbertura( $linha ['dt_abertura'] );
-                $ocorrencia->setDtAtendimento( $linha ['dt_atendimento'] );
-                $ocorrencia->setDtFechamento( $linha ['dt_fechamento'] );
-                $ocorrencia->setDtFechaConfirmado( $linha ['dt_fecha_confirmado'] );
-                $ocorrencia->setDtCancelamento( $linha ['dt_cancelamento'] );
-                $ocorrencia->setIdAtendente( $linha ['id_atendente'] );
-                $ocorrencia->setIdTecnicoIndicado( $linha ['id_tecnico_indicado'] );
-                $ocorrencia->setDtLiberacao( $linha ['dt_liberacao'] );
-                $ocorrencia->setAnexo( $linha ['anexo'] );
-                $ocorrencia->setDtEspera( $linha ['dt_espera'] );
-                $ocorrencia->setDtAguardandoUsuario( $linha ['dt_aguardando_usuario'] );
-                $ocorrencia->setLocalSala( $linha ['local_sala'] );
-                $ocorrencia->getAreaResponsavel()->setId( $linha ['id_area_responsavel_area_responsavel'] );
-                $ocorrencia->getAreaResponsavel()->setNome( $linha ['nome_area_responsavel_area_responsavel'] );
-                $ocorrencia->getAreaResponsavel()->setDescricao( $linha ['descricao_area_responsavel_area_responsavel'] );
-                $ocorrencia->getAreaResponsavel()->setEmail( $linha ['email_area_responsavel_area_responsavel'] );
-                $ocorrencia->getAreaResponsavel()->setIdAdmin( $linha ['id_admin_area_responsavel_area_responsavel'] );
-                $ocorrencia->getServico()->setId( $linha ['id_servico_servico'] );
-                $ocorrencia->getServico()->setNome( $linha ['nome_servico_servico'] );
-                $ocorrencia->getServico()->setDescricao( $linha ['descricao_servico_servico'] );
-                $ocorrencia->getServico()->setAtivo( $linha ['ativo_servico_servico'] );
-                $ocorrencia->getServico()->setTempoSla( $linha ['tempo_sla_servico_servico'] );
+                $ocorrencia->getServico()->setVisao( $linha ['visao_servico_servico'] );
+                $ocorrencia->getUsuarioCliente()->setId( $linha ['id_usuario_usuario_cliente'] );
+                $ocorrencia->getUsuarioCliente()->setNome( $linha ['nome_usuario_usuario_cliente'] );
+                $ocorrencia->getUsuarioCliente()->setEmail( $linha ['email_usuario_usuario_cliente'] );
+                $ocorrencia->getUsuarioCliente()->setLogin( $linha ['login_usuario_usuario_cliente'] );
+                $ocorrencia->getUsuarioCliente()->setSenha( $linha ['senha_usuario_usuario_cliente'] );
+                $ocorrencia->getUsuarioCliente()->setNivel( $linha ['nivel_usuario_usuario_cliente'] );
+                $ocorrencia->getUsuarioAtendente()->setId( $linha ['id_usuario_usuario_atendente'] );
+                $ocorrencia->getUsuarioAtendente()->setNome( $linha ['nome_usuario_usuario_atendente'] );
+                $ocorrencia->getUsuarioAtendente()->setEmail( $linha ['email_usuario_usuario_atendente'] );
+                $ocorrencia->getUsuarioAtendente()->setLogin( $linha ['login_usuario_usuario_atendente'] );
+                $ocorrencia->getUsuarioAtendente()->setSenha( $linha ['senha_usuario_usuario_atendente'] );
+                $ocorrencia->getUsuarioAtendente()->setNivel( $linha ['nivel_usuario_usuario_atendente'] );
+                $ocorrencia->getUsuarioIndicado()->setId( $linha ['id_usuario_usuario_indicado'] );
+                $ocorrencia->getUsuarioIndicado()->setNome( $linha ['nome_usuario_usuario_indicado'] );
+                $ocorrencia->getUsuarioIndicado()->setEmail( $linha ['email_usuario_usuario_indicado'] );
+                $ocorrencia->getUsuarioIndicado()->setLogin( $linha ['login_usuario_usuario_indicado'] );
+                $ocorrencia->getUsuarioIndicado()->setSenha( $linha ['senha_usuario_usuario_indicado'] );
+                $ocorrencia->getUsuarioIndicado()->setNivel( $linha ['nivel_usuario_usuario_indicado'] );
                 
                 
 		    }
@@ -6346,46 +3401,51 @@ class OcorrenciaDAO extends DAO {
 		SELECT
         ocorrencia.id, 
         ocorrencia.id_local, 
-        ocorrencia.id_funcionario, 
-        ocorrencia.desc_problema, 
+        ocorrencia.descricao, 
         ocorrencia.campus, 
-        ocorrencia.etiq_equipamento, 
-        ocorrencia.contato, 
+        ocorrencia.patrimonio, 
         ocorrencia.ramal, 
         ocorrencia.local, 
-        ocorrencia.funcionario, 
         ocorrencia.status, 
-        ocorrencia.obs, 
+        ocorrencia.solucao, 
         ocorrencia.prioridade, 
         ocorrencia.avaliacao, 
         ocorrencia.email, 
-        ocorrencia.fecha_confirmado, 
-        ocorrencia.reaberto, 
-        ocorrencia.dt_abertura, 
-        ocorrencia.dt_atendimento, 
-        ocorrencia.dt_fechamento, 
-        ocorrencia.dt_fecha_confirmado, 
-        ocorrencia.dt_cancelamento, 
-        ocorrencia.id_atendente, 
-        ocorrencia.id_tecnico_indicado, 
-        ocorrencia.dt_liberacao, 
         ocorrencia.anexo, 
-        ocorrencia.dt_espera, 
-        ocorrencia.dt_aguardando_usuario, 
         ocorrencia.local_sala, 
         area_responsavel.id as id_area_responsavel_area_responsavel, 
         area_responsavel.nome as nome_area_responsavel_area_responsavel, 
         area_responsavel.descricao as descricao_area_responsavel_area_responsavel, 
         area_responsavel.email as email_area_responsavel_area_responsavel, 
-        area_responsavel.id_admin as id_admin_area_responsavel_area_responsavel, 
         servico.id as id_servico_servico, 
         servico.nome as nome_servico_servico, 
         servico.descricao as descricao_servico_servico, 
-        servico.ativo as ativo_servico_servico, 
-        servico.tempo_sla as tempo_sla_servico_servico
+        servico.tempo_sla as tempo_sla_servico_servico, 
+        servico.visao as visao_servico_servico, 
+        usuario_cliente.id as id_usuario_usuario_cliente, 
+        usuario_cliente.nome as nome_usuario_usuario_cliente, 
+        usuario_cliente.email as email_usuario_usuario_cliente, 
+        usuario_cliente.login as login_usuario_usuario_cliente, 
+        usuario_cliente.senha as senha_usuario_usuario_cliente, 
+        usuario_cliente.nivel as nivel_usuario_usuario_cliente, 
+        usuario_atendente.id as id_usuario_usuario_atendente, 
+        usuario_atendente.nome as nome_usuario_usuario_atendente, 
+        usuario_atendente.email as email_usuario_usuario_atendente, 
+        usuario_atendente.login as login_usuario_usuario_atendente, 
+        usuario_atendente.senha as senha_usuario_usuario_atendente, 
+        usuario_atendente.nivel as nivel_usuario_usuario_atendente, 
+        usuario_indicado.id as id_usuario_usuario_indicado, 
+        usuario_indicado.nome as nome_usuario_usuario_indicado, 
+        usuario_indicado.email as email_usuario_usuario_indicado, 
+        usuario_indicado.login as login_usuario_usuario_indicado, 
+        usuario_indicado.senha as senha_usuario_usuario_indicado, 
+        usuario_indicado.nivel as nivel_usuario_usuario_indicado
 		FROM ocorrencia
 		INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel
 		INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico
+		INNER JOIN usuario as usuario_cliente ON usuario_cliente.id = ocorrencia.id_usuario_cliente
+		INNER JOIN usuario as usuario_atendente ON usuario_atendente.id = ocorrencia.id_usuario_atendente
+		INNER JOIN usuario as usuario_indicado ON usuario_indicado.id = ocorrencia.id_usuario_indicado
                 WHERE ocorrencia.anexo = :anexo
                  LIMIT 1000";
                 
@@ -6402,261 +3462,45 @@ class OcorrenciaDAO extends DAO {
             {
                 $ocorrencia->setId( $linha ['id'] );
                 $ocorrencia->setIdLocal( $linha ['id_local'] );
-                $ocorrencia->setIdFuncionario( $linha ['id_funcionario'] );
-                $ocorrencia->setDescProblema( $linha ['desc_problema'] );
+                $ocorrencia->setDescricao( $linha ['descricao'] );
                 $ocorrencia->setCampus( $linha ['campus'] );
-                $ocorrencia->setEtiqEquipamento( $linha ['etiq_equipamento'] );
-                $ocorrencia->setContato( $linha ['contato'] );
+                $ocorrencia->setPatrimonio( $linha ['patrimonio'] );
                 $ocorrencia->setRamal( $linha ['ramal'] );
                 $ocorrencia->setLocal( $linha ['local'] );
-                $ocorrencia->setFuncionario( $linha ['funcionario'] );
                 $ocorrencia->setStatus( $linha ['status'] );
-                $ocorrencia->setObs( $linha ['obs'] );
+                $ocorrencia->setSolucao( $linha ['solucao'] );
                 $ocorrencia->setPrioridade( $linha ['prioridade'] );
                 $ocorrencia->setAvaliacao( $linha ['avaliacao'] );
                 $ocorrencia->setEmail( $linha ['email'] );
-                $ocorrencia->setFechaConfirmado( $linha ['fecha_confirmado'] );
-                $ocorrencia->setReaberto( $linha ['reaberto'] );
-                $ocorrencia->setDtAbertura( $linha ['dt_abertura'] );
-                $ocorrencia->setDtAtendimento( $linha ['dt_atendimento'] );
-                $ocorrencia->setDtFechamento( $linha ['dt_fechamento'] );
-                $ocorrencia->setDtFechaConfirmado( $linha ['dt_fecha_confirmado'] );
-                $ocorrencia->setDtCancelamento( $linha ['dt_cancelamento'] );
-                $ocorrencia->setIdAtendente( $linha ['id_atendente'] );
-                $ocorrencia->setIdTecnicoIndicado( $linha ['id_tecnico_indicado'] );
-                $ocorrencia->setDtLiberacao( $linha ['dt_liberacao'] );
                 $ocorrencia->setAnexo( $linha ['anexo'] );
-                $ocorrencia->setDtEspera( $linha ['dt_espera'] );
-                $ocorrencia->setDtAguardandoUsuario( $linha ['dt_aguardando_usuario'] );
                 $ocorrencia->setLocalSala( $linha ['local_sala'] );
                 $ocorrencia->getAreaResponsavel()->setId( $linha ['id_area_responsavel_area_responsavel'] );
                 $ocorrencia->getAreaResponsavel()->setNome( $linha ['nome_area_responsavel_area_responsavel'] );
                 $ocorrencia->getAreaResponsavel()->setDescricao( $linha ['descricao_area_responsavel_area_responsavel'] );
                 $ocorrencia->getAreaResponsavel()->setEmail( $linha ['email_area_responsavel_area_responsavel'] );
-                $ocorrencia->getAreaResponsavel()->setIdAdmin( $linha ['id_admin_area_responsavel_area_responsavel'] );
                 $ocorrencia->getServico()->setId( $linha ['id_servico_servico'] );
                 $ocorrencia->getServico()->setNome( $linha ['nome_servico_servico'] );
                 $ocorrencia->getServico()->setDescricao( $linha ['descricao_servico_servico'] );
-                $ocorrencia->getServico()->setAtivo( $linha ['ativo_servico_servico'] );
                 $ocorrencia->getServico()->setTempoSla( $linha ['tempo_sla_servico_servico'] );
-                
-                
-		    }
-		} catch(PDOException $e) {
-		    echo $e->getMessage();
- 		}
-		return $ocorrencia;
-    }
-                
-    public function preenchePorDtEspera(Ocorrencia $ocorrencia) {
-        
-	    $dtEspera = $ocorrencia->getDtEspera();
-	    $sql = "
-		SELECT
-        ocorrencia.id, 
-        ocorrencia.id_local, 
-        ocorrencia.id_funcionario, 
-        ocorrencia.desc_problema, 
-        ocorrencia.campus, 
-        ocorrencia.etiq_equipamento, 
-        ocorrencia.contato, 
-        ocorrencia.ramal, 
-        ocorrencia.local, 
-        ocorrencia.funcionario, 
-        ocorrencia.status, 
-        ocorrencia.obs, 
-        ocorrencia.prioridade, 
-        ocorrencia.avaliacao, 
-        ocorrencia.email, 
-        ocorrencia.fecha_confirmado, 
-        ocorrencia.reaberto, 
-        ocorrencia.dt_abertura, 
-        ocorrencia.dt_atendimento, 
-        ocorrencia.dt_fechamento, 
-        ocorrencia.dt_fecha_confirmado, 
-        ocorrencia.dt_cancelamento, 
-        ocorrencia.id_atendente, 
-        ocorrencia.id_tecnico_indicado, 
-        ocorrencia.dt_liberacao, 
-        ocorrencia.anexo, 
-        ocorrencia.dt_espera, 
-        ocorrencia.dt_aguardando_usuario, 
-        ocorrencia.local_sala, 
-        area_responsavel.id as id_area_responsavel_area_responsavel, 
-        area_responsavel.nome as nome_area_responsavel_area_responsavel, 
-        area_responsavel.descricao as descricao_area_responsavel_area_responsavel, 
-        area_responsavel.email as email_area_responsavel_area_responsavel, 
-        area_responsavel.id_admin as id_admin_area_responsavel_area_responsavel, 
-        servico.id as id_servico_servico, 
-        servico.nome as nome_servico_servico, 
-        servico.descricao as descricao_servico_servico, 
-        servico.ativo as ativo_servico_servico, 
-        servico.tempo_sla as tempo_sla_servico_servico
-		FROM ocorrencia
-		INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel
-		INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico
-                WHERE ocorrencia.dt_espera = :dtEspera
-                 LIMIT 1000";
-                
-        try {
-            $stmt = $this->conexao->prepare($sql);
-                
-		    if(!$stmt){
-                echo "<br>Mensagem de erro retornada: ".$this->conexao->errorInfo()[2]."<br>";
-		    }
-            $stmt->bindParam(":dtEspera", $dtEspera, PDO::PARAM_STR);
-            $stmt->execute();
-		    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-		    foreach ( $result as $linha )
-            {
-                $ocorrencia->setId( $linha ['id'] );
-                $ocorrencia->setIdLocal( $linha ['id_local'] );
-                $ocorrencia->setIdFuncionario( $linha ['id_funcionario'] );
-                $ocorrencia->setDescProblema( $linha ['desc_problema'] );
-                $ocorrencia->setCampus( $linha ['campus'] );
-                $ocorrencia->setEtiqEquipamento( $linha ['etiq_equipamento'] );
-                $ocorrencia->setContato( $linha ['contato'] );
-                $ocorrencia->setRamal( $linha ['ramal'] );
-                $ocorrencia->setLocal( $linha ['local'] );
-                $ocorrencia->setFuncionario( $linha ['funcionario'] );
-                $ocorrencia->setStatus( $linha ['status'] );
-                $ocorrencia->setObs( $linha ['obs'] );
-                $ocorrencia->setPrioridade( $linha ['prioridade'] );
-                $ocorrencia->setAvaliacao( $linha ['avaliacao'] );
-                $ocorrencia->setEmail( $linha ['email'] );
-                $ocorrencia->setFechaConfirmado( $linha ['fecha_confirmado'] );
-                $ocorrencia->setReaberto( $linha ['reaberto'] );
-                $ocorrencia->setDtAbertura( $linha ['dt_abertura'] );
-                $ocorrencia->setDtAtendimento( $linha ['dt_atendimento'] );
-                $ocorrencia->setDtFechamento( $linha ['dt_fechamento'] );
-                $ocorrencia->setDtFechaConfirmado( $linha ['dt_fecha_confirmado'] );
-                $ocorrencia->setDtCancelamento( $linha ['dt_cancelamento'] );
-                $ocorrencia->setIdAtendente( $linha ['id_atendente'] );
-                $ocorrencia->setIdTecnicoIndicado( $linha ['id_tecnico_indicado'] );
-                $ocorrencia->setDtLiberacao( $linha ['dt_liberacao'] );
-                $ocorrencia->setAnexo( $linha ['anexo'] );
-                $ocorrencia->setDtEspera( $linha ['dt_espera'] );
-                $ocorrencia->setDtAguardandoUsuario( $linha ['dt_aguardando_usuario'] );
-                $ocorrencia->setLocalSala( $linha ['local_sala'] );
-                $ocorrencia->getAreaResponsavel()->setId( $linha ['id_area_responsavel_area_responsavel'] );
-                $ocorrencia->getAreaResponsavel()->setNome( $linha ['nome_area_responsavel_area_responsavel'] );
-                $ocorrencia->getAreaResponsavel()->setDescricao( $linha ['descricao_area_responsavel_area_responsavel'] );
-                $ocorrencia->getAreaResponsavel()->setEmail( $linha ['email_area_responsavel_area_responsavel'] );
-                $ocorrencia->getAreaResponsavel()->setIdAdmin( $linha ['id_admin_area_responsavel_area_responsavel'] );
-                $ocorrencia->getServico()->setId( $linha ['id_servico_servico'] );
-                $ocorrencia->getServico()->setNome( $linha ['nome_servico_servico'] );
-                $ocorrencia->getServico()->setDescricao( $linha ['descricao_servico_servico'] );
-                $ocorrencia->getServico()->setAtivo( $linha ['ativo_servico_servico'] );
-                $ocorrencia->getServico()->setTempoSla( $linha ['tempo_sla_servico_servico'] );
-                
-                
-		    }
-		} catch(PDOException $e) {
-		    echo $e->getMessage();
- 		}
-		return $ocorrencia;
-    }
-                
-    public function preenchePorDtAguardandoUsuario(Ocorrencia $ocorrencia) {
-        
-	    $dtAguardandoUsuario = $ocorrencia->getDtAguardandoUsuario();
-	    $sql = "
-		SELECT
-        ocorrencia.id, 
-        ocorrencia.id_local, 
-        ocorrencia.id_funcionario, 
-        ocorrencia.desc_problema, 
-        ocorrencia.campus, 
-        ocorrencia.etiq_equipamento, 
-        ocorrencia.contato, 
-        ocorrencia.ramal, 
-        ocorrencia.local, 
-        ocorrencia.funcionario, 
-        ocorrencia.status, 
-        ocorrencia.obs, 
-        ocorrencia.prioridade, 
-        ocorrencia.avaliacao, 
-        ocorrencia.email, 
-        ocorrencia.fecha_confirmado, 
-        ocorrencia.reaberto, 
-        ocorrencia.dt_abertura, 
-        ocorrencia.dt_atendimento, 
-        ocorrencia.dt_fechamento, 
-        ocorrencia.dt_fecha_confirmado, 
-        ocorrencia.dt_cancelamento, 
-        ocorrencia.id_atendente, 
-        ocorrencia.id_tecnico_indicado, 
-        ocorrencia.dt_liberacao, 
-        ocorrencia.anexo, 
-        ocorrencia.dt_espera, 
-        ocorrencia.dt_aguardando_usuario, 
-        ocorrencia.local_sala, 
-        area_responsavel.id as id_area_responsavel_area_responsavel, 
-        area_responsavel.nome as nome_area_responsavel_area_responsavel, 
-        area_responsavel.descricao as descricao_area_responsavel_area_responsavel, 
-        area_responsavel.email as email_area_responsavel_area_responsavel, 
-        area_responsavel.id_admin as id_admin_area_responsavel_area_responsavel, 
-        servico.id as id_servico_servico, 
-        servico.nome as nome_servico_servico, 
-        servico.descricao as descricao_servico_servico, 
-        servico.ativo as ativo_servico_servico, 
-        servico.tempo_sla as tempo_sla_servico_servico
-		FROM ocorrencia
-		INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel
-		INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico
-                WHERE ocorrencia.dt_aguardando_usuario = :dtAguardandoUsuario
-                 LIMIT 1000";
-                
-        try {
-            $stmt = $this->conexao->prepare($sql);
-                
-		    if(!$stmt){
-                echo "<br>Mensagem de erro retornada: ".$this->conexao->errorInfo()[2]."<br>";
-		    }
-            $stmt->bindParam(":dtAguardandoUsuario", $dtAguardandoUsuario, PDO::PARAM_STR);
-            $stmt->execute();
-		    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-		    foreach ( $result as $linha )
-            {
-                $ocorrencia->setId( $linha ['id'] );
-                $ocorrencia->setIdLocal( $linha ['id_local'] );
-                $ocorrencia->setIdFuncionario( $linha ['id_funcionario'] );
-                $ocorrencia->setDescProblema( $linha ['desc_problema'] );
-                $ocorrencia->setCampus( $linha ['campus'] );
-                $ocorrencia->setEtiqEquipamento( $linha ['etiq_equipamento'] );
-                $ocorrencia->setContato( $linha ['contato'] );
-                $ocorrencia->setRamal( $linha ['ramal'] );
-                $ocorrencia->setLocal( $linha ['local'] );
-                $ocorrencia->setFuncionario( $linha ['funcionario'] );
-                $ocorrencia->setStatus( $linha ['status'] );
-                $ocorrencia->setObs( $linha ['obs'] );
-                $ocorrencia->setPrioridade( $linha ['prioridade'] );
-                $ocorrencia->setAvaliacao( $linha ['avaliacao'] );
-                $ocorrencia->setEmail( $linha ['email'] );
-                $ocorrencia->setFechaConfirmado( $linha ['fecha_confirmado'] );
-                $ocorrencia->setReaberto( $linha ['reaberto'] );
-                $ocorrencia->setDtAbertura( $linha ['dt_abertura'] );
-                $ocorrencia->setDtAtendimento( $linha ['dt_atendimento'] );
-                $ocorrencia->setDtFechamento( $linha ['dt_fechamento'] );
-                $ocorrencia->setDtFechaConfirmado( $linha ['dt_fecha_confirmado'] );
-                $ocorrencia->setDtCancelamento( $linha ['dt_cancelamento'] );
-                $ocorrencia->setIdAtendente( $linha ['id_atendente'] );
-                $ocorrencia->setIdTecnicoIndicado( $linha ['id_tecnico_indicado'] );
-                $ocorrencia->setDtLiberacao( $linha ['dt_liberacao'] );
-                $ocorrencia->setAnexo( $linha ['anexo'] );
-                $ocorrencia->setDtEspera( $linha ['dt_espera'] );
-                $ocorrencia->setDtAguardandoUsuario( $linha ['dt_aguardando_usuario'] );
-                $ocorrencia->setLocalSala( $linha ['local_sala'] );
-                $ocorrencia->getAreaResponsavel()->setId( $linha ['id_area_responsavel_area_responsavel'] );
-                $ocorrencia->getAreaResponsavel()->setNome( $linha ['nome_area_responsavel_area_responsavel'] );
-                $ocorrencia->getAreaResponsavel()->setDescricao( $linha ['descricao_area_responsavel_area_responsavel'] );
-                $ocorrencia->getAreaResponsavel()->setEmail( $linha ['email_area_responsavel_area_responsavel'] );
-                $ocorrencia->getAreaResponsavel()->setIdAdmin( $linha ['id_admin_area_responsavel_area_responsavel'] );
-                $ocorrencia->getServico()->setId( $linha ['id_servico_servico'] );
-                $ocorrencia->getServico()->setNome( $linha ['nome_servico_servico'] );
-                $ocorrencia->getServico()->setDescricao( $linha ['descricao_servico_servico'] );
-                $ocorrencia->getServico()->setAtivo( $linha ['ativo_servico_servico'] );
-                $ocorrencia->getServico()->setTempoSla( $linha ['tempo_sla_servico_servico'] );
+                $ocorrencia->getServico()->setVisao( $linha ['visao_servico_servico'] );
+                $ocorrencia->getUsuarioCliente()->setId( $linha ['id_usuario_usuario_cliente'] );
+                $ocorrencia->getUsuarioCliente()->setNome( $linha ['nome_usuario_usuario_cliente'] );
+                $ocorrencia->getUsuarioCliente()->setEmail( $linha ['email_usuario_usuario_cliente'] );
+                $ocorrencia->getUsuarioCliente()->setLogin( $linha ['login_usuario_usuario_cliente'] );
+                $ocorrencia->getUsuarioCliente()->setSenha( $linha ['senha_usuario_usuario_cliente'] );
+                $ocorrencia->getUsuarioCliente()->setNivel( $linha ['nivel_usuario_usuario_cliente'] );
+                $ocorrencia->getUsuarioAtendente()->setId( $linha ['id_usuario_usuario_atendente'] );
+                $ocorrencia->getUsuarioAtendente()->setNome( $linha ['nome_usuario_usuario_atendente'] );
+                $ocorrencia->getUsuarioAtendente()->setEmail( $linha ['email_usuario_usuario_atendente'] );
+                $ocorrencia->getUsuarioAtendente()->setLogin( $linha ['login_usuario_usuario_atendente'] );
+                $ocorrencia->getUsuarioAtendente()->setSenha( $linha ['senha_usuario_usuario_atendente'] );
+                $ocorrencia->getUsuarioAtendente()->setNivel( $linha ['nivel_usuario_usuario_atendente'] );
+                $ocorrencia->getUsuarioIndicado()->setId( $linha ['id_usuario_usuario_indicado'] );
+                $ocorrencia->getUsuarioIndicado()->setNome( $linha ['nome_usuario_usuario_indicado'] );
+                $ocorrencia->getUsuarioIndicado()->setEmail( $linha ['email_usuario_usuario_indicado'] );
+                $ocorrencia->getUsuarioIndicado()->setLogin( $linha ['login_usuario_usuario_indicado'] );
+                $ocorrencia->getUsuarioIndicado()->setSenha( $linha ['senha_usuario_usuario_indicado'] );
+                $ocorrencia->getUsuarioIndicado()->setNivel( $linha ['nivel_usuario_usuario_indicado'] );
                 
                 
 		    }
@@ -6673,46 +3517,51 @@ class OcorrenciaDAO extends DAO {
 		SELECT
         ocorrencia.id, 
         ocorrencia.id_local, 
-        ocorrencia.id_funcionario, 
-        ocorrencia.desc_problema, 
+        ocorrencia.descricao, 
         ocorrencia.campus, 
-        ocorrencia.etiq_equipamento, 
-        ocorrencia.contato, 
+        ocorrencia.patrimonio, 
         ocorrencia.ramal, 
         ocorrencia.local, 
-        ocorrencia.funcionario, 
         ocorrencia.status, 
-        ocorrencia.obs, 
+        ocorrencia.solucao, 
         ocorrencia.prioridade, 
         ocorrencia.avaliacao, 
         ocorrencia.email, 
-        ocorrencia.fecha_confirmado, 
-        ocorrencia.reaberto, 
-        ocorrencia.dt_abertura, 
-        ocorrencia.dt_atendimento, 
-        ocorrencia.dt_fechamento, 
-        ocorrencia.dt_fecha_confirmado, 
-        ocorrencia.dt_cancelamento, 
-        ocorrencia.id_atendente, 
-        ocorrencia.id_tecnico_indicado, 
-        ocorrencia.dt_liberacao, 
         ocorrencia.anexo, 
-        ocorrencia.dt_espera, 
-        ocorrencia.dt_aguardando_usuario, 
         ocorrencia.local_sala, 
         area_responsavel.id as id_area_responsavel_area_responsavel, 
         area_responsavel.nome as nome_area_responsavel_area_responsavel, 
         area_responsavel.descricao as descricao_area_responsavel_area_responsavel, 
         area_responsavel.email as email_area_responsavel_area_responsavel, 
-        area_responsavel.id_admin as id_admin_area_responsavel_area_responsavel, 
         servico.id as id_servico_servico, 
         servico.nome as nome_servico_servico, 
         servico.descricao as descricao_servico_servico, 
-        servico.ativo as ativo_servico_servico, 
-        servico.tempo_sla as tempo_sla_servico_servico
+        servico.tempo_sla as tempo_sla_servico_servico, 
+        servico.visao as visao_servico_servico, 
+        usuario_cliente.id as id_usuario_usuario_cliente, 
+        usuario_cliente.nome as nome_usuario_usuario_cliente, 
+        usuario_cliente.email as email_usuario_usuario_cliente, 
+        usuario_cliente.login as login_usuario_usuario_cliente, 
+        usuario_cliente.senha as senha_usuario_usuario_cliente, 
+        usuario_cliente.nivel as nivel_usuario_usuario_cliente, 
+        usuario_atendente.id as id_usuario_usuario_atendente, 
+        usuario_atendente.nome as nome_usuario_usuario_atendente, 
+        usuario_atendente.email as email_usuario_usuario_atendente, 
+        usuario_atendente.login as login_usuario_usuario_atendente, 
+        usuario_atendente.senha as senha_usuario_usuario_atendente, 
+        usuario_atendente.nivel as nivel_usuario_usuario_atendente, 
+        usuario_indicado.id as id_usuario_usuario_indicado, 
+        usuario_indicado.nome as nome_usuario_usuario_indicado, 
+        usuario_indicado.email as email_usuario_usuario_indicado, 
+        usuario_indicado.login as login_usuario_usuario_indicado, 
+        usuario_indicado.senha as senha_usuario_usuario_indicado, 
+        usuario_indicado.nivel as nivel_usuario_usuario_indicado
 		FROM ocorrencia
 		INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel
 		INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico
+		INNER JOIN usuario as usuario_cliente ON usuario_cliente.id = ocorrencia.id_usuario_cliente
+		INNER JOIN usuario as usuario_atendente ON usuario_atendente.id = ocorrencia.id_usuario_atendente
+		INNER JOIN usuario as usuario_indicado ON usuario_indicado.id = ocorrencia.id_usuario_indicado
                 WHERE ocorrencia.local_sala = :localSala
                  LIMIT 1000";
                 
@@ -6729,43 +3578,45 @@ class OcorrenciaDAO extends DAO {
             {
                 $ocorrencia->setId( $linha ['id'] );
                 $ocorrencia->setIdLocal( $linha ['id_local'] );
-                $ocorrencia->setIdFuncionario( $linha ['id_funcionario'] );
-                $ocorrencia->setDescProblema( $linha ['desc_problema'] );
+                $ocorrencia->setDescricao( $linha ['descricao'] );
                 $ocorrencia->setCampus( $linha ['campus'] );
-                $ocorrencia->setEtiqEquipamento( $linha ['etiq_equipamento'] );
-                $ocorrencia->setContato( $linha ['contato'] );
+                $ocorrencia->setPatrimonio( $linha ['patrimonio'] );
                 $ocorrencia->setRamal( $linha ['ramal'] );
                 $ocorrencia->setLocal( $linha ['local'] );
-                $ocorrencia->setFuncionario( $linha ['funcionario'] );
                 $ocorrencia->setStatus( $linha ['status'] );
-                $ocorrencia->setObs( $linha ['obs'] );
+                $ocorrencia->setSolucao( $linha ['solucao'] );
                 $ocorrencia->setPrioridade( $linha ['prioridade'] );
                 $ocorrencia->setAvaliacao( $linha ['avaliacao'] );
                 $ocorrencia->setEmail( $linha ['email'] );
-                $ocorrencia->setFechaConfirmado( $linha ['fecha_confirmado'] );
-                $ocorrencia->setReaberto( $linha ['reaberto'] );
-                $ocorrencia->setDtAbertura( $linha ['dt_abertura'] );
-                $ocorrencia->setDtAtendimento( $linha ['dt_atendimento'] );
-                $ocorrencia->setDtFechamento( $linha ['dt_fechamento'] );
-                $ocorrencia->setDtFechaConfirmado( $linha ['dt_fecha_confirmado'] );
-                $ocorrencia->setDtCancelamento( $linha ['dt_cancelamento'] );
-                $ocorrencia->setIdAtendente( $linha ['id_atendente'] );
-                $ocorrencia->setIdTecnicoIndicado( $linha ['id_tecnico_indicado'] );
-                $ocorrencia->setDtLiberacao( $linha ['dt_liberacao'] );
                 $ocorrencia->setAnexo( $linha ['anexo'] );
-                $ocorrencia->setDtEspera( $linha ['dt_espera'] );
-                $ocorrencia->setDtAguardandoUsuario( $linha ['dt_aguardando_usuario'] );
                 $ocorrencia->setLocalSala( $linha ['local_sala'] );
                 $ocorrencia->getAreaResponsavel()->setId( $linha ['id_area_responsavel_area_responsavel'] );
                 $ocorrencia->getAreaResponsavel()->setNome( $linha ['nome_area_responsavel_area_responsavel'] );
                 $ocorrencia->getAreaResponsavel()->setDescricao( $linha ['descricao_area_responsavel_area_responsavel'] );
                 $ocorrencia->getAreaResponsavel()->setEmail( $linha ['email_area_responsavel_area_responsavel'] );
-                $ocorrencia->getAreaResponsavel()->setIdAdmin( $linha ['id_admin_area_responsavel_area_responsavel'] );
                 $ocorrencia->getServico()->setId( $linha ['id_servico_servico'] );
                 $ocorrencia->getServico()->setNome( $linha ['nome_servico_servico'] );
                 $ocorrencia->getServico()->setDescricao( $linha ['descricao_servico_servico'] );
-                $ocorrencia->getServico()->setAtivo( $linha ['ativo_servico_servico'] );
                 $ocorrencia->getServico()->setTempoSla( $linha ['tempo_sla_servico_servico'] );
+                $ocorrencia->getServico()->setVisao( $linha ['visao_servico_servico'] );
+                $ocorrencia->getUsuarioCliente()->setId( $linha ['id_usuario_usuario_cliente'] );
+                $ocorrencia->getUsuarioCliente()->setNome( $linha ['nome_usuario_usuario_cliente'] );
+                $ocorrencia->getUsuarioCliente()->setEmail( $linha ['email_usuario_usuario_cliente'] );
+                $ocorrencia->getUsuarioCliente()->setLogin( $linha ['login_usuario_usuario_cliente'] );
+                $ocorrencia->getUsuarioCliente()->setSenha( $linha ['senha_usuario_usuario_cliente'] );
+                $ocorrencia->getUsuarioCliente()->setNivel( $linha ['nivel_usuario_usuario_cliente'] );
+                $ocorrencia->getUsuarioAtendente()->setId( $linha ['id_usuario_usuario_atendente'] );
+                $ocorrencia->getUsuarioAtendente()->setNome( $linha ['nome_usuario_usuario_atendente'] );
+                $ocorrencia->getUsuarioAtendente()->setEmail( $linha ['email_usuario_usuario_atendente'] );
+                $ocorrencia->getUsuarioAtendente()->setLogin( $linha ['login_usuario_usuario_atendente'] );
+                $ocorrencia->getUsuarioAtendente()->setSenha( $linha ['senha_usuario_usuario_atendente'] );
+                $ocorrencia->getUsuarioAtendente()->setNivel( $linha ['nivel_usuario_usuario_atendente'] );
+                $ocorrencia->getUsuarioIndicado()->setId( $linha ['id_usuario_usuario_indicado'] );
+                $ocorrencia->getUsuarioIndicado()->setNome( $linha ['nome_usuario_usuario_indicado'] );
+                $ocorrencia->getUsuarioIndicado()->setEmail( $linha ['email_usuario_usuario_indicado'] );
+                $ocorrencia->getUsuarioIndicado()->setLogin( $linha ['login_usuario_usuario_indicado'] );
+                $ocorrencia->getUsuarioIndicado()->setSenha( $linha ['senha_usuario_usuario_indicado'] );
+                $ocorrencia->getUsuarioIndicado()->setNivel( $linha ['nivel_usuario_usuario_indicado'] );
                 
                 
 		    }

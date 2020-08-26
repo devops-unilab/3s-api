@@ -13,16 +13,16 @@ class Servico {
 	private $id;
 	private $nome;
 	private $descricao;
-	private $ativo;
+	private $tipoAtividade;
 	private $tempoSla;
+	private $visao;
 	private $areaResponsavel;
 	private $grupoServico;
-	private $tipoAtividade;
     public function __construct(){
 
+        $this->tipoAtividade = new TipoAtividade();
         $this->areaResponsavel = new AreaResponsavel();
         $this->grupoServico = new GrupoServico();
-        $this->tipoAtividade = new TipoAtividade();
     }
 	public function setId($id) {
 		$this->id = $id;
@@ -45,12 +45,12 @@ class Servico {
 	public function getDescricao() {
 		return $this->descricao;
 	}
-	public function setAtivo($ativo) {
-		$this->ativo = $ativo;
+	public function setTipoAtividade(TipoAtividade $tipoAtividade) {
+		$this->tipoAtividade = $tipoAtividade;
 	}
 		    
-	public function getAtivo() {
-		return $this->ativo;
+	public function getTipoAtividade() {
+		return $this->tipoAtividade;
 	}
 	public function setTempoSla($tempoSla) {
 		$this->tempoSla = $tempoSla;
@@ -58,6 +58,13 @@ class Servico {
 		    
 	public function getTempoSla() {
 		return $this->tempoSla;
+	}
+	public function setVisao($visao) {
+		$this->visao = $visao;
+	}
+		    
+	public function getVisao() {
+		return $this->visao;
 	}
 	public function setAreaResponsavel(AreaResponsavel $areaResponsavel) {
 		$this->areaResponsavel = $areaResponsavel;
@@ -73,15 +80,8 @@ class Servico {
 	public function getGrupoServico() {
 		return $this->grupoServico;
 	}
-	public function setTipoAtividade(TipoAtividade $tipoAtividade) {
-		$this->tipoAtividade = $tipoAtividade;
-	}
-		    
-	public function getTipoAtividade() {
-		return $this->tipoAtividade;
-	}
 	public function __toString(){
-	    return $this->id.' - '.$this->nome.' - '.$this->descricao.' - '.$this->ativo.' - '.$this->tempoSla.' - '.$this->areaResponsavel.' - '.$this->grupoServico.' - '.$this->tipoAtividade;
+	    return $this->id.' - '.$this->nome.' - '.$this->descricao.' - '.$this->tipoAtividade.' - '.$this->tempoSla.' - '.$this->visao.' - '.$this->areaResponsavel.' - '.$this->grupoServico;
 	}
                 
 

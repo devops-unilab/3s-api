@@ -24,14 +24,10 @@ class StatusDAO extends DAO {
         $sql = "UPDATE status
                 SET
                 sigla = :sigla,
-                nome = :nome,
-                icone = :icone,
-                cor = :cor
+                nome = :nome
                 WHERE status.id = :id;";
 			$sigla = $status->getSigla();
 			$nome = $status->getNome();
-			$icone = $status->getIcone();
-			$cor = $status->getCor();
             
         try {
             
@@ -39,8 +35,6 @@ class StatusDAO extends DAO {
 			$stmt->bindParam(":id", $id, PDO::PARAM_INT);
 			$stmt->bindParam(":sigla", $sigla, PDO::PARAM_STR);
 			$stmt->bindParam(":nome", $nome, PDO::PARAM_STR);
-			$stmt->bindParam(":icone", $icone, PDO::PARAM_STR);
-			$stmt->bindParam(":cor", $cor, PDO::PARAM_STR);
             
             return $stmt->execute();
         } catch (PDOException $e) {
@@ -52,18 +46,14 @@ class StatusDAO extends DAO {
             
 
     public function inserir(Status $status){
-        $sql = "INSERT INTO status(sigla, nome, icone, cor) VALUES (:sigla, :nome, :icone, :cor);";
+        $sql = "INSERT INTO status(sigla, nome) VALUES (:sigla, :nome);";
 		$sigla = $status->getSigla();
 		$nome = $status->getNome();
-		$icone = $status->getIcone();
-		$cor = $status->getCor();
 		try {
 			$db = $this->getConexao();
 			$stmt = $db->prepare($sql);
 			$stmt->bindParam(":sigla", $sigla, PDO::PARAM_STR);
 			$stmt->bindParam(":nome", $nome, PDO::PARAM_STR);
-			$stmt->bindParam(":icone", $icone, PDO::PARAM_STR);
-			$stmt->bindParam(":cor", $cor, PDO::PARAM_STR);
 			return $stmt->execute();
 		} catch(PDOException $e) {
 			echo '{"error":{"text":'. $e->getMessage() .'}}';
@@ -71,20 +61,16 @@ class StatusDAO extends DAO {
             
     }
     public function inserirComPK(Status $status){
-        $sql = "INSERT INTO status(id, sigla, nome, icone, cor) VALUES (:id, :sigla, :nome, :icone, :cor);";
+        $sql = "INSERT INTO status(id, sigla, nome) VALUES (:id, :sigla, :nome);";
 		$id = $status->getId();
 		$sigla = $status->getSigla();
 		$nome = $status->getNome();
-		$icone = $status->getIcone();
-		$cor = $status->getCor();
 		try {
 			$db = $this->getConexao();
 			$stmt = $db->prepare($sql);
 			$stmt->bindParam(":id", $id, PDO::PARAM_INT);
 			$stmt->bindParam(":sigla", $sigla, PDO::PARAM_STR);
 			$stmt->bindParam(":nome", $nome, PDO::PARAM_STR);
-			$stmt->bindParam(":icone", $icone, PDO::PARAM_STR);
-			$stmt->bindParam(":cor", $cor, PDO::PARAM_STR);
 			return $stmt->execute();
 		} catch(PDOException $e) {
 			echo '{"error":{"text":'. $e->getMessage() .'}}';
@@ -114,9 +100,7 @@ class StatusDAO extends DAO {
 		SELECT
         status.id, 
         status.sigla, 
-        status.nome, 
-        status.icone, 
-        status.cor
+        status.nome
 		FROM status
                  LIMIT 1000";
 
@@ -135,8 +119,6 @@ class StatusDAO extends DAO {
                 $status->setId( $linha ['id'] );
                 $status->setSigla( $linha ['sigla'] );
                 $status->setNome( $linha ['nome'] );
-                $status->setIcone( $linha ['icone'] );
-                $status->setCor( $linha ['cor'] );
                 $lista [] = $status;
 
 	
@@ -156,9 +138,7 @@ class StatusDAO extends DAO {
 		SELECT
         status.id, 
         status.sigla, 
-        status.nome, 
-        status.icone, 
-        status.cor
+        status.nome
 		FROM status
             WHERE status.id = :id";
                 
@@ -173,8 +153,6 @@ class StatusDAO extends DAO {
     	        $status->setId( $linha ['id'] );
     	        $status->setSigla( $linha ['sigla'] );
     	        $status->setNome( $linha ['nome'] );
-    	        $status->setIcone( $linha ['icone'] );
-    	        $status->setCor( $linha ['cor'] );
     			$lista [] = $status;
     			    
             }
@@ -194,9 +172,7 @@ class StatusDAO extends DAO {
 		SELECT
         status.id, 
         status.sigla, 
-        status.nome, 
-        status.icone, 
-        status.cor
+        status.nome
 		FROM status
             WHERE status.sigla like :sigla";
                 
@@ -211,8 +187,6 @@ class StatusDAO extends DAO {
     	        $status->setId( $linha ['id'] );
     	        $status->setSigla( $linha ['sigla'] );
     	        $status->setNome( $linha ['nome'] );
-    	        $status->setIcone( $linha ['icone'] );
-    	        $status->setCor( $linha ['cor'] );
     			$lista [] = $status;
     			    
             }
@@ -232,9 +206,7 @@ class StatusDAO extends DAO {
 		SELECT
         status.id, 
         status.sigla, 
-        status.nome, 
-        status.icone, 
-        status.cor
+        status.nome
 		FROM status
             WHERE status.nome like :nome";
                 
@@ -249,84 +221,6 @@ class StatusDAO extends DAO {
     	        $status->setId( $linha ['id'] );
     	        $status->setSigla( $linha ['sigla'] );
     	        $status->setNome( $linha ['nome'] );
-    	        $status->setIcone( $linha ['icone'] );
-    	        $status->setCor( $linha ['cor'] );
-    			$lista [] = $status;
-    			    
-            }
-    			    
-        } catch(PDOException $e) {
-            echo $e->getMessage();
-    			    
-        }
-		return $lista;
-    }
-                
-    public function pesquisaPorIcone(Status $status) {
-        $lista = array();
-	    $icone = $status->getIcone();
-                
-        $sql = "
-		SELECT
-        status.id, 
-        status.sigla, 
-        status.nome, 
-        status.icone, 
-        status.cor
-		FROM status
-            WHERE status.icone like :icone";
-                
-        try {
-                
-            $stmt = $this->conexao->prepare($sql);
-            $stmt->bindParam(":icone", $icone, PDO::PARAM_STR);
-            $stmt->execute();
-            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            foreach ( $result as $linha ) {
-                $status = new Status();
-    	        $status->setId( $linha ['id'] );
-    	        $status->setSigla( $linha ['sigla'] );
-    	        $status->setNome( $linha ['nome'] );
-    	        $status->setIcone( $linha ['icone'] );
-    	        $status->setCor( $linha ['cor'] );
-    			$lista [] = $status;
-    			    
-            }
-    			    
-        } catch(PDOException $e) {
-            echo $e->getMessage();
-    			    
-        }
-		return $lista;
-    }
-                
-    public function pesquisaPorCor(Status $status) {
-        $lista = array();
-	    $cor = $status->getCor();
-                
-        $sql = "
-		SELECT
-        status.id, 
-        status.sigla, 
-        status.nome, 
-        status.icone, 
-        status.cor
-		FROM status
-            WHERE status.cor like :cor";
-                
-        try {
-                
-            $stmt = $this->conexao->prepare($sql);
-            $stmt->bindParam(":cor", $cor, PDO::PARAM_STR);
-            $stmt->execute();
-            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            foreach ( $result as $linha ) {
-                $status = new Status();
-    	        $status->setId( $linha ['id'] );
-    	        $status->setSigla( $linha ['sigla'] );
-    	        $status->setNome( $linha ['nome'] );
-    	        $status->setIcone( $linha ['icone'] );
-    	        $status->setCor( $linha ['cor'] );
     			$lista [] = $status;
     			    
             }
@@ -345,9 +239,7 @@ class StatusDAO extends DAO {
 		SELECT
         status.id, 
         status.sigla, 
-        status.nome, 
-        status.icone, 
-        status.cor
+        status.nome
 		FROM status
                 WHERE status.id = :id
                  LIMIT 1000";
@@ -366,8 +258,6 @@ class StatusDAO extends DAO {
                 $status->setId( $linha ['id'] );
                 $status->setSigla( $linha ['sigla'] );
                 $status->setNome( $linha ['nome'] );
-                $status->setIcone( $linha ['icone'] );
-                $status->setCor( $linha ['cor'] );
                 
                 
 		    }
@@ -384,9 +274,7 @@ class StatusDAO extends DAO {
 		SELECT
         status.id, 
         status.sigla, 
-        status.nome, 
-        status.icone, 
-        status.cor
+        status.nome
 		FROM status
                 WHERE status.sigla = :sigla
                  LIMIT 1000";
@@ -405,8 +293,6 @@ class StatusDAO extends DAO {
                 $status->setId( $linha ['id'] );
                 $status->setSigla( $linha ['sigla'] );
                 $status->setNome( $linha ['nome'] );
-                $status->setIcone( $linha ['icone'] );
-                $status->setCor( $linha ['cor'] );
                 
                 
 		    }
@@ -423,9 +309,7 @@ class StatusDAO extends DAO {
 		SELECT
         status.id, 
         status.sigla, 
-        status.nome, 
-        status.icone, 
-        status.cor
+        status.nome
 		FROM status
                 WHERE status.nome = :nome
                  LIMIT 1000";
@@ -444,86 +328,6 @@ class StatusDAO extends DAO {
                 $status->setId( $linha ['id'] );
                 $status->setSigla( $linha ['sigla'] );
                 $status->setNome( $linha ['nome'] );
-                $status->setIcone( $linha ['icone'] );
-                $status->setCor( $linha ['cor'] );
-                
-                
-		    }
-		} catch(PDOException $e) {
-		    echo $e->getMessage();
- 		}
-		return $status;
-    }
-                
-    public function preenchePorIcone(Status $status) {
-        
-	    $icone = $status->getIcone();
-	    $sql = "
-		SELECT
-        status.id, 
-        status.sigla, 
-        status.nome, 
-        status.icone, 
-        status.cor
-		FROM status
-                WHERE status.icone = :icone
-                 LIMIT 1000";
-                
-        try {
-            $stmt = $this->conexao->prepare($sql);
-                
-		    if(!$stmt){
-                echo "<br>Mensagem de erro retornada: ".$this->conexao->errorInfo()[2]."<br>";
-		    }
-            $stmt->bindParam(":icone", $icone, PDO::PARAM_STR);
-            $stmt->execute();
-		    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-		    foreach ( $result as $linha )
-            {
-                $status->setId( $linha ['id'] );
-                $status->setSigla( $linha ['sigla'] );
-                $status->setNome( $linha ['nome'] );
-                $status->setIcone( $linha ['icone'] );
-                $status->setCor( $linha ['cor'] );
-                
-                
-		    }
-		} catch(PDOException $e) {
-		    echo $e->getMessage();
- 		}
-		return $status;
-    }
-                
-    public function preenchePorCor(Status $status) {
-        
-	    $cor = $status->getCor();
-	    $sql = "
-		SELECT
-        status.id, 
-        status.sigla, 
-        status.nome, 
-        status.icone, 
-        status.cor
-		FROM status
-                WHERE status.cor = :cor
-                 LIMIT 1000";
-                
-        try {
-            $stmt = $this->conexao->prepare($sql);
-                
-		    if(!$stmt){
-                echo "<br>Mensagem de erro retornada: ".$this->conexao->errorInfo()[2]."<br>";
-		    }
-            $stmt->bindParam(":cor", $cor, PDO::PARAM_STR);
-            $stmt->execute();
-		    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-		    foreach ( $result as $linha )
-            {
-                $status->setId( $linha ['id'] );
-                $status->setSigla( $linha ['sigla'] );
-                $status->setNome( $linha ['nome'] );
-                $status->setIcone( $linha ['icone'] );
-                $status->setCor( $linha ['cor'] );
                 
                 
 		    }

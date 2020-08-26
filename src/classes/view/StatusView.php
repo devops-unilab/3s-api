@@ -42,16 +42,6 @@ class StatusView {
                                             <input type="text" class="form-control"  name="nome" id="nome" placeholder="Nome">
                                         </div>
 
-                                        <div class="form-group">
-                                            <label for="icone">Icone</label>
-                                            <input type="text" class="form-control"  name="icone" id="icone" placeholder="Icone">
-                                        </div>
-
-                                        <div class="form-group">
-                                            <label for="cor">Cor</label>
-                                            <input type="text" class="form-control"  name="cor" id="cor" placeholder="Cor">
-                                        </div>
-
 						              </form>
 
 
@@ -94,7 +84,6 @@ class StatusView {
 						<th>Id</th>
 						<th>Sigla</th>
 						<th>Nome</th>
-						<th>Icone</th>
                         <th>Ações</th>
 					</tr>
 				</thead>
@@ -103,7 +92,6 @@ class StatusView {
                         <th>Id</th>
                         <th>Sigla</th>
                         <th>Nome</th>
-                        <th>Icone</th>
                         <th>Ações</th>
 					</tr>
 				</tfoot>
@@ -114,7 +102,6 @@ class StatusView {
                 echo '<td>'.$elemento->getId().'</td>';
                 echo '<td>'.$elemento->getSigla().'</td>';
                 echo '<td>'.$elemento->getNome().'</td>';
-                echo '<td>'.$elemento->getIcone().'</td>';
                 echo '<td>
                         <a href="?pagina=status&selecionar='.$elemento->getId().'" class="btn btn-info text-white">Selecionar</a>
                         <a href="?pagina=status&editar='.$elemento->getId().'" class="btn btn-success text-white">Editar</a>
@@ -152,8 +139,6 @@ class StatusView {
                 Id: '.$status->getId().'<br>
                 Sigla: '.$status->getSigla().'<br>
                 Nome: '.$status->getNome().'<br>
-                Icone: '.$status->getIcone().'<br>
-                Cor: '.$status->getCor().'<br>
             
             </div>
         </div>
@@ -187,14 +172,6 @@ class StatusView {
                                         <div class="form-group">
                                             <label for="nome">Nome</label>
                                             <input type="text" class="form-control" value="'.$selecionado->getNome().'"  name="nome" id="nome" placeholder="Nome">
-                						</div>
-                                        <div class="form-group">
-                                            <label for="icone">Icone</label>
-                                            <input type="text" class="form-control" value="'.$selecionado->getIcone().'"  name="icone" id="icone" placeholder="Icone">
-                						</div>
-                                        <div class="form-group">
-                                            <label for="cor">Cor</label>
-                                            <input type="text" class="form-control" value="'.$selecionado->getCor().'"  name="cor" id="cor" placeholder="Cor">
                 						</div>
                                         <input type="submit" class="btn btn-primary btn-user btn-block" value="Alterar" name="editar_status">
                                         <hr>

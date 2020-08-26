@@ -47,8 +47,11 @@ ALTER TABLE ocorrencias DROP COLUMN fecha_confirmado;
 ALTER TABLE ocorrencias RENAME COLUMN obs TO solucao;
 ALTER TABLE ocorrencias RENAME COLUMN desc_problema TO descricao;
 ALTER TABLE ocorrencias RENAME COLUMN etiq_equipamento TO patrimonio;
-ALTER TABLE ocorrencias RENAME TO ocorrencia;
+ALTER TABLE ocorrencias RENAME COLUMN id_funcionario TO id_usuario_cliente;
+ALTER TABLE ocorrencias RENAME COLUMN id_atendente TO id_usuario_atendente;
+ALTER TABLE ocorrencias RENAME COLUMN id_tecnico_indicado TO id_usuario_indicado;
 
+ALTER TABLE ocorrencias RENAME TO ocorrencia;
 
 
 DROP TABLE subitem_ocorrencia;
@@ -61,7 +64,9 @@ ALTER TABLE status RENAME COLUMN id_status TO id;
 ALTER TABLE status_ocorrencia RENAME COLUMN id_user TO id_usuario;
 ALTER TABLE status_ocorrencia RENAME COLUMN dt_mudanca TO data_mudanca;
 
+ALTER TABLE tarefa_ocorrencia RENAME COLUMN id_user TO id_usuario;
 ALTER TABLE tarefa_ocorrencia RENAME COLUMN dt_inclusao TO data_inclusao;
+
 
 ALTER TABLE mensagens_forum DROP COLUMN ativo;
 ALTER TABLE mensagens_forum DROP COLUMN origem;

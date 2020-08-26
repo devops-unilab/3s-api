@@ -6,7 +6,7 @@
  *
  */
 class OcorrenciaView {
-    public function mostraFormInserir($listaAreaResponsavel, $listaServico) {
+    public function mostraFormInserir($listaAreaResponsavel, $listaServico, $listaUsuarioCliente, $listaUsuarioAtendente, $listaUsuarioIndicado) {
 		echo '
 <!-- Button trigger modal -->
 <button type="button" class="btn btn-primary m-3" data-toggle="modal" data-target="#modalAddOcorrencia">
@@ -38,13 +38,8 @@ class OcorrenciaView {
                                         </div>
 
                                         <div class="form-group">
-                                            <label for="id_funcionario">Id Funcionario</label>
-                                            <input type="number" class="form-control"  name="id_funcionario" id="id_funcionario" placeholder="Id Funcionario">
-                                        </div>
-
-                                        <div class="form-group">
-                                            <label for="desc_problema">Desc Problema</label>
-                                            <input type="text" class="form-control"  name="desc_problema" id="desc_problema" placeholder="Desc Problema">
+                                            <label for="descricao">Descricao</label>
+                                            <input type="text" class="form-control"  name="descricao" id="descricao" placeholder="Descricao">
                                         </div>
 
                                         <div class="form-group">
@@ -53,13 +48,8 @@ class OcorrenciaView {
                                         </div>
 
                                         <div class="form-group">
-                                            <label for="etiq_equipamento">Etiq Equipamento</label>
-                                            <input type="text" class="form-control"  name="etiq_equipamento" id="etiq_equipamento" placeholder="Etiq Equipamento">
-                                        </div>
-
-                                        <div class="form-group">
-                                            <label for="contato">Contato</label>
-                                            <input type="text" class="form-control"  name="contato" id="contato" placeholder="Contato">
+                                            <label for="patrimonio">Patrimonio</label>
+                                            <input type="text" class="form-control"  name="patrimonio" id="patrimonio" placeholder="Patrimonio">
                                         </div>
 
                                         <div class="form-group">
@@ -73,18 +63,13 @@ class OcorrenciaView {
                                         </div>
 
                                         <div class="form-group">
-                                            <label for="funcionario">Funcionario</label>
-                                            <input type="text" class="form-control"  name="funcionario" id="funcionario" placeholder="Funcionario">
-                                        </div>
-
-                                        <div class="form-group">
                                             <label for="status">Status</label>
                                             <input type="text" class="form-control"  name="status" id="status" placeholder="Status">
                                         </div>
 
                                         <div class="form-group">
-                                            <label for="obs">Obs</label>
-                                            <input type="text" class="form-control"  name="obs" id="obs" placeholder="Obs">
+                                            <label for="solucao">Solucao</label>
+                                            <input type="text" class="form-control"  name="solucao" id="solucao" placeholder="Solucao">
                                         </div>
 
                                         <div class="form-group">
@@ -103,68 +88,8 @@ class OcorrenciaView {
                                         </div>
 
                                         <div class="form-group">
-                                            <label for="fecha_confirmado">Fecha Confirmado</label>
-                                            <input type="text" class="form-control"  name="fecha_confirmado" id="fecha_confirmado" placeholder="Fecha Confirmado">
-                                        </div>
-
-                                        <div class="form-group">
-                                            <label for="reaberto">Reaberto</label>
-                                            <input type="text" class="form-control"  name="reaberto" id="reaberto" placeholder="Reaberto">
-                                        </div>
-
-                                        <div class="form-group">
-                                            <label for="dt_abertura">Dt Abertura</label>
-                                            <input type="datetime-local" class="form-control"  name="dt_abertura" id="dt_abertura" placeholder="Dt Abertura">
-                                        </div>
-
-                                        <div class="form-group">
-                                            <label for="dt_atendimento">Dt Atendimento</label>
-                                            <input type="datetime-local" class="form-control"  name="dt_atendimento" id="dt_atendimento" placeholder="Dt Atendimento">
-                                        </div>
-
-                                        <div class="form-group">
-                                            <label for="dt_fechamento">Dt Fechamento</label>
-                                            <input type="datetime-local" class="form-control"  name="dt_fechamento" id="dt_fechamento" placeholder="Dt Fechamento">
-                                        </div>
-
-                                        <div class="form-group">
-                                            <label for="dt_fecha_confirmado">Dt Fecha Confirmado</label>
-                                            <input type="datetime-local" class="form-control"  name="dt_fecha_confirmado" id="dt_fecha_confirmado" placeholder="Dt Fecha Confirmado">
-                                        </div>
-
-                                        <div class="form-group">
-                                            <label for="dt_cancelamento">Dt Cancelamento</label>
-                                            <input type="datetime-local" class="form-control"  name="dt_cancelamento" id="dt_cancelamento" placeholder="Dt Cancelamento">
-                                        </div>
-
-                                        <div class="form-group">
-                                            <label for="id_atendente">Id Atendente</label>
-                                            <input type="number" class="form-control"  name="id_atendente" id="id_atendente" placeholder="Id Atendente">
-                                        </div>
-
-                                        <div class="form-group">
-                                            <label for="id_tecnico_indicado">Id Tecnico Indicado</label>
-                                            <input type="number" class="form-control"  name="id_tecnico_indicado" id="id_tecnico_indicado" placeholder="Id Tecnico Indicado">
-                                        </div>
-
-                                        <div class="form-group">
-                                            <label for="dt_liberacao">Dt Liberacao</label>
-                                            <input type="datetime-local" class="form-control"  name="dt_liberacao" id="dt_liberacao" placeholder="Dt Liberacao">
-                                        </div>
-
-                                        <div class="form-group">
                                             <label for="anexo">Anexo</label>
                                             <input type="text" class="form-control"  name="anexo" id="anexo" placeholder="Anexo">
-                                        </div>
-
-                                        <div class="form-group">
-                                            <label for="dt_espera">Dt Espera</label>
-                                            <input type="datetime-local" class="form-control"  name="dt_espera" id="dt_espera" placeholder="Dt Espera">
-                                        </div>
-
-                                        <div class="form-group">
-                                            <label for="dt_aguardando_usuario">Dt Aguardando Usuario</label>
-                                            <input type="datetime-local" class="form-control"  name="dt_aguardando_usuario" id="dt_aguardando_usuario" placeholder="Dt Aguardando Usuario">
                                         </div>
 
                                         <div class="form-group">
@@ -189,6 +114,42 @@ class OcorrenciaView {
                                             <option value="">Selecione o Servico</option>';
                                                 
         foreach( $listaServico as $elemento){
+            echo '<option value="'.$elemento->getId().'">'.$elemento.'</option>';
+        }
+            
+        echo '
+                                          </select>
+                						</div>
+                                        <div class="form-group">
+                                          <label for="usuario_cliente">Usuario Cliente</label>
+                						  <select class="form-control" id="usuario_cliente" name="usuario_cliente">
+                                            <option value="">Selecione o Usuario Cliente</option>';
+                                                
+        foreach( $listaUsuarioCliente as $elemento){
+            echo '<option value="'.$elemento->getId().'">'.$elemento.'</option>';
+        }
+            
+        echo '
+                                          </select>
+                						</div>
+                                        <div class="form-group">
+                                          <label for="usuario_atendente">Usuario Atendente</label>
+                						  <select class="form-control" id="usuario_atendente" name="usuario_atendente">
+                                            <option value="">Selecione o Usuario Atendente</option>';
+                                                
+        foreach( $listaUsuarioAtendente as $elemento){
+            echo '<option value="'.$elemento->getId().'">'.$elemento.'</option>';
+        }
+            
+        echo '
+                                          </select>
+                						</div>
+                                        <div class="form-group">
+                                          <label for="usuario_indicado">Usuario Indicado</label>
+                						  <select class="form-control" id="usuario_indicado" name="usuario_indicado">
+                                            <option value="">Selecione o Usuario Indicado</option>';
+                                                
+        foreach( $listaUsuarioIndicado as $elemento){
             echo '<option value="'.$elemento->getId().'">'.$elemento.'</option>';
         }
             
@@ -236,16 +197,26 @@ class OcorrenciaView {
 				<thead>
 					<tr>
 						<th>Id</th>
+						<th>Id Local</th>
+						<th>Descricao</th>
+						<th>Campus</th>
 						<th>Area Responsavel</th>
 						<th>Servico</th>
+						<th>Usuario Cliente</th>
+						<th>Usuario Atendente</th>
                         <th>Ações</th>
 					</tr>
 				</thead>
 				<tfoot>
 					<tr>
                         <th>Id</th>
+                        <th>Id Local</th>
+                        <th>Descricao</th>
+                        <th>Campus</th>
 						<th>Area Responsavel</th>
 						<th>Servico</th>
+						<th>Usuario Cliente</th>
+						<th>Usuario Atendente</th>
                         <th>Ações</th>
 					</tr>
 				</tfoot>
@@ -254,11 +225,17 @@ class OcorrenciaView {
             foreach($lista as $elemento){
                 echo '<tr>';
                 echo '<td>'.$elemento->getId().'</td>';
-                echo '<td>'.$elemento->getAreaResponsavel()->getNome().'</td>';
-                echo '<td>'.$elemento->getServico()->getNome().'</td>';
+                echo '<td>'.$elemento->getIdLocal().'</td>';
+                echo '<td>'.$elemento->getDescricao().'</td>';
+                echo '<td>'.$elemento->getCampus().'</td>';
+                echo '<td>'.$elemento->getAreaResponsavel().'</td>';
+                echo '<td>'.$elemento->getServico().'</td>';
+                echo '<td>'.$elemento->getUsuarioCliente().'</td>';
+                echo '<td>'.$elemento->getUsuarioAtendente().'</td>';
                 echo '<td>
                         <a href="?pagina=ocorrencia&selecionar='.$elemento->getId().'" class="btn btn-info text-white">Selecionar</a>
-                        
+                        <a href="?pagina=ocorrencia&editar='.$elemento->getId().'" class="btn btn-success text-white">Editar</a>
+                        <a href="?pagina=ocorrencia&deletar='.$elemento->getId().'" class="btn btn-danger text-white">Deletar</a>
                       </td>';
                 echo '</tr>';
             }
@@ -291,35 +268,23 @@ class OcorrenciaView {
             <div class="card-body">
                 Id: '.$ocorrencia->getId().'<br>
                 Id Local: '.$ocorrencia->getIdLocal().'<br>
-                Id Funcionario: '.$ocorrencia->getIdFuncionario().'<br>
-                Desc Problema: '.$ocorrencia->getDescProblema().'<br>
+                Descricao: '.$ocorrencia->getDescricao().'<br>
                 Campus: '.$ocorrencia->getCampus().'<br>
-                Etiq Equipamento: '.$ocorrencia->getEtiqEquipamento().'<br>
-                Contato: '.$ocorrencia->getContato().'<br>
+                Patrimonio: '.$ocorrencia->getPatrimonio().'<br>
                 Ramal: '.$ocorrencia->getRamal().'<br>
                 Local: '.$ocorrencia->getLocal().'<br>
-                Funcionario: '.$ocorrencia->getFuncionario().'<br>
                 Status: '.$ocorrencia->getStatus().'<br>
-                Obs: '.$ocorrencia->getObs().'<br>
+                Solucao: '.$ocorrencia->getSolucao().'<br>
                 Prioridade: '.$ocorrencia->getPrioridade().'<br>
                 Avaliacao: '.$ocorrencia->getAvaliacao().'<br>
                 Email: '.$ocorrencia->getEmail().'<br>
-                Fecha Confirmado: '.$ocorrencia->getFechaConfirmado().'<br>
-                Reaberto: '.$ocorrencia->getReaberto().'<br>
-                Dt Abertura: '.$ocorrencia->getDtAbertura().'<br>
-                Dt Atendimento: '.$ocorrencia->getDtAtendimento().'<br>
-                Dt Fechamento: '.$ocorrencia->getDtFechamento().'<br>
-                Dt Fecha Confirmado: '.$ocorrencia->getDtFechaConfirmado().'<br>
-                Dt Cancelamento: '.$ocorrencia->getDtCancelamento().'<br>
-                Id Atendente: '.$ocorrencia->getIdAtendente().'<br>
-                Id Tecnico Indicado: '.$ocorrencia->getIdTecnicoIndicado().'<br>
-                Dt Liberacao: '.$ocorrencia->getDtLiberacao().'<br>
                 Anexo: '.$ocorrencia->getAnexo().'<br>
-                Dt Espera: '.$ocorrencia->getDtEspera().'<br>
-                Dt Aguardando Usuario: '.$ocorrencia->getDtAguardandoUsuario().'<br>
                 Local Sala: '.$ocorrencia->getLocalSala().'<br>
                 Area Responsavel: '.$ocorrencia->getAreaResponsavel().'<br>
                 Servico: '.$ocorrencia->getServico().'<br>
+                Usuario Cliente: '.$ocorrencia->getUsuarioCliente().'<br>
+                Usuario Atendente: '.$ocorrencia->getUsuarioAtendente().'<br>
+                Usuario Indicado: '.$ocorrencia->getUsuarioIndicado().'<br>
             
             </div>
         </div>
@@ -331,7 +296,7 @@ class OcorrenciaView {
 
 
             
-	public function mostraFormEditar($listaAreaResponsavel, $listaServico, Ocorrencia $selecionado) {
+	public function mostraFormEditar($listaAreaResponsavel, $listaServico, $listaUsuarioCliente, $listaUsuarioAtendente, $listaUsuarioIndicado, Ocorrencia $selecionado) {
 		echo '
 	    
 	    
@@ -351,24 +316,16 @@ class OcorrenciaView {
                                             <input type="number" class="form-control" value="'.$selecionado->getIdLocal().'"  name="id_local" id="id_local" placeholder="Id Local">
                 						</div>
                                         <div class="form-group">
-                                            <label for="id_funcionario">Id Funcionario</label>
-                                            <input type="number" class="form-control" value="'.$selecionado->getIdFuncionario().'"  name="id_funcionario" id="id_funcionario" placeholder="Id Funcionario">
-                						</div>
-                                        <div class="form-group">
-                                            <label for="desc_problema">Desc Problema</label>
-                                            <input type="text" class="form-control" value="'.$selecionado->getDescProblema().'"  name="desc_problema" id="desc_problema" placeholder="Desc Problema">
+                                            <label for="descricao">Descricao</label>
+                                            <input type="text" class="form-control" value="'.$selecionado->getDescricao().'"  name="descricao" id="descricao" placeholder="Descricao">
                 						</div>
                                         <div class="form-group">
                                             <label for="campus">Campus</label>
                                             <input type="text" class="form-control" value="'.$selecionado->getCampus().'"  name="campus" id="campus" placeholder="Campus">
                 						</div>
                                         <div class="form-group">
-                                            <label for="etiq_equipamento">Etiq Equipamento</label>
-                                            <input type="text" class="form-control" value="'.$selecionado->getEtiqEquipamento().'"  name="etiq_equipamento" id="etiq_equipamento" placeholder="Etiq Equipamento">
-                						</div>
-                                        <div class="form-group">
-                                            <label for="contato">Contato</label>
-                                            <input type="text" class="form-control" value="'.$selecionado->getContato().'"  name="contato" id="contato" placeholder="Contato">
+                                            <label for="patrimonio">Patrimonio</label>
+                                            <input type="text" class="form-control" value="'.$selecionado->getPatrimonio().'"  name="patrimonio" id="patrimonio" placeholder="Patrimonio">
                 						</div>
                                         <div class="form-group">
                                             <label for="ramal">Ramal</label>
@@ -379,16 +336,12 @@ class OcorrenciaView {
                                             <input type="text" class="form-control" value="'.$selecionado->getLocal().'"  name="local" id="local" placeholder="Local">
                 						</div>
                                         <div class="form-group">
-                                            <label for="funcionario">Funcionario</label>
-                                            <input type="text" class="form-control" value="'.$selecionado->getFuncionario().'"  name="funcionario" id="funcionario" placeholder="Funcionario">
-                						</div>
-                                        <div class="form-group">
                                             <label for="status">Status</label>
                                             <input type="text" class="form-control" value="'.$selecionado->getStatus().'"  name="status" id="status" placeholder="Status">
                 						</div>
                                         <div class="form-group">
-                                            <label for="obs">Obs</label>
-                                            <input type="text" class="form-control" value="'.$selecionado->getObs().'"  name="obs" id="obs" placeholder="Obs">
+                                            <label for="solucao">Solucao</label>
+                                            <input type="text" class="form-control" value="'.$selecionado->getSolucao().'"  name="solucao" id="solucao" placeholder="Solucao">
                 						</div>
                                         <div class="form-group">
                                             <label for="prioridade">Prioridade</label>
@@ -403,56 +356,8 @@ class OcorrenciaView {
                                             <input type="text" class="form-control" value="'.$selecionado->getEmail().'"  name="email" id="email" placeholder="Email">
                 						</div>
                                         <div class="form-group">
-                                            <label for="fecha_confirmado">Fecha Confirmado</label>
-                                            <input type="text" class="form-control" value="'.$selecionado->getFechaConfirmado().'"  name="fecha_confirmado" id="fecha_confirmado" placeholder="Fecha Confirmado">
-                						</div>
-                                        <div class="form-group">
-                                            <label for="reaberto">Reaberto</label>
-                                            <input type="text" class="form-control" value="'.$selecionado->getReaberto().'"  name="reaberto" id="reaberto" placeholder="Reaberto">
-                						</div>
-                                        <div class="form-group">
-                                            <label for="dt_abertura">Dt Abertura</label>
-                                            <input type="datetime-local" class="form-control" value="'.$selecionado->getDtAbertura().'"  name="dt_abertura" id="dt_abertura" placeholder="Dt Abertura">
-                						</div>
-                                        <div class="form-group">
-                                            <label for="dt_atendimento">Dt Atendimento</label>
-                                            <input type="datetime-local" class="form-control" value="'.$selecionado->getDtAtendimento().'"  name="dt_atendimento" id="dt_atendimento" placeholder="Dt Atendimento">
-                						</div>
-                                        <div class="form-group">
-                                            <label for="dt_fechamento">Dt Fechamento</label>
-                                            <input type="datetime-local" class="form-control" value="'.$selecionado->getDtFechamento().'"  name="dt_fechamento" id="dt_fechamento" placeholder="Dt Fechamento">
-                						</div>
-                                        <div class="form-group">
-                                            <label for="dt_fecha_confirmado">Dt Fecha Confirmado</label>
-                                            <input type="datetime-local" class="form-control" value="'.$selecionado->getDtFechaConfirmado().'"  name="dt_fecha_confirmado" id="dt_fecha_confirmado" placeholder="Dt Fecha Confirmado">
-                						</div>
-                                        <div class="form-group">
-                                            <label for="dt_cancelamento">Dt Cancelamento</label>
-                                            <input type="datetime-local" class="form-control" value="'.$selecionado->getDtCancelamento().'"  name="dt_cancelamento" id="dt_cancelamento" placeholder="Dt Cancelamento">
-                						</div>
-                                        <div class="form-group">
-                                            <label for="id_atendente">Id Atendente</label>
-                                            <input type="number" class="form-control" value="'.$selecionado->getIdAtendente().'"  name="id_atendente" id="id_atendente" placeholder="Id Atendente">
-                						</div>
-                                        <div class="form-group">
-                                            <label for="id_tecnico_indicado">Id Tecnico Indicado</label>
-                                            <input type="number" class="form-control" value="'.$selecionado->getIdTecnicoIndicado().'"  name="id_tecnico_indicado" id="id_tecnico_indicado" placeholder="Id Tecnico Indicado">
-                						</div>
-                                        <div class="form-group">
-                                            <label for="dt_liberacao">Dt Liberacao</label>
-                                            <input type="datetime-local" class="form-control" value="'.$selecionado->getDtLiberacao().'"  name="dt_liberacao" id="dt_liberacao" placeholder="Dt Liberacao">
-                						</div>
-                                        <div class="form-group">
                                             <label for="anexo">Anexo</label>
                                             <input type="text" class="form-control" value="'.$selecionado->getAnexo().'"  name="anexo" id="anexo" placeholder="Anexo">
-                						</div>
-                                        <div class="form-group">
-                                            <label for="dt_espera">Dt Espera</label>
-                                            <input type="datetime-local" class="form-control" value="'.$selecionado->getDtEspera().'"  name="dt_espera" id="dt_espera" placeholder="Dt Espera">
-                						</div>
-                                        <div class="form-group">
-                                            <label for="dt_aguardando_usuario">Dt Aguardando Usuario</label>
-                                            <input type="datetime-local" class="form-control" value="'.$selecionado->getDtAguardandoUsuario().'"  name="dt_aguardando_usuario" id="dt_aguardando_usuario" placeholder="Dt Aguardando Usuario">
                 						</div>
                                         <div class="form-group">
                                             <label for="local_sala">Local Sala</label>
@@ -476,6 +381,42 @@ class OcorrenciaView {
                                             <option value="">Selecione o Servico</option>';
                                                 
         foreach( $listaServico as $elemento){
+            echo '<option value="'.$elemento->getId().'">'.$elemento.'</option>';
+        }
+            
+        echo '
+                                          </select>
+                						</div>
+                                        <div class="form-group">
+                                          <label for="usuario_cliente">Usuario Cliente</label>
+                						  <select class="form-control" id="usuario_cliente" name="usuario_cliente">
+                                            <option value="">Selecione o Usuario Cliente</option>';
+                                                
+        foreach( $listaUsuarioCliente as $elemento){
+            echo '<option value="'.$elemento->getId().'">'.$elemento.'</option>';
+        }
+            
+        echo '
+                                          </select>
+                						</div>
+                                        <div class="form-group">
+                                          <label for="usuario_atendente">Usuario Atendente</label>
+                						  <select class="form-control" id="usuario_atendente" name="usuario_atendente">
+                                            <option value="">Selecione o Usuario Atendente</option>';
+                                                
+        foreach( $listaUsuarioAtendente as $elemento){
+            echo '<option value="'.$elemento->getId().'">'.$elemento.'</option>';
+        }
+            
+        echo '
+                                          </select>
+                						</div>
+                                        <div class="form-group">
+                                          <label for="usuario_indicado">Usuario Indicado</label>
+                						  <select class="form-control" id="usuario_indicado" name="usuario_indicado">
+                                            <option value="">Selecione o Usuario Indicado</option>';
+                                                
+        foreach( $listaUsuarioIndicado as $elemento){
             echo '<option value="'.$elemento->getId().'">'.$elemento.'</option>';
         }
             

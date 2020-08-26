@@ -6,7 +6,7 @@
  *
  */
 class ServicoView {
-    public function mostraFormInserir($listaAreaResponsavel, $listaGrupoServico, $listaTipoAtividade) {
+    public function mostraFormInserir($listaTipoAtividade, $listaAreaResponsavel, $listaGrupoServico) {
 		echo '
 <!-- Button trigger modal -->
 <button type="button" class="btn btn-primary m-3" data-toggle="modal" data-target="#modalAddServico">
@@ -43,19 +43,26 @@ class ServicoView {
                                         </div>
 
                                         <div class="form-group">
-                                            <label for="ativo">Ativo</label>
-                                            
-                    <select class="form-control" id="ativo" name="ativo">
-                        <option value="">Selecione Um Valor</option>
-                          <option value="1">Sim</option>
-                          <option value="0">Não</option>
-                    </select>
-                                        </div>
-
-                                        <div class="form-group">
                                             <label for="tempo_sla">Tempo Sla</label>
                                             <input type="number" class="form-control"  name="tempo_sla" id="tempo_sla" placeholder="Tempo Sla">
                                         </div>
+
+                                        <div class="form-group">
+                                            <label for="visao">Visao</label>
+                                            <input type="number" class="form-control"  name="visao" id="visao" placeholder="Visao">
+                                        </div>
+                                        <div class="form-group">
+                                          <label for="tipo_atividade">Tipo Atividade</label>
+                						  <select class="form-control" id="tipo_atividade" name="tipo_atividade">
+                                            <option value="">Selecione o Tipo Atividade</option>';
+                                                
+        foreach( $listaTipoAtividade as $elemento){
+            echo '<option value="'.$elemento->getId().'">'.$elemento.'</option>';
+        }
+            
+        echo '
+                                          </select>
+                						</div>
                                         <div class="form-group">
                                           <label for="area_responsavel">Area Responsavel</label>
                 						  <select class="form-control" id="area_responsavel" name="area_responsavel">
@@ -74,18 +81,6 @@ class ServicoView {
                                             <option value="">Selecione o Grupo Servico</option>';
                                                 
         foreach( $listaGrupoServico as $elemento){
-            echo '<option value="'.$elemento->getId().'">'.$elemento.'</option>';
-        }
-            
-        echo '
-                                          </select>
-                						</div>
-                                        <div class="form-group">
-                                          <label for="tipo_atividade">Tipo Atividade</label>
-                						  <select class="form-control" id="tipo_atividade" name="tipo_atividade">
-                                            <option value="">Selecione o Tipo Atividade</option>';
-                                                
-        foreach( $listaTipoAtividade as $elemento){
             echo '<option value="'.$elemento->getId().'">'.$elemento.'</option>';
         }
             
@@ -135,10 +130,10 @@ class ServicoView {
 						<th>Id</th>
 						<th>Nome</th>
 						<th>Descricao</th>
-						<th>Ativo</th>
+						<th>Tempo Sla</th>
+						<th>Tipo Atividade</th>
 						<th>Area Responsavel</th>
 						<th>Grupo Servico</th>
-						<th>Tipo Atividade</th>
                         <th>Ações</th>
 					</tr>
 				</thead>
@@ -147,10 +142,10 @@ class ServicoView {
                         <th>Id</th>
                         <th>Nome</th>
                         <th>Descricao</th>
-                        <th>Ativo</th>
+                        <th>Tempo Sla</th>
+						<th>Tipo Atividade</th>
 						<th>Area Responsavel</th>
 						<th>Grupo Servico</th>
-						<th>Tipo Atividade</th>
                         <th>Ações</th>
 					</tr>
 				</tfoot>
@@ -161,10 +156,10 @@ class ServicoView {
                 echo '<td>'.$elemento->getId().'</td>';
                 echo '<td>'.$elemento->getNome().'</td>';
                 echo '<td>'.$elemento->getDescricao().'</td>';
-                echo '<td>'.$elemento->getAtivo().'</td>';
+                echo '<td>'.$elemento->getTempoSla().'</td>';
+                echo '<td>'.$elemento->getTipoAtividade().'</td>';
                 echo '<td>'.$elemento->getAreaResponsavel().'</td>';
                 echo '<td>'.$elemento->getGrupoServico().'</td>';
-                echo '<td>'.$elemento->getTipoAtividade().'</td>';
                 echo '<td>
                         <a href="?pagina=servico&selecionar='.$elemento->getId().'" class="btn btn-info text-white">Selecionar</a>
                         <a href="?pagina=servico&editar='.$elemento->getId().'" class="btn btn-success text-white">Editar</a>
@@ -202,11 +197,11 @@ class ServicoView {
                 Id: '.$servico->getId().'<br>
                 Nome: '.$servico->getNome().'<br>
                 Descricao: '.$servico->getDescricao().'<br>
-                Ativo: '.$servico->getAtivo().'<br>
                 Tempo Sla: '.$servico->getTempoSla().'<br>
+                Visao: '.$servico->getVisao().'<br>
+                Tipo Atividade: '.$servico->getTipoAtividade().'<br>
                 Area Responsavel: '.$servico->getAreaResponsavel().'<br>
                 Grupo Servico: '.$servico->getGrupoServico().'<br>
-                Tipo Atividade: '.$servico->getTipoAtividade().'<br>
             
             </div>
         </div>
@@ -218,7 +213,7 @@ class ServicoView {
 
 
             
-	public function mostraFormEditar($listaAreaResponsavel, $listaGrupoServico, $listaTipoAtividade, Servico $selecionado) {
+	public function mostraFormEditar($listaTipoAtividade, $listaAreaResponsavel, $listaGrupoServico, Servico $selecionado) {
 		echo '
 	    
 	    
@@ -242,17 +237,24 @@ class ServicoView {
                                             <input type="text" class="form-control" value="'.$selecionado->getDescricao().'"  name="descricao" id="descricao" placeholder="Descricao">
                 						</div>
                                         <div class="form-group">
-                                            <label for="ativo">Ativo</label>
-                                            
-                    <select class="form-control" id="ativo" name="ativo" required>
-                        <option value="">Selecione Um Valor</option>
-                          <option value="1">Sim</option>
-                          <option value="0">Não</option>
-                    </select>
-                						</div>
-                                        <div class="form-group">
                                             <label for="tempo_sla">Tempo Sla</label>
                                             <input type="number" class="form-control" value="'.$selecionado->getTempoSla().'"  name="tempo_sla" id="tempo_sla" placeholder="Tempo Sla">
+                						</div>
+                                        <div class="form-group">
+                                            <label for="visao">Visao</label>
+                                            <input type="number" class="form-control" value="'.$selecionado->getVisao().'"  name="visao" id="visao" placeholder="Visao">
+                						</div>
+                                        <div class="form-group">
+                                          <label for="tipo_atividade">Tipo Atividade</label>
+                						  <select class="form-control" id="tipo_atividade" name="tipo_atividade">
+                                            <option value="">Selecione o Tipo Atividade</option>';
+                                                
+        foreach( $listaTipoAtividade as $elemento){
+            echo '<option value="'.$elemento->getId().'">'.$elemento.'</option>';
+        }
+            
+        echo '
+                                          </select>
                 						</div>
                                         <div class="form-group">
                                           <label for="area_responsavel">Area Responsavel</label>
@@ -272,18 +274,6 @@ class ServicoView {
                                             <option value="">Selecione o Grupo Servico</option>';
                                                 
         foreach( $listaGrupoServico as $elemento){
-            echo '<option value="'.$elemento->getId().'">'.$elemento.'</option>';
-        }
-            
-        echo '
-                                          </select>
-                						</div>
-                                        <div class="form-group">
-                                          <label for="tipo_atividade">Tipo Atividade</label>
-                						  <select class="form-control" id="tipo_atividade" name="tipo_atividade">
-                                            <option value="">Selecione o Tipo Atividade</option>';
-                                                
-        foreach( $listaTipoAtividade as $elemento){
             echo '<option value="'.$elemento->getId().'">'.$elemento.'</option>';
         }
             

@@ -47,11 +47,6 @@ class AreaResponsavelView {
                                             <input type="text" class="form-control"  name="email" id="email" placeholder="Email">
                                         </div>
 
-                                        <div class="form-group">
-                                            <label for="id_admin">Id Admin</label>
-                                            <input type="number" class="form-control"  name="id_admin" id="id_admin" placeholder="Id Admin">
-                                        </div>
-
 						              </form>
 
 
@@ -153,7 +148,6 @@ class AreaResponsavelView {
                 Nome: '.$arearesponsavel->getNome().'<br>
                 Descricao: '.$arearesponsavel->getDescricao().'<br>
                 Email: '.$arearesponsavel->getEmail().'<br>
-                Id Admin: '.$arearesponsavel->getIdAdmin().'<br>
             
             </div>
         </div>
@@ -191,10 +185,6 @@ class AreaResponsavelView {
                                         <div class="form-group">
                                             <label for="email">Email</label>
                                             <input type="text" class="form-control" value="'.$selecionado->getEmail().'"  name="email" id="email" placeholder="Email">
-                						</div>
-                                        <div class="form-group">
-                                            <label for="id_admin">Id Admin</label>
-                                            <input type="number" class="form-control" value="'.$selecionado->getIdAdmin().'"  name="id_admin" id="id_admin" placeholder="Id Admin">
                 						</div>
                                         <input type="submit" class="btn btn-primary btn-user btn-block" value="Alterar" name="editar_area_responsavel">
                                         <hr>

@@ -11,13 +11,16 @@
 
 class StatusOcorrencia {
 	private $id;
+	private $ocorrencia;
 	private $status;
 	private $mensagem;
-	private $idUser;
-	private $dtMudanca;
+	private $usuario;
+	private $dataMudanca;
     public function __construct(){
 
+        $this->ocorrencia = new Ocorrencia();
         $this->status = new Status();
+        $this->usuario = new Usuario();
     }
 	public function setId($id) {
 		$this->id = $id;
@@ -25,6 +28,13 @@ class StatusOcorrencia {
 		    
 	public function getId() {
 		return $this->id;
+	}
+	public function setOcorrencia(Ocorrencia $ocorrencia) {
+		$this->ocorrencia = $ocorrencia;
+	}
+		    
+	public function getOcorrencia() {
+		return $this->ocorrencia;
 	}
 	public function setStatus(Status $status) {
 		$this->status = $status;
@@ -40,22 +50,22 @@ class StatusOcorrencia {
 	public function getMensagem() {
 		return $this->mensagem;
 	}
-	public function setIdUser($idUser) {
-		$this->idUser = $idUser;
+	public function setUsuario(Usuario $usuario) {
+		$this->usuario = $usuario;
 	}
 		    
-	public function getIdUser() {
-		return $this->idUser;
+	public function getUsuario() {
+		return $this->usuario;
 	}
-	public function setDtMudanca($dtMudanca) {
-		$this->dtMudanca = $dtMudanca;
+	public function setDataMudanca($dataMudanca) {
+		$this->dataMudanca = $dataMudanca;
 	}
 		    
-	public function getDtMudanca() {
-		return $this->dtMudanca;
+	public function getDataMudanca() {
+		return $this->dataMudanca;
 	}
 	public function __toString(){
-	    return $this->id.' - '.$this->status.' - '.$this->mensagem.' - '.$this->idUser.' - '.$this->dtMudanca;
+	    return $this->id.' - '.$this->ocorrencia.' - '.$this->status.' - '.$this->mensagem.' - '.$this->usuario.' - '.$this->dataMudanca;
 	}
                 
 

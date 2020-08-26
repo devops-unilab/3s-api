@@ -56,10 +56,16 @@ class TarefaOcorrenciaController {
 	public function cadastrar() {
             
         if(!isset($_POST['enviar_tarefa_ocorrencia'])){
-            $this->view->mostraFormInserir();
+            $ocorrenciaDao = new OcorrenciaDAO($this->dao->getConexao());
+            $listaOcorrencia = $ocorrenciaDao->retornaLista();
+
+            $usuarioDao = new UsuarioDAO($this->dao->getConexao());
+            $listaUsuario = $usuarioDao->retornaLista();
+
+            $this->view->mostraFormInserir($listaOcorrencia, $listaUsuario);
 		    return;
 		}
-		if (! ( isset ( $_POST ['id_ocorrencia'] ) && isset ( $_POST ['tarefa'] ) && isset ( $_POST ['id_user'] ) && isset ( $_POST ['dt_inclusao'] ))) {
+		if (! ( isset ( $_POST ['tarefa'] ) && isset ( $_POST ['data_inclusao'] ) &&  isset($_POST ['ocorrencia']) &&  isset($_POST ['usuario']))) {
 			echo '
                 <div class="alert alert-danger" role="alert">
                     Falha ao cadastrar. Algum campo deve estar faltando. 
@@ -70,10 +76,10 @@ class TarefaOcorrenciaController {
 		}
             
 		$tarefaOcorrencia = new TarefaOcorrencia ();
-		$tarefaOcorrencia->setIdOcorrencia ( $_POST ['id_ocorrencia'] );
 		$tarefaOcorrencia->setTarefa ( $_POST ['tarefa'] );
-		$tarefaOcorrencia->setIdUser ( $_POST ['id_user'] );
-		$tarefaOcorrencia->setDtInclusao ( $_POST ['dt_inclusao'] );
+		$tarefaOcorrencia->setDataInclusao ( $_POST ['data_inclusao'] );
+		$tarefaOcorrencia->getOcorrencia()->setId ( $_POST ['ocorrencia'] );
+		$tarefaOcorrencia->getUsuario()->setId ( $_POST ['usuario'] );
             
 		if ($this->dao->inserir ( $tarefaOcorrencia ))
         {
@@ -108,19 +114,23 @@ class TarefaOcorrenciaController {
 	    $this->dao->preenchePorId($selecionado);
 	        
         if(!isset($_POST['editar_tarefa_ocorrencia'])){
-            $this->view->mostraFormEditar($selecionado);
+            $ocorrenciaDao = new OcorrenciaDAO($this->dao->getConexao());
+            $listaOcorrencia = $ocorrenciaDao->retornaLista();
+
+            $usuarioDao = new UsuarioDAO($this->dao->getConexao());
+            $listaUsuario = $usuarioDao->retornaLista();
+
+            $this->view->mostraFormEditar($listaOcorrencia, $listaUsuario, $selecionado);
             return;
         }
             
-		if (! ( isset ( $_POST ['id_ocorrencia'] ) && isset ( $_POST ['tarefa'] ) && isset ( $_POST ['id_user'] ) && isset ( $_POST ['dt_inclusao'] ))) {
+		if (! ( isset ( $_POST ['tarefa'] ) && isset ( $_POST ['data_inclusao'] ) &&  isset($_POST ['ocorrencia']) &&  isset($_POST ['usuario']))) {
 			echo "Incompleto";
 			return;
 		}
 
-		$selecionado->setIdOcorrencia ( $_POST ['id_ocorrencia'] );
 		$selecionado->setTarefa ( $_POST ['tarefa'] );
-		$selecionado->setIdUser ( $_POST ['id_user'] );
-		$selecionado->setDtInclusao ( $_POST ['dt_inclusao'] );
+		$selecionado->setDataInclusao ( $_POST ['data_inclusao'] );
             
 		if ($this->dao->atualizar ($selecionado ))
         {
@@ -229,10 +239,8 @@ class TarefaOcorrenciaController {
 
             $pesquisado = array(
 					'id' => $pesquisado->getId (), 
-					'idOcorrencia' => $pesquisado->getIdOcorrencia (), 
 					'tarefa' => $pesquisado->getTarefa (), 
-					'idUser' => $pesquisado->getIdUser (), 
-					'dtInclusao' => $pesquisado->getDtInclusao ()
+					'dataInclusao' => $pesquisado->getDataInclusao (), 
             
             
 			);
@@ -244,10 +252,8 @@ class TarefaOcorrenciaController {
         foreach ( $lista as $linha ) {
 			$listagem ['lista'] [] = array (
 					'id' => $linha->getId (), 
-					'idOcorrencia' => $linha->getIdOcorrencia (), 
 					'tarefa' => $linha->getTarefa (), 
-					'idUser' => $linha->getIdUser (), 
-					'dtInclusao' => $linha->getDtInclusao ()
+					'dataInclusao' => $linha->getDataInclusao (), 
             
             
 			);
@@ -340,23 +346,13 @@ class TarefaOcorrenciaController {
         }
                     
 
-        if (isset($jsonBody['id_ocorrencia'])) {
-            $pesquisado->setIdOcorrencia($jsonBody['id_ocorrencia']);
-        }
-                    
-
         if (isset($jsonBody['tarefa'])) {
             $pesquisado->setTarefa($jsonBody['tarefa']);
         }
                     
 
-        if (isset($jsonBody['id_user'])) {
-            $pesquisado->setIdUser($jsonBody['id_user']);
-        }
-                    
-
-        if (isset($jsonBody['dt_inclusao'])) {
-            $pesquisado->setDtInclusao($jsonBody['dt_inclusao']);
+        if (isset($jsonBody['data_inclusao'])) {
+            $pesquisado->setDataInclusao($jsonBody['data_inclusao']);
         }
                     
 
@@ -387,7 +383,7 @@ class TarefaOcorrenciaController {
         $body = file_get_contents('php://input');
         $jsonBody = json_decode($body, true);
 
-        if (! ( isset ( $jsonBody ['idOcorrencia'] ) && isset ( $jsonBody ['tarefa'] ) && isset ( $jsonBody ['idUser'] ) && isset ( $jsonBody ['dtInclusao'] ))) {
+        if (! ( isset ( $jsonBody ['tarefa'] ) && isset ( $jsonBody ['dataInclusao'] ) &&  isset($_POST ['ocorrencia']) &&  isset($_POST ['usuario']))) {
 			echo "Incompleto";
 			return;
 		}
@@ -395,13 +391,9 @@ class TarefaOcorrenciaController {
         $adicionado = new TarefaOcorrencia();
         $adicionado->setId($jsonBody['id']);
 
-        $adicionado->setIdOcorrencia($jsonBody['id_ocorrencia']);
-
         $adicionado->setTarefa($jsonBody['tarefa']);
 
-        $adicionado->setIdUser($jsonBody['id_user']);
-
-        $adicionado->setDtInclusao($jsonBody['dt_inclusao']);
+        $adicionado->setDataInclusao($jsonBody['data_inclusao']);
 
         if ($this->dao->inserir($adicionado)) {
             echo "Sucesso";

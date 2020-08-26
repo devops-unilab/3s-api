@@ -6,7 +6,7 @@
  *
  */
 class TarefaOcorrenciaView {
-    public function mostraFormInserir() {
+    public function mostraFormInserir($listaOcorrencia, $listaUsuario) {
 		echo '
 <!-- Button trigger modal -->
 <button type="button" class="btn btn-primary m-3" data-toggle="modal" data-target="#modalAddTarefaOcorrencia">
@@ -33,24 +33,38 @@ class TarefaOcorrenciaView {
 
 
                                         <div class="form-group">
-                                            <label for="id_ocorrencia">Id Ocorrencia</label>
-                                            <input type="number" class="form-control"  name="id_ocorrencia" id="id_ocorrencia" placeholder="Id Ocorrencia">
-                                        </div>
-
-                                        <div class="form-group">
                                             <label for="tarefa">Tarefa</label>
                                             <input type="number" class="form-control"  name="tarefa" id="tarefa" placeholder="Tarefa">
                                         </div>
 
                                         <div class="form-group">
-                                            <label for="id_user">Id User</label>
-                                            <input type="number" class="form-control"  name="id_user" id="id_user" placeholder="Id User">
+                                            <label for="data_inclusao">Data Inclusao</label>
+                                            <input type="datetime-local" class="form-control"  name="data_inclusao" id="data_inclusao" placeholder="Data Inclusao">
                                         </div>
-
                                         <div class="form-group">
-                                            <label for="dt_inclusao">Dt Inclusao</label>
-                                            <input type="datetime-local" class="form-control"  name="dt_inclusao" id="dt_inclusao" placeholder="Dt Inclusao">
-                                        </div>
+                                          <label for="ocorrencia">Ocorrencia</label>
+                						  <select class="form-control" id="ocorrencia" name="ocorrencia">
+                                            <option value="">Selecione o Ocorrencia</option>';
+                                                
+        foreach( $listaOcorrencia as $elemento){
+            echo '<option value="'.$elemento->getId().'">'.$elemento.'</option>';
+        }
+            
+        echo '
+                                          </select>
+                						</div>
+                                        <div class="form-group">
+                                          <label for="usuario">Usuario</label>
+                						  <select class="form-control" id="usuario" name="usuario">
+                                            <option value="">Selecione o Usuario</option>';
+                                                
+        foreach( $listaUsuario as $elemento){
+            echo '<option value="'.$elemento->getId().'">'.$elemento.'</option>';
+        }
+            
+        echo '
+                                          </select>
+                						</div>
 
 						              </form>
 
@@ -92,18 +106,20 @@ class TarefaOcorrenciaView {
 				<thead>
 					<tr>
 						<th>Id</th>
-						<th>Id Ocorrencia</th>
 						<th>Tarefa</th>
-						<th>Id User</th>
+						<th>Data Inclusao</th>
+						<th>Ocorrencia</th>
+						<th>Usuario</th>
                         <th>Ações</th>
 					</tr>
 				</thead>
 				<tfoot>
 					<tr>
                         <th>Id</th>
-                        <th>Id Ocorrencia</th>
                         <th>Tarefa</th>
-                        <th>Id User</th>
+                        <th>Data Inclusao</th>
+						<th>Ocorrencia</th>
+						<th>Usuario</th>
                         <th>Ações</th>
 					</tr>
 				</tfoot>
@@ -112,9 +128,10 @@ class TarefaOcorrenciaView {
             foreach($lista as $elemento){
                 echo '<tr>';
                 echo '<td>'.$elemento->getId().'</td>';
-                echo '<td>'.$elemento->getIdOcorrencia().'</td>';
                 echo '<td>'.$elemento->getTarefa().'</td>';
-                echo '<td>'.$elemento->getIdUser().'</td>';
+                echo '<td>'.$elemento->getDataInclusao().'</td>';
+                echo '<td>'.$elemento->getOcorrencia().'</td>';
+                echo '<td>'.$elemento->getUsuario().'</td>';
                 echo '<td>
                         <a href="?pagina=tarefa_ocorrencia&selecionar='.$elemento->getId().'" class="btn btn-info text-white">Selecionar</a>
                         <a href="?pagina=tarefa_ocorrencia&editar='.$elemento->getId().'" class="btn btn-success text-white">Editar</a>
@@ -150,10 +167,10 @@ class TarefaOcorrenciaView {
             </div>
             <div class="card-body">
                 Id: '.$tarefaocorrencia->getId().'<br>
-                Id Ocorrencia: '.$tarefaocorrencia->getIdOcorrencia().'<br>
                 Tarefa: '.$tarefaocorrencia->getTarefa().'<br>
-                Id User: '.$tarefaocorrencia->getIdUser().'<br>
-                Dt Inclusao: '.$tarefaocorrencia->getDtInclusao().'<br>
+                Data Inclusao: '.$tarefaocorrencia->getDataInclusao().'<br>
+                Ocorrencia: '.$tarefaocorrencia->getOcorrencia().'<br>
+                Usuario: '.$tarefaocorrencia->getUsuario().'<br>
             
             </div>
         </div>
@@ -165,7 +182,7 @@ class TarefaOcorrenciaView {
 
 
             
-	public function mostraFormEditar(TarefaOcorrencia $selecionado) {
+	public function mostraFormEditar($listaOcorrencia, $listaUsuario, TarefaOcorrencia $selecionado) {
 		echo '
 	    
 	    
@@ -181,20 +198,36 @@ class TarefaOcorrenciaView {
 									</div>
 						              <form class="user" method="post">
                                         <div class="form-group">
-                                            <label for="id_ocorrencia">Id Ocorrencia</label>
-                                            <input type="number" class="form-control" value="'.$selecionado->getIdOcorrencia().'"  name="id_ocorrencia" id="id_ocorrencia" placeholder="Id Ocorrencia">
-                						</div>
-                                        <div class="form-group">
                                             <label for="tarefa">Tarefa</label>
                                             <input type="number" class="form-control" value="'.$selecionado->getTarefa().'"  name="tarefa" id="tarefa" placeholder="Tarefa">
                 						</div>
                                         <div class="form-group">
-                                            <label for="id_user">Id User</label>
-                                            <input type="number" class="form-control" value="'.$selecionado->getIdUser().'"  name="id_user" id="id_user" placeholder="Id User">
+                                            <label for="data_inclusao">Data Inclusao</label>
+                                            <input type="datetime-local" class="form-control" value="'.$selecionado->getDataInclusao().'"  name="data_inclusao" id="data_inclusao" placeholder="Data Inclusao">
                 						</div>
                                         <div class="form-group">
-                                            <label for="dt_inclusao">Dt Inclusao</label>
-                                            <input type="datetime-local" class="form-control" value="'.$selecionado->getDtInclusao().'"  name="dt_inclusao" id="dt_inclusao" placeholder="Dt Inclusao">
+                                          <label for="ocorrencia">Ocorrencia</label>
+                						  <select class="form-control" id="ocorrencia" name="ocorrencia">
+                                            <option value="">Selecione o Ocorrencia</option>';
+                                                
+        foreach( $listaOcorrencia as $elemento){
+            echo '<option value="'.$elemento->getId().'">'.$elemento.'</option>';
+        }
+            
+        echo '
+                                          </select>
+                						</div>
+                                        <div class="form-group">
+                                          <label for="usuario">Usuario</label>
+                						  <select class="form-control" id="usuario" name="usuario">
+                                            <option value="">Selecione o Usuario</option>';
+                                                
+        foreach( $listaUsuario as $elemento){
+            echo '<option value="'.$elemento->getId().'">'.$elemento.'</option>';
+        }
+            
+        echo '
+                                          </select>
                 						</div>
                                         <input type="submit" class="btn btn-primary btn-user btn-block" value="Alterar" name="editar_tarefa_ocorrencia">
                                         <hr>

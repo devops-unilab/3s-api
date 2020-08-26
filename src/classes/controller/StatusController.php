@@ -59,7 +59,7 @@ class StatusController {
             $this->view->mostraFormInserir();
 		    return;
 		}
-		if (! ( isset ( $_POST ['sigla'] ) && isset ( $_POST ['nome'] ) && isset ( $_POST ['icone'] ) && isset ( $_POST ['cor'] ))) {
+		if (! ( isset ( $_POST ['sigla'] ) && isset ( $_POST ['nome'] ))) {
 			echo '
                 <div class="alert alert-danger" role="alert">
                     Falha ao cadastrar. Algum campo deve estar faltando. 
@@ -72,8 +72,6 @@ class StatusController {
 		$status = new Status ();
 		$status->setSigla ( $_POST ['sigla'] );
 		$status->setNome ( $_POST ['nome'] );
-		$status->setIcone ( $_POST ['icone'] );
-		$status->setCor ( $_POST ['cor'] );
             
 		if ($this->dao->inserir ( $status ))
         {
@@ -112,15 +110,13 @@ class StatusController {
             return;
         }
             
-		if (! ( isset ( $_POST ['sigla'] ) && isset ( $_POST ['nome'] ) && isset ( $_POST ['icone'] ) && isset ( $_POST ['cor'] ))) {
+		if (! ( isset ( $_POST ['sigla'] ) && isset ( $_POST ['nome'] ))) {
 			echo "Incompleto";
 			return;
 		}
 
 		$selecionado->setSigla ( $_POST ['sigla'] );
 		$selecionado->setNome ( $_POST ['nome'] );
-		$selecionado->setIcone ( $_POST ['icone'] );
-		$selecionado->setCor ( $_POST ['cor'] );
             
 		if ($this->dao->atualizar ($selecionado ))
         {
@@ -230,9 +226,7 @@ class StatusController {
             $pesquisado = array(
 					'id' => $pesquisado->getId (), 
 					'sigla' => $pesquisado->getSigla (), 
-					'nome' => $pesquisado->getNome (), 
-					'icone' => $pesquisado->getIcone (), 
-					'cor' => $pesquisado->getCor ()
+					'nome' => $pesquisado->getNome ()
             
             
 			);
@@ -245,9 +239,7 @@ class StatusController {
 			$listagem ['lista'] [] = array (
 					'id' => $linha->getId (), 
 					'sigla' => $linha->getSigla (), 
-					'nome' => $linha->getNome (), 
-					'icone' => $linha->getIcone (), 
-					'cor' => $linha->getCor ()
+					'nome' => $linha->getNome ()
             
             
 			);
@@ -350,16 +342,6 @@ class StatusController {
         }
                     
 
-        if (isset($jsonBody['icone'])) {
-            $pesquisado->setIcone($jsonBody['icone']);
-        }
-                    
-
-        if (isset($jsonBody['cor'])) {
-            $pesquisado->setCor($jsonBody['cor']);
-        }
-                    
-
         if ($this->dao->atualizar($pesquisado)) {
             echo "Sucesso";
         } else {
@@ -387,7 +369,7 @@ class StatusController {
         $body = file_get_contents('php://input');
         $jsonBody = json_decode($body, true);
 
-        if (! ( isset ( $jsonBody ['sigla'] ) && isset ( $jsonBody ['nome'] ) && isset ( $jsonBody ['icone'] ) && isset ( $jsonBody ['cor'] ))) {
+        if (! ( isset ( $jsonBody ['sigla'] ) && isset ( $jsonBody ['nome'] ))) {
 			echo "Incompleto";
 			return;
 		}
@@ -398,10 +380,6 @@ class StatusController {
         $adicionado->setSigla($jsonBody['sigla']);
 
         $adicionado->setNome($jsonBody['nome']);
-
-        $adicionado->setIcone($jsonBody['icone']);
-
-        $adicionado->setCor($jsonBody['cor']);
 
         if ($this->dao->inserir($adicionado)) {
             echo "Sucesso";

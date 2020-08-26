@@ -23,24 +23,18 @@ class TarefaOcorrenciaDAO extends DAO {
             
         $sql = "UPDATE tarefa_ocorrencia
                 SET
-                id_ocorrencia = :idOcorrencia,
                 tarefa = :tarefa,
-                id_user = :idUser,
-                dt_inclusao = :dtInclusao
+                data_inclusao = :dataInclusao
                 WHERE tarefa_ocorrencia.id = :id;";
-			$idOcorrencia = $tarefaOcorrencia->getIdOcorrencia();
 			$tarefa = $tarefaOcorrencia->getTarefa();
-			$idUser = $tarefaOcorrencia->getIdUser();
-			$dtInclusao = $tarefaOcorrencia->getDtInclusao();
+			$dataInclusao = $tarefaOcorrencia->getDataInclusao();
             
         try {
             
             $stmt = $this->getConexao()->prepare($sql);
 			$stmt->bindParam(":id", $id, PDO::PARAM_INT);
-			$stmt->bindParam(":idOcorrencia", $idOcorrencia, PDO::PARAM_INT);
 			$stmt->bindParam(":tarefa", $tarefa, PDO::PARAM_INT);
-			$stmt->bindParam(":idUser", $idUser, PDO::PARAM_INT);
-			$stmt->bindParam(":dtInclusao", $dtInclusao, PDO::PARAM_STR);
+			$stmt->bindParam(":dataInclusao", $dataInclusao, PDO::PARAM_STR);
             
             return $stmt->execute();
         } catch (PDOException $e) {
@@ -52,18 +46,18 @@ class TarefaOcorrenciaDAO extends DAO {
             
 
     public function inserir(TarefaOcorrencia $tarefaOcorrencia){
-        $sql = "INSERT INTO tarefa_ocorrencia(id_ocorrencia, tarefa, id_user, dt_inclusao) VALUES (:idOcorrencia, :tarefa, :idUser, :dtInclusao);";
-		$idOcorrencia = $tarefaOcorrencia->getIdOcorrencia();
+        $sql = "INSERT INTO tarefa_ocorrencia(id_ocorrencia, tarefa, id_usuario, data_inclusao) VALUES (:ocorrencia, :tarefa, :usuario, :dataInclusao);";
+		$ocorrencia = $tarefaOcorrencia->getOcorrencia()->getId();
 		$tarefa = $tarefaOcorrencia->getTarefa();
-		$idUser = $tarefaOcorrencia->getIdUser();
-		$dtInclusao = $tarefaOcorrencia->getDtInclusao();
+		$usuario = $tarefaOcorrencia->getUsuario()->getId();
+		$dataInclusao = $tarefaOcorrencia->getDataInclusao();
 		try {
 			$db = $this->getConexao();
 			$stmt = $db->prepare($sql);
-			$stmt->bindParam(":idOcorrencia", $idOcorrencia, PDO::PARAM_INT);
+			$stmt->bindParam(":ocorrencia", $ocorrencia, PDO::PARAM_INT);
 			$stmt->bindParam(":tarefa", $tarefa, PDO::PARAM_INT);
-			$stmt->bindParam(":idUser", $idUser, PDO::PARAM_INT);
-			$stmt->bindParam(":dtInclusao", $dtInclusao, PDO::PARAM_STR);
+			$stmt->bindParam(":usuario", $usuario, PDO::PARAM_INT);
+			$stmt->bindParam(":dataInclusao", $dataInclusao, PDO::PARAM_STR);
 			return $stmt->execute();
 		} catch(PDOException $e) {
 			echo '{"error":{"text":'. $e->getMessage() .'}}';
@@ -71,20 +65,20 @@ class TarefaOcorrenciaDAO extends DAO {
             
     }
     public function inserirComPK(TarefaOcorrencia $tarefaOcorrencia){
-        $sql = "INSERT INTO tarefa_ocorrencia(id, id_ocorrencia, tarefa, id_user, dt_inclusao) VALUES (:id, :idOcorrencia, :tarefa, :idUser, :dtInclusao);";
+        $sql = "INSERT INTO tarefa_ocorrencia(id, id_ocorrencia_ocorrencia, tarefa, id_usuario_usuario, data_inclusao) VALUES (:id, :ocorrencia, :tarefa, :usuario, :dataInclusao);";
 		$id = $tarefaOcorrencia->getId();
-		$idOcorrencia = $tarefaOcorrencia->getIdOcorrencia();
+		$ocorrencia = $tarefaOcorrencia->getOcorrencia()->getId();
 		$tarefa = $tarefaOcorrencia->getTarefa();
-		$idUser = $tarefaOcorrencia->getIdUser();
-		$dtInclusao = $tarefaOcorrencia->getDtInclusao();
+		$usuario = $tarefaOcorrencia->getUsuario()->getId();
+		$dataInclusao = $tarefaOcorrencia->getDataInclusao();
 		try {
 			$db = $this->getConexao();
 			$stmt = $db->prepare($sql);
 			$stmt->bindParam(":id", $id, PDO::PARAM_INT);
-			$stmt->bindParam(":idOcorrencia", $idOcorrencia, PDO::PARAM_INT);
+			$stmt->bindParam(":ocorrencia", $ocorrencia, PDO::PARAM_INT);
 			$stmt->bindParam(":tarefa", $tarefa, PDO::PARAM_INT);
-			$stmt->bindParam(":idUser", $idUser, PDO::PARAM_INT);
-			$stmt->bindParam(":dtInclusao", $dtInclusao, PDO::PARAM_STR);
+			$stmt->bindParam(":usuario", $usuario, PDO::PARAM_INT);
+			$stmt->bindParam(":dataInclusao", $dataInclusao, PDO::PARAM_STR);
 			return $stmt->execute();
 		} catch(PDOException $e) {
 			echo '{"error":{"text":'. $e->getMessage() .'}}';
@@ -113,11 +107,31 @@ class TarefaOcorrenciaDAO extends DAO {
 		$sql = "
 		SELECT
         tarefa_ocorrencia.id, 
-        tarefa_ocorrencia.id_ocorrencia, 
         tarefa_ocorrencia.tarefa, 
-        tarefa_ocorrencia.id_user, 
-        tarefa_ocorrencia.dt_inclusao
+        tarefa_ocorrencia.data_inclusao, 
+        ocorrencia.id as id_ocorrencia_ocorrencia, 
+        ocorrencia.id_local as id_local_ocorrencia_ocorrencia, 
+        ocorrencia.descricao as descricao_ocorrencia_ocorrencia, 
+        ocorrencia.campus as campus_ocorrencia_ocorrencia, 
+        ocorrencia.patrimonio as patrimonio_ocorrencia_ocorrencia, 
+        ocorrencia.ramal as ramal_ocorrencia_ocorrencia, 
+        ocorrencia.local as local_ocorrencia_ocorrencia, 
+        ocorrencia.status as status_ocorrencia_ocorrencia, 
+        ocorrencia.solucao as solucao_ocorrencia_ocorrencia, 
+        ocorrencia.prioridade as prioridade_ocorrencia_ocorrencia, 
+        ocorrencia.avaliacao as avaliacao_ocorrencia_ocorrencia, 
+        ocorrencia.email as email_ocorrencia_ocorrencia, 
+        ocorrencia.anexo as anexo_ocorrencia_ocorrencia, 
+        ocorrencia.local_sala as local_sala_ocorrencia_ocorrencia, 
+        usuario.id as id_usuario_usuario, 
+        usuario.nome as nome_usuario_usuario, 
+        usuario.email as email_usuario_usuario, 
+        usuario.login as login_usuario_usuario, 
+        usuario.senha as senha_usuario_usuario, 
+        usuario.nivel as nivel_usuario_usuario
 		FROM tarefa_ocorrencia
+		INNER JOIN ocorrencia as ocorrencia ON ocorrencia.id = tarefa_ocorrencia.id_ocorrencia
+		INNER JOIN usuario as usuario ON usuario.id = tarefa_ocorrencia.id_usuario
                  LIMIT 1000";
 
         try {
@@ -133,10 +147,28 @@ class TarefaOcorrenciaDAO extends DAO {
             {
 		        $tarefaOcorrencia = new TarefaOcorrencia();
                 $tarefaOcorrencia->setId( $linha ['id'] );
-                $tarefaOcorrencia->setIdOcorrencia( $linha ['id_ocorrencia'] );
                 $tarefaOcorrencia->setTarefa( $linha ['tarefa'] );
-                $tarefaOcorrencia->setIdUser( $linha ['id_user'] );
-                $tarefaOcorrencia->setDtInclusao( $linha ['dt_inclusao'] );
+                $tarefaOcorrencia->setDataInclusao( $linha ['data_inclusao'] );
+                $tarefaOcorrencia->getOcorrencia()->setId( $linha ['id_ocorrencia_ocorrencia'] );
+                $tarefaOcorrencia->getOcorrencia()->setIdLocal( $linha ['id_local_ocorrencia_ocorrencia'] );
+                $tarefaOcorrencia->getOcorrencia()->setDescricao( $linha ['descricao_ocorrencia_ocorrencia'] );
+                $tarefaOcorrencia->getOcorrencia()->setCampus( $linha ['campus_ocorrencia_ocorrencia'] );
+                $tarefaOcorrencia->getOcorrencia()->setPatrimonio( $linha ['patrimonio_ocorrencia_ocorrencia'] );
+                $tarefaOcorrencia->getOcorrencia()->setRamal( $linha ['ramal_ocorrencia_ocorrencia'] );
+                $tarefaOcorrencia->getOcorrencia()->setLocal( $linha ['local_ocorrencia_ocorrencia'] );
+                $tarefaOcorrencia->getOcorrencia()->setStatus( $linha ['status_ocorrencia_ocorrencia'] );
+                $tarefaOcorrencia->getOcorrencia()->setSolucao( $linha ['solucao_ocorrencia_ocorrencia'] );
+                $tarefaOcorrencia->getOcorrencia()->setPrioridade( $linha ['prioridade_ocorrencia_ocorrencia'] );
+                $tarefaOcorrencia->getOcorrencia()->setAvaliacao( $linha ['avaliacao_ocorrencia_ocorrencia'] );
+                $tarefaOcorrencia->getOcorrencia()->setEmail( $linha ['email_ocorrencia_ocorrencia'] );
+                $tarefaOcorrencia->getOcorrencia()->setAnexo( $linha ['anexo_ocorrencia_ocorrencia'] );
+                $tarefaOcorrencia->getOcorrencia()->setLocalSala( $linha ['local_sala_ocorrencia_ocorrencia'] );
+                $tarefaOcorrencia->getUsuario()->setId( $linha ['id_usuario_usuario'] );
+                $tarefaOcorrencia->getUsuario()->setNome( $linha ['nome_usuario_usuario'] );
+                $tarefaOcorrencia->getUsuario()->setEmail( $linha ['email_usuario_usuario'] );
+                $tarefaOcorrencia->getUsuario()->setLogin( $linha ['login_usuario_usuario'] );
+                $tarefaOcorrencia->getUsuario()->setSenha( $linha ['senha_usuario_usuario'] );
+                $tarefaOcorrencia->getUsuario()->setNivel( $linha ['nivel_usuario_usuario'] );
                 $lista [] = $tarefaOcorrencia;
 
 	
@@ -155,11 +187,31 @@ class TarefaOcorrenciaDAO extends DAO {
         $sql = "
 		SELECT
         tarefa_ocorrencia.id, 
-        tarefa_ocorrencia.id_ocorrencia, 
         tarefa_ocorrencia.tarefa, 
-        tarefa_ocorrencia.id_user, 
-        tarefa_ocorrencia.dt_inclusao
+        tarefa_ocorrencia.data_inclusao, 
+        ocorrencia.id as id_ocorrencia_ocorrencia, 
+        ocorrencia.id_local as id_local_ocorrencia_ocorrencia, 
+        ocorrencia.descricao as descricao_ocorrencia_ocorrencia, 
+        ocorrencia.campus as campus_ocorrencia_ocorrencia, 
+        ocorrencia.patrimonio as patrimonio_ocorrencia_ocorrencia, 
+        ocorrencia.ramal as ramal_ocorrencia_ocorrencia, 
+        ocorrencia.local as local_ocorrencia_ocorrencia, 
+        ocorrencia.status as status_ocorrencia_ocorrencia, 
+        ocorrencia.solucao as solucao_ocorrencia_ocorrencia, 
+        ocorrencia.prioridade as prioridade_ocorrencia_ocorrencia, 
+        ocorrencia.avaliacao as avaliacao_ocorrencia_ocorrencia, 
+        ocorrencia.email as email_ocorrencia_ocorrencia, 
+        ocorrencia.anexo as anexo_ocorrencia_ocorrencia, 
+        ocorrencia.local_sala as local_sala_ocorrencia_ocorrencia, 
+        usuario.id as id_usuario_usuario, 
+        usuario.nome as nome_usuario_usuario, 
+        usuario.email as email_usuario_usuario, 
+        usuario.login as login_usuario_usuario, 
+        usuario.senha as senha_usuario_usuario, 
+        usuario.nivel as nivel_usuario_usuario
 		FROM tarefa_ocorrencia
+		INNER JOIN ocorrencia as ocorrencia ON ocorrencia.id = tarefa_ocorrencia.id_ocorrencia
+		INNER JOIN usuario as usuario ON usuario.id = tarefa_ocorrencia.id_usuario
             WHERE tarefa_ocorrencia.id = :id";
                 
         try {
@@ -171,48 +223,34 @@ class TarefaOcorrenciaDAO extends DAO {
             foreach ( $result as $linha ) {
                 $tarefaOcorrencia = new TarefaOcorrencia();
     	        $tarefaOcorrencia->setId( $linha ['id'] );
-    	        $tarefaOcorrencia->setIdOcorrencia( $linha ['id_ocorrencia'] );
     	        $tarefaOcorrencia->setTarefa( $linha ['tarefa'] );
-    	        $tarefaOcorrencia->setIdUser( $linha ['id_user'] );
-    	        $tarefaOcorrencia->setDtInclusao( $linha ['dt_inclusao'] );
-    			$lista [] = $tarefaOcorrencia;
-    			    
-            }
-    			    
-        } catch(PDOException $e) {
-            echo $e->getMessage();
-    			    
-        }
-		return $lista;
-    }
-                
-    public function pesquisaPorIdOcorrencia(TarefaOcorrencia $tarefaOcorrencia) {
-        $lista = array();
-	    $idOcorrencia = $tarefaOcorrencia->getIdOcorrencia();
-                
-        $sql = "
-		SELECT
-        tarefa_ocorrencia.id, 
-        tarefa_ocorrencia.id_ocorrencia, 
-        tarefa_ocorrencia.tarefa, 
-        tarefa_ocorrencia.id_user, 
-        tarefa_ocorrencia.dt_inclusao
-		FROM tarefa_ocorrencia
-            WHERE tarefa_ocorrencia.id_ocorrencia = :idOcorrencia";
-                
-        try {
-                
-            $stmt = $this->conexao->prepare($sql);
-            $stmt->bindParam(":idOcorrencia", $idOcorrencia, PDO::PARAM_INT);
-            $stmt->execute();
-            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            foreach ( $result as $linha ) {
-                $tarefaOcorrencia = new TarefaOcorrencia();
-    	        $tarefaOcorrencia->setId( $linha ['id'] );
-    	        $tarefaOcorrencia->setIdOcorrencia( $linha ['id_ocorrencia'] );
-    	        $tarefaOcorrencia->setTarefa( $linha ['tarefa'] );
-    	        $tarefaOcorrencia->setIdUser( $linha ['id_user'] );
-    	        $tarefaOcorrencia->setDtInclusao( $linha ['dt_inclusao'] );
+    	        $tarefaOcorrencia->setDataInclusao( $linha ['data_inclusao'] );
+    			$tarefaOcorrencia->getOcorrencia()->setId( $linha ['id_ocorrencia_ocorrencia'] );
+    			$tarefaOcorrencia->getOcorrencia()->setAreaResponsavel( $linha ['area_responsavel_ocorrencia_ocorrencia'] );
+    			$tarefaOcorrencia->getOcorrencia()->setServico( $linha ['servico_ocorrencia_ocorrencia'] );
+    			$tarefaOcorrencia->getOcorrencia()->setIdLocal( $linha ['id_local_ocorrencia_ocorrencia'] );
+    			$tarefaOcorrencia->getOcorrencia()->setUsuarioCliente( $linha ['usuario_cliente_ocorrencia_ocorrencia'] );
+    			$tarefaOcorrencia->getOcorrencia()->setDescricao( $linha ['descricao_ocorrencia_ocorrencia'] );
+    			$tarefaOcorrencia->getOcorrencia()->setCampus( $linha ['campus_ocorrencia_ocorrencia'] );
+    			$tarefaOcorrencia->getOcorrencia()->setPatrimonio( $linha ['patrimonio_ocorrencia_ocorrencia'] );
+    			$tarefaOcorrencia->getOcorrencia()->setRamal( $linha ['ramal_ocorrencia_ocorrencia'] );
+    			$tarefaOcorrencia->getOcorrencia()->setLocal( $linha ['local_ocorrencia_ocorrencia'] );
+    			$tarefaOcorrencia->getOcorrencia()->setStatus( $linha ['status_ocorrencia_ocorrencia'] );
+    			$tarefaOcorrencia->getOcorrencia()->setSolucao( $linha ['solucao_ocorrencia_ocorrencia'] );
+    			$tarefaOcorrencia->getOcorrencia()->setPrioridade( $linha ['prioridade_ocorrencia_ocorrencia'] );
+    			$tarefaOcorrencia->getOcorrencia()->setAvaliacao( $linha ['avaliacao_ocorrencia_ocorrencia'] );
+    			$tarefaOcorrencia->getOcorrencia()->setEmail( $linha ['email_ocorrencia_ocorrencia'] );
+    			$tarefaOcorrencia->getOcorrencia()->setUsuarioAtendente( $linha ['usuario_atendente_ocorrencia_ocorrencia'] );
+    			$tarefaOcorrencia->getOcorrencia()->setUsuarioIndicado( $linha ['usuario_indicado_ocorrencia_ocorrencia'] );
+    			$tarefaOcorrencia->getOcorrencia()->setAnexo( $linha ['anexo_ocorrencia_ocorrencia'] );
+    			$tarefaOcorrencia->getOcorrencia()->setLocalSala( $linha ['local_sala_ocorrencia_ocorrencia'] );
+    			$tarefaOcorrencia->getUsuario()->setId( $linha ['id_usuario_usuario'] );
+    			$tarefaOcorrencia->getUsuario()->setNome( $linha ['nome_usuario_usuario'] );
+    			$tarefaOcorrencia->getUsuario()->setEmail( $linha ['email_usuario_usuario'] );
+    			$tarefaOcorrencia->getUsuario()->setLogin( $linha ['login_usuario_usuario'] );
+    			$tarefaOcorrencia->getUsuario()->setSenha( $linha ['senha_usuario_usuario'] );
+    			$tarefaOcorrencia->getUsuario()->setNivel( $linha ['nivel_usuario_usuario'] );
+    			$tarefaOcorrencia->getUsuario()->setSetor( $linha ['setor_usuario_usuario'] );
     			$lista [] = $tarefaOcorrencia;
     			    
             }
@@ -231,11 +269,31 @@ class TarefaOcorrenciaDAO extends DAO {
         $sql = "
 		SELECT
         tarefa_ocorrencia.id, 
-        tarefa_ocorrencia.id_ocorrencia, 
         tarefa_ocorrencia.tarefa, 
-        tarefa_ocorrencia.id_user, 
-        tarefa_ocorrencia.dt_inclusao
+        tarefa_ocorrencia.data_inclusao, 
+        ocorrencia.id as id_ocorrencia_ocorrencia, 
+        ocorrencia.id_local as id_local_ocorrencia_ocorrencia, 
+        ocorrencia.descricao as descricao_ocorrencia_ocorrencia, 
+        ocorrencia.campus as campus_ocorrencia_ocorrencia, 
+        ocorrencia.patrimonio as patrimonio_ocorrencia_ocorrencia, 
+        ocorrencia.ramal as ramal_ocorrencia_ocorrencia, 
+        ocorrencia.local as local_ocorrencia_ocorrencia, 
+        ocorrencia.status as status_ocorrencia_ocorrencia, 
+        ocorrencia.solucao as solucao_ocorrencia_ocorrencia, 
+        ocorrencia.prioridade as prioridade_ocorrencia_ocorrencia, 
+        ocorrencia.avaliacao as avaliacao_ocorrencia_ocorrencia, 
+        ocorrencia.email as email_ocorrencia_ocorrencia, 
+        ocorrencia.anexo as anexo_ocorrencia_ocorrencia, 
+        ocorrencia.local_sala as local_sala_ocorrencia_ocorrencia, 
+        usuario.id as id_usuario_usuario, 
+        usuario.nome as nome_usuario_usuario, 
+        usuario.email as email_usuario_usuario, 
+        usuario.login as login_usuario_usuario, 
+        usuario.senha as senha_usuario_usuario, 
+        usuario.nivel as nivel_usuario_usuario
 		FROM tarefa_ocorrencia
+		INNER JOIN ocorrencia as ocorrencia ON ocorrencia.id = tarefa_ocorrencia.id_ocorrencia
+		INNER JOIN usuario as usuario ON usuario.id = tarefa_ocorrencia.id_usuario
             WHERE tarefa_ocorrencia.tarefa = :tarefa";
                 
         try {
@@ -247,10 +305,34 @@ class TarefaOcorrenciaDAO extends DAO {
             foreach ( $result as $linha ) {
                 $tarefaOcorrencia = new TarefaOcorrencia();
     	        $tarefaOcorrencia->setId( $linha ['id'] );
-    	        $tarefaOcorrencia->setIdOcorrencia( $linha ['id_ocorrencia'] );
     	        $tarefaOcorrencia->setTarefa( $linha ['tarefa'] );
-    	        $tarefaOcorrencia->setIdUser( $linha ['id_user'] );
-    	        $tarefaOcorrencia->setDtInclusao( $linha ['dt_inclusao'] );
+    	        $tarefaOcorrencia->setDataInclusao( $linha ['data_inclusao'] );
+    			$tarefaOcorrencia->getOcorrencia()->setId( $linha ['id_ocorrencia_ocorrencia'] );
+    			$tarefaOcorrencia->getOcorrencia()->setAreaResponsavel( $linha ['area_responsavel_ocorrencia_ocorrencia'] );
+    			$tarefaOcorrencia->getOcorrencia()->setServico( $linha ['servico_ocorrencia_ocorrencia'] );
+    			$tarefaOcorrencia->getOcorrencia()->setIdLocal( $linha ['id_local_ocorrencia_ocorrencia'] );
+    			$tarefaOcorrencia->getOcorrencia()->setUsuarioCliente( $linha ['usuario_cliente_ocorrencia_ocorrencia'] );
+    			$tarefaOcorrencia->getOcorrencia()->setDescricao( $linha ['descricao_ocorrencia_ocorrencia'] );
+    			$tarefaOcorrencia->getOcorrencia()->setCampus( $linha ['campus_ocorrencia_ocorrencia'] );
+    			$tarefaOcorrencia->getOcorrencia()->setPatrimonio( $linha ['patrimonio_ocorrencia_ocorrencia'] );
+    			$tarefaOcorrencia->getOcorrencia()->setRamal( $linha ['ramal_ocorrencia_ocorrencia'] );
+    			$tarefaOcorrencia->getOcorrencia()->setLocal( $linha ['local_ocorrencia_ocorrencia'] );
+    			$tarefaOcorrencia->getOcorrencia()->setStatus( $linha ['status_ocorrencia_ocorrencia'] );
+    			$tarefaOcorrencia->getOcorrencia()->setSolucao( $linha ['solucao_ocorrencia_ocorrencia'] );
+    			$tarefaOcorrencia->getOcorrencia()->setPrioridade( $linha ['prioridade_ocorrencia_ocorrencia'] );
+    			$tarefaOcorrencia->getOcorrencia()->setAvaliacao( $linha ['avaliacao_ocorrencia_ocorrencia'] );
+    			$tarefaOcorrencia->getOcorrencia()->setEmail( $linha ['email_ocorrencia_ocorrencia'] );
+    			$tarefaOcorrencia->getOcorrencia()->setUsuarioAtendente( $linha ['usuario_atendente_ocorrencia_ocorrencia'] );
+    			$tarefaOcorrencia->getOcorrencia()->setUsuarioIndicado( $linha ['usuario_indicado_ocorrencia_ocorrencia'] );
+    			$tarefaOcorrencia->getOcorrencia()->setAnexo( $linha ['anexo_ocorrencia_ocorrencia'] );
+    			$tarefaOcorrencia->getOcorrencia()->setLocalSala( $linha ['local_sala_ocorrencia_ocorrencia'] );
+    			$tarefaOcorrencia->getUsuario()->setId( $linha ['id_usuario_usuario'] );
+    			$tarefaOcorrencia->getUsuario()->setNome( $linha ['nome_usuario_usuario'] );
+    			$tarefaOcorrencia->getUsuario()->setEmail( $linha ['email_usuario_usuario'] );
+    			$tarefaOcorrencia->getUsuario()->setLogin( $linha ['login_usuario_usuario'] );
+    			$tarefaOcorrencia->getUsuario()->setSenha( $linha ['senha_usuario_usuario'] );
+    			$tarefaOcorrencia->getUsuario()->setNivel( $linha ['nivel_usuario_usuario'] );
+    			$tarefaOcorrencia->getUsuario()->setSetor( $linha ['setor_usuario_usuario'] );
     			$lista [] = $tarefaOcorrencia;
     			    
             }
@@ -262,71 +344,77 @@ class TarefaOcorrenciaDAO extends DAO {
 		return $lista;
     }
                 
-    public function pesquisaPorIdUser(TarefaOcorrencia $tarefaOcorrencia) {
+    public function pesquisaPorDataInclusao(TarefaOcorrencia $tarefaOcorrencia) {
         $lista = array();
-	    $idUser = $tarefaOcorrencia->getIdUser();
+	    $dataInclusao = $tarefaOcorrencia->getDataInclusao();
                 
         $sql = "
 		SELECT
         tarefa_ocorrencia.id, 
-        tarefa_ocorrencia.id_ocorrencia, 
         tarefa_ocorrencia.tarefa, 
-        tarefa_ocorrencia.id_user, 
-        tarefa_ocorrencia.dt_inclusao
+        tarefa_ocorrencia.data_inclusao, 
+        ocorrencia.id as id_ocorrencia_ocorrencia, 
+        ocorrencia.id_local as id_local_ocorrencia_ocorrencia, 
+        ocorrencia.descricao as descricao_ocorrencia_ocorrencia, 
+        ocorrencia.campus as campus_ocorrencia_ocorrencia, 
+        ocorrencia.patrimonio as patrimonio_ocorrencia_ocorrencia, 
+        ocorrencia.ramal as ramal_ocorrencia_ocorrencia, 
+        ocorrencia.local as local_ocorrencia_ocorrencia, 
+        ocorrencia.status as status_ocorrencia_ocorrencia, 
+        ocorrencia.solucao as solucao_ocorrencia_ocorrencia, 
+        ocorrencia.prioridade as prioridade_ocorrencia_ocorrencia, 
+        ocorrencia.avaliacao as avaliacao_ocorrencia_ocorrencia, 
+        ocorrencia.email as email_ocorrencia_ocorrencia, 
+        ocorrencia.anexo as anexo_ocorrencia_ocorrencia, 
+        ocorrencia.local_sala as local_sala_ocorrencia_ocorrencia, 
+        usuario.id as id_usuario_usuario, 
+        usuario.nome as nome_usuario_usuario, 
+        usuario.email as email_usuario_usuario, 
+        usuario.login as login_usuario_usuario, 
+        usuario.senha as senha_usuario_usuario, 
+        usuario.nivel as nivel_usuario_usuario
 		FROM tarefa_ocorrencia
-            WHERE tarefa_ocorrencia.id_user = :idUser";
+		INNER JOIN ocorrencia as ocorrencia ON ocorrencia.id = tarefa_ocorrencia.id_ocorrencia
+		INNER JOIN usuario as usuario ON usuario.id = tarefa_ocorrencia.id_usuario
+            WHERE tarefa_ocorrencia.data_inclusao like :dataInclusao";
                 
         try {
                 
             $stmt = $this->conexao->prepare($sql);
-            $stmt->bindParam(":idUser", $idUser, PDO::PARAM_INT);
+            $stmt->bindParam(":dataInclusao", $dataInclusao, PDO::PARAM_STR);
             $stmt->execute();
             $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
             foreach ( $result as $linha ) {
                 $tarefaOcorrencia = new TarefaOcorrencia();
     	        $tarefaOcorrencia->setId( $linha ['id'] );
-    	        $tarefaOcorrencia->setIdOcorrencia( $linha ['id_ocorrencia'] );
     	        $tarefaOcorrencia->setTarefa( $linha ['tarefa'] );
-    	        $tarefaOcorrencia->setIdUser( $linha ['id_user'] );
-    	        $tarefaOcorrencia->setDtInclusao( $linha ['dt_inclusao'] );
-    			$lista [] = $tarefaOcorrencia;
-    			    
-            }
-    			    
-        } catch(PDOException $e) {
-            echo $e->getMessage();
-    			    
-        }
-		return $lista;
-    }
-                
-    public function pesquisaPorDtInclusao(TarefaOcorrencia $tarefaOcorrencia) {
-        $lista = array();
-	    $dtInclusao = $tarefaOcorrencia->getDtInclusao();
-                
-        $sql = "
-		SELECT
-        tarefa_ocorrencia.id, 
-        tarefa_ocorrencia.id_ocorrencia, 
-        tarefa_ocorrencia.tarefa, 
-        tarefa_ocorrencia.id_user, 
-        tarefa_ocorrencia.dt_inclusao
-		FROM tarefa_ocorrencia
-            WHERE tarefa_ocorrencia.dt_inclusao like :dtInclusao";
-                
-        try {
-                
-            $stmt = $this->conexao->prepare($sql);
-            $stmt->bindParam(":dtInclusao", $dtInclusao, PDO::PARAM_STR);
-            $stmt->execute();
-            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            foreach ( $result as $linha ) {
-                $tarefaOcorrencia = new TarefaOcorrencia();
-    	        $tarefaOcorrencia->setId( $linha ['id'] );
-    	        $tarefaOcorrencia->setIdOcorrencia( $linha ['id_ocorrencia'] );
-    	        $tarefaOcorrencia->setTarefa( $linha ['tarefa'] );
-    	        $tarefaOcorrencia->setIdUser( $linha ['id_user'] );
-    	        $tarefaOcorrencia->setDtInclusao( $linha ['dt_inclusao'] );
+    	        $tarefaOcorrencia->setDataInclusao( $linha ['data_inclusao'] );
+    			$tarefaOcorrencia->getOcorrencia()->setId( $linha ['id_ocorrencia_ocorrencia'] );
+    			$tarefaOcorrencia->getOcorrencia()->setAreaResponsavel( $linha ['area_responsavel_ocorrencia_ocorrencia'] );
+    			$tarefaOcorrencia->getOcorrencia()->setServico( $linha ['servico_ocorrencia_ocorrencia'] );
+    			$tarefaOcorrencia->getOcorrencia()->setIdLocal( $linha ['id_local_ocorrencia_ocorrencia'] );
+    			$tarefaOcorrencia->getOcorrencia()->setUsuarioCliente( $linha ['usuario_cliente_ocorrencia_ocorrencia'] );
+    			$tarefaOcorrencia->getOcorrencia()->setDescricao( $linha ['descricao_ocorrencia_ocorrencia'] );
+    			$tarefaOcorrencia->getOcorrencia()->setCampus( $linha ['campus_ocorrencia_ocorrencia'] );
+    			$tarefaOcorrencia->getOcorrencia()->setPatrimonio( $linha ['patrimonio_ocorrencia_ocorrencia'] );
+    			$tarefaOcorrencia->getOcorrencia()->setRamal( $linha ['ramal_ocorrencia_ocorrencia'] );
+    			$tarefaOcorrencia->getOcorrencia()->setLocal( $linha ['local_ocorrencia_ocorrencia'] );
+    			$tarefaOcorrencia->getOcorrencia()->setStatus( $linha ['status_ocorrencia_ocorrencia'] );
+    			$tarefaOcorrencia->getOcorrencia()->setSolucao( $linha ['solucao_ocorrencia_ocorrencia'] );
+    			$tarefaOcorrencia->getOcorrencia()->setPrioridade( $linha ['prioridade_ocorrencia_ocorrencia'] );
+    			$tarefaOcorrencia->getOcorrencia()->setAvaliacao( $linha ['avaliacao_ocorrencia_ocorrencia'] );
+    			$tarefaOcorrencia->getOcorrencia()->setEmail( $linha ['email_ocorrencia_ocorrencia'] );
+    			$tarefaOcorrencia->getOcorrencia()->setUsuarioAtendente( $linha ['usuario_atendente_ocorrencia_ocorrencia'] );
+    			$tarefaOcorrencia->getOcorrencia()->setUsuarioIndicado( $linha ['usuario_indicado_ocorrencia_ocorrencia'] );
+    			$tarefaOcorrencia->getOcorrencia()->setAnexo( $linha ['anexo_ocorrencia_ocorrencia'] );
+    			$tarefaOcorrencia->getOcorrencia()->setLocalSala( $linha ['local_sala_ocorrencia_ocorrencia'] );
+    			$tarefaOcorrencia->getUsuario()->setId( $linha ['id_usuario_usuario'] );
+    			$tarefaOcorrencia->getUsuario()->setNome( $linha ['nome_usuario_usuario'] );
+    			$tarefaOcorrencia->getUsuario()->setEmail( $linha ['email_usuario_usuario'] );
+    			$tarefaOcorrencia->getUsuario()->setLogin( $linha ['login_usuario_usuario'] );
+    			$tarefaOcorrencia->getUsuario()->setSenha( $linha ['senha_usuario_usuario'] );
+    			$tarefaOcorrencia->getUsuario()->setNivel( $linha ['nivel_usuario_usuario'] );
+    			$tarefaOcorrencia->getUsuario()->setSetor( $linha ['setor_usuario_usuario'] );
     			$lista [] = $tarefaOcorrencia;
     			    
             }
@@ -344,11 +432,31 @@ class TarefaOcorrenciaDAO extends DAO {
 	    $sql = "
 		SELECT
         tarefa_ocorrencia.id, 
-        tarefa_ocorrencia.id_ocorrencia, 
         tarefa_ocorrencia.tarefa, 
-        tarefa_ocorrencia.id_user, 
-        tarefa_ocorrencia.dt_inclusao
+        tarefa_ocorrencia.data_inclusao, 
+        ocorrencia.id as id_ocorrencia_ocorrencia, 
+        ocorrencia.id_local as id_local_ocorrencia_ocorrencia, 
+        ocorrencia.descricao as descricao_ocorrencia_ocorrencia, 
+        ocorrencia.campus as campus_ocorrencia_ocorrencia, 
+        ocorrencia.patrimonio as patrimonio_ocorrencia_ocorrencia, 
+        ocorrencia.ramal as ramal_ocorrencia_ocorrencia, 
+        ocorrencia.local as local_ocorrencia_ocorrencia, 
+        ocorrencia.status as status_ocorrencia_ocorrencia, 
+        ocorrencia.solucao as solucao_ocorrencia_ocorrencia, 
+        ocorrencia.prioridade as prioridade_ocorrencia_ocorrencia, 
+        ocorrencia.avaliacao as avaliacao_ocorrencia_ocorrencia, 
+        ocorrencia.email as email_ocorrencia_ocorrencia, 
+        ocorrencia.anexo as anexo_ocorrencia_ocorrencia, 
+        ocorrencia.local_sala as local_sala_ocorrencia_ocorrencia, 
+        usuario.id as id_usuario_usuario, 
+        usuario.nome as nome_usuario_usuario, 
+        usuario.email as email_usuario_usuario, 
+        usuario.login as login_usuario_usuario, 
+        usuario.senha as senha_usuario_usuario, 
+        usuario.nivel as nivel_usuario_usuario
 		FROM tarefa_ocorrencia
+		INNER JOIN ocorrencia as ocorrencia ON ocorrencia.id = tarefa_ocorrencia.id_ocorrencia
+		INNER JOIN usuario as usuario ON usuario.id = tarefa_ocorrencia.id_usuario
                 WHERE tarefa_ocorrencia.id = :id
                  LIMIT 1000";
                 
@@ -364,49 +472,28 @@ class TarefaOcorrenciaDAO extends DAO {
 		    foreach ( $result as $linha )
             {
                 $tarefaOcorrencia->setId( $linha ['id'] );
-                $tarefaOcorrencia->setIdOcorrencia( $linha ['id_ocorrencia'] );
                 $tarefaOcorrencia->setTarefa( $linha ['tarefa'] );
-                $tarefaOcorrencia->setIdUser( $linha ['id_user'] );
-                $tarefaOcorrencia->setDtInclusao( $linha ['dt_inclusao'] );
-                
-                
-		    }
-		} catch(PDOException $e) {
-		    echo $e->getMessage();
- 		}
-		return $tarefaOcorrencia;
-    }
-                
-    public function preenchePorIdOcorrencia(TarefaOcorrencia $tarefaOcorrencia) {
-        
-	    $idOcorrencia = $tarefaOcorrencia->getIdOcorrencia();
-	    $sql = "
-		SELECT
-        tarefa_ocorrencia.id, 
-        tarefa_ocorrencia.id_ocorrencia, 
-        tarefa_ocorrencia.tarefa, 
-        tarefa_ocorrencia.id_user, 
-        tarefa_ocorrencia.dt_inclusao
-		FROM tarefa_ocorrencia
-                WHERE tarefa_ocorrencia.id_ocorrencia = :idOcorrencia
-                 LIMIT 1000";
-                
-        try {
-            $stmt = $this->conexao->prepare($sql);
-                
-		    if(!$stmt){
-                echo "<br>Mensagem de erro retornada: ".$this->conexao->errorInfo()[2]."<br>";
-		    }
-            $stmt->bindParam(":idOcorrencia", $idOcorrencia, PDO::PARAM_INT);
-            $stmt->execute();
-		    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-		    foreach ( $result as $linha )
-            {
-                $tarefaOcorrencia->setId( $linha ['id'] );
-                $tarefaOcorrencia->setIdOcorrencia( $linha ['id_ocorrencia'] );
-                $tarefaOcorrencia->setTarefa( $linha ['tarefa'] );
-                $tarefaOcorrencia->setIdUser( $linha ['id_user'] );
-                $tarefaOcorrencia->setDtInclusao( $linha ['dt_inclusao'] );
+                $tarefaOcorrencia->setDataInclusao( $linha ['data_inclusao'] );
+                $tarefaOcorrencia->getOcorrencia()->setId( $linha ['id_ocorrencia_ocorrencia'] );
+                $tarefaOcorrencia->getOcorrencia()->setIdLocal( $linha ['id_local_ocorrencia_ocorrencia'] );
+                $tarefaOcorrencia->getOcorrencia()->setDescricao( $linha ['descricao_ocorrencia_ocorrencia'] );
+                $tarefaOcorrencia->getOcorrencia()->setCampus( $linha ['campus_ocorrencia_ocorrencia'] );
+                $tarefaOcorrencia->getOcorrencia()->setPatrimonio( $linha ['patrimonio_ocorrencia_ocorrencia'] );
+                $tarefaOcorrencia->getOcorrencia()->setRamal( $linha ['ramal_ocorrencia_ocorrencia'] );
+                $tarefaOcorrencia->getOcorrencia()->setLocal( $linha ['local_ocorrencia_ocorrencia'] );
+                $tarefaOcorrencia->getOcorrencia()->setStatus( $linha ['status_ocorrencia_ocorrencia'] );
+                $tarefaOcorrencia->getOcorrencia()->setSolucao( $linha ['solucao_ocorrencia_ocorrencia'] );
+                $tarefaOcorrencia->getOcorrencia()->setPrioridade( $linha ['prioridade_ocorrencia_ocorrencia'] );
+                $tarefaOcorrencia->getOcorrencia()->setAvaliacao( $linha ['avaliacao_ocorrencia_ocorrencia'] );
+                $tarefaOcorrencia->getOcorrencia()->setEmail( $linha ['email_ocorrencia_ocorrencia'] );
+                $tarefaOcorrencia->getOcorrencia()->setAnexo( $linha ['anexo_ocorrencia_ocorrencia'] );
+                $tarefaOcorrencia->getOcorrencia()->setLocalSala( $linha ['local_sala_ocorrencia_ocorrencia'] );
+                $tarefaOcorrencia->getUsuario()->setId( $linha ['id_usuario_usuario'] );
+                $tarefaOcorrencia->getUsuario()->setNome( $linha ['nome_usuario_usuario'] );
+                $tarefaOcorrencia->getUsuario()->setEmail( $linha ['email_usuario_usuario'] );
+                $tarefaOcorrencia->getUsuario()->setLogin( $linha ['login_usuario_usuario'] );
+                $tarefaOcorrencia->getUsuario()->setSenha( $linha ['senha_usuario_usuario'] );
+                $tarefaOcorrencia->getUsuario()->setNivel( $linha ['nivel_usuario_usuario'] );
                 
                 
 		    }
@@ -422,11 +509,31 @@ class TarefaOcorrenciaDAO extends DAO {
 	    $sql = "
 		SELECT
         tarefa_ocorrencia.id, 
-        tarefa_ocorrencia.id_ocorrencia, 
         tarefa_ocorrencia.tarefa, 
-        tarefa_ocorrencia.id_user, 
-        tarefa_ocorrencia.dt_inclusao
+        tarefa_ocorrencia.data_inclusao, 
+        ocorrencia.id as id_ocorrencia_ocorrencia, 
+        ocorrencia.id_local as id_local_ocorrencia_ocorrencia, 
+        ocorrencia.descricao as descricao_ocorrencia_ocorrencia, 
+        ocorrencia.campus as campus_ocorrencia_ocorrencia, 
+        ocorrencia.patrimonio as patrimonio_ocorrencia_ocorrencia, 
+        ocorrencia.ramal as ramal_ocorrencia_ocorrencia, 
+        ocorrencia.local as local_ocorrencia_ocorrencia, 
+        ocorrencia.status as status_ocorrencia_ocorrencia, 
+        ocorrencia.solucao as solucao_ocorrencia_ocorrencia, 
+        ocorrencia.prioridade as prioridade_ocorrencia_ocorrencia, 
+        ocorrencia.avaliacao as avaliacao_ocorrencia_ocorrencia, 
+        ocorrencia.email as email_ocorrencia_ocorrencia, 
+        ocorrencia.anexo as anexo_ocorrencia_ocorrencia, 
+        ocorrencia.local_sala as local_sala_ocorrencia_ocorrencia, 
+        usuario.id as id_usuario_usuario, 
+        usuario.nome as nome_usuario_usuario, 
+        usuario.email as email_usuario_usuario, 
+        usuario.login as login_usuario_usuario, 
+        usuario.senha as senha_usuario_usuario, 
+        usuario.nivel as nivel_usuario_usuario
 		FROM tarefa_ocorrencia
+		INNER JOIN ocorrencia as ocorrencia ON ocorrencia.id = tarefa_ocorrencia.id_ocorrencia
+		INNER JOIN usuario as usuario ON usuario.id = tarefa_ocorrencia.id_usuario
                 WHERE tarefa_ocorrencia.tarefa = :tarefa
                  LIMIT 1000";
                 
@@ -442,10 +549,28 @@ class TarefaOcorrenciaDAO extends DAO {
 		    foreach ( $result as $linha )
             {
                 $tarefaOcorrencia->setId( $linha ['id'] );
-                $tarefaOcorrencia->setIdOcorrencia( $linha ['id_ocorrencia'] );
                 $tarefaOcorrencia->setTarefa( $linha ['tarefa'] );
-                $tarefaOcorrencia->setIdUser( $linha ['id_user'] );
-                $tarefaOcorrencia->setDtInclusao( $linha ['dt_inclusao'] );
+                $tarefaOcorrencia->setDataInclusao( $linha ['data_inclusao'] );
+                $tarefaOcorrencia->getOcorrencia()->setId( $linha ['id_ocorrencia_ocorrencia'] );
+                $tarefaOcorrencia->getOcorrencia()->setIdLocal( $linha ['id_local_ocorrencia_ocorrencia'] );
+                $tarefaOcorrencia->getOcorrencia()->setDescricao( $linha ['descricao_ocorrencia_ocorrencia'] );
+                $tarefaOcorrencia->getOcorrencia()->setCampus( $linha ['campus_ocorrencia_ocorrencia'] );
+                $tarefaOcorrencia->getOcorrencia()->setPatrimonio( $linha ['patrimonio_ocorrencia_ocorrencia'] );
+                $tarefaOcorrencia->getOcorrencia()->setRamal( $linha ['ramal_ocorrencia_ocorrencia'] );
+                $tarefaOcorrencia->getOcorrencia()->setLocal( $linha ['local_ocorrencia_ocorrencia'] );
+                $tarefaOcorrencia->getOcorrencia()->setStatus( $linha ['status_ocorrencia_ocorrencia'] );
+                $tarefaOcorrencia->getOcorrencia()->setSolucao( $linha ['solucao_ocorrencia_ocorrencia'] );
+                $tarefaOcorrencia->getOcorrencia()->setPrioridade( $linha ['prioridade_ocorrencia_ocorrencia'] );
+                $tarefaOcorrencia->getOcorrencia()->setAvaliacao( $linha ['avaliacao_ocorrencia_ocorrencia'] );
+                $tarefaOcorrencia->getOcorrencia()->setEmail( $linha ['email_ocorrencia_ocorrencia'] );
+                $tarefaOcorrencia->getOcorrencia()->setAnexo( $linha ['anexo_ocorrencia_ocorrencia'] );
+                $tarefaOcorrencia->getOcorrencia()->setLocalSala( $linha ['local_sala_ocorrencia_ocorrencia'] );
+                $tarefaOcorrencia->getUsuario()->setId( $linha ['id_usuario_usuario'] );
+                $tarefaOcorrencia->getUsuario()->setNome( $linha ['nome_usuario_usuario'] );
+                $tarefaOcorrencia->getUsuario()->setEmail( $linha ['email_usuario_usuario'] );
+                $tarefaOcorrencia->getUsuario()->setLogin( $linha ['login_usuario_usuario'] );
+                $tarefaOcorrencia->getUsuario()->setSenha( $linha ['senha_usuario_usuario'] );
+                $tarefaOcorrencia->getUsuario()->setNivel( $linha ['nivel_usuario_usuario'] );
                 
                 
 		    }
@@ -455,18 +580,38 @@ class TarefaOcorrenciaDAO extends DAO {
 		return $tarefaOcorrencia;
     }
                 
-    public function preenchePorIdUser(TarefaOcorrencia $tarefaOcorrencia) {
+    public function preenchePorDataInclusao(TarefaOcorrencia $tarefaOcorrencia) {
         
-	    $idUser = $tarefaOcorrencia->getIdUser();
+	    $dataInclusao = $tarefaOcorrencia->getDataInclusao();
 	    $sql = "
 		SELECT
         tarefa_ocorrencia.id, 
-        tarefa_ocorrencia.id_ocorrencia, 
         tarefa_ocorrencia.tarefa, 
-        tarefa_ocorrencia.id_user, 
-        tarefa_ocorrencia.dt_inclusao
+        tarefa_ocorrencia.data_inclusao, 
+        ocorrencia.id as id_ocorrencia_ocorrencia, 
+        ocorrencia.id_local as id_local_ocorrencia_ocorrencia, 
+        ocorrencia.descricao as descricao_ocorrencia_ocorrencia, 
+        ocorrencia.campus as campus_ocorrencia_ocorrencia, 
+        ocorrencia.patrimonio as patrimonio_ocorrencia_ocorrencia, 
+        ocorrencia.ramal as ramal_ocorrencia_ocorrencia, 
+        ocorrencia.local as local_ocorrencia_ocorrencia, 
+        ocorrencia.status as status_ocorrencia_ocorrencia, 
+        ocorrencia.solucao as solucao_ocorrencia_ocorrencia, 
+        ocorrencia.prioridade as prioridade_ocorrencia_ocorrencia, 
+        ocorrencia.avaliacao as avaliacao_ocorrencia_ocorrencia, 
+        ocorrencia.email as email_ocorrencia_ocorrencia, 
+        ocorrencia.anexo as anexo_ocorrencia_ocorrencia, 
+        ocorrencia.local_sala as local_sala_ocorrencia_ocorrencia, 
+        usuario.id as id_usuario_usuario, 
+        usuario.nome as nome_usuario_usuario, 
+        usuario.email as email_usuario_usuario, 
+        usuario.login as login_usuario_usuario, 
+        usuario.senha as senha_usuario_usuario, 
+        usuario.nivel as nivel_usuario_usuario
 		FROM tarefa_ocorrencia
-                WHERE tarefa_ocorrencia.id_user = :idUser
+		INNER JOIN ocorrencia as ocorrencia ON ocorrencia.id = tarefa_ocorrencia.id_ocorrencia
+		INNER JOIN usuario as usuario ON usuario.id = tarefa_ocorrencia.id_usuario
+                WHERE tarefa_ocorrencia.data_inclusao = :dataInclusao
                  LIMIT 1000";
                 
         try {
@@ -475,55 +620,34 @@ class TarefaOcorrenciaDAO extends DAO {
 		    if(!$stmt){
                 echo "<br>Mensagem de erro retornada: ".$this->conexao->errorInfo()[2]."<br>";
 		    }
-            $stmt->bindParam(":idUser", $idUser, PDO::PARAM_INT);
+            $stmt->bindParam(":dataInclusao", $dataInclusao, PDO::PARAM_STR);
             $stmt->execute();
 		    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 		    foreach ( $result as $linha )
             {
                 $tarefaOcorrencia->setId( $linha ['id'] );
-                $tarefaOcorrencia->setIdOcorrencia( $linha ['id_ocorrencia'] );
                 $tarefaOcorrencia->setTarefa( $linha ['tarefa'] );
-                $tarefaOcorrencia->setIdUser( $linha ['id_user'] );
-                $tarefaOcorrencia->setDtInclusao( $linha ['dt_inclusao'] );
-                
-                
-		    }
-		} catch(PDOException $e) {
-		    echo $e->getMessage();
- 		}
-		return $tarefaOcorrencia;
-    }
-                
-    public function preenchePorDtInclusao(TarefaOcorrencia $tarefaOcorrencia) {
-        
-	    $dtInclusao = $tarefaOcorrencia->getDtInclusao();
-	    $sql = "
-		SELECT
-        tarefa_ocorrencia.id, 
-        tarefa_ocorrencia.id_ocorrencia, 
-        tarefa_ocorrencia.tarefa, 
-        tarefa_ocorrencia.id_user, 
-        tarefa_ocorrencia.dt_inclusao
-		FROM tarefa_ocorrencia
-                WHERE tarefa_ocorrencia.dt_inclusao = :dtInclusao
-                 LIMIT 1000";
-                
-        try {
-            $stmt = $this->conexao->prepare($sql);
-                
-		    if(!$stmt){
-                echo "<br>Mensagem de erro retornada: ".$this->conexao->errorInfo()[2]."<br>";
-		    }
-            $stmt->bindParam(":dtInclusao", $dtInclusao, PDO::PARAM_STR);
-            $stmt->execute();
-		    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-		    foreach ( $result as $linha )
-            {
-                $tarefaOcorrencia->setId( $linha ['id'] );
-                $tarefaOcorrencia->setIdOcorrencia( $linha ['id_ocorrencia'] );
-                $tarefaOcorrencia->setTarefa( $linha ['tarefa'] );
-                $tarefaOcorrencia->setIdUser( $linha ['id_user'] );
-                $tarefaOcorrencia->setDtInclusao( $linha ['dt_inclusao'] );
+                $tarefaOcorrencia->setDataInclusao( $linha ['data_inclusao'] );
+                $tarefaOcorrencia->getOcorrencia()->setId( $linha ['id_ocorrencia_ocorrencia'] );
+                $tarefaOcorrencia->getOcorrencia()->setIdLocal( $linha ['id_local_ocorrencia_ocorrencia'] );
+                $tarefaOcorrencia->getOcorrencia()->setDescricao( $linha ['descricao_ocorrencia_ocorrencia'] );
+                $tarefaOcorrencia->getOcorrencia()->setCampus( $linha ['campus_ocorrencia_ocorrencia'] );
+                $tarefaOcorrencia->getOcorrencia()->setPatrimonio( $linha ['patrimonio_ocorrencia_ocorrencia'] );
+                $tarefaOcorrencia->getOcorrencia()->setRamal( $linha ['ramal_ocorrencia_ocorrencia'] );
+                $tarefaOcorrencia->getOcorrencia()->setLocal( $linha ['local_ocorrencia_ocorrencia'] );
+                $tarefaOcorrencia->getOcorrencia()->setStatus( $linha ['status_ocorrencia_ocorrencia'] );
+                $tarefaOcorrencia->getOcorrencia()->setSolucao( $linha ['solucao_ocorrencia_ocorrencia'] );
+                $tarefaOcorrencia->getOcorrencia()->setPrioridade( $linha ['prioridade_ocorrencia_ocorrencia'] );
+                $tarefaOcorrencia->getOcorrencia()->setAvaliacao( $linha ['avaliacao_ocorrencia_ocorrencia'] );
+                $tarefaOcorrencia->getOcorrencia()->setEmail( $linha ['email_ocorrencia_ocorrencia'] );
+                $tarefaOcorrencia->getOcorrencia()->setAnexo( $linha ['anexo_ocorrencia_ocorrencia'] );
+                $tarefaOcorrencia->getOcorrencia()->setLocalSala( $linha ['local_sala_ocorrencia_ocorrencia'] );
+                $tarefaOcorrencia->getUsuario()->setId( $linha ['id_usuario_usuario'] );
+                $tarefaOcorrencia->getUsuario()->setNome( $linha ['nome_usuario_usuario'] );
+                $tarefaOcorrencia->getUsuario()->setEmail( $linha ['email_usuario_usuario'] );
+                $tarefaOcorrencia->getUsuario()->setLogin( $linha ['login_usuario_usuario'] );
+                $tarefaOcorrencia->getUsuario()->setSenha( $linha ['senha_usuario_usuario'] );
+                $tarefaOcorrencia->getUsuario()->setNivel( $linha ['nivel_usuario_usuario'] );
                 
                 
 		    }

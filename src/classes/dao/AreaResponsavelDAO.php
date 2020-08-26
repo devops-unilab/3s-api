@@ -25,13 +25,11 @@ class AreaResponsavelDAO extends DAO {
                 SET
                 nome = :nome,
                 descricao = :descricao,
-                email = :email,
-                id_admin = :idAdmin
+                email = :email
                 WHERE area_responsavel.id = :id;";
 			$nome = $areaResponsavel->getNome();
 			$descricao = $areaResponsavel->getDescricao();
 			$email = $areaResponsavel->getEmail();
-			$idAdmin = $areaResponsavel->getIdAdmin();
             
         try {
             
@@ -40,7 +38,6 @@ class AreaResponsavelDAO extends DAO {
 			$stmt->bindParam(":nome", $nome, PDO::PARAM_STR);
 			$stmt->bindParam(":descricao", $descricao, PDO::PARAM_STR);
 			$stmt->bindParam(":email", $email, PDO::PARAM_STR);
-			$stmt->bindParam(":idAdmin", $idAdmin, PDO::PARAM_INT);
             
             return $stmt->execute();
         } catch (PDOException $e) {
@@ -52,18 +49,16 @@ class AreaResponsavelDAO extends DAO {
             
 
     public function inserir(AreaResponsavel $areaResponsavel){
-        $sql = "INSERT INTO area_responsavel(nome, descricao, email, id_admin) VALUES (:nome, :descricao, :email, :idAdmin);";
+        $sql = "INSERT INTO area_responsavel(nome, descricao, email) VALUES (:nome, :descricao, :email);";
 		$nome = $areaResponsavel->getNome();
 		$descricao = $areaResponsavel->getDescricao();
 		$email = $areaResponsavel->getEmail();
-		$idAdmin = $areaResponsavel->getIdAdmin();
 		try {
 			$db = $this->getConexao();
 			$stmt = $db->prepare($sql);
 			$stmt->bindParam(":nome", $nome, PDO::PARAM_STR);
 			$stmt->bindParam(":descricao", $descricao, PDO::PARAM_STR);
 			$stmt->bindParam(":email", $email, PDO::PARAM_STR);
-			$stmt->bindParam(":idAdmin", $idAdmin, PDO::PARAM_INT);
 			return $stmt->execute();
 		} catch(PDOException $e) {
 			echo '{"error":{"text":'. $e->getMessage() .'}}';
@@ -71,12 +66,11 @@ class AreaResponsavelDAO extends DAO {
             
     }
     public function inserirComPK(AreaResponsavel $areaResponsavel){
-        $sql = "INSERT INTO area_responsavel(id, nome, descricao, email, id_admin) VALUES (:id, :nome, :descricao, :email, :idAdmin);";
+        $sql = "INSERT INTO area_responsavel(id, nome, descricao, email) VALUES (:id, :nome, :descricao, :email);";
 		$id = $areaResponsavel->getId();
 		$nome = $areaResponsavel->getNome();
 		$descricao = $areaResponsavel->getDescricao();
 		$email = $areaResponsavel->getEmail();
-		$idAdmin = $areaResponsavel->getIdAdmin();
 		try {
 			$db = $this->getConexao();
 			$stmt = $db->prepare($sql);
@@ -84,7 +78,6 @@ class AreaResponsavelDAO extends DAO {
 			$stmt->bindParam(":nome", $nome, PDO::PARAM_STR);
 			$stmt->bindParam(":descricao", $descricao, PDO::PARAM_STR);
 			$stmt->bindParam(":email", $email, PDO::PARAM_STR);
-			$stmt->bindParam(":idAdmin", $idAdmin, PDO::PARAM_INT);
 			return $stmt->execute();
 		} catch(PDOException $e) {
 			echo '{"error":{"text":'. $e->getMessage() .'}}';
@@ -115,8 +108,7 @@ class AreaResponsavelDAO extends DAO {
         area_responsavel.id, 
         area_responsavel.nome, 
         area_responsavel.descricao, 
-        area_responsavel.email, 
-        area_responsavel.id_admin
+        area_responsavel.email
 		FROM area_responsavel
                  LIMIT 1000";
 
@@ -136,7 +128,6 @@ class AreaResponsavelDAO extends DAO {
                 $areaResponsavel->setNome( $linha ['nome'] );
                 $areaResponsavel->setDescricao( $linha ['descricao'] );
                 $areaResponsavel->setEmail( $linha ['email'] );
-                $areaResponsavel->setIdAdmin( $linha ['id_admin'] );
                 $lista [] = $areaResponsavel;
 
 	
@@ -157,8 +148,7 @@ class AreaResponsavelDAO extends DAO {
         area_responsavel.id, 
         area_responsavel.nome, 
         area_responsavel.descricao, 
-        area_responsavel.email, 
-        area_responsavel.id_admin
+        area_responsavel.email
 		FROM area_responsavel
             WHERE area_responsavel.id = :id";
                 
@@ -174,7 +164,6 @@ class AreaResponsavelDAO extends DAO {
     	        $areaResponsavel->setNome( $linha ['nome'] );
     	        $areaResponsavel->setDescricao( $linha ['descricao'] );
     	        $areaResponsavel->setEmail( $linha ['email'] );
-    	        $areaResponsavel->setIdAdmin( $linha ['id_admin'] );
     			$lista [] = $areaResponsavel;
     			    
             }
@@ -195,8 +184,7 @@ class AreaResponsavelDAO extends DAO {
         area_responsavel.id, 
         area_responsavel.nome, 
         area_responsavel.descricao, 
-        area_responsavel.email, 
-        area_responsavel.id_admin
+        area_responsavel.email
 		FROM area_responsavel
             WHERE area_responsavel.nome like :nome";
                 
@@ -212,7 +200,6 @@ class AreaResponsavelDAO extends DAO {
     	        $areaResponsavel->setNome( $linha ['nome'] );
     	        $areaResponsavel->setDescricao( $linha ['descricao'] );
     	        $areaResponsavel->setEmail( $linha ['email'] );
-    	        $areaResponsavel->setIdAdmin( $linha ['id_admin'] );
     			$lista [] = $areaResponsavel;
     			    
             }
@@ -233,8 +220,7 @@ class AreaResponsavelDAO extends DAO {
         area_responsavel.id, 
         area_responsavel.nome, 
         area_responsavel.descricao, 
-        area_responsavel.email, 
-        area_responsavel.id_admin
+        area_responsavel.email
 		FROM area_responsavel
             WHERE area_responsavel.descricao like :descricao";
                 
@@ -250,7 +236,6 @@ class AreaResponsavelDAO extends DAO {
     	        $areaResponsavel->setNome( $linha ['nome'] );
     	        $areaResponsavel->setDescricao( $linha ['descricao'] );
     	        $areaResponsavel->setEmail( $linha ['email'] );
-    	        $areaResponsavel->setIdAdmin( $linha ['id_admin'] );
     			$lista [] = $areaResponsavel;
     			    
             }
@@ -271,8 +256,7 @@ class AreaResponsavelDAO extends DAO {
         area_responsavel.id, 
         area_responsavel.nome, 
         area_responsavel.descricao, 
-        area_responsavel.email, 
-        area_responsavel.id_admin
+        area_responsavel.email
 		FROM area_responsavel
             WHERE area_responsavel.email like :email";
                 
@@ -288,45 +272,6 @@ class AreaResponsavelDAO extends DAO {
     	        $areaResponsavel->setNome( $linha ['nome'] );
     	        $areaResponsavel->setDescricao( $linha ['descricao'] );
     	        $areaResponsavel->setEmail( $linha ['email'] );
-    	        $areaResponsavel->setIdAdmin( $linha ['id_admin'] );
-    			$lista [] = $areaResponsavel;
-    			    
-            }
-    			    
-        } catch(PDOException $e) {
-            echo $e->getMessage();
-    			    
-        }
-		return $lista;
-    }
-                
-    public function pesquisaPorIdAdmin(AreaResponsavel $areaResponsavel) {
-        $lista = array();
-	    $idAdmin = $areaResponsavel->getIdAdmin();
-                
-        $sql = "
-		SELECT
-        area_responsavel.id, 
-        area_responsavel.nome, 
-        area_responsavel.descricao, 
-        area_responsavel.email, 
-        area_responsavel.id_admin
-		FROM area_responsavel
-            WHERE area_responsavel.id_admin = :idAdmin";
-                
-        try {
-                
-            $stmt = $this->conexao->prepare($sql);
-            $stmt->bindParam(":idAdmin", $idAdmin, PDO::PARAM_INT);
-            $stmt->execute();
-            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            foreach ( $result as $linha ) {
-                $areaResponsavel = new AreaResponsavel();
-    	        $areaResponsavel->setId( $linha ['id'] );
-    	        $areaResponsavel->setNome( $linha ['nome'] );
-    	        $areaResponsavel->setDescricao( $linha ['descricao'] );
-    	        $areaResponsavel->setEmail( $linha ['email'] );
-    	        $areaResponsavel->setIdAdmin( $linha ['id_admin'] );
     			$lista [] = $areaResponsavel;
     			    
             }
@@ -346,8 +291,7 @@ class AreaResponsavelDAO extends DAO {
         area_responsavel.id, 
         area_responsavel.nome, 
         area_responsavel.descricao, 
-        area_responsavel.email, 
-        area_responsavel.id_admin
+        area_responsavel.email
 		FROM area_responsavel
                 WHERE area_responsavel.id = :id
                  LIMIT 1000";
@@ -367,7 +311,6 @@ class AreaResponsavelDAO extends DAO {
                 $areaResponsavel->setNome( $linha ['nome'] );
                 $areaResponsavel->setDescricao( $linha ['descricao'] );
                 $areaResponsavel->setEmail( $linha ['email'] );
-                $areaResponsavel->setIdAdmin( $linha ['id_admin'] );
                 
                 
 		    }
@@ -385,8 +328,7 @@ class AreaResponsavelDAO extends DAO {
         area_responsavel.id, 
         area_responsavel.nome, 
         area_responsavel.descricao, 
-        area_responsavel.email, 
-        area_responsavel.id_admin
+        area_responsavel.email
 		FROM area_responsavel
                 WHERE area_responsavel.nome = :nome
                  LIMIT 1000";
@@ -406,7 +348,6 @@ class AreaResponsavelDAO extends DAO {
                 $areaResponsavel->setNome( $linha ['nome'] );
                 $areaResponsavel->setDescricao( $linha ['descricao'] );
                 $areaResponsavel->setEmail( $linha ['email'] );
-                $areaResponsavel->setIdAdmin( $linha ['id_admin'] );
                 
                 
 		    }
@@ -424,8 +365,7 @@ class AreaResponsavelDAO extends DAO {
         area_responsavel.id, 
         area_responsavel.nome, 
         area_responsavel.descricao, 
-        area_responsavel.email, 
-        area_responsavel.id_admin
+        area_responsavel.email
 		FROM area_responsavel
                 WHERE area_responsavel.descricao = :descricao
                  LIMIT 1000";
@@ -445,7 +385,6 @@ class AreaResponsavelDAO extends DAO {
                 $areaResponsavel->setNome( $linha ['nome'] );
                 $areaResponsavel->setDescricao( $linha ['descricao'] );
                 $areaResponsavel->setEmail( $linha ['email'] );
-                $areaResponsavel->setIdAdmin( $linha ['id_admin'] );
                 
                 
 		    }
@@ -463,8 +402,7 @@ class AreaResponsavelDAO extends DAO {
         area_responsavel.id, 
         area_responsavel.nome, 
         area_responsavel.descricao, 
-        area_responsavel.email, 
-        area_responsavel.id_admin
+        area_responsavel.email
 		FROM area_responsavel
                 WHERE area_responsavel.email = :email
                  LIMIT 1000";
@@ -484,46 +422,6 @@ class AreaResponsavelDAO extends DAO {
                 $areaResponsavel->setNome( $linha ['nome'] );
                 $areaResponsavel->setDescricao( $linha ['descricao'] );
                 $areaResponsavel->setEmail( $linha ['email'] );
-                $areaResponsavel->setIdAdmin( $linha ['id_admin'] );
-                
-                
-		    }
-		} catch(PDOException $e) {
-		    echo $e->getMessage();
- 		}
-		return $areaResponsavel;
-    }
-                
-    public function preenchePorIdAdmin(AreaResponsavel $areaResponsavel) {
-        
-	    $idAdmin = $areaResponsavel->getIdAdmin();
-	    $sql = "
-		SELECT
-        area_responsavel.id, 
-        area_responsavel.nome, 
-        area_responsavel.descricao, 
-        area_responsavel.email, 
-        area_responsavel.id_admin
-		FROM area_responsavel
-                WHERE area_responsavel.id_admin = :idAdmin
-                 LIMIT 1000";
-                
-        try {
-            $stmt = $this->conexao->prepare($sql);
-                
-		    if(!$stmt){
-                echo "<br>Mensagem de erro retornada: ".$this->conexao->errorInfo()[2]."<br>";
-		    }
-            $stmt->bindParam(":idAdmin", $idAdmin, PDO::PARAM_INT);
-            $stmt->execute();
-		    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-		    foreach ( $result as $linha )
-            {
-                $areaResponsavel->setId( $linha ['id'] );
-                $areaResponsavel->setNome( $linha ['nome'] );
-                $areaResponsavel->setDescricao( $linha ['descricao'] );
-                $areaResponsavel->setEmail( $linha ['email'] );
-                $areaResponsavel->setIdAdmin( $linha ['id_admin'] );
                 
                 
 		    }

@@ -25,17 +25,11 @@ class MensagemForumDAO extends DAO {
                 SET
                 tipo = :tipo,
                 mensagem = :mensagem,
-                id_user = :idUser,
-                dt_envio = :dtEnvio,
-                origem = :origem,
-                ativo = :ativo
+                data_envio = :dataEnvio
                 WHERE mensagem_forum.id = :id;";
 			$tipo = $mensagemForum->getTipo();
 			$mensagem = $mensagemForum->getMensagem();
-			$idUser = $mensagemForum->getIdUser();
-			$dtEnvio = $mensagemForum->getDtEnvio();
-			$origem = $mensagemForum->getOrigem();
-			$ativo = $mensagemForum->getAtivo();
+			$dataEnvio = $mensagemForum->getDataEnvio();
             
         try {
             
@@ -43,10 +37,7 @@ class MensagemForumDAO extends DAO {
 			$stmt->bindParam(":id", $id, PDO::PARAM_INT);
 			$stmt->bindParam(":tipo", $tipo, PDO::PARAM_INT);
 			$stmt->bindParam(":mensagem", $mensagem, PDO::PARAM_STR);
-			$stmt->bindParam(":idUser", $idUser, PDO::PARAM_INT);
-			$stmt->bindParam(":dtEnvio", $dtEnvio, PDO::PARAM_STR);
-			$stmt->bindParam(":origem", $origem, PDO::PARAM_INT);
-			$stmt->bindParam(":ativo", $ativo, PDO::PARAM_BOOL);
+			$stmt->bindParam(":dataEnvio", $dataEnvio, PDO::PARAM_STR);
             
             return $stmt->execute();
         } catch (PDOException $e) {
@@ -58,22 +49,20 @@ class MensagemForumDAO extends DAO {
             
 
     public function inserir(MensagemForum $mensagemForum){
-        $sql = "INSERT INTO mensagem_forum(tipo, mensagem, id_user, dt_envio, origem, ativo) VALUES (:tipo, :mensagem, :idUser, :dtEnvio, :origem, :ativo);";
+        $sql = "INSERT INTO mensagem_forum(id_ocorrencia, tipo, mensagem, id_usuario, data_envio) VALUES (:ocorrencia, :tipo, :mensagem, :usuario, :dataEnvio);";
+		$ocorrencia = $mensagemForum->getOcorrencia()->getId();
 		$tipo = $mensagemForum->getTipo();
 		$mensagem = $mensagemForum->getMensagem();
-		$idUser = $mensagemForum->getIdUser();
-		$dtEnvio = $mensagemForum->getDtEnvio();
-		$origem = $mensagemForum->getOrigem();
-		$ativo = $mensagemForum->getAtivo();
+		$usuario = $mensagemForum->getUsuario()->getId();
+		$dataEnvio = $mensagemForum->getDataEnvio();
 		try {
 			$db = $this->getConexao();
 			$stmt = $db->prepare($sql);
+			$stmt->bindParam(":ocorrencia", $ocorrencia, PDO::PARAM_INT);
 			$stmt->bindParam(":tipo", $tipo, PDO::PARAM_INT);
 			$stmt->bindParam(":mensagem", $mensagem, PDO::PARAM_STR);
-			$stmt->bindParam(":idUser", $idUser, PDO::PARAM_INT);
-			$stmt->bindParam(":dtEnvio", $dtEnvio, PDO::PARAM_STR);
-			$stmt->bindParam(":origem", $origem, PDO::PARAM_INT);
-			$stmt->bindParam(":ativo", $ativo, PDO::PARAM_BOOL);
+			$stmt->bindParam(":usuario", $usuario, PDO::PARAM_INT);
+			$stmt->bindParam(":dataEnvio", $dataEnvio, PDO::PARAM_STR);
 			return $stmt->execute();
 		} catch(PDOException $e) {
 			echo '{"error":{"text":'. $e->getMessage() .'}}';
@@ -81,24 +70,22 @@ class MensagemForumDAO extends DAO {
             
     }
     public function inserirComPK(MensagemForum $mensagemForum){
-        $sql = "INSERT INTO mensagem_forum(id, tipo, mensagem, id_user, dt_envio, origem, ativo) VALUES (:id, :tipo, :mensagem, :idUser, :dtEnvio, :origem, :ativo);";
+        $sql = "INSERT INTO mensagem_forum(id, id_ocorrencia_ocorrencia, tipo, mensagem, id_usuario_usuario, data_envio) VALUES (:id, :ocorrencia, :tipo, :mensagem, :usuario, :dataEnvio);";
 		$id = $mensagemForum->getId();
+		$ocorrencia = $mensagemForum->getOcorrencia()->getId();
 		$tipo = $mensagemForum->getTipo();
 		$mensagem = $mensagemForum->getMensagem();
-		$idUser = $mensagemForum->getIdUser();
-		$dtEnvio = $mensagemForum->getDtEnvio();
-		$origem = $mensagemForum->getOrigem();
-		$ativo = $mensagemForum->getAtivo();
+		$usuario = $mensagemForum->getUsuario()->getId();
+		$dataEnvio = $mensagemForum->getDataEnvio();
 		try {
 			$db = $this->getConexao();
 			$stmt = $db->prepare($sql);
 			$stmt->bindParam(":id", $id, PDO::PARAM_INT);
+			$stmt->bindParam(":ocorrencia", $ocorrencia, PDO::PARAM_INT);
 			$stmt->bindParam(":tipo", $tipo, PDO::PARAM_INT);
 			$stmt->bindParam(":mensagem", $mensagem, PDO::PARAM_STR);
-			$stmt->bindParam(":idUser", $idUser, PDO::PARAM_INT);
-			$stmt->bindParam(":dtEnvio", $dtEnvio, PDO::PARAM_STR);
-			$stmt->bindParam(":origem", $origem, PDO::PARAM_INT);
-			$stmt->bindParam(":ativo", $ativo, PDO::PARAM_BOOL);
+			$stmt->bindParam(":usuario", $usuario, PDO::PARAM_INT);
+			$stmt->bindParam(":dataEnvio", $dataEnvio, PDO::PARAM_STR);
 			return $stmt->execute();
 		} catch(PDOException $e) {
 			echo '{"error":{"text":'. $e->getMessage() .'}}';
@@ -129,11 +116,30 @@ class MensagemForumDAO extends DAO {
         mensagem_forum.id, 
         mensagem_forum.tipo, 
         mensagem_forum.mensagem, 
-        mensagem_forum.id_user, 
-        mensagem_forum.dt_envio, 
-        mensagem_forum.origem, 
-        mensagem_forum.ativo
+        mensagem_forum.data_envio, 
+        ocorrencia.id as id_ocorrencia_ocorrencia, 
+        ocorrencia.id_local as id_local_ocorrencia_ocorrencia, 
+        ocorrencia.descricao as descricao_ocorrencia_ocorrencia, 
+        ocorrencia.campus as campus_ocorrencia_ocorrencia, 
+        ocorrencia.patrimonio as patrimonio_ocorrencia_ocorrencia, 
+        ocorrencia.ramal as ramal_ocorrencia_ocorrencia, 
+        ocorrencia.local as local_ocorrencia_ocorrencia, 
+        ocorrencia.status as status_ocorrencia_ocorrencia, 
+        ocorrencia.solucao as solucao_ocorrencia_ocorrencia, 
+        ocorrencia.prioridade as prioridade_ocorrencia_ocorrencia, 
+        ocorrencia.avaliacao as avaliacao_ocorrencia_ocorrencia, 
+        ocorrencia.email as email_ocorrencia_ocorrencia, 
+        ocorrencia.anexo as anexo_ocorrencia_ocorrencia, 
+        ocorrencia.local_sala as local_sala_ocorrencia_ocorrencia, 
+        usuario.id as id_usuario_usuario, 
+        usuario.nome as nome_usuario_usuario, 
+        usuario.email as email_usuario_usuario, 
+        usuario.login as login_usuario_usuario, 
+        usuario.senha as senha_usuario_usuario, 
+        usuario.nivel as nivel_usuario_usuario
 		FROM mensagem_forum
+		INNER JOIN ocorrencia as ocorrencia ON ocorrencia.id = mensagem_forum.id_ocorrencia
+		INNER JOIN usuario as usuario ON usuario.id = mensagem_forum.id_usuario
                  LIMIT 1000";
 
         try {
@@ -151,10 +157,27 @@ class MensagemForumDAO extends DAO {
                 $mensagemForum->setId( $linha ['id'] );
                 $mensagemForum->setTipo( $linha ['tipo'] );
                 $mensagemForum->setMensagem( $linha ['mensagem'] );
-                $mensagemForum->setIdUser( $linha ['id_user'] );
-                $mensagemForum->setDtEnvio( $linha ['dt_envio'] );
-                $mensagemForum->setOrigem( $linha ['origem'] );
-                $mensagemForum->setAtivo( $linha ['ativo'] );
+                $mensagemForum->setDataEnvio( $linha ['data_envio'] );
+                $mensagemForum->getOcorrencia()->setId( $linha ['id_ocorrencia_ocorrencia'] );
+                $mensagemForum->getOcorrencia()->setIdLocal( $linha ['id_local_ocorrencia_ocorrencia'] );
+                $mensagemForum->getOcorrencia()->setDescricao( $linha ['descricao_ocorrencia_ocorrencia'] );
+                $mensagemForum->getOcorrencia()->setCampus( $linha ['campus_ocorrencia_ocorrencia'] );
+                $mensagemForum->getOcorrencia()->setPatrimonio( $linha ['patrimonio_ocorrencia_ocorrencia'] );
+                $mensagemForum->getOcorrencia()->setRamal( $linha ['ramal_ocorrencia_ocorrencia'] );
+                $mensagemForum->getOcorrencia()->setLocal( $linha ['local_ocorrencia_ocorrencia'] );
+                $mensagemForum->getOcorrencia()->setStatus( $linha ['status_ocorrencia_ocorrencia'] );
+                $mensagemForum->getOcorrencia()->setSolucao( $linha ['solucao_ocorrencia_ocorrencia'] );
+                $mensagemForum->getOcorrencia()->setPrioridade( $linha ['prioridade_ocorrencia_ocorrencia'] );
+                $mensagemForum->getOcorrencia()->setAvaliacao( $linha ['avaliacao_ocorrencia_ocorrencia'] );
+                $mensagemForum->getOcorrencia()->setEmail( $linha ['email_ocorrencia_ocorrencia'] );
+                $mensagemForum->getOcorrencia()->setAnexo( $linha ['anexo_ocorrencia_ocorrencia'] );
+                $mensagemForum->getOcorrencia()->setLocalSala( $linha ['local_sala_ocorrencia_ocorrencia'] );
+                $mensagemForum->getUsuario()->setId( $linha ['id_usuario_usuario'] );
+                $mensagemForum->getUsuario()->setNome( $linha ['nome_usuario_usuario'] );
+                $mensagemForum->getUsuario()->setEmail( $linha ['email_usuario_usuario'] );
+                $mensagemForum->getUsuario()->setLogin( $linha ['login_usuario_usuario'] );
+                $mensagemForum->getUsuario()->setSenha( $linha ['senha_usuario_usuario'] );
+                $mensagemForum->getUsuario()->setNivel( $linha ['nivel_usuario_usuario'] );
                 $lista [] = $mensagemForum;
 
 	
@@ -175,11 +198,30 @@ class MensagemForumDAO extends DAO {
         mensagem_forum.id, 
         mensagem_forum.tipo, 
         mensagem_forum.mensagem, 
-        mensagem_forum.id_user, 
-        mensagem_forum.dt_envio, 
-        mensagem_forum.origem, 
-        mensagem_forum.ativo
+        mensagem_forum.data_envio, 
+        ocorrencia.id as id_ocorrencia_ocorrencia, 
+        ocorrencia.id_local as id_local_ocorrencia_ocorrencia, 
+        ocorrencia.descricao as descricao_ocorrencia_ocorrencia, 
+        ocorrencia.campus as campus_ocorrencia_ocorrencia, 
+        ocorrencia.patrimonio as patrimonio_ocorrencia_ocorrencia, 
+        ocorrencia.ramal as ramal_ocorrencia_ocorrencia, 
+        ocorrencia.local as local_ocorrencia_ocorrencia, 
+        ocorrencia.status as status_ocorrencia_ocorrencia, 
+        ocorrencia.solucao as solucao_ocorrencia_ocorrencia, 
+        ocorrencia.prioridade as prioridade_ocorrencia_ocorrencia, 
+        ocorrencia.avaliacao as avaliacao_ocorrencia_ocorrencia, 
+        ocorrencia.email as email_ocorrencia_ocorrencia, 
+        ocorrencia.anexo as anexo_ocorrencia_ocorrencia, 
+        ocorrencia.local_sala as local_sala_ocorrencia_ocorrencia, 
+        usuario.id as id_usuario_usuario, 
+        usuario.nome as nome_usuario_usuario, 
+        usuario.email as email_usuario_usuario, 
+        usuario.login as login_usuario_usuario, 
+        usuario.senha as senha_usuario_usuario, 
+        usuario.nivel as nivel_usuario_usuario
 		FROM mensagem_forum
+		INNER JOIN ocorrencia as ocorrencia ON ocorrencia.id = mensagem_forum.id_ocorrencia
+		INNER JOIN usuario as usuario ON usuario.id = mensagem_forum.id_usuario
             WHERE mensagem_forum.id = :id";
                 
         try {
@@ -193,10 +235,33 @@ class MensagemForumDAO extends DAO {
     	        $mensagemForum->setId( $linha ['id'] );
     	        $mensagemForum->setTipo( $linha ['tipo'] );
     	        $mensagemForum->setMensagem( $linha ['mensagem'] );
-    	        $mensagemForum->setIdUser( $linha ['id_user'] );
-    	        $mensagemForum->setDtEnvio( $linha ['dt_envio'] );
-    	        $mensagemForum->setOrigem( $linha ['origem'] );
-    	        $mensagemForum->setAtivo( $linha ['ativo'] );
+    	        $mensagemForum->setDataEnvio( $linha ['data_envio'] );
+    			$mensagemForum->getOcorrencia()->setId( $linha ['id_ocorrencia_ocorrencia'] );
+    			$mensagemForum->getOcorrencia()->setAreaResponsavel( $linha ['area_responsavel_ocorrencia_ocorrencia'] );
+    			$mensagemForum->getOcorrencia()->setServico( $linha ['servico_ocorrencia_ocorrencia'] );
+    			$mensagemForum->getOcorrencia()->setIdLocal( $linha ['id_local_ocorrencia_ocorrencia'] );
+    			$mensagemForum->getOcorrencia()->setUsuarioCliente( $linha ['usuario_cliente_ocorrencia_ocorrencia'] );
+    			$mensagemForum->getOcorrencia()->setDescricao( $linha ['descricao_ocorrencia_ocorrencia'] );
+    			$mensagemForum->getOcorrencia()->setCampus( $linha ['campus_ocorrencia_ocorrencia'] );
+    			$mensagemForum->getOcorrencia()->setPatrimonio( $linha ['patrimonio_ocorrencia_ocorrencia'] );
+    			$mensagemForum->getOcorrencia()->setRamal( $linha ['ramal_ocorrencia_ocorrencia'] );
+    			$mensagemForum->getOcorrencia()->setLocal( $linha ['local_ocorrencia_ocorrencia'] );
+    			$mensagemForum->getOcorrencia()->setStatus( $linha ['status_ocorrencia_ocorrencia'] );
+    			$mensagemForum->getOcorrencia()->setSolucao( $linha ['solucao_ocorrencia_ocorrencia'] );
+    			$mensagemForum->getOcorrencia()->setPrioridade( $linha ['prioridade_ocorrencia_ocorrencia'] );
+    			$mensagemForum->getOcorrencia()->setAvaliacao( $linha ['avaliacao_ocorrencia_ocorrencia'] );
+    			$mensagemForum->getOcorrencia()->setEmail( $linha ['email_ocorrencia_ocorrencia'] );
+    			$mensagemForum->getOcorrencia()->setUsuarioAtendente( $linha ['usuario_atendente_ocorrencia_ocorrencia'] );
+    			$mensagemForum->getOcorrencia()->setUsuarioIndicado( $linha ['usuario_indicado_ocorrencia_ocorrencia'] );
+    			$mensagemForum->getOcorrencia()->setAnexo( $linha ['anexo_ocorrencia_ocorrencia'] );
+    			$mensagemForum->getOcorrencia()->setLocalSala( $linha ['local_sala_ocorrencia_ocorrencia'] );
+    			$mensagemForum->getUsuario()->setId( $linha ['id_usuario_usuario'] );
+    			$mensagemForum->getUsuario()->setNome( $linha ['nome_usuario_usuario'] );
+    			$mensagemForum->getUsuario()->setEmail( $linha ['email_usuario_usuario'] );
+    			$mensagemForum->getUsuario()->setLogin( $linha ['login_usuario_usuario'] );
+    			$mensagemForum->getUsuario()->setSenha( $linha ['senha_usuario_usuario'] );
+    			$mensagemForum->getUsuario()->setNivel( $linha ['nivel_usuario_usuario'] );
+    			$mensagemForum->getUsuario()->setSetor( $linha ['setor_usuario_usuario'] );
     			$lista [] = $mensagemForum;
     			    
             }
@@ -217,11 +282,30 @@ class MensagemForumDAO extends DAO {
         mensagem_forum.id, 
         mensagem_forum.tipo, 
         mensagem_forum.mensagem, 
-        mensagem_forum.id_user, 
-        mensagem_forum.dt_envio, 
-        mensagem_forum.origem, 
-        mensagem_forum.ativo
+        mensagem_forum.data_envio, 
+        ocorrencia.id as id_ocorrencia_ocorrencia, 
+        ocorrencia.id_local as id_local_ocorrencia_ocorrencia, 
+        ocorrencia.descricao as descricao_ocorrencia_ocorrencia, 
+        ocorrencia.campus as campus_ocorrencia_ocorrencia, 
+        ocorrencia.patrimonio as patrimonio_ocorrencia_ocorrencia, 
+        ocorrencia.ramal as ramal_ocorrencia_ocorrencia, 
+        ocorrencia.local as local_ocorrencia_ocorrencia, 
+        ocorrencia.status as status_ocorrencia_ocorrencia, 
+        ocorrencia.solucao as solucao_ocorrencia_ocorrencia, 
+        ocorrencia.prioridade as prioridade_ocorrencia_ocorrencia, 
+        ocorrencia.avaliacao as avaliacao_ocorrencia_ocorrencia, 
+        ocorrencia.email as email_ocorrencia_ocorrencia, 
+        ocorrencia.anexo as anexo_ocorrencia_ocorrencia, 
+        ocorrencia.local_sala as local_sala_ocorrencia_ocorrencia, 
+        usuario.id as id_usuario_usuario, 
+        usuario.nome as nome_usuario_usuario, 
+        usuario.email as email_usuario_usuario, 
+        usuario.login as login_usuario_usuario, 
+        usuario.senha as senha_usuario_usuario, 
+        usuario.nivel as nivel_usuario_usuario
 		FROM mensagem_forum
+		INNER JOIN ocorrencia as ocorrencia ON ocorrencia.id = mensagem_forum.id_ocorrencia
+		INNER JOIN usuario as usuario ON usuario.id = mensagem_forum.id_usuario
             WHERE mensagem_forum.tipo = :tipo";
                 
         try {
@@ -235,10 +319,33 @@ class MensagemForumDAO extends DAO {
     	        $mensagemForum->setId( $linha ['id'] );
     	        $mensagemForum->setTipo( $linha ['tipo'] );
     	        $mensagemForum->setMensagem( $linha ['mensagem'] );
-    	        $mensagemForum->setIdUser( $linha ['id_user'] );
-    	        $mensagemForum->setDtEnvio( $linha ['dt_envio'] );
-    	        $mensagemForum->setOrigem( $linha ['origem'] );
-    	        $mensagemForum->setAtivo( $linha ['ativo'] );
+    	        $mensagemForum->setDataEnvio( $linha ['data_envio'] );
+    			$mensagemForum->getOcorrencia()->setId( $linha ['id_ocorrencia_ocorrencia'] );
+    			$mensagemForum->getOcorrencia()->setAreaResponsavel( $linha ['area_responsavel_ocorrencia_ocorrencia'] );
+    			$mensagemForum->getOcorrencia()->setServico( $linha ['servico_ocorrencia_ocorrencia'] );
+    			$mensagemForum->getOcorrencia()->setIdLocal( $linha ['id_local_ocorrencia_ocorrencia'] );
+    			$mensagemForum->getOcorrencia()->setUsuarioCliente( $linha ['usuario_cliente_ocorrencia_ocorrencia'] );
+    			$mensagemForum->getOcorrencia()->setDescricao( $linha ['descricao_ocorrencia_ocorrencia'] );
+    			$mensagemForum->getOcorrencia()->setCampus( $linha ['campus_ocorrencia_ocorrencia'] );
+    			$mensagemForum->getOcorrencia()->setPatrimonio( $linha ['patrimonio_ocorrencia_ocorrencia'] );
+    			$mensagemForum->getOcorrencia()->setRamal( $linha ['ramal_ocorrencia_ocorrencia'] );
+    			$mensagemForum->getOcorrencia()->setLocal( $linha ['local_ocorrencia_ocorrencia'] );
+    			$mensagemForum->getOcorrencia()->setStatus( $linha ['status_ocorrencia_ocorrencia'] );
+    			$mensagemForum->getOcorrencia()->setSolucao( $linha ['solucao_ocorrencia_ocorrencia'] );
+    			$mensagemForum->getOcorrencia()->setPrioridade( $linha ['prioridade_ocorrencia_ocorrencia'] );
+    			$mensagemForum->getOcorrencia()->setAvaliacao( $linha ['avaliacao_ocorrencia_ocorrencia'] );
+    			$mensagemForum->getOcorrencia()->setEmail( $linha ['email_ocorrencia_ocorrencia'] );
+    			$mensagemForum->getOcorrencia()->setUsuarioAtendente( $linha ['usuario_atendente_ocorrencia_ocorrencia'] );
+    			$mensagemForum->getOcorrencia()->setUsuarioIndicado( $linha ['usuario_indicado_ocorrencia_ocorrencia'] );
+    			$mensagemForum->getOcorrencia()->setAnexo( $linha ['anexo_ocorrencia_ocorrencia'] );
+    			$mensagemForum->getOcorrencia()->setLocalSala( $linha ['local_sala_ocorrencia_ocorrencia'] );
+    			$mensagemForum->getUsuario()->setId( $linha ['id_usuario_usuario'] );
+    			$mensagemForum->getUsuario()->setNome( $linha ['nome_usuario_usuario'] );
+    			$mensagemForum->getUsuario()->setEmail( $linha ['email_usuario_usuario'] );
+    			$mensagemForum->getUsuario()->setLogin( $linha ['login_usuario_usuario'] );
+    			$mensagemForum->getUsuario()->setSenha( $linha ['senha_usuario_usuario'] );
+    			$mensagemForum->getUsuario()->setNivel( $linha ['nivel_usuario_usuario'] );
+    			$mensagemForum->getUsuario()->setSetor( $linha ['setor_usuario_usuario'] );
     			$lista [] = $mensagemForum;
     			    
             }
@@ -259,11 +366,30 @@ class MensagemForumDAO extends DAO {
         mensagem_forum.id, 
         mensagem_forum.tipo, 
         mensagem_forum.mensagem, 
-        mensagem_forum.id_user, 
-        mensagem_forum.dt_envio, 
-        mensagem_forum.origem, 
-        mensagem_forum.ativo
+        mensagem_forum.data_envio, 
+        ocorrencia.id as id_ocorrencia_ocorrencia, 
+        ocorrencia.id_local as id_local_ocorrencia_ocorrencia, 
+        ocorrencia.descricao as descricao_ocorrencia_ocorrencia, 
+        ocorrencia.campus as campus_ocorrencia_ocorrencia, 
+        ocorrencia.patrimonio as patrimonio_ocorrencia_ocorrencia, 
+        ocorrencia.ramal as ramal_ocorrencia_ocorrencia, 
+        ocorrencia.local as local_ocorrencia_ocorrencia, 
+        ocorrencia.status as status_ocorrencia_ocorrencia, 
+        ocorrencia.solucao as solucao_ocorrencia_ocorrencia, 
+        ocorrencia.prioridade as prioridade_ocorrencia_ocorrencia, 
+        ocorrencia.avaliacao as avaliacao_ocorrencia_ocorrencia, 
+        ocorrencia.email as email_ocorrencia_ocorrencia, 
+        ocorrencia.anexo as anexo_ocorrencia_ocorrencia, 
+        ocorrencia.local_sala as local_sala_ocorrencia_ocorrencia, 
+        usuario.id as id_usuario_usuario, 
+        usuario.nome as nome_usuario_usuario, 
+        usuario.email as email_usuario_usuario, 
+        usuario.login as login_usuario_usuario, 
+        usuario.senha as senha_usuario_usuario, 
+        usuario.nivel as nivel_usuario_usuario
 		FROM mensagem_forum
+		INNER JOIN ocorrencia as ocorrencia ON ocorrencia.id = mensagem_forum.id_ocorrencia
+		INNER JOIN usuario as usuario ON usuario.id = mensagem_forum.id_usuario
             WHERE mensagem_forum.mensagem like :mensagem";
                 
         try {
@@ -277,10 +403,33 @@ class MensagemForumDAO extends DAO {
     	        $mensagemForum->setId( $linha ['id'] );
     	        $mensagemForum->setTipo( $linha ['tipo'] );
     	        $mensagemForum->setMensagem( $linha ['mensagem'] );
-    	        $mensagemForum->setIdUser( $linha ['id_user'] );
-    	        $mensagemForum->setDtEnvio( $linha ['dt_envio'] );
-    	        $mensagemForum->setOrigem( $linha ['origem'] );
-    	        $mensagemForum->setAtivo( $linha ['ativo'] );
+    	        $mensagemForum->setDataEnvio( $linha ['data_envio'] );
+    			$mensagemForum->getOcorrencia()->setId( $linha ['id_ocorrencia_ocorrencia'] );
+    			$mensagemForum->getOcorrencia()->setAreaResponsavel( $linha ['area_responsavel_ocorrencia_ocorrencia'] );
+    			$mensagemForum->getOcorrencia()->setServico( $linha ['servico_ocorrencia_ocorrencia'] );
+    			$mensagemForum->getOcorrencia()->setIdLocal( $linha ['id_local_ocorrencia_ocorrencia'] );
+    			$mensagemForum->getOcorrencia()->setUsuarioCliente( $linha ['usuario_cliente_ocorrencia_ocorrencia'] );
+    			$mensagemForum->getOcorrencia()->setDescricao( $linha ['descricao_ocorrencia_ocorrencia'] );
+    			$mensagemForum->getOcorrencia()->setCampus( $linha ['campus_ocorrencia_ocorrencia'] );
+    			$mensagemForum->getOcorrencia()->setPatrimonio( $linha ['patrimonio_ocorrencia_ocorrencia'] );
+    			$mensagemForum->getOcorrencia()->setRamal( $linha ['ramal_ocorrencia_ocorrencia'] );
+    			$mensagemForum->getOcorrencia()->setLocal( $linha ['local_ocorrencia_ocorrencia'] );
+    			$mensagemForum->getOcorrencia()->setStatus( $linha ['status_ocorrencia_ocorrencia'] );
+    			$mensagemForum->getOcorrencia()->setSolucao( $linha ['solucao_ocorrencia_ocorrencia'] );
+    			$mensagemForum->getOcorrencia()->setPrioridade( $linha ['prioridade_ocorrencia_ocorrencia'] );
+    			$mensagemForum->getOcorrencia()->setAvaliacao( $linha ['avaliacao_ocorrencia_ocorrencia'] );
+    			$mensagemForum->getOcorrencia()->setEmail( $linha ['email_ocorrencia_ocorrencia'] );
+    			$mensagemForum->getOcorrencia()->setUsuarioAtendente( $linha ['usuario_atendente_ocorrencia_ocorrencia'] );
+    			$mensagemForum->getOcorrencia()->setUsuarioIndicado( $linha ['usuario_indicado_ocorrencia_ocorrencia'] );
+    			$mensagemForum->getOcorrencia()->setAnexo( $linha ['anexo_ocorrencia_ocorrencia'] );
+    			$mensagemForum->getOcorrencia()->setLocalSala( $linha ['local_sala_ocorrencia_ocorrencia'] );
+    			$mensagemForum->getUsuario()->setId( $linha ['id_usuario_usuario'] );
+    			$mensagemForum->getUsuario()->setNome( $linha ['nome_usuario_usuario'] );
+    			$mensagemForum->getUsuario()->setEmail( $linha ['email_usuario_usuario'] );
+    			$mensagemForum->getUsuario()->setLogin( $linha ['login_usuario_usuario'] );
+    			$mensagemForum->getUsuario()->setSenha( $linha ['senha_usuario_usuario'] );
+    			$mensagemForum->getUsuario()->setNivel( $linha ['nivel_usuario_usuario'] );
+    			$mensagemForum->getUsuario()->setSetor( $linha ['setor_usuario_usuario'] );
     			$lista [] = $mensagemForum;
     			    
             }
@@ -292,26 +441,45 @@ class MensagemForumDAO extends DAO {
 		return $lista;
     }
                 
-    public function pesquisaPorIdUser(MensagemForum $mensagemForum) {
+    public function pesquisaPorDataEnvio(MensagemForum $mensagemForum) {
         $lista = array();
-	    $idUser = $mensagemForum->getIdUser();
+	    $dataEnvio = $mensagemForum->getDataEnvio();
                 
         $sql = "
 		SELECT
         mensagem_forum.id, 
         mensagem_forum.tipo, 
         mensagem_forum.mensagem, 
-        mensagem_forum.id_user, 
-        mensagem_forum.dt_envio, 
-        mensagem_forum.origem, 
-        mensagem_forum.ativo
+        mensagem_forum.data_envio, 
+        ocorrencia.id as id_ocorrencia_ocorrencia, 
+        ocorrencia.id_local as id_local_ocorrencia_ocorrencia, 
+        ocorrencia.descricao as descricao_ocorrencia_ocorrencia, 
+        ocorrencia.campus as campus_ocorrencia_ocorrencia, 
+        ocorrencia.patrimonio as patrimonio_ocorrencia_ocorrencia, 
+        ocorrencia.ramal as ramal_ocorrencia_ocorrencia, 
+        ocorrencia.local as local_ocorrencia_ocorrencia, 
+        ocorrencia.status as status_ocorrencia_ocorrencia, 
+        ocorrencia.solucao as solucao_ocorrencia_ocorrencia, 
+        ocorrencia.prioridade as prioridade_ocorrencia_ocorrencia, 
+        ocorrencia.avaliacao as avaliacao_ocorrencia_ocorrencia, 
+        ocorrencia.email as email_ocorrencia_ocorrencia, 
+        ocorrencia.anexo as anexo_ocorrencia_ocorrencia, 
+        ocorrencia.local_sala as local_sala_ocorrencia_ocorrencia, 
+        usuario.id as id_usuario_usuario, 
+        usuario.nome as nome_usuario_usuario, 
+        usuario.email as email_usuario_usuario, 
+        usuario.login as login_usuario_usuario, 
+        usuario.senha as senha_usuario_usuario, 
+        usuario.nivel as nivel_usuario_usuario
 		FROM mensagem_forum
-            WHERE mensagem_forum.id_user = :idUser";
+		INNER JOIN ocorrencia as ocorrencia ON ocorrencia.id = mensagem_forum.id_ocorrencia
+		INNER JOIN usuario as usuario ON usuario.id = mensagem_forum.id_usuario
+            WHERE mensagem_forum.data_envio like :dataEnvio";
                 
         try {
                 
             $stmt = $this->conexao->prepare($sql);
-            $stmt->bindParam(":idUser", $idUser, PDO::PARAM_INT);
+            $stmt->bindParam(":dataEnvio", $dataEnvio, PDO::PARAM_STR);
             $stmt->execute();
             $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
             foreach ( $result as $linha ) {
@@ -319,136 +487,33 @@ class MensagemForumDAO extends DAO {
     	        $mensagemForum->setId( $linha ['id'] );
     	        $mensagemForum->setTipo( $linha ['tipo'] );
     	        $mensagemForum->setMensagem( $linha ['mensagem'] );
-    	        $mensagemForum->setIdUser( $linha ['id_user'] );
-    	        $mensagemForum->setDtEnvio( $linha ['dt_envio'] );
-    	        $mensagemForum->setOrigem( $linha ['origem'] );
-    	        $mensagemForum->setAtivo( $linha ['ativo'] );
-    			$lista [] = $mensagemForum;
-    			    
-            }
-    			    
-        } catch(PDOException $e) {
-            echo $e->getMessage();
-    			    
-        }
-		return $lista;
-    }
-                
-    public function pesquisaPorDtEnvio(MensagemForum $mensagemForum) {
-        $lista = array();
-	    $dtEnvio = $mensagemForum->getDtEnvio();
-                
-        $sql = "
-		SELECT
-        mensagem_forum.id, 
-        mensagem_forum.tipo, 
-        mensagem_forum.mensagem, 
-        mensagem_forum.id_user, 
-        mensagem_forum.dt_envio, 
-        mensagem_forum.origem, 
-        mensagem_forum.ativo
-		FROM mensagem_forum
-            WHERE mensagem_forum.dt_envio like :dtEnvio";
-                
-        try {
-                
-            $stmt = $this->conexao->prepare($sql);
-            $stmt->bindParam(":dtEnvio", $dtEnvio, PDO::PARAM_STR);
-            $stmt->execute();
-            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            foreach ( $result as $linha ) {
-                $mensagemForum = new MensagemForum();
-    	        $mensagemForum->setId( $linha ['id'] );
-    	        $mensagemForum->setTipo( $linha ['tipo'] );
-    	        $mensagemForum->setMensagem( $linha ['mensagem'] );
-    	        $mensagemForum->setIdUser( $linha ['id_user'] );
-    	        $mensagemForum->setDtEnvio( $linha ['dt_envio'] );
-    	        $mensagemForum->setOrigem( $linha ['origem'] );
-    	        $mensagemForum->setAtivo( $linha ['ativo'] );
-    			$lista [] = $mensagemForum;
-    			    
-            }
-    			    
-        } catch(PDOException $e) {
-            echo $e->getMessage();
-    			    
-        }
-		return $lista;
-    }
-                
-    public function pesquisaPorOrigem(MensagemForum $mensagemForum) {
-        $lista = array();
-	    $origem = $mensagemForum->getOrigem();
-                
-        $sql = "
-		SELECT
-        mensagem_forum.id, 
-        mensagem_forum.tipo, 
-        mensagem_forum.mensagem, 
-        mensagem_forum.id_user, 
-        mensagem_forum.dt_envio, 
-        mensagem_forum.origem, 
-        mensagem_forum.ativo
-		FROM mensagem_forum
-            WHERE mensagem_forum.origem = :origem";
-                
-        try {
-                
-            $stmt = $this->conexao->prepare($sql);
-            $stmt->bindParam(":origem", $origem, PDO::PARAM_INT);
-            $stmt->execute();
-            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            foreach ( $result as $linha ) {
-                $mensagemForum = new MensagemForum();
-    	        $mensagemForum->setId( $linha ['id'] );
-    	        $mensagemForum->setTipo( $linha ['tipo'] );
-    	        $mensagemForum->setMensagem( $linha ['mensagem'] );
-    	        $mensagemForum->setIdUser( $linha ['id_user'] );
-    	        $mensagemForum->setDtEnvio( $linha ['dt_envio'] );
-    	        $mensagemForum->setOrigem( $linha ['origem'] );
-    	        $mensagemForum->setAtivo( $linha ['ativo'] );
-    			$lista [] = $mensagemForum;
-    			    
-            }
-    			    
-        } catch(PDOException $e) {
-            echo $e->getMessage();
-    			    
-        }
-		return $lista;
-    }
-                
-    public function pesquisaPorAtivo(MensagemForum $mensagemForum) {
-        $lista = array();
-	    $ativo = $mensagemForum->getAtivo();
-                
-        $sql = "
-		SELECT
-        mensagem_forum.id, 
-        mensagem_forum.tipo, 
-        mensagem_forum.mensagem, 
-        mensagem_forum.id_user, 
-        mensagem_forum.dt_envio, 
-        mensagem_forum.origem, 
-        mensagem_forum.ativo
-		FROM mensagem_forum
-            WHERE mensagem_forum.ativo = :ativo";
-                
-        try {
-                
-            $stmt = $this->conexao->prepare($sql);
-            $stmt->bindParam(":ativo", $ativo, PDO::PARAM_BOOL);
-            $stmt->execute();
-            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            foreach ( $result as $linha ) {
-                $mensagemForum = new MensagemForum();
-    	        $mensagemForum->setId( $linha ['id'] );
-    	        $mensagemForum->setTipo( $linha ['tipo'] );
-    	        $mensagemForum->setMensagem( $linha ['mensagem'] );
-    	        $mensagemForum->setIdUser( $linha ['id_user'] );
-    	        $mensagemForum->setDtEnvio( $linha ['dt_envio'] );
-    	        $mensagemForum->setOrigem( $linha ['origem'] );
-    	        $mensagemForum->setAtivo( $linha ['ativo'] );
+    	        $mensagemForum->setDataEnvio( $linha ['data_envio'] );
+    			$mensagemForum->getOcorrencia()->setId( $linha ['id_ocorrencia_ocorrencia'] );
+    			$mensagemForum->getOcorrencia()->setAreaResponsavel( $linha ['area_responsavel_ocorrencia_ocorrencia'] );
+    			$mensagemForum->getOcorrencia()->setServico( $linha ['servico_ocorrencia_ocorrencia'] );
+    			$mensagemForum->getOcorrencia()->setIdLocal( $linha ['id_local_ocorrencia_ocorrencia'] );
+    			$mensagemForum->getOcorrencia()->setUsuarioCliente( $linha ['usuario_cliente_ocorrencia_ocorrencia'] );
+    			$mensagemForum->getOcorrencia()->setDescricao( $linha ['descricao_ocorrencia_ocorrencia'] );
+    			$mensagemForum->getOcorrencia()->setCampus( $linha ['campus_ocorrencia_ocorrencia'] );
+    			$mensagemForum->getOcorrencia()->setPatrimonio( $linha ['patrimonio_ocorrencia_ocorrencia'] );
+    			$mensagemForum->getOcorrencia()->setRamal( $linha ['ramal_ocorrencia_ocorrencia'] );
+    			$mensagemForum->getOcorrencia()->setLocal( $linha ['local_ocorrencia_ocorrencia'] );
+    			$mensagemForum->getOcorrencia()->setStatus( $linha ['status_ocorrencia_ocorrencia'] );
+    			$mensagemForum->getOcorrencia()->setSolucao( $linha ['solucao_ocorrencia_ocorrencia'] );
+    			$mensagemForum->getOcorrencia()->setPrioridade( $linha ['prioridade_ocorrencia_ocorrencia'] );
+    			$mensagemForum->getOcorrencia()->setAvaliacao( $linha ['avaliacao_ocorrencia_ocorrencia'] );
+    			$mensagemForum->getOcorrencia()->setEmail( $linha ['email_ocorrencia_ocorrencia'] );
+    			$mensagemForum->getOcorrencia()->setUsuarioAtendente( $linha ['usuario_atendente_ocorrencia_ocorrencia'] );
+    			$mensagemForum->getOcorrencia()->setUsuarioIndicado( $linha ['usuario_indicado_ocorrencia_ocorrencia'] );
+    			$mensagemForum->getOcorrencia()->setAnexo( $linha ['anexo_ocorrencia_ocorrencia'] );
+    			$mensagemForum->getOcorrencia()->setLocalSala( $linha ['local_sala_ocorrencia_ocorrencia'] );
+    			$mensagemForum->getUsuario()->setId( $linha ['id_usuario_usuario'] );
+    			$mensagemForum->getUsuario()->setNome( $linha ['nome_usuario_usuario'] );
+    			$mensagemForum->getUsuario()->setEmail( $linha ['email_usuario_usuario'] );
+    			$mensagemForum->getUsuario()->setLogin( $linha ['login_usuario_usuario'] );
+    			$mensagemForum->getUsuario()->setSenha( $linha ['senha_usuario_usuario'] );
+    			$mensagemForum->getUsuario()->setNivel( $linha ['nivel_usuario_usuario'] );
+    			$mensagemForum->getUsuario()->setSetor( $linha ['setor_usuario_usuario'] );
     			$lista [] = $mensagemForum;
     			    
             }
@@ -468,11 +533,30 @@ class MensagemForumDAO extends DAO {
         mensagem_forum.id, 
         mensagem_forum.tipo, 
         mensagem_forum.mensagem, 
-        mensagem_forum.id_user, 
-        mensagem_forum.dt_envio, 
-        mensagem_forum.origem, 
-        mensagem_forum.ativo
+        mensagem_forum.data_envio, 
+        ocorrencia.id as id_ocorrencia_ocorrencia, 
+        ocorrencia.id_local as id_local_ocorrencia_ocorrencia, 
+        ocorrencia.descricao as descricao_ocorrencia_ocorrencia, 
+        ocorrencia.campus as campus_ocorrencia_ocorrencia, 
+        ocorrencia.patrimonio as patrimonio_ocorrencia_ocorrencia, 
+        ocorrencia.ramal as ramal_ocorrencia_ocorrencia, 
+        ocorrencia.local as local_ocorrencia_ocorrencia, 
+        ocorrencia.status as status_ocorrencia_ocorrencia, 
+        ocorrencia.solucao as solucao_ocorrencia_ocorrencia, 
+        ocorrencia.prioridade as prioridade_ocorrencia_ocorrencia, 
+        ocorrencia.avaliacao as avaliacao_ocorrencia_ocorrencia, 
+        ocorrencia.email as email_ocorrencia_ocorrencia, 
+        ocorrencia.anexo as anexo_ocorrencia_ocorrencia, 
+        ocorrencia.local_sala as local_sala_ocorrencia_ocorrencia, 
+        usuario.id as id_usuario_usuario, 
+        usuario.nome as nome_usuario_usuario, 
+        usuario.email as email_usuario_usuario, 
+        usuario.login as login_usuario_usuario, 
+        usuario.senha as senha_usuario_usuario, 
+        usuario.nivel as nivel_usuario_usuario
 		FROM mensagem_forum
+		INNER JOIN ocorrencia as ocorrencia ON ocorrencia.id = mensagem_forum.id_ocorrencia
+		INNER JOIN usuario as usuario ON usuario.id = mensagem_forum.id_usuario
                 WHERE mensagem_forum.id = :id
                  LIMIT 1000";
                 
@@ -490,10 +574,27 @@ class MensagemForumDAO extends DAO {
                 $mensagemForum->setId( $linha ['id'] );
                 $mensagemForum->setTipo( $linha ['tipo'] );
                 $mensagemForum->setMensagem( $linha ['mensagem'] );
-                $mensagemForum->setIdUser( $linha ['id_user'] );
-                $mensagemForum->setDtEnvio( $linha ['dt_envio'] );
-                $mensagemForum->setOrigem( $linha ['origem'] );
-                $mensagemForum->setAtivo( $linha ['ativo'] );
+                $mensagemForum->setDataEnvio( $linha ['data_envio'] );
+                $mensagemForum->getOcorrencia()->setId( $linha ['id_ocorrencia_ocorrencia'] );
+                $mensagemForum->getOcorrencia()->setIdLocal( $linha ['id_local_ocorrencia_ocorrencia'] );
+                $mensagemForum->getOcorrencia()->setDescricao( $linha ['descricao_ocorrencia_ocorrencia'] );
+                $mensagemForum->getOcorrencia()->setCampus( $linha ['campus_ocorrencia_ocorrencia'] );
+                $mensagemForum->getOcorrencia()->setPatrimonio( $linha ['patrimonio_ocorrencia_ocorrencia'] );
+                $mensagemForum->getOcorrencia()->setRamal( $linha ['ramal_ocorrencia_ocorrencia'] );
+                $mensagemForum->getOcorrencia()->setLocal( $linha ['local_ocorrencia_ocorrencia'] );
+                $mensagemForum->getOcorrencia()->setStatus( $linha ['status_ocorrencia_ocorrencia'] );
+                $mensagemForum->getOcorrencia()->setSolucao( $linha ['solucao_ocorrencia_ocorrencia'] );
+                $mensagemForum->getOcorrencia()->setPrioridade( $linha ['prioridade_ocorrencia_ocorrencia'] );
+                $mensagemForum->getOcorrencia()->setAvaliacao( $linha ['avaliacao_ocorrencia_ocorrencia'] );
+                $mensagemForum->getOcorrencia()->setEmail( $linha ['email_ocorrencia_ocorrencia'] );
+                $mensagemForum->getOcorrencia()->setAnexo( $linha ['anexo_ocorrencia_ocorrencia'] );
+                $mensagemForum->getOcorrencia()->setLocalSala( $linha ['local_sala_ocorrencia_ocorrencia'] );
+                $mensagemForum->getUsuario()->setId( $linha ['id_usuario_usuario'] );
+                $mensagemForum->getUsuario()->setNome( $linha ['nome_usuario_usuario'] );
+                $mensagemForum->getUsuario()->setEmail( $linha ['email_usuario_usuario'] );
+                $mensagemForum->getUsuario()->setLogin( $linha ['login_usuario_usuario'] );
+                $mensagemForum->getUsuario()->setSenha( $linha ['senha_usuario_usuario'] );
+                $mensagemForum->getUsuario()->setNivel( $linha ['nivel_usuario_usuario'] );
                 
                 
 		    }
@@ -511,11 +612,30 @@ class MensagemForumDAO extends DAO {
         mensagem_forum.id, 
         mensagem_forum.tipo, 
         mensagem_forum.mensagem, 
-        mensagem_forum.id_user, 
-        mensagem_forum.dt_envio, 
-        mensagem_forum.origem, 
-        mensagem_forum.ativo
+        mensagem_forum.data_envio, 
+        ocorrencia.id as id_ocorrencia_ocorrencia, 
+        ocorrencia.id_local as id_local_ocorrencia_ocorrencia, 
+        ocorrencia.descricao as descricao_ocorrencia_ocorrencia, 
+        ocorrencia.campus as campus_ocorrencia_ocorrencia, 
+        ocorrencia.patrimonio as patrimonio_ocorrencia_ocorrencia, 
+        ocorrencia.ramal as ramal_ocorrencia_ocorrencia, 
+        ocorrencia.local as local_ocorrencia_ocorrencia, 
+        ocorrencia.status as status_ocorrencia_ocorrencia, 
+        ocorrencia.solucao as solucao_ocorrencia_ocorrencia, 
+        ocorrencia.prioridade as prioridade_ocorrencia_ocorrencia, 
+        ocorrencia.avaliacao as avaliacao_ocorrencia_ocorrencia, 
+        ocorrencia.email as email_ocorrencia_ocorrencia, 
+        ocorrencia.anexo as anexo_ocorrencia_ocorrencia, 
+        ocorrencia.local_sala as local_sala_ocorrencia_ocorrencia, 
+        usuario.id as id_usuario_usuario, 
+        usuario.nome as nome_usuario_usuario, 
+        usuario.email as email_usuario_usuario, 
+        usuario.login as login_usuario_usuario, 
+        usuario.senha as senha_usuario_usuario, 
+        usuario.nivel as nivel_usuario_usuario
 		FROM mensagem_forum
+		INNER JOIN ocorrencia as ocorrencia ON ocorrencia.id = mensagem_forum.id_ocorrencia
+		INNER JOIN usuario as usuario ON usuario.id = mensagem_forum.id_usuario
                 WHERE mensagem_forum.tipo = :tipo
                  LIMIT 1000";
                 
@@ -533,10 +653,27 @@ class MensagemForumDAO extends DAO {
                 $mensagemForum->setId( $linha ['id'] );
                 $mensagemForum->setTipo( $linha ['tipo'] );
                 $mensagemForum->setMensagem( $linha ['mensagem'] );
-                $mensagemForum->setIdUser( $linha ['id_user'] );
-                $mensagemForum->setDtEnvio( $linha ['dt_envio'] );
-                $mensagemForum->setOrigem( $linha ['origem'] );
-                $mensagemForum->setAtivo( $linha ['ativo'] );
+                $mensagemForum->setDataEnvio( $linha ['data_envio'] );
+                $mensagemForum->getOcorrencia()->setId( $linha ['id_ocorrencia_ocorrencia'] );
+                $mensagemForum->getOcorrencia()->setIdLocal( $linha ['id_local_ocorrencia_ocorrencia'] );
+                $mensagemForum->getOcorrencia()->setDescricao( $linha ['descricao_ocorrencia_ocorrencia'] );
+                $mensagemForum->getOcorrencia()->setCampus( $linha ['campus_ocorrencia_ocorrencia'] );
+                $mensagemForum->getOcorrencia()->setPatrimonio( $linha ['patrimonio_ocorrencia_ocorrencia'] );
+                $mensagemForum->getOcorrencia()->setRamal( $linha ['ramal_ocorrencia_ocorrencia'] );
+                $mensagemForum->getOcorrencia()->setLocal( $linha ['local_ocorrencia_ocorrencia'] );
+                $mensagemForum->getOcorrencia()->setStatus( $linha ['status_ocorrencia_ocorrencia'] );
+                $mensagemForum->getOcorrencia()->setSolucao( $linha ['solucao_ocorrencia_ocorrencia'] );
+                $mensagemForum->getOcorrencia()->setPrioridade( $linha ['prioridade_ocorrencia_ocorrencia'] );
+                $mensagemForum->getOcorrencia()->setAvaliacao( $linha ['avaliacao_ocorrencia_ocorrencia'] );
+                $mensagemForum->getOcorrencia()->setEmail( $linha ['email_ocorrencia_ocorrencia'] );
+                $mensagemForum->getOcorrencia()->setAnexo( $linha ['anexo_ocorrencia_ocorrencia'] );
+                $mensagemForum->getOcorrencia()->setLocalSala( $linha ['local_sala_ocorrencia_ocorrencia'] );
+                $mensagemForum->getUsuario()->setId( $linha ['id_usuario_usuario'] );
+                $mensagemForum->getUsuario()->setNome( $linha ['nome_usuario_usuario'] );
+                $mensagemForum->getUsuario()->setEmail( $linha ['email_usuario_usuario'] );
+                $mensagemForum->getUsuario()->setLogin( $linha ['login_usuario_usuario'] );
+                $mensagemForum->getUsuario()->setSenha( $linha ['senha_usuario_usuario'] );
+                $mensagemForum->getUsuario()->setNivel( $linha ['nivel_usuario_usuario'] );
                 
                 
 		    }
@@ -554,11 +691,30 @@ class MensagemForumDAO extends DAO {
         mensagem_forum.id, 
         mensagem_forum.tipo, 
         mensagem_forum.mensagem, 
-        mensagem_forum.id_user, 
-        mensagem_forum.dt_envio, 
-        mensagem_forum.origem, 
-        mensagem_forum.ativo
+        mensagem_forum.data_envio, 
+        ocorrencia.id as id_ocorrencia_ocorrencia, 
+        ocorrencia.id_local as id_local_ocorrencia_ocorrencia, 
+        ocorrencia.descricao as descricao_ocorrencia_ocorrencia, 
+        ocorrencia.campus as campus_ocorrencia_ocorrencia, 
+        ocorrencia.patrimonio as patrimonio_ocorrencia_ocorrencia, 
+        ocorrencia.ramal as ramal_ocorrencia_ocorrencia, 
+        ocorrencia.local as local_ocorrencia_ocorrencia, 
+        ocorrencia.status as status_ocorrencia_ocorrencia, 
+        ocorrencia.solucao as solucao_ocorrencia_ocorrencia, 
+        ocorrencia.prioridade as prioridade_ocorrencia_ocorrencia, 
+        ocorrencia.avaliacao as avaliacao_ocorrencia_ocorrencia, 
+        ocorrencia.email as email_ocorrencia_ocorrencia, 
+        ocorrencia.anexo as anexo_ocorrencia_ocorrencia, 
+        ocorrencia.local_sala as local_sala_ocorrencia_ocorrencia, 
+        usuario.id as id_usuario_usuario, 
+        usuario.nome as nome_usuario_usuario, 
+        usuario.email as email_usuario_usuario, 
+        usuario.login as login_usuario_usuario, 
+        usuario.senha as senha_usuario_usuario, 
+        usuario.nivel as nivel_usuario_usuario
 		FROM mensagem_forum
+		INNER JOIN ocorrencia as ocorrencia ON ocorrencia.id = mensagem_forum.id_ocorrencia
+		INNER JOIN usuario as usuario ON usuario.id = mensagem_forum.id_usuario
                 WHERE mensagem_forum.mensagem = :mensagem
                  LIMIT 1000";
                 
@@ -576,10 +732,27 @@ class MensagemForumDAO extends DAO {
                 $mensagemForum->setId( $linha ['id'] );
                 $mensagemForum->setTipo( $linha ['tipo'] );
                 $mensagemForum->setMensagem( $linha ['mensagem'] );
-                $mensagemForum->setIdUser( $linha ['id_user'] );
-                $mensagemForum->setDtEnvio( $linha ['dt_envio'] );
-                $mensagemForum->setOrigem( $linha ['origem'] );
-                $mensagemForum->setAtivo( $linha ['ativo'] );
+                $mensagemForum->setDataEnvio( $linha ['data_envio'] );
+                $mensagemForum->getOcorrencia()->setId( $linha ['id_ocorrencia_ocorrencia'] );
+                $mensagemForum->getOcorrencia()->setIdLocal( $linha ['id_local_ocorrencia_ocorrencia'] );
+                $mensagemForum->getOcorrencia()->setDescricao( $linha ['descricao_ocorrencia_ocorrencia'] );
+                $mensagemForum->getOcorrencia()->setCampus( $linha ['campus_ocorrencia_ocorrencia'] );
+                $mensagemForum->getOcorrencia()->setPatrimonio( $linha ['patrimonio_ocorrencia_ocorrencia'] );
+                $mensagemForum->getOcorrencia()->setRamal( $linha ['ramal_ocorrencia_ocorrencia'] );
+                $mensagemForum->getOcorrencia()->setLocal( $linha ['local_ocorrencia_ocorrencia'] );
+                $mensagemForum->getOcorrencia()->setStatus( $linha ['status_ocorrencia_ocorrencia'] );
+                $mensagemForum->getOcorrencia()->setSolucao( $linha ['solucao_ocorrencia_ocorrencia'] );
+                $mensagemForum->getOcorrencia()->setPrioridade( $linha ['prioridade_ocorrencia_ocorrencia'] );
+                $mensagemForum->getOcorrencia()->setAvaliacao( $linha ['avaliacao_ocorrencia_ocorrencia'] );
+                $mensagemForum->getOcorrencia()->setEmail( $linha ['email_ocorrencia_ocorrencia'] );
+                $mensagemForum->getOcorrencia()->setAnexo( $linha ['anexo_ocorrencia_ocorrencia'] );
+                $mensagemForum->getOcorrencia()->setLocalSala( $linha ['local_sala_ocorrencia_ocorrencia'] );
+                $mensagemForum->getUsuario()->setId( $linha ['id_usuario_usuario'] );
+                $mensagemForum->getUsuario()->setNome( $linha ['nome_usuario_usuario'] );
+                $mensagemForum->getUsuario()->setEmail( $linha ['email_usuario_usuario'] );
+                $mensagemForum->getUsuario()->setLogin( $linha ['login_usuario_usuario'] );
+                $mensagemForum->getUsuario()->setSenha( $linha ['senha_usuario_usuario'] );
+                $mensagemForum->getUsuario()->setNivel( $linha ['nivel_usuario_usuario'] );
                 
                 
 		    }
@@ -589,20 +762,39 @@ class MensagemForumDAO extends DAO {
 		return $mensagemForum;
     }
                 
-    public function preenchePorIdUser(MensagemForum $mensagemForum) {
+    public function preenchePorDataEnvio(MensagemForum $mensagemForum) {
         
-	    $idUser = $mensagemForum->getIdUser();
+	    $dataEnvio = $mensagemForum->getDataEnvio();
 	    $sql = "
 		SELECT
         mensagem_forum.id, 
         mensagem_forum.tipo, 
         mensagem_forum.mensagem, 
-        mensagem_forum.id_user, 
-        mensagem_forum.dt_envio, 
-        mensagem_forum.origem, 
-        mensagem_forum.ativo
+        mensagem_forum.data_envio, 
+        ocorrencia.id as id_ocorrencia_ocorrencia, 
+        ocorrencia.id_local as id_local_ocorrencia_ocorrencia, 
+        ocorrencia.descricao as descricao_ocorrencia_ocorrencia, 
+        ocorrencia.campus as campus_ocorrencia_ocorrencia, 
+        ocorrencia.patrimonio as patrimonio_ocorrencia_ocorrencia, 
+        ocorrencia.ramal as ramal_ocorrencia_ocorrencia, 
+        ocorrencia.local as local_ocorrencia_ocorrencia, 
+        ocorrencia.status as status_ocorrencia_ocorrencia, 
+        ocorrencia.solucao as solucao_ocorrencia_ocorrencia, 
+        ocorrencia.prioridade as prioridade_ocorrencia_ocorrencia, 
+        ocorrencia.avaliacao as avaliacao_ocorrencia_ocorrencia, 
+        ocorrencia.email as email_ocorrencia_ocorrencia, 
+        ocorrencia.anexo as anexo_ocorrencia_ocorrencia, 
+        ocorrencia.local_sala as local_sala_ocorrencia_ocorrencia, 
+        usuario.id as id_usuario_usuario, 
+        usuario.nome as nome_usuario_usuario, 
+        usuario.email as email_usuario_usuario, 
+        usuario.login as login_usuario_usuario, 
+        usuario.senha as senha_usuario_usuario, 
+        usuario.nivel as nivel_usuario_usuario
 		FROM mensagem_forum
-                WHERE mensagem_forum.id_user = :idUser
+		INNER JOIN ocorrencia as ocorrencia ON ocorrencia.id = mensagem_forum.id_ocorrencia
+		INNER JOIN usuario as usuario ON usuario.id = mensagem_forum.id_usuario
+                WHERE mensagem_forum.data_envio = :dataEnvio
                  LIMIT 1000";
                 
         try {
@@ -611,7 +803,7 @@ class MensagemForumDAO extends DAO {
 		    if(!$stmt){
                 echo "<br>Mensagem de erro retornada: ".$this->conexao->errorInfo()[2]."<br>";
 		    }
-            $stmt->bindParam(":idUser", $idUser, PDO::PARAM_INT);
+            $stmt->bindParam(":dataEnvio", $dataEnvio, PDO::PARAM_STR);
             $stmt->execute();
 		    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 		    foreach ( $result as $linha )
@@ -619,139 +811,27 @@ class MensagemForumDAO extends DAO {
                 $mensagemForum->setId( $linha ['id'] );
                 $mensagemForum->setTipo( $linha ['tipo'] );
                 $mensagemForum->setMensagem( $linha ['mensagem'] );
-                $mensagemForum->setIdUser( $linha ['id_user'] );
-                $mensagemForum->setDtEnvio( $linha ['dt_envio'] );
-                $mensagemForum->setOrigem( $linha ['origem'] );
-                $mensagemForum->setAtivo( $linha ['ativo'] );
-                
-                
-		    }
-		} catch(PDOException $e) {
-		    echo $e->getMessage();
- 		}
-		return $mensagemForum;
-    }
-                
-    public function preenchePorDtEnvio(MensagemForum $mensagemForum) {
-        
-	    $dtEnvio = $mensagemForum->getDtEnvio();
-	    $sql = "
-		SELECT
-        mensagem_forum.id, 
-        mensagem_forum.tipo, 
-        mensagem_forum.mensagem, 
-        mensagem_forum.id_user, 
-        mensagem_forum.dt_envio, 
-        mensagem_forum.origem, 
-        mensagem_forum.ativo
-		FROM mensagem_forum
-                WHERE mensagem_forum.dt_envio = :dtEnvio
-                 LIMIT 1000";
-                
-        try {
-            $stmt = $this->conexao->prepare($sql);
-                
-		    if(!$stmt){
-                echo "<br>Mensagem de erro retornada: ".$this->conexao->errorInfo()[2]."<br>";
-		    }
-            $stmt->bindParam(":dtEnvio", $dtEnvio, PDO::PARAM_STR);
-            $stmt->execute();
-		    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-		    foreach ( $result as $linha )
-            {
-                $mensagemForum->setId( $linha ['id'] );
-                $mensagemForum->setTipo( $linha ['tipo'] );
-                $mensagemForum->setMensagem( $linha ['mensagem'] );
-                $mensagemForum->setIdUser( $linha ['id_user'] );
-                $mensagemForum->setDtEnvio( $linha ['dt_envio'] );
-                $mensagemForum->setOrigem( $linha ['origem'] );
-                $mensagemForum->setAtivo( $linha ['ativo'] );
-                
-                
-		    }
-		} catch(PDOException $e) {
-		    echo $e->getMessage();
- 		}
-		return $mensagemForum;
-    }
-                
-    public function preenchePorOrigem(MensagemForum $mensagemForum) {
-        
-	    $origem = $mensagemForum->getOrigem();
-	    $sql = "
-		SELECT
-        mensagem_forum.id, 
-        mensagem_forum.tipo, 
-        mensagem_forum.mensagem, 
-        mensagem_forum.id_user, 
-        mensagem_forum.dt_envio, 
-        mensagem_forum.origem, 
-        mensagem_forum.ativo
-		FROM mensagem_forum
-                WHERE mensagem_forum.origem = :origem
-                 LIMIT 1000";
-                
-        try {
-            $stmt = $this->conexao->prepare($sql);
-                
-		    if(!$stmt){
-                echo "<br>Mensagem de erro retornada: ".$this->conexao->errorInfo()[2]."<br>";
-		    }
-            $stmt->bindParam(":origem", $origem, PDO::PARAM_INT);
-            $stmt->execute();
-		    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-		    foreach ( $result as $linha )
-            {
-                $mensagemForum->setId( $linha ['id'] );
-                $mensagemForum->setTipo( $linha ['tipo'] );
-                $mensagemForum->setMensagem( $linha ['mensagem'] );
-                $mensagemForum->setIdUser( $linha ['id_user'] );
-                $mensagemForum->setDtEnvio( $linha ['dt_envio'] );
-                $mensagemForum->setOrigem( $linha ['origem'] );
-                $mensagemForum->setAtivo( $linha ['ativo'] );
-                
-                
-		    }
-		} catch(PDOException $e) {
-		    echo $e->getMessage();
- 		}
-		return $mensagemForum;
-    }
-                
-    public function preenchePorAtivo(MensagemForum $mensagemForum) {
-        
-	    $ativo = $mensagemForum->getAtivo();
-	    $sql = "
-		SELECT
-        mensagem_forum.id, 
-        mensagem_forum.tipo, 
-        mensagem_forum.mensagem, 
-        mensagem_forum.id_user, 
-        mensagem_forum.dt_envio, 
-        mensagem_forum.origem, 
-        mensagem_forum.ativo
-		FROM mensagem_forum
-                WHERE mensagem_forum.ativo = :ativo
-                 LIMIT 1000";
-                
-        try {
-            $stmt = $this->conexao->prepare($sql);
-                
-		    if(!$stmt){
-                echo "<br>Mensagem de erro retornada: ".$this->conexao->errorInfo()[2]."<br>";
-		    }
-            $stmt->bindParam(":ativo", $ativo, PDO::PARAM_BOOL);
-            $stmt->execute();
-		    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-		    foreach ( $result as $linha )
-            {
-                $mensagemForum->setId( $linha ['id'] );
-                $mensagemForum->setTipo( $linha ['tipo'] );
-                $mensagemForum->setMensagem( $linha ['mensagem'] );
-                $mensagemForum->setIdUser( $linha ['id_user'] );
-                $mensagemForum->setDtEnvio( $linha ['dt_envio'] );
-                $mensagemForum->setOrigem( $linha ['origem'] );
-                $mensagemForum->setAtivo( $linha ['ativo'] );
+                $mensagemForum->setDataEnvio( $linha ['data_envio'] );
+                $mensagemForum->getOcorrencia()->setId( $linha ['id_ocorrencia_ocorrencia'] );
+                $mensagemForum->getOcorrencia()->setIdLocal( $linha ['id_local_ocorrencia_ocorrencia'] );
+                $mensagemForum->getOcorrencia()->setDescricao( $linha ['descricao_ocorrencia_ocorrencia'] );
+                $mensagemForum->getOcorrencia()->setCampus( $linha ['campus_ocorrencia_ocorrencia'] );
+                $mensagemForum->getOcorrencia()->setPatrimonio( $linha ['patrimonio_ocorrencia_ocorrencia'] );
+                $mensagemForum->getOcorrencia()->setRamal( $linha ['ramal_ocorrencia_ocorrencia'] );
+                $mensagemForum->getOcorrencia()->setLocal( $linha ['local_ocorrencia_ocorrencia'] );
+                $mensagemForum->getOcorrencia()->setStatus( $linha ['status_ocorrencia_ocorrencia'] );
+                $mensagemForum->getOcorrencia()->setSolucao( $linha ['solucao_ocorrencia_ocorrencia'] );
+                $mensagemForum->getOcorrencia()->setPrioridade( $linha ['prioridade_ocorrencia_ocorrencia'] );
+                $mensagemForum->getOcorrencia()->setAvaliacao( $linha ['avaliacao_ocorrencia_ocorrencia'] );
+                $mensagemForum->getOcorrencia()->setEmail( $linha ['email_ocorrencia_ocorrencia'] );
+                $mensagemForum->getOcorrencia()->setAnexo( $linha ['anexo_ocorrencia_ocorrencia'] );
+                $mensagemForum->getOcorrencia()->setLocalSala( $linha ['local_sala_ocorrencia_ocorrencia'] );
+                $mensagemForum->getUsuario()->setId( $linha ['id_usuario_usuario'] );
+                $mensagemForum->getUsuario()->setNome( $linha ['nome_usuario_usuario'] );
+                $mensagemForum->getUsuario()->setEmail( $linha ['email_usuario_usuario'] );
+                $mensagemForum->getUsuario()->setLogin( $linha ['login_usuario_usuario'] );
+                $mensagemForum->getUsuario()->setSenha( $linha ['senha_usuario_usuario'] );
+                $mensagemForum->getUsuario()->setNivel( $linha ['nivel_usuario_usuario'] );
                 
                 
 		    }

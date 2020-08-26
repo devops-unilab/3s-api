@@ -56,10 +56,16 @@ class MensagemForumController {
 	public function cadastrar() {
             
         if(!isset($_POST['enviar_mensagem_forum'])){
-            $this->view->mostraFormInserir();
+            $ocorrenciaDao = new OcorrenciaDAO($this->dao->getConexao());
+            $listaOcorrencia = $ocorrenciaDao->retornaLista();
+
+            $usuarioDao = new UsuarioDAO($this->dao->getConexao());
+            $listaUsuario = $usuarioDao->retornaLista();
+
+            $this->view->mostraFormInserir($listaOcorrencia, $listaUsuario);
 		    return;
 		}
-		if (! ( isset ( $_POST ['tipo'] ) && isset ( $_POST ['mensagem'] ) && isset ( $_POST ['id_user'] ) && isset ( $_POST ['dt_envio'] ) && isset ( $_POST ['origem'] ) && isset ( $_POST ['ativo'] ))) {
+		if (! ( isset ( $_POST ['tipo'] ) && isset ( $_POST ['mensagem'] ) && isset ( $_POST ['data_envio'] ) &&  isset($_POST ['ocorrencia']) &&  isset($_POST ['usuario']))) {
 			echo '
                 <div class="alert alert-danger" role="alert">
                     Falha ao cadastrar. Algum campo deve estar faltando. 
@@ -72,10 +78,9 @@ class MensagemForumController {
 		$mensagemForum = new MensagemForum ();
 		$mensagemForum->setTipo ( $_POST ['tipo'] );
 		$mensagemForum->setMensagem ( $_POST ['mensagem'] );
-		$mensagemForum->setIdUser ( $_POST ['id_user'] );
-		$mensagemForum->setDtEnvio ( $_POST ['dt_envio'] );
-		$mensagemForum->setOrigem ( $_POST ['origem'] );
-		$mensagemForum->setAtivo ( $_POST ['ativo'] );
+		$mensagemForum->setDataEnvio ( $_POST ['data_envio'] );
+		$mensagemForum->getOcorrencia()->setId ( $_POST ['ocorrencia'] );
+		$mensagemForum->getUsuario()->setId ( $_POST ['usuario'] );
             
 		if ($this->dao->inserir ( $mensagemForum ))
         {
@@ -110,21 +115,24 @@ class MensagemForumController {
 	    $this->dao->preenchePorId($selecionado);
 	        
         if(!isset($_POST['editar_mensagem_forum'])){
-            $this->view->mostraFormEditar($selecionado);
+            $ocorrenciaDao = new OcorrenciaDAO($this->dao->getConexao());
+            $listaOcorrencia = $ocorrenciaDao->retornaLista();
+
+            $usuarioDao = new UsuarioDAO($this->dao->getConexao());
+            $listaUsuario = $usuarioDao->retornaLista();
+
+            $this->view->mostraFormEditar($listaOcorrencia, $listaUsuario, $selecionado);
             return;
         }
             
-		if (! ( isset ( $_POST ['tipo'] ) && isset ( $_POST ['mensagem'] ) && isset ( $_POST ['id_user'] ) && isset ( $_POST ['dt_envio'] ) && isset ( $_POST ['origem'] ) && isset ( $_POST ['ativo'] ))) {
+		if (! ( isset ( $_POST ['tipo'] ) && isset ( $_POST ['mensagem'] ) && isset ( $_POST ['data_envio'] ) &&  isset($_POST ['ocorrencia']) &&  isset($_POST ['usuario']))) {
 			echo "Incompleto";
 			return;
 		}
 
 		$selecionado->setTipo ( $_POST ['tipo'] );
 		$selecionado->setMensagem ( $_POST ['mensagem'] );
-		$selecionado->setIdUser ( $_POST ['id_user'] );
-		$selecionado->setDtEnvio ( $_POST ['dt_envio'] );
-		$selecionado->setOrigem ( $_POST ['origem'] );
-		$selecionado->setAtivo ( $_POST ['ativo'] );
+		$selecionado->setDataEnvio ( $_POST ['data_envio'] );
             
 		if ($this->dao->atualizar ($selecionado ))
         {
@@ -235,10 +243,7 @@ class MensagemForumController {
 					'id' => $pesquisado->getId (), 
 					'tipo' => $pesquisado->getTipo (), 
 					'mensagem' => $pesquisado->getMensagem (), 
-					'idUser' => $pesquisado->getIdUser (), 
-					'dtEnvio' => $pesquisado->getDtEnvio (), 
-					'origem' => $pesquisado->getOrigem (), 
-					'ativo' => $pesquisado->getAtivo ()
+					'dataEnvio' => $pesquisado->getDataEnvio (), 
             
             
 			);
@@ -252,10 +257,7 @@ class MensagemForumController {
 					'id' => $linha->getId (), 
 					'tipo' => $linha->getTipo (), 
 					'mensagem' => $linha->getMensagem (), 
-					'idUser' => $linha->getIdUser (), 
-					'dtEnvio' => $linha->getDtEnvio (), 
-					'origem' => $linha->getOrigem (), 
-					'ativo' => $linha->getAtivo ()
+					'dataEnvio' => $linha->getDataEnvio (), 
             
             
 			);
@@ -358,23 +360,8 @@ class MensagemForumController {
         }
                     
 
-        if (isset($jsonBody['id_user'])) {
-            $pesquisado->setIdUser($jsonBody['id_user']);
-        }
-                    
-
-        if (isset($jsonBody['dt_envio'])) {
-            $pesquisado->setDtEnvio($jsonBody['dt_envio']);
-        }
-                    
-
-        if (isset($jsonBody['origem'])) {
-            $pesquisado->setOrigem($jsonBody['origem']);
-        }
-                    
-
-        if (isset($jsonBody['ativo'])) {
-            $pesquisado->setAtivo($jsonBody['ativo']);
+        if (isset($jsonBody['data_envio'])) {
+            $pesquisado->setDataEnvio($jsonBody['data_envio']);
         }
                     
 
@@ -405,7 +392,7 @@ class MensagemForumController {
         $body = file_get_contents('php://input');
         $jsonBody = json_decode($body, true);
 
-        if (! ( isset ( $jsonBody ['tipo'] ) && isset ( $jsonBody ['mensagem'] ) && isset ( $jsonBody ['idUser'] ) && isset ( $jsonBody ['dtEnvio'] ) && isset ( $jsonBody ['origem'] ) && isset ( $jsonBody ['ativo'] ))) {
+        if (! ( isset ( $jsonBody ['tipo'] ) && isset ( $jsonBody ['mensagem'] ) && isset ( $jsonBody ['dataEnvio'] ) &&  isset($_POST ['ocorrencia']) &&  isset($_POST ['usuario']))) {
 			echo "Incompleto";
 			return;
 		}
@@ -417,13 +404,7 @@ class MensagemForumController {
 
         $adicionado->setMensagem($jsonBody['mensagem']);
 
-        $adicionado->setIdUser($jsonBody['id_user']);
-
-        $adicionado->setDtEnvio($jsonBody['dt_envio']);
-
-        $adicionado->setOrigem($jsonBody['origem']);
-
-        $adicionado->setAtivo($jsonBody['ativo']);
+        $adicionado->setDataEnvio($jsonBody['data_envio']);
 
         if ($this->dao->inserir($adicionado)) {
             echo "Sucesso";
