@@ -24,6 +24,7 @@ class OcorrenciaDAO extends DAO {
         $sql = "UPDATE ocorrencia
                 SET
                 id_local = :idLocal,
+                id_usuario_cliente = :idUsuarioCliente,
                 descricao = :descricao,
                 campus = :campus,
                 patrimonio = :patrimonio,
@@ -34,10 +35,13 @@ class OcorrenciaDAO extends DAO {
                 prioridade = :prioridade,
                 avaliacao = :avaliacao,
                 email = :email,
+                id_usuario_atendente = :idUsuarioAtendente,
+                id_usuario_indicado = :idUsuarioIndicado,
                 anexo = :anexo,
                 local_sala = :localSala
                 WHERE ocorrencia.id = :id;";
 			$idLocal = $ocorrencia->getIdLocal();
+			$idUsuarioCliente = $ocorrencia->getIdUsuarioCliente();
 			$descricao = $ocorrencia->getDescricao();
 			$campus = $ocorrencia->getCampus();
 			$patrimonio = $ocorrencia->getPatrimonio();
@@ -48,6 +52,8 @@ class OcorrenciaDAO extends DAO {
 			$prioridade = $ocorrencia->getPrioridade();
 			$avaliacao = $ocorrencia->getAvaliacao();
 			$email = $ocorrencia->getEmail();
+			$idUsuarioAtendente = $ocorrencia->getIdUsuarioAtendente();
+			$idUsuarioIndicado = $ocorrencia->getIdUsuarioIndicado();
 			$anexo = $ocorrencia->getAnexo();
 			$localSala = $ocorrencia->getLocalSala();
             
@@ -56,6 +62,7 @@ class OcorrenciaDAO extends DAO {
             $stmt = $this->getConexao()->prepare($sql);
 			$stmt->bindParam(":id", $id, PDO::PARAM_INT);
 			$stmt->bindParam(":idLocal", $idLocal, PDO::PARAM_INT);
+			$stmt->bindParam(":idUsuarioCliente", $idUsuarioCliente, PDO::PARAM_INT);
 			$stmt->bindParam(":descricao", $descricao, PDO::PARAM_STR);
 			$stmt->bindParam(":campus", $campus, PDO::PARAM_STR);
 			$stmt->bindParam(":patrimonio", $patrimonio, PDO::PARAM_STR);
@@ -66,6 +73,8 @@ class OcorrenciaDAO extends DAO {
 			$stmt->bindParam(":prioridade", $prioridade, PDO::PARAM_STR);
 			$stmt->bindParam(":avaliacao", $avaliacao, PDO::PARAM_STR);
 			$stmt->bindParam(":email", $email, PDO::PARAM_STR);
+			$stmt->bindParam(":idUsuarioAtendente", $idUsuarioAtendente, PDO::PARAM_INT);
+			$stmt->bindParam(":idUsuarioIndicado", $idUsuarioIndicado, PDO::PARAM_INT);
 			$stmt->bindParam(":anexo", $anexo, PDO::PARAM_STR);
 			$stmt->bindParam(":localSala", $localSala, PDO::PARAM_STR);
             
@@ -79,11 +88,11 @@ class OcorrenciaDAO extends DAO {
             
 
     public function inserir(Ocorrencia $ocorrencia){
-        $sql = "INSERT INTO ocorrencia(id_area_responsavel, id_servico, id_local, id_usuario_cliente, descricao, campus, patrimonio, ramal, local, status, solucao, prioridade, avaliacao, email, id_usuario_atendente, id_usuario_indicado, anexo, local_sala) VALUES (:areaResponsavel, :servico, :idLocal, :usuarioCliente, :descricao, :campus, :patrimonio, :ramal, :local, :status, :solucao, :prioridade, :avaliacao, :email, :usuarioAtendente, :usuarioIndicado, :anexo, :localSala);";
+        $sql = "INSERT INTO ocorrencia(id_area_responsavel, id_servico, id_local, id_usuario_cliente, descricao, campus, patrimonio, ramal, local, status, solucao, prioridade, avaliacao, email, id_usuario_atendente, id_usuario_indicado, anexo, local_sala) VALUES (:areaResponsavel, :servico, :idLocal, :idUsuarioCliente, :descricao, :campus, :patrimonio, :ramal, :local, :status, :solucao, :prioridade, :avaliacao, :email, :idUsuarioAtendente, :idUsuarioIndicado, :anexo, :localSala);";
 		$areaResponsavel = $ocorrencia->getAreaResponsavel()->getId();
 		$servico = $ocorrencia->getServico()->getId();
 		$idLocal = $ocorrencia->getIdLocal();
-		$usuarioCliente = $ocorrencia->getUsuarioCliente()->getId();
+		$idUsuarioCliente = $ocorrencia->getIdUsuarioCliente();
 		$descricao = $ocorrencia->getDescricao();
 		$campus = $ocorrencia->getCampus();
 		$patrimonio = $ocorrencia->getPatrimonio();
@@ -94,8 +103,8 @@ class OcorrenciaDAO extends DAO {
 		$prioridade = $ocorrencia->getPrioridade();
 		$avaliacao = $ocorrencia->getAvaliacao();
 		$email = $ocorrencia->getEmail();
-		$usuarioAtendente = $ocorrencia->getUsuarioAtendente()->getId();
-		$usuarioIndicado = $ocorrencia->getUsuarioIndicado()->getId();
+		$idUsuarioAtendente = $ocorrencia->getIdUsuarioAtendente();
+		$idUsuarioIndicado = $ocorrencia->getIdUsuarioIndicado();
 		$anexo = $ocorrencia->getAnexo();
 		$localSala = $ocorrencia->getLocalSala();
 		try {
@@ -104,7 +113,7 @@ class OcorrenciaDAO extends DAO {
 			$stmt->bindParam(":areaResponsavel", $areaResponsavel, PDO::PARAM_INT);
 			$stmt->bindParam(":servico", $servico, PDO::PARAM_INT);
 			$stmt->bindParam(":idLocal", $idLocal, PDO::PARAM_INT);
-			$stmt->bindParam(":usuarioCliente", $usuarioCliente, PDO::PARAM_INT);
+			$stmt->bindParam(":idUsuarioCliente", $idUsuarioCliente, PDO::PARAM_INT);
 			$stmt->bindParam(":descricao", $descricao, PDO::PARAM_STR);
 			$stmt->bindParam(":campus", $campus, PDO::PARAM_STR);
 			$stmt->bindParam(":patrimonio", $patrimonio, PDO::PARAM_STR);
@@ -115,8 +124,8 @@ class OcorrenciaDAO extends DAO {
 			$stmt->bindParam(":prioridade", $prioridade, PDO::PARAM_STR);
 			$stmt->bindParam(":avaliacao", $avaliacao, PDO::PARAM_STR);
 			$stmt->bindParam(":email", $email, PDO::PARAM_STR);
-			$stmt->bindParam(":usuarioAtendente", $usuarioAtendente, PDO::PARAM_INT);
-			$stmt->bindParam(":usuarioIndicado", $usuarioIndicado, PDO::PARAM_INT);
+			$stmt->bindParam(":idUsuarioAtendente", $idUsuarioAtendente, PDO::PARAM_INT);
+			$stmt->bindParam(":idUsuarioIndicado", $idUsuarioIndicado, PDO::PARAM_INT);
 			$stmt->bindParam(":anexo", $anexo, PDO::PARAM_STR);
 			$stmt->bindParam(":localSala", $localSala, PDO::PARAM_STR);
 			return $stmt->execute();
@@ -126,12 +135,12 @@ class OcorrenciaDAO extends DAO {
             
     }
     public function inserirComPK(Ocorrencia $ocorrencia){
-        $sql = "INSERT INTO ocorrencia(id, id_area_responsavel_area_responsavel, id_servico_servico, id_local, id_usuario_usuario_cliente, descricao, campus, patrimonio, ramal, local, status, solucao, prioridade, avaliacao, email, id_usuario_usuario_atendente, id_usuario_usuario_indicado, anexo, local_sala) VALUES (:id, :areaResponsavel, :servico, :idLocal, :usuarioCliente, :descricao, :campus, :patrimonio, :ramal, :local, :status, :solucao, :prioridade, :avaliacao, :email, :usuarioAtendente, :usuarioIndicado, :anexo, :localSala);";
+        $sql = "INSERT INTO ocorrencia(id, id_area_responsavel_area_responsavel, id_servico_servico, id_local, id_usuario_cliente, descricao, campus, patrimonio, ramal, local, status, solucao, prioridade, avaliacao, email, id_usuario_atendente, id_usuario_indicado, anexo, local_sala) VALUES (:id, :areaResponsavel, :servico, :idLocal, :idUsuarioCliente, :descricao, :campus, :patrimonio, :ramal, :local, :status, :solucao, :prioridade, :avaliacao, :email, :idUsuarioAtendente, :idUsuarioIndicado, :anexo, :localSala);";
 		$id = $ocorrencia->getId();
 		$areaResponsavel = $ocorrencia->getAreaResponsavel()->getId();
 		$servico = $ocorrencia->getServico()->getId();
 		$idLocal = $ocorrencia->getIdLocal();
-		$usuarioCliente = $ocorrencia->getUsuarioCliente()->getId();
+		$idUsuarioCliente = $ocorrencia->getIdUsuarioCliente();
 		$descricao = $ocorrencia->getDescricao();
 		$campus = $ocorrencia->getCampus();
 		$patrimonio = $ocorrencia->getPatrimonio();
@@ -142,8 +151,8 @@ class OcorrenciaDAO extends DAO {
 		$prioridade = $ocorrencia->getPrioridade();
 		$avaliacao = $ocorrencia->getAvaliacao();
 		$email = $ocorrencia->getEmail();
-		$usuarioAtendente = $ocorrencia->getUsuarioAtendente()->getId();
-		$usuarioIndicado = $ocorrencia->getUsuarioIndicado()->getId();
+		$idUsuarioAtendente = $ocorrencia->getIdUsuarioAtendente();
+		$idUsuarioIndicado = $ocorrencia->getIdUsuarioIndicado();
 		$anexo = $ocorrencia->getAnexo();
 		$localSala = $ocorrencia->getLocalSala();
 		try {
@@ -153,7 +162,7 @@ class OcorrenciaDAO extends DAO {
 			$stmt->bindParam(":areaResponsavel", $areaResponsavel, PDO::PARAM_INT);
 			$stmt->bindParam(":servico", $servico, PDO::PARAM_INT);
 			$stmt->bindParam(":idLocal", $idLocal, PDO::PARAM_INT);
-			$stmt->bindParam(":usuarioCliente", $usuarioCliente, PDO::PARAM_INT);
+			$stmt->bindParam(":idUsuarioCliente", $idUsuarioCliente, PDO::PARAM_INT);
 			$stmt->bindParam(":descricao", $descricao, PDO::PARAM_STR);
 			$stmt->bindParam(":campus", $campus, PDO::PARAM_STR);
 			$stmt->bindParam(":patrimonio", $patrimonio, PDO::PARAM_STR);
@@ -164,8 +173,8 @@ class OcorrenciaDAO extends DAO {
 			$stmt->bindParam(":prioridade", $prioridade, PDO::PARAM_STR);
 			$stmt->bindParam(":avaliacao", $avaliacao, PDO::PARAM_STR);
 			$stmt->bindParam(":email", $email, PDO::PARAM_STR);
-			$stmt->bindParam(":usuarioAtendente", $usuarioAtendente, PDO::PARAM_INT);
-			$stmt->bindParam(":usuarioIndicado", $usuarioIndicado, PDO::PARAM_INT);
+			$stmt->bindParam(":idUsuarioAtendente", $idUsuarioAtendente, PDO::PARAM_INT);
+			$stmt->bindParam(":idUsuarioIndicado", $idUsuarioIndicado, PDO::PARAM_INT);
 			$stmt->bindParam(":anexo", $anexo, PDO::PARAM_STR);
 			$stmt->bindParam(":localSala", $localSala, PDO::PARAM_STR);
 			return $stmt->execute();
@@ -197,6 +206,7 @@ class OcorrenciaDAO extends DAO {
 		SELECT
         ocorrencia.id, 
         ocorrencia.id_local, 
+        ocorrencia.id_usuario_cliente, 
         ocorrencia.descricao, 
         ocorrencia.campus, 
         ocorrencia.patrimonio, 
@@ -207,6 +217,8 @@ class OcorrenciaDAO extends DAO {
         ocorrencia.prioridade, 
         ocorrencia.avaliacao, 
         ocorrencia.email, 
+        ocorrencia.id_usuario_atendente, 
+        ocorrencia.id_usuario_indicado, 
         ocorrencia.anexo, 
         ocorrencia.local_sala, 
         area_responsavel.id as id_area_responsavel_area_responsavel, 
@@ -217,31 +229,10 @@ class OcorrenciaDAO extends DAO {
         servico.nome as nome_servico_servico, 
         servico.descricao as descricao_servico_servico, 
         servico.tempo_sla as tempo_sla_servico_servico, 
-        servico.visao as visao_servico_servico, 
-        usuario_cliente.id as id_usuario_usuario_cliente, 
-        usuario_cliente.nome as nome_usuario_usuario_cliente, 
-        usuario_cliente.email as email_usuario_usuario_cliente, 
-        usuario_cliente.login as login_usuario_usuario_cliente, 
-        usuario_cliente.senha as senha_usuario_usuario_cliente, 
-        usuario_cliente.nivel as nivel_usuario_usuario_cliente, 
-        usuario_atendente.id as id_usuario_usuario_atendente, 
-        usuario_atendente.nome as nome_usuario_usuario_atendente, 
-        usuario_atendente.email as email_usuario_usuario_atendente, 
-        usuario_atendente.login as login_usuario_usuario_atendente, 
-        usuario_atendente.senha as senha_usuario_usuario_atendente, 
-        usuario_atendente.nivel as nivel_usuario_usuario_atendente, 
-        usuario_indicado.id as id_usuario_usuario_indicado, 
-        usuario_indicado.nome as nome_usuario_usuario_indicado, 
-        usuario_indicado.email as email_usuario_usuario_indicado, 
-        usuario_indicado.login as login_usuario_usuario_indicado, 
-        usuario_indicado.senha as senha_usuario_usuario_indicado, 
-        usuario_indicado.nivel as nivel_usuario_usuario_indicado
+        servico.visao as visao_servico_servico
 		FROM ocorrencia
 		INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel
 		INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico
-		INNER JOIN usuario as usuario_cliente ON usuario_cliente.id = ocorrencia.id_usuario_cliente
-		INNER JOIN usuario as usuario_atendente ON usuario_atendente.id = ocorrencia.id_usuario_atendente
-		INNER JOIN usuario as usuario_indicado ON usuario_indicado.id = ocorrencia.id_usuario_indicado
                  LIMIT 1000";
 
         try {
@@ -258,6 +249,7 @@ class OcorrenciaDAO extends DAO {
 		        $ocorrencia = new Ocorrencia();
                 $ocorrencia->setId( $linha ['id'] );
                 $ocorrencia->setIdLocal( $linha ['id_local'] );
+                $ocorrencia->setIdUsuarioCliente( $linha ['id_usuario_cliente'] );
                 $ocorrencia->setDescricao( $linha ['descricao'] );
                 $ocorrencia->setCampus( $linha ['campus'] );
                 $ocorrencia->setPatrimonio( $linha ['patrimonio'] );
@@ -268,6 +260,8 @@ class OcorrenciaDAO extends DAO {
                 $ocorrencia->setPrioridade( $linha ['prioridade'] );
                 $ocorrencia->setAvaliacao( $linha ['avaliacao'] );
                 $ocorrencia->setEmail( $linha ['email'] );
+                $ocorrencia->setIdUsuarioAtendente( $linha ['id_usuario_atendente'] );
+                $ocorrencia->setIdUsuarioIndicado( $linha ['id_usuario_indicado'] );
                 $ocorrencia->setAnexo( $linha ['anexo'] );
                 $ocorrencia->setLocalSala( $linha ['local_sala'] );
                 $ocorrencia->getAreaResponsavel()->setId( $linha ['id_area_responsavel_area_responsavel'] );
@@ -279,24 +273,6 @@ class OcorrenciaDAO extends DAO {
                 $ocorrencia->getServico()->setDescricao( $linha ['descricao_servico_servico'] );
                 $ocorrencia->getServico()->setTempoSla( $linha ['tempo_sla_servico_servico'] );
                 $ocorrencia->getServico()->setVisao( $linha ['visao_servico_servico'] );
-                $ocorrencia->getUsuarioCliente()->setId( $linha ['id_usuario_usuario_cliente'] );
-                $ocorrencia->getUsuarioCliente()->setNome( $linha ['nome_usuario_usuario_cliente'] );
-                $ocorrencia->getUsuarioCliente()->setEmail( $linha ['email_usuario_usuario_cliente'] );
-                $ocorrencia->getUsuarioCliente()->setLogin( $linha ['login_usuario_usuario_cliente'] );
-                $ocorrencia->getUsuarioCliente()->setSenha( $linha ['senha_usuario_usuario_cliente'] );
-                $ocorrencia->getUsuarioCliente()->setNivel( $linha ['nivel_usuario_usuario_cliente'] );
-                $ocorrencia->getUsuarioAtendente()->setId( $linha ['id_usuario_usuario_atendente'] );
-                $ocorrencia->getUsuarioAtendente()->setNome( $linha ['nome_usuario_usuario_atendente'] );
-                $ocorrencia->getUsuarioAtendente()->setEmail( $linha ['email_usuario_usuario_atendente'] );
-                $ocorrencia->getUsuarioAtendente()->setLogin( $linha ['login_usuario_usuario_atendente'] );
-                $ocorrencia->getUsuarioAtendente()->setSenha( $linha ['senha_usuario_usuario_atendente'] );
-                $ocorrencia->getUsuarioAtendente()->setNivel( $linha ['nivel_usuario_usuario_atendente'] );
-                $ocorrencia->getUsuarioIndicado()->setId( $linha ['id_usuario_usuario_indicado'] );
-                $ocorrencia->getUsuarioIndicado()->setNome( $linha ['nome_usuario_usuario_indicado'] );
-                $ocorrencia->getUsuarioIndicado()->setEmail( $linha ['email_usuario_usuario_indicado'] );
-                $ocorrencia->getUsuarioIndicado()->setLogin( $linha ['login_usuario_usuario_indicado'] );
-                $ocorrencia->getUsuarioIndicado()->setSenha( $linha ['senha_usuario_usuario_indicado'] );
-                $ocorrencia->getUsuarioIndicado()->setNivel( $linha ['nivel_usuario_usuario_indicado'] );
                 $lista [] = $ocorrencia;
 
 	
@@ -316,6 +292,7 @@ class OcorrenciaDAO extends DAO {
 		SELECT
         ocorrencia.id, 
         ocorrencia.id_local, 
+        ocorrencia.id_usuario_cliente, 
         ocorrencia.descricao, 
         ocorrencia.campus, 
         ocorrencia.patrimonio, 
@@ -326,6 +303,8 @@ class OcorrenciaDAO extends DAO {
         ocorrencia.prioridade, 
         ocorrencia.avaliacao, 
         ocorrencia.email, 
+        ocorrencia.id_usuario_atendente, 
+        ocorrencia.id_usuario_indicado, 
         ocorrencia.anexo, 
         ocorrencia.local_sala, 
         area_responsavel.id as id_area_responsavel_area_responsavel, 
@@ -336,31 +315,10 @@ class OcorrenciaDAO extends DAO {
         servico.nome as nome_servico_servico, 
         servico.descricao as descricao_servico_servico, 
         servico.tempo_sla as tempo_sla_servico_servico, 
-        servico.visao as visao_servico_servico, 
-        usuario_cliente.id as id_usuario_usuario_cliente, 
-        usuario_cliente.nome as nome_usuario_usuario_cliente, 
-        usuario_cliente.email as email_usuario_usuario_cliente, 
-        usuario_cliente.login as login_usuario_usuario_cliente, 
-        usuario_cliente.senha as senha_usuario_usuario_cliente, 
-        usuario_cliente.nivel as nivel_usuario_usuario_cliente, 
-        usuario_atendente.id as id_usuario_usuario_atendente, 
-        usuario_atendente.nome as nome_usuario_usuario_atendente, 
-        usuario_atendente.email as email_usuario_usuario_atendente, 
-        usuario_atendente.login as login_usuario_usuario_atendente, 
-        usuario_atendente.senha as senha_usuario_usuario_atendente, 
-        usuario_atendente.nivel as nivel_usuario_usuario_atendente, 
-        usuario_indicado.id as id_usuario_usuario_indicado, 
-        usuario_indicado.nome as nome_usuario_usuario_indicado, 
-        usuario_indicado.email as email_usuario_usuario_indicado, 
-        usuario_indicado.login as login_usuario_usuario_indicado, 
-        usuario_indicado.senha as senha_usuario_usuario_indicado, 
-        usuario_indicado.nivel as nivel_usuario_usuario_indicado
+        servico.visao as visao_servico_servico
 		FROM ocorrencia
 		INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel
 		INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico
-		INNER JOIN usuario as usuario_cliente ON usuario_cliente.id = ocorrencia.id_usuario_cliente
-		INNER JOIN usuario as usuario_atendente ON usuario_atendente.id = ocorrencia.id_usuario_atendente
-		INNER JOIN usuario as usuario_indicado ON usuario_indicado.id = ocorrencia.id_usuario_indicado
             WHERE ocorrencia.id = :id";
                 
         try {
@@ -373,6 +331,7 @@ class OcorrenciaDAO extends DAO {
                 $ocorrencia = new Ocorrencia();
     	        $ocorrencia->setId( $linha ['id'] );
     	        $ocorrencia->setIdLocal( $linha ['id_local'] );
+    	        $ocorrencia->setIdUsuarioCliente( $linha ['id_usuario_cliente'] );
     	        $ocorrencia->setDescricao( $linha ['descricao'] );
     	        $ocorrencia->setCampus( $linha ['campus'] );
     	        $ocorrencia->setPatrimonio( $linha ['patrimonio'] );
@@ -383,6 +342,8 @@ class OcorrenciaDAO extends DAO {
     	        $ocorrencia->setPrioridade( $linha ['prioridade'] );
     	        $ocorrencia->setAvaliacao( $linha ['avaliacao'] );
     	        $ocorrencia->setEmail( $linha ['email'] );
+    	        $ocorrencia->setIdUsuarioAtendente( $linha ['id_usuario_atendente'] );
+    	        $ocorrencia->setIdUsuarioIndicado( $linha ['id_usuario_indicado'] );
     	        $ocorrencia->setAnexo( $linha ['anexo'] );
     	        $ocorrencia->setLocalSala( $linha ['local_sala'] );
     			$ocorrencia->getAreaResponsavel()->setId( $linha ['id_area_responsavel_area_responsavel'] );
@@ -397,27 +358,6 @@ class OcorrenciaDAO extends DAO {
     			$ocorrencia->getServico()->setVisao( $linha ['visao_servico_servico'] );
     			$ocorrencia->getServico()->setAreaResponsavel( $linha ['area_responsavel_servico_servico'] );
     			$ocorrencia->getServico()->setGrupoServico( $linha ['grupo_servico_servico_servico'] );
-    			$ocorrencia->getUsuarioCliente()->setId( $linha ['id_usuario_usuario_cliente'] );
-    			$ocorrencia->getUsuarioCliente()->setNome( $linha ['nome_usuario_usuario_cliente'] );
-    			$ocorrencia->getUsuarioCliente()->setEmail( $linha ['email_usuario_usuario_cliente'] );
-    			$ocorrencia->getUsuarioCliente()->setLogin( $linha ['login_usuario_usuario_cliente'] );
-    			$ocorrencia->getUsuarioCliente()->setSenha( $linha ['senha_usuario_usuario_cliente'] );
-    			$ocorrencia->getUsuarioCliente()->setNivel( $linha ['nivel_usuario_usuario_cliente'] );
-    			$ocorrencia->getUsuarioCliente()->setSetor( $linha ['setor_usuario_usuario_cliente'] );
-    			$ocorrencia->getUsuarioAtendente()->setId( $linha ['id_usuario_usuario_atendente'] );
-    			$ocorrencia->getUsuarioAtendente()->setNome( $linha ['nome_usuario_usuario_atendente'] );
-    			$ocorrencia->getUsuarioAtendente()->setEmail( $linha ['email_usuario_usuario_atendente'] );
-    			$ocorrencia->getUsuarioAtendente()->setLogin( $linha ['login_usuario_usuario_atendente'] );
-    			$ocorrencia->getUsuarioAtendente()->setSenha( $linha ['senha_usuario_usuario_atendente'] );
-    			$ocorrencia->getUsuarioAtendente()->setNivel( $linha ['nivel_usuario_usuario_atendente'] );
-    			$ocorrencia->getUsuarioAtendente()->setSetor( $linha ['setor_usuario_usuario_atendente'] );
-    			$ocorrencia->getUsuarioIndicado()->setId( $linha ['id_usuario_usuario_indicado'] );
-    			$ocorrencia->getUsuarioIndicado()->setNome( $linha ['nome_usuario_usuario_indicado'] );
-    			$ocorrencia->getUsuarioIndicado()->setEmail( $linha ['email_usuario_usuario_indicado'] );
-    			$ocorrencia->getUsuarioIndicado()->setLogin( $linha ['login_usuario_usuario_indicado'] );
-    			$ocorrencia->getUsuarioIndicado()->setSenha( $linha ['senha_usuario_usuario_indicado'] );
-    			$ocorrencia->getUsuarioIndicado()->setNivel( $linha ['nivel_usuario_usuario_indicado'] );
-    			$ocorrencia->getUsuarioIndicado()->setSetor( $linha ['setor_usuario_usuario_indicado'] );
     			$lista [] = $ocorrencia;
     			    
             }
@@ -437,6 +377,7 @@ class OcorrenciaDAO extends DAO {
 		SELECT
         ocorrencia.id, 
         ocorrencia.id_local, 
+        ocorrencia.id_usuario_cliente, 
         ocorrencia.descricao, 
         ocorrencia.campus, 
         ocorrencia.patrimonio, 
@@ -447,6 +388,8 @@ class OcorrenciaDAO extends DAO {
         ocorrencia.prioridade, 
         ocorrencia.avaliacao, 
         ocorrencia.email, 
+        ocorrencia.id_usuario_atendente, 
+        ocorrencia.id_usuario_indicado, 
         ocorrencia.anexo, 
         ocorrencia.local_sala, 
         area_responsavel.id as id_area_responsavel_area_responsavel, 
@@ -457,31 +400,10 @@ class OcorrenciaDAO extends DAO {
         servico.nome as nome_servico_servico, 
         servico.descricao as descricao_servico_servico, 
         servico.tempo_sla as tempo_sla_servico_servico, 
-        servico.visao as visao_servico_servico, 
-        usuario_cliente.id as id_usuario_usuario_cliente, 
-        usuario_cliente.nome as nome_usuario_usuario_cliente, 
-        usuario_cliente.email as email_usuario_usuario_cliente, 
-        usuario_cliente.login as login_usuario_usuario_cliente, 
-        usuario_cliente.senha as senha_usuario_usuario_cliente, 
-        usuario_cliente.nivel as nivel_usuario_usuario_cliente, 
-        usuario_atendente.id as id_usuario_usuario_atendente, 
-        usuario_atendente.nome as nome_usuario_usuario_atendente, 
-        usuario_atendente.email as email_usuario_usuario_atendente, 
-        usuario_atendente.login as login_usuario_usuario_atendente, 
-        usuario_atendente.senha as senha_usuario_usuario_atendente, 
-        usuario_atendente.nivel as nivel_usuario_usuario_atendente, 
-        usuario_indicado.id as id_usuario_usuario_indicado, 
-        usuario_indicado.nome as nome_usuario_usuario_indicado, 
-        usuario_indicado.email as email_usuario_usuario_indicado, 
-        usuario_indicado.login as login_usuario_usuario_indicado, 
-        usuario_indicado.senha as senha_usuario_usuario_indicado, 
-        usuario_indicado.nivel as nivel_usuario_usuario_indicado
+        servico.visao as visao_servico_servico
 		FROM ocorrencia
 		INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel
 		INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico
-		INNER JOIN usuario as usuario_cliente ON usuario_cliente.id = ocorrencia.id_usuario_cliente
-		INNER JOIN usuario as usuario_atendente ON usuario_atendente.id = ocorrencia.id_usuario_atendente
-		INNER JOIN usuario as usuario_indicado ON usuario_indicado.id = ocorrencia.id_usuario_indicado
             WHERE ocorrencia.id_local = :idLocal";
                 
         try {
@@ -494,6 +416,7 @@ class OcorrenciaDAO extends DAO {
                 $ocorrencia = new Ocorrencia();
     	        $ocorrencia->setId( $linha ['id'] );
     	        $ocorrencia->setIdLocal( $linha ['id_local'] );
+    	        $ocorrencia->setIdUsuarioCliente( $linha ['id_usuario_cliente'] );
     	        $ocorrencia->setDescricao( $linha ['descricao'] );
     	        $ocorrencia->setCampus( $linha ['campus'] );
     	        $ocorrencia->setPatrimonio( $linha ['patrimonio'] );
@@ -504,6 +427,8 @@ class OcorrenciaDAO extends DAO {
     	        $ocorrencia->setPrioridade( $linha ['prioridade'] );
     	        $ocorrencia->setAvaliacao( $linha ['avaliacao'] );
     	        $ocorrencia->setEmail( $linha ['email'] );
+    	        $ocorrencia->setIdUsuarioAtendente( $linha ['id_usuario_atendente'] );
+    	        $ocorrencia->setIdUsuarioIndicado( $linha ['id_usuario_indicado'] );
     	        $ocorrencia->setAnexo( $linha ['anexo'] );
     	        $ocorrencia->setLocalSala( $linha ['local_sala'] );
     			$ocorrencia->getAreaResponsavel()->setId( $linha ['id_area_responsavel_area_responsavel'] );
@@ -518,27 +443,91 @@ class OcorrenciaDAO extends DAO {
     			$ocorrencia->getServico()->setVisao( $linha ['visao_servico_servico'] );
     			$ocorrencia->getServico()->setAreaResponsavel( $linha ['area_responsavel_servico_servico'] );
     			$ocorrencia->getServico()->setGrupoServico( $linha ['grupo_servico_servico_servico'] );
-    			$ocorrencia->getUsuarioCliente()->setId( $linha ['id_usuario_usuario_cliente'] );
-    			$ocorrencia->getUsuarioCliente()->setNome( $linha ['nome_usuario_usuario_cliente'] );
-    			$ocorrencia->getUsuarioCliente()->setEmail( $linha ['email_usuario_usuario_cliente'] );
-    			$ocorrencia->getUsuarioCliente()->setLogin( $linha ['login_usuario_usuario_cliente'] );
-    			$ocorrencia->getUsuarioCliente()->setSenha( $linha ['senha_usuario_usuario_cliente'] );
-    			$ocorrencia->getUsuarioCliente()->setNivel( $linha ['nivel_usuario_usuario_cliente'] );
-    			$ocorrencia->getUsuarioCliente()->setSetor( $linha ['setor_usuario_usuario_cliente'] );
-    			$ocorrencia->getUsuarioAtendente()->setId( $linha ['id_usuario_usuario_atendente'] );
-    			$ocorrencia->getUsuarioAtendente()->setNome( $linha ['nome_usuario_usuario_atendente'] );
-    			$ocorrencia->getUsuarioAtendente()->setEmail( $linha ['email_usuario_usuario_atendente'] );
-    			$ocorrencia->getUsuarioAtendente()->setLogin( $linha ['login_usuario_usuario_atendente'] );
-    			$ocorrencia->getUsuarioAtendente()->setSenha( $linha ['senha_usuario_usuario_atendente'] );
-    			$ocorrencia->getUsuarioAtendente()->setNivel( $linha ['nivel_usuario_usuario_atendente'] );
-    			$ocorrencia->getUsuarioAtendente()->setSetor( $linha ['setor_usuario_usuario_atendente'] );
-    			$ocorrencia->getUsuarioIndicado()->setId( $linha ['id_usuario_usuario_indicado'] );
-    			$ocorrencia->getUsuarioIndicado()->setNome( $linha ['nome_usuario_usuario_indicado'] );
-    			$ocorrencia->getUsuarioIndicado()->setEmail( $linha ['email_usuario_usuario_indicado'] );
-    			$ocorrencia->getUsuarioIndicado()->setLogin( $linha ['login_usuario_usuario_indicado'] );
-    			$ocorrencia->getUsuarioIndicado()->setSenha( $linha ['senha_usuario_usuario_indicado'] );
-    			$ocorrencia->getUsuarioIndicado()->setNivel( $linha ['nivel_usuario_usuario_indicado'] );
-    			$ocorrencia->getUsuarioIndicado()->setSetor( $linha ['setor_usuario_usuario_indicado'] );
+    			$lista [] = $ocorrencia;
+    			    
+            }
+    			    
+        } catch(PDOException $e) {
+            echo $e->getMessage();
+    			    
+        }
+		return $lista;
+    }
+                
+    public function pesquisaPorIdUsuarioCliente(Ocorrencia $ocorrencia) {
+        $lista = array();
+	    $idUsuarioCliente = $ocorrencia->getIdUsuarioCliente();
+                
+        $sql = "
+		SELECT
+        ocorrencia.id, 
+        ocorrencia.id_local, 
+        ocorrencia.id_usuario_cliente, 
+        ocorrencia.descricao, 
+        ocorrencia.campus, 
+        ocorrencia.patrimonio, 
+        ocorrencia.ramal, 
+        ocorrencia.local, 
+        ocorrencia.status, 
+        ocorrencia.solucao, 
+        ocorrencia.prioridade, 
+        ocorrencia.avaliacao, 
+        ocorrencia.email, 
+        ocorrencia.id_usuario_atendente, 
+        ocorrencia.id_usuario_indicado, 
+        ocorrencia.anexo, 
+        ocorrencia.local_sala, 
+        area_responsavel.id as id_area_responsavel_area_responsavel, 
+        area_responsavel.nome as nome_area_responsavel_area_responsavel, 
+        area_responsavel.descricao as descricao_area_responsavel_area_responsavel, 
+        area_responsavel.email as email_area_responsavel_area_responsavel, 
+        servico.id as id_servico_servico, 
+        servico.nome as nome_servico_servico, 
+        servico.descricao as descricao_servico_servico, 
+        servico.tempo_sla as tempo_sla_servico_servico, 
+        servico.visao as visao_servico_servico
+		FROM ocorrencia
+		INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel
+		INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico
+            WHERE ocorrencia.id_usuario_cliente = :idUsuarioCliente";
+                
+        try {
+                
+            $stmt = $this->conexao->prepare($sql);
+            $stmt->bindParam(":idUsuarioCliente", $idUsuarioCliente, PDO::PARAM_INT);
+            $stmt->execute();
+            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            foreach ( $result as $linha ) {
+                $ocorrencia = new Ocorrencia();
+    	        $ocorrencia->setId( $linha ['id'] );
+    	        $ocorrencia->setIdLocal( $linha ['id_local'] );
+    	        $ocorrencia->setIdUsuarioCliente( $linha ['id_usuario_cliente'] );
+    	        $ocorrencia->setDescricao( $linha ['descricao'] );
+    	        $ocorrencia->setCampus( $linha ['campus'] );
+    	        $ocorrencia->setPatrimonio( $linha ['patrimonio'] );
+    	        $ocorrencia->setRamal( $linha ['ramal'] );
+    	        $ocorrencia->setLocal( $linha ['local'] );
+    	        $ocorrencia->setStatus( $linha ['status'] );
+    	        $ocorrencia->setSolucao( $linha ['solucao'] );
+    	        $ocorrencia->setPrioridade( $linha ['prioridade'] );
+    	        $ocorrencia->setAvaliacao( $linha ['avaliacao'] );
+    	        $ocorrencia->setEmail( $linha ['email'] );
+    	        $ocorrencia->setIdUsuarioAtendente( $linha ['id_usuario_atendente'] );
+    	        $ocorrencia->setIdUsuarioIndicado( $linha ['id_usuario_indicado'] );
+    	        $ocorrencia->setAnexo( $linha ['anexo'] );
+    	        $ocorrencia->setLocalSala( $linha ['local_sala'] );
+    			$ocorrencia->getAreaResponsavel()->setId( $linha ['id_area_responsavel_area_responsavel'] );
+    			$ocorrencia->getAreaResponsavel()->setNome( $linha ['nome_area_responsavel_area_responsavel'] );
+    			$ocorrencia->getAreaResponsavel()->setDescricao( $linha ['descricao_area_responsavel_area_responsavel'] );
+    			$ocorrencia->getAreaResponsavel()->setEmail( $linha ['email_area_responsavel_area_responsavel'] );
+    			$ocorrencia->getServico()->setId( $linha ['id_servico_servico'] );
+    			$ocorrencia->getServico()->setNome( $linha ['nome_servico_servico'] );
+    			$ocorrencia->getServico()->setDescricao( $linha ['descricao_servico_servico'] );
+    			$ocorrencia->getServico()->setTipoAtividade( $linha ['tipo_atividade_servico_servico'] );
+    			$ocorrencia->getServico()->setTempoSla( $linha ['tempo_sla_servico_servico'] );
+    			$ocorrencia->getServico()->setVisao( $linha ['visao_servico_servico'] );
+    			$ocorrencia->getServico()->setAreaResponsavel( $linha ['area_responsavel_servico_servico'] );
+    			$ocorrencia->getServico()->setGrupoServico( $linha ['grupo_servico_servico_servico'] );
     			$lista [] = $ocorrencia;
     			    
             }
@@ -558,6 +547,7 @@ class OcorrenciaDAO extends DAO {
 		SELECT
         ocorrencia.id, 
         ocorrencia.id_local, 
+        ocorrencia.id_usuario_cliente, 
         ocorrencia.descricao, 
         ocorrencia.campus, 
         ocorrencia.patrimonio, 
@@ -568,6 +558,8 @@ class OcorrenciaDAO extends DAO {
         ocorrencia.prioridade, 
         ocorrencia.avaliacao, 
         ocorrencia.email, 
+        ocorrencia.id_usuario_atendente, 
+        ocorrencia.id_usuario_indicado, 
         ocorrencia.anexo, 
         ocorrencia.local_sala, 
         area_responsavel.id as id_area_responsavel_area_responsavel, 
@@ -578,31 +570,10 @@ class OcorrenciaDAO extends DAO {
         servico.nome as nome_servico_servico, 
         servico.descricao as descricao_servico_servico, 
         servico.tempo_sla as tempo_sla_servico_servico, 
-        servico.visao as visao_servico_servico, 
-        usuario_cliente.id as id_usuario_usuario_cliente, 
-        usuario_cliente.nome as nome_usuario_usuario_cliente, 
-        usuario_cliente.email as email_usuario_usuario_cliente, 
-        usuario_cliente.login as login_usuario_usuario_cliente, 
-        usuario_cliente.senha as senha_usuario_usuario_cliente, 
-        usuario_cliente.nivel as nivel_usuario_usuario_cliente, 
-        usuario_atendente.id as id_usuario_usuario_atendente, 
-        usuario_atendente.nome as nome_usuario_usuario_atendente, 
-        usuario_atendente.email as email_usuario_usuario_atendente, 
-        usuario_atendente.login as login_usuario_usuario_atendente, 
-        usuario_atendente.senha as senha_usuario_usuario_atendente, 
-        usuario_atendente.nivel as nivel_usuario_usuario_atendente, 
-        usuario_indicado.id as id_usuario_usuario_indicado, 
-        usuario_indicado.nome as nome_usuario_usuario_indicado, 
-        usuario_indicado.email as email_usuario_usuario_indicado, 
-        usuario_indicado.login as login_usuario_usuario_indicado, 
-        usuario_indicado.senha as senha_usuario_usuario_indicado, 
-        usuario_indicado.nivel as nivel_usuario_usuario_indicado
+        servico.visao as visao_servico_servico
 		FROM ocorrencia
 		INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel
 		INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico
-		INNER JOIN usuario as usuario_cliente ON usuario_cliente.id = ocorrencia.id_usuario_cliente
-		INNER JOIN usuario as usuario_atendente ON usuario_atendente.id = ocorrencia.id_usuario_atendente
-		INNER JOIN usuario as usuario_indicado ON usuario_indicado.id = ocorrencia.id_usuario_indicado
             WHERE ocorrencia.descricao like :descricao";
                 
         try {
@@ -615,6 +586,7 @@ class OcorrenciaDAO extends DAO {
                 $ocorrencia = new Ocorrencia();
     	        $ocorrencia->setId( $linha ['id'] );
     	        $ocorrencia->setIdLocal( $linha ['id_local'] );
+    	        $ocorrencia->setIdUsuarioCliente( $linha ['id_usuario_cliente'] );
     	        $ocorrencia->setDescricao( $linha ['descricao'] );
     	        $ocorrencia->setCampus( $linha ['campus'] );
     	        $ocorrencia->setPatrimonio( $linha ['patrimonio'] );
@@ -625,6 +597,8 @@ class OcorrenciaDAO extends DAO {
     	        $ocorrencia->setPrioridade( $linha ['prioridade'] );
     	        $ocorrencia->setAvaliacao( $linha ['avaliacao'] );
     	        $ocorrencia->setEmail( $linha ['email'] );
+    	        $ocorrencia->setIdUsuarioAtendente( $linha ['id_usuario_atendente'] );
+    	        $ocorrencia->setIdUsuarioIndicado( $linha ['id_usuario_indicado'] );
     	        $ocorrencia->setAnexo( $linha ['anexo'] );
     	        $ocorrencia->setLocalSala( $linha ['local_sala'] );
     			$ocorrencia->getAreaResponsavel()->setId( $linha ['id_area_responsavel_area_responsavel'] );
@@ -639,27 +613,6 @@ class OcorrenciaDAO extends DAO {
     			$ocorrencia->getServico()->setVisao( $linha ['visao_servico_servico'] );
     			$ocorrencia->getServico()->setAreaResponsavel( $linha ['area_responsavel_servico_servico'] );
     			$ocorrencia->getServico()->setGrupoServico( $linha ['grupo_servico_servico_servico'] );
-    			$ocorrencia->getUsuarioCliente()->setId( $linha ['id_usuario_usuario_cliente'] );
-    			$ocorrencia->getUsuarioCliente()->setNome( $linha ['nome_usuario_usuario_cliente'] );
-    			$ocorrencia->getUsuarioCliente()->setEmail( $linha ['email_usuario_usuario_cliente'] );
-    			$ocorrencia->getUsuarioCliente()->setLogin( $linha ['login_usuario_usuario_cliente'] );
-    			$ocorrencia->getUsuarioCliente()->setSenha( $linha ['senha_usuario_usuario_cliente'] );
-    			$ocorrencia->getUsuarioCliente()->setNivel( $linha ['nivel_usuario_usuario_cliente'] );
-    			$ocorrencia->getUsuarioCliente()->setSetor( $linha ['setor_usuario_usuario_cliente'] );
-    			$ocorrencia->getUsuarioAtendente()->setId( $linha ['id_usuario_usuario_atendente'] );
-    			$ocorrencia->getUsuarioAtendente()->setNome( $linha ['nome_usuario_usuario_atendente'] );
-    			$ocorrencia->getUsuarioAtendente()->setEmail( $linha ['email_usuario_usuario_atendente'] );
-    			$ocorrencia->getUsuarioAtendente()->setLogin( $linha ['login_usuario_usuario_atendente'] );
-    			$ocorrencia->getUsuarioAtendente()->setSenha( $linha ['senha_usuario_usuario_atendente'] );
-    			$ocorrencia->getUsuarioAtendente()->setNivel( $linha ['nivel_usuario_usuario_atendente'] );
-    			$ocorrencia->getUsuarioAtendente()->setSetor( $linha ['setor_usuario_usuario_atendente'] );
-    			$ocorrencia->getUsuarioIndicado()->setId( $linha ['id_usuario_usuario_indicado'] );
-    			$ocorrencia->getUsuarioIndicado()->setNome( $linha ['nome_usuario_usuario_indicado'] );
-    			$ocorrencia->getUsuarioIndicado()->setEmail( $linha ['email_usuario_usuario_indicado'] );
-    			$ocorrencia->getUsuarioIndicado()->setLogin( $linha ['login_usuario_usuario_indicado'] );
-    			$ocorrencia->getUsuarioIndicado()->setSenha( $linha ['senha_usuario_usuario_indicado'] );
-    			$ocorrencia->getUsuarioIndicado()->setNivel( $linha ['nivel_usuario_usuario_indicado'] );
-    			$ocorrencia->getUsuarioIndicado()->setSetor( $linha ['setor_usuario_usuario_indicado'] );
     			$lista [] = $ocorrencia;
     			    
             }
@@ -679,6 +632,7 @@ class OcorrenciaDAO extends DAO {
 		SELECT
         ocorrencia.id, 
         ocorrencia.id_local, 
+        ocorrencia.id_usuario_cliente, 
         ocorrencia.descricao, 
         ocorrencia.campus, 
         ocorrencia.patrimonio, 
@@ -689,6 +643,8 @@ class OcorrenciaDAO extends DAO {
         ocorrencia.prioridade, 
         ocorrencia.avaliacao, 
         ocorrencia.email, 
+        ocorrencia.id_usuario_atendente, 
+        ocorrencia.id_usuario_indicado, 
         ocorrencia.anexo, 
         ocorrencia.local_sala, 
         area_responsavel.id as id_area_responsavel_area_responsavel, 
@@ -699,31 +655,10 @@ class OcorrenciaDAO extends DAO {
         servico.nome as nome_servico_servico, 
         servico.descricao as descricao_servico_servico, 
         servico.tempo_sla as tempo_sla_servico_servico, 
-        servico.visao as visao_servico_servico, 
-        usuario_cliente.id as id_usuario_usuario_cliente, 
-        usuario_cliente.nome as nome_usuario_usuario_cliente, 
-        usuario_cliente.email as email_usuario_usuario_cliente, 
-        usuario_cliente.login as login_usuario_usuario_cliente, 
-        usuario_cliente.senha as senha_usuario_usuario_cliente, 
-        usuario_cliente.nivel as nivel_usuario_usuario_cliente, 
-        usuario_atendente.id as id_usuario_usuario_atendente, 
-        usuario_atendente.nome as nome_usuario_usuario_atendente, 
-        usuario_atendente.email as email_usuario_usuario_atendente, 
-        usuario_atendente.login as login_usuario_usuario_atendente, 
-        usuario_atendente.senha as senha_usuario_usuario_atendente, 
-        usuario_atendente.nivel as nivel_usuario_usuario_atendente, 
-        usuario_indicado.id as id_usuario_usuario_indicado, 
-        usuario_indicado.nome as nome_usuario_usuario_indicado, 
-        usuario_indicado.email as email_usuario_usuario_indicado, 
-        usuario_indicado.login as login_usuario_usuario_indicado, 
-        usuario_indicado.senha as senha_usuario_usuario_indicado, 
-        usuario_indicado.nivel as nivel_usuario_usuario_indicado
+        servico.visao as visao_servico_servico
 		FROM ocorrencia
 		INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel
 		INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico
-		INNER JOIN usuario as usuario_cliente ON usuario_cliente.id = ocorrencia.id_usuario_cliente
-		INNER JOIN usuario as usuario_atendente ON usuario_atendente.id = ocorrencia.id_usuario_atendente
-		INNER JOIN usuario as usuario_indicado ON usuario_indicado.id = ocorrencia.id_usuario_indicado
             WHERE ocorrencia.campus like :campus";
                 
         try {
@@ -736,6 +671,7 @@ class OcorrenciaDAO extends DAO {
                 $ocorrencia = new Ocorrencia();
     	        $ocorrencia->setId( $linha ['id'] );
     	        $ocorrencia->setIdLocal( $linha ['id_local'] );
+    	        $ocorrencia->setIdUsuarioCliente( $linha ['id_usuario_cliente'] );
     	        $ocorrencia->setDescricao( $linha ['descricao'] );
     	        $ocorrencia->setCampus( $linha ['campus'] );
     	        $ocorrencia->setPatrimonio( $linha ['patrimonio'] );
@@ -746,6 +682,8 @@ class OcorrenciaDAO extends DAO {
     	        $ocorrencia->setPrioridade( $linha ['prioridade'] );
     	        $ocorrencia->setAvaliacao( $linha ['avaliacao'] );
     	        $ocorrencia->setEmail( $linha ['email'] );
+    	        $ocorrencia->setIdUsuarioAtendente( $linha ['id_usuario_atendente'] );
+    	        $ocorrencia->setIdUsuarioIndicado( $linha ['id_usuario_indicado'] );
     	        $ocorrencia->setAnexo( $linha ['anexo'] );
     	        $ocorrencia->setLocalSala( $linha ['local_sala'] );
     			$ocorrencia->getAreaResponsavel()->setId( $linha ['id_area_responsavel_area_responsavel'] );
@@ -760,27 +698,6 @@ class OcorrenciaDAO extends DAO {
     			$ocorrencia->getServico()->setVisao( $linha ['visao_servico_servico'] );
     			$ocorrencia->getServico()->setAreaResponsavel( $linha ['area_responsavel_servico_servico'] );
     			$ocorrencia->getServico()->setGrupoServico( $linha ['grupo_servico_servico_servico'] );
-    			$ocorrencia->getUsuarioCliente()->setId( $linha ['id_usuario_usuario_cliente'] );
-    			$ocorrencia->getUsuarioCliente()->setNome( $linha ['nome_usuario_usuario_cliente'] );
-    			$ocorrencia->getUsuarioCliente()->setEmail( $linha ['email_usuario_usuario_cliente'] );
-    			$ocorrencia->getUsuarioCliente()->setLogin( $linha ['login_usuario_usuario_cliente'] );
-    			$ocorrencia->getUsuarioCliente()->setSenha( $linha ['senha_usuario_usuario_cliente'] );
-    			$ocorrencia->getUsuarioCliente()->setNivel( $linha ['nivel_usuario_usuario_cliente'] );
-    			$ocorrencia->getUsuarioCliente()->setSetor( $linha ['setor_usuario_usuario_cliente'] );
-    			$ocorrencia->getUsuarioAtendente()->setId( $linha ['id_usuario_usuario_atendente'] );
-    			$ocorrencia->getUsuarioAtendente()->setNome( $linha ['nome_usuario_usuario_atendente'] );
-    			$ocorrencia->getUsuarioAtendente()->setEmail( $linha ['email_usuario_usuario_atendente'] );
-    			$ocorrencia->getUsuarioAtendente()->setLogin( $linha ['login_usuario_usuario_atendente'] );
-    			$ocorrencia->getUsuarioAtendente()->setSenha( $linha ['senha_usuario_usuario_atendente'] );
-    			$ocorrencia->getUsuarioAtendente()->setNivel( $linha ['nivel_usuario_usuario_atendente'] );
-    			$ocorrencia->getUsuarioAtendente()->setSetor( $linha ['setor_usuario_usuario_atendente'] );
-    			$ocorrencia->getUsuarioIndicado()->setId( $linha ['id_usuario_usuario_indicado'] );
-    			$ocorrencia->getUsuarioIndicado()->setNome( $linha ['nome_usuario_usuario_indicado'] );
-    			$ocorrencia->getUsuarioIndicado()->setEmail( $linha ['email_usuario_usuario_indicado'] );
-    			$ocorrencia->getUsuarioIndicado()->setLogin( $linha ['login_usuario_usuario_indicado'] );
-    			$ocorrencia->getUsuarioIndicado()->setSenha( $linha ['senha_usuario_usuario_indicado'] );
-    			$ocorrencia->getUsuarioIndicado()->setNivel( $linha ['nivel_usuario_usuario_indicado'] );
-    			$ocorrencia->getUsuarioIndicado()->setSetor( $linha ['setor_usuario_usuario_indicado'] );
     			$lista [] = $ocorrencia;
     			    
             }
@@ -800,6 +717,7 @@ class OcorrenciaDAO extends DAO {
 		SELECT
         ocorrencia.id, 
         ocorrencia.id_local, 
+        ocorrencia.id_usuario_cliente, 
         ocorrencia.descricao, 
         ocorrencia.campus, 
         ocorrencia.patrimonio, 
@@ -810,6 +728,8 @@ class OcorrenciaDAO extends DAO {
         ocorrencia.prioridade, 
         ocorrencia.avaliacao, 
         ocorrencia.email, 
+        ocorrencia.id_usuario_atendente, 
+        ocorrencia.id_usuario_indicado, 
         ocorrencia.anexo, 
         ocorrencia.local_sala, 
         area_responsavel.id as id_area_responsavel_area_responsavel, 
@@ -820,31 +740,10 @@ class OcorrenciaDAO extends DAO {
         servico.nome as nome_servico_servico, 
         servico.descricao as descricao_servico_servico, 
         servico.tempo_sla as tempo_sla_servico_servico, 
-        servico.visao as visao_servico_servico, 
-        usuario_cliente.id as id_usuario_usuario_cliente, 
-        usuario_cliente.nome as nome_usuario_usuario_cliente, 
-        usuario_cliente.email as email_usuario_usuario_cliente, 
-        usuario_cliente.login as login_usuario_usuario_cliente, 
-        usuario_cliente.senha as senha_usuario_usuario_cliente, 
-        usuario_cliente.nivel as nivel_usuario_usuario_cliente, 
-        usuario_atendente.id as id_usuario_usuario_atendente, 
-        usuario_atendente.nome as nome_usuario_usuario_atendente, 
-        usuario_atendente.email as email_usuario_usuario_atendente, 
-        usuario_atendente.login as login_usuario_usuario_atendente, 
-        usuario_atendente.senha as senha_usuario_usuario_atendente, 
-        usuario_atendente.nivel as nivel_usuario_usuario_atendente, 
-        usuario_indicado.id as id_usuario_usuario_indicado, 
-        usuario_indicado.nome as nome_usuario_usuario_indicado, 
-        usuario_indicado.email as email_usuario_usuario_indicado, 
-        usuario_indicado.login as login_usuario_usuario_indicado, 
-        usuario_indicado.senha as senha_usuario_usuario_indicado, 
-        usuario_indicado.nivel as nivel_usuario_usuario_indicado
+        servico.visao as visao_servico_servico
 		FROM ocorrencia
 		INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel
 		INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico
-		INNER JOIN usuario as usuario_cliente ON usuario_cliente.id = ocorrencia.id_usuario_cliente
-		INNER JOIN usuario as usuario_atendente ON usuario_atendente.id = ocorrencia.id_usuario_atendente
-		INNER JOIN usuario as usuario_indicado ON usuario_indicado.id = ocorrencia.id_usuario_indicado
             WHERE ocorrencia.patrimonio like :patrimonio";
                 
         try {
@@ -857,6 +756,7 @@ class OcorrenciaDAO extends DAO {
                 $ocorrencia = new Ocorrencia();
     	        $ocorrencia->setId( $linha ['id'] );
     	        $ocorrencia->setIdLocal( $linha ['id_local'] );
+    	        $ocorrencia->setIdUsuarioCliente( $linha ['id_usuario_cliente'] );
     	        $ocorrencia->setDescricao( $linha ['descricao'] );
     	        $ocorrencia->setCampus( $linha ['campus'] );
     	        $ocorrencia->setPatrimonio( $linha ['patrimonio'] );
@@ -867,6 +767,8 @@ class OcorrenciaDAO extends DAO {
     	        $ocorrencia->setPrioridade( $linha ['prioridade'] );
     	        $ocorrencia->setAvaliacao( $linha ['avaliacao'] );
     	        $ocorrencia->setEmail( $linha ['email'] );
+    	        $ocorrencia->setIdUsuarioAtendente( $linha ['id_usuario_atendente'] );
+    	        $ocorrencia->setIdUsuarioIndicado( $linha ['id_usuario_indicado'] );
     	        $ocorrencia->setAnexo( $linha ['anexo'] );
     	        $ocorrencia->setLocalSala( $linha ['local_sala'] );
     			$ocorrencia->getAreaResponsavel()->setId( $linha ['id_area_responsavel_area_responsavel'] );
@@ -881,27 +783,6 @@ class OcorrenciaDAO extends DAO {
     			$ocorrencia->getServico()->setVisao( $linha ['visao_servico_servico'] );
     			$ocorrencia->getServico()->setAreaResponsavel( $linha ['area_responsavel_servico_servico'] );
     			$ocorrencia->getServico()->setGrupoServico( $linha ['grupo_servico_servico_servico'] );
-    			$ocorrencia->getUsuarioCliente()->setId( $linha ['id_usuario_usuario_cliente'] );
-    			$ocorrencia->getUsuarioCliente()->setNome( $linha ['nome_usuario_usuario_cliente'] );
-    			$ocorrencia->getUsuarioCliente()->setEmail( $linha ['email_usuario_usuario_cliente'] );
-    			$ocorrencia->getUsuarioCliente()->setLogin( $linha ['login_usuario_usuario_cliente'] );
-    			$ocorrencia->getUsuarioCliente()->setSenha( $linha ['senha_usuario_usuario_cliente'] );
-    			$ocorrencia->getUsuarioCliente()->setNivel( $linha ['nivel_usuario_usuario_cliente'] );
-    			$ocorrencia->getUsuarioCliente()->setSetor( $linha ['setor_usuario_usuario_cliente'] );
-    			$ocorrencia->getUsuarioAtendente()->setId( $linha ['id_usuario_usuario_atendente'] );
-    			$ocorrencia->getUsuarioAtendente()->setNome( $linha ['nome_usuario_usuario_atendente'] );
-    			$ocorrencia->getUsuarioAtendente()->setEmail( $linha ['email_usuario_usuario_atendente'] );
-    			$ocorrencia->getUsuarioAtendente()->setLogin( $linha ['login_usuario_usuario_atendente'] );
-    			$ocorrencia->getUsuarioAtendente()->setSenha( $linha ['senha_usuario_usuario_atendente'] );
-    			$ocorrencia->getUsuarioAtendente()->setNivel( $linha ['nivel_usuario_usuario_atendente'] );
-    			$ocorrencia->getUsuarioAtendente()->setSetor( $linha ['setor_usuario_usuario_atendente'] );
-    			$ocorrencia->getUsuarioIndicado()->setId( $linha ['id_usuario_usuario_indicado'] );
-    			$ocorrencia->getUsuarioIndicado()->setNome( $linha ['nome_usuario_usuario_indicado'] );
-    			$ocorrencia->getUsuarioIndicado()->setEmail( $linha ['email_usuario_usuario_indicado'] );
-    			$ocorrencia->getUsuarioIndicado()->setLogin( $linha ['login_usuario_usuario_indicado'] );
-    			$ocorrencia->getUsuarioIndicado()->setSenha( $linha ['senha_usuario_usuario_indicado'] );
-    			$ocorrencia->getUsuarioIndicado()->setNivel( $linha ['nivel_usuario_usuario_indicado'] );
-    			$ocorrencia->getUsuarioIndicado()->setSetor( $linha ['setor_usuario_usuario_indicado'] );
     			$lista [] = $ocorrencia;
     			    
             }
@@ -921,6 +802,7 @@ class OcorrenciaDAO extends DAO {
 		SELECT
         ocorrencia.id, 
         ocorrencia.id_local, 
+        ocorrencia.id_usuario_cliente, 
         ocorrencia.descricao, 
         ocorrencia.campus, 
         ocorrencia.patrimonio, 
@@ -931,6 +813,8 @@ class OcorrenciaDAO extends DAO {
         ocorrencia.prioridade, 
         ocorrencia.avaliacao, 
         ocorrencia.email, 
+        ocorrencia.id_usuario_atendente, 
+        ocorrencia.id_usuario_indicado, 
         ocorrencia.anexo, 
         ocorrencia.local_sala, 
         area_responsavel.id as id_area_responsavel_area_responsavel, 
@@ -941,31 +825,10 @@ class OcorrenciaDAO extends DAO {
         servico.nome as nome_servico_servico, 
         servico.descricao as descricao_servico_servico, 
         servico.tempo_sla as tempo_sla_servico_servico, 
-        servico.visao as visao_servico_servico, 
-        usuario_cliente.id as id_usuario_usuario_cliente, 
-        usuario_cliente.nome as nome_usuario_usuario_cliente, 
-        usuario_cliente.email as email_usuario_usuario_cliente, 
-        usuario_cliente.login as login_usuario_usuario_cliente, 
-        usuario_cliente.senha as senha_usuario_usuario_cliente, 
-        usuario_cliente.nivel as nivel_usuario_usuario_cliente, 
-        usuario_atendente.id as id_usuario_usuario_atendente, 
-        usuario_atendente.nome as nome_usuario_usuario_atendente, 
-        usuario_atendente.email as email_usuario_usuario_atendente, 
-        usuario_atendente.login as login_usuario_usuario_atendente, 
-        usuario_atendente.senha as senha_usuario_usuario_atendente, 
-        usuario_atendente.nivel as nivel_usuario_usuario_atendente, 
-        usuario_indicado.id as id_usuario_usuario_indicado, 
-        usuario_indicado.nome as nome_usuario_usuario_indicado, 
-        usuario_indicado.email as email_usuario_usuario_indicado, 
-        usuario_indicado.login as login_usuario_usuario_indicado, 
-        usuario_indicado.senha as senha_usuario_usuario_indicado, 
-        usuario_indicado.nivel as nivel_usuario_usuario_indicado
+        servico.visao as visao_servico_servico
 		FROM ocorrencia
 		INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel
 		INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico
-		INNER JOIN usuario as usuario_cliente ON usuario_cliente.id = ocorrencia.id_usuario_cliente
-		INNER JOIN usuario as usuario_atendente ON usuario_atendente.id = ocorrencia.id_usuario_atendente
-		INNER JOIN usuario as usuario_indicado ON usuario_indicado.id = ocorrencia.id_usuario_indicado
             WHERE ocorrencia.ramal like :ramal";
                 
         try {
@@ -978,6 +841,7 @@ class OcorrenciaDAO extends DAO {
                 $ocorrencia = new Ocorrencia();
     	        $ocorrencia->setId( $linha ['id'] );
     	        $ocorrencia->setIdLocal( $linha ['id_local'] );
+    	        $ocorrencia->setIdUsuarioCliente( $linha ['id_usuario_cliente'] );
     	        $ocorrencia->setDescricao( $linha ['descricao'] );
     	        $ocorrencia->setCampus( $linha ['campus'] );
     	        $ocorrencia->setPatrimonio( $linha ['patrimonio'] );
@@ -988,6 +852,8 @@ class OcorrenciaDAO extends DAO {
     	        $ocorrencia->setPrioridade( $linha ['prioridade'] );
     	        $ocorrencia->setAvaliacao( $linha ['avaliacao'] );
     	        $ocorrencia->setEmail( $linha ['email'] );
+    	        $ocorrencia->setIdUsuarioAtendente( $linha ['id_usuario_atendente'] );
+    	        $ocorrencia->setIdUsuarioIndicado( $linha ['id_usuario_indicado'] );
     	        $ocorrencia->setAnexo( $linha ['anexo'] );
     	        $ocorrencia->setLocalSala( $linha ['local_sala'] );
     			$ocorrencia->getAreaResponsavel()->setId( $linha ['id_area_responsavel_area_responsavel'] );
@@ -1002,27 +868,6 @@ class OcorrenciaDAO extends DAO {
     			$ocorrencia->getServico()->setVisao( $linha ['visao_servico_servico'] );
     			$ocorrencia->getServico()->setAreaResponsavel( $linha ['area_responsavel_servico_servico'] );
     			$ocorrencia->getServico()->setGrupoServico( $linha ['grupo_servico_servico_servico'] );
-    			$ocorrencia->getUsuarioCliente()->setId( $linha ['id_usuario_usuario_cliente'] );
-    			$ocorrencia->getUsuarioCliente()->setNome( $linha ['nome_usuario_usuario_cliente'] );
-    			$ocorrencia->getUsuarioCliente()->setEmail( $linha ['email_usuario_usuario_cliente'] );
-    			$ocorrencia->getUsuarioCliente()->setLogin( $linha ['login_usuario_usuario_cliente'] );
-    			$ocorrencia->getUsuarioCliente()->setSenha( $linha ['senha_usuario_usuario_cliente'] );
-    			$ocorrencia->getUsuarioCliente()->setNivel( $linha ['nivel_usuario_usuario_cliente'] );
-    			$ocorrencia->getUsuarioCliente()->setSetor( $linha ['setor_usuario_usuario_cliente'] );
-    			$ocorrencia->getUsuarioAtendente()->setId( $linha ['id_usuario_usuario_atendente'] );
-    			$ocorrencia->getUsuarioAtendente()->setNome( $linha ['nome_usuario_usuario_atendente'] );
-    			$ocorrencia->getUsuarioAtendente()->setEmail( $linha ['email_usuario_usuario_atendente'] );
-    			$ocorrencia->getUsuarioAtendente()->setLogin( $linha ['login_usuario_usuario_atendente'] );
-    			$ocorrencia->getUsuarioAtendente()->setSenha( $linha ['senha_usuario_usuario_atendente'] );
-    			$ocorrencia->getUsuarioAtendente()->setNivel( $linha ['nivel_usuario_usuario_atendente'] );
-    			$ocorrencia->getUsuarioAtendente()->setSetor( $linha ['setor_usuario_usuario_atendente'] );
-    			$ocorrencia->getUsuarioIndicado()->setId( $linha ['id_usuario_usuario_indicado'] );
-    			$ocorrencia->getUsuarioIndicado()->setNome( $linha ['nome_usuario_usuario_indicado'] );
-    			$ocorrencia->getUsuarioIndicado()->setEmail( $linha ['email_usuario_usuario_indicado'] );
-    			$ocorrencia->getUsuarioIndicado()->setLogin( $linha ['login_usuario_usuario_indicado'] );
-    			$ocorrencia->getUsuarioIndicado()->setSenha( $linha ['senha_usuario_usuario_indicado'] );
-    			$ocorrencia->getUsuarioIndicado()->setNivel( $linha ['nivel_usuario_usuario_indicado'] );
-    			$ocorrencia->getUsuarioIndicado()->setSetor( $linha ['setor_usuario_usuario_indicado'] );
     			$lista [] = $ocorrencia;
     			    
             }
@@ -1042,6 +887,7 @@ class OcorrenciaDAO extends DAO {
 		SELECT
         ocorrencia.id, 
         ocorrencia.id_local, 
+        ocorrencia.id_usuario_cliente, 
         ocorrencia.descricao, 
         ocorrencia.campus, 
         ocorrencia.patrimonio, 
@@ -1052,6 +898,8 @@ class OcorrenciaDAO extends DAO {
         ocorrencia.prioridade, 
         ocorrencia.avaliacao, 
         ocorrencia.email, 
+        ocorrencia.id_usuario_atendente, 
+        ocorrencia.id_usuario_indicado, 
         ocorrencia.anexo, 
         ocorrencia.local_sala, 
         area_responsavel.id as id_area_responsavel_area_responsavel, 
@@ -1062,31 +910,10 @@ class OcorrenciaDAO extends DAO {
         servico.nome as nome_servico_servico, 
         servico.descricao as descricao_servico_servico, 
         servico.tempo_sla as tempo_sla_servico_servico, 
-        servico.visao as visao_servico_servico, 
-        usuario_cliente.id as id_usuario_usuario_cliente, 
-        usuario_cliente.nome as nome_usuario_usuario_cliente, 
-        usuario_cliente.email as email_usuario_usuario_cliente, 
-        usuario_cliente.login as login_usuario_usuario_cliente, 
-        usuario_cliente.senha as senha_usuario_usuario_cliente, 
-        usuario_cliente.nivel as nivel_usuario_usuario_cliente, 
-        usuario_atendente.id as id_usuario_usuario_atendente, 
-        usuario_atendente.nome as nome_usuario_usuario_atendente, 
-        usuario_atendente.email as email_usuario_usuario_atendente, 
-        usuario_atendente.login as login_usuario_usuario_atendente, 
-        usuario_atendente.senha as senha_usuario_usuario_atendente, 
-        usuario_atendente.nivel as nivel_usuario_usuario_atendente, 
-        usuario_indicado.id as id_usuario_usuario_indicado, 
-        usuario_indicado.nome as nome_usuario_usuario_indicado, 
-        usuario_indicado.email as email_usuario_usuario_indicado, 
-        usuario_indicado.login as login_usuario_usuario_indicado, 
-        usuario_indicado.senha as senha_usuario_usuario_indicado, 
-        usuario_indicado.nivel as nivel_usuario_usuario_indicado
+        servico.visao as visao_servico_servico
 		FROM ocorrencia
 		INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel
 		INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico
-		INNER JOIN usuario as usuario_cliente ON usuario_cliente.id = ocorrencia.id_usuario_cliente
-		INNER JOIN usuario as usuario_atendente ON usuario_atendente.id = ocorrencia.id_usuario_atendente
-		INNER JOIN usuario as usuario_indicado ON usuario_indicado.id = ocorrencia.id_usuario_indicado
             WHERE ocorrencia.local like :local";
                 
         try {
@@ -1099,6 +926,7 @@ class OcorrenciaDAO extends DAO {
                 $ocorrencia = new Ocorrencia();
     	        $ocorrencia->setId( $linha ['id'] );
     	        $ocorrencia->setIdLocal( $linha ['id_local'] );
+    	        $ocorrencia->setIdUsuarioCliente( $linha ['id_usuario_cliente'] );
     	        $ocorrencia->setDescricao( $linha ['descricao'] );
     	        $ocorrencia->setCampus( $linha ['campus'] );
     	        $ocorrencia->setPatrimonio( $linha ['patrimonio'] );
@@ -1109,6 +937,8 @@ class OcorrenciaDAO extends DAO {
     	        $ocorrencia->setPrioridade( $linha ['prioridade'] );
     	        $ocorrencia->setAvaliacao( $linha ['avaliacao'] );
     	        $ocorrencia->setEmail( $linha ['email'] );
+    	        $ocorrencia->setIdUsuarioAtendente( $linha ['id_usuario_atendente'] );
+    	        $ocorrencia->setIdUsuarioIndicado( $linha ['id_usuario_indicado'] );
     	        $ocorrencia->setAnexo( $linha ['anexo'] );
     	        $ocorrencia->setLocalSala( $linha ['local_sala'] );
     			$ocorrencia->getAreaResponsavel()->setId( $linha ['id_area_responsavel_area_responsavel'] );
@@ -1123,27 +953,6 @@ class OcorrenciaDAO extends DAO {
     			$ocorrencia->getServico()->setVisao( $linha ['visao_servico_servico'] );
     			$ocorrencia->getServico()->setAreaResponsavel( $linha ['area_responsavel_servico_servico'] );
     			$ocorrencia->getServico()->setGrupoServico( $linha ['grupo_servico_servico_servico'] );
-    			$ocorrencia->getUsuarioCliente()->setId( $linha ['id_usuario_usuario_cliente'] );
-    			$ocorrencia->getUsuarioCliente()->setNome( $linha ['nome_usuario_usuario_cliente'] );
-    			$ocorrencia->getUsuarioCliente()->setEmail( $linha ['email_usuario_usuario_cliente'] );
-    			$ocorrencia->getUsuarioCliente()->setLogin( $linha ['login_usuario_usuario_cliente'] );
-    			$ocorrencia->getUsuarioCliente()->setSenha( $linha ['senha_usuario_usuario_cliente'] );
-    			$ocorrencia->getUsuarioCliente()->setNivel( $linha ['nivel_usuario_usuario_cliente'] );
-    			$ocorrencia->getUsuarioCliente()->setSetor( $linha ['setor_usuario_usuario_cliente'] );
-    			$ocorrencia->getUsuarioAtendente()->setId( $linha ['id_usuario_usuario_atendente'] );
-    			$ocorrencia->getUsuarioAtendente()->setNome( $linha ['nome_usuario_usuario_atendente'] );
-    			$ocorrencia->getUsuarioAtendente()->setEmail( $linha ['email_usuario_usuario_atendente'] );
-    			$ocorrencia->getUsuarioAtendente()->setLogin( $linha ['login_usuario_usuario_atendente'] );
-    			$ocorrencia->getUsuarioAtendente()->setSenha( $linha ['senha_usuario_usuario_atendente'] );
-    			$ocorrencia->getUsuarioAtendente()->setNivel( $linha ['nivel_usuario_usuario_atendente'] );
-    			$ocorrencia->getUsuarioAtendente()->setSetor( $linha ['setor_usuario_usuario_atendente'] );
-    			$ocorrencia->getUsuarioIndicado()->setId( $linha ['id_usuario_usuario_indicado'] );
-    			$ocorrencia->getUsuarioIndicado()->setNome( $linha ['nome_usuario_usuario_indicado'] );
-    			$ocorrencia->getUsuarioIndicado()->setEmail( $linha ['email_usuario_usuario_indicado'] );
-    			$ocorrencia->getUsuarioIndicado()->setLogin( $linha ['login_usuario_usuario_indicado'] );
-    			$ocorrencia->getUsuarioIndicado()->setSenha( $linha ['senha_usuario_usuario_indicado'] );
-    			$ocorrencia->getUsuarioIndicado()->setNivel( $linha ['nivel_usuario_usuario_indicado'] );
-    			$ocorrencia->getUsuarioIndicado()->setSetor( $linha ['setor_usuario_usuario_indicado'] );
     			$lista [] = $ocorrencia;
     			    
             }
@@ -1163,6 +972,7 @@ class OcorrenciaDAO extends DAO {
 		SELECT
         ocorrencia.id, 
         ocorrencia.id_local, 
+        ocorrencia.id_usuario_cliente, 
         ocorrencia.descricao, 
         ocorrencia.campus, 
         ocorrencia.patrimonio, 
@@ -1173,6 +983,8 @@ class OcorrenciaDAO extends DAO {
         ocorrencia.prioridade, 
         ocorrencia.avaliacao, 
         ocorrencia.email, 
+        ocorrencia.id_usuario_atendente, 
+        ocorrencia.id_usuario_indicado, 
         ocorrencia.anexo, 
         ocorrencia.local_sala, 
         area_responsavel.id as id_area_responsavel_area_responsavel, 
@@ -1183,31 +995,10 @@ class OcorrenciaDAO extends DAO {
         servico.nome as nome_servico_servico, 
         servico.descricao as descricao_servico_servico, 
         servico.tempo_sla as tempo_sla_servico_servico, 
-        servico.visao as visao_servico_servico, 
-        usuario_cliente.id as id_usuario_usuario_cliente, 
-        usuario_cliente.nome as nome_usuario_usuario_cliente, 
-        usuario_cliente.email as email_usuario_usuario_cliente, 
-        usuario_cliente.login as login_usuario_usuario_cliente, 
-        usuario_cliente.senha as senha_usuario_usuario_cliente, 
-        usuario_cliente.nivel as nivel_usuario_usuario_cliente, 
-        usuario_atendente.id as id_usuario_usuario_atendente, 
-        usuario_atendente.nome as nome_usuario_usuario_atendente, 
-        usuario_atendente.email as email_usuario_usuario_atendente, 
-        usuario_atendente.login as login_usuario_usuario_atendente, 
-        usuario_atendente.senha as senha_usuario_usuario_atendente, 
-        usuario_atendente.nivel as nivel_usuario_usuario_atendente, 
-        usuario_indicado.id as id_usuario_usuario_indicado, 
-        usuario_indicado.nome as nome_usuario_usuario_indicado, 
-        usuario_indicado.email as email_usuario_usuario_indicado, 
-        usuario_indicado.login as login_usuario_usuario_indicado, 
-        usuario_indicado.senha as senha_usuario_usuario_indicado, 
-        usuario_indicado.nivel as nivel_usuario_usuario_indicado
+        servico.visao as visao_servico_servico
 		FROM ocorrencia
 		INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel
 		INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico
-		INNER JOIN usuario as usuario_cliente ON usuario_cliente.id = ocorrencia.id_usuario_cliente
-		INNER JOIN usuario as usuario_atendente ON usuario_atendente.id = ocorrencia.id_usuario_atendente
-		INNER JOIN usuario as usuario_indicado ON usuario_indicado.id = ocorrencia.id_usuario_indicado
             WHERE ocorrencia.status like :status";
                 
         try {
@@ -1220,6 +1011,7 @@ class OcorrenciaDAO extends DAO {
                 $ocorrencia = new Ocorrencia();
     	        $ocorrencia->setId( $linha ['id'] );
     	        $ocorrencia->setIdLocal( $linha ['id_local'] );
+    	        $ocorrencia->setIdUsuarioCliente( $linha ['id_usuario_cliente'] );
     	        $ocorrencia->setDescricao( $linha ['descricao'] );
     	        $ocorrencia->setCampus( $linha ['campus'] );
     	        $ocorrencia->setPatrimonio( $linha ['patrimonio'] );
@@ -1230,6 +1022,8 @@ class OcorrenciaDAO extends DAO {
     	        $ocorrencia->setPrioridade( $linha ['prioridade'] );
     	        $ocorrencia->setAvaliacao( $linha ['avaliacao'] );
     	        $ocorrencia->setEmail( $linha ['email'] );
+    	        $ocorrencia->setIdUsuarioAtendente( $linha ['id_usuario_atendente'] );
+    	        $ocorrencia->setIdUsuarioIndicado( $linha ['id_usuario_indicado'] );
     	        $ocorrencia->setAnexo( $linha ['anexo'] );
     	        $ocorrencia->setLocalSala( $linha ['local_sala'] );
     			$ocorrencia->getAreaResponsavel()->setId( $linha ['id_area_responsavel_area_responsavel'] );
@@ -1244,27 +1038,6 @@ class OcorrenciaDAO extends DAO {
     			$ocorrencia->getServico()->setVisao( $linha ['visao_servico_servico'] );
     			$ocorrencia->getServico()->setAreaResponsavel( $linha ['area_responsavel_servico_servico'] );
     			$ocorrencia->getServico()->setGrupoServico( $linha ['grupo_servico_servico_servico'] );
-    			$ocorrencia->getUsuarioCliente()->setId( $linha ['id_usuario_usuario_cliente'] );
-    			$ocorrencia->getUsuarioCliente()->setNome( $linha ['nome_usuario_usuario_cliente'] );
-    			$ocorrencia->getUsuarioCliente()->setEmail( $linha ['email_usuario_usuario_cliente'] );
-    			$ocorrencia->getUsuarioCliente()->setLogin( $linha ['login_usuario_usuario_cliente'] );
-    			$ocorrencia->getUsuarioCliente()->setSenha( $linha ['senha_usuario_usuario_cliente'] );
-    			$ocorrencia->getUsuarioCliente()->setNivel( $linha ['nivel_usuario_usuario_cliente'] );
-    			$ocorrencia->getUsuarioCliente()->setSetor( $linha ['setor_usuario_usuario_cliente'] );
-    			$ocorrencia->getUsuarioAtendente()->setId( $linha ['id_usuario_usuario_atendente'] );
-    			$ocorrencia->getUsuarioAtendente()->setNome( $linha ['nome_usuario_usuario_atendente'] );
-    			$ocorrencia->getUsuarioAtendente()->setEmail( $linha ['email_usuario_usuario_atendente'] );
-    			$ocorrencia->getUsuarioAtendente()->setLogin( $linha ['login_usuario_usuario_atendente'] );
-    			$ocorrencia->getUsuarioAtendente()->setSenha( $linha ['senha_usuario_usuario_atendente'] );
-    			$ocorrencia->getUsuarioAtendente()->setNivel( $linha ['nivel_usuario_usuario_atendente'] );
-    			$ocorrencia->getUsuarioAtendente()->setSetor( $linha ['setor_usuario_usuario_atendente'] );
-    			$ocorrencia->getUsuarioIndicado()->setId( $linha ['id_usuario_usuario_indicado'] );
-    			$ocorrencia->getUsuarioIndicado()->setNome( $linha ['nome_usuario_usuario_indicado'] );
-    			$ocorrencia->getUsuarioIndicado()->setEmail( $linha ['email_usuario_usuario_indicado'] );
-    			$ocorrencia->getUsuarioIndicado()->setLogin( $linha ['login_usuario_usuario_indicado'] );
-    			$ocorrencia->getUsuarioIndicado()->setSenha( $linha ['senha_usuario_usuario_indicado'] );
-    			$ocorrencia->getUsuarioIndicado()->setNivel( $linha ['nivel_usuario_usuario_indicado'] );
-    			$ocorrencia->getUsuarioIndicado()->setSetor( $linha ['setor_usuario_usuario_indicado'] );
     			$lista [] = $ocorrencia;
     			    
             }
@@ -1284,6 +1057,7 @@ class OcorrenciaDAO extends DAO {
 		SELECT
         ocorrencia.id, 
         ocorrencia.id_local, 
+        ocorrencia.id_usuario_cliente, 
         ocorrencia.descricao, 
         ocorrencia.campus, 
         ocorrencia.patrimonio, 
@@ -1294,6 +1068,8 @@ class OcorrenciaDAO extends DAO {
         ocorrencia.prioridade, 
         ocorrencia.avaliacao, 
         ocorrencia.email, 
+        ocorrencia.id_usuario_atendente, 
+        ocorrencia.id_usuario_indicado, 
         ocorrencia.anexo, 
         ocorrencia.local_sala, 
         area_responsavel.id as id_area_responsavel_area_responsavel, 
@@ -1304,31 +1080,10 @@ class OcorrenciaDAO extends DAO {
         servico.nome as nome_servico_servico, 
         servico.descricao as descricao_servico_servico, 
         servico.tempo_sla as tempo_sla_servico_servico, 
-        servico.visao as visao_servico_servico, 
-        usuario_cliente.id as id_usuario_usuario_cliente, 
-        usuario_cliente.nome as nome_usuario_usuario_cliente, 
-        usuario_cliente.email as email_usuario_usuario_cliente, 
-        usuario_cliente.login as login_usuario_usuario_cliente, 
-        usuario_cliente.senha as senha_usuario_usuario_cliente, 
-        usuario_cliente.nivel as nivel_usuario_usuario_cliente, 
-        usuario_atendente.id as id_usuario_usuario_atendente, 
-        usuario_atendente.nome as nome_usuario_usuario_atendente, 
-        usuario_atendente.email as email_usuario_usuario_atendente, 
-        usuario_atendente.login as login_usuario_usuario_atendente, 
-        usuario_atendente.senha as senha_usuario_usuario_atendente, 
-        usuario_atendente.nivel as nivel_usuario_usuario_atendente, 
-        usuario_indicado.id as id_usuario_usuario_indicado, 
-        usuario_indicado.nome as nome_usuario_usuario_indicado, 
-        usuario_indicado.email as email_usuario_usuario_indicado, 
-        usuario_indicado.login as login_usuario_usuario_indicado, 
-        usuario_indicado.senha as senha_usuario_usuario_indicado, 
-        usuario_indicado.nivel as nivel_usuario_usuario_indicado
+        servico.visao as visao_servico_servico
 		FROM ocorrencia
 		INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel
 		INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico
-		INNER JOIN usuario as usuario_cliente ON usuario_cliente.id = ocorrencia.id_usuario_cliente
-		INNER JOIN usuario as usuario_atendente ON usuario_atendente.id = ocorrencia.id_usuario_atendente
-		INNER JOIN usuario as usuario_indicado ON usuario_indicado.id = ocorrencia.id_usuario_indicado
             WHERE ocorrencia.solucao like :solucao";
                 
         try {
@@ -1341,6 +1096,7 @@ class OcorrenciaDAO extends DAO {
                 $ocorrencia = new Ocorrencia();
     	        $ocorrencia->setId( $linha ['id'] );
     	        $ocorrencia->setIdLocal( $linha ['id_local'] );
+    	        $ocorrencia->setIdUsuarioCliente( $linha ['id_usuario_cliente'] );
     	        $ocorrencia->setDescricao( $linha ['descricao'] );
     	        $ocorrencia->setCampus( $linha ['campus'] );
     	        $ocorrencia->setPatrimonio( $linha ['patrimonio'] );
@@ -1351,6 +1107,8 @@ class OcorrenciaDAO extends DAO {
     	        $ocorrencia->setPrioridade( $linha ['prioridade'] );
     	        $ocorrencia->setAvaliacao( $linha ['avaliacao'] );
     	        $ocorrencia->setEmail( $linha ['email'] );
+    	        $ocorrencia->setIdUsuarioAtendente( $linha ['id_usuario_atendente'] );
+    	        $ocorrencia->setIdUsuarioIndicado( $linha ['id_usuario_indicado'] );
     	        $ocorrencia->setAnexo( $linha ['anexo'] );
     	        $ocorrencia->setLocalSala( $linha ['local_sala'] );
     			$ocorrencia->getAreaResponsavel()->setId( $linha ['id_area_responsavel_area_responsavel'] );
@@ -1365,27 +1123,6 @@ class OcorrenciaDAO extends DAO {
     			$ocorrencia->getServico()->setVisao( $linha ['visao_servico_servico'] );
     			$ocorrencia->getServico()->setAreaResponsavel( $linha ['area_responsavel_servico_servico'] );
     			$ocorrencia->getServico()->setGrupoServico( $linha ['grupo_servico_servico_servico'] );
-    			$ocorrencia->getUsuarioCliente()->setId( $linha ['id_usuario_usuario_cliente'] );
-    			$ocorrencia->getUsuarioCliente()->setNome( $linha ['nome_usuario_usuario_cliente'] );
-    			$ocorrencia->getUsuarioCliente()->setEmail( $linha ['email_usuario_usuario_cliente'] );
-    			$ocorrencia->getUsuarioCliente()->setLogin( $linha ['login_usuario_usuario_cliente'] );
-    			$ocorrencia->getUsuarioCliente()->setSenha( $linha ['senha_usuario_usuario_cliente'] );
-    			$ocorrencia->getUsuarioCliente()->setNivel( $linha ['nivel_usuario_usuario_cliente'] );
-    			$ocorrencia->getUsuarioCliente()->setSetor( $linha ['setor_usuario_usuario_cliente'] );
-    			$ocorrencia->getUsuarioAtendente()->setId( $linha ['id_usuario_usuario_atendente'] );
-    			$ocorrencia->getUsuarioAtendente()->setNome( $linha ['nome_usuario_usuario_atendente'] );
-    			$ocorrencia->getUsuarioAtendente()->setEmail( $linha ['email_usuario_usuario_atendente'] );
-    			$ocorrencia->getUsuarioAtendente()->setLogin( $linha ['login_usuario_usuario_atendente'] );
-    			$ocorrencia->getUsuarioAtendente()->setSenha( $linha ['senha_usuario_usuario_atendente'] );
-    			$ocorrencia->getUsuarioAtendente()->setNivel( $linha ['nivel_usuario_usuario_atendente'] );
-    			$ocorrencia->getUsuarioAtendente()->setSetor( $linha ['setor_usuario_usuario_atendente'] );
-    			$ocorrencia->getUsuarioIndicado()->setId( $linha ['id_usuario_usuario_indicado'] );
-    			$ocorrencia->getUsuarioIndicado()->setNome( $linha ['nome_usuario_usuario_indicado'] );
-    			$ocorrencia->getUsuarioIndicado()->setEmail( $linha ['email_usuario_usuario_indicado'] );
-    			$ocorrencia->getUsuarioIndicado()->setLogin( $linha ['login_usuario_usuario_indicado'] );
-    			$ocorrencia->getUsuarioIndicado()->setSenha( $linha ['senha_usuario_usuario_indicado'] );
-    			$ocorrencia->getUsuarioIndicado()->setNivel( $linha ['nivel_usuario_usuario_indicado'] );
-    			$ocorrencia->getUsuarioIndicado()->setSetor( $linha ['setor_usuario_usuario_indicado'] );
     			$lista [] = $ocorrencia;
     			    
             }
@@ -1405,6 +1142,7 @@ class OcorrenciaDAO extends DAO {
 		SELECT
         ocorrencia.id, 
         ocorrencia.id_local, 
+        ocorrencia.id_usuario_cliente, 
         ocorrencia.descricao, 
         ocorrencia.campus, 
         ocorrencia.patrimonio, 
@@ -1415,6 +1153,8 @@ class OcorrenciaDAO extends DAO {
         ocorrencia.prioridade, 
         ocorrencia.avaliacao, 
         ocorrencia.email, 
+        ocorrencia.id_usuario_atendente, 
+        ocorrencia.id_usuario_indicado, 
         ocorrencia.anexo, 
         ocorrencia.local_sala, 
         area_responsavel.id as id_area_responsavel_area_responsavel, 
@@ -1425,31 +1165,10 @@ class OcorrenciaDAO extends DAO {
         servico.nome as nome_servico_servico, 
         servico.descricao as descricao_servico_servico, 
         servico.tempo_sla as tempo_sla_servico_servico, 
-        servico.visao as visao_servico_servico, 
-        usuario_cliente.id as id_usuario_usuario_cliente, 
-        usuario_cliente.nome as nome_usuario_usuario_cliente, 
-        usuario_cliente.email as email_usuario_usuario_cliente, 
-        usuario_cliente.login as login_usuario_usuario_cliente, 
-        usuario_cliente.senha as senha_usuario_usuario_cliente, 
-        usuario_cliente.nivel as nivel_usuario_usuario_cliente, 
-        usuario_atendente.id as id_usuario_usuario_atendente, 
-        usuario_atendente.nome as nome_usuario_usuario_atendente, 
-        usuario_atendente.email as email_usuario_usuario_atendente, 
-        usuario_atendente.login as login_usuario_usuario_atendente, 
-        usuario_atendente.senha as senha_usuario_usuario_atendente, 
-        usuario_atendente.nivel as nivel_usuario_usuario_atendente, 
-        usuario_indicado.id as id_usuario_usuario_indicado, 
-        usuario_indicado.nome as nome_usuario_usuario_indicado, 
-        usuario_indicado.email as email_usuario_usuario_indicado, 
-        usuario_indicado.login as login_usuario_usuario_indicado, 
-        usuario_indicado.senha as senha_usuario_usuario_indicado, 
-        usuario_indicado.nivel as nivel_usuario_usuario_indicado
+        servico.visao as visao_servico_servico
 		FROM ocorrencia
 		INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel
 		INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico
-		INNER JOIN usuario as usuario_cliente ON usuario_cliente.id = ocorrencia.id_usuario_cliente
-		INNER JOIN usuario as usuario_atendente ON usuario_atendente.id = ocorrencia.id_usuario_atendente
-		INNER JOIN usuario as usuario_indicado ON usuario_indicado.id = ocorrencia.id_usuario_indicado
             WHERE ocorrencia.prioridade like :prioridade";
                 
         try {
@@ -1462,6 +1181,7 @@ class OcorrenciaDAO extends DAO {
                 $ocorrencia = new Ocorrencia();
     	        $ocorrencia->setId( $linha ['id'] );
     	        $ocorrencia->setIdLocal( $linha ['id_local'] );
+    	        $ocorrencia->setIdUsuarioCliente( $linha ['id_usuario_cliente'] );
     	        $ocorrencia->setDescricao( $linha ['descricao'] );
     	        $ocorrencia->setCampus( $linha ['campus'] );
     	        $ocorrencia->setPatrimonio( $linha ['patrimonio'] );
@@ -1472,6 +1192,8 @@ class OcorrenciaDAO extends DAO {
     	        $ocorrencia->setPrioridade( $linha ['prioridade'] );
     	        $ocorrencia->setAvaliacao( $linha ['avaliacao'] );
     	        $ocorrencia->setEmail( $linha ['email'] );
+    	        $ocorrencia->setIdUsuarioAtendente( $linha ['id_usuario_atendente'] );
+    	        $ocorrencia->setIdUsuarioIndicado( $linha ['id_usuario_indicado'] );
     	        $ocorrencia->setAnexo( $linha ['anexo'] );
     	        $ocorrencia->setLocalSala( $linha ['local_sala'] );
     			$ocorrencia->getAreaResponsavel()->setId( $linha ['id_area_responsavel_area_responsavel'] );
@@ -1486,27 +1208,6 @@ class OcorrenciaDAO extends DAO {
     			$ocorrencia->getServico()->setVisao( $linha ['visao_servico_servico'] );
     			$ocorrencia->getServico()->setAreaResponsavel( $linha ['area_responsavel_servico_servico'] );
     			$ocorrencia->getServico()->setGrupoServico( $linha ['grupo_servico_servico_servico'] );
-    			$ocorrencia->getUsuarioCliente()->setId( $linha ['id_usuario_usuario_cliente'] );
-    			$ocorrencia->getUsuarioCliente()->setNome( $linha ['nome_usuario_usuario_cliente'] );
-    			$ocorrencia->getUsuarioCliente()->setEmail( $linha ['email_usuario_usuario_cliente'] );
-    			$ocorrencia->getUsuarioCliente()->setLogin( $linha ['login_usuario_usuario_cliente'] );
-    			$ocorrencia->getUsuarioCliente()->setSenha( $linha ['senha_usuario_usuario_cliente'] );
-    			$ocorrencia->getUsuarioCliente()->setNivel( $linha ['nivel_usuario_usuario_cliente'] );
-    			$ocorrencia->getUsuarioCliente()->setSetor( $linha ['setor_usuario_usuario_cliente'] );
-    			$ocorrencia->getUsuarioAtendente()->setId( $linha ['id_usuario_usuario_atendente'] );
-    			$ocorrencia->getUsuarioAtendente()->setNome( $linha ['nome_usuario_usuario_atendente'] );
-    			$ocorrencia->getUsuarioAtendente()->setEmail( $linha ['email_usuario_usuario_atendente'] );
-    			$ocorrencia->getUsuarioAtendente()->setLogin( $linha ['login_usuario_usuario_atendente'] );
-    			$ocorrencia->getUsuarioAtendente()->setSenha( $linha ['senha_usuario_usuario_atendente'] );
-    			$ocorrencia->getUsuarioAtendente()->setNivel( $linha ['nivel_usuario_usuario_atendente'] );
-    			$ocorrencia->getUsuarioAtendente()->setSetor( $linha ['setor_usuario_usuario_atendente'] );
-    			$ocorrencia->getUsuarioIndicado()->setId( $linha ['id_usuario_usuario_indicado'] );
-    			$ocorrencia->getUsuarioIndicado()->setNome( $linha ['nome_usuario_usuario_indicado'] );
-    			$ocorrencia->getUsuarioIndicado()->setEmail( $linha ['email_usuario_usuario_indicado'] );
-    			$ocorrencia->getUsuarioIndicado()->setLogin( $linha ['login_usuario_usuario_indicado'] );
-    			$ocorrencia->getUsuarioIndicado()->setSenha( $linha ['senha_usuario_usuario_indicado'] );
-    			$ocorrencia->getUsuarioIndicado()->setNivel( $linha ['nivel_usuario_usuario_indicado'] );
-    			$ocorrencia->getUsuarioIndicado()->setSetor( $linha ['setor_usuario_usuario_indicado'] );
     			$lista [] = $ocorrencia;
     			    
             }
@@ -1526,6 +1227,7 @@ class OcorrenciaDAO extends DAO {
 		SELECT
         ocorrencia.id, 
         ocorrencia.id_local, 
+        ocorrencia.id_usuario_cliente, 
         ocorrencia.descricao, 
         ocorrencia.campus, 
         ocorrencia.patrimonio, 
@@ -1536,6 +1238,8 @@ class OcorrenciaDAO extends DAO {
         ocorrencia.prioridade, 
         ocorrencia.avaliacao, 
         ocorrencia.email, 
+        ocorrencia.id_usuario_atendente, 
+        ocorrencia.id_usuario_indicado, 
         ocorrencia.anexo, 
         ocorrencia.local_sala, 
         area_responsavel.id as id_area_responsavel_area_responsavel, 
@@ -1546,31 +1250,10 @@ class OcorrenciaDAO extends DAO {
         servico.nome as nome_servico_servico, 
         servico.descricao as descricao_servico_servico, 
         servico.tempo_sla as tempo_sla_servico_servico, 
-        servico.visao as visao_servico_servico, 
-        usuario_cliente.id as id_usuario_usuario_cliente, 
-        usuario_cliente.nome as nome_usuario_usuario_cliente, 
-        usuario_cliente.email as email_usuario_usuario_cliente, 
-        usuario_cliente.login as login_usuario_usuario_cliente, 
-        usuario_cliente.senha as senha_usuario_usuario_cliente, 
-        usuario_cliente.nivel as nivel_usuario_usuario_cliente, 
-        usuario_atendente.id as id_usuario_usuario_atendente, 
-        usuario_atendente.nome as nome_usuario_usuario_atendente, 
-        usuario_atendente.email as email_usuario_usuario_atendente, 
-        usuario_atendente.login as login_usuario_usuario_atendente, 
-        usuario_atendente.senha as senha_usuario_usuario_atendente, 
-        usuario_atendente.nivel as nivel_usuario_usuario_atendente, 
-        usuario_indicado.id as id_usuario_usuario_indicado, 
-        usuario_indicado.nome as nome_usuario_usuario_indicado, 
-        usuario_indicado.email as email_usuario_usuario_indicado, 
-        usuario_indicado.login as login_usuario_usuario_indicado, 
-        usuario_indicado.senha as senha_usuario_usuario_indicado, 
-        usuario_indicado.nivel as nivel_usuario_usuario_indicado
+        servico.visao as visao_servico_servico
 		FROM ocorrencia
 		INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel
 		INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico
-		INNER JOIN usuario as usuario_cliente ON usuario_cliente.id = ocorrencia.id_usuario_cliente
-		INNER JOIN usuario as usuario_atendente ON usuario_atendente.id = ocorrencia.id_usuario_atendente
-		INNER JOIN usuario as usuario_indicado ON usuario_indicado.id = ocorrencia.id_usuario_indicado
             WHERE ocorrencia.avaliacao like :avaliacao";
                 
         try {
@@ -1583,6 +1266,7 @@ class OcorrenciaDAO extends DAO {
                 $ocorrencia = new Ocorrencia();
     	        $ocorrencia->setId( $linha ['id'] );
     	        $ocorrencia->setIdLocal( $linha ['id_local'] );
+    	        $ocorrencia->setIdUsuarioCliente( $linha ['id_usuario_cliente'] );
     	        $ocorrencia->setDescricao( $linha ['descricao'] );
     	        $ocorrencia->setCampus( $linha ['campus'] );
     	        $ocorrencia->setPatrimonio( $linha ['patrimonio'] );
@@ -1593,6 +1277,8 @@ class OcorrenciaDAO extends DAO {
     	        $ocorrencia->setPrioridade( $linha ['prioridade'] );
     	        $ocorrencia->setAvaliacao( $linha ['avaliacao'] );
     	        $ocorrencia->setEmail( $linha ['email'] );
+    	        $ocorrencia->setIdUsuarioAtendente( $linha ['id_usuario_atendente'] );
+    	        $ocorrencia->setIdUsuarioIndicado( $linha ['id_usuario_indicado'] );
     	        $ocorrencia->setAnexo( $linha ['anexo'] );
     	        $ocorrencia->setLocalSala( $linha ['local_sala'] );
     			$ocorrencia->getAreaResponsavel()->setId( $linha ['id_area_responsavel_area_responsavel'] );
@@ -1607,27 +1293,6 @@ class OcorrenciaDAO extends DAO {
     			$ocorrencia->getServico()->setVisao( $linha ['visao_servico_servico'] );
     			$ocorrencia->getServico()->setAreaResponsavel( $linha ['area_responsavel_servico_servico'] );
     			$ocorrencia->getServico()->setGrupoServico( $linha ['grupo_servico_servico_servico'] );
-    			$ocorrencia->getUsuarioCliente()->setId( $linha ['id_usuario_usuario_cliente'] );
-    			$ocorrencia->getUsuarioCliente()->setNome( $linha ['nome_usuario_usuario_cliente'] );
-    			$ocorrencia->getUsuarioCliente()->setEmail( $linha ['email_usuario_usuario_cliente'] );
-    			$ocorrencia->getUsuarioCliente()->setLogin( $linha ['login_usuario_usuario_cliente'] );
-    			$ocorrencia->getUsuarioCliente()->setSenha( $linha ['senha_usuario_usuario_cliente'] );
-    			$ocorrencia->getUsuarioCliente()->setNivel( $linha ['nivel_usuario_usuario_cliente'] );
-    			$ocorrencia->getUsuarioCliente()->setSetor( $linha ['setor_usuario_usuario_cliente'] );
-    			$ocorrencia->getUsuarioAtendente()->setId( $linha ['id_usuario_usuario_atendente'] );
-    			$ocorrencia->getUsuarioAtendente()->setNome( $linha ['nome_usuario_usuario_atendente'] );
-    			$ocorrencia->getUsuarioAtendente()->setEmail( $linha ['email_usuario_usuario_atendente'] );
-    			$ocorrencia->getUsuarioAtendente()->setLogin( $linha ['login_usuario_usuario_atendente'] );
-    			$ocorrencia->getUsuarioAtendente()->setSenha( $linha ['senha_usuario_usuario_atendente'] );
-    			$ocorrencia->getUsuarioAtendente()->setNivel( $linha ['nivel_usuario_usuario_atendente'] );
-    			$ocorrencia->getUsuarioAtendente()->setSetor( $linha ['setor_usuario_usuario_atendente'] );
-    			$ocorrencia->getUsuarioIndicado()->setId( $linha ['id_usuario_usuario_indicado'] );
-    			$ocorrencia->getUsuarioIndicado()->setNome( $linha ['nome_usuario_usuario_indicado'] );
-    			$ocorrencia->getUsuarioIndicado()->setEmail( $linha ['email_usuario_usuario_indicado'] );
-    			$ocorrencia->getUsuarioIndicado()->setLogin( $linha ['login_usuario_usuario_indicado'] );
-    			$ocorrencia->getUsuarioIndicado()->setSenha( $linha ['senha_usuario_usuario_indicado'] );
-    			$ocorrencia->getUsuarioIndicado()->setNivel( $linha ['nivel_usuario_usuario_indicado'] );
-    			$ocorrencia->getUsuarioIndicado()->setSetor( $linha ['setor_usuario_usuario_indicado'] );
     			$lista [] = $ocorrencia;
     			    
             }
@@ -1647,6 +1312,7 @@ class OcorrenciaDAO extends DAO {
 		SELECT
         ocorrencia.id, 
         ocorrencia.id_local, 
+        ocorrencia.id_usuario_cliente, 
         ocorrencia.descricao, 
         ocorrencia.campus, 
         ocorrencia.patrimonio, 
@@ -1657,6 +1323,8 @@ class OcorrenciaDAO extends DAO {
         ocorrencia.prioridade, 
         ocorrencia.avaliacao, 
         ocorrencia.email, 
+        ocorrencia.id_usuario_atendente, 
+        ocorrencia.id_usuario_indicado, 
         ocorrencia.anexo, 
         ocorrencia.local_sala, 
         area_responsavel.id as id_area_responsavel_area_responsavel, 
@@ -1667,31 +1335,10 @@ class OcorrenciaDAO extends DAO {
         servico.nome as nome_servico_servico, 
         servico.descricao as descricao_servico_servico, 
         servico.tempo_sla as tempo_sla_servico_servico, 
-        servico.visao as visao_servico_servico, 
-        usuario_cliente.id as id_usuario_usuario_cliente, 
-        usuario_cliente.nome as nome_usuario_usuario_cliente, 
-        usuario_cliente.email as email_usuario_usuario_cliente, 
-        usuario_cliente.login as login_usuario_usuario_cliente, 
-        usuario_cliente.senha as senha_usuario_usuario_cliente, 
-        usuario_cliente.nivel as nivel_usuario_usuario_cliente, 
-        usuario_atendente.id as id_usuario_usuario_atendente, 
-        usuario_atendente.nome as nome_usuario_usuario_atendente, 
-        usuario_atendente.email as email_usuario_usuario_atendente, 
-        usuario_atendente.login as login_usuario_usuario_atendente, 
-        usuario_atendente.senha as senha_usuario_usuario_atendente, 
-        usuario_atendente.nivel as nivel_usuario_usuario_atendente, 
-        usuario_indicado.id as id_usuario_usuario_indicado, 
-        usuario_indicado.nome as nome_usuario_usuario_indicado, 
-        usuario_indicado.email as email_usuario_usuario_indicado, 
-        usuario_indicado.login as login_usuario_usuario_indicado, 
-        usuario_indicado.senha as senha_usuario_usuario_indicado, 
-        usuario_indicado.nivel as nivel_usuario_usuario_indicado
+        servico.visao as visao_servico_servico
 		FROM ocorrencia
 		INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel
 		INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico
-		INNER JOIN usuario as usuario_cliente ON usuario_cliente.id = ocorrencia.id_usuario_cliente
-		INNER JOIN usuario as usuario_atendente ON usuario_atendente.id = ocorrencia.id_usuario_atendente
-		INNER JOIN usuario as usuario_indicado ON usuario_indicado.id = ocorrencia.id_usuario_indicado
             WHERE ocorrencia.email like :email";
                 
         try {
@@ -1704,6 +1351,7 @@ class OcorrenciaDAO extends DAO {
                 $ocorrencia = new Ocorrencia();
     	        $ocorrencia->setId( $linha ['id'] );
     	        $ocorrencia->setIdLocal( $linha ['id_local'] );
+    	        $ocorrencia->setIdUsuarioCliente( $linha ['id_usuario_cliente'] );
     	        $ocorrencia->setDescricao( $linha ['descricao'] );
     	        $ocorrencia->setCampus( $linha ['campus'] );
     	        $ocorrencia->setPatrimonio( $linha ['patrimonio'] );
@@ -1714,6 +1362,8 @@ class OcorrenciaDAO extends DAO {
     	        $ocorrencia->setPrioridade( $linha ['prioridade'] );
     	        $ocorrencia->setAvaliacao( $linha ['avaliacao'] );
     	        $ocorrencia->setEmail( $linha ['email'] );
+    	        $ocorrencia->setIdUsuarioAtendente( $linha ['id_usuario_atendente'] );
+    	        $ocorrencia->setIdUsuarioIndicado( $linha ['id_usuario_indicado'] );
     	        $ocorrencia->setAnexo( $linha ['anexo'] );
     	        $ocorrencia->setLocalSala( $linha ['local_sala'] );
     			$ocorrencia->getAreaResponsavel()->setId( $linha ['id_area_responsavel_area_responsavel'] );
@@ -1728,27 +1378,176 @@ class OcorrenciaDAO extends DAO {
     			$ocorrencia->getServico()->setVisao( $linha ['visao_servico_servico'] );
     			$ocorrencia->getServico()->setAreaResponsavel( $linha ['area_responsavel_servico_servico'] );
     			$ocorrencia->getServico()->setGrupoServico( $linha ['grupo_servico_servico_servico'] );
-    			$ocorrencia->getUsuarioCliente()->setId( $linha ['id_usuario_usuario_cliente'] );
-    			$ocorrencia->getUsuarioCliente()->setNome( $linha ['nome_usuario_usuario_cliente'] );
-    			$ocorrencia->getUsuarioCliente()->setEmail( $linha ['email_usuario_usuario_cliente'] );
-    			$ocorrencia->getUsuarioCliente()->setLogin( $linha ['login_usuario_usuario_cliente'] );
-    			$ocorrencia->getUsuarioCliente()->setSenha( $linha ['senha_usuario_usuario_cliente'] );
-    			$ocorrencia->getUsuarioCliente()->setNivel( $linha ['nivel_usuario_usuario_cliente'] );
-    			$ocorrencia->getUsuarioCliente()->setSetor( $linha ['setor_usuario_usuario_cliente'] );
-    			$ocorrencia->getUsuarioAtendente()->setId( $linha ['id_usuario_usuario_atendente'] );
-    			$ocorrencia->getUsuarioAtendente()->setNome( $linha ['nome_usuario_usuario_atendente'] );
-    			$ocorrencia->getUsuarioAtendente()->setEmail( $linha ['email_usuario_usuario_atendente'] );
-    			$ocorrencia->getUsuarioAtendente()->setLogin( $linha ['login_usuario_usuario_atendente'] );
-    			$ocorrencia->getUsuarioAtendente()->setSenha( $linha ['senha_usuario_usuario_atendente'] );
-    			$ocorrencia->getUsuarioAtendente()->setNivel( $linha ['nivel_usuario_usuario_atendente'] );
-    			$ocorrencia->getUsuarioAtendente()->setSetor( $linha ['setor_usuario_usuario_atendente'] );
-    			$ocorrencia->getUsuarioIndicado()->setId( $linha ['id_usuario_usuario_indicado'] );
-    			$ocorrencia->getUsuarioIndicado()->setNome( $linha ['nome_usuario_usuario_indicado'] );
-    			$ocorrencia->getUsuarioIndicado()->setEmail( $linha ['email_usuario_usuario_indicado'] );
-    			$ocorrencia->getUsuarioIndicado()->setLogin( $linha ['login_usuario_usuario_indicado'] );
-    			$ocorrencia->getUsuarioIndicado()->setSenha( $linha ['senha_usuario_usuario_indicado'] );
-    			$ocorrencia->getUsuarioIndicado()->setNivel( $linha ['nivel_usuario_usuario_indicado'] );
-    			$ocorrencia->getUsuarioIndicado()->setSetor( $linha ['setor_usuario_usuario_indicado'] );
+    			$lista [] = $ocorrencia;
+    			    
+            }
+    			    
+        } catch(PDOException $e) {
+            echo $e->getMessage();
+    			    
+        }
+		return $lista;
+    }
+                
+    public function pesquisaPorIdUsuarioAtendente(Ocorrencia $ocorrencia) {
+        $lista = array();
+	    $idUsuarioAtendente = $ocorrencia->getIdUsuarioAtendente();
+                
+        $sql = "
+		SELECT
+        ocorrencia.id, 
+        ocorrencia.id_local, 
+        ocorrencia.id_usuario_cliente, 
+        ocorrencia.descricao, 
+        ocorrencia.campus, 
+        ocorrencia.patrimonio, 
+        ocorrencia.ramal, 
+        ocorrencia.local, 
+        ocorrencia.status, 
+        ocorrencia.solucao, 
+        ocorrencia.prioridade, 
+        ocorrencia.avaliacao, 
+        ocorrencia.email, 
+        ocorrencia.id_usuario_atendente, 
+        ocorrencia.id_usuario_indicado, 
+        ocorrencia.anexo, 
+        ocorrencia.local_sala, 
+        area_responsavel.id as id_area_responsavel_area_responsavel, 
+        area_responsavel.nome as nome_area_responsavel_area_responsavel, 
+        area_responsavel.descricao as descricao_area_responsavel_area_responsavel, 
+        area_responsavel.email as email_area_responsavel_area_responsavel, 
+        servico.id as id_servico_servico, 
+        servico.nome as nome_servico_servico, 
+        servico.descricao as descricao_servico_servico, 
+        servico.tempo_sla as tempo_sla_servico_servico, 
+        servico.visao as visao_servico_servico
+		FROM ocorrencia
+		INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel
+		INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico
+            WHERE ocorrencia.id_usuario_atendente = :idUsuarioAtendente";
+                
+        try {
+                
+            $stmt = $this->conexao->prepare($sql);
+            $stmt->bindParam(":idUsuarioAtendente", $idUsuarioAtendente, PDO::PARAM_INT);
+            $stmt->execute();
+            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            foreach ( $result as $linha ) {
+                $ocorrencia = new Ocorrencia();
+    	        $ocorrencia->setId( $linha ['id'] );
+    	        $ocorrencia->setIdLocal( $linha ['id_local'] );
+    	        $ocorrencia->setIdUsuarioCliente( $linha ['id_usuario_cliente'] );
+    	        $ocorrencia->setDescricao( $linha ['descricao'] );
+    	        $ocorrencia->setCampus( $linha ['campus'] );
+    	        $ocorrencia->setPatrimonio( $linha ['patrimonio'] );
+    	        $ocorrencia->setRamal( $linha ['ramal'] );
+    	        $ocorrencia->setLocal( $linha ['local'] );
+    	        $ocorrencia->setStatus( $linha ['status'] );
+    	        $ocorrencia->setSolucao( $linha ['solucao'] );
+    	        $ocorrencia->setPrioridade( $linha ['prioridade'] );
+    	        $ocorrencia->setAvaliacao( $linha ['avaliacao'] );
+    	        $ocorrencia->setEmail( $linha ['email'] );
+    	        $ocorrencia->setIdUsuarioAtendente( $linha ['id_usuario_atendente'] );
+    	        $ocorrencia->setIdUsuarioIndicado( $linha ['id_usuario_indicado'] );
+    	        $ocorrencia->setAnexo( $linha ['anexo'] );
+    	        $ocorrencia->setLocalSala( $linha ['local_sala'] );
+    			$ocorrencia->getAreaResponsavel()->setId( $linha ['id_area_responsavel_area_responsavel'] );
+    			$ocorrencia->getAreaResponsavel()->setNome( $linha ['nome_area_responsavel_area_responsavel'] );
+    			$ocorrencia->getAreaResponsavel()->setDescricao( $linha ['descricao_area_responsavel_area_responsavel'] );
+    			$ocorrencia->getAreaResponsavel()->setEmail( $linha ['email_area_responsavel_area_responsavel'] );
+    			$ocorrencia->getServico()->setId( $linha ['id_servico_servico'] );
+    			$ocorrencia->getServico()->setNome( $linha ['nome_servico_servico'] );
+    			$ocorrencia->getServico()->setDescricao( $linha ['descricao_servico_servico'] );
+    			$ocorrencia->getServico()->setTipoAtividade( $linha ['tipo_atividade_servico_servico'] );
+    			$ocorrencia->getServico()->setTempoSla( $linha ['tempo_sla_servico_servico'] );
+    			$ocorrencia->getServico()->setVisao( $linha ['visao_servico_servico'] );
+    			$ocorrencia->getServico()->setAreaResponsavel( $linha ['area_responsavel_servico_servico'] );
+    			$ocorrencia->getServico()->setGrupoServico( $linha ['grupo_servico_servico_servico'] );
+    			$lista [] = $ocorrencia;
+    			    
+            }
+    			    
+        } catch(PDOException $e) {
+            echo $e->getMessage();
+    			    
+        }
+		return $lista;
+    }
+                
+    public function pesquisaPorIdUsuarioIndicado(Ocorrencia $ocorrencia) {
+        $lista = array();
+	    $idUsuarioIndicado = $ocorrencia->getIdUsuarioIndicado();
+                
+        $sql = "
+		SELECT
+        ocorrencia.id, 
+        ocorrencia.id_local, 
+        ocorrencia.id_usuario_cliente, 
+        ocorrencia.descricao, 
+        ocorrencia.campus, 
+        ocorrencia.patrimonio, 
+        ocorrencia.ramal, 
+        ocorrencia.local, 
+        ocorrencia.status, 
+        ocorrencia.solucao, 
+        ocorrencia.prioridade, 
+        ocorrencia.avaliacao, 
+        ocorrencia.email, 
+        ocorrencia.id_usuario_atendente, 
+        ocorrencia.id_usuario_indicado, 
+        ocorrencia.anexo, 
+        ocorrencia.local_sala, 
+        area_responsavel.id as id_area_responsavel_area_responsavel, 
+        area_responsavel.nome as nome_area_responsavel_area_responsavel, 
+        area_responsavel.descricao as descricao_area_responsavel_area_responsavel, 
+        area_responsavel.email as email_area_responsavel_area_responsavel, 
+        servico.id as id_servico_servico, 
+        servico.nome as nome_servico_servico, 
+        servico.descricao as descricao_servico_servico, 
+        servico.tempo_sla as tempo_sla_servico_servico, 
+        servico.visao as visao_servico_servico
+		FROM ocorrencia
+		INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel
+		INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico
+            WHERE ocorrencia.id_usuario_indicado = :idUsuarioIndicado";
+                
+        try {
+                
+            $stmt = $this->conexao->prepare($sql);
+            $stmt->bindParam(":idUsuarioIndicado", $idUsuarioIndicado, PDO::PARAM_INT);
+            $stmt->execute();
+            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            foreach ( $result as $linha ) {
+                $ocorrencia = new Ocorrencia();
+    	        $ocorrencia->setId( $linha ['id'] );
+    	        $ocorrencia->setIdLocal( $linha ['id_local'] );
+    	        $ocorrencia->setIdUsuarioCliente( $linha ['id_usuario_cliente'] );
+    	        $ocorrencia->setDescricao( $linha ['descricao'] );
+    	        $ocorrencia->setCampus( $linha ['campus'] );
+    	        $ocorrencia->setPatrimonio( $linha ['patrimonio'] );
+    	        $ocorrencia->setRamal( $linha ['ramal'] );
+    	        $ocorrencia->setLocal( $linha ['local'] );
+    	        $ocorrencia->setStatus( $linha ['status'] );
+    	        $ocorrencia->setSolucao( $linha ['solucao'] );
+    	        $ocorrencia->setPrioridade( $linha ['prioridade'] );
+    	        $ocorrencia->setAvaliacao( $linha ['avaliacao'] );
+    	        $ocorrencia->setEmail( $linha ['email'] );
+    	        $ocorrencia->setIdUsuarioAtendente( $linha ['id_usuario_atendente'] );
+    	        $ocorrencia->setIdUsuarioIndicado( $linha ['id_usuario_indicado'] );
+    	        $ocorrencia->setAnexo( $linha ['anexo'] );
+    	        $ocorrencia->setLocalSala( $linha ['local_sala'] );
+    			$ocorrencia->getAreaResponsavel()->setId( $linha ['id_area_responsavel_area_responsavel'] );
+    			$ocorrencia->getAreaResponsavel()->setNome( $linha ['nome_area_responsavel_area_responsavel'] );
+    			$ocorrencia->getAreaResponsavel()->setDescricao( $linha ['descricao_area_responsavel_area_responsavel'] );
+    			$ocorrencia->getAreaResponsavel()->setEmail( $linha ['email_area_responsavel_area_responsavel'] );
+    			$ocorrencia->getServico()->setId( $linha ['id_servico_servico'] );
+    			$ocorrencia->getServico()->setNome( $linha ['nome_servico_servico'] );
+    			$ocorrencia->getServico()->setDescricao( $linha ['descricao_servico_servico'] );
+    			$ocorrencia->getServico()->setTipoAtividade( $linha ['tipo_atividade_servico_servico'] );
+    			$ocorrencia->getServico()->setTempoSla( $linha ['tempo_sla_servico_servico'] );
+    			$ocorrencia->getServico()->setVisao( $linha ['visao_servico_servico'] );
+    			$ocorrencia->getServico()->setAreaResponsavel( $linha ['area_responsavel_servico_servico'] );
+    			$ocorrencia->getServico()->setGrupoServico( $linha ['grupo_servico_servico_servico'] );
     			$lista [] = $ocorrencia;
     			    
             }
@@ -1768,6 +1567,7 @@ class OcorrenciaDAO extends DAO {
 		SELECT
         ocorrencia.id, 
         ocorrencia.id_local, 
+        ocorrencia.id_usuario_cliente, 
         ocorrencia.descricao, 
         ocorrencia.campus, 
         ocorrencia.patrimonio, 
@@ -1778,6 +1578,8 @@ class OcorrenciaDAO extends DAO {
         ocorrencia.prioridade, 
         ocorrencia.avaliacao, 
         ocorrencia.email, 
+        ocorrencia.id_usuario_atendente, 
+        ocorrencia.id_usuario_indicado, 
         ocorrencia.anexo, 
         ocorrencia.local_sala, 
         area_responsavel.id as id_area_responsavel_area_responsavel, 
@@ -1788,31 +1590,10 @@ class OcorrenciaDAO extends DAO {
         servico.nome as nome_servico_servico, 
         servico.descricao as descricao_servico_servico, 
         servico.tempo_sla as tempo_sla_servico_servico, 
-        servico.visao as visao_servico_servico, 
-        usuario_cliente.id as id_usuario_usuario_cliente, 
-        usuario_cliente.nome as nome_usuario_usuario_cliente, 
-        usuario_cliente.email as email_usuario_usuario_cliente, 
-        usuario_cliente.login as login_usuario_usuario_cliente, 
-        usuario_cliente.senha as senha_usuario_usuario_cliente, 
-        usuario_cliente.nivel as nivel_usuario_usuario_cliente, 
-        usuario_atendente.id as id_usuario_usuario_atendente, 
-        usuario_atendente.nome as nome_usuario_usuario_atendente, 
-        usuario_atendente.email as email_usuario_usuario_atendente, 
-        usuario_atendente.login as login_usuario_usuario_atendente, 
-        usuario_atendente.senha as senha_usuario_usuario_atendente, 
-        usuario_atendente.nivel as nivel_usuario_usuario_atendente, 
-        usuario_indicado.id as id_usuario_usuario_indicado, 
-        usuario_indicado.nome as nome_usuario_usuario_indicado, 
-        usuario_indicado.email as email_usuario_usuario_indicado, 
-        usuario_indicado.login as login_usuario_usuario_indicado, 
-        usuario_indicado.senha as senha_usuario_usuario_indicado, 
-        usuario_indicado.nivel as nivel_usuario_usuario_indicado
+        servico.visao as visao_servico_servico
 		FROM ocorrencia
 		INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel
 		INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico
-		INNER JOIN usuario as usuario_cliente ON usuario_cliente.id = ocorrencia.id_usuario_cliente
-		INNER JOIN usuario as usuario_atendente ON usuario_atendente.id = ocorrencia.id_usuario_atendente
-		INNER JOIN usuario as usuario_indicado ON usuario_indicado.id = ocorrencia.id_usuario_indicado
             WHERE ocorrencia.anexo like :anexo";
                 
         try {
@@ -1825,6 +1606,7 @@ class OcorrenciaDAO extends DAO {
                 $ocorrencia = new Ocorrencia();
     	        $ocorrencia->setId( $linha ['id'] );
     	        $ocorrencia->setIdLocal( $linha ['id_local'] );
+    	        $ocorrencia->setIdUsuarioCliente( $linha ['id_usuario_cliente'] );
     	        $ocorrencia->setDescricao( $linha ['descricao'] );
     	        $ocorrencia->setCampus( $linha ['campus'] );
     	        $ocorrencia->setPatrimonio( $linha ['patrimonio'] );
@@ -1835,6 +1617,8 @@ class OcorrenciaDAO extends DAO {
     	        $ocorrencia->setPrioridade( $linha ['prioridade'] );
     	        $ocorrencia->setAvaliacao( $linha ['avaliacao'] );
     	        $ocorrencia->setEmail( $linha ['email'] );
+    	        $ocorrencia->setIdUsuarioAtendente( $linha ['id_usuario_atendente'] );
+    	        $ocorrencia->setIdUsuarioIndicado( $linha ['id_usuario_indicado'] );
     	        $ocorrencia->setAnexo( $linha ['anexo'] );
     	        $ocorrencia->setLocalSala( $linha ['local_sala'] );
     			$ocorrencia->getAreaResponsavel()->setId( $linha ['id_area_responsavel_area_responsavel'] );
@@ -1849,27 +1633,6 @@ class OcorrenciaDAO extends DAO {
     			$ocorrencia->getServico()->setVisao( $linha ['visao_servico_servico'] );
     			$ocorrencia->getServico()->setAreaResponsavel( $linha ['area_responsavel_servico_servico'] );
     			$ocorrencia->getServico()->setGrupoServico( $linha ['grupo_servico_servico_servico'] );
-    			$ocorrencia->getUsuarioCliente()->setId( $linha ['id_usuario_usuario_cliente'] );
-    			$ocorrencia->getUsuarioCliente()->setNome( $linha ['nome_usuario_usuario_cliente'] );
-    			$ocorrencia->getUsuarioCliente()->setEmail( $linha ['email_usuario_usuario_cliente'] );
-    			$ocorrencia->getUsuarioCliente()->setLogin( $linha ['login_usuario_usuario_cliente'] );
-    			$ocorrencia->getUsuarioCliente()->setSenha( $linha ['senha_usuario_usuario_cliente'] );
-    			$ocorrencia->getUsuarioCliente()->setNivel( $linha ['nivel_usuario_usuario_cliente'] );
-    			$ocorrencia->getUsuarioCliente()->setSetor( $linha ['setor_usuario_usuario_cliente'] );
-    			$ocorrencia->getUsuarioAtendente()->setId( $linha ['id_usuario_usuario_atendente'] );
-    			$ocorrencia->getUsuarioAtendente()->setNome( $linha ['nome_usuario_usuario_atendente'] );
-    			$ocorrencia->getUsuarioAtendente()->setEmail( $linha ['email_usuario_usuario_atendente'] );
-    			$ocorrencia->getUsuarioAtendente()->setLogin( $linha ['login_usuario_usuario_atendente'] );
-    			$ocorrencia->getUsuarioAtendente()->setSenha( $linha ['senha_usuario_usuario_atendente'] );
-    			$ocorrencia->getUsuarioAtendente()->setNivel( $linha ['nivel_usuario_usuario_atendente'] );
-    			$ocorrencia->getUsuarioAtendente()->setSetor( $linha ['setor_usuario_usuario_atendente'] );
-    			$ocorrencia->getUsuarioIndicado()->setId( $linha ['id_usuario_usuario_indicado'] );
-    			$ocorrencia->getUsuarioIndicado()->setNome( $linha ['nome_usuario_usuario_indicado'] );
-    			$ocorrencia->getUsuarioIndicado()->setEmail( $linha ['email_usuario_usuario_indicado'] );
-    			$ocorrencia->getUsuarioIndicado()->setLogin( $linha ['login_usuario_usuario_indicado'] );
-    			$ocorrencia->getUsuarioIndicado()->setSenha( $linha ['senha_usuario_usuario_indicado'] );
-    			$ocorrencia->getUsuarioIndicado()->setNivel( $linha ['nivel_usuario_usuario_indicado'] );
-    			$ocorrencia->getUsuarioIndicado()->setSetor( $linha ['setor_usuario_usuario_indicado'] );
     			$lista [] = $ocorrencia;
     			    
             }
@@ -1889,6 +1652,7 @@ class OcorrenciaDAO extends DAO {
 		SELECT
         ocorrencia.id, 
         ocorrencia.id_local, 
+        ocorrencia.id_usuario_cliente, 
         ocorrencia.descricao, 
         ocorrencia.campus, 
         ocorrencia.patrimonio, 
@@ -1899,6 +1663,8 @@ class OcorrenciaDAO extends DAO {
         ocorrencia.prioridade, 
         ocorrencia.avaliacao, 
         ocorrencia.email, 
+        ocorrencia.id_usuario_atendente, 
+        ocorrencia.id_usuario_indicado, 
         ocorrencia.anexo, 
         ocorrencia.local_sala, 
         area_responsavel.id as id_area_responsavel_area_responsavel, 
@@ -1909,31 +1675,10 @@ class OcorrenciaDAO extends DAO {
         servico.nome as nome_servico_servico, 
         servico.descricao as descricao_servico_servico, 
         servico.tempo_sla as tempo_sla_servico_servico, 
-        servico.visao as visao_servico_servico, 
-        usuario_cliente.id as id_usuario_usuario_cliente, 
-        usuario_cliente.nome as nome_usuario_usuario_cliente, 
-        usuario_cliente.email as email_usuario_usuario_cliente, 
-        usuario_cliente.login as login_usuario_usuario_cliente, 
-        usuario_cliente.senha as senha_usuario_usuario_cliente, 
-        usuario_cliente.nivel as nivel_usuario_usuario_cliente, 
-        usuario_atendente.id as id_usuario_usuario_atendente, 
-        usuario_atendente.nome as nome_usuario_usuario_atendente, 
-        usuario_atendente.email as email_usuario_usuario_atendente, 
-        usuario_atendente.login as login_usuario_usuario_atendente, 
-        usuario_atendente.senha as senha_usuario_usuario_atendente, 
-        usuario_atendente.nivel as nivel_usuario_usuario_atendente, 
-        usuario_indicado.id as id_usuario_usuario_indicado, 
-        usuario_indicado.nome as nome_usuario_usuario_indicado, 
-        usuario_indicado.email as email_usuario_usuario_indicado, 
-        usuario_indicado.login as login_usuario_usuario_indicado, 
-        usuario_indicado.senha as senha_usuario_usuario_indicado, 
-        usuario_indicado.nivel as nivel_usuario_usuario_indicado
+        servico.visao as visao_servico_servico
 		FROM ocorrencia
 		INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel
 		INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico
-		INNER JOIN usuario as usuario_cliente ON usuario_cliente.id = ocorrencia.id_usuario_cliente
-		INNER JOIN usuario as usuario_atendente ON usuario_atendente.id = ocorrencia.id_usuario_atendente
-		INNER JOIN usuario as usuario_indicado ON usuario_indicado.id = ocorrencia.id_usuario_indicado
             WHERE ocorrencia.local_sala like :localSala";
                 
         try {
@@ -1946,6 +1691,7 @@ class OcorrenciaDAO extends DAO {
                 $ocorrencia = new Ocorrencia();
     	        $ocorrencia->setId( $linha ['id'] );
     	        $ocorrencia->setIdLocal( $linha ['id_local'] );
+    	        $ocorrencia->setIdUsuarioCliente( $linha ['id_usuario_cliente'] );
     	        $ocorrencia->setDescricao( $linha ['descricao'] );
     	        $ocorrencia->setCampus( $linha ['campus'] );
     	        $ocorrencia->setPatrimonio( $linha ['patrimonio'] );
@@ -1956,6 +1702,8 @@ class OcorrenciaDAO extends DAO {
     	        $ocorrencia->setPrioridade( $linha ['prioridade'] );
     	        $ocorrencia->setAvaliacao( $linha ['avaliacao'] );
     	        $ocorrencia->setEmail( $linha ['email'] );
+    	        $ocorrencia->setIdUsuarioAtendente( $linha ['id_usuario_atendente'] );
+    	        $ocorrencia->setIdUsuarioIndicado( $linha ['id_usuario_indicado'] );
     	        $ocorrencia->setAnexo( $linha ['anexo'] );
     	        $ocorrencia->setLocalSala( $linha ['local_sala'] );
     			$ocorrencia->getAreaResponsavel()->setId( $linha ['id_area_responsavel_area_responsavel'] );
@@ -1970,27 +1718,6 @@ class OcorrenciaDAO extends DAO {
     			$ocorrencia->getServico()->setVisao( $linha ['visao_servico_servico'] );
     			$ocorrencia->getServico()->setAreaResponsavel( $linha ['area_responsavel_servico_servico'] );
     			$ocorrencia->getServico()->setGrupoServico( $linha ['grupo_servico_servico_servico'] );
-    			$ocorrencia->getUsuarioCliente()->setId( $linha ['id_usuario_usuario_cliente'] );
-    			$ocorrencia->getUsuarioCliente()->setNome( $linha ['nome_usuario_usuario_cliente'] );
-    			$ocorrencia->getUsuarioCliente()->setEmail( $linha ['email_usuario_usuario_cliente'] );
-    			$ocorrencia->getUsuarioCliente()->setLogin( $linha ['login_usuario_usuario_cliente'] );
-    			$ocorrencia->getUsuarioCliente()->setSenha( $linha ['senha_usuario_usuario_cliente'] );
-    			$ocorrencia->getUsuarioCliente()->setNivel( $linha ['nivel_usuario_usuario_cliente'] );
-    			$ocorrencia->getUsuarioCliente()->setSetor( $linha ['setor_usuario_usuario_cliente'] );
-    			$ocorrencia->getUsuarioAtendente()->setId( $linha ['id_usuario_usuario_atendente'] );
-    			$ocorrencia->getUsuarioAtendente()->setNome( $linha ['nome_usuario_usuario_atendente'] );
-    			$ocorrencia->getUsuarioAtendente()->setEmail( $linha ['email_usuario_usuario_atendente'] );
-    			$ocorrencia->getUsuarioAtendente()->setLogin( $linha ['login_usuario_usuario_atendente'] );
-    			$ocorrencia->getUsuarioAtendente()->setSenha( $linha ['senha_usuario_usuario_atendente'] );
-    			$ocorrencia->getUsuarioAtendente()->setNivel( $linha ['nivel_usuario_usuario_atendente'] );
-    			$ocorrencia->getUsuarioAtendente()->setSetor( $linha ['setor_usuario_usuario_atendente'] );
-    			$ocorrencia->getUsuarioIndicado()->setId( $linha ['id_usuario_usuario_indicado'] );
-    			$ocorrencia->getUsuarioIndicado()->setNome( $linha ['nome_usuario_usuario_indicado'] );
-    			$ocorrencia->getUsuarioIndicado()->setEmail( $linha ['email_usuario_usuario_indicado'] );
-    			$ocorrencia->getUsuarioIndicado()->setLogin( $linha ['login_usuario_usuario_indicado'] );
-    			$ocorrencia->getUsuarioIndicado()->setSenha( $linha ['senha_usuario_usuario_indicado'] );
-    			$ocorrencia->getUsuarioIndicado()->setNivel( $linha ['nivel_usuario_usuario_indicado'] );
-    			$ocorrencia->getUsuarioIndicado()->setSetor( $linha ['setor_usuario_usuario_indicado'] );
     			$lista [] = $ocorrencia;
     			    
             }
@@ -2009,6 +1736,7 @@ class OcorrenciaDAO extends DAO {
 		SELECT
         ocorrencia.id, 
         ocorrencia.id_local, 
+        ocorrencia.id_usuario_cliente, 
         ocorrencia.descricao, 
         ocorrencia.campus, 
         ocorrencia.patrimonio, 
@@ -2019,6 +1747,8 @@ class OcorrenciaDAO extends DAO {
         ocorrencia.prioridade, 
         ocorrencia.avaliacao, 
         ocorrencia.email, 
+        ocorrencia.id_usuario_atendente, 
+        ocorrencia.id_usuario_indicado, 
         ocorrencia.anexo, 
         ocorrencia.local_sala, 
         area_responsavel.id as id_area_responsavel_area_responsavel, 
@@ -2029,31 +1759,10 @@ class OcorrenciaDAO extends DAO {
         servico.nome as nome_servico_servico, 
         servico.descricao as descricao_servico_servico, 
         servico.tempo_sla as tempo_sla_servico_servico, 
-        servico.visao as visao_servico_servico, 
-        usuario_cliente.id as id_usuario_usuario_cliente, 
-        usuario_cliente.nome as nome_usuario_usuario_cliente, 
-        usuario_cliente.email as email_usuario_usuario_cliente, 
-        usuario_cliente.login as login_usuario_usuario_cliente, 
-        usuario_cliente.senha as senha_usuario_usuario_cliente, 
-        usuario_cliente.nivel as nivel_usuario_usuario_cliente, 
-        usuario_atendente.id as id_usuario_usuario_atendente, 
-        usuario_atendente.nome as nome_usuario_usuario_atendente, 
-        usuario_atendente.email as email_usuario_usuario_atendente, 
-        usuario_atendente.login as login_usuario_usuario_atendente, 
-        usuario_atendente.senha as senha_usuario_usuario_atendente, 
-        usuario_atendente.nivel as nivel_usuario_usuario_atendente, 
-        usuario_indicado.id as id_usuario_usuario_indicado, 
-        usuario_indicado.nome as nome_usuario_usuario_indicado, 
-        usuario_indicado.email as email_usuario_usuario_indicado, 
-        usuario_indicado.login as login_usuario_usuario_indicado, 
-        usuario_indicado.senha as senha_usuario_usuario_indicado, 
-        usuario_indicado.nivel as nivel_usuario_usuario_indicado
+        servico.visao as visao_servico_servico
 		FROM ocorrencia
 		INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel
 		INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico
-		INNER JOIN usuario as usuario_cliente ON usuario_cliente.id = ocorrencia.id_usuario_cliente
-		INNER JOIN usuario as usuario_atendente ON usuario_atendente.id = ocorrencia.id_usuario_atendente
-		INNER JOIN usuario as usuario_indicado ON usuario_indicado.id = ocorrencia.id_usuario_indicado
                 WHERE ocorrencia.id = :id
                  LIMIT 1000";
                 
@@ -2070,6 +1779,7 @@ class OcorrenciaDAO extends DAO {
             {
                 $ocorrencia->setId( $linha ['id'] );
                 $ocorrencia->setIdLocal( $linha ['id_local'] );
+                $ocorrencia->setIdUsuarioCliente( $linha ['id_usuario_cliente'] );
                 $ocorrencia->setDescricao( $linha ['descricao'] );
                 $ocorrencia->setCampus( $linha ['campus'] );
                 $ocorrencia->setPatrimonio( $linha ['patrimonio'] );
@@ -2080,6 +1790,8 @@ class OcorrenciaDAO extends DAO {
                 $ocorrencia->setPrioridade( $linha ['prioridade'] );
                 $ocorrencia->setAvaliacao( $linha ['avaliacao'] );
                 $ocorrencia->setEmail( $linha ['email'] );
+                $ocorrencia->setIdUsuarioAtendente( $linha ['id_usuario_atendente'] );
+                $ocorrencia->setIdUsuarioIndicado( $linha ['id_usuario_indicado'] );
                 $ocorrencia->setAnexo( $linha ['anexo'] );
                 $ocorrencia->setLocalSala( $linha ['local_sala'] );
                 $ocorrencia->getAreaResponsavel()->setId( $linha ['id_area_responsavel_area_responsavel'] );
@@ -2091,24 +1803,6 @@ class OcorrenciaDAO extends DAO {
                 $ocorrencia->getServico()->setDescricao( $linha ['descricao_servico_servico'] );
                 $ocorrencia->getServico()->setTempoSla( $linha ['tempo_sla_servico_servico'] );
                 $ocorrencia->getServico()->setVisao( $linha ['visao_servico_servico'] );
-                $ocorrencia->getUsuarioCliente()->setId( $linha ['id_usuario_usuario_cliente'] );
-                $ocorrencia->getUsuarioCliente()->setNome( $linha ['nome_usuario_usuario_cliente'] );
-                $ocorrencia->getUsuarioCliente()->setEmail( $linha ['email_usuario_usuario_cliente'] );
-                $ocorrencia->getUsuarioCliente()->setLogin( $linha ['login_usuario_usuario_cliente'] );
-                $ocorrencia->getUsuarioCliente()->setSenha( $linha ['senha_usuario_usuario_cliente'] );
-                $ocorrencia->getUsuarioCliente()->setNivel( $linha ['nivel_usuario_usuario_cliente'] );
-                $ocorrencia->getUsuarioAtendente()->setId( $linha ['id_usuario_usuario_atendente'] );
-                $ocorrencia->getUsuarioAtendente()->setNome( $linha ['nome_usuario_usuario_atendente'] );
-                $ocorrencia->getUsuarioAtendente()->setEmail( $linha ['email_usuario_usuario_atendente'] );
-                $ocorrencia->getUsuarioAtendente()->setLogin( $linha ['login_usuario_usuario_atendente'] );
-                $ocorrencia->getUsuarioAtendente()->setSenha( $linha ['senha_usuario_usuario_atendente'] );
-                $ocorrencia->getUsuarioAtendente()->setNivel( $linha ['nivel_usuario_usuario_atendente'] );
-                $ocorrencia->getUsuarioIndicado()->setId( $linha ['id_usuario_usuario_indicado'] );
-                $ocorrencia->getUsuarioIndicado()->setNome( $linha ['nome_usuario_usuario_indicado'] );
-                $ocorrencia->getUsuarioIndicado()->setEmail( $linha ['email_usuario_usuario_indicado'] );
-                $ocorrencia->getUsuarioIndicado()->setLogin( $linha ['login_usuario_usuario_indicado'] );
-                $ocorrencia->getUsuarioIndicado()->setSenha( $linha ['senha_usuario_usuario_indicado'] );
-                $ocorrencia->getUsuarioIndicado()->setNivel( $linha ['nivel_usuario_usuario_indicado'] );
                 
                 
 		    }
@@ -2125,6 +1819,7 @@ class OcorrenciaDAO extends DAO {
 		SELECT
         ocorrencia.id, 
         ocorrencia.id_local, 
+        ocorrencia.id_usuario_cliente, 
         ocorrencia.descricao, 
         ocorrencia.campus, 
         ocorrencia.patrimonio, 
@@ -2135,6 +1830,8 @@ class OcorrenciaDAO extends DAO {
         ocorrencia.prioridade, 
         ocorrencia.avaliacao, 
         ocorrencia.email, 
+        ocorrencia.id_usuario_atendente, 
+        ocorrencia.id_usuario_indicado, 
         ocorrencia.anexo, 
         ocorrencia.local_sala, 
         area_responsavel.id as id_area_responsavel_area_responsavel, 
@@ -2145,31 +1842,10 @@ class OcorrenciaDAO extends DAO {
         servico.nome as nome_servico_servico, 
         servico.descricao as descricao_servico_servico, 
         servico.tempo_sla as tempo_sla_servico_servico, 
-        servico.visao as visao_servico_servico, 
-        usuario_cliente.id as id_usuario_usuario_cliente, 
-        usuario_cliente.nome as nome_usuario_usuario_cliente, 
-        usuario_cliente.email as email_usuario_usuario_cliente, 
-        usuario_cliente.login as login_usuario_usuario_cliente, 
-        usuario_cliente.senha as senha_usuario_usuario_cliente, 
-        usuario_cliente.nivel as nivel_usuario_usuario_cliente, 
-        usuario_atendente.id as id_usuario_usuario_atendente, 
-        usuario_atendente.nome as nome_usuario_usuario_atendente, 
-        usuario_atendente.email as email_usuario_usuario_atendente, 
-        usuario_atendente.login as login_usuario_usuario_atendente, 
-        usuario_atendente.senha as senha_usuario_usuario_atendente, 
-        usuario_atendente.nivel as nivel_usuario_usuario_atendente, 
-        usuario_indicado.id as id_usuario_usuario_indicado, 
-        usuario_indicado.nome as nome_usuario_usuario_indicado, 
-        usuario_indicado.email as email_usuario_usuario_indicado, 
-        usuario_indicado.login as login_usuario_usuario_indicado, 
-        usuario_indicado.senha as senha_usuario_usuario_indicado, 
-        usuario_indicado.nivel as nivel_usuario_usuario_indicado
+        servico.visao as visao_servico_servico
 		FROM ocorrencia
 		INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel
 		INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico
-		INNER JOIN usuario as usuario_cliente ON usuario_cliente.id = ocorrencia.id_usuario_cliente
-		INNER JOIN usuario as usuario_atendente ON usuario_atendente.id = ocorrencia.id_usuario_atendente
-		INNER JOIN usuario as usuario_indicado ON usuario_indicado.id = ocorrencia.id_usuario_indicado
                 WHERE ocorrencia.id_local = :idLocal
                  LIMIT 1000";
                 
@@ -2186,6 +1862,7 @@ class OcorrenciaDAO extends DAO {
             {
                 $ocorrencia->setId( $linha ['id'] );
                 $ocorrencia->setIdLocal( $linha ['id_local'] );
+                $ocorrencia->setIdUsuarioCliente( $linha ['id_usuario_cliente'] );
                 $ocorrencia->setDescricao( $linha ['descricao'] );
                 $ocorrencia->setCampus( $linha ['campus'] );
                 $ocorrencia->setPatrimonio( $linha ['patrimonio'] );
@@ -2196,6 +1873,8 @@ class OcorrenciaDAO extends DAO {
                 $ocorrencia->setPrioridade( $linha ['prioridade'] );
                 $ocorrencia->setAvaliacao( $linha ['avaliacao'] );
                 $ocorrencia->setEmail( $linha ['email'] );
+                $ocorrencia->setIdUsuarioAtendente( $linha ['id_usuario_atendente'] );
+                $ocorrencia->setIdUsuarioIndicado( $linha ['id_usuario_indicado'] );
                 $ocorrencia->setAnexo( $linha ['anexo'] );
                 $ocorrencia->setLocalSala( $linha ['local_sala'] );
                 $ocorrencia->getAreaResponsavel()->setId( $linha ['id_area_responsavel_area_responsavel'] );
@@ -2207,24 +1886,89 @@ class OcorrenciaDAO extends DAO {
                 $ocorrencia->getServico()->setDescricao( $linha ['descricao_servico_servico'] );
                 $ocorrencia->getServico()->setTempoSla( $linha ['tempo_sla_servico_servico'] );
                 $ocorrencia->getServico()->setVisao( $linha ['visao_servico_servico'] );
-                $ocorrencia->getUsuarioCliente()->setId( $linha ['id_usuario_usuario_cliente'] );
-                $ocorrencia->getUsuarioCliente()->setNome( $linha ['nome_usuario_usuario_cliente'] );
-                $ocorrencia->getUsuarioCliente()->setEmail( $linha ['email_usuario_usuario_cliente'] );
-                $ocorrencia->getUsuarioCliente()->setLogin( $linha ['login_usuario_usuario_cliente'] );
-                $ocorrencia->getUsuarioCliente()->setSenha( $linha ['senha_usuario_usuario_cliente'] );
-                $ocorrencia->getUsuarioCliente()->setNivel( $linha ['nivel_usuario_usuario_cliente'] );
-                $ocorrencia->getUsuarioAtendente()->setId( $linha ['id_usuario_usuario_atendente'] );
-                $ocorrencia->getUsuarioAtendente()->setNome( $linha ['nome_usuario_usuario_atendente'] );
-                $ocorrencia->getUsuarioAtendente()->setEmail( $linha ['email_usuario_usuario_atendente'] );
-                $ocorrencia->getUsuarioAtendente()->setLogin( $linha ['login_usuario_usuario_atendente'] );
-                $ocorrencia->getUsuarioAtendente()->setSenha( $linha ['senha_usuario_usuario_atendente'] );
-                $ocorrencia->getUsuarioAtendente()->setNivel( $linha ['nivel_usuario_usuario_atendente'] );
-                $ocorrencia->getUsuarioIndicado()->setId( $linha ['id_usuario_usuario_indicado'] );
-                $ocorrencia->getUsuarioIndicado()->setNome( $linha ['nome_usuario_usuario_indicado'] );
-                $ocorrencia->getUsuarioIndicado()->setEmail( $linha ['email_usuario_usuario_indicado'] );
-                $ocorrencia->getUsuarioIndicado()->setLogin( $linha ['login_usuario_usuario_indicado'] );
-                $ocorrencia->getUsuarioIndicado()->setSenha( $linha ['senha_usuario_usuario_indicado'] );
-                $ocorrencia->getUsuarioIndicado()->setNivel( $linha ['nivel_usuario_usuario_indicado'] );
+                
+                
+		    }
+		} catch(PDOException $e) {
+		    echo $e->getMessage();
+ 		}
+		return $ocorrencia;
+    }
+                
+    public function preenchePorIdUsuarioCliente(Ocorrencia $ocorrencia) {
+        
+	    $idUsuarioCliente = $ocorrencia->getIdUsuarioCliente();
+	    $sql = "
+		SELECT
+        ocorrencia.id, 
+        ocorrencia.id_local, 
+        ocorrencia.id_usuario_cliente, 
+        ocorrencia.descricao, 
+        ocorrencia.campus, 
+        ocorrencia.patrimonio, 
+        ocorrencia.ramal, 
+        ocorrencia.local, 
+        ocorrencia.status, 
+        ocorrencia.solucao, 
+        ocorrencia.prioridade, 
+        ocorrencia.avaliacao, 
+        ocorrencia.email, 
+        ocorrencia.id_usuario_atendente, 
+        ocorrencia.id_usuario_indicado, 
+        ocorrencia.anexo, 
+        ocorrencia.local_sala, 
+        area_responsavel.id as id_area_responsavel_area_responsavel, 
+        area_responsavel.nome as nome_area_responsavel_area_responsavel, 
+        area_responsavel.descricao as descricao_area_responsavel_area_responsavel, 
+        area_responsavel.email as email_area_responsavel_area_responsavel, 
+        servico.id as id_servico_servico, 
+        servico.nome as nome_servico_servico, 
+        servico.descricao as descricao_servico_servico, 
+        servico.tempo_sla as tempo_sla_servico_servico, 
+        servico.visao as visao_servico_servico
+		FROM ocorrencia
+		INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel
+		INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico
+                WHERE ocorrencia.id_usuario_cliente = :idUsuarioCliente
+                 LIMIT 1000";
+                
+        try {
+            $stmt = $this->conexao->prepare($sql);
+                
+		    if(!$stmt){
+                echo "<br>Mensagem de erro retornada: ".$this->conexao->errorInfo()[2]."<br>";
+		    }
+            $stmt->bindParam(":idUsuarioCliente", $idUsuarioCliente, PDO::PARAM_INT);
+            $stmt->execute();
+		    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+		    foreach ( $result as $linha )
+            {
+                $ocorrencia->setId( $linha ['id'] );
+                $ocorrencia->setIdLocal( $linha ['id_local'] );
+                $ocorrencia->setIdUsuarioCliente( $linha ['id_usuario_cliente'] );
+                $ocorrencia->setDescricao( $linha ['descricao'] );
+                $ocorrencia->setCampus( $linha ['campus'] );
+                $ocorrencia->setPatrimonio( $linha ['patrimonio'] );
+                $ocorrencia->setRamal( $linha ['ramal'] );
+                $ocorrencia->setLocal( $linha ['local'] );
+                $ocorrencia->setStatus( $linha ['status'] );
+                $ocorrencia->setSolucao( $linha ['solucao'] );
+                $ocorrencia->setPrioridade( $linha ['prioridade'] );
+                $ocorrencia->setAvaliacao( $linha ['avaliacao'] );
+                $ocorrencia->setEmail( $linha ['email'] );
+                $ocorrencia->setIdUsuarioAtendente( $linha ['id_usuario_atendente'] );
+                $ocorrencia->setIdUsuarioIndicado( $linha ['id_usuario_indicado'] );
+                $ocorrencia->setAnexo( $linha ['anexo'] );
+                $ocorrencia->setLocalSala( $linha ['local_sala'] );
+                $ocorrencia->getAreaResponsavel()->setId( $linha ['id_area_responsavel_area_responsavel'] );
+                $ocorrencia->getAreaResponsavel()->setNome( $linha ['nome_area_responsavel_area_responsavel'] );
+                $ocorrencia->getAreaResponsavel()->setDescricao( $linha ['descricao_area_responsavel_area_responsavel'] );
+                $ocorrencia->getAreaResponsavel()->setEmail( $linha ['email_area_responsavel_area_responsavel'] );
+                $ocorrencia->getServico()->setId( $linha ['id_servico_servico'] );
+                $ocorrencia->getServico()->setNome( $linha ['nome_servico_servico'] );
+                $ocorrencia->getServico()->setDescricao( $linha ['descricao_servico_servico'] );
+                $ocorrencia->getServico()->setTempoSla( $linha ['tempo_sla_servico_servico'] );
+                $ocorrencia->getServico()->setVisao( $linha ['visao_servico_servico'] );
                 
                 
 		    }
@@ -2241,6 +1985,7 @@ class OcorrenciaDAO extends DAO {
 		SELECT
         ocorrencia.id, 
         ocorrencia.id_local, 
+        ocorrencia.id_usuario_cliente, 
         ocorrencia.descricao, 
         ocorrencia.campus, 
         ocorrencia.patrimonio, 
@@ -2251,6 +1996,8 @@ class OcorrenciaDAO extends DAO {
         ocorrencia.prioridade, 
         ocorrencia.avaliacao, 
         ocorrencia.email, 
+        ocorrencia.id_usuario_atendente, 
+        ocorrencia.id_usuario_indicado, 
         ocorrencia.anexo, 
         ocorrencia.local_sala, 
         area_responsavel.id as id_area_responsavel_area_responsavel, 
@@ -2261,31 +2008,10 @@ class OcorrenciaDAO extends DAO {
         servico.nome as nome_servico_servico, 
         servico.descricao as descricao_servico_servico, 
         servico.tempo_sla as tempo_sla_servico_servico, 
-        servico.visao as visao_servico_servico, 
-        usuario_cliente.id as id_usuario_usuario_cliente, 
-        usuario_cliente.nome as nome_usuario_usuario_cliente, 
-        usuario_cliente.email as email_usuario_usuario_cliente, 
-        usuario_cliente.login as login_usuario_usuario_cliente, 
-        usuario_cliente.senha as senha_usuario_usuario_cliente, 
-        usuario_cliente.nivel as nivel_usuario_usuario_cliente, 
-        usuario_atendente.id as id_usuario_usuario_atendente, 
-        usuario_atendente.nome as nome_usuario_usuario_atendente, 
-        usuario_atendente.email as email_usuario_usuario_atendente, 
-        usuario_atendente.login as login_usuario_usuario_atendente, 
-        usuario_atendente.senha as senha_usuario_usuario_atendente, 
-        usuario_atendente.nivel as nivel_usuario_usuario_atendente, 
-        usuario_indicado.id as id_usuario_usuario_indicado, 
-        usuario_indicado.nome as nome_usuario_usuario_indicado, 
-        usuario_indicado.email as email_usuario_usuario_indicado, 
-        usuario_indicado.login as login_usuario_usuario_indicado, 
-        usuario_indicado.senha as senha_usuario_usuario_indicado, 
-        usuario_indicado.nivel as nivel_usuario_usuario_indicado
+        servico.visao as visao_servico_servico
 		FROM ocorrencia
 		INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel
 		INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico
-		INNER JOIN usuario as usuario_cliente ON usuario_cliente.id = ocorrencia.id_usuario_cliente
-		INNER JOIN usuario as usuario_atendente ON usuario_atendente.id = ocorrencia.id_usuario_atendente
-		INNER JOIN usuario as usuario_indicado ON usuario_indicado.id = ocorrencia.id_usuario_indicado
                 WHERE ocorrencia.descricao = :descricao
                  LIMIT 1000";
                 
@@ -2302,6 +2028,7 @@ class OcorrenciaDAO extends DAO {
             {
                 $ocorrencia->setId( $linha ['id'] );
                 $ocorrencia->setIdLocal( $linha ['id_local'] );
+                $ocorrencia->setIdUsuarioCliente( $linha ['id_usuario_cliente'] );
                 $ocorrencia->setDescricao( $linha ['descricao'] );
                 $ocorrencia->setCampus( $linha ['campus'] );
                 $ocorrencia->setPatrimonio( $linha ['patrimonio'] );
@@ -2312,6 +2039,8 @@ class OcorrenciaDAO extends DAO {
                 $ocorrencia->setPrioridade( $linha ['prioridade'] );
                 $ocorrencia->setAvaliacao( $linha ['avaliacao'] );
                 $ocorrencia->setEmail( $linha ['email'] );
+                $ocorrencia->setIdUsuarioAtendente( $linha ['id_usuario_atendente'] );
+                $ocorrencia->setIdUsuarioIndicado( $linha ['id_usuario_indicado'] );
                 $ocorrencia->setAnexo( $linha ['anexo'] );
                 $ocorrencia->setLocalSala( $linha ['local_sala'] );
                 $ocorrencia->getAreaResponsavel()->setId( $linha ['id_area_responsavel_area_responsavel'] );
@@ -2323,24 +2052,6 @@ class OcorrenciaDAO extends DAO {
                 $ocorrencia->getServico()->setDescricao( $linha ['descricao_servico_servico'] );
                 $ocorrencia->getServico()->setTempoSla( $linha ['tempo_sla_servico_servico'] );
                 $ocorrencia->getServico()->setVisao( $linha ['visao_servico_servico'] );
-                $ocorrencia->getUsuarioCliente()->setId( $linha ['id_usuario_usuario_cliente'] );
-                $ocorrencia->getUsuarioCliente()->setNome( $linha ['nome_usuario_usuario_cliente'] );
-                $ocorrencia->getUsuarioCliente()->setEmail( $linha ['email_usuario_usuario_cliente'] );
-                $ocorrencia->getUsuarioCliente()->setLogin( $linha ['login_usuario_usuario_cliente'] );
-                $ocorrencia->getUsuarioCliente()->setSenha( $linha ['senha_usuario_usuario_cliente'] );
-                $ocorrencia->getUsuarioCliente()->setNivel( $linha ['nivel_usuario_usuario_cliente'] );
-                $ocorrencia->getUsuarioAtendente()->setId( $linha ['id_usuario_usuario_atendente'] );
-                $ocorrencia->getUsuarioAtendente()->setNome( $linha ['nome_usuario_usuario_atendente'] );
-                $ocorrencia->getUsuarioAtendente()->setEmail( $linha ['email_usuario_usuario_atendente'] );
-                $ocorrencia->getUsuarioAtendente()->setLogin( $linha ['login_usuario_usuario_atendente'] );
-                $ocorrencia->getUsuarioAtendente()->setSenha( $linha ['senha_usuario_usuario_atendente'] );
-                $ocorrencia->getUsuarioAtendente()->setNivel( $linha ['nivel_usuario_usuario_atendente'] );
-                $ocorrencia->getUsuarioIndicado()->setId( $linha ['id_usuario_usuario_indicado'] );
-                $ocorrencia->getUsuarioIndicado()->setNome( $linha ['nome_usuario_usuario_indicado'] );
-                $ocorrencia->getUsuarioIndicado()->setEmail( $linha ['email_usuario_usuario_indicado'] );
-                $ocorrencia->getUsuarioIndicado()->setLogin( $linha ['login_usuario_usuario_indicado'] );
-                $ocorrencia->getUsuarioIndicado()->setSenha( $linha ['senha_usuario_usuario_indicado'] );
-                $ocorrencia->getUsuarioIndicado()->setNivel( $linha ['nivel_usuario_usuario_indicado'] );
                 
                 
 		    }
@@ -2357,6 +2068,7 @@ class OcorrenciaDAO extends DAO {
 		SELECT
         ocorrencia.id, 
         ocorrencia.id_local, 
+        ocorrencia.id_usuario_cliente, 
         ocorrencia.descricao, 
         ocorrencia.campus, 
         ocorrencia.patrimonio, 
@@ -2367,6 +2079,8 @@ class OcorrenciaDAO extends DAO {
         ocorrencia.prioridade, 
         ocorrencia.avaliacao, 
         ocorrencia.email, 
+        ocorrencia.id_usuario_atendente, 
+        ocorrencia.id_usuario_indicado, 
         ocorrencia.anexo, 
         ocorrencia.local_sala, 
         area_responsavel.id as id_area_responsavel_area_responsavel, 
@@ -2377,31 +2091,10 @@ class OcorrenciaDAO extends DAO {
         servico.nome as nome_servico_servico, 
         servico.descricao as descricao_servico_servico, 
         servico.tempo_sla as tempo_sla_servico_servico, 
-        servico.visao as visao_servico_servico, 
-        usuario_cliente.id as id_usuario_usuario_cliente, 
-        usuario_cliente.nome as nome_usuario_usuario_cliente, 
-        usuario_cliente.email as email_usuario_usuario_cliente, 
-        usuario_cliente.login as login_usuario_usuario_cliente, 
-        usuario_cliente.senha as senha_usuario_usuario_cliente, 
-        usuario_cliente.nivel as nivel_usuario_usuario_cliente, 
-        usuario_atendente.id as id_usuario_usuario_atendente, 
-        usuario_atendente.nome as nome_usuario_usuario_atendente, 
-        usuario_atendente.email as email_usuario_usuario_atendente, 
-        usuario_atendente.login as login_usuario_usuario_atendente, 
-        usuario_atendente.senha as senha_usuario_usuario_atendente, 
-        usuario_atendente.nivel as nivel_usuario_usuario_atendente, 
-        usuario_indicado.id as id_usuario_usuario_indicado, 
-        usuario_indicado.nome as nome_usuario_usuario_indicado, 
-        usuario_indicado.email as email_usuario_usuario_indicado, 
-        usuario_indicado.login as login_usuario_usuario_indicado, 
-        usuario_indicado.senha as senha_usuario_usuario_indicado, 
-        usuario_indicado.nivel as nivel_usuario_usuario_indicado
+        servico.visao as visao_servico_servico
 		FROM ocorrencia
 		INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel
 		INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico
-		INNER JOIN usuario as usuario_cliente ON usuario_cliente.id = ocorrencia.id_usuario_cliente
-		INNER JOIN usuario as usuario_atendente ON usuario_atendente.id = ocorrencia.id_usuario_atendente
-		INNER JOIN usuario as usuario_indicado ON usuario_indicado.id = ocorrencia.id_usuario_indicado
                 WHERE ocorrencia.campus = :campus
                  LIMIT 1000";
                 
@@ -2418,6 +2111,7 @@ class OcorrenciaDAO extends DAO {
             {
                 $ocorrencia->setId( $linha ['id'] );
                 $ocorrencia->setIdLocal( $linha ['id_local'] );
+                $ocorrencia->setIdUsuarioCliente( $linha ['id_usuario_cliente'] );
                 $ocorrencia->setDescricao( $linha ['descricao'] );
                 $ocorrencia->setCampus( $linha ['campus'] );
                 $ocorrencia->setPatrimonio( $linha ['patrimonio'] );
@@ -2428,6 +2122,8 @@ class OcorrenciaDAO extends DAO {
                 $ocorrencia->setPrioridade( $linha ['prioridade'] );
                 $ocorrencia->setAvaliacao( $linha ['avaliacao'] );
                 $ocorrencia->setEmail( $linha ['email'] );
+                $ocorrencia->setIdUsuarioAtendente( $linha ['id_usuario_atendente'] );
+                $ocorrencia->setIdUsuarioIndicado( $linha ['id_usuario_indicado'] );
                 $ocorrencia->setAnexo( $linha ['anexo'] );
                 $ocorrencia->setLocalSala( $linha ['local_sala'] );
                 $ocorrencia->getAreaResponsavel()->setId( $linha ['id_area_responsavel_area_responsavel'] );
@@ -2439,24 +2135,6 @@ class OcorrenciaDAO extends DAO {
                 $ocorrencia->getServico()->setDescricao( $linha ['descricao_servico_servico'] );
                 $ocorrencia->getServico()->setTempoSla( $linha ['tempo_sla_servico_servico'] );
                 $ocorrencia->getServico()->setVisao( $linha ['visao_servico_servico'] );
-                $ocorrencia->getUsuarioCliente()->setId( $linha ['id_usuario_usuario_cliente'] );
-                $ocorrencia->getUsuarioCliente()->setNome( $linha ['nome_usuario_usuario_cliente'] );
-                $ocorrencia->getUsuarioCliente()->setEmail( $linha ['email_usuario_usuario_cliente'] );
-                $ocorrencia->getUsuarioCliente()->setLogin( $linha ['login_usuario_usuario_cliente'] );
-                $ocorrencia->getUsuarioCliente()->setSenha( $linha ['senha_usuario_usuario_cliente'] );
-                $ocorrencia->getUsuarioCliente()->setNivel( $linha ['nivel_usuario_usuario_cliente'] );
-                $ocorrencia->getUsuarioAtendente()->setId( $linha ['id_usuario_usuario_atendente'] );
-                $ocorrencia->getUsuarioAtendente()->setNome( $linha ['nome_usuario_usuario_atendente'] );
-                $ocorrencia->getUsuarioAtendente()->setEmail( $linha ['email_usuario_usuario_atendente'] );
-                $ocorrencia->getUsuarioAtendente()->setLogin( $linha ['login_usuario_usuario_atendente'] );
-                $ocorrencia->getUsuarioAtendente()->setSenha( $linha ['senha_usuario_usuario_atendente'] );
-                $ocorrencia->getUsuarioAtendente()->setNivel( $linha ['nivel_usuario_usuario_atendente'] );
-                $ocorrencia->getUsuarioIndicado()->setId( $linha ['id_usuario_usuario_indicado'] );
-                $ocorrencia->getUsuarioIndicado()->setNome( $linha ['nome_usuario_usuario_indicado'] );
-                $ocorrencia->getUsuarioIndicado()->setEmail( $linha ['email_usuario_usuario_indicado'] );
-                $ocorrencia->getUsuarioIndicado()->setLogin( $linha ['login_usuario_usuario_indicado'] );
-                $ocorrencia->getUsuarioIndicado()->setSenha( $linha ['senha_usuario_usuario_indicado'] );
-                $ocorrencia->getUsuarioIndicado()->setNivel( $linha ['nivel_usuario_usuario_indicado'] );
                 
                 
 		    }
@@ -2473,6 +2151,7 @@ class OcorrenciaDAO extends DAO {
 		SELECT
         ocorrencia.id, 
         ocorrencia.id_local, 
+        ocorrencia.id_usuario_cliente, 
         ocorrencia.descricao, 
         ocorrencia.campus, 
         ocorrencia.patrimonio, 
@@ -2483,6 +2162,8 @@ class OcorrenciaDAO extends DAO {
         ocorrencia.prioridade, 
         ocorrencia.avaliacao, 
         ocorrencia.email, 
+        ocorrencia.id_usuario_atendente, 
+        ocorrencia.id_usuario_indicado, 
         ocorrencia.anexo, 
         ocorrencia.local_sala, 
         area_responsavel.id as id_area_responsavel_area_responsavel, 
@@ -2493,31 +2174,10 @@ class OcorrenciaDAO extends DAO {
         servico.nome as nome_servico_servico, 
         servico.descricao as descricao_servico_servico, 
         servico.tempo_sla as tempo_sla_servico_servico, 
-        servico.visao as visao_servico_servico, 
-        usuario_cliente.id as id_usuario_usuario_cliente, 
-        usuario_cliente.nome as nome_usuario_usuario_cliente, 
-        usuario_cliente.email as email_usuario_usuario_cliente, 
-        usuario_cliente.login as login_usuario_usuario_cliente, 
-        usuario_cliente.senha as senha_usuario_usuario_cliente, 
-        usuario_cliente.nivel as nivel_usuario_usuario_cliente, 
-        usuario_atendente.id as id_usuario_usuario_atendente, 
-        usuario_atendente.nome as nome_usuario_usuario_atendente, 
-        usuario_atendente.email as email_usuario_usuario_atendente, 
-        usuario_atendente.login as login_usuario_usuario_atendente, 
-        usuario_atendente.senha as senha_usuario_usuario_atendente, 
-        usuario_atendente.nivel as nivel_usuario_usuario_atendente, 
-        usuario_indicado.id as id_usuario_usuario_indicado, 
-        usuario_indicado.nome as nome_usuario_usuario_indicado, 
-        usuario_indicado.email as email_usuario_usuario_indicado, 
-        usuario_indicado.login as login_usuario_usuario_indicado, 
-        usuario_indicado.senha as senha_usuario_usuario_indicado, 
-        usuario_indicado.nivel as nivel_usuario_usuario_indicado
+        servico.visao as visao_servico_servico
 		FROM ocorrencia
 		INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel
 		INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico
-		INNER JOIN usuario as usuario_cliente ON usuario_cliente.id = ocorrencia.id_usuario_cliente
-		INNER JOIN usuario as usuario_atendente ON usuario_atendente.id = ocorrencia.id_usuario_atendente
-		INNER JOIN usuario as usuario_indicado ON usuario_indicado.id = ocorrencia.id_usuario_indicado
                 WHERE ocorrencia.patrimonio = :patrimonio
                  LIMIT 1000";
                 
@@ -2534,6 +2194,7 @@ class OcorrenciaDAO extends DAO {
             {
                 $ocorrencia->setId( $linha ['id'] );
                 $ocorrencia->setIdLocal( $linha ['id_local'] );
+                $ocorrencia->setIdUsuarioCliente( $linha ['id_usuario_cliente'] );
                 $ocorrencia->setDescricao( $linha ['descricao'] );
                 $ocorrencia->setCampus( $linha ['campus'] );
                 $ocorrencia->setPatrimonio( $linha ['patrimonio'] );
@@ -2544,6 +2205,8 @@ class OcorrenciaDAO extends DAO {
                 $ocorrencia->setPrioridade( $linha ['prioridade'] );
                 $ocorrencia->setAvaliacao( $linha ['avaliacao'] );
                 $ocorrencia->setEmail( $linha ['email'] );
+                $ocorrencia->setIdUsuarioAtendente( $linha ['id_usuario_atendente'] );
+                $ocorrencia->setIdUsuarioIndicado( $linha ['id_usuario_indicado'] );
                 $ocorrencia->setAnexo( $linha ['anexo'] );
                 $ocorrencia->setLocalSala( $linha ['local_sala'] );
                 $ocorrencia->getAreaResponsavel()->setId( $linha ['id_area_responsavel_area_responsavel'] );
@@ -2555,24 +2218,6 @@ class OcorrenciaDAO extends DAO {
                 $ocorrencia->getServico()->setDescricao( $linha ['descricao_servico_servico'] );
                 $ocorrencia->getServico()->setTempoSla( $linha ['tempo_sla_servico_servico'] );
                 $ocorrencia->getServico()->setVisao( $linha ['visao_servico_servico'] );
-                $ocorrencia->getUsuarioCliente()->setId( $linha ['id_usuario_usuario_cliente'] );
-                $ocorrencia->getUsuarioCliente()->setNome( $linha ['nome_usuario_usuario_cliente'] );
-                $ocorrencia->getUsuarioCliente()->setEmail( $linha ['email_usuario_usuario_cliente'] );
-                $ocorrencia->getUsuarioCliente()->setLogin( $linha ['login_usuario_usuario_cliente'] );
-                $ocorrencia->getUsuarioCliente()->setSenha( $linha ['senha_usuario_usuario_cliente'] );
-                $ocorrencia->getUsuarioCliente()->setNivel( $linha ['nivel_usuario_usuario_cliente'] );
-                $ocorrencia->getUsuarioAtendente()->setId( $linha ['id_usuario_usuario_atendente'] );
-                $ocorrencia->getUsuarioAtendente()->setNome( $linha ['nome_usuario_usuario_atendente'] );
-                $ocorrencia->getUsuarioAtendente()->setEmail( $linha ['email_usuario_usuario_atendente'] );
-                $ocorrencia->getUsuarioAtendente()->setLogin( $linha ['login_usuario_usuario_atendente'] );
-                $ocorrencia->getUsuarioAtendente()->setSenha( $linha ['senha_usuario_usuario_atendente'] );
-                $ocorrencia->getUsuarioAtendente()->setNivel( $linha ['nivel_usuario_usuario_atendente'] );
-                $ocorrencia->getUsuarioIndicado()->setId( $linha ['id_usuario_usuario_indicado'] );
-                $ocorrencia->getUsuarioIndicado()->setNome( $linha ['nome_usuario_usuario_indicado'] );
-                $ocorrencia->getUsuarioIndicado()->setEmail( $linha ['email_usuario_usuario_indicado'] );
-                $ocorrencia->getUsuarioIndicado()->setLogin( $linha ['login_usuario_usuario_indicado'] );
-                $ocorrencia->getUsuarioIndicado()->setSenha( $linha ['senha_usuario_usuario_indicado'] );
-                $ocorrencia->getUsuarioIndicado()->setNivel( $linha ['nivel_usuario_usuario_indicado'] );
                 
                 
 		    }
@@ -2589,6 +2234,7 @@ class OcorrenciaDAO extends DAO {
 		SELECT
         ocorrencia.id, 
         ocorrencia.id_local, 
+        ocorrencia.id_usuario_cliente, 
         ocorrencia.descricao, 
         ocorrencia.campus, 
         ocorrencia.patrimonio, 
@@ -2599,6 +2245,8 @@ class OcorrenciaDAO extends DAO {
         ocorrencia.prioridade, 
         ocorrencia.avaliacao, 
         ocorrencia.email, 
+        ocorrencia.id_usuario_atendente, 
+        ocorrencia.id_usuario_indicado, 
         ocorrencia.anexo, 
         ocorrencia.local_sala, 
         area_responsavel.id as id_area_responsavel_area_responsavel, 
@@ -2609,31 +2257,10 @@ class OcorrenciaDAO extends DAO {
         servico.nome as nome_servico_servico, 
         servico.descricao as descricao_servico_servico, 
         servico.tempo_sla as tempo_sla_servico_servico, 
-        servico.visao as visao_servico_servico, 
-        usuario_cliente.id as id_usuario_usuario_cliente, 
-        usuario_cliente.nome as nome_usuario_usuario_cliente, 
-        usuario_cliente.email as email_usuario_usuario_cliente, 
-        usuario_cliente.login as login_usuario_usuario_cliente, 
-        usuario_cliente.senha as senha_usuario_usuario_cliente, 
-        usuario_cliente.nivel as nivel_usuario_usuario_cliente, 
-        usuario_atendente.id as id_usuario_usuario_atendente, 
-        usuario_atendente.nome as nome_usuario_usuario_atendente, 
-        usuario_atendente.email as email_usuario_usuario_atendente, 
-        usuario_atendente.login as login_usuario_usuario_atendente, 
-        usuario_atendente.senha as senha_usuario_usuario_atendente, 
-        usuario_atendente.nivel as nivel_usuario_usuario_atendente, 
-        usuario_indicado.id as id_usuario_usuario_indicado, 
-        usuario_indicado.nome as nome_usuario_usuario_indicado, 
-        usuario_indicado.email as email_usuario_usuario_indicado, 
-        usuario_indicado.login as login_usuario_usuario_indicado, 
-        usuario_indicado.senha as senha_usuario_usuario_indicado, 
-        usuario_indicado.nivel as nivel_usuario_usuario_indicado
+        servico.visao as visao_servico_servico
 		FROM ocorrencia
 		INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel
 		INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico
-		INNER JOIN usuario as usuario_cliente ON usuario_cliente.id = ocorrencia.id_usuario_cliente
-		INNER JOIN usuario as usuario_atendente ON usuario_atendente.id = ocorrencia.id_usuario_atendente
-		INNER JOIN usuario as usuario_indicado ON usuario_indicado.id = ocorrencia.id_usuario_indicado
                 WHERE ocorrencia.ramal = :ramal
                  LIMIT 1000";
                 
@@ -2650,6 +2277,7 @@ class OcorrenciaDAO extends DAO {
             {
                 $ocorrencia->setId( $linha ['id'] );
                 $ocorrencia->setIdLocal( $linha ['id_local'] );
+                $ocorrencia->setIdUsuarioCliente( $linha ['id_usuario_cliente'] );
                 $ocorrencia->setDescricao( $linha ['descricao'] );
                 $ocorrencia->setCampus( $linha ['campus'] );
                 $ocorrencia->setPatrimonio( $linha ['patrimonio'] );
@@ -2660,6 +2288,8 @@ class OcorrenciaDAO extends DAO {
                 $ocorrencia->setPrioridade( $linha ['prioridade'] );
                 $ocorrencia->setAvaliacao( $linha ['avaliacao'] );
                 $ocorrencia->setEmail( $linha ['email'] );
+                $ocorrencia->setIdUsuarioAtendente( $linha ['id_usuario_atendente'] );
+                $ocorrencia->setIdUsuarioIndicado( $linha ['id_usuario_indicado'] );
                 $ocorrencia->setAnexo( $linha ['anexo'] );
                 $ocorrencia->setLocalSala( $linha ['local_sala'] );
                 $ocorrencia->getAreaResponsavel()->setId( $linha ['id_area_responsavel_area_responsavel'] );
@@ -2671,24 +2301,6 @@ class OcorrenciaDAO extends DAO {
                 $ocorrencia->getServico()->setDescricao( $linha ['descricao_servico_servico'] );
                 $ocorrencia->getServico()->setTempoSla( $linha ['tempo_sla_servico_servico'] );
                 $ocorrencia->getServico()->setVisao( $linha ['visao_servico_servico'] );
-                $ocorrencia->getUsuarioCliente()->setId( $linha ['id_usuario_usuario_cliente'] );
-                $ocorrencia->getUsuarioCliente()->setNome( $linha ['nome_usuario_usuario_cliente'] );
-                $ocorrencia->getUsuarioCliente()->setEmail( $linha ['email_usuario_usuario_cliente'] );
-                $ocorrencia->getUsuarioCliente()->setLogin( $linha ['login_usuario_usuario_cliente'] );
-                $ocorrencia->getUsuarioCliente()->setSenha( $linha ['senha_usuario_usuario_cliente'] );
-                $ocorrencia->getUsuarioCliente()->setNivel( $linha ['nivel_usuario_usuario_cliente'] );
-                $ocorrencia->getUsuarioAtendente()->setId( $linha ['id_usuario_usuario_atendente'] );
-                $ocorrencia->getUsuarioAtendente()->setNome( $linha ['nome_usuario_usuario_atendente'] );
-                $ocorrencia->getUsuarioAtendente()->setEmail( $linha ['email_usuario_usuario_atendente'] );
-                $ocorrencia->getUsuarioAtendente()->setLogin( $linha ['login_usuario_usuario_atendente'] );
-                $ocorrencia->getUsuarioAtendente()->setSenha( $linha ['senha_usuario_usuario_atendente'] );
-                $ocorrencia->getUsuarioAtendente()->setNivel( $linha ['nivel_usuario_usuario_atendente'] );
-                $ocorrencia->getUsuarioIndicado()->setId( $linha ['id_usuario_usuario_indicado'] );
-                $ocorrencia->getUsuarioIndicado()->setNome( $linha ['nome_usuario_usuario_indicado'] );
-                $ocorrencia->getUsuarioIndicado()->setEmail( $linha ['email_usuario_usuario_indicado'] );
-                $ocorrencia->getUsuarioIndicado()->setLogin( $linha ['login_usuario_usuario_indicado'] );
-                $ocorrencia->getUsuarioIndicado()->setSenha( $linha ['senha_usuario_usuario_indicado'] );
-                $ocorrencia->getUsuarioIndicado()->setNivel( $linha ['nivel_usuario_usuario_indicado'] );
                 
                 
 		    }
@@ -2705,6 +2317,7 @@ class OcorrenciaDAO extends DAO {
 		SELECT
         ocorrencia.id, 
         ocorrencia.id_local, 
+        ocorrencia.id_usuario_cliente, 
         ocorrencia.descricao, 
         ocorrencia.campus, 
         ocorrencia.patrimonio, 
@@ -2715,6 +2328,8 @@ class OcorrenciaDAO extends DAO {
         ocorrencia.prioridade, 
         ocorrencia.avaliacao, 
         ocorrencia.email, 
+        ocorrencia.id_usuario_atendente, 
+        ocorrencia.id_usuario_indicado, 
         ocorrencia.anexo, 
         ocorrencia.local_sala, 
         area_responsavel.id as id_area_responsavel_area_responsavel, 
@@ -2725,31 +2340,10 @@ class OcorrenciaDAO extends DAO {
         servico.nome as nome_servico_servico, 
         servico.descricao as descricao_servico_servico, 
         servico.tempo_sla as tempo_sla_servico_servico, 
-        servico.visao as visao_servico_servico, 
-        usuario_cliente.id as id_usuario_usuario_cliente, 
-        usuario_cliente.nome as nome_usuario_usuario_cliente, 
-        usuario_cliente.email as email_usuario_usuario_cliente, 
-        usuario_cliente.login as login_usuario_usuario_cliente, 
-        usuario_cliente.senha as senha_usuario_usuario_cliente, 
-        usuario_cliente.nivel as nivel_usuario_usuario_cliente, 
-        usuario_atendente.id as id_usuario_usuario_atendente, 
-        usuario_atendente.nome as nome_usuario_usuario_atendente, 
-        usuario_atendente.email as email_usuario_usuario_atendente, 
-        usuario_atendente.login as login_usuario_usuario_atendente, 
-        usuario_atendente.senha as senha_usuario_usuario_atendente, 
-        usuario_atendente.nivel as nivel_usuario_usuario_atendente, 
-        usuario_indicado.id as id_usuario_usuario_indicado, 
-        usuario_indicado.nome as nome_usuario_usuario_indicado, 
-        usuario_indicado.email as email_usuario_usuario_indicado, 
-        usuario_indicado.login as login_usuario_usuario_indicado, 
-        usuario_indicado.senha as senha_usuario_usuario_indicado, 
-        usuario_indicado.nivel as nivel_usuario_usuario_indicado
+        servico.visao as visao_servico_servico
 		FROM ocorrencia
 		INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel
 		INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico
-		INNER JOIN usuario as usuario_cliente ON usuario_cliente.id = ocorrencia.id_usuario_cliente
-		INNER JOIN usuario as usuario_atendente ON usuario_atendente.id = ocorrencia.id_usuario_atendente
-		INNER JOIN usuario as usuario_indicado ON usuario_indicado.id = ocorrencia.id_usuario_indicado
                 WHERE ocorrencia.local = :local
                  LIMIT 1000";
                 
@@ -2766,6 +2360,7 @@ class OcorrenciaDAO extends DAO {
             {
                 $ocorrencia->setId( $linha ['id'] );
                 $ocorrencia->setIdLocal( $linha ['id_local'] );
+                $ocorrencia->setIdUsuarioCliente( $linha ['id_usuario_cliente'] );
                 $ocorrencia->setDescricao( $linha ['descricao'] );
                 $ocorrencia->setCampus( $linha ['campus'] );
                 $ocorrencia->setPatrimonio( $linha ['patrimonio'] );
@@ -2776,6 +2371,8 @@ class OcorrenciaDAO extends DAO {
                 $ocorrencia->setPrioridade( $linha ['prioridade'] );
                 $ocorrencia->setAvaliacao( $linha ['avaliacao'] );
                 $ocorrencia->setEmail( $linha ['email'] );
+                $ocorrencia->setIdUsuarioAtendente( $linha ['id_usuario_atendente'] );
+                $ocorrencia->setIdUsuarioIndicado( $linha ['id_usuario_indicado'] );
                 $ocorrencia->setAnexo( $linha ['anexo'] );
                 $ocorrencia->setLocalSala( $linha ['local_sala'] );
                 $ocorrencia->getAreaResponsavel()->setId( $linha ['id_area_responsavel_area_responsavel'] );
@@ -2787,24 +2384,6 @@ class OcorrenciaDAO extends DAO {
                 $ocorrencia->getServico()->setDescricao( $linha ['descricao_servico_servico'] );
                 $ocorrencia->getServico()->setTempoSla( $linha ['tempo_sla_servico_servico'] );
                 $ocorrencia->getServico()->setVisao( $linha ['visao_servico_servico'] );
-                $ocorrencia->getUsuarioCliente()->setId( $linha ['id_usuario_usuario_cliente'] );
-                $ocorrencia->getUsuarioCliente()->setNome( $linha ['nome_usuario_usuario_cliente'] );
-                $ocorrencia->getUsuarioCliente()->setEmail( $linha ['email_usuario_usuario_cliente'] );
-                $ocorrencia->getUsuarioCliente()->setLogin( $linha ['login_usuario_usuario_cliente'] );
-                $ocorrencia->getUsuarioCliente()->setSenha( $linha ['senha_usuario_usuario_cliente'] );
-                $ocorrencia->getUsuarioCliente()->setNivel( $linha ['nivel_usuario_usuario_cliente'] );
-                $ocorrencia->getUsuarioAtendente()->setId( $linha ['id_usuario_usuario_atendente'] );
-                $ocorrencia->getUsuarioAtendente()->setNome( $linha ['nome_usuario_usuario_atendente'] );
-                $ocorrencia->getUsuarioAtendente()->setEmail( $linha ['email_usuario_usuario_atendente'] );
-                $ocorrencia->getUsuarioAtendente()->setLogin( $linha ['login_usuario_usuario_atendente'] );
-                $ocorrencia->getUsuarioAtendente()->setSenha( $linha ['senha_usuario_usuario_atendente'] );
-                $ocorrencia->getUsuarioAtendente()->setNivel( $linha ['nivel_usuario_usuario_atendente'] );
-                $ocorrencia->getUsuarioIndicado()->setId( $linha ['id_usuario_usuario_indicado'] );
-                $ocorrencia->getUsuarioIndicado()->setNome( $linha ['nome_usuario_usuario_indicado'] );
-                $ocorrencia->getUsuarioIndicado()->setEmail( $linha ['email_usuario_usuario_indicado'] );
-                $ocorrencia->getUsuarioIndicado()->setLogin( $linha ['login_usuario_usuario_indicado'] );
-                $ocorrencia->getUsuarioIndicado()->setSenha( $linha ['senha_usuario_usuario_indicado'] );
-                $ocorrencia->getUsuarioIndicado()->setNivel( $linha ['nivel_usuario_usuario_indicado'] );
                 
                 
 		    }
@@ -2821,6 +2400,7 @@ class OcorrenciaDAO extends DAO {
 		SELECT
         ocorrencia.id, 
         ocorrencia.id_local, 
+        ocorrencia.id_usuario_cliente, 
         ocorrencia.descricao, 
         ocorrencia.campus, 
         ocorrencia.patrimonio, 
@@ -2831,6 +2411,8 @@ class OcorrenciaDAO extends DAO {
         ocorrencia.prioridade, 
         ocorrencia.avaliacao, 
         ocorrencia.email, 
+        ocorrencia.id_usuario_atendente, 
+        ocorrencia.id_usuario_indicado, 
         ocorrencia.anexo, 
         ocorrencia.local_sala, 
         area_responsavel.id as id_area_responsavel_area_responsavel, 
@@ -2841,31 +2423,10 @@ class OcorrenciaDAO extends DAO {
         servico.nome as nome_servico_servico, 
         servico.descricao as descricao_servico_servico, 
         servico.tempo_sla as tempo_sla_servico_servico, 
-        servico.visao as visao_servico_servico, 
-        usuario_cliente.id as id_usuario_usuario_cliente, 
-        usuario_cliente.nome as nome_usuario_usuario_cliente, 
-        usuario_cliente.email as email_usuario_usuario_cliente, 
-        usuario_cliente.login as login_usuario_usuario_cliente, 
-        usuario_cliente.senha as senha_usuario_usuario_cliente, 
-        usuario_cliente.nivel as nivel_usuario_usuario_cliente, 
-        usuario_atendente.id as id_usuario_usuario_atendente, 
-        usuario_atendente.nome as nome_usuario_usuario_atendente, 
-        usuario_atendente.email as email_usuario_usuario_atendente, 
-        usuario_atendente.login as login_usuario_usuario_atendente, 
-        usuario_atendente.senha as senha_usuario_usuario_atendente, 
-        usuario_atendente.nivel as nivel_usuario_usuario_atendente, 
-        usuario_indicado.id as id_usuario_usuario_indicado, 
-        usuario_indicado.nome as nome_usuario_usuario_indicado, 
-        usuario_indicado.email as email_usuario_usuario_indicado, 
-        usuario_indicado.login as login_usuario_usuario_indicado, 
-        usuario_indicado.senha as senha_usuario_usuario_indicado, 
-        usuario_indicado.nivel as nivel_usuario_usuario_indicado
+        servico.visao as visao_servico_servico
 		FROM ocorrencia
 		INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel
 		INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico
-		INNER JOIN usuario as usuario_cliente ON usuario_cliente.id = ocorrencia.id_usuario_cliente
-		INNER JOIN usuario as usuario_atendente ON usuario_atendente.id = ocorrencia.id_usuario_atendente
-		INNER JOIN usuario as usuario_indicado ON usuario_indicado.id = ocorrencia.id_usuario_indicado
                 WHERE ocorrencia.status = :status
                  LIMIT 1000";
                 
@@ -2882,6 +2443,7 @@ class OcorrenciaDAO extends DAO {
             {
                 $ocorrencia->setId( $linha ['id'] );
                 $ocorrencia->setIdLocal( $linha ['id_local'] );
+                $ocorrencia->setIdUsuarioCliente( $linha ['id_usuario_cliente'] );
                 $ocorrencia->setDescricao( $linha ['descricao'] );
                 $ocorrencia->setCampus( $linha ['campus'] );
                 $ocorrencia->setPatrimonio( $linha ['patrimonio'] );
@@ -2892,6 +2454,8 @@ class OcorrenciaDAO extends DAO {
                 $ocorrencia->setPrioridade( $linha ['prioridade'] );
                 $ocorrencia->setAvaliacao( $linha ['avaliacao'] );
                 $ocorrencia->setEmail( $linha ['email'] );
+                $ocorrencia->setIdUsuarioAtendente( $linha ['id_usuario_atendente'] );
+                $ocorrencia->setIdUsuarioIndicado( $linha ['id_usuario_indicado'] );
                 $ocorrencia->setAnexo( $linha ['anexo'] );
                 $ocorrencia->setLocalSala( $linha ['local_sala'] );
                 $ocorrencia->getAreaResponsavel()->setId( $linha ['id_area_responsavel_area_responsavel'] );
@@ -2903,24 +2467,6 @@ class OcorrenciaDAO extends DAO {
                 $ocorrencia->getServico()->setDescricao( $linha ['descricao_servico_servico'] );
                 $ocorrencia->getServico()->setTempoSla( $linha ['tempo_sla_servico_servico'] );
                 $ocorrencia->getServico()->setVisao( $linha ['visao_servico_servico'] );
-                $ocorrencia->getUsuarioCliente()->setId( $linha ['id_usuario_usuario_cliente'] );
-                $ocorrencia->getUsuarioCliente()->setNome( $linha ['nome_usuario_usuario_cliente'] );
-                $ocorrencia->getUsuarioCliente()->setEmail( $linha ['email_usuario_usuario_cliente'] );
-                $ocorrencia->getUsuarioCliente()->setLogin( $linha ['login_usuario_usuario_cliente'] );
-                $ocorrencia->getUsuarioCliente()->setSenha( $linha ['senha_usuario_usuario_cliente'] );
-                $ocorrencia->getUsuarioCliente()->setNivel( $linha ['nivel_usuario_usuario_cliente'] );
-                $ocorrencia->getUsuarioAtendente()->setId( $linha ['id_usuario_usuario_atendente'] );
-                $ocorrencia->getUsuarioAtendente()->setNome( $linha ['nome_usuario_usuario_atendente'] );
-                $ocorrencia->getUsuarioAtendente()->setEmail( $linha ['email_usuario_usuario_atendente'] );
-                $ocorrencia->getUsuarioAtendente()->setLogin( $linha ['login_usuario_usuario_atendente'] );
-                $ocorrencia->getUsuarioAtendente()->setSenha( $linha ['senha_usuario_usuario_atendente'] );
-                $ocorrencia->getUsuarioAtendente()->setNivel( $linha ['nivel_usuario_usuario_atendente'] );
-                $ocorrencia->getUsuarioIndicado()->setId( $linha ['id_usuario_usuario_indicado'] );
-                $ocorrencia->getUsuarioIndicado()->setNome( $linha ['nome_usuario_usuario_indicado'] );
-                $ocorrencia->getUsuarioIndicado()->setEmail( $linha ['email_usuario_usuario_indicado'] );
-                $ocorrencia->getUsuarioIndicado()->setLogin( $linha ['login_usuario_usuario_indicado'] );
-                $ocorrencia->getUsuarioIndicado()->setSenha( $linha ['senha_usuario_usuario_indicado'] );
-                $ocorrencia->getUsuarioIndicado()->setNivel( $linha ['nivel_usuario_usuario_indicado'] );
                 
                 
 		    }
@@ -2937,6 +2483,7 @@ class OcorrenciaDAO extends DAO {
 		SELECT
         ocorrencia.id, 
         ocorrencia.id_local, 
+        ocorrencia.id_usuario_cliente, 
         ocorrencia.descricao, 
         ocorrencia.campus, 
         ocorrencia.patrimonio, 
@@ -2947,6 +2494,8 @@ class OcorrenciaDAO extends DAO {
         ocorrencia.prioridade, 
         ocorrencia.avaliacao, 
         ocorrencia.email, 
+        ocorrencia.id_usuario_atendente, 
+        ocorrencia.id_usuario_indicado, 
         ocorrencia.anexo, 
         ocorrencia.local_sala, 
         area_responsavel.id as id_area_responsavel_area_responsavel, 
@@ -2957,31 +2506,10 @@ class OcorrenciaDAO extends DAO {
         servico.nome as nome_servico_servico, 
         servico.descricao as descricao_servico_servico, 
         servico.tempo_sla as tempo_sla_servico_servico, 
-        servico.visao as visao_servico_servico, 
-        usuario_cliente.id as id_usuario_usuario_cliente, 
-        usuario_cliente.nome as nome_usuario_usuario_cliente, 
-        usuario_cliente.email as email_usuario_usuario_cliente, 
-        usuario_cliente.login as login_usuario_usuario_cliente, 
-        usuario_cliente.senha as senha_usuario_usuario_cliente, 
-        usuario_cliente.nivel as nivel_usuario_usuario_cliente, 
-        usuario_atendente.id as id_usuario_usuario_atendente, 
-        usuario_atendente.nome as nome_usuario_usuario_atendente, 
-        usuario_atendente.email as email_usuario_usuario_atendente, 
-        usuario_atendente.login as login_usuario_usuario_atendente, 
-        usuario_atendente.senha as senha_usuario_usuario_atendente, 
-        usuario_atendente.nivel as nivel_usuario_usuario_atendente, 
-        usuario_indicado.id as id_usuario_usuario_indicado, 
-        usuario_indicado.nome as nome_usuario_usuario_indicado, 
-        usuario_indicado.email as email_usuario_usuario_indicado, 
-        usuario_indicado.login as login_usuario_usuario_indicado, 
-        usuario_indicado.senha as senha_usuario_usuario_indicado, 
-        usuario_indicado.nivel as nivel_usuario_usuario_indicado
+        servico.visao as visao_servico_servico
 		FROM ocorrencia
 		INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel
 		INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico
-		INNER JOIN usuario as usuario_cliente ON usuario_cliente.id = ocorrencia.id_usuario_cliente
-		INNER JOIN usuario as usuario_atendente ON usuario_atendente.id = ocorrencia.id_usuario_atendente
-		INNER JOIN usuario as usuario_indicado ON usuario_indicado.id = ocorrencia.id_usuario_indicado
                 WHERE ocorrencia.solucao = :solucao
                  LIMIT 1000";
                 
@@ -2998,6 +2526,7 @@ class OcorrenciaDAO extends DAO {
             {
                 $ocorrencia->setId( $linha ['id'] );
                 $ocorrencia->setIdLocal( $linha ['id_local'] );
+                $ocorrencia->setIdUsuarioCliente( $linha ['id_usuario_cliente'] );
                 $ocorrencia->setDescricao( $linha ['descricao'] );
                 $ocorrencia->setCampus( $linha ['campus'] );
                 $ocorrencia->setPatrimonio( $linha ['patrimonio'] );
@@ -3008,6 +2537,8 @@ class OcorrenciaDAO extends DAO {
                 $ocorrencia->setPrioridade( $linha ['prioridade'] );
                 $ocorrencia->setAvaliacao( $linha ['avaliacao'] );
                 $ocorrencia->setEmail( $linha ['email'] );
+                $ocorrencia->setIdUsuarioAtendente( $linha ['id_usuario_atendente'] );
+                $ocorrencia->setIdUsuarioIndicado( $linha ['id_usuario_indicado'] );
                 $ocorrencia->setAnexo( $linha ['anexo'] );
                 $ocorrencia->setLocalSala( $linha ['local_sala'] );
                 $ocorrencia->getAreaResponsavel()->setId( $linha ['id_area_responsavel_area_responsavel'] );
@@ -3019,24 +2550,6 @@ class OcorrenciaDAO extends DAO {
                 $ocorrencia->getServico()->setDescricao( $linha ['descricao_servico_servico'] );
                 $ocorrencia->getServico()->setTempoSla( $linha ['tempo_sla_servico_servico'] );
                 $ocorrencia->getServico()->setVisao( $linha ['visao_servico_servico'] );
-                $ocorrencia->getUsuarioCliente()->setId( $linha ['id_usuario_usuario_cliente'] );
-                $ocorrencia->getUsuarioCliente()->setNome( $linha ['nome_usuario_usuario_cliente'] );
-                $ocorrencia->getUsuarioCliente()->setEmail( $linha ['email_usuario_usuario_cliente'] );
-                $ocorrencia->getUsuarioCliente()->setLogin( $linha ['login_usuario_usuario_cliente'] );
-                $ocorrencia->getUsuarioCliente()->setSenha( $linha ['senha_usuario_usuario_cliente'] );
-                $ocorrencia->getUsuarioCliente()->setNivel( $linha ['nivel_usuario_usuario_cliente'] );
-                $ocorrencia->getUsuarioAtendente()->setId( $linha ['id_usuario_usuario_atendente'] );
-                $ocorrencia->getUsuarioAtendente()->setNome( $linha ['nome_usuario_usuario_atendente'] );
-                $ocorrencia->getUsuarioAtendente()->setEmail( $linha ['email_usuario_usuario_atendente'] );
-                $ocorrencia->getUsuarioAtendente()->setLogin( $linha ['login_usuario_usuario_atendente'] );
-                $ocorrencia->getUsuarioAtendente()->setSenha( $linha ['senha_usuario_usuario_atendente'] );
-                $ocorrencia->getUsuarioAtendente()->setNivel( $linha ['nivel_usuario_usuario_atendente'] );
-                $ocorrencia->getUsuarioIndicado()->setId( $linha ['id_usuario_usuario_indicado'] );
-                $ocorrencia->getUsuarioIndicado()->setNome( $linha ['nome_usuario_usuario_indicado'] );
-                $ocorrencia->getUsuarioIndicado()->setEmail( $linha ['email_usuario_usuario_indicado'] );
-                $ocorrencia->getUsuarioIndicado()->setLogin( $linha ['login_usuario_usuario_indicado'] );
-                $ocorrencia->getUsuarioIndicado()->setSenha( $linha ['senha_usuario_usuario_indicado'] );
-                $ocorrencia->getUsuarioIndicado()->setNivel( $linha ['nivel_usuario_usuario_indicado'] );
                 
                 
 		    }
@@ -3053,6 +2566,7 @@ class OcorrenciaDAO extends DAO {
 		SELECT
         ocorrencia.id, 
         ocorrencia.id_local, 
+        ocorrencia.id_usuario_cliente, 
         ocorrencia.descricao, 
         ocorrencia.campus, 
         ocorrencia.patrimonio, 
@@ -3063,6 +2577,8 @@ class OcorrenciaDAO extends DAO {
         ocorrencia.prioridade, 
         ocorrencia.avaliacao, 
         ocorrencia.email, 
+        ocorrencia.id_usuario_atendente, 
+        ocorrencia.id_usuario_indicado, 
         ocorrencia.anexo, 
         ocorrencia.local_sala, 
         area_responsavel.id as id_area_responsavel_area_responsavel, 
@@ -3073,31 +2589,10 @@ class OcorrenciaDAO extends DAO {
         servico.nome as nome_servico_servico, 
         servico.descricao as descricao_servico_servico, 
         servico.tempo_sla as tempo_sla_servico_servico, 
-        servico.visao as visao_servico_servico, 
-        usuario_cliente.id as id_usuario_usuario_cliente, 
-        usuario_cliente.nome as nome_usuario_usuario_cliente, 
-        usuario_cliente.email as email_usuario_usuario_cliente, 
-        usuario_cliente.login as login_usuario_usuario_cliente, 
-        usuario_cliente.senha as senha_usuario_usuario_cliente, 
-        usuario_cliente.nivel as nivel_usuario_usuario_cliente, 
-        usuario_atendente.id as id_usuario_usuario_atendente, 
-        usuario_atendente.nome as nome_usuario_usuario_atendente, 
-        usuario_atendente.email as email_usuario_usuario_atendente, 
-        usuario_atendente.login as login_usuario_usuario_atendente, 
-        usuario_atendente.senha as senha_usuario_usuario_atendente, 
-        usuario_atendente.nivel as nivel_usuario_usuario_atendente, 
-        usuario_indicado.id as id_usuario_usuario_indicado, 
-        usuario_indicado.nome as nome_usuario_usuario_indicado, 
-        usuario_indicado.email as email_usuario_usuario_indicado, 
-        usuario_indicado.login as login_usuario_usuario_indicado, 
-        usuario_indicado.senha as senha_usuario_usuario_indicado, 
-        usuario_indicado.nivel as nivel_usuario_usuario_indicado
+        servico.visao as visao_servico_servico
 		FROM ocorrencia
 		INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel
 		INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico
-		INNER JOIN usuario as usuario_cliente ON usuario_cliente.id = ocorrencia.id_usuario_cliente
-		INNER JOIN usuario as usuario_atendente ON usuario_atendente.id = ocorrencia.id_usuario_atendente
-		INNER JOIN usuario as usuario_indicado ON usuario_indicado.id = ocorrencia.id_usuario_indicado
                 WHERE ocorrencia.prioridade = :prioridade
                  LIMIT 1000";
                 
@@ -3114,6 +2609,7 @@ class OcorrenciaDAO extends DAO {
             {
                 $ocorrencia->setId( $linha ['id'] );
                 $ocorrencia->setIdLocal( $linha ['id_local'] );
+                $ocorrencia->setIdUsuarioCliente( $linha ['id_usuario_cliente'] );
                 $ocorrencia->setDescricao( $linha ['descricao'] );
                 $ocorrencia->setCampus( $linha ['campus'] );
                 $ocorrencia->setPatrimonio( $linha ['patrimonio'] );
@@ -3124,6 +2620,8 @@ class OcorrenciaDAO extends DAO {
                 $ocorrencia->setPrioridade( $linha ['prioridade'] );
                 $ocorrencia->setAvaliacao( $linha ['avaliacao'] );
                 $ocorrencia->setEmail( $linha ['email'] );
+                $ocorrencia->setIdUsuarioAtendente( $linha ['id_usuario_atendente'] );
+                $ocorrencia->setIdUsuarioIndicado( $linha ['id_usuario_indicado'] );
                 $ocorrencia->setAnexo( $linha ['anexo'] );
                 $ocorrencia->setLocalSala( $linha ['local_sala'] );
                 $ocorrencia->getAreaResponsavel()->setId( $linha ['id_area_responsavel_area_responsavel'] );
@@ -3135,24 +2633,6 @@ class OcorrenciaDAO extends DAO {
                 $ocorrencia->getServico()->setDescricao( $linha ['descricao_servico_servico'] );
                 $ocorrencia->getServico()->setTempoSla( $linha ['tempo_sla_servico_servico'] );
                 $ocorrencia->getServico()->setVisao( $linha ['visao_servico_servico'] );
-                $ocorrencia->getUsuarioCliente()->setId( $linha ['id_usuario_usuario_cliente'] );
-                $ocorrencia->getUsuarioCliente()->setNome( $linha ['nome_usuario_usuario_cliente'] );
-                $ocorrencia->getUsuarioCliente()->setEmail( $linha ['email_usuario_usuario_cliente'] );
-                $ocorrencia->getUsuarioCliente()->setLogin( $linha ['login_usuario_usuario_cliente'] );
-                $ocorrencia->getUsuarioCliente()->setSenha( $linha ['senha_usuario_usuario_cliente'] );
-                $ocorrencia->getUsuarioCliente()->setNivel( $linha ['nivel_usuario_usuario_cliente'] );
-                $ocorrencia->getUsuarioAtendente()->setId( $linha ['id_usuario_usuario_atendente'] );
-                $ocorrencia->getUsuarioAtendente()->setNome( $linha ['nome_usuario_usuario_atendente'] );
-                $ocorrencia->getUsuarioAtendente()->setEmail( $linha ['email_usuario_usuario_atendente'] );
-                $ocorrencia->getUsuarioAtendente()->setLogin( $linha ['login_usuario_usuario_atendente'] );
-                $ocorrencia->getUsuarioAtendente()->setSenha( $linha ['senha_usuario_usuario_atendente'] );
-                $ocorrencia->getUsuarioAtendente()->setNivel( $linha ['nivel_usuario_usuario_atendente'] );
-                $ocorrencia->getUsuarioIndicado()->setId( $linha ['id_usuario_usuario_indicado'] );
-                $ocorrencia->getUsuarioIndicado()->setNome( $linha ['nome_usuario_usuario_indicado'] );
-                $ocorrencia->getUsuarioIndicado()->setEmail( $linha ['email_usuario_usuario_indicado'] );
-                $ocorrencia->getUsuarioIndicado()->setLogin( $linha ['login_usuario_usuario_indicado'] );
-                $ocorrencia->getUsuarioIndicado()->setSenha( $linha ['senha_usuario_usuario_indicado'] );
-                $ocorrencia->getUsuarioIndicado()->setNivel( $linha ['nivel_usuario_usuario_indicado'] );
                 
                 
 		    }
@@ -3169,6 +2649,7 @@ class OcorrenciaDAO extends DAO {
 		SELECT
         ocorrencia.id, 
         ocorrencia.id_local, 
+        ocorrencia.id_usuario_cliente, 
         ocorrencia.descricao, 
         ocorrencia.campus, 
         ocorrencia.patrimonio, 
@@ -3179,6 +2660,8 @@ class OcorrenciaDAO extends DAO {
         ocorrencia.prioridade, 
         ocorrencia.avaliacao, 
         ocorrencia.email, 
+        ocorrencia.id_usuario_atendente, 
+        ocorrencia.id_usuario_indicado, 
         ocorrencia.anexo, 
         ocorrencia.local_sala, 
         area_responsavel.id as id_area_responsavel_area_responsavel, 
@@ -3189,31 +2672,10 @@ class OcorrenciaDAO extends DAO {
         servico.nome as nome_servico_servico, 
         servico.descricao as descricao_servico_servico, 
         servico.tempo_sla as tempo_sla_servico_servico, 
-        servico.visao as visao_servico_servico, 
-        usuario_cliente.id as id_usuario_usuario_cliente, 
-        usuario_cliente.nome as nome_usuario_usuario_cliente, 
-        usuario_cliente.email as email_usuario_usuario_cliente, 
-        usuario_cliente.login as login_usuario_usuario_cliente, 
-        usuario_cliente.senha as senha_usuario_usuario_cliente, 
-        usuario_cliente.nivel as nivel_usuario_usuario_cliente, 
-        usuario_atendente.id as id_usuario_usuario_atendente, 
-        usuario_atendente.nome as nome_usuario_usuario_atendente, 
-        usuario_atendente.email as email_usuario_usuario_atendente, 
-        usuario_atendente.login as login_usuario_usuario_atendente, 
-        usuario_atendente.senha as senha_usuario_usuario_atendente, 
-        usuario_atendente.nivel as nivel_usuario_usuario_atendente, 
-        usuario_indicado.id as id_usuario_usuario_indicado, 
-        usuario_indicado.nome as nome_usuario_usuario_indicado, 
-        usuario_indicado.email as email_usuario_usuario_indicado, 
-        usuario_indicado.login as login_usuario_usuario_indicado, 
-        usuario_indicado.senha as senha_usuario_usuario_indicado, 
-        usuario_indicado.nivel as nivel_usuario_usuario_indicado
+        servico.visao as visao_servico_servico
 		FROM ocorrencia
 		INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel
 		INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico
-		INNER JOIN usuario as usuario_cliente ON usuario_cliente.id = ocorrencia.id_usuario_cliente
-		INNER JOIN usuario as usuario_atendente ON usuario_atendente.id = ocorrencia.id_usuario_atendente
-		INNER JOIN usuario as usuario_indicado ON usuario_indicado.id = ocorrencia.id_usuario_indicado
                 WHERE ocorrencia.avaliacao = :avaliacao
                  LIMIT 1000";
                 
@@ -3230,6 +2692,7 @@ class OcorrenciaDAO extends DAO {
             {
                 $ocorrencia->setId( $linha ['id'] );
                 $ocorrencia->setIdLocal( $linha ['id_local'] );
+                $ocorrencia->setIdUsuarioCliente( $linha ['id_usuario_cliente'] );
                 $ocorrencia->setDescricao( $linha ['descricao'] );
                 $ocorrencia->setCampus( $linha ['campus'] );
                 $ocorrencia->setPatrimonio( $linha ['patrimonio'] );
@@ -3240,6 +2703,8 @@ class OcorrenciaDAO extends DAO {
                 $ocorrencia->setPrioridade( $linha ['prioridade'] );
                 $ocorrencia->setAvaliacao( $linha ['avaliacao'] );
                 $ocorrencia->setEmail( $linha ['email'] );
+                $ocorrencia->setIdUsuarioAtendente( $linha ['id_usuario_atendente'] );
+                $ocorrencia->setIdUsuarioIndicado( $linha ['id_usuario_indicado'] );
                 $ocorrencia->setAnexo( $linha ['anexo'] );
                 $ocorrencia->setLocalSala( $linha ['local_sala'] );
                 $ocorrencia->getAreaResponsavel()->setId( $linha ['id_area_responsavel_area_responsavel'] );
@@ -3251,24 +2716,6 @@ class OcorrenciaDAO extends DAO {
                 $ocorrencia->getServico()->setDescricao( $linha ['descricao_servico_servico'] );
                 $ocorrencia->getServico()->setTempoSla( $linha ['tempo_sla_servico_servico'] );
                 $ocorrencia->getServico()->setVisao( $linha ['visao_servico_servico'] );
-                $ocorrencia->getUsuarioCliente()->setId( $linha ['id_usuario_usuario_cliente'] );
-                $ocorrencia->getUsuarioCliente()->setNome( $linha ['nome_usuario_usuario_cliente'] );
-                $ocorrencia->getUsuarioCliente()->setEmail( $linha ['email_usuario_usuario_cliente'] );
-                $ocorrencia->getUsuarioCliente()->setLogin( $linha ['login_usuario_usuario_cliente'] );
-                $ocorrencia->getUsuarioCliente()->setSenha( $linha ['senha_usuario_usuario_cliente'] );
-                $ocorrencia->getUsuarioCliente()->setNivel( $linha ['nivel_usuario_usuario_cliente'] );
-                $ocorrencia->getUsuarioAtendente()->setId( $linha ['id_usuario_usuario_atendente'] );
-                $ocorrencia->getUsuarioAtendente()->setNome( $linha ['nome_usuario_usuario_atendente'] );
-                $ocorrencia->getUsuarioAtendente()->setEmail( $linha ['email_usuario_usuario_atendente'] );
-                $ocorrencia->getUsuarioAtendente()->setLogin( $linha ['login_usuario_usuario_atendente'] );
-                $ocorrencia->getUsuarioAtendente()->setSenha( $linha ['senha_usuario_usuario_atendente'] );
-                $ocorrencia->getUsuarioAtendente()->setNivel( $linha ['nivel_usuario_usuario_atendente'] );
-                $ocorrencia->getUsuarioIndicado()->setId( $linha ['id_usuario_usuario_indicado'] );
-                $ocorrencia->getUsuarioIndicado()->setNome( $linha ['nome_usuario_usuario_indicado'] );
-                $ocorrencia->getUsuarioIndicado()->setEmail( $linha ['email_usuario_usuario_indicado'] );
-                $ocorrencia->getUsuarioIndicado()->setLogin( $linha ['login_usuario_usuario_indicado'] );
-                $ocorrencia->getUsuarioIndicado()->setSenha( $linha ['senha_usuario_usuario_indicado'] );
-                $ocorrencia->getUsuarioIndicado()->setNivel( $linha ['nivel_usuario_usuario_indicado'] );
                 
                 
 		    }
@@ -3285,6 +2732,7 @@ class OcorrenciaDAO extends DAO {
 		SELECT
         ocorrencia.id, 
         ocorrencia.id_local, 
+        ocorrencia.id_usuario_cliente, 
         ocorrencia.descricao, 
         ocorrencia.campus, 
         ocorrencia.patrimonio, 
@@ -3295,6 +2743,8 @@ class OcorrenciaDAO extends DAO {
         ocorrencia.prioridade, 
         ocorrencia.avaliacao, 
         ocorrencia.email, 
+        ocorrencia.id_usuario_atendente, 
+        ocorrencia.id_usuario_indicado, 
         ocorrencia.anexo, 
         ocorrencia.local_sala, 
         area_responsavel.id as id_area_responsavel_area_responsavel, 
@@ -3305,31 +2755,10 @@ class OcorrenciaDAO extends DAO {
         servico.nome as nome_servico_servico, 
         servico.descricao as descricao_servico_servico, 
         servico.tempo_sla as tempo_sla_servico_servico, 
-        servico.visao as visao_servico_servico, 
-        usuario_cliente.id as id_usuario_usuario_cliente, 
-        usuario_cliente.nome as nome_usuario_usuario_cliente, 
-        usuario_cliente.email as email_usuario_usuario_cliente, 
-        usuario_cliente.login as login_usuario_usuario_cliente, 
-        usuario_cliente.senha as senha_usuario_usuario_cliente, 
-        usuario_cliente.nivel as nivel_usuario_usuario_cliente, 
-        usuario_atendente.id as id_usuario_usuario_atendente, 
-        usuario_atendente.nome as nome_usuario_usuario_atendente, 
-        usuario_atendente.email as email_usuario_usuario_atendente, 
-        usuario_atendente.login as login_usuario_usuario_atendente, 
-        usuario_atendente.senha as senha_usuario_usuario_atendente, 
-        usuario_atendente.nivel as nivel_usuario_usuario_atendente, 
-        usuario_indicado.id as id_usuario_usuario_indicado, 
-        usuario_indicado.nome as nome_usuario_usuario_indicado, 
-        usuario_indicado.email as email_usuario_usuario_indicado, 
-        usuario_indicado.login as login_usuario_usuario_indicado, 
-        usuario_indicado.senha as senha_usuario_usuario_indicado, 
-        usuario_indicado.nivel as nivel_usuario_usuario_indicado
+        servico.visao as visao_servico_servico
 		FROM ocorrencia
 		INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel
 		INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico
-		INNER JOIN usuario as usuario_cliente ON usuario_cliente.id = ocorrencia.id_usuario_cliente
-		INNER JOIN usuario as usuario_atendente ON usuario_atendente.id = ocorrencia.id_usuario_atendente
-		INNER JOIN usuario as usuario_indicado ON usuario_indicado.id = ocorrencia.id_usuario_indicado
                 WHERE ocorrencia.email = :email
                  LIMIT 1000";
                 
@@ -3346,6 +2775,7 @@ class OcorrenciaDAO extends DAO {
             {
                 $ocorrencia->setId( $linha ['id'] );
                 $ocorrencia->setIdLocal( $linha ['id_local'] );
+                $ocorrencia->setIdUsuarioCliente( $linha ['id_usuario_cliente'] );
                 $ocorrencia->setDescricao( $linha ['descricao'] );
                 $ocorrencia->setCampus( $linha ['campus'] );
                 $ocorrencia->setPatrimonio( $linha ['patrimonio'] );
@@ -3356,6 +2786,8 @@ class OcorrenciaDAO extends DAO {
                 $ocorrencia->setPrioridade( $linha ['prioridade'] );
                 $ocorrencia->setAvaliacao( $linha ['avaliacao'] );
                 $ocorrencia->setEmail( $linha ['email'] );
+                $ocorrencia->setIdUsuarioAtendente( $linha ['id_usuario_atendente'] );
+                $ocorrencia->setIdUsuarioIndicado( $linha ['id_usuario_indicado'] );
                 $ocorrencia->setAnexo( $linha ['anexo'] );
                 $ocorrencia->setLocalSala( $linha ['local_sala'] );
                 $ocorrencia->getAreaResponsavel()->setId( $linha ['id_area_responsavel_area_responsavel'] );
@@ -3367,24 +2799,172 @@ class OcorrenciaDAO extends DAO {
                 $ocorrencia->getServico()->setDescricao( $linha ['descricao_servico_servico'] );
                 $ocorrencia->getServico()->setTempoSla( $linha ['tempo_sla_servico_servico'] );
                 $ocorrencia->getServico()->setVisao( $linha ['visao_servico_servico'] );
-                $ocorrencia->getUsuarioCliente()->setId( $linha ['id_usuario_usuario_cliente'] );
-                $ocorrencia->getUsuarioCliente()->setNome( $linha ['nome_usuario_usuario_cliente'] );
-                $ocorrencia->getUsuarioCliente()->setEmail( $linha ['email_usuario_usuario_cliente'] );
-                $ocorrencia->getUsuarioCliente()->setLogin( $linha ['login_usuario_usuario_cliente'] );
-                $ocorrencia->getUsuarioCliente()->setSenha( $linha ['senha_usuario_usuario_cliente'] );
-                $ocorrencia->getUsuarioCliente()->setNivel( $linha ['nivel_usuario_usuario_cliente'] );
-                $ocorrencia->getUsuarioAtendente()->setId( $linha ['id_usuario_usuario_atendente'] );
-                $ocorrencia->getUsuarioAtendente()->setNome( $linha ['nome_usuario_usuario_atendente'] );
-                $ocorrencia->getUsuarioAtendente()->setEmail( $linha ['email_usuario_usuario_atendente'] );
-                $ocorrencia->getUsuarioAtendente()->setLogin( $linha ['login_usuario_usuario_atendente'] );
-                $ocorrencia->getUsuarioAtendente()->setSenha( $linha ['senha_usuario_usuario_atendente'] );
-                $ocorrencia->getUsuarioAtendente()->setNivel( $linha ['nivel_usuario_usuario_atendente'] );
-                $ocorrencia->getUsuarioIndicado()->setId( $linha ['id_usuario_usuario_indicado'] );
-                $ocorrencia->getUsuarioIndicado()->setNome( $linha ['nome_usuario_usuario_indicado'] );
-                $ocorrencia->getUsuarioIndicado()->setEmail( $linha ['email_usuario_usuario_indicado'] );
-                $ocorrencia->getUsuarioIndicado()->setLogin( $linha ['login_usuario_usuario_indicado'] );
-                $ocorrencia->getUsuarioIndicado()->setSenha( $linha ['senha_usuario_usuario_indicado'] );
-                $ocorrencia->getUsuarioIndicado()->setNivel( $linha ['nivel_usuario_usuario_indicado'] );
+                
+                
+		    }
+		} catch(PDOException $e) {
+		    echo $e->getMessage();
+ 		}
+		return $ocorrencia;
+    }
+                
+    public function preenchePorIdUsuarioAtendente(Ocorrencia $ocorrencia) {
+        
+	    $idUsuarioAtendente = $ocorrencia->getIdUsuarioAtendente();
+	    $sql = "
+		SELECT
+        ocorrencia.id, 
+        ocorrencia.id_local, 
+        ocorrencia.id_usuario_cliente, 
+        ocorrencia.descricao, 
+        ocorrencia.campus, 
+        ocorrencia.patrimonio, 
+        ocorrencia.ramal, 
+        ocorrencia.local, 
+        ocorrencia.status, 
+        ocorrencia.solucao, 
+        ocorrencia.prioridade, 
+        ocorrencia.avaliacao, 
+        ocorrencia.email, 
+        ocorrencia.id_usuario_atendente, 
+        ocorrencia.id_usuario_indicado, 
+        ocorrencia.anexo, 
+        ocorrencia.local_sala, 
+        area_responsavel.id as id_area_responsavel_area_responsavel, 
+        area_responsavel.nome as nome_area_responsavel_area_responsavel, 
+        area_responsavel.descricao as descricao_area_responsavel_area_responsavel, 
+        area_responsavel.email as email_area_responsavel_area_responsavel, 
+        servico.id as id_servico_servico, 
+        servico.nome as nome_servico_servico, 
+        servico.descricao as descricao_servico_servico, 
+        servico.tempo_sla as tempo_sla_servico_servico, 
+        servico.visao as visao_servico_servico
+		FROM ocorrencia
+		INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel
+		INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico
+                WHERE ocorrencia.id_usuario_atendente = :idUsuarioAtendente
+                 LIMIT 1000";
+                
+        try {
+            $stmt = $this->conexao->prepare($sql);
+                
+		    if(!$stmt){
+                echo "<br>Mensagem de erro retornada: ".$this->conexao->errorInfo()[2]."<br>";
+		    }
+            $stmt->bindParam(":idUsuarioAtendente", $idUsuarioAtendente, PDO::PARAM_INT);
+            $stmt->execute();
+		    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+		    foreach ( $result as $linha )
+            {
+                $ocorrencia->setId( $linha ['id'] );
+                $ocorrencia->setIdLocal( $linha ['id_local'] );
+                $ocorrencia->setIdUsuarioCliente( $linha ['id_usuario_cliente'] );
+                $ocorrencia->setDescricao( $linha ['descricao'] );
+                $ocorrencia->setCampus( $linha ['campus'] );
+                $ocorrencia->setPatrimonio( $linha ['patrimonio'] );
+                $ocorrencia->setRamal( $linha ['ramal'] );
+                $ocorrencia->setLocal( $linha ['local'] );
+                $ocorrencia->setStatus( $linha ['status'] );
+                $ocorrencia->setSolucao( $linha ['solucao'] );
+                $ocorrencia->setPrioridade( $linha ['prioridade'] );
+                $ocorrencia->setAvaliacao( $linha ['avaliacao'] );
+                $ocorrencia->setEmail( $linha ['email'] );
+                $ocorrencia->setIdUsuarioAtendente( $linha ['id_usuario_atendente'] );
+                $ocorrencia->setIdUsuarioIndicado( $linha ['id_usuario_indicado'] );
+                $ocorrencia->setAnexo( $linha ['anexo'] );
+                $ocorrencia->setLocalSala( $linha ['local_sala'] );
+                $ocorrencia->getAreaResponsavel()->setId( $linha ['id_area_responsavel_area_responsavel'] );
+                $ocorrencia->getAreaResponsavel()->setNome( $linha ['nome_area_responsavel_area_responsavel'] );
+                $ocorrencia->getAreaResponsavel()->setDescricao( $linha ['descricao_area_responsavel_area_responsavel'] );
+                $ocorrencia->getAreaResponsavel()->setEmail( $linha ['email_area_responsavel_area_responsavel'] );
+                $ocorrencia->getServico()->setId( $linha ['id_servico_servico'] );
+                $ocorrencia->getServico()->setNome( $linha ['nome_servico_servico'] );
+                $ocorrencia->getServico()->setDescricao( $linha ['descricao_servico_servico'] );
+                $ocorrencia->getServico()->setTempoSla( $linha ['tempo_sla_servico_servico'] );
+                $ocorrencia->getServico()->setVisao( $linha ['visao_servico_servico'] );
+                
+                
+		    }
+		} catch(PDOException $e) {
+		    echo $e->getMessage();
+ 		}
+		return $ocorrencia;
+    }
+                
+    public function preenchePorIdUsuarioIndicado(Ocorrencia $ocorrencia) {
+        
+	    $idUsuarioIndicado = $ocorrencia->getIdUsuarioIndicado();
+	    $sql = "
+		SELECT
+        ocorrencia.id, 
+        ocorrencia.id_local, 
+        ocorrencia.id_usuario_cliente, 
+        ocorrencia.descricao, 
+        ocorrencia.campus, 
+        ocorrencia.patrimonio, 
+        ocorrencia.ramal, 
+        ocorrencia.local, 
+        ocorrencia.status, 
+        ocorrencia.solucao, 
+        ocorrencia.prioridade, 
+        ocorrencia.avaliacao, 
+        ocorrencia.email, 
+        ocorrencia.id_usuario_atendente, 
+        ocorrencia.id_usuario_indicado, 
+        ocorrencia.anexo, 
+        ocorrencia.local_sala, 
+        area_responsavel.id as id_area_responsavel_area_responsavel, 
+        area_responsavel.nome as nome_area_responsavel_area_responsavel, 
+        area_responsavel.descricao as descricao_area_responsavel_area_responsavel, 
+        area_responsavel.email as email_area_responsavel_area_responsavel, 
+        servico.id as id_servico_servico, 
+        servico.nome as nome_servico_servico, 
+        servico.descricao as descricao_servico_servico, 
+        servico.tempo_sla as tempo_sla_servico_servico, 
+        servico.visao as visao_servico_servico
+		FROM ocorrencia
+		INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel
+		INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico
+                WHERE ocorrencia.id_usuario_indicado = :idUsuarioIndicado
+                 LIMIT 1000";
+                
+        try {
+            $stmt = $this->conexao->prepare($sql);
+                
+		    if(!$stmt){
+                echo "<br>Mensagem de erro retornada: ".$this->conexao->errorInfo()[2]."<br>";
+		    }
+            $stmt->bindParam(":idUsuarioIndicado", $idUsuarioIndicado, PDO::PARAM_INT);
+            $stmt->execute();
+		    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+		    foreach ( $result as $linha )
+            {
+                $ocorrencia->setId( $linha ['id'] );
+                $ocorrencia->setIdLocal( $linha ['id_local'] );
+                $ocorrencia->setIdUsuarioCliente( $linha ['id_usuario_cliente'] );
+                $ocorrencia->setDescricao( $linha ['descricao'] );
+                $ocorrencia->setCampus( $linha ['campus'] );
+                $ocorrencia->setPatrimonio( $linha ['patrimonio'] );
+                $ocorrencia->setRamal( $linha ['ramal'] );
+                $ocorrencia->setLocal( $linha ['local'] );
+                $ocorrencia->setStatus( $linha ['status'] );
+                $ocorrencia->setSolucao( $linha ['solucao'] );
+                $ocorrencia->setPrioridade( $linha ['prioridade'] );
+                $ocorrencia->setAvaliacao( $linha ['avaliacao'] );
+                $ocorrencia->setEmail( $linha ['email'] );
+                $ocorrencia->setIdUsuarioAtendente( $linha ['id_usuario_atendente'] );
+                $ocorrencia->setIdUsuarioIndicado( $linha ['id_usuario_indicado'] );
+                $ocorrencia->setAnexo( $linha ['anexo'] );
+                $ocorrencia->setLocalSala( $linha ['local_sala'] );
+                $ocorrencia->getAreaResponsavel()->setId( $linha ['id_area_responsavel_area_responsavel'] );
+                $ocorrencia->getAreaResponsavel()->setNome( $linha ['nome_area_responsavel_area_responsavel'] );
+                $ocorrencia->getAreaResponsavel()->setDescricao( $linha ['descricao_area_responsavel_area_responsavel'] );
+                $ocorrencia->getAreaResponsavel()->setEmail( $linha ['email_area_responsavel_area_responsavel'] );
+                $ocorrencia->getServico()->setId( $linha ['id_servico_servico'] );
+                $ocorrencia->getServico()->setNome( $linha ['nome_servico_servico'] );
+                $ocorrencia->getServico()->setDescricao( $linha ['descricao_servico_servico'] );
+                $ocorrencia->getServico()->setTempoSla( $linha ['tempo_sla_servico_servico'] );
+                $ocorrencia->getServico()->setVisao( $linha ['visao_servico_servico'] );
                 
                 
 		    }
@@ -3401,6 +2981,7 @@ class OcorrenciaDAO extends DAO {
 		SELECT
         ocorrencia.id, 
         ocorrencia.id_local, 
+        ocorrencia.id_usuario_cliente, 
         ocorrencia.descricao, 
         ocorrencia.campus, 
         ocorrencia.patrimonio, 
@@ -3411,6 +2992,8 @@ class OcorrenciaDAO extends DAO {
         ocorrencia.prioridade, 
         ocorrencia.avaliacao, 
         ocorrencia.email, 
+        ocorrencia.id_usuario_atendente, 
+        ocorrencia.id_usuario_indicado, 
         ocorrencia.anexo, 
         ocorrencia.local_sala, 
         area_responsavel.id as id_area_responsavel_area_responsavel, 
@@ -3421,31 +3004,10 @@ class OcorrenciaDAO extends DAO {
         servico.nome as nome_servico_servico, 
         servico.descricao as descricao_servico_servico, 
         servico.tempo_sla as tempo_sla_servico_servico, 
-        servico.visao as visao_servico_servico, 
-        usuario_cliente.id as id_usuario_usuario_cliente, 
-        usuario_cliente.nome as nome_usuario_usuario_cliente, 
-        usuario_cliente.email as email_usuario_usuario_cliente, 
-        usuario_cliente.login as login_usuario_usuario_cliente, 
-        usuario_cliente.senha as senha_usuario_usuario_cliente, 
-        usuario_cliente.nivel as nivel_usuario_usuario_cliente, 
-        usuario_atendente.id as id_usuario_usuario_atendente, 
-        usuario_atendente.nome as nome_usuario_usuario_atendente, 
-        usuario_atendente.email as email_usuario_usuario_atendente, 
-        usuario_atendente.login as login_usuario_usuario_atendente, 
-        usuario_atendente.senha as senha_usuario_usuario_atendente, 
-        usuario_atendente.nivel as nivel_usuario_usuario_atendente, 
-        usuario_indicado.id as id_usuario_usuario_indicado, 
-        usuario_indicado.nome as nome_usuario_usuario_indicado, 
-        usuario_indicado.email as email_usuario_usuario_indicado, 
-        usuario_indicado.login as login_usuario_usuario_indicado, 
-        usuario_indicado.senha as senha_usuario_usuario_indicado, 
-        usuario_indicado.nivel as nivel_usuario_usuario_indicado
+        servico.visao as visao_servico_servico
 		FROM ocorrencia
 		INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel
 		INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico
-		INNER JOIN usuario as usuario_cliente ON usuario_cliente.id = ocorrencia.id_usuario_cliente
-		INNER JOIN usuario as usuario_atendente ON usuario_atendente.id = ocorrencia.id_usuario_atendente
-		INNER JOIN usuario as usuario_indicado ON usuario_indicado.id = ocorrencia.id_usuario_indicado
                 WHERE ocorrencia.anexo = :anexo
                  LIMIT 1000";
                 
@@ -3462,6 +3024,7 @@ class OcorrenciaDAO extends DAO {
             {
                 $ocorrencia->setId( $linha ['id'] );
                 $ocorrencia->setIdLocal( $linha ['id_local'] );
+                $ocorrencia->setIdUsuarioCliente( $linha ['id_usuario_cliente'] );
                 $ocorrencia->setDescricao( $linha ['descricao'] );
                 $ocorrencia->setCampus( $linha ['campus'] );
                 $ocorrencia->setPatrimonio( $linha ['patrimonio'] );
@@ -3472,6 +3035,8 @@ class OcorrenciaDAO extends DAO {
                 $ocorrencia->setPrioridade( $linha ['prioridade'] );
                 $ocorrencia->setAvaliacao( $linha ['avaliacao'] );
                 $ocorrencia->setEmail( $linha ['email'] );
+                $ocorrencia->setIdUsuarioAtendente( $linha ['id_usuario_atendente'] );
+                $ocorrencia->setIdUsuarioIndicado( $linha ['id_usuario_indicado'] );
                 $ocorrencia->setAnexo( $linha ['anexo'] );
                 $ocorrencia->setLocalSala( $linha ['local_sala'] );
                 $ocorrencia->getAreaResponsavel()->setId( $linha ['id_area_responsavel_area_responsavel'] );
@@ -3483,24 +3048,6 @@ class OcorrenciaDAO extends DAO {
                 $ocorrencia->getServico()->setDescricao( $linha ['descricao_servico_servico'] );
                 $ocorrencia->getServico()->setTempoSla( $linha ['tempo_sla_servico_servico'] );
                 $ocorrencia->getServico()->setVisao( $linha ['visao_servico_servico'] );
-                $ocorrencia->getUsuarioCliente()->setId( $linha ['id_usuario_usuario_cliente'] );
-                $ocorrencia->getUsuarioCliente()->setNome( $linha ['nome_usuario_usuario_cliente'] );
-                $ocorrencia->getUsuarioCliente()->setEmail( $linha ['email_usuario_usuario_cliente'] );
-                $ocorrencia->getUsuarioCliente()->setLogin( $linha ['login_usuario_usuario_cliente'] );
-                $ocorrencia->getUsuarioCliente()->setSenha( $linha ['senha_usuario_usuario_cliente'] );
-                $ocorrencia->getUsuarioCliente()->setNivel( $linha ['nivel_usuario_usuario_cliente'] );
-                $ocorrencia->getUsuarioAtendente()->setId( $linha ['id_usuario_usuario_atendente'] );
-                $ocorrencia->getUsuarioAtendente()->setNome( $linha ['nome_usuario_usuario_atendente'] );
-                $ocorrencia->getUsuarioAtendente()->setEmail( $linha ['email_usuario_usuario_atendente'] );
-                $ocorrencia->getUsuarioAtendente()->setLogin( $linha ['login_usuario_usuario_atendente'] );
-                $ocorrencia->getUsuarioAtendente()->setSenha( $linha ['senha_usuario_usuario_atendente'] );
-                $ocorrencia->getUsuarioAtendente()->setNivel( $linha ['nivel_usuario_usuario_atendente'] );
-                $ocorrencia->getUsuarioIndicado()->setId( $linha ['id_usuario_usuario_indicado'] );
-                $ocorrencia->getUsuarioIndicado()->setNome( $linha ['nome_usuario_usuario_indicado'] );
-                $ocorrencia->getUsuarioIndicado()->setEmail( $linha ['email_usuario_usuario_indicado'] );
-                $ocorrencia->getUsuarioIndicado()->setLogin( $linha ['login_usuario_usuario_indicado'] );
-                $ocorrencia->getUsuarioIndicado()->setSenha( $linha ['senha_usuario_usuario_indicado'] );
-                $ocorrencia->getUsuarioIndicado()->setNivel( $linha ['nivel_usuario_usuario_indicado'] );
                 
                 
 		    }
@@ -3517,6 +3064,7 @@ class OcorrenciaDAO extends DAO {
 		SELECT
         ocorrencia.id, 
         ocorrencia.id_local, 
+        ocorrencia.id_usuario_cliente, 
         ocorrencia.descricao, 
         ocorrencia.campus, 
         ocorrencia.patrimonio, 
@@ -3527,6 +3075,8 @@ class OcorrenciaDAO extends DAO {
         ocorrencia.prioridade, 
         ocorrencia.avaliacao, 
         ocorrencia.email, 
+        ocorrencia.id_usuario_atendente, 
+        ocorrencia.id_usuario_indicado, 
         ocorrencia.anexo, 
         ocorrencia.local_sala, 
         area_responsavel.id as id_area_responsavel_area_responsavel, 
@@ -3537,31 +3087,10 @@ class OcorrenciaDAO extends DAO {
         servico.nome as nome_servico_servico, 
         servico.descricao as descricao_servico_servico, 
         servico.tempo_sla as tempo_sla_servico_servico, 
-        servico.visao as visao_servico_servico, 
-        usuario_cliente.id as id_usuario_usuario_cliente, 
-        usuario_cliente.nome as nome_usuario_usuario_cliente, 
-        usuario_cliente.email as email_usuario_usuario_cliente, 
-        usuario_cliente.login as login_usuario_usuario_cliente, 
-        usuario_cliente.senha as senha_usuario_usuario_cliente, 
-        usuario_cliente.nivel as nivel_usuario_usuario_cliente, 
-        usuario_atendente.id as id_usuario_usuario_atendente, 
-        usuario_atendente.nome as nome_usuario_usuario_atendente, 
-        usuario_atendente.email as email_usuario_usuario_atendente, 
-        usuario_atendente.login as login_usuario_usuario_atendente, 
-        usuario_atendente.senha as senha_usuario_usuario_atendente, 
-        usuario_atendente.nivel as nivel_usuario_usuario_atendente, 
-        usuario_indicado.id as id_usuario_usuario_indicado, 
-        usuario_indicado.nome as nome_usuario_usuario_indicado, 
-        usuario_indicado.email as email_usuario_usuario_indicado, 
-        usuario_indicado.login as login_usuario_usuario_indicado, 
-        usuario_indicado.senha as senha_usuario_usuario_indicado, 
-        usuario_indicado.nivel as nivel_usuario_usuario_indicado
+        servico.visao as visao_servico_servico
 		FROM ocorrencia
 		INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel
 		INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico
-		INNER JOIN usuario as usuario_cliente ON usuario_cliente.id = ocorrencia.id_usuario_cliente
-		INNER JOIN usuario as usuario_atendente ON usuario_atendente.id = ocorrencia.id_usuario_atendente
-		INNER JOIN usuario as usuario_indicado ON usuario_indicado.id = ocorrencia.id_usuario_indicado
                 WHERE ocorrencia.local_sala = :localSala
                  LIMIT 1000";
                 
@@ -3578,6 +3107,7 @@ class OcorrenciaDAO extends DAO {
             {
                 $ocorrencia->setId( $linha ['id'] );
                 $ocorrencia->setIdLocal( $linha ['id_local'] );
+                $ocorrencia->setIdUsuarioCliente( $linha ['id_usuario_cliente'] );
                 $ocorrencia->setDescricao( $linha ['descricao'] );
                 $ocorrencia->setCampus( $linha ['campus'] );
                 $ocorrencia->setPatrimonio( $linha ['patrimonio'] );
@@ -3588,6 +3118,8 @@ class OcorrenciaDAO extends DAO {
                 $ocorrencia->setPrioridade( $linha ['prioridade'] );
                 $ocorrencia->setAvaliacao( $linha ['avaliacao'] );
                 $ocorrencia->setEmail( $linha ['email'] );
+                $ocorrencia->setIdUsuarioAtendente( $linha ['id_usuario_atendente'] );
+                $ocorrencia->setIdUsuarioIndicado( $linha ['id_usuario_indicado'] );
                 $ocorrencia->setAnexo( $linha ['anexo'] );
                 $ocorrencia->setLocalSala( $linha ['local_sala'] );
                 $ocorrencia->getAreaResponsavel()->setId( $linha ['id_area_responsavel_area_responsavel'] );
@@ -3599,24 +3131,6 @@ class OcorrenciaDAO extends DAO {
                 $ocorrencia->getServico()->setDescricao( $linha ['descricao_servico_servico'] );
                 $ocorrencia->getServico()->setTempoSla( $linha ['tempo_sla_servico_servico'] );
                 $ocorrencia->getServico()->setVisao( $linha ['visao_servico_servico'] );
-                $ocorrencia->getUsuarioCliente()->setId( $linha ['id_usuario_usuario_cliente'] );
-                $ocorrencia->getUsuarioCliente()->setNome( $linha ['nome_usuario_usuario_cliente'] );
-                $ocorrencia->getUsuarioCliente()->setEmail( $linha ['email_usuario_usuario_cliente'] );
-                $ocorrencia->getUsuarioCliente()->setLogin( $linha ['login_usuario_usuario_cliente'] );
-                $ocorrencia->getUsuarioCliente()->setSenha( $linha ['senha_usuario_usuario_cliente'] );
-                $ocorrencia->getUsuarioCliente()->setNivel( $linha ['nivel_usuario_usuario_cliente'] );
-                $ocorrencia->getUsuarioAtendente()->setId( $linha ['id_usuario_usuario_atendente'] );
-                $ocorrencia->getUsuarioAtendente()->setNome( $linha ['nome_usuario_usuario_atendente'] );
-                $ocorrencia->getUsuarioAtendente()->setEmail( $linha ['email_usuario_usuario_atendente'] );
-                $ocorrencia->getUsuarioAtendente()->setLogin( $linha ['login_usuario_usuario_atendente'] );
-                $ocorrencia->getUsuarioAtendente()->setSenha( $linha ['senha_usuario_usuario_atendente'] );
-                $ocorrencia->getUsuarioAtendente()->setNivel( $linha ['nivel_usuario_usuario_atendente'] );
-                $ocorrencia->getUsuarioIndicado()->setId( $linha ['id_usuario_usuario_indicado'] );
-                $ocorrencia->getUsuarioIndicado()->setNome( $linha ['nome_usuario_usuario_indicado'] );
-                $ocorrencia->getUsuarioIndicado()->setEmail( $linha ['email_usuario_usuario_indicado'] );
-                $ocorrencia->getUsuarioIndicado()->setLogin( $linha ['login_usuario_usuario_indicado'] );
-                $ocorrencia->getUsuarioIndicado()->setSenha( $linha ['senha_usuario_usuario_indicado'] );
-                $ocorrencia->getUsuarioIndicado()->setNivel( $linha ['nivel_usuario_usuario_indicado'] );
                 
                 
 		    }

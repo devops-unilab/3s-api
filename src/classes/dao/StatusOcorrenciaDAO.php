@@ -115,6 +115,7 @@ class StatusOcorrenciaDAO extends DAO {
         status_ocorrencia.data_mudanca, 
         ocorrencia.id as id_ocorrencia_ocorrencia, 
         ocorrencia.id_local as id_local_ocorrencia_ocorrencia, 
+        ocorrencia.id_usuario_cliente as id_usuario_cliente_ocorrencia_ocorrencia, 
         ocorrencia.descricao as descricao_ocorrencia_ocorrencia, 
         ocorrencia.campus as campus_ocorrencia_ocorrencia, 
         ocorrencia.patrimonio as patrimonio_ocorrencia_ocorrencia, 
@@ -125,6 +126,8 @@ class StatusOcorrenciaDAO extends DAO {
         ocorrencia.prioridade as prioridade_ocorrencia_ocorrencia, 
         ocorrencia.avaliacao as avaliacao_ocorrencia_ocorrencia, 
         ocorrencia.email as email_ocorrencia_ocorrencia, 
+        ocorrencia.id_usuario_atendente as id_usuario_atendente_ocorrencia_ocorrencia, 
+        ocorrencia.id_usuario_indicado as id_usuario_indicado_ocorrencia_ocorrencia, 
         ocorrencia.anexo as anexo_ocorrencia_ocorrencia, 
         ocorrencia.local_sala as local_sala_ocorrencia_ocorrencia, 
         status.id as id_status_status, 
@@ -159,6 +162,7 @@ class StatusOcorrenciaDAO extends DAO {
                 $statusOcorrencia->setDataMudanca( $linha ['data_mudanca'] );
                 $statusOcorrencia->getOcorrencia()->setId( $linha ['id_ocorrencia_ocorrencia'] );
                 $statusOcorrencia->getOcorrencia()->setIdLocal( $linha ['id_local_ocorrencia_ocorrencia'] );
+                $statusOcorrencia->getOcorrencia()->setIdUsuarioCliente( $linha ['id_usuario_cliente_ocorrencia_ocorrencia'] );
                 $statusOcorrencia->getOcorrencia()->setDescricao( $linha ['descricao_ocorrencia_ocorrencia'] );
                 $statusOcorrencia->getOcorrencia()->setCampus( $linha ['campus_ocorrencia_ocorrencia'] );
                 $statusOcorrencia->getOcorrencia()->setPatrimonio( $linha ['patrimonio_ocorrencia_ocorrencia'] );
@@ -169,6 +173,8 @@ class StatusOcorrenciaDAO extends DAO {
                 $statusOcorrencia->getOcorrencia()->setPrioridade( $linha ['prioridade_ocorrencia_ocorrencia'] );
                 $statusOcorrencia->getOcorrencia()->setAvaliacao( $linha ['avaliacao_ocorrencia_ocorrencia'] );
                 $statusOcorrencia->getOcorrencia()->setEmail( $linha ['email_ocorrencia_ocorrencia'] );
+                $statusOcorrencia->getOcorrencia()->setIdUsuarioAtendente( $linha ['id_usuario_atendente_ocorrencia_ocorrencia'] );
+                $statusOcorrencia->getOcorrencia()->setIdUsuarioIndicado( $linha ['id_usuario_indicado_ocorrencia_ocorrencia'] );
                 $statusOcorrencia->getOcorrencia()->setAnexo( $linha ['anexo_ocorrencia_ocorrencia'] );
                 $statusOcorrencia->getOcorrencia()->setLocalSala( $linha ['local_sala_ocorrencia_ocorrencia'] );
                 $statusOcorrencia->getStatus()->setId( $linha ['id_status_status'] );
@@ -202,6 +208,7 @@ class StatusOcorrenciaDAO extends DAO {
         status_ocorrencia.data_mudanca, 
         ocorrencia.id as id_ocorrencia_ocorrencia, 
         ocorrencia.id_local as id_local_ocorrencia_ocorrencia, 
+        ocorrencia.id_usuario_cliente as id_usuario_cliente_ocorrencia_ocorrencia, 
         ocorrencia.descricao as descricao_ocorrencia_ocorrencia, 
         ocorrencia.campus as campus_ocorrencia_ocorrencia, 
         ocorrencia.patrimonio as patrimonio_ocorrencia_ocorrencia, 
@@ -212,6 +219,8 @@ class StatusOcorrenciaDAO extends DAO {
         ocorrencia.prioridade as prioridade_ocorrencia_ocorrencia, 
         ocorrencia.avaliacao as avaliacao_ocorrencia_ocorrencia, 
         ocorrencia.email as email_ocorrencia_ocorrencia, 
+        ocorrencia.id_usuario_atendente as id_usuario_atendente_ocorrencia_ocorrencia, 
+        ocorrencia.id_usuario_indicado as id_usuario_indicado_ocorrencia_ocorrencia, 
         ocorrencia.anexo as anexo_ocorrencia_ocorrencia, 
         ocorrencia.local_sala as local_sala_ocorrencia_ocorrencia, 
         status.id as id_status_status, 
@@ -244,7 +253,7 @@ class StatusOcorrenciaDAO extends DAO {
     			$statusOcorrencia->getOcorrencia()->setAreaResponsavel( $linha ['area_responsavel_ocorrencia_ocorrencia'] );
     			$statusOcorrencia->getOcorrencia()->setServico( $linha ['servico_ocorrencia_ocorrencia'] );
     			$statusOcorrencia->getOcorrencia()->setIdLocal( $linha ['id_local_ocorrencia_ocorrencia'] );
-    			$statusOcorrencia->getOcorrencia()->setUsuarioCliente( $linha ['usuario_cliente_ocorrencia_ocorrencia'] );
+    			$statusOcorrencia->getOcorrencia()->setIdUsuarioCliente( $linha ['id_usuario_cliente_ocorrencia_ocorrencia'] );
     			$statusOcorrencia->getOcorrencia()->setDescricao( $linha ['descricao_ocorrencia_ocorrencia'] );
     			$statusOcorrencia->getOcorrencia()->setCampus( $linha ['campus_ocorrencia_ocorrencia'] );
     			$statusOcorrencia->getOcorrencia()->setPatrimonio( $linha ['patrimonio_ocorrencia_ocorrencia'] );
@@ -255,8 +264,8 @@ class StatusOcorrenciaDAO extends DAO {
     			$statusOcorrencia->getOcorrencia()->setPrioridade( $linha ['prioridade_ocorrencia_ocorrencia'] );
     			$statusOcorrencia->getOcorrencia()->setAvaliacao( $linha ['avaliacao_ocorrencia_ocorrencia'] );
     			$statusOcorrencia->getOcorrencia()->setEmail( $linha ['email_ocorrencia_ocorrencia'] );
-    			$statusOcorrencia->getOcorrencia()->setUsuarioAtendente( $linha ['usuario_atendente_ocorrencia_ocorrencia'] );
-    			$statusOcorrencia->getOcorrencia()->setUsuarioIndicado( $linha ['usuario_indicado_ocorrencia_ocorrencia'] );
+    			$statusOcorrencia->getOcorrencia()->setIdUsuarioAtendente( $linha ['id_usuario_atendente_ocorrencia_ocorrencia'] );
+    			$statusOcorrencia->getOcorrencia()->setIdUsuarioIndicado( $linha ['id_usuario_indicado_ocorrencia_ocorrencia'] );
     			$statusOcorrencia->getOcorrencia()->setAnexo( $linha ['anexo_ocorrencia_ocorrencia'] );
     			$statusOcorrencia->getOcorrencia()->setLocalSala( $linha ['local_sala_ocorrencia_ocorrencia'] );
     			$statusOcorrencia->getStatus()->setId( $linha ['id_status_status'] );
@@ -291,6 +300,7 @@ class StatusOcorrenciaDAO extends DAO {
         status_ocorrencia.data_mudanca, 
         ocorrencia.id as id_ocorrencia_ocorrencia, 
         ocorrencia.id_local as id_local_ocorrencia_ocorrencia, 
+        ocorrencia.id_usuario_cliente as id_usuario_cliente_ocorrencia_ocorrencia, 
         ocorrencia.descricao as descricao_ocorrencia_ocorrencia, 
         ocorrencia.campus as campus_ocorrencia_ocorrencia, 
         ocorrencia.patrimonio as patrimonio_ocorrencia_ocorrencia, 
@@ -301,6 +311,8 @@ class StatusOcorrenciaDAO extends DAO {
         ocorrencia.prioridade as prioridade_ocorrencia_ocorrencia, 
         ocorrencia.avaliacao as avaliacao_ocorrencia_ocorrencia, 
         ocorrencia.email as email_ocorrencia_ocorrencia, 
+        ocorrencia.id_usuario_atendente as id_usuario_atendente_ocorrencia_ocorrencia, 
+        ocorrencia.id_usuario_indicado as id_usuario_indicado_ocorrencia_ocorrencia, 
         ocorrencia.anexo as anexo_ocorrencia_ocorrencia, 
         ocorrencia.local_sala as local_sala_ocorrencia_ocorrencia, 
         status.id as id_status_status, 
@@ -333,7 +345,7 @@ class StatusOcorrenciaDAO extends DAO {
     			$statusOcorrencia->getOcorrencia()->setAreaResponsavel( $linha ['area_responsavel_ocorrencia_ocorrencia'] );
     			$statusOcorrencia->getOcorrencia()->setServico( $linha ['servico_ocorrencia_ocorrencia'] );
     			$statusOcorrencia->getOcorrencia()->setIdLocal( $linha ['id_local_ocorrencia_ocorrencia'] );
-    			$statusOcorrencia->getOcorrencia()->setUsuarioCliente( $linha ['usuario_cliente_ocorrencia_ocorrencia'] );
+    			$statusOcorrencia->getOcorrencia()->setIdUsuarioCliente( $linha ['id_usuario_cliente_ocorrencia_ocorrencia'] );
     			$statusOcorrencia->getOcorrencia()->setDescricao( $linha ['descricao_ocorrencia_ocorrencia'] );
     			$statusOcorrencia->getOcorrencia()->setCampus( $linha ['campus_ocorrencia_ocorrencia'] );
     			$statusOcorrencia->getOcorrencia()->setPatrimonio( $linha ['patrimonio_ocorrencia_ocorrencia'] );
@@ -344,8 +356,8 @@ class StatusOcorrenciaDAO extends DAO {
     			$statusOcorrencia->getOcorrencia()->setPrioridade( $linha ['prioridade_ocorrencia_ocorrencia'] );
     			$statusOcorrencia->getOcorrencia()->setAvaliacao( $linha ['avaliacao_ocorrencia_ocorrencia'] );
     			$statusOcorrencia->getOcorrencia()->setEmail( $linha ['email_ocorrencia_ocorrencia'] );
-    			$statusOcorrencia->getOcorrencia()->setUsuarioAtendente( $linha ['usuario_atendente_ocorrencia_ocorrencia'] );
-    			$statusOcorrencia->getOcorrencia()->setUsuarioIndicado( $linha ['usuario_indicado_ocorrencia_ocorrencia'] );
+    			$statusOcorrencia->getOcorrencia()->setIdUsuarioAtendente( $linha ['id_usuario_atendente_ocorrencia_ocorrencia'] );
+    			$statusOcorrencia->getOcorrencia()->setIdUsuarioIndicado( $linha ['id_usuario_indicado_ocorrencia_ocorrencia'] );
     			$statusOcorrencia->getOcorrencia()->setAnexo( $linha ['anexo_ocorrencia_ocorrencia'] );
     			$statusOcorrencia->getOcorrencia()->setLocalSala( $linha ['local_sala_ocorrencia_ocorrencia'] );
     			$statusOcorrencia->getStatus()->setId( $linha ['id_status_status'] );
@@ -380,6 +392,7 @@ class StatusOcorrenciaDAO extends DAO {
         status_ocorrencia.data_mudanca, 
         ocorrencia.id as id_ocorrencia_ocorrencia, 
         ocorrencia.id_local as id_local_ocorrencia_ocorrencia, 
+        ocorrencia.id_usuario_cliente as id_usuario_cliente_ocorrencia_ocorrencia, 
         ocorrencia.descricao as descricao_ocorrencia_ocorrencia, 
         ocorrencia.campus as campus_ocorrencia_ocorrencia, 
         ocorrencia.patrimonio as patrimonio_ocorrencia_ocorrencia, 
@@ -390,6 +403,8 @@ class StatusOcorrenciaDAO extends DAO {
         ocorrencia.prioridade as prioridade_ocorrencia_ocorrencia, 
         ocorrencia.avaliacao as avaliacao_ocorrencia_ocorrencia, 
         ocorrencia.email as email_ocorrencia_ocorrencia, 
+        ocorrencia.id_usuario_atendente as id_usuario_atendente_ocorrencia_ocorrencia, 
+        ocorrencia.id_usuario_indicado as id_usuario_indicado_ocorrencia_ocorrencia, 
         ocorrencia.anexo as anexo_ocorrencia_ocorrencia, 
         ocorrencia.local_sala as local_sala_ocorrencia_ocorrencia, 
         status.id as id_status_status, 
@@ -422,7 +437,7 @@ class StatusOcorrenciaDAO extends DAO {
     			$statusOcorrencia->getOcorrencia()->setAreaResponsavel( $linha ['area_responsavel_ocorrencia_ocorrencia'] );
     			$statusOcorrencia->getOcorrencia()->setServico( $linha ['servico_ocorrencia_ocorrencia'] );
     			$statusOcorrencia->getOcorrencia()->setIdLocal( $linha ['id_local_ocorrencia_ocorrencia'] );
-    			$statusOcorrencia->getOcorrencia()->setUsuarioCliente( $linha ['usuario_cliente_ocorrencia_ocorrencia'] );
+    			$statusOcorrencia->getOcorrencia()->setIdUsuarioCliente( $linha ['id_usuario_cliente_ocorrencia_ocorrencia'] );
     			$statusOcorrencia->getOcorrencia()->setDescricao( $linha ['descricao_ocorrencia_ocorrencia'] );
     			$statusOcorrencia->getOcorrencia()->setCampus( $linha ['campus_ocorrencia_ocorrencia'] );
     			$statusOcorrencia->getOcorrencia()->setPatrimonio( $linha ['patrimonio_ocorrencia_ocorrencia'] );
@@ -433,8 +448,8 @@ class StatusOcorrenciaDAO extends DAO {
     			$statusOcorrencia->getOcorrencia()->setPrioridade( $linha ['prioridade_ocorrencia_ocorrencia'] );
     			$statusOcorrencia->getOcorrencia()->setAvaliacao( $linha ['avaliacao_ocorrencia_ocorrencia'] );
     			$statusOcorrencia->getOcorrencia()->setEmail( $linha ['email_ocorrencia_ocorrencia'] );
-    			$statusOcorrencia->getOcorrencia()->setUsuarioAtendente( $linha ['usuario_atendente_ocorrencia_ocorrencia'] );
-    			$statusOcorrencia->getOcorrencia()->setUsuarioIndicado( $linha ['usuario_indicado_ocorrencia_ocorrencia'] );
+    			$statusOcorrencia->getOcorrencia()->setIdUsuarioAtendente( $linha ['id_usuario_atendente_ocorrencia_ocorrencia'] );
+    			$statusOcorrencia->getOcorrencia()->setIdUsuarioIndicado( $linha ['id_usuario_indicado_ocorrencia_ocorrencia'] );
     			$statusOcorrencia->getOcorrencia()->setAnexo( $linha ['anexo_ocorrencia_ocorrencia'] );
     			$statusOcorrencia->getOcorrencia()->setLocalSala( $linha ['local_sala_ocorrencia_ocorrencia'] );
     			$statusOcorrencia->getStatus()->setId( $linha ['id_status_status'] );
@@ -468,6 +483,7 @@ class StatusOcorrenciaDAO extends DAO {
         status_ocorrencia.data_mudanca, 
         ocorrencia.id as id_ocorrencia_ocorrencia, 
         ocorrencia.id_local as id_local_ocorrencia_ocorrencia, 
+        ocorrencia.id_usuario_cliente as id_usuario_cliente_ocorrencia_ocorrencia, 
         ocorrencia.descricao as descricao_ocorrencia_ocorrencia, 
         ocorrencia.campus as campus_ocorrencia_ocorrencia, 
         ocorrencia.patrimonio as patrimonio_ocorrencia_ocorrencia, 
@@ -478,6 +494,8 @@ class StatusOcorrenciaDAO extends DAO {
         ocorrencia.prioridade as prioridade_ocorrencia_ocorrencia, 
         ocorrencia.avaliacao as avaliacao_ocorrencia_ocorrencia, 
         ocorrencia.email as email_ocorrencia_ocorrencia, 
+        ocorrencia.id_usuario_atendente as id_usuario_atendente_ocorrencia_ocorrencia, 
+        ocorrencia.id_usuario_indicado as id_usuario_indicado_ocorrencia_ocorrencia, 
         ocorrencia.anexo as anexo_ocorrencia_ocorrencia, 
         ocorrencia.local_sala as local_sala_ocorrencia_ocorrencia, 
         status.id as id_status_status, 
@@ -512,6 +530,7 @@ class StatusOcorrenciaDAO extends DAO {
                 $statusOcorrencia->setDataMudanca( $linha ['data_mudanca'] );
                 $statusOcorrencia->getOcorrencia()->setId( $linha ['id_ocorrencia_ocorrencia'] );
                 $statusOcorrencia->getOcorrencia()->setIdLocal( $linha ['id_local_ocorrencia_ocorrencia'] );
+                $statusOcorrencia->getOcorrencia()->setIdUsuarioCliente( $linha ['id_usuario_cliente_ocorrencia_ocorrencia'] );
                 $statusOcorrencia->getOcorrencia()->setDescricao( $linha ['descricao_ocorrencia_ocorrencia'] );
                 $statusOcorrencia->getOcorrencia()->setCampus( $linha ['campus_ocorrencia_ocorrencia'] );
                 $statusOcorrencia->getOcorrencia()->setPatrimonio( $linha ['patrimonio_ocorrencia_ocorrencia'] );
@@ -522,6 +541,8 @@ class StatusOcorrenciaDAO extends DAO {
                 $statusOcorrencia->getOcorrencia()->setPrioridade( $linha ['prioridade_ocorrencia_ocorrencia'] );
                 $statusOcorrencia->getOcorrencia()->setAvaliacao( $linha ['avaliacao_ocorrencia_ocorrencia'] );
                 $statusOcorrencia->getOcorrencia()->setEmail( $linha ['email_ocorrencia_ocorrencia'] );
+                $statusOcorrencia->getOcorrencia()->setIdUsuarioAtendente( $linha ['id_usuario_atendente_ocorrencia_ocorrencia'] );
+                $statusOcorrencia->getOcorrencia()->setIdUsuarioIndicado( $linha ['id_usuario_indicado_ocorrencia_ocorrencia'] );
                 $statusOcorrencia->getOcorrencia()->setAnexo( $linha ['anexo_ocorrencia_ocorrencia'] );
                 $statusOcorrencia->getOcorrencia()->setLocalSala( $linha ['local_sala_ocorrencia_ocorrencia'] );
                 $statusOcorrencia->getStatus()->setId( $linha ['id_status_status'] );
@@ -552,6 +573,7 @@ class StatusOcorrenciaDAO extends DAO {
         status_ocorrencia.data_mudanca, 
         ocorrencia.id as id_ocorrencia_ocorrencia, 
         ocorrencia.id_local as id_local_ocorrencia_ocorrencia, 
+        ocorrencia.id_usuario_cliente as id_usuario_cliente_ocorrencia_ocorrencia, 
         ocorrencia.descricao as descricao_ocorrencia_ocorrencia, 
         ocorrencia.campus as campus_ocorrencia_ocorrencia, 
         ocorrencia.patrimonio as patrimonio_ocorrencia_ocorrencia, 
@@ -562,6 +584,8 @@ class StatusOcorrenciaDAO extends DAO {
         ocorrencia.prioridade as prioridade_ocorrencia_ocorrencia, 
         ocorrencia.avaliacao as avaliacao_ocorrencia_ocorrencia, 
         ocorrencia.email as email_ocorrencia_ocorrencia, 
+        ocorrencia.id_usuario_atendente as id_usuario_atendente_ocorrencia_ocorrencia, 
+        ocorrencia.id_usuario_indicado as id_usuario_indicado_ocorrencia_ocorrencia, 
         ocorrencia.anexo as anexo_ocorrencia_ocorrencia, 
         ocorrencia.local_sala as local_sala_ocorrencia_ocorrencia, 
         status.id as id_status_status, 
@@ -596,6 +620,7 @@ class StatusOcorrenciaDAO extends DAO {
                 $statusOcorrencia->setDataMudanca( $linha ['data_mudanca'] );
                 $statusOcorrencia->getOcorrencia()->setId( $linha ['id_ocorrencia_ocorrencia'] );
                 $statusOcorrencia->getOcorrencia()->setIdLocal( $linha ['id_local_ocorrencia_ocorrencia'] );
+                $statusOcorrencia->getOcorrencia()->setIdUsuarioCliente( $linha ['id_usuario_cliente_ocorrencia_ocorrencia'] );
                 $statusOcorrencia->getOcorrencia()->setDescricao( $linha ['descricao_ocorrencia_ocorrencia'] );
                 $statusOcorrencia->getOcorrencia()->setCampus( $linha ['campus_ocorrencia_ocorrencia'] );
                 $statusOcorrencia->getOcorrencia()->setPatrimonio( $linha ['patrimonio_ocorrencia_ocorrencia'] );
@@ -606,6 +631,8 @@ class StatusOcorrenciaDAO extends DAO {
                 $statusOcorrencia->getOcorrencia()->setPrioridade( $linha ['prioridade_ocorrencia_ocorrencia'] );
                 $statusOcorrencia->getOcorrencia()->setAvaliacao( $linha ['avaliacao_ocorrencia_ocorrencia'] );
                 $statusOcorrencia->getOcorrencia()->setEmail( $linha ['email_ocorrencia_ocorrencia'] );
+                $statusOcorrencia->getOcorrencia()->setIdUsuarioAtendente( $linha ['id_usuario_atendente_ocorrencia_ocorrencia'] );
+                $statusOcorrencia->getOcorrencia()->setIdUsuarioIndicado( $linha ['id_usuario_indicado_ocorrencia_ocorrencia'] );
                 $statusOcorrencia->getOcorrencia()->setAnexo( $linha ['anexo_ocorrencia_ocorrencia'] );
                 $statusOcorrencia->getOcorrencia()->setLocalSala( $linha ['local_sala_ocorrencia_ocorrencia'] );
                 $statusOcorrencia->getStatus()->setId( $linha ['id_status_status'] );
@@ -636,6 +663,7 @@ class StatusOcorrenciaDAO extends DAO {
         status_ocorrencia.data_mudanca, 
         ocorrencia.id as id_ocorrencia_ocorrencia, 
         ocorrencia.id_local as id_local_ocorrencia_ocorrencia, 
+        ocorrencia.id_usuario_cliente as id_usuario_cliente_ocorrencia_ocorrencia, 
         ocorrencia.descricao as descricao_ocorrencia_ocorrencia, 
         ocorrencia.campus as campus_ocorrencia_ocorrencia, 
         ocorrencia.patrimonio as patrimonio_ocorrencia_ocorrencia, 
@@ -646,6 +674,8 @@ class StatusOcorrenciaDAO extends DAO {
         ocorrencia.prioridade as prioridade_ocorrencia_ocorrencia, 
         ocorrencia.avaliacao as avaliacao_ocorrencia_ocorrencia, 
         ocorrencia.email as email_ocorrencia_ocorrencia, 
+        ocorrencia.id_usuario_atendente as id_usuario_atendente_ocorrencia_ocorrencia, 
+        ocorrencia.id_usuario_indicado as id_usuario_indicado_ocorrencia_ocorrencia, 
         ocorrencia.anexo as anexo_ocorrencia_ocorrencia, 
         ocorrencia.local_sala as local_sala_ocorrencia_ocorrencia, 
         status.id as id_status_status, 
@@ -680,6 +710,7 @@ class StatusOcorrenciaDAO extends DAO {
                 $statusOcorrencia->setDataMudanca( $linha ['data_mudanca'] );
                 $statusOcorrencia->getOcorrencia()->setId( $linha ['id_ocorrencia_ocorrencia'] );
                 $statusOcorrencia->getOcorrencia()->setIdLocal( $linha ['id_local_ocorrencia_ocorrencia'] );
+                $statusOcorrencia->getOcorrencia()->setIdUsuarioCliente( $linha ['id_usuario_cliente_ocorrencia_ocorrencia'] );
                 $statusOcorrencia->getOcorrencia()->setDescricao( $linha ['descricao_ocorrencia_ocorrencia'] );
                 $statusOcorrencia->getOcorrencia()->setCampus( $linha ['campus_ocorrencia_ocorrencia'] );
                 $statusOcorrencia->getOcorrencia()->setPatrimonio( $linha ['patrimonio_ocorrencia_ocorrencia'] );
@@ -690,6 +721,8 @@ class StatusOcorrenciaDAO extends DAO {
                 $statusOcorrencia->getOcorrencia()->setPrioridade( $linha ['prioridade_ocorrencia_ocorrencia'] );
                 $statusOcorrencia->getOcorrencia()->setAvaliacao( $linha ['avaliacao_ocorrencia_ocorrencia'] );
                 $statusOcorrencia->getOcorrencia()->setEmail( $linha ['email_ocorrencia_ocorrencia'] );
+                $statusOcorrencia->getOcorrencia()->setIdUsuarioAtendente( $linha ['id_usuario_atendente_ocorrencia_ocorrencia'] );
+                $statusOcorrencia->getOcorrencia()->setIdUsuarioIndicado( $linha ['id_usuario_indicado_ocorrencia_ocorrencia'] );
                 $statusOcorrencia->getOcorrencia()->setAnexo( $linha ['anexo_ocorrencia_ocorrencia'] );
                 $statusOcorrencia->getOcorrencia()->setLocalSala( $linha ['local_sala_ocorrencia_ocorrencia'] );
                 $statusOcorrencia->getStatus()->setId( $linha ['id_status_status'] );

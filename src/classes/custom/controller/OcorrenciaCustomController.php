@@ -173,6 +173,7 @@ class OcorrenciaCustomController  extends OcorrenciaController {
 	    $ocorrencia = new Ocorrencia();
 	    $ocorrencia->setStatus('a');
 	    $lista = $this->dao->pesquisaPorStatus($ocorrencia);
+	    print_r($lista);
 	    $this->view->exibirLista($lista);
 	}
 }

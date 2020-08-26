@@ -119,6 +119,7 @@ class MensagemForumDAO extends DAO {
         mensagem_forum.data_envio, 
         ocorrencia.id as id_ocorrencia_ocorrencia, 
         ocorrencia.id_local as id_local_ocorrencia_ocorrencia, 
+        ocorrencia.id_usuario_cliente as id_usuario_cliente_ocorrencia_ocorrencia, 
         ocorrencia.descricao as descricao_ocorrencia_ocorrencia, 
         ocorrencia.campus as campus_ocorrencia_ocorrencia, 
         ocorrencia.patrimonio as patrimonio_ocorrencia_ocorrencia, 
@@ -129,6 +130,8 @@ class MensagemForumDAO extends DAO {
         ocorrencia.prioridade as prioridade_ocorrencia_ocorrencia, 
         ocorrencia.avaliacao as avaliacao_ocorrencia_ocorrencia, 
         ocorrencia.email as email_ocorrencia_ocorrencia, 
+        ocorrencia.id_usuario_atendente as id_usuario_atendente_ocorrencia_ocorrencia, 
+        ocorrencia.id_usuario_indicado as id_usuario_indicado_ocorrencia_ocorrencia, 
         ocorrencia.anexo as anexo_ocorrencia_ocorrencia, 
         ocorrencia.local_sala as local_sala_ocorrencia_ocorrencia, 
         usuario.id as id_usuario_usuario, 
@@ -160,6 +163,7 @@ class MensagemForumDAO extends DAO {
                 $mensagemForum->setDataEnvio( $linha ['data_envio'] );
                 $mensagemForum->getOcorrencia()->setId( $linha ['id_ocorrencia_ocorrencia'] );
                 $mensagemForum->getOcorrencia()->setIdLocal( $linha ['id_local_ocorrencia_ocorrencia'] );
+                $mensagemForum->getOcorrencia()->setIdUsuarioCliente( $linha ['id_usuario_cliente_ocorrencia_ocorrencia'] );
                 $mensagemForum->getOcorrencia()->setDescricao( $linha ['descricao_ocorrencia_ocorrencia'] );
                 $mensagemForum->getOcorrencia()->setCampus( $linha ['campus_ocorrencia_ocorrencia'] );
                 $mensagemForum->getOcorrencia()->setPatrimonio( $linha ['patrimonio_ocorrencia_ocorrencia'] );
@@ -170,6 +174,8 @@ class MensagemForumDAO extends DAO {
                 $mensagemForum->getOcorrencia()->setPrioridade( $linha ['prioridade_ocorrencia_ocorrencia'] );
                 $mensagemForum->getOcorrencia()->setAvaliacao( $linha ['avaliacao_ocorrencia_ocorrencia'] );
                 $mensagemForum->getOcorrencia()->setEmail( $linha ['email_ocorrencia_ocorrencia'] );
+                $mensagemForum->getOcorrencia()->setIdUsuarioAtendente( $linha ['id_usuario_atendente_ocorrencia_ocorrencia'] );
+                $mensagemForum->getOcorrencia()->setIdUsuarioIndicado( $linha ['id_usuario_indicado_ocorrencia_ocorrencia'] );
                 $mensagemForum->getOcorrencia()->setAnexo( $linha ['anexo_ocorrencia_ocorrencia'] );
                 $mensagemForum->getOcorrencia()->setLocalSala( $linha ['local_sala_ocorrencia_ocorrencia'] );
                 $mensagemForum->getUsuario()->setId( $linha ['id_usuario_usuario'] );
@@ -201,6 +207,7 @@ class MensagemForumDAO extends DAO {
         mensagem_forum.data_envio, 
         ocorrencia.id as id_ocorrencia_ocorrencia, 
         ocorrencia.id_local as id_local_ocorrencia_ocorrencia, 
+        ocorrencia.id_usuario_cliente as id_usuario_cliente_ocorrencia_ocorrencia, 
         ocorrencia.descricao as descricao_ocorrencia_ocorrencia, 
         ocorrencia.campus as campus_ocorrencia_ocorrencia, 
         ocorrencia.patrimonio as patrimonio_ocorrencia_ocorrencia, 
@@ -211,6 +218,8 @@ class MensagemForumDAO extends DAO {
         ocorrencia.prioridade as prioridade_ocorrencia_ocorrencia, 
         ocorrencia.avaliacao as avaliacao_ocorrencia_ocorrencia, 
         ocorrencia.email as email_ocorrencia_ocorrencia, 
+        ocorrencia.id_usuario_atendente as id_usuario_atendente_ocorrencia_ocorrencia, 
+        ocorrencia.id_usuario_indicado as id_usuario_indicado_ocorrencia_ocorrencia, 
         ocorrencia.anexo as anexo_ocorrencia_ocorrencia, 
         ocorrencia.local_sala as local_sala_ocorrencia_ocorrencia, 
         usuario.id as id_usuario_usuario, 
@@ -240,7 +249,7 @@ class MensagemForumDAO extends DAO {
     			$mensagemForum->getOcorrencia()->setAreaResponsavel( $linha ['area_responsavel_ocorrencia_ocorrencia'] );
     			$mensagemForum->getOcorrencia()->setServico( $linha ['servico_ocorrencia_ocorrencia'] );
     			$mensagemForum->getOcorrencia()->setIdLocal( $linha ['id_local_ocorrencia_ocorrencia'] );
-    			$mensagemForum->getOcorrencia()->setUsuarioCliente( $linha ['usuario_cliente_ocorrencia_ocorrencia'] );
+    			$mensagemForum->getOcorrencia()->setIdUsuarioCliente( $linha ['id_usuario_cliente_ocorrencia_ocorrencia'] );
     			$mensagemForum->getOcorrencia()->setDescricao( $linha ['descricao_ocorrencia_ocorrencia'] );
     			$mensagemForum->getOcorrencia()->setCampus( $linha ['campus_ocorrencia_ocorrencia'] );
     			$mensagemForum->getOcorrencia()->setPatrimonio( $linha ['patrimonio_ocorrencia_ocorrencia'] );
@@ -251,8 +260,8 @@ class MensagemForumDAO extends DAO {
     			$mensagemForum->getOcorrencia()->setPrioridade( $linha ['prioridade_ocorrencia_ocorrencia'] );
     			$mensagemForum->getOcorrencia()->setAvaliacao( $linha ['avaliacao_ocorrencia_ocorrencia'] );
     			$mensagemForum->getOcorrencia()->setEmail( $linha ['email_ocorrencia_ocorrencia'] );
-    			$mensagemForum->getOcorrencia()->setUsuarioAtendente( $linha ['usuario_atendente_ocorrencia_ocorrencia'] );
-    			$mensagemForum->getOcorrencia()->setUsuarioIndicado( $linha ['usuario_indicado_ocorrencia_ocorrencia'] );
+    			$mensagemForum->getOcorrencia()->setIdUsuarioAtendente( $linha ['id_usuario_atendente_ocorrencia_ocorrencia'] );
+    			$mensagemForum->getOcorrencia()->setIdUsuarioIndicado( $linha ['id_usuario_indicado_ocorrencia_ocorrencia'] );
     			$mensagemForum->getOcorrencia()->setAnexo( $linha ['anexo_ocorrencia_ocorrencia'] );
     			$mensagemForum->getOcorrencia()->setLocalSala( $linha ['local_sala_ocorrencia_ocorrencia'] );
     			$mensagemForum->getUsuario()->setId( $linha ['id_usuario_usuario'] );
@@ -285,6 +294,7 @@ class MensagemForumDAO extends DAO {
         mensagem_forum.data_envio, 
         ocorrencia.id as id_ocorrencia_ocorrencia, 
         ocorrencia.id_local as id_local_ocorrencia_ocorrencia, 
+        ocorrencia.id_usuario_cliente as id_usuario_cliente_ocorrencia_ocorrencia, 
         ocorrencia.descricao as descricao_ocorrencia_ocorrencia, 
         ocorrencia.campus as campus_ocorrencia_ocorrencia, 
         ocorrencia.patrimonio as patrimonio_ocorrencia_ocorrencia, 
@@ -295,6 +305,8 @@ class MensagemForumDAO extends DAO {
         ocorrencia.prioridade as prioridade_ocorrencia_ocorrencia, 
         ocorrencia.avaliacao as avaliacao_ocorrencia_ocorrencia, 
         ocorrencia.email as email_ocorrencia_ocorrencia, 
+        ocorrencia.id_usuario_atendente as id_usuario_atendente_ocorrencia_ocorrencia, 
+        ocorrencia.id_usuario_indicado as id_usuario_indicado_ocorrencia_ocorrencia, 
         ocorrencia.anexo as anexo_ocorrencia_ocorrencia, 
         ocorrencia.local_sala as local_sala_ocorrencia_ocorrencia, 
         usuario.id as id_usuario_usuario, 
@@ -324,7 +336,7 @@ class MensagemForumDAO extends DAO {
     			$mensagemForum->getOcorrencia()->setAreaResponsavel( $linha ['area_responsavel_ocorrencia_ocorrencia'] );
     			$mensagemForum->getOcorrencia()->setServico( $linha ['servico_ocorrencia_ocorrencia'] );
     			$mensagemForum->getOcorrencia()->setIdLocal( $linha ['id_local_ocorrencia_ocorrencia'] );
-    			$mensagemForum->getOcorrencia()->setUsuarioCliente( $linha ['usuario_cliente_ocorrencia_ocorrencia'] );
+    			$mensagemForum->getOcorrencia()->setIdUsuarioCliente( $linha ['id_usuario_cliente_ocorrencia_ocorrencia'] );
     			$mensagemForum->getOcorrencia()->setDescricao( $linha ['descricao_ocorrencia_ocorrencia'] );
     			$mensagemForum->getOcorrencia()->setCampus( $linha ['campus_ocorrencia_ocorrencia'] );
     			$mensagemForum->getOcorrencia()->setPatrimonio( $linha ['patrimonio_ocorrencia_ocorrencia'] );
@@ -335,8 +347,8 @@ class MensagemForumDAO extends DAO {
     			$mensagemForum->getOcorrencia()->setPrioridade( $linha ['prioridade_ocorrencia_ocorrencia'] );
     			$mensagemForum->getOcorrencia()->setAvaliacao( $linha ['avaliacao_ocorrencia_ocorrencia'] );
     			$mensagemForum->getOcorrencia()->setEmail( $linha ['email_ocorrencia_ocorrencia'] );
-    			$mensagemForum->getOcorrencia()->setUsuarioAtendente( $linha ['usuario_atendente_ocorrencia_ocorrencia'] );
-    			$mensagemForum->getOcorrencia()->setUsuarioIndicado( $linha ['usuario_indicado_ocorrencia_ocorrencia'] );
+    			$mensagemForum->getOcorrencia()->setIdUsuarioAtendente( $linha ['id_usuario_atendente_ocorrencia_ocorrencia'] );
+    			$mensagemForum->getOcorrencia()->setIdUsuarioIndicado( $linha ['id_usuario_indicado_ocorrencia_ocorrencia'] );
     			$mensagemForum->getOcorrencia()->setAnexo( $linha ['anexo_ocorrencia_ocorrencia'] );
     			$mensagemForum->getOcorrencia()->setLocalSala( $linha ['local_sala_ocorrencia_ocorrencia'] );
     			$mensagemForum->getUsuario()->setId( $linha ['id_usuario_usuario'] );
@@ -369,6 +381,7 @@ class MensagemForumDAO extends DAO {
         mensagem_forum.data_envio, 
         ocorrencia.id as id_ocorrencia_ocorrencia, 
         ocorrencia.id_local as id_local_ocorrencia_ocorrencia, 
+        ocorrencia.id_usuario_cliente as id_usuario_cliente_ocorrencia_ocorrencia, 
         ocorrencia.descricao as descricao_ocorrencia_ocorrencia, 
         ocorrencia.campus as campus_ocorrencia_ocorrencia, 
         ocorrencia.patrimonio as patrimonio_ocorrencia_ocorrencia, 
@@ -379,6 +392,8 @@ class MensagemForumDAO extends DAO {
         ocorrencia.prioridade as prioridade_ocorrencia_ocorrencia, 
         ocorrencia.avaliacao as avaliacao_ocorrencia_ocorrencia, 
         ocorrencia.email as email_ocorrencia_ocorrencia, 
+        ocorrencia.id_usuario_atendente as id_usuario_atendente_ocorrencia_ocorrencia, 
+        ocorrencia.id_usuario_indicado as id_usuario_indicado_ocorrencia_ocorrencia, 
         ocorrencia.anexo as anexo_ocorrencia_ocorrencia, 
         ocorrencia.local_sala as local_sala_ocorrencia_ocorrencia, 
         usuario.id as id_usuario_usuario, 
@@ -408,7 +423,7 @@ class MensagemForumDAO extends DAO {
     			$mensagemForum->getOcorrencia()->setAreaResponsavel( $linha ['area_responsavel_ocorrencia_ocorrencia'] );
     			$mensagemForum->getOcorrencia()->setServico( $linha ['servico_ocorrencia_ocorrencia'] );
     			$mensagemForum->getOcorrencia()->setIdLocal( $linha ['id_local_ocorrencia_ocorrencia'] );
-    			$mensagemForum->getOcorrencia()->setUsuarioCliente( $linha ['usuario_cliente_ocorrencia_ocorrencia'] );
+    			$mensagemForum->getOcorrencia()->setIdUsuarioCliente( $linha ['id_usuario_cliente_ocorrencia_ocorrencia'] );
     			$mensagemForum->getOcorrencia()->setDescricao( $linha ['descricao_ocorrencia_ocorrencia'] );
     			$mensagemForum->getOcorrencia()->setCampus( $linha ['campus_ocorrencia_ocorrencia'] );
     			$mensagemForum->getOcorrencia()->setPatrimonio( $linha ['patrimonio_ocorrencia_ocorrencia'] );
@@ -419,8 +434,8 @@ class MensagemForumDAO extends DAO {
     			$mensagemForum->getOcorrencia()->setPrioridade( $linha ['prioridade_ocorrencia_ocorrencia'] );
     			$mensagemForum->getOcorrencia()->setAvaliacao( $linha ['avaliacao_ocorrencia_ocorrencia'] );
     			$mensagemForum->getOcorrencia()->setEmail( $linha ['email_ocorrencia_ocorrencia'] );
-    			$mensagemForum->getOcorrencia()->setUsuarioAtendente( $linha ['usuario_atendente_ocorrencia_ocorrencia'] );
-    			$mensagemForum->getOcorrencia()->setUsuarioIndicado( $linha ['usuario_indicado_ocorrencia_ocorrencia'] );
+    			$mensagemForum->getOcorrencia()->setIdUsuarioAtendente( $linha ['id_usuario_atendente_ocorrencia_ocorrencia'] );
+    			$mensagemForum->getOcorrencia()->setIdUsuarioIndicado( $linha ['id_usuario_indicado_ocorrencia_ocorrencia'] );
     			$mensagemForum->getOcorrencia()->setAnexo( $linha ['anexo_ocorrencia_ocorrencia'] );
     			$mensagemForum->getOcorrencia()->setLocalSala( $linha ['local_sala_ocorrencia_ocorrencia'] );
     			$mensagemForum->getUsuario()->setId( $linha ['id_usuario_usuario'] );
@@ -453,6 +468,7 @@ class MensagemForumDAO extends DAO {
         mensagem_forum.data_envio, 
         ocorrencia.id as id_ocorrencia_ocorrencia, 
         ocorrencia.id_local as id_local_ocorrencia_ocorrencia, 
+        ocorrencia.id_usuario_cliente as id_usuario_cliente_ocorrencia_ocorrencia, 
         ocorrencia.descricao as descricao_ocorrencia_ocorrencia, 
         ocorrencia.campus as campus_ocorrencia_ocorrencia, 
         ocorrencia.patrimonio as patrimonio_ocorrencia_ocorrencia, 
@@ -463,6 +479,8 @@ class MensagemForumDAO extends DAO {
         ocorrencia.prioridade as prioridade_ocorrencia_ocorrencia, 
         ocorrencia.avaliacao as avaliacao_ocorrencia_ocorrencia, 
         ocorrencia.email as email_ocorrencia_ocorrencia, 
+        ocorrencia.id_usuario_atendente as id_usuario_atendente_ocorrencia_ocorrencia, 
+        ocorrencia.id_usuario_indicado as id_usuario_indicado_ocorrencia_ocorrencia, 
         ocorrencia.anexo as anexo_ocorrencia_ocorrencia, 
         ocorrencia.local_sala as local_sala_ocorrencia_ocorrencia, 
         usuario.id as id_usuario_usuario, 
@@ -492,7 +510,7 @@ class MensagemForumDAO extends DAO {
     			$mensagemForum->getOcorrencia()->setAreaResponsavel( $linha ['area_responsavel_ocorrencia_ocorrencia'] );
     			$mensagemForum->getOcorrencia()->setServico( $linha ['servico_ocorrencia_ocorrencia'] );
     			$mensagemForum->getOcorrencia()->setIdLocal( $linha ['id_local_ocorrencia_ocorrencia'] );
-    			$mensagemForum->getOcorrencia()->setUsuarioCliente( $linha ['usuario_cliente_ocorrencia_ocorrencia'] );
+    			$mensagemForum->getOcorrencia()->setIdUsuarioCliente( $linha ['id_usuario_cliente_ocorrencia_ocorrencia'] );
     			$mensagemForum->getOcorrencia()->setDescricao( $linha ['descricao_ocorrencia_ocorrencia'] );
     			$mensagemForum->getOcorrencia()->setCampus( $linha ['campus_ocorrencia_ocorrencia'] );
     			$mensagemForum->getOcorrencia()->setPatrimonio( $linha ['patrimonio_ocorrencia_ocorrencia'] );
@@ -503,8 +521,8 @@ class MensagemForumDAO extends DAO {
     			$mensagemForum->getOcorrencia()->setPrioridade( $linha ['prioridade_ocorrencia_ocorrencia'] );
     			$mensagemForum->getOcorrencia()->setAvaliacao( $linha ['avaliacao_ocorrencia_ocorrencia'] );
     			$mensagemForum->getOcorrencia()->setEmail( $linha ['email_ocorrencia_ocorrencia'] );
-    			$mensagemForum->getOcorrencia()->setUsuarioAtendente( $linha ['usuario_atendente_ocorrencia_ocorrencia'] );
-    			$mensagemForum->getOcorrencia()->setUsuarioIndicado( $linha ['usuario_indicado_ocorrencia_ocorrencia'] );
+    			$mensagemForum->getOcorrencia()->setIdUsuarioAtendente( $linha ['id_usuario_atendente_ocorrencia_ocorrencia'] );
+    			$mensagemForum->getOcorrencia()->setIdUsuarioIndicado( $linha ['id_usuario_indicado_ocorrencia_ocorrencia'] );
     			$mensagemForum->getOcorrencia()->setAnexo( $linha ['anexo_ocorrencia_ocorrencia'] );
     			$mensagemForum->getOcorrencia()->setLocalSala( $linha ['local_sala_ocorrencia_ocorrencia'] );
     			$mensagemForum->getUsuario()->setId( $linha ['id_usuario_usuario'] );
@@ -536,6 +554,7 @@ class MensagemForumDAO extends DAO {
         mensagem_forum.data_envio, 
         ocorrencia.id as id_ocorrencia_ocorrencia, 
         ocorrencia.id_local as id_local_ocorrencia_ocorrencia, 
+        ocorrencia.id_usuario_cliente as id_usuario_cliente_ocorrencia_ocorrencia, 
         ocorrencia.descricao as descricao_ocorrencia_ocorrencia, 
         ocorrencia.campus as campus_ocorrencia_ocorrencia, 
         ocorrencia.patrimonio as patrimonio_ocorrencia_ocorrencia, 
@@ -546,6 +565,8 @@ class MensagemForumDAO extends DAO {
         ocorrencia.prioridade as prioridade_ocorrencia_ocorrencia, 
         ocorrencia.avaliacao as avaliacao_ocorrencia_ocorrencia, 
         ocorrencia.email as email_ocorrencia_ocorrencia, 
+        ocorrencia.id_usuario_atendente as id_usuario_atendente_ocorrencia_ocorrencia, 
+        ocorrencia.id_usuario_indicado as id_usuario_indicado_ocorrencia_ocorrencia, 
         ocorrencia.anexo as anexo_ocorrencia_ocorrencia, 
         ocorrencia.local_sala as local_sala_ocorrencia_ocorrencia, 
         usuario.id as id_usuario_usuario, 
@@ -577,6 +598,7 @@ class MensagemForumDAO extends DAO {
                 $mensagemForum->setDataEnvio( $linha ['data_envio'] );
                 $mensagemForum->getOcorrencia()->setId( $linha ['id_ocorrencia_ocorrencia'] );
                 $mensagemForum->getOcorrencia()->setIdLocal( $linha ['id_local_ocorrencia_ocorrencia'] );
+                $mensagemForum->getOcorrencia()->setIdUsuarioCliente( $linha ['id_usuario_cliente_ocorrencia_ocorrencia'] );
                 $mensagemForum->getOcorrencia()->setDescricao( $linha ['descricao_ocorrencia_ocorrencia'] );
                 $mensagemForum->getOcorrencia()->setCampus( $linha ['campus_ocorrencia_ocorrencia'] );
                 $mensagemForum->getOcorrencia()->setPatrimonio( $linha ['patrimonio_ocorrencia_ocorrencia'] );
@@ -587,6 +609,8 @@ class MensagemForumDAO extends DAO {
                 $mensagemForum->getOcorrencia()->setPrioridade( $linha ['prioridade_ocorrencia_ocorrencia'] );
                 $mensagemForum->getOcorrencia()->setAvaliacao( $linha ['avaliacao_ocorrencia_ocorrencia'] );
                 $mensagemForum->getOcorrencia()->setEmail( $linha ['email_ocorrencia_ocorrencia'] );
+                $mensagemForum->getOcorrencia()->setIdUsuarioAtendente( $linha ['id_usuario_atendente_ocorrencia_ocorrencia'] );
+                $mensagemForum->getOcorrencia()->setIdUsuarioIndicado( $linha ['id_usuario_indicado_ocorrencia_ocorrencia'] );
                 $mensagemForum->getOcorrencia()->setAnexo( $linha ['anexo_ocorrencia_ocorrencia'] );
                 $mensagemForum->getOcorrencia()->setLocalSala( $linha ['local_sala_ocorrencia_ocorrencia'] );
                 $mensagemForum->getUsuario()->setId( $linha ['id_usuario_usuario'] );
@@ -615,6 +639,7 @@ class MensagemForumDAO extends DAO {
         mensagem_forum.data_envio, 
         ocorrencia.id as id_ocorrencia_ocorrencia, 
         ocorrencia.id_local as id_local_ocorrencia_ocorrencia, 
+        ocorrencia.id_usuario_cliente as id_usuario_cliente_ocorrencia_ocorrencia, 
         ocorrencia.descricao as descricao_ocorrencia_ocorrencia, 
         ocorrencia.campus as campus_ocorrencia_ocorrencia, 
         ocorrencia.patrimonio as patrimonio_ocorrencia_ocorrencia, 
@@ -625,6 +650,8 @@ class MensagemForumDAO extends DAO {
         ocorrencia.prioridade as prioridade_ocorrencia_ocorrencia, 
         ocorrencia.avaliacao as avaliacao_ocorrencia_ocorrencia, 
         ocorrencia.email as email_ocorrencia_ocorrencia, 
+        ocorrencia.id_usuario_atendente as id_usuario_atendente_ocorrencia_ocorrencia, 
+        ocorrencia.id_usuario_indicado as id_usuario_indicado_ocorrencia_ocorrencia, 
         ocorrencia.anexo as anexo_ocorrencia_ocorrencia, 
         ocorrencia.local_sala as local_sala_ocorrencia_ocorrencia, 
         usuario.id as id_usuario_usuario, 
@@ -656,6 +683,7 @@ class MensagemForumDAO extends DAO {
                 $mensagemForum->setDataEnvio( $linha ['data_envio'] );
                 $mensagemForum->getOcorrencia()->setId( $linha ['id_ocorrencia_ocorrencia'] );
                 $mensagemForum->getOcorrencia()->setIdLocal( $linha ['id_local_ocorrencia_ocorrencia'] );
+                $mensagemForum->getOcorrencia()->setIdUsuarioCliente( $linha ['id_usuario_cliente_ocorrencia_ocorrencia'] );
                 $mensagemForum->getOcorrencia()->setDescricao( $linha ['descricao_ocorrencia_ocorrencia'] );
                 $mensagemForum->getOcorrencia()->setCampus( $linha ['campus_ocorrencia_ocorrencia'] );
                 $mensagemForum->getOcorrencia()->setPatrimonio( $linha ['patrimonio_ocorrencia_ocorrencia'] );
@@ -666,6 +694,8 @@ class MensagemForumDAO extends DAO {
                 $mensagemForum->getOcorrencia()->setPrioridade( $linha ['prioridade_ocorrencia_ocorrencia'] );
                 $mensagemForum->getOcorrencia()->setAvaliacao( $linha ['avaliacao_ocorrencia_ocorrencia'] );
                 $mensagemForum->getOcorrencia()->setEmail( $linha ['email_ocorrencia_ocorrencia'] );
+                $mensagemForum->getOcorrencia()->setIdUsuarioAtendente( $linha ['id_usuario_atendente_ocorrencia_ocorrencia'] );
+                $mensagemForum->getOcorrencia()->setIdUsuarioIndicado( $linha ['id_usuario_indicado_ocorrencia_ocorrencia'] );
                 $mensagemForum->getOcorrencia()->setAnexo( $linha ['anexo_ocorrencia_ocorrencia'] );
                 $mensagemForum->getOcorrencia()->setLocalSala( $linha ['local_sala_ocorrencia_ocorrencia'] );
                 $mensagemForum->getUsuario()->setId( $linha ['id_usuario_usuario'] );
@@ -694,6 +724,7 @@ class MensagemForumDAO extends DAO {
         mensagem_forum.data_envio, 
         ocorrencia.id as id_ocorrencia_ocorrencia, 
         ocorrencia.id_local as id_local_ocorrencia_ocorrencia, 
+        ocorrencia.id_usuario_cliente as id_usuario_cliente_ocorrencia_ocorrencia, 
         ocorrencia.descricao as descricao_ocorrencia_ocorrencia, 
         ocorrencia.campus as campus_ocorrencia_ocorrencia, 
         ocorrencia.patrimonio as patrimonio_ocorrencia_ocorrencia, 
@@ -704,6 +735,8 @@ class MensagemForumDAO extends DAO {
         ocorrencia.prioridade as prioridade_ocorrencia_ocorrencia, 
         ocorrencia.avaliacao as avaliacao_ocorrencia_ocorrencia, 
         ocorrencia.email as email_ocorrencia_ocorrencia, 
+        ocorrencia.id_usuario_atendente as id_usuario_atendente_ocorrencia_ocorrencia, 
+        ocorrencia.id_usuario_indicado as id_usuario_indicado_ocorrencia_ocorrencia, 
         ocorrencia.anexo as anexo_ocorrencia_ocorrencia, 
         ocorrencia.local_sala as local_sala_ocorrencia_ocorrencia, 
         usuario.id as id_usuario_usuario, 
@@ -735,6 +768,7 @@ class MensagemForumDAO extends DAO {
                 $mensagemForum->setDataEnvio( $linha ['data_envio'] );
                 $mensagemForum->getOcorrencia()->setId( $linha ['id_ocorrencia_ocorrencia'] );
                 $mensagemForum->getOcorrencia()->setIdLocal( $linha ['id_local_ocorrencia_ocorrencia'] );
+                $mensagemForum->getOcorrencia()->setIdUsuarioCliente( $linha ['id_usuario_cliente_ocorrencia_ocorrencia'] );
                 $mensagemForum->getOcorrencia()->setDescricao( $linha ['descricao_ocorrencia_ocorrencia'] );
                 $mensagemForum->getOcorrencia()->setCampus( $linha ['campus_ocorrencia_ocorrencia'] );
                 $mensagemForum->getOcorrencia()->setPatrimonio( $linha ['patrimonio_ocorrencia_ocorrencia'] );
@@ -745,6 +779,8 @@ class MensagemForumDAO extends DAO {
                 $mensagemForum->getOcorrencia()->setPrioridade( $linha ['prioridade_ocorrencia_ocorrencia'] );
                 $mensagemForum->getOcorrencia()->setAvaliacao( $linha ['avaliacao_ocorrencia_ocorrencia'] );
                 $mensagemForum->getOcorrencia()->setEmail( $linha ['email_ocorrencia_ocorrencia'] );
+                $mensagemForum->getOcorrencia()->setIdUsuarioAtendente( $linha ['id_usuario_atendente_ocorrencia_ocorrencia'] );
+                $mensagemForum->getOcorrencia()->setIdUsuarioIndicado( $linha ['id_usuario_indicado_ocorrencia_ocorrencia'] );
                 $mensagemForum->getOcorrencia()->setAnexo( $linha ['anexo_ocorrencia_ocorrencia'] );
                 $mensagemForum->getOcorrencia()->setLocalSala( $linha ['local_sala_ocorrencia_ocorrencia'] );
                 $mensagemForum->getUsuario()->setId( $linha ['id_usuario_usuario'] );
@@ -773,6 +809,7 @@ class MensagemForumDAO extends DAO {
         mensagem_forum.data_envio, 
         ocorrencia.id as id_ocorrencia_ocorrencia, 
         ocorrencia.id_local as id_local_ocorrencia_ocorrencia, 
+        ocorrencia.id_usuario_cliente as id_usuario_cliente_ocorrencia_ocorrencia, 
         ocorrencia.descricao as descricao_ocorrencia_ocorrencia, 
         ocorrencia.campus as campus_ocorrencia_ocorrencia, 
         ocorrencia.patrimonio as patrimonio_ocorrencia_ocorrencia, 
@@ -783,6 +820,8 @@ class MensagemForumDAO extends DAO {
         ocorrencia.prioridade as prioridade_ocorrencia_ocorrencia, 
         ocorrencia.avaliacao as avaliacao_ocorrencia_ocorrencia, 
         ocorrencia.email as email_ocorrencia_ocorrencia, 
+        ocorrencia.id_usuario_atendente as id_usuario_atendente_ocorrencia_ocorrencia, 
+        ocorrencia.id_usuario_indicado as id_usuario_indicado_ocorrencia_ocorrencia, 
         ocorrencia.anexo as anexo_ocorrencia_ocorrencia, 
         ocorrencia.local_sala as local_sala_ocorrencia_ocorrencia, 
         usuario.id as id_usuario_usuario, 
@@ -814,6 +853,7 @@ class MensagemForumDAO extends DAO {
                 $mensagemForum->setDataEnvio( $linha ['data_envio'] );
                 $mensagemForum->getOcorrencia()->setId( $linha ['id_ocorrencia_ocorrencia'] );
                 $mensagemForum->getOcorrencia()->setIdLocal( $linha ['id_local_ocorrencia_ocorrencia'] );
+                $mensagemForum->getOcorrencia()->setIdUsuarioCliente( $linha ['id_usuario_cliente_ocorrencia_ocorrencia'] );
                 $mensagemForum->getOcorrencia()->setDescricao( $linha ['descricao_ocorrencia_ocorrencia'] );
                 $mensagemForum->getOcorrencia()->setCampus( $linha ['campus_ocorrencia_ocorrencia'] );
                 $mensagemForum->getOcorrencia()->setPatrimonio( $linha ['patrimonio_ocorrencia_ocorrencia'] );
@@ -824,6 +864,8 @@ class MensagemForumDAO extends DAO {
                 $mensagemForum->getOcorrencia()->setPrioridade( $linha ['prioridade_ocorrencia_ocorrencia'] );
                 $mensagemForum->getOcorrencia()->setAvaliacao( $linha ['avaliacao_ocorrencia_ocorrencia'] );
                 $mensagemForum->getOcorrencia()->setEmail( $linha ['email_ocorrencia_ocorrencia'] );
+                $mensagemForum->getOcorrencia()->setIdUsuarioAtendente( $linha ['id_usuario_atendente_ocorrencia_ocorrencia'] );
+                $mensagemForum->getOcorrencia()->setIdUsuarioIndicado( $linha ['id_usuario_indicado_ocorrencia_ocorrencia'] );
                 $mensagemForum->getOcorrencia()->setAnexo( $linha ['anexo_ocorrencia_ocorrencia'] );
                 $mensagemForum->getOcorrencia()->setLocalSala( $linha ['local_sala_ocorrencia_ocorrencia'] );
                 $mensagemForum->getUsuario()->setId( $linha ['id_usuario_usuario'] );

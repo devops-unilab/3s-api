@@ -14,7 +14,7 @@ class Ocorrencia {
 	private $areaResponsavel;
 	private $servico;
 	private $idLocal;
-	private $usuarioCliente;
+	private $idUsuarioCliente;
 	private $descricao;
 	private $campus;
 	private $patrimonio;
@@ -25,17 +25,14 @@ class Ocorrencia {
 	private $prioridade;
 	private $avaliacao;
 	private $email;
-	private $usuarioAtendente;
-	private $usuarioIndicado;
+	private $idUsuarioAtendente;
+	private $idUsuarioIndicado;
 	private $anexo;
 	private $localSala;
     public function __construct(){
 
         $this->areaResponsavel = new AreaResponsavel();
         $this->servico = new Servico();
-        $this->usuarioCliente = new Usuario();
-        $this->usuarioAtendente = new Usuario();
-        $this->usuarioIndicado = new Usuario();
     }
 	public function setId($id) {
 		$this->id = $id;
@@ -65,12 +62,12 @@ class Ocorrencia {
 	public function getIdLocal() {
 		return $this->idLocal;
 	}
-	public function setUsuarioCliente(Usuario $usuario) {
-		$this->usuarioCliente = $usuario;
+	public function setIdUsuarioCliente($idUsuarioCliente) {
+		$this->idUsuarioCliente = $idUsuarioCliente;
 	}
 		    
-	public function getUsuarioCliente() {
-		return $this->usuarioCliente;
+	public function getIdUsuarioCliente() {
+		return $this->idUsuarioCliente;
 	}
 	public function setDescricao($descricao) {
 		$this->descricao = $descricao;
@@ -142,19 +139,19 @@ class Ocorrencia {
 	public function getEmail() {
 		return $this->email;
 	}
-	public function setUsuarioAtendente(Usuario $usuario) {
-		$this->usuarioAtendente = $usuario;
+	public function setIdUsuarioAtendente($idUsuarioAtendente) {
+		$this->idUsuarioAtendente = $idUsuarioAtendente;
 	}
 		    
-	public function getUsuarioAtendente() {
-		return $this->usuarioAtendente;
+	public function getIdUsuarioAtendente() {
+		return $this->idUsuarioAtendente;
 	}
-	public function setUsuarioIndicado(Usuario $usuario) {
-		$this->usuarioIndicado = $usuario;
+	public function setIdUsuarioIndicado($idUsuarioIndicado) {
+		$this->idUsuarioIndicado = $idUsuarioIndicado;
 	}
 		    
-	public function getUsuarioIndicado() {
-		return $this->usuarioIndicado;
+	public function getIdUsuarioIndicado() {
+		return $this->idUsuarioIndicado;
 	}
 	public function setAnexo($anexo) {
 		$this->anexo = $anexo;
@@ -171,7 +168,7 @@ class Ocorrencia {
 		return $this->localSala;
 	}
 	public function __toString(){
-	    return $this->id.' - '.$this->areaResponsavel.' - '.$this->servico.' - '.$this->idLocal.' - '.$this->usuarioCliente.' - '.$this->descricao.' - '.$this->campus.' - '.$this->patrimonio.' - '.$this->ramal.' - '.$this->local.' - '.$this->status.' - '.$this->solucao.' - '.$this->prioridade.' - '.$this->avaliacao.' - '.$this->email.' - '.$this->usuarioAtendente.' - '.$this->usuarioIndicado.' - '.$this->anexo.' - '.$this->localSala;
+	    return $this->id.' - '.$this->areaResponsavel.' - '.$this->servico.' - '.$this->idLocal.' - '.$this->idUsuarioCliente.' - '.$this->descricao.' - '.$this->campus.' - '.$this->patrimonio.' - '.$this->ramal.' - '.$this->local.' - '.$this->status.' - '.$this->solucao.' - '.$this->prioridade.' - '.$this->avaliacao.' - '.$this->email.' - '.$this->idUsuarioAtendente.' - '.$this->idUsuarioIndicado.' - '.$this->anexo.' - '.$this->localSala;
 	}
                 
 
