@@ -9,7 +9,7 @@ class OcorrenciaCustomView extends OcorrenciaView {
 
     
     public function mostraFormInserir2($listaServico){
-//         print_r($listaServico);
+
         echo '
             
 
@@ -25,8 +25,13 @@ class OcorrenciaCustomView extends OcorrenciaView {
                     <label for="select-demanda">Serviço*</label>
                 </div>
                 <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
-                    <select id="select-item-ocorrencia-comum" name="item_ocorrencia" required>
-                        <option value="" selected="selected">Selecione uma opção</option>
+                    <select id="select-servicos" name="item_ocorrencia" required>
+                        <option value="" selected="selected">Selecione um serviço</option>';        
+        foreach($listaServico as $servico){
+            echo '
+                        <option value="'.$servico->getId().'">'.$servico->getDescricao().'</option>';
+        }
+        echo '
             
             
             
