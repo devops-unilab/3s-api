@@ -29,7 +29,7 @@ class OcorrenciaCustomController  extends OcorrenciaController {
             <div class="row">
                 <div class="col-md-8 blog-main">
                     <h3 class="pb-4 mb-4 font-italic border-bottom">
-                        Chamado Selecionado
+                        #'.$selecionado->getId().' - Chamado Selecionado
                     </h3>
 
 ';
@@ -93,7 +93,10 @@ class OcorrenciaCustomController  extends OcorrenciaController {
 	    
 	    if(isset($_GET['selecionar'])){
 	        $this->selecionar();
-	    }else{
+	    }else if(isset($_GET['cadastrar'])){
+	        $this->cadastrar();
+	    }
+	    else{
 	        $this->listar();
 	    }
 	    
@@ -113,25 +116,42 @@ class OcorrenciaCustomController  extends OcorrenciaController {
 	}
 	
 	public function cadastrar() {
-	    
-	    if(!isset($_POST['enviar_ocorrencia']))
-	    {  
-	    
-	        $servicoDao = new ServicoDAO($this->dao->getConexao());
-	        $listaServico = $servicoDao->retornaLista();
+	    echo '
+            <div class="row">
+                <div class="col-md-12 blog-main">
+                    <h3 class="pb-4 mb-4 font-italic border-bottom">
+                        Cadastrar Ocorrência
+                    </h3>
 	        
-	        $this->view->mostraFormInserir2($listaServico);
-	        return;
-	    }
-	    if (! ( isset ( $_POST ['id_local'] ) && isset ( $_POST ['descricao'] ) && isset ( $_POST ['campus'] ) && isset ( $_POST ['patrimonio'] ) && isset ( $_POST ['ramal'] ) && isset ( $_POST ['local'] ) && isset ( $_POST ['status'] ) && isset ( $_POST ['solucao'] ) && isset ( $_POST ['prioridade'] ) && isset ( $_POST ['avaliacao'] ) && isset ( $_POST ['email'] ) && isset ( $_POST ['anexo'] ) && isset ( $_POST ['local_sala'] ) &&  isset($_POST ['area_responsavel']) &&  isset($_POST ['servico']) &&  isset($_POST ['usuario_cliente']) &&  isset($_POST ['usuario_atendente']) &&  isset($_POST ['usuario_indicado']))) {
-	        echo '
-                <div class="alert alert-danger" role="alert">
-                    Falha ao cadastrar. Algum campo deve estar faltando.
+';
+	    $servicoDao = new ServicoDAO($this->dao->getConexao());
+	    $listaServico = $servicoDao->retornaLista();
+	    
+	    $this->view->mostraFormInserir2($listaServico);
+
+	    
+	    echo '
+	        
+	        
                 </div>
-	            
-                ';
-	        return;
+            </div>';
+	    
+	    
+	    
+	    if(!isset($_POST['enviar_ocorrencia'])){
+	       return;
 	    }
+        if (! ( isset ( $_POST ['id_local'] ) && isset ( $_POST ['descricao'] ) && isset ( $_POST ['campus'] ) && isset ( $_POST ['patrimonio'] ) && isset ( $_POST ['ramal'] ) && isset ( $_POST ['local'] ) && isset ( $_POST ['status'] ) && isset ( $_POST ['solucao'] ) && isset ( $_POST ['prioridade'] ) && isset ( $_POST ['avaliacao'] ) && isset ( $_POST ['email'] ) && isset ( $_POST ['anexo'] ) && isset ( $_POST ['local_sala'] ) &&  isset($_POST ['area_responsavel']) &&  isset($_POST ['servico']) &&  isset($_POST ['usuario_cliente']) &&  isset($_POST ['usuario_atendente']) &&  isset($_POST ['usuario_indicado']))) {
+            echo '
+            <div class="alert alert-danger" role="alert">
+                Falha ao cadastrar. Algum campo deve estar faltando.
+            </div>
+                
+            ';
+            return;
+        }
+	    
+	    
 	    
 	    $ocorrencia = new Ocorrencia ();
 	    $ocorrencia->setIdLocal ( $_POST ['id_local'] );

@@ -107,6 +107,9 @@ spl_autoload_register('autoload');
         <a class="nav-link" href=".">Início<span class="sr-only">(current)</span></a>
       </li>
       <li class="nav-item">
+        <a class="nav-link" href="?pagina=ocorrencia&cadastrar=1">Adicionar</a>
+      </li>
+      <li class="nav-item">
         <a class="nav-link" href="#">Painel</a>
       </li>
       <li class="nav-item dropdown">

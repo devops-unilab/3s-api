@@ -12,7 +12,7 @@ class OcorrenciaCustomView extends OcorrenciaView {
 //         print_r($listaServico);
         echo '
             
-<div class="collapse" id="collapseExample">
+
   <div class="card card-body">
             
             
@@ -95,7 +95,7 @@ class OcorrenciaCustomView extends OcorrenciaView {
             
       
   </div><br><br>
-</div>
+
             
 ';
     }
@@ -173,6 +173,42 @@ class OcorrenciaCustomView extends OcorrenciaView {
 
 
     }
+    
+    
+    public function mostrarSelecionado(Ocorrencia $ocorrencia){
+        echo '
+            
+            
+        <div class="card mb-4">
+            <div class="card-body">
+                
+                Id Local: '.$ocorrencia->getIdLocal().'<br>
+                Descricao: '.$ocorrencia->getDescricao().'<br>
+                Campus: '.$ocorrencia->getCampus().'<br>
+                Patrimonio: '.$ocorrencia->getPatrimonio().'<br>
+                Ramal: '.$ocorrencia->getRamal().'<br>
+                Local: '.$ocorrencia->getLocal().'<br>
+                Status: '.$ocorrencia->getStatus().'<br>
+                Solucao: '.$ocorrencia->getSolucao().'<br>
+                Prioridade: '.$ocorrencia->getPrioridade().'<br>
+                Avaliacao: '.$ocorrencia->getAvaliacao().'<br>
+                Email: '.$ocorrencia->getEmail().'<br>
+                Id Usuario Atendente: '.$ocorrencia->getIdUsuarioAtendente().'<br>
+                Id Usuario Indicado: '.$ocorrencia->getIdUsuarioIndicado().'<br>
+                Anexo: '.$ocorrencia->getAnexo().'<br>
+                Local Sala: '.$ocorrencia->getLocalSala().'<br>
+                Area Responsavel: '.$ocorrencia->getAreaResponsavel().'<br>
+                Servico: '.$ocorrencia->getServico().'<br>
+                Usuario Cliente: '.$ocorrencia->getUsuarioCliente().'<br>
+                    
+            </div>
+        </div>
+                    
+                    
+                    
+';
+    }
+    
     ////////Digite seu código customizado aqui.
     
 
