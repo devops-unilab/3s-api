@@ -77,6 +77,7 @@ if(isset($_GET['ajax'])){
 
 <link rel="stylesheet" href="css/stylesheet.css">
 <link rel="stylesheet" href="css/bootstrap.min.css" >
+
 </head>
 <body>
 

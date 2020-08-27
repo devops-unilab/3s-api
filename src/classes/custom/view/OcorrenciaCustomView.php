@@ -28,8 +28,13 @@ class OcorrenciaCustomView extends OcorrenciaView {
                     <select id="select-servicos" name="item_ocorrencia" required>
                         <option value="" selected="selected">Selecione um serviço</option>';        
         foreach($listaServico as $servico){
+            if($servico->getDescricao() == ""){
+                $descricao = $servico->getNome();
+            }else{
+                $descricao = $servico->getDescricao();
+            }
             echo '
-                        <option value="'.$servico->getId().'">'.$servico->getDescricao().'</option>';
+                        <option value="'.$servico->getId().'">'.$descricao.'</option>';
         }
         echo '
             
@@ -110,9 +115,30 @@ class OcorrenciaCustomView extends OcorrenciaView {
             <div class="row">
                 <div class="col-md-8 blog-main">';
         echo '
-                    <h3 class="pb-4 mb-4 font-italic border-bottom">
-                        Lista de Ocorrências
-                    </h3>
+            <div class="row">
+                    <div class="col-md-10">
+                        <h3 class="pb-4 mb-4 font-italic border-bottom">
+                            Lista de Ocorrências
+                        </h3>
+                        
+                    </div>
+                    <div class="col-md-2">
+                        <button type="button" class="btn btn-warning btn-circle btn-lg"  data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample"><i class="fa fa-filter icone-maior"></i></button>
+                    </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="collapse" id="collapseExample">
+                              <div class="card card-body">
+                                Local reservado para o formulário de edição de filtros. 
+                              </div><br><br>
+                            </div>
+                        </div>
+                        
+                    </div>
+
+
+
                 <div class="panel panel-info">
                     <div class="list-group">';
         
@@ -150,20 +176,6 @@ class OcorrenciaCustomView extends OcorrenciaView {
                       <li><a href="#">May 2013</a></li>
                       <li><a href="#">April 2013</a></li>
                     </ol>
-                  </div>
-            	        
-                  <div class="p-4">
-                     
-                        <p>
-                          <a class="btn btn-primary" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
-                             Editar Filtros
-                          </a>
-                        </p>
-                        <div class="collapse" id="collapseExample">
-                          <div class="card card-body">
-                            Esta funcionalidade está em desenvolvimento
-                          </div>
-                        </div>
                   </div>
                 </aside><!-- /.blog-sidebar -->
                 
