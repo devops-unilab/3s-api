@@ -110,6 +110,9 @@ class OcorrenciaCustomView extends OcorrenciaView {
                     </h3>
 
 
+
+
+
                     <div class="list-group">';
         
         foreach($lista as $elemento){
@@ -128,9 +131,10 @@ class OcorrenciaCustomView extends OcorrenciaView {
                                     Os chamados antigos foram preservados em uma nova estrutura, 
                                     a responsividade foi adicionada e muitas falhas de segurança foram sanadas. </p>
                   </div>
+
             	        
-                  <div class="p-4">
-                    <h4 class="font-italic">Archives</h4>
+                <div class="p-4">
+                    <h4 class="font-italic">Arquivos</h4>
                     <ol class="list-unstyled mb-0">
                       <li><a href="#">March 2014</a></li>
                       <li><a href="#">February 2014</a></li>
@@ -148,12 +152,17 @@ class OcorrenciaCustomView extends OcorrenciaView {
                   </div>
             	        
                   <div class="p-4">
-                    <h4 class="font-italic">Elsewhere</h4>
-                    <ol class="list-unstyled">
-                      <li><a href="#">GitHub</a></li>
-                      <li><a href="#">Twitter</a></li>
-                      <li><a href="#">Facebook</a></li>
-                    </ol>
+                     
+                        <p>
+                          <a class="btn btn-primary" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+                             Editar Filtros
+                          </a>
+                        </p>
+                        <div class="collapse" id="collapseExample">
+                          <div class="card card-body">
+                            Esta funcionalidade está em desenvolvimento
+                          </div>
+                        </div>
                   </div>
                 </aside><!-- /.blog-sidebar -->
                 
