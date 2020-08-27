@@ -22,7 +22,7 @@ class OcorrenciaCustomView extends OcorrenciaView {
         <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12">
             <div class="row">
                 <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
-                    <label for="select-demanda">Item de Ocorrência*</label>
+                    <label for="select-demanda">Serviço*</label>
                 </div>
                 <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
                     <select id="select-item-ocorrencia-comum" name="item_ocorrencia" required>
@@ -108,20 +108,16 @@ class OcorrenciaCustomView extends OcorrenciaView {
                     <h3 class="pb-4 mb-4 font-italic border-bottom">
                         Lista de Ocorrências
                     </h3>
-
-
-
-
-
+                <div class="panel panel-info">
                     <div class="list-group">';
         
         foreach($lista as $elemento){
             echo '
-                        <a href="?pagina=ocorrencia&selecionar='.$elemento->getId().'" class="list-group-item list-group-item-action">'.$elemento->getId().' - '.$elemento->getServico()->getNome().'</a>';
+                        <a href="?pagina=ocorrencia&selecionar='.$elemento->getId().'" class="list-group-item active">'.$elemento->getId().' - '.$elemento->getServico()->getNome().'</a>';
             
         }
         
-        echo '
+        echo '          </div>
                     </div>
                 </div>
                 <aside class="col-md-4 blog-sidebar">

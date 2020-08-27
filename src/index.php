@@ -63,6 +63,7 @@ spl_autoload_register('autoload');
 <!-- Bootstrap CSS -->
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
 <link rel="stylesheet" type="text/css" href="css/style.css" />
+<link rel="stylesheet" type="text/css" href="css/list.css" />
 </head>
 <body>
 	<!--     Barra do Governo -->
