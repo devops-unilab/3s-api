@@ -6,7 +6,7 @@
  *
  */
 class OcorrenciaView {
-    public function mostraFormInserir($listaAreaResponsavel, $listaServico) {
+    public function mostraFormInserir($listaAreaResponsavel, $listaServico, $listaUsuarioCliente) {
 		echo '
 <!-- Button trigger modal -->
 <button type="button" class="btn btn-primary m-3" data-toggle="modal" data-target="#modalAddOcorrencia">
@@ -35,11 +35,6 @@ class OcorrenciaView {
                                         <div class="form-group">
                                             <label for="id_local">Id Local</label>
                                             <input type="number" class="form-control"  name="id_local" id="id_local" placeholder="Id Local">
-                                        </div>
-
-                                        <div class="form-group">
-                                            <label for="id_usuario_cliente">Id Usuario Cliente</label>
-                                            <input type="number" class="form-control"  name="id_usuario_cliente" id="id_usuario_cliente" placeholder="Id Usuario Cliente">
                                         </div>
 
                                         <div class="form-group">
@@ -135,6 +130,18 @@ class OcorrenciaView {
         echo '
                                           </select>
                 						</div>
+                                        <div class="form-group">
+                                          <label for="usuario_cliente">Usuario Cliente</label>
+                						  <select class="form-control" id="usuario_cliente" name="usuario_cliente">
+                                            <option value="">Selecione o Usuario Cliente</option>';
+                                                
+        foreach( $listaUsuarioCliente as $elemento){
+            echo '<option value="'.$elemento->getId().'">'.$elemento.'</option>';
+        }
+            
+        echo '
+                                          </select>
+                						</div>
 
 						              </form>
 
@@ -177,10 +184,11 @@ class OcorrenciaView {
 					<tr>
 						<th>Id</th>
 						<th>Id Local</th>
-						<th>Id Usuario Cliente</th>
 						<th>Descricao</th>
+						<th>Campus</th>
 						<th>Area Responsavel</th>
 						<th>Servico</th>
+						<th>Usuario Cliente</th>
                         <th>Ações</th>
 					</tr>
 				</thead>
@@ -188,10 +196,11 @@ class OcorrenciaView {
 					<tr>
                         <th>Id</th>
                         <th>Id Local</th>
-                        <th>Id Usuario Cliente</th>
                         <th>Descricao</th>
+                        <th>Campus</th>
 						<th>Area Responsavel</th>
 						<th>Servico</th>
+						<th>Usuario Cliente</th>
                         <th>Ações</th>
 					</tr>
 				</tfoot>
@@ -201,10 +210,11 @@ class OcorrenciaView {
                 echo '<tr>';
                 echo '<td>'.$elemento->getId().'</td>';
                 echo '<td>'.$elemento->getIdLocal().'</td>';
-                echo '<td>'.$elemento->getIdUsuarioCliente().'</td>';
                 echo '<td>'.$elemento->getDescricao().'</td>';
+                echo '<td>'.$elemento->getCampus().'</td>';
                 echo '<td>'.$elemento->getAreaResponsavel().'</td>';
                 echo '<td>'.$elemento->getServico().'</td>';
+                echo '<td>'.$elemento->getUsuarioCliente().'</td>';
                 echo '<td>
                         <a href="?pagina=ocorrencia&selecionar='.$elemento->getId().'" class="btn btn-info text-white">Selecionar</a>
                         <a href="?pagina=ocorrencia&editar='.$elemento->getId().'" class="btn btn-success text-white">Editar</a>
@@ -233,15 +243,11 @@ class OcorrenciaView {
         public function mostrarSelecionado(Ocorrencia $ocorrencia){
             echo '
             
-	<div class="card o-hidden border-0 shadow-lg my-5">
+
         <div class="card mb-4">
-            <div class="card-header">
-                  Ocorrencia selecionado
-            </div>
             <div class="card-body">
                 Id: '.$ocorrencia->getId().'<br>
                 Id Local: '.$ocorrencia->getIdLocal().'<br>
-                Id Usuario Cliente: '.$ocorrencia->getIdUsuarioCliente().'<br>
                 Descricao: '.$ocorrencia->getDescricao().'<br>
                 Campus: '.$ocorrencia->getCampus().'<br>
                 Patrimonio: '.$ocorrencia->getPatrimonio().'<br>
@@ -258,10 +264,11 @@ class OcorrenciaView {
                 Local Sala: '.$ocorrencia->getLocalSala().'<br>
                 Area Responsavel: '.$ocorrencia->getAreaResponsavel().'<br>
                 Servico: '.$ocorrencia->getServico().'<br>
+                Usuario Cliente: '.$ocorrencia->getUsuarioCliente().'<br>
             
             </div>
         </div>
-    </div>
+
             
             
 ';
@@ -269,7 +276,7 @@ class OcorrenciaView {
 
 
             
-	public function mostraFormEditar($listaAreaResponsavel, $listaServico, Ocorrencia $selecionado) {
+	public function mostraFormEditar($listaAreaResponsavel, $listaServico, $listaUsuarioCliente, Ocorrencia $selecionado) {
 		echo '
 	    
 	    
@@ -287,10 +294,6 @@ class OcorrenciaView {
                                         <div class="form-group">
                                             <label for="id_local">Id Local</label>
                                             <input type="number" class="form-control" value="'.$selecionado->getIdLocal().'"  name="id_local" id="id_local" placeholder="Id Local">
-                						</div>
-                                        <div class="form-group">
-                                            <label for="id_usuario_cliente">Id Usuario Cliente</label>
-                                            <input type="number" class="form-control" value="'.$selecionado->getIdUsuarioCliente().'"  name="id_usuario_cliente" id="id_usuario_cliente" placeholder="Id Usuario Cliente">
                 						</div>
                                         <div class="form-group">
                                             <label for="descricao">Descricao</label>
@@ -366,6 +369,18 @@ class OcorrenciaView {
                                             <option value="">Selecione o Servico</option>';
                                                 
         foreach( $listaServico as $elemento){
+            echo '<option value="'.$elemento->getId().'">'.$elemento.'</option>';
+        }
+            
+        echo '
+                                          </select>
+                						</div>
+                                        <div class="form-group">
+                                          <label for="usuario_cliente">Usuario Cliente</label>
+                						  <select class="form-control" id="usuario_cliente" name="usuario_cliente">
+                                            <option value="">Selecione o Usuario Cliente</option>';
+                                                
+        foreach( $listaUsuarioCliente as $elemento){
             echo '<option value="'.$elemento->getId().'">'.$elemento.'</option>';
         }
             

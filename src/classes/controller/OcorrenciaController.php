@@ -62,10 +62,13 @@ class OcorrenciaController {
             $servicoDao = new ServicoDAO($this->dao->getConexao());
             $listaServico = $servicoDao->retornaLista();
 
-            $this->view->mostraFormInserir($listaAreaResponsavel, $listaServico);
+            $usuarioDao = new UsuarioDAO($this->dao->getConexao());
+            $listaUsuario = $usuarioDao->retornaLista();
+
+            $this->view->mostraFormInserir($listaAreaResponsavel, $listaServico, $listaUsuario);
 		    return;
 		}
-		if (! ( isset ( $_POST ['id_local'] ) && isset ( $_POST ['id_usuario_cliente'] ) && isset ( $_POST ['descricao'] ) && isset ( $_POST ['campus'] ) && isset ( $_POST ['patrimonio'] ) && isset ( $_POST ['ramal'] ) && isset ( $_POST ['local'] ) && isset ( $_POST ['status'] ) && isset ( $_POST ['solucao'] ) && isset ( $_POST ['prioridade'] ) && isset ( $_POST ['avaliacao'] ) && isset ( $_POST ['email'] ) && isset ( $_POST ['id_usuario_atendente'] ) && isset ( $_POST ['id_usuario_indicado'] ) && isset ( $_POST ['anexo'] ) && isset ( $_POST ['local_sala'] ) &&  isset($_POST ['area_responsavel']) &&  isset($_POST ['servico']))) {
+		if (! ( isset ( $_POST ['id_local'] ) && isset ( $_POST ['descricao'] ) && isset ( $_POST ['campus'] ) && isset ( $_POST ['patrimonio'] ) && isset ( $_POST ['ramal'] ) && isset ( $_POST ['local'] ) && isset ( $_POST ['status'] ) && isset ( $_POST ['solucao'] ) && isset ( $_POST ['prioridade'] ) && isset ( $_POST ['avaliacao'] ) && isset ( $_POST ['email'] ) && isset ( $_POST ['id_usuario_atendente'] ) && isset ( $_POST ['id_usuario_indicado'] ) && isset ( $_POST ['anexo'] ) && isset ( $_POST ['local_sala'] ) &&  isset($_POST ['area_responsavel']) &&  isset($_POST ['servico']) &&  isset($_POST ['usuario_cliente']))) {
 			echo '
                 <div class="alert alert-danger" role="alert">
                     Falha ao cadastrar. Algum campo deve estar faltando. 
@@ -77,7 +80,6 @@ class OcorrenciaController {
             
 		$ocorrencia = new Ocorrencia ();
 		$ocorrencia->setIdLocal ( $_POST ['id_local'] );
-		$ocorrencia->setIdUsuarioCliente ( $_POST ['id_usuario_cliente'] );
 		$ocorrencia->setDescricao ( $_POST ['descricao'] );
 		$ocorrencia->setCampus ( $_POST ['campus'] );
 		$ocorrencia->setPatrimonio ( $_POST ['patrimonio'] );
@@ -94,6 +96,7 @@ class OcorrenciaController {
 		$ocorrencia->setLocalSala ( $_POST ['local_sala'] );
 		$ocorrencia->getAreaResponsavel()->setId ( $_POST ['area_responsavel'] );
 		$ocorrencia->getServico()->setId ( $_POST ['servico'] );
+		$ocorrencia->getUsuarioCliente()->setId ( $_POST ['usuario_cliente'] );
             
 		if ($this->dao->inserir ( $ocorrencia ))
         {
@@ -134,17 +137,19 @@ class OcorrenciaController {
             $servicoDao = new ServicoDAO($this->dao->getConexao());
             $listaServico = $servicoDao->retornaLista();
 
-            $this->view->mostraFormEditar($listaAreaResponsavel, $listaServico, $selecionado);
+            $usuarioDao = new UsuarioDAO($this->dao->getConexao());
+            $listaUsuario = $usuarioDao->retornaLista();
+
+            $this->view->mostraFormEditar($listaAreaResponsavel, $listaServico, $listaUsuario, $selecionado);
             return;
         }
             
-		if (! ( isset ( $_POST ['id_local'] ) && isset ( $_POST ['id_usuario_cliente'] ) && isset ( $_POST ['descricao'] ) && isset ( $_POST ['campus'] ) && isset ( $_POST ['patrimonio'] ) && isset ( $_POST ['ramal'] ) && isset ( $_POST ['local'] ) && isset ( $_POST ['status'] ) && isset ( $_POST ['solucao'] ) && isset ( $_POST ['prioridade'] ) && isset ( $_POST ['avaliacao'] ) && isset ( $_POST ['email'] ) && isset ( $_POST ['id_usuario_atendente'] ) && isset ( $_POST ['id_usuario_indicado'] ) && isset ( $_POST ['anexo'] ) && isset ( $_POST ['local_sala'] ) &&  isset($_POST ['area_responsavel']) &&  isset($_POST ['servico']))) {
+		if (! ( isset ( $_POST ['id_local'] ) && isset ( $_POST ['descricao'] ) && isset ( $_POST ['campus'] ) && isset ( $_POST ['patrimonio'] ) && isset ( $_POST ['ramal'] ) && isset ( $_POST ['local'] ) && isset ( $_POST ['status'] ) && isset ( $_POST ['solucao'] ) && isset ( $_POST ['prioridade'] ) && isset ( $_POST ['avaliacao'] ) && isset ( $_POST ['email'] ) && isset ( $_POST ['id_usuario_atendente'] ) && isset ( $_POST ['id_usuario_indicado'] ) && isset ( $_POST ['anexo'] ) && isset ( $_POST ['local_sala'] ) &&  isset($_POST ['area_responsavel']) &&  isset($_POST ['servico']) &&  isset($_POST ['usuario_cliente']))) {
 			echo "Incompleto";
 			return;
 		}
 
 		$selecionado->setIdLocal ( $_POST ['id_local'] );
-		$selecionado->setIdUsuarioCliente ( $_POST ['id_usuario_cliente'] );
 		$selecionado->setDescricao ( $_POST ['descricao'] );
 		$selecionado->setCampus ( $_POST ['campus'] );
 		$selecionado->setPatrimonio ( $_POST ['patrimonio'] );
@@ -268,7 +273,6 @@ class OcorrenciaController {
             $pesquisado = array(
 					'id' => $pesquisado->getId (), 
 					'idLocal' => $pesquisado->getIdLocal (), 
-					'idUsuarioCliente' => $pesquisado->getIdUsuarioCliente (), 
 					'descricao' => $pesquisado->getDescricao (), 
 					'campus' => $pesquisado->getCampus (), 
 					'patrimonio' => $pesquisado->getPatrimonio (), 
@@ -295,7 +299,6 @@ class OcorrenciaController {
 			$listagem ['lista'] [] = array (
 					'id' => $linha->getId (), 
 					'idLocal' => $linha->getIdLocal (), 
-					'idUsuarioCliente' => $linha->getIdUsuarioCliente (), 
 					'descricao' => $linha->getDescricao (), 
 					'campus' => $linha->getCampus (), 
 					'patrimonio' => $linha->getPatrimonio (), 
@@ -407,11 +410,6 @@ class OcorrenciaController {
         }
                     
 
-        if (isset($jsonBody['id_usuario_cliente'])) {
-            $pesquisado->setIdUsuarioCliente($jsonBody['id_usuario_cliente']);
-        }
-                    
-
         if (isset($jsonBody['descricao'])) {
             $pesquisado->setDescricao($jsonBody['descricao']);
         }
@@ -509,7 +507,7 @@ class OcorrenciaController {
         $body = file_get_contents('php://input');
         $jsonBody = json_decode($body, true);
 
-        if (! ( isset ( $jsonBody ['idLocal'] ) && isset ( $jsonBody ['idUsuarioCliente'] ) && isset ( $jsonBody ['descricao'] ) && isset ( $jsonBody ['campus'] ) && isset ( $jsonBody ['patrimonio'] ) && isset ( $jsonBody ['ramal'] ) && isset ( $jsonBody ['local'] ) && isset ( $jsonBody ['status'] ) && isset ( $jsonBody ['solucao'] ) && isset ( $jsonBody ['prioridade'] ) && isset ( $jsonBody ['avaliacao'] ) && isset ( $jsonBody ['email'] ) && isset ( $jsonBody ['idUsuarioAtendente'] ) && isset ( $jsonBody ['idUsuarioIndicado'] ) && isset ( $jsonBody ['anexo'] ) && isset ( $jsonBody ['localSala'] ) &&  isset($_POST ['area_responsavel']) &&  isset($_POST ['servico']))) {
+        if (! ( isset ( $jsonBody ['idLocal'] ) && isset ( $jsonBody ['descricao'] ) && isset ( $jsonBody ['campus'] ) && isset ( $jsonBody ['patrimonio'] ) && isset ( $jsonBody ['ramal'] ) && isset ( $jsonBody ['local'] ) && isset ( $jsonBody ['status'] ) && isset ( $jsonBody ['solucao'] ) && isset ( $jsonBody ['prioridade'] ) && isset ( $jsonBody ['avaliacao'] ) && isset ( $jsonBody ['email'] ) && isset ( $jsonBody ['idUsuarioAtendente'] ) && isset ( $jsonBody ['idUsuarioIndicado'] ) && isset ( $jsonBody ['anexo'] ) && isset ( $jsonBody ['localSala'] ) &&  isset($_POST ['area_responsavel']) &&  isset($_POST ['servico']) &&  isset($_POST ['usuario_cliente']))) {
 			echo "Incompleto";
 			return;
 		}
@@ -518,8 +516,6 @@ class OcorrenciaController {
         $adicionado->setId($jsonBody['id']);
 
         $adicionado->setIdLocal($jsonBody['id_local']);
-
-        $adicionado->setIdUsuarioCliente($jsonBody['id_usuario_cliente']);
 
         $adicionado->setDescricao($jsonBody['descricao']);
 

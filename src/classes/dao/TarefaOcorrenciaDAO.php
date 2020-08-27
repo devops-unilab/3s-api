@@ -111,7 +111,6 @@ class TarefaOcorrenciaDAO extends DAO {
         tarefa_ocorrencia.data_inclusao, 
         ocorrencia.id as id_ocorrencia_ocorrencia, 
         ocorrencia.id_local as id_local_ocorrencia_ocorrencia, 
-        ocorrencia.id_usuario_cliente as id_usuario_cliente_ocorrencia_ocorrencia, 
         ocorrencia.descricao as descricao_ocorrencia_ocorrencia, 
         ocorrencia.campus as campus_ocorrencia_ocorrencia, 
         ocorrencia.patrimonio as patrimonio_ocorrencia_ocorrencia, 
@@ -154,7 +153,6 @@ class TarefaOcorrenciaDAO extends DAO {
                 $tarefaOcorrencia->setDataInclusao( $linha ['data_inclusao'] );
                 $tarefaOcorrencia->getOcorrencia()->setId( $linha ['id_ocorrencia_ocorrencia'] );
                 $tarefaOcorrencia->getOcorrencia()->setIdLocal( $linha ['id_local_ocorrencia_ocorrencia'] );
-                $tarefaOcorrencia->getOcorrencia()->setIdUsuarioCliente( $linha ['id_usuario_cliente_ocorrencia_ocorrencia'] );
                 $tarefaOcorrencia->getOcorrencia()->setDescricao( $linha ['descricao_ocorrencia_ocorrencia'] );
                 $tarefaOcorrencia->getOcorrencia()->setCampus( $linha ['campus_ocorrencia_ocorrencia'] );
                 $tarefaOcorrencia->getOcorrencia()->setPatrimonio( $linha ['patrimonio_ocorrencia_ocorrencia'] );
@@ -197,7 +195,6 @@ class TarefaOcorrenciaDAO extends DAO {
         tarefa_ocorrencia.data_inclusao, 
         ocorrencia.id as id_ocorrencia_ocorrencia, 
         ocorrencia.id_local as id_local_ocorrencia_ocorrencia, 
-        ocorrencia.id_usuario_cliente as id_usuario_cliente_ocorrencia_ocorrencia, 
         ocorrencia.descricao as descricao_ocorrencia_ocorrencia, 
         ocorrencia.campus as campus_ocorrencia_ocorrencia, 
         ocorrencia.patrimonio as patrimonio_ocorrencia_ocorrencia, 
@@ -236,7 +233,6 @@ class TarefaOcorrenciaDAO extends DAO {
                 $tarefaOcorrencia->setDataInclusao( $linha ['data_inclusao'] );
                 $tarefaOcorrencia->getOcorrencia()->setId( $linha ['id_ocorrencia_ocorrencia'] );
                 $tarefaOcorrencia->getOcorrencia()->setIdLocal( $linha ['id_local_ocorrencia_ocorrencia'] );
-                $tarefaOcorrencia->getOcorrencia()->setIdUsuarioCliente( $linha ['id_usuario_cliente_ocorrencia_ocorrencia'] );
                 $tarefaOcorrencia->getOcorrencia()->setDescricao( $linha ['descricao_ocorrencia_ocorrencia'] );
                 $tarefaOcorrencia->getOcorrencia()->setCampus( $linha ['campus_ocorrencia_ocorrencia'] );
                 $tarefaOcorrencia->getOcorrencia()->setPatrimonio( $linha ['patrimonio_ocorrencia_ocorrencia'] );
@@ -280,7 +276,6 @@ class TarefaOcorrenciaDAO extends DAO {
         tarefa_ocorrencia.data_inclusao, 
         ocorrencia.id as id_ocorrencia_ocorrencia, 
         ocorrencia.id_local as id_local_ocorrencia_ocorrencia, 
-        ocorrencia.id_usuario_cliente as id_usuario_cliente_ocorrencia_ocorrencia, 
         ocorrencia.descricao as descricao_ocorrencia_ocorrencia, 
         ocorrencia.campus as campus_ocorrencia_ocorrencia, 
         ocorrencia.patrimonio as patrimonio_ocorrencia_ocorrencia, 
@@ -319,7 +314,6 @@ class TarefaOcorrenciaDAO extends DAO {
                 $tarefaOcorrencia->setDataInclusao( $linha ['data_inclusao'] );
                 $tarefaOcorrencia->getOcorrencia()->setId( $linha ['id_ocorrencia_ocorrencia'] );
                 $tarefaOcorrencia->getOcorrencia()->setIdLocal( $linha ['id_local_ocorrencia_ocorrencia'] );
-                $tarefaOcorrencia->getOcorrencia()->setIdUsuarioCliente( $linha ['id_usuario_cliente_ocorrencia_ocorrencia'] );
                 $tarefaOcorrencia->getOcorrencia()->setDescricao( $linha ['descricao_ocorrencia_ocorrencia'] );
                 $tarefaOcorrencia->getOcorrencia()->setCampus( $linha ['campus_ocorrencia_ocorrencia'] );
                 $tarefaOcorrencia->getOcorrencia()->setPatrimonio( $linha ['patrimonio_ocorrencia_ocorrencia'] );
@@ -363,7 +357,6 @@ class TarefaOcorrenciaDAO extends DAO {
         tarefa_ocorrencia.data_inclusao, 
         ocorrencia.id as id_ocorrencia_ocorrencia, 
         ocorrencia.id_local as id_local_ocorrencia_ocorrencia, 
-        ocorrencia.id_usuario_cliente as id_usuario_cliente_ocorrencia_ocorrencia, 
         ocorrencia.descricao as descricao_ocorrencia_ocorrencia, 
         ocorrencia.campus as campus_ocorrencia_ocorrencia, 
         ocorrencia.patrimonio as patrimonio_ocorrencia_ocorrencia, 
@@ -402,7 +395,6 @@ class TarefaOcorrenciaDAO extends DAO {
                 $tarefaOcorrencia->setDataInclusao( $linha ['data_inclusao'] );
                 $tarefaOcorrencia->getOcorrencia()->setId( $linha ['id_ocorrencia_ocorrencia'] );
                 $tarefaOcorrencia->getOcorrencia()->setIdLocal( $linha ['id_local_ocorrencia_ocorrencia'] );
-                $tarefaOcorrencia->getOcorrencia()->setIdUsuarioCliente( $linha ['id_usuario_cliente_ocorrencia_ocorrencia'] );
                 $tarefaOcorrencia->getOcorrencia()->setDescricao( $linha ['descricao_ocorrencia_ocorrencia'] );
                 $tarefaOcorrencia->getOcorrencia()->setCampus( $linha ['campus_ocorrencia_ocorrencia'] );
                 $tarefaOcorrencia->getOcorrencia()->setPatrimonio( $linha ['patrimonio_ocorrencia_ocorrencia'] );
@@ -445,7 +437,6 @@ class TarefaOcorrenciaDAO extends DAO {
         tarefa_ocorrencia.data_inclusao, 
         ocorrencia.id as id_ocorrencia_ocorrencia, 
         ocorrencia.id_local as id_local_ocorrencia_ocorrencia, 
-        ocorrencia.id_usuario_cliente as id_usuario_cliente_ocorrencia_ocorrencia, 
         ocorrencia.descricao as descricao_ocorrencia_ocorrencia, 
         ocorrencia.campus as campus_ocorrencia_ocorrencia, 
         ocorrencia.patrimonio as patrimonio_ocorrencia_ocorrencia, 
@@ -488,7 +479,6 @@ class TarefaOcorrenciaDAO extends DAO {
                 $tarefaOcorrencia->setDataInclusao( $linha ['data_inclusao'] );
                 $tarefaOcorrencia->getOcorrencia()->setId( $linha ['id_ocorrencia_ocorrencia'] );
                 $tarefaOcorrencia->getOcorrencia()->setIdLocal( $linha ['id_local_ocorrencia_ocorrencia'] );
-                $tarefaOcorrencia->getOcorrencia()->setIdUsuarioCliente( $linha ['id_usuario_cliente_ocorrencia_ocorrencia'] );
                 $tarefaOcorrencia->getOcorrencia()->setDescricao( $linha ['descricao_ocorrencia_ocorrencia'] );
                 $tarefaOcorrencia->getOcorrencia()->setCampus( $linha ['campus_ocorrencia_ocorrencia'] );
                 $tarefaOcorrencia->getOcorrencia()->setPatrimonio( $linha ['patrimonio_ocorrencia_ocorrencia'] );
@@ -528,7 +518,6 @@ class TarefaOcorrenciaDAO extends DAO {
         tarefa_ocorrencia.data_inclusao, 
         ocorrencia.id as id_ocorrencia_ocorrencia, 
         ocorrencia.id_local as id_local_ocorrencia_ocorrencia, 
-        ocorrencia.id_usuario_cliente as id_usuario_cliente_ocorrencia_ocorrencia, 
         ocorrencia.descricao as descricao_ocorrencia_ocorrencia, 
         ocorrencia.campus as campus_ocorrencia_ocorrencia, 
         ocorrencia.patrimonio as patrimonio_ocorrencia_ocorrencia, 
@@ -571,7 +560,6 @@ class TarefaOcorrenciaDAO extends DAO {
                 $tarefaOcorrencia->setDataInclusao( $linha ['data_inclusao'] );
                 $tarefaOcorrencia->getOcorrencia()->setId( $linha ['id_ocorrencia_ocorrencia'] );
                 $tarefaOcorrencia->getOcorrencia()->setIdLocal( $linha ['id_local_ocorrencia_ocorrencia'] );
-                $tarefaOcorrencia->getOcorrencia()->setIdUsuarioCliente( $linha ['id_usuario_cliente_ocorrencia_ocorrencia'] );
                 $tarefaOcorrencia->getOcorrencia()->setDescricao( $linha ['descricao_ocorrencia_ocorrencia'] );
                 $tarefaOcorrencia->getOcorrencia()->setCampus( $linha ['campus_ocorrencia_ocorrencia'] );
                 $tarefaOcorrencia->getOcorrencia()->setPatrimonio( $linha ['patrimonio_ocorrencia_ocorrencia'] );
@@ -611,7 +599,6 @@ class TarefaOcorrenciaDAO extends DAO {
         tarefa_ocorrencia.data_inclusao, 
         ocorrencia.id as id_ocorrencia_ocorrencia, 
         ocorrencia.id_local as id_local_ocorrencia_ocorrencia, 
-        ocorrencia.id_usuario_cliente as id_usuario_cliente_ocorrencia_ocorrencia, 
         ocorrencia.descricao as descricao_ocorrencia_ocorrencia, 
         ocorrencia.campus as campus_ocorrencia_ocorrencia, 
         ocorrencia.patrimonio as patrimonio_ocorrencia_ocorrencia, 
@@ -654,7 +641,6 @@ class TarefaOcorrenciaDAO extends DAO {
                 $tarefaOcorrencia->setDataInclusao( $linha ['data_inclusao'] );
                 $tarefaOcorrencia->getOcorrencia()->setId( $linha ['id_ocorrencia_ocorrencia'] );
                 $tarefaOcorrencia->getOcorrencia()->setIdLocal( $linha ['id_local_ocorrencia_ocorrencia'] );
-                $tarefaOcorrencia->getOcorrencia()->setIdUsuarioCliente( $linha ['id_usuario_cliente_ocorrencia_ocorrencia'] );
                 $tarefaOcorrencia->getOcorrencia()->setDescricao( $linha ['descricao_ocorrencia_ocorrencia'] );
                 $tarefaOcorrencia->getOcorrencia()->setCampus( $linha ['campus_ocorrencia_ocorrencia'] );
                 $tarefaOcorrencia->getOcorrencia()->setPatrimonio( $linha ['patrimonio_ocorrencia_ocorrencia'] );

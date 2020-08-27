@@ -119,7 +119,6 @@ class MensagemForumDAO extends DAO {
         mensagem_forum.data_envio, 
         ocorrencia.id as id_ocorrencia_ocorrencia, 
         ocorrencia.id_local as id_local_ocorrencia_ocorrencia, 
-        ocorrencia.id_usuario_cliente as id_usuario_cliente_ocorrencia_ocorrencia, 
         ocorrencia.descricao as descricao_ocorrencia_ocorrencia, 
         ocorrencia.campus as campus_ocorrencia_ocorrencia, 
         ocorrencia.patrimonio as patrimonio_ocorrencia_ocorrencia, 
@@ -163,7 +162,6 @@ class MensagemForumDAO extends DAO {
                 $mensagemForum->setDataEnvio( $linha ['data_envio'] );
                 $mensagemForum->getOcorrencia()->setId( $linha ['id_ocorrencia_ocorrencia'] );
                 $mensagemForum->getOcorrencia()->setIdLocal( $linha ['id_local_ocorrencia_ocorrencia'] );
-                $mensagemForum->getOcorrencia()->setIdUsuarioCliente( $linha ['id_usuario_cliente_ocorrencia_ocorrencia'] );
                 $mensagemForum->getOcorrencia()->setDescricao( $linha ['descricao_ocorrencia_ocorrencia'] );
                 $mensagemForum->getOcorrencia()->setCampus( $linha ['campus_ocorrencia_ocorrencia'] );
                 $mensagemForum->getOcorrencia()->setPatrimonio( $linha ['patrimonio_ocorrencia_ocorrencia'] );
@@ -207,7 +205,6 @@ class MensagemForumDAO extends DAO {
         mensagem_forum.data_envio, 
         ocorrencia.id as id_ocorrencia_ocorrencia, 
         ocorrencia.id_local as id_local_ocorrencia_ocorrencia, 
-        ocorrencia.id_usuario_cliente as id_usuario_cliente_ocorrencia_ocorrencia, 
         ocorrencia.descricao as descricao_ocorrencia_ocorrencia, 
         ocorrencia.campus as campus_ocorrencia_ocorrencia, 
         ocorrencia.patrimonio as patrimonio_ocorrencia_ocorrencia, 
@@ -247,7 +244,6 @@ class MensagemForumDAO extends DAO {
                 $mensagemForum->setDataEnvio( $linha ['data_envio'] );
                 $mensagemForum->getOcorrencia()->setId( $linha ['id_ocorrencia_ocorrencia'] );
                 $mensagemForum->getOcorrencia()->setIdLocal( $linha ['id_local_ocorrencia_ocorrencia'] );
-                $mensagemForum->getOcorrencia()->setIdUsuarioCliente( $linha ['id_usuario_cliente_ocorrencia_ocorrencia'] );
                 $mensagemForum->getOcorrencia()->setDescricao( $linha ['descricao_ocorrencia_ocorrencia'] );
                 $mensagemForum->getOcorrencia()->setCampus( $linha ['campus_ocorrencia_ocorrencia'] );
                 $mensagemForum->getOcorrencia()->setPatrimonio( $linha ['patrimonio_ocorrencia_ocorrencia'] );
@@ -292,7 +288,6 @@ class MensagemForumDAO extends DAO {
         mensagem_forum.data_envio, 
         ocorrencia.id as id_ocorrencia_ocorrencia, 
         ocorrencia.id_local as id_local_ocorrencia_ocorrencia, 
-        ocorrencia.id_usuario_cliente as id_usuario_cliente_ocorrencia_ocorrencia, 
         ocorrencia.descricao as descricao_ocorrencia_ocorrencia, 
         ocorrencia.campus as campus_ocorrencia_ocorrencia, 
         ocorrencia.patrimonio as patrimonio_ocorrencia_ocorrencia, 
@@ -332,7 +327,6 @@ class MensagemForumDAO extends DAO {
                 $mensagemForum->setDataEnvio( $linha ['data_envio'] );
                 $mensagemForum->getOcorrencia()->setId( $linha ['id_ocorrencia_ocorrencia'] );
                 $mensagemForum->getOcorrencia()->setIdLocal( $linha ['id_local_ocorrencia_ocorrencia'] );
-                $mensagemForum->getOcorrencia()->setIdUsuarioCliente( $linha ['id_usuario_cliente_ocorrencia_ocorrencia'] );
                 $mensagemForum->getOcorrencia()->setDescricao( $linha ['descricao_ocorrencia_ocorrencia'] );
                 $mensagemForum->getOcorrencia()->setCampus( $linha ['campus_ocorrencia_ocorrencia'] );
                 $mensagemForum->getOcorrencia()->setPatrimonio( $linha ['patrimonio_ocorrencia_ocorrencia'] );
@@ -377,7 +371,6 @@ class MensagemForumDAO extends DAO {
         mensagem_forum.data_envio, 
         ocorrencia.id as id_ocorrencia_ocorrencia, 
         ocorrencia.id_local as id_local_ocorrencia_ocorrencia, 
-        ocorrencia.id_usuario_cliente as id_usuario_cliente_ocorrencia_ocorrencia, 
         ocorrencia.descricao as descricao_ocorrencia_ocorrencia, 
         ocorrencia.campus as campus_ocorrencia_ocorrencia, 
         ocorrencia.patrimonio as patrimonio_ocorrencia_ocorrencia, 
@@ -417,7 +410,6 @@ class MensagemForumDAO extends DAO {
                 $mensagemForum->setDataEnvio( $linha ['data_envio'] );
                 $mensagemForum->getOcorrencia()->setId( $linha ['id_ocorrencia_ocorrencia'] );
                 $mensagemForum->getOcorrencia()->setIdLocal( $linha ['id_local_ocorrencia_ocorrencia'] );
-                $mensagemForum->getOcorrencia()->setIdUsuarioCliente( $linha ['id_usuario_cliente_ocorrencia_ocorrencia'] );
                 $mensagemForum->getOcorrencia()->setDescricao( $linha ['descricao_ocorrencia_ocorrencia'] );
                 $mensagemForum->getOcorrencia()->setCampus( $linha ['campus_ocorrencia_ocorrencia'] );
                 $mensagemForum->getOcorrencia()->setPatrimonio( $linha ['patrimonio_ocorrencia_ocorrencia'] );
@@ -462,7 +454,6 @@ class MensagemForumDAO extends DAO {
         mensagem_forum.data_envio, 
         ocorrencia.id as id_ocorrencia_ocorrencia, 
         ocorrencia.id_local as id_local_ocorrencia_ocorrencia, 
-        ocorrencia.id_usuario_cliente as id_usuario_cliente_ocorrencia_ocorrencia, 
         ocorrencia.descricao as descricao_ocorrencia_ocorrencia, 
         ocorrencia.campus as campus_ocorrencia_ocorrencia, 
         ocorrencia.patrimonio as patrimonio_ocorrencia_ocorrencia, 
@@ -502,7 +493,6 @@ class MensagemForumDAO extends DAO {
                 $mensagemForum->setDataEnvio( $linha ['data_envio'] );
                 $mensagemForum->getOcorrencia()->setId( $linha ['id_ocorrencia_ocorrencia'] );
                 $mensagemForum->getOcorrencia()->setIdLocal( $linha ['id_local_ocorrencia_ocorrencia'] );
-                $mensagemForum->getOcorrencia()->setIdUsuarioCliente( $linha ['id_usuario_cliente_ocorrencia_ocorrencia'] );
                 $mensagemForum->getOcorrencia()->setDescricao( $linha ['descricao_ocorrencia_ocorrencia'] );
                 $mensagemForum->getOcorrencia()->setCampus( $linha ['campus_ocorrencia_ocorrencia'] );
                 $mensagemForum->getOcorrencia()->setPatrimonio( $linha ['patrimonio_ocorrencia_ocorrencia'] );
@@ -546,7 +536,6 @@ class MensagemForumDAO extends DAO {
         mensagem_forum.data_envio, 
         ocorrencia.id as id_ocorrencia_ocorrencia, 
         ocorrencia.id_local as id_local_ocorrencia_ocorrencia, 
-        ocorrencia.id_usuario_cliente as id_usuario_cliente_ocorrencia_ocorrencia, 
         ocorrencia.descricao as descricao_ocorrencia_ocorrencia, 
         ocorrencia.campus as campus_ocorrencia_ocorrencia, 
         ocorrencia.patrimonio as patrimonio_ocorrencia_ocorrencia, 
@@ -590,7 +579,6 @@ class MensagemForumDAO extends DAO {
                 $mensagemForum->setDataEnvio( $linha ['data_envio'] );
                 $mensagemForum->getOcorrencia()->setId( $linha ['id_ocorrencia_ocorrencia'] );
                 $mensagemForum->getOcorrencia()->setIdLocal( $linha ['id_local_ocorrencia_ocorrencia'] );
-                $mensagemForum->getOcorrencia()->setIdUsuarioCliente( $linha ['id_usuario_cliente_ocorrencia_ocorrencia'] );
                 $mensagemForum->getOcorrencia()->setDescricao( $linha ['descricao_ocorrencia_ocorrencia'] );
                 $mensagemForum->getOcorrencia()->setCampus( $linha ['campus_ocorrencia_ocorrencia'] );
                 $mensagemForum->getOcorrencia()->setPatrimonio( $linha ['patrimonio_ocorrencia_ocorrencia'] );
@@ -631,7 +619,6 @@ class MensagemForumDAO extends DAO {
         mensagem_forum.data_envio, 
         ocorrencia.id as id_ocorrencia_ocorrencia, 
         ocorrencia.id_local as id_local_ocorrencia_ocorrencia, 
-        ocorrencia.id_usuario_cliente as id_usuario_cliente_ocorrencia_ocorrencia, 
         ocorrencia.descricao as descricao_ocorrencia_ocorrencia, 
         ocorrencia.campus as campus_ocorrencia_ocorrencia, 
         ocorrencia.patrimonio as patrimonio_ocorrencia_ocorrencia, 
@@ -675,7 +662,6 @@ class MensagemForumDAO extends DAO {
                 $mensagemForum->setDataEnvio( $linha ['data_envio'] );
                 $mensagemForum->getOcorrencia()->setId( $linha ['id_ocorrencia_ocorrencia'] );
                 $mensagemForum->getOcorrencia()->setIdLocal( $linha ['id_local_ocorrencia_ocorrencia'] );
-                $mensagemForum->getOcorrencia()->setIdUsuarioCliente( $linha ['id_usuario_cliente_ocorrencia_ocorrencia'] );
                 $mensagemForum->getOcorrencia()->setDescricao( $linha ['descricao_ocorrencia_ocorrencia'] );
                 $mensagemForum->getOcorrencia()->setCampus( $linha ['campus_ocorrencia_ocorrencia'] );
                 $mensagemForum->getOcorrencia()->setPatrimonio( $linha ['patrimonio_ocorrencia_ocorrencia'] );
@@ -716,7 +702,6 @@ class MensagemForumDAO extends DAO {
         mensagem_forum.data_envio, 
         ocorrencia.id as id_ocorrencia_ocorrencia, 
         ocorrencia.id_local as id_local_ocorrencia_ocorrencia, 
-        ocorrencia.id_usuario_cliente as id_usuario_cliente_ocorrencia_ocorrencia, 
         ocorrencia.descricao as descricao_ocorrencia_ocorrencia, 
         ocorrencia.campus as campus_ocorrencia_ocorrencia, 
         ocorrencia.patrimonio as patrimonio_ocorrencia_ocorrencia, 
@@ -760,7 +745,6 @@ class MensagemForumDAO extends DAO {
                 $mensagemForum->setDataEnvio( $linha ['data_envio'] );
                 $mensagemForum->getOcorrencia()->setId( $linha ['id_ocorrencia_ocorrencia'] );
                 $mensagemForum->getOcorrencia()->setIdLocal( $linha ['id_local_ocorrencia_ocorrencia'] );
-                $mensagemForum->getOcorrencia()->setIdUsuarioCliente( $linha ['id_usuario_cliente_ocorrencia_ocorrencia'] );
                 $mensagemForum->getOcorrencia()->setDescricao( $linha ['descricao_ocorrencia_ocorrencia'] );
                 $mensagemForum->getOcorrencia()->setCampus( $linha ['campus_ocorrencia_ocorrencia'] );
                 $mensagemForum->getOcorrencia()->setPatrimonio( $linha ['patrimonio_ocorrencia_ocorrencia'] );
@@ -801,7 +785,6 @@ class MensagemForumDAO extends DAO {
         mensagem_forum.data_envio, 
         ocorrencia.id as id_ocorrencia_ocorrencia, 
         ocorrencia.id_local as id_local_ocorrencia_ocorrencia, 
-        ocorrencia.id_usuario_cliente as id_usuario_cliente_ocorrencia_ocorrencia, 
         ocorrencia.descricao as descricao_ocorrencia_ocorrencia, 
         ocorrencia.campus as campus_ocorrencia_ocorrencia, 
         ocorrencia.patrimonio as patrimonio_ocorrencia_ocorrencia, 
@@ -845,7 +828,6 @@ class MensagemForumDAO extends DAO {
                 $mensagemForum->setDataEnvio( $linha ['data_envio'] );
                 $mensagemForum->getOcorrencia()->setId( $linha ['id_ocorrencia_ocorrencia'] );
                 $mensagemForum->getOcorrencia()->setIdLocal( $linha ['id_local_ocorrencia_ocorrencia'] );
-                $mensagemForum->getOcorrencia()->setIdUsuarioCliente( $linha ['id_usuario_cliente_ocorrencia_ocorrencia'] );
                 $mensagemForum->getOcorrencia()->setDescricao( $linha ['descricao_ocorrencia_ocorrencia'] );
                 $mensagemForum->getOcorrencia()->setCampus( $linha ['campus_ocorrencia_ocorrencia'] );
                 $mensagemForum->getOcorrencia()->setPatrimonio( $linha ['patrimonio_ocorrencia_ocorrencia'] );

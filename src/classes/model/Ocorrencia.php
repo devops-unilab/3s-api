@@ -14,7 +14,7 @@ class Ocorrencia {
 	private $areaResponsavel;
 	private $servico;
 	private $idLocal;
-	private $idUsuarioCliente;
+	private $usuarioCliente;
 	private $descricao;
 	private $campus;
 	private $patrimonio;
@@ -33,6 +33,7 @@ class Ocorrencia {
 
         $this->areaResponsavel = new AreaResponsavel();
         $this->servico = new Servico();
+        $this->usuarioCliente = new Usuario();
     }
 	public function setId($id) {
 		$this->id = $id;
@@ -62,12 +63,12 @@ class Ocorrencia {
 	public function getIdLocal() {
 		return $this->idLocal;
 	}
-	public function setIdUsuarioCliente($idUsuarioCliente) {
-		$this->idUsuarioCliente = $idUsuarioCliente;
+	public function setUsuarioCliente(Usuario $usuario) {
+		$this->usuarioCliente = $usuario;
 	}
 		    
-	public function getIdUsuarioCliente() {
-		return $this->idUsuarioCliente;
+	public function getUsuarioCliente() {
+		return $this->usuarioCliente;
 	}
 	public function setDescricao($descricao) {
 		$this->descricao = $descricao;
@@ -168,7 +169,7 @@ class Ocorrencia {
 		return $this->localSala;
 	}
 	public function __toString(){
-	    return $this->id.' - '.$this->areaResponsavel.' - '.$this->servico.' - '.$this->idLocal.' - '.$this->idUsuarioCliente.' - '.$this->descricao.' - '.$this->campus.' - '.$this->patrimonio.' - '.$this->ramal.' - '.$this->local.' - '.$this->status.' - '.$this->solucao.' - '.$this->prioridade.' - '.$this->avaliacao.' - '.$this->email.' - '.$this->idUsuarioAtendente.' - '.$this->idUsuarioIndicado.' - '.$this->anexo.' - '.$this->localSala;
+	    return $this->id.' - '.$this->areaResponsavel.' - '.$this->servico.' - '.$this->idLocal.' - '.$this->usuarioCliente.' - '.$this->descricao.' - '.$this->campus.' - '.$this->patrimonio.' - '.$this->ramal.' - '.$this->local.' - '.$this->status.' - '.$this->solucao.' - '.$this->prioridade.' - '.$this->avaliacao.' - '.$this->email.' - '.$this->idUsuarioAtendente.' - '.$this->idUsuarioIndicado.' - '.$this->anexo.' - '.$this->localSala;
 	}
                 
 
