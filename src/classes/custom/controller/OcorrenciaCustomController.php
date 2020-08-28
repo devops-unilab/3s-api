@@ -198,8 +198,8 @@ class OcorrenciaCustomController  extends OcorrenciaController {
 	{
 	    
 	    $ocorrencia = new Ocorrencia();
-	    $ocorrencia->setStatus('a');
-	    $lista = $this->dao->pesquisaPorStatus($ocorrencia);
+	    
+	    $lista = $this->dao->retornaLista();
 	    
 	    $this->view->exibirLista($lista);
 	}

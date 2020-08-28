@@ -187,68 +187,7 @@ spl_autoload_register('autoload');
 
 
 <?php
-
-
-if(isset($_GET['pagina'])){
-	switch ($_GET['pagina']){
-		case 'recesso':
-            $controller = new RecessoCustomController();
-		    $controller->main();
-			break;
-		case 'grupo_servico':
-            $controller = new GrupoServicoCustomController();
-		    $controller->main();
-			break;
-		case 'area_responsavel':
-            $controller = new AreaResponsavelCustomController();
-		    $controller->main();
-			break;
-		case 'mensagem_forum':
-            $controller = new MensagemForumCustomController();
-		    $controller->main();
-			break;
-		case 'ocorrencia':
-            $controller = new OcorrenciaCustomController();
-		    $controller->main();
-			break;
-		case 'perfil':
-            $controller = new PerfilCustomController();
-		    $controller->main();
-			break;
-		case 'permissao_usuario':
-            $controller = new PermissaoUsuarioCustomController();
-		    $controller->main();
-			break;
-		case 'servico':
-            $controller = new ServicoCustomController();
-		    $controller->main();
-			break;
-		case 'status':
-            $controller = new StatusCustomController();
-		    $controller->main();
-			break;
-		case 'status_ocorrencia':
-            $controller = new StatusOcorrenciaCustomController();
-		    $controller->main();
-			break;
-		case 'tarefa_ocorrencia':
-            $controller = new TarefaOcorrenciaCustomController();
-		    $controller->main();
-			break;
-		case 'tipo_atividade':
-            $controller = new TipoAtividadeCustomController();
-		    $controller->main();
-			break;
-		default:
-			echo '<p>Página solicitada não encontrada.</p>';
-			break;
-	}
-}else{
-    $controller = new OcorrenciaCustomController();
-	$controller->main();
-	
-}
-					    
+Principal::main();	    
 ?>
             
 

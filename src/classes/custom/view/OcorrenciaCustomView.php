@@ -98,13 +98,14 @@ class OcorrenciaCustomView extends OcorrenciaView {
             </div>
         </div>
     </div>
-    <div class="d-flex justify-content-center m-3">
-        <input type="submit" id="btn-submit" name="enviar_ocorrencia" value="Cadastrar Ocorrência" class="btn btn-primary" >
-    </div>
+    
 </form>
             
       
   </div><br><br>
+<div class="d-flex justify-content-center m-3">
+        <input type="submit" id="btn-submit" name="enviar_ocorrencia" value="Cadastrar Ocorrência" class="btn btn-primary" >
+</div><br><br>
 
             
 ';
@@ -144,7 +145,7 @@ class OcorrenciaCustomView extends OcorrenciaView {
         
         foreach($lista as $elemento){
             echo '
-                        <a href="?pagina=ocorrencia&selecionar='.$elemento->getId().'" class="list-group-item active">'.$elemento->getId().' - '.$elemento->getServico()->getNome().'</a>';
+                        <a href="?pagina=ocorrencia&selecionar='.$elemento->getId().'" class="list-group-item active">#'.$elemento->getId().' - '.$elemento->getServico()->getNome().'</a>';
             
         }
         

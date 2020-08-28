@@ -243,8 +243,11 @@ class OcorrenciaView {
         public function mostrarSelecionado(Ocorrencia $ocorrencia){
             echo '
             
-
+	<div class="card o-hidden border-0 shadow-lg my-5">
         <div class="card mb-4">
+            <div class="card-header">
+                  Ocorrencia selecionado
+            </div>
             <div class="card-body">
                 Id: '.$ocorrencia->getId().'<br>
                 Id Local: '.$ocorrencia->getIdLocal().'<br>
@@ -268,7 +271,7 @@ class OcorrenciaView {
             
             </div>
         </div>
-
+    </div>
             
             
 ';
