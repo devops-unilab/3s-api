@@ -138,7 +138,8 @@ class MensagemForumDAO extends DAO {
         usuario.email as email_usuario_usuario, 
         usuario.login as login_usuario_usuario, 
         usuario.senha as senha_usuario_usuario, 
-        usuario.nivel as nivel_usuario_usuario
+        usuario.nivel as nivel_usuario_usuario, 
+        usuario.id_setor as id_setor_usuario_usuario
 		FROM mensagem_forum
 		INNER JOIN ocorrencia as ocorrencia ON ocorrencia.id = mensagem_forum.id_ocorrencia
 		INNER JOIN usuario as usuario ON usuario.id = mensagem_forum.id_usuario
@@ -182,6 +183,7 @@ class MensagemForumDAO extends DAO {
                 $mensagemForum->getUsuario()->setLogin( $linha ['login_usuario_usuario'] );
                 $mensagemForum->getUsuario()->setSenha( $linha ['senha_usuario_usuario'] );
                 $mensagemForum->getUsuario()->setNivel( $linha ['nivel_usuario_usuario'] );
+                $mensagemForum->getUsuario()->setIdSetor( $linha ['id_setor_usuario_usuario'] );
                 $lista [] = $mensagemForum;
 
 	
@@ -224,7 +226,8 @@ class MensagemForumDAO extends DAO {
         usuario.email as email_usuario_usuario, 
         usuario.login as login_usuario_usuario, 
         usuario.senha as senha_usuario_usuario, 
-        usuario.nivel as nivel_usuario_usuario
+        usuario.nivel as nivel_usuario_usuario, 
+        usuario.id_setor as id_setor_usuario_usuario
 		FROM mensagem_forum
 		INNER JOIN ocorrencia as ocorrencia ON ocorrencia.id = mensagem_forum.id_ocorrencia
 		INNER JOIN usuario as usuario ON usuario.id = mensagem_forum.id_usuario
@@ -264,6 +267,7 @@ class MensagemForumDAO extends DAO {
                 $mensagemForum->getUsuario()->setLogin( $linha ['login_usuario_usuario'] );
                 $mensagemForum->getUsuario()->setSenha( $linha ['senha_usuario_usuario'] );
                 $mensagemForum->getUsuario()->setNivel( $linha ['nivel_usuario_usuario'] );
+                $mensagemForum->getUsuario()->setIdSetor( $linha ['id_setor_usuario_usuario'] );
                 $lista [] = $mensagemForum;
 
 	
@@ -307,7 +311,8 @@ class MensagemForumDAO extends DAO {
         usuario.email as email_usuario_usuario, 
         usuario.login as login_usuario_usuario, 
         usuario.senha as senha_usuario_usuario, 
-        usuario.nivel as nivel_usuario_usuario
+        usuario.nivel as nivel_usuario_usuario, 
+        usuario.id_setor as id_setor_usuario_usuario
 		FROM mensagem_forum
 		INNER JOIN ocorrencia as ocorrencia ON ocorrencia.id = mensagem_forum.id_ocorrencia
 		INNER JOIN usuario as usuario ON usuario.id = mensagem_forum.id_usuario
@@ -347,6 +352,7 @@ class MensagemForumDAO extends DAO {
                 $mensagemForum->getUsuario()->setLogin( $linha ['login_usuario_usuario'] );
                 $mensagemForum->getUsuario()->setSenha( $linha ['senha_usuario_usuario'] );
                 $mensagemForum->getUsuario()->setNivel( $linha ['nivel_usuario_usuario'] );
+                $mensagemForum->getUsuario()->setIdSetor( $linha ['id_setor_usuario_usuario'] );
                 $lista [] = $mensagemForum;
 
 	
@@ -390,7 +396,8 @@ class MensagemForumDAO extends DAO {
         usuario.email as email_usuario_usuario, 
         usuario.login as login_usuario_usuario, 
         usuario.senha as senha_usuario_usuario, 
-        usuario.nivel as nivel_usuario_usuario
+        usuario.nivel as nivel_usuario_usuario, 
+        usuario.id_setor as id_setor_usuario_usuario
 		FROM mensagem_forum
 		INNER JOIN ocorrencia as ocorrencia ON ocorrencia.id = mensagem_forum.id_ocorrencia
 		INNER JOIN usuario as usuario ON usuario.id = mensagem_forum.id_usuario
@@ -430,6 +437,7 @@ class MensagemForumDAO extends DAO {
                 $mensagemForum->getUsuario()->setLogin( $linha ['login_usuario_usuario'] );
                 $mensagemForum->getUsuario()->setSenha( $linha ['senha_usuario_usuario'] );
                 $mensagemForum->getUsuario()->setNivel( $linha ['nivel_usuario_usuario'] );
+                $mensagemForum->getUsuario()->setIdSetor( $linha ['id_setor_usuario_usuario'] );
                 $lista [] = $mensagemForum;
 
 	
@@ -473,7 +481,8 @@ class MensagemForumDAO extends DAO {
         usuario.email as email_usuario_usuario, 
         usuario.login as login_usuario_usuario, 
         usuario.senha as senha_usuario_usuario, 
-        usuario.nivel as nivel_usuario_usuario
+        usuario.nivel as nivel_usuario_usuario, 
+        usuario.id_setor as id_setor_usuario_usuario
 		FROM mensagem_forum
 		INNER JOIN ocorrencia as ocorrencia ON ocorrencia.id = mensagem_forum.id_ocorrencia
 		INNER JOIN usuario as usuario ON usuario.id = mensagem_forum.id_usuario
@@ -513,6 +522,7 @@ class MensagemForumDAO extends DAO {
                 $mensagemForum->getUsuario()->setLogin( $linha ['login_usuario_usuario'] );
                 $mensagemForum->getUsuario()->setSenha( $linha ['senha_usuario_usuario'] );
                 $mensagemForum->getUsuario()->setNivel( $linha ['nivel_usuario_usuario'] );
+                $mensagemForum->getUsuario()->setIdSetor( $linha ['id_setor_usuario_usuario'] );
                 $lista [] = $mensagemForum;
 
 	
@@ -555,7 +565,8 @@ class MensagemForumDAO extends DAO {
         usuario.email as email_usuario_usuario, 
         usuario.login as login_usuario_usuario, 
         usuario.senha as senha_usuario_usuario, 
-        usuario.nivel as nivel_usuario_usuario
+        usuario.nivel as nivel_usuario_usuario, 
+        usuario.id_setor as id_setor_usuario_usuario
 		FROM mensagem_forum
 		INNER JOIN ocorrencia as ocorrencia ON ocorrencia.id = mensagem_forum.id_ocorrencia
 		INNER JOIN usuario as usuario ON usuario.id = mensagem_forum.id_usuario
@@ -599,6 +610,7 @@ class MensagemForumDAO extends DAO {
                 $mensagemForum->getUsuario()->setLogin( $linha ['login_usuario_usuario'] );
                 $mensagemForum->getUsuario()->setSenha( $linha ['senha_usuario_usuario'] );
                 $mensagemForum->getUsuario()->setNivel( $linha ['nivel_usuario_usuario'] );
+                $mensagemForum->getUsuario()->setIdSetor( $linha ['id_setor_usuario_usuario'] );
                 
                 
 		    }
@@ -638,7 +650,8 @@ class MensagemForumDAO extends DAO {
         usuario.email as email_usuario_usuario, 
         usuario.login as login_usuario_usuario, 
         usuario.senha as senha_usuario_usuario, 
-        usuario.nivel as nivel_usuario_usuario
+        usuario.nivel as nivel_usuario_usuario, 
+        usuario.id_setor as id_setor_usuario_usuario
 		FROM mensagem_forum
 		INNER JOIN ocorrencia as ocorrencia ON ocorrencia.id = mensagem_forum.id_ocorrencia
 		INNER JOIN usuario as usuario ON usuario.id = mensagem_forum.id_usuario
@@ -682,6 +695,7 @@ class MensagemForumDAO extends DAO {
                 $mensagemForum->getUsuario()->setLogin( $linha ['login_usuario_usuario'] );
                 $mensagemForum->getUsuario()->setSenha( $linha ['senha_usuario_usuario'] );
                 $mensagemForum->getUsuario()->setNivel( $linha ['nivel_usuario_usuario'] );
+                $mensagemForum->getUsuario()->setIdSetor( $linha ['id_setor_usuario_usuario'] );
                 
                 
 		    }
@@ -721,7 +735,8 @@ class MensagemForumDAO extends DAO {
         usuario.email as email_usuario_usuario, 
         usuario.login as login_usuario_usuario, 
         usuario.senha as senha_usuario_usuario, 
-        usuario.nivel as nivel_usuario_usuario
+        usuario.nivel as nivel_usuario_usuario, 
+        usuario.id_setor as id_setor_usuario_usuario
 		FROM mensagem_forum
 		INNER JOIN ocorrencia as ocorrencia ON ocorrencia.id = mensagem_forum.id_ocorrencia
 		INNER JOIN usuario as usuario ON usuario.id = mensagem_forum.id_usuario
@@ -765,6 +780,7 @@ class MensagemForumDAO extends DAO {
                 $mensagemForum->getUsuario()->setLogin( $linha ['login_usuario_usuario'] );
                 $mensagemForum->getUsuario()->setSenha( $linha ['senha_usuario_usuario'] );
                 $mensagemForum->getUsuario()->setNivel( $linha ['nivel_usuario_usuario'] );
+                $mensagemForum->getUsuario()->setIdSetor( $linha ['id_setor_usuario_usuario'] );
                 
                 
 		    }
@@ -804,7 +820,8 @@ class MensagemForumDAO extends DAO {
         usuario.email as email_usuario_usuario, 
         usuario.login as login_usuario_usuario, 
         usuario.senha as senha_usuario_usuario, 
-        usuario.nivel as nivel_usuario_usuario
+        usuario.nivel as nivel_usuario_usuario, 
+        usuario.id_setor as id_setor_usuario_usuario
 		FROM mensagem_forum
 		INNER JOIN ocorrencia as ocorrencia ON ocorrencia.id = mensagem_forum.id_ocorrencia
 		INNER JOIN usuario as usuario ON usuario.id = mensagem_forum.id_usuario
@@ -848,6 +865,7 @@ class MensagemForumDAO extends DAO {
                 $mensagemForum->getUsuario()->setLogin( $linha ['login_usuario_usuario'] );
                 $mensagemForum->getUsuario()->setSenha( $linha ['senha_usuario_usuario'] );
                 $mensagemForum->getUsuario()->setNivel( $linha ['nivel_usuario_usuario'] );
+                $mensagemForum->getUsuario()->setIdSetor( $linha ['id_setor_usuario_usuario'] );
                 
                 
 		    }

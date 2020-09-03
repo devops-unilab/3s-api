@@ -6,7 +6,7 @@
  *
  */
 class UsuarioView {
-    public function mostraFormInserir($listaSetor) {
+    public function mostraFormInserir() {
 		echo '
 <!-- Button trigger modal -->
 <button type="button" class="btn btn-primary m-3" data-toggle="modal" data-target="#modalAddUsuario">
@@ -56,18 +56,11 @@ class UsuarioView {
                                             <label for="nivel">Nivel</label>
                                             <input type="text" class="form-control"  name="nivel" id="nivel" placeholder="Nivel">
                                         </div>
+
                                         <div class="form-group">
-                                          <label for="setor">Setor</label>
-                						  <select class="form-control" id="setor" name="setor">
-                                            <option value="">Selecione o Setor</option>';
-                                                
-        foreach( $listaSetor as $elemento){
-            echo '<option value="'.$elemento->getId().'">'.$elemento.'</option>';
-        }
-            
-        echo '
-                                          </select>
-                						</div>
+                                            <label for="id_setor">Id Setor</label>
+                                            <input type="number" class="form-control"  name="id_setor" id="id_setor" placeholder="Id Setor">
+                                        </div>
 
 						              </form>
 
@@ -112,7 +105,6 @@ class UsuarioView {
 						<th>Nome</th>
 						<th>Email</th>
 						<th>Login</th>
-						<th>Setor</th>
                         <th>Ações</th>
 					</tr>
 				</thead>
@@ -122,7 +114,6 @@ class UsuarioView {
                         <th>Nome</th>
                         <th>Email</th>
                         <th>Login</th>
-						<th>Setor</th>
                         <th>Ações</th>
 					</tr>
 				</tfoot>
@@ -134,7 +125,6 @@ class UsuarioView {
                 echo '<td>'.$elemento->getNome().'</td>';
                 echo '<td>'.$elemento->getEmail().'</td>';
                 echo '<td>'.$elemento->getLogin().'</td>';
-                echo '<td>'.$elemento->getSetor().'</td>';
                 echo '<td>
                         <a href="?pagina=usuario&selecionar='.$elemento->getId().'" class="btn btn-info text-white">Selecionar</a>
                         <a href="?pagina=usuario&editar='.$elemento->getId().'" class="btn btn-success text-white">Editar</a>
@@ -175,7 +165,7 @@ class UsuarioView {
                 Login: '.$usuario->getLogin().'<br>
                 Senha: '.$usuario->getSenha().'<br>
                 Nivel: '.$usuario->getNivel().'<br>
-                Setor: '.$usuario->getSetor().'<br>
+                Id Setor: '.$usuario->getIdSetor().'<br>
             
             </div>
         </div>
@@ -187,7 +177,7 @@ class UsuarioView {
 
 
             
-	public function mostraFormEditar($listaSetor, Usuario $selecionado) {
+	public function mostraFormEditar(Usuario $selecionado) {
 		echo '
 	    
 	    
@@ -223,16 +213,8 @@ class UsuarioView {
                                             <input type="text" class="form-control" value="'.$selecionado->getNivel().'"  name="nivel" id="nivel" placeholder="Nivel">
                 						</div>
                                         <div class="form-group">
-                                          <label for="setor">Setor</label>
-                						  <select class="form-control" id="setor" name="setor">
-                                            <option value="">Selecione o Setor</option>';
-                                                
-        foreach( $listaSetor as $elemento){
-            echo '<option value="'.$elemento->getId().'">'.$elemento.'</option>';
-        }
-            
-        echo '
-                                          </select>
+                                            <label for="id_setor">Id Setor</label>
+                                            <input type="number" class="form-control" value="'.$selecionado->getIdSetor().'"  name="id_setor" id="id_setor" placeholder="Id Setor">
                 						</div>
                                         <input type="submit" class="btn btn-primary btn-user btn-block" value="Alterar" name="editar_usuario">
                                         <hr>

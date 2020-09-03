@@ -130,7 +130,8 @@ class TarefaOcorrenciaDAO extends DAO {
         usuario.email as email_usuario_usuario, 
         usuario.login as login_usuario_usuario, 
         usuario.senha as senha_usuario_usuario, 
-        usuario.nivel as nivel_usuario_usuario
+        usuario.nivel as nivel_usuario_usuario, 
+        usuario.id_setor as id_setor_usuario_usuario
 		FROM tarefa_ocorrencia
 		INNER JOIN ocorrencia as ocorrencia ON ocorrencia.id = tarefa_ocorrencia.id_ocorrencia
 		INNER JOIN usuario as usuario ON usuario.id = tarefa_ocorrencia.id_usuario
@@ -173,6 +174,7 @@ class TarefaOcorrenciaDAO extends DAO {
                 $tarefaOcorrencia->getUsuario()->setLogin( $linha ['login_usuario_usuario'] );
                 $tarefaOcorrencia->getUsuario()->setSenha( $linha ['senha_usuario_usuario'] );
                 $tarefaOcorrencia->getUsuario()->setNivel( $linha ['nivel_usuario_usuario'] );
+                $tarefaOcorrencia->getUsuario()->setIdSetor( $linha ['id_setor_usuario_usuario'] );
                 $lista [] = $tarefaOcorrencia;
 
 	
@@ -214,7 +216,8 @@ class TarefaOcorrenciaDAO extends DAO {
         usuario.email as email_usuario_usuario, 
         usuario.login as login_usuario_usuario, 
         usuario.senha as senha_usuario_usuario, 
-        usuario.nivel as nivel_usuario_usuario
+        usuario.nivel as nivel_usuario_usuario, 
+        usuario.id_setor as id_setor_usuario_usuario
 		FROM tarefa_ocorrencia
 		INNER JOIN ocorrencia as ocorrencia ON ocorrencia.id = tarefa_ocorrencia.id_ocorrencia
 		INNER JOIN usuario as usuario ON usuario.id = tarefa_ocorrencia.id_usuario
@@ -253,6 +256,7 @@ class TarefaOcorrenciaDAO extends DAO {
                 $tarefaOcorrencia->getUsuario()->setLogin( $linha ['login_usuario_usuario'] );
                 $tarefaOcorrencia->getUsuario()->setSenha( $linha ['senha_usuario_usuario'] );
                 $tarefaOcorrencia->getUsuario()->setNivel( $linha ['nivel_usuario_usuario'] );
+                $tarefaOcorrencia->getUsuario()->setIdSetor( $linha ['id_setor_usuario_usuario'] );
                 $lista [] = $tarefaOcorrencia;
 
 	
@@ -295,7 +299,8 @@ class TarefaOcorrenciaDAO extends DAO {
         usuario.email as email_usuario_usuario, 
         usuario.login as login_usuario_usuario, 
         usuario.senha as senha_usuario_usuario, 
-        usuario.nivel as nivel_usuario_usuario
+        usuario.nivel as nivel_usuario_usuario, 
+        usuario.id_setor as id_setor_usuario_usuario
 		FROM tarefa_ocorrencia
 		INNER JOIN ocorrencia as ocorrencia ON ocorrencia.id = tarefa_ocorrencia.id_ocorrencia
 		INNER JOIN usuario as usuario ON usuario.id = tarefa_ocorrencia.id_usuario
@@ -334,6 +339,7 @@ class TarefaOcorrenciaDAO extends DAO {
                 $tarefaOcorrencia->getUsuario()->setLogin( $linha ['login_usuario_usuario'] );
                 $tarefaOcorrencia->getUsuario()->setSenha( $linha ['senha_usuario_usuario'] );
                 $tarefaOcorrencia->getUsuario()->setNivel( $linha ['nivel_usuario_usuario'] );
+                $tarefaOcorrencia->getUsuario()->setIdSetor( $linha ['id_setor_usuario_usuario'] );
                 $lista [] = $tarefaOcorrencia;
 
 	
@@ -376,7 +382,8 @@ class TarefaOcorrenciaDAO extends DAO {
         usuario.email as email_usuario_usuario, 
         usuario.login as login_usuario_usuario, 
         usuario.senha as senha_usuario_usuario, 
-        usuario.nivel as nivel_usuario_usuario
+        usuario.nivel as nivel_usuario_usuario, 
+        usuario.id_setor as id_setor_usuario_usuario
 		FROM tarefa_ocorrencia
 		INNER JOIN ocorrencia as ocorrencia ON ocorrencia.id = tarefa_ocorrencia.id_ocorrencia
 		INNER JOIN usuario as usuario ON usuario.id = tarefa_ocorrencia.id_usuario
@@ -415,6 +422,7 @@ class TarefaOcorrenciaDAO extends DAO {
                 $tarefaOcorrencia->getUsuario()->setLogin( $linha ['login_usuario_usuario'] );
                 $tarefaOcorrencia->getUsuario()->setSenha( $linha ['senha_usuario_usuario'] );
                 $tarefaOcorrencia->getUsuario()->setNivel( $linha ['nivel_usuario_usuario'] );
+                $tarefaOcorrencia->getUsuario()->setIdSetor( $linha ['id_setor_usuario_usuario'] );
                 $lista [] = $tarefaOcorrencia;
 
 	
@@ -456,7 +464,8 @@ class TarefaOcorrenciaDAO extends DAO {
         usuario.email as email_usuario_usuario, 
         usuario.login as login_usuario_usuario, 
         usuario.senha as senha_usuario_usuario, 
-        usuario.nivel as nivel_usuario_usuario
+        usuario.nivel as nivel_usuario_usuario, 
+        usuario.id_setor as id_setor_usuario_usuario
 		FROM tarefa_ocorrencia
 		INNER JOIN ocorrencia as ocorrencia ON ocorrencia.id = tarefa_ocorrencia.id_ocorrencia
 		INNER JOIN usuario as usuario ON usuario.id = tarefa_ocorrencia.id_usuario
@@ -499,6 +508,7 @@ class TarefaOcorrenciaDAO extends DAO {
                 $tarefaOcorrencia->getUsuario()->setLogin( $linha ['login_usuario_usuario'] );
                 $tarefaOcorrencia->getUsuario()->setSenha( $linha ['senha_usuario_usuario'] );
                 $tarefaOcorrencia->getUsuario()->setNivel( $linha ['nivel_usuario_usuario'] );
+                $tarefaOcorrencia->getUsuario()->setIdSetor( $linha ['id_setor_usuario_usuario'] );
                 
                 
 		    }
@@ -537,7 +547,8 @@ class TarefaOcorrenciaDAO extends DAO {
         usuario.email as email_usuario_usuario, 
         usuario.login as login_usuario_usuario, 
         usuario.senha as senha_usuario_usuario, 
-        usuario.nivel as nivel_usuario_usuario
+        usuario.nivel as nivel_usuario_usuario, 
+        usuario.id_setor as id_setor_usuario_usuario
 		FROM tarefa_ocorrencia
 		INNER JOIN ocorrencia as ocorrencia ON ocorrencia.id = tarefa_ocorrencia.id_ocorrencia
 		INNER JOIN usuario as usuario ON usuario.id = tarefa_ocorrencia.id_usuario
@@ -580,6 +591,7 @@ class TarefaOcorrenciaDAO extends DAO {
                 $tarefaOcorrencia->getUsuario()->setLogin( $linha ['login_usuario_usuario'] );
                 $tarefaOcorrencia->getUsuario()->setSenha( $linha ['senha_usuario_usuario'] );
                 $tarefaOcorrencia->getUsuario()->setNivel( $linha ['nivel_usuario_usuario'] );
+                $tarefaOcorrencia->getUsuario()->setIdSetor( $linha ['id_setor_usuario_usuario'] );
                 
                 
 		    }
@@ -618,7 +630,8 @@ class TarefaOcorrenciaDAO extends DAO {
         usuario.email as email_usuario_usuario, 
         usuario.login as login_usuario_usuario, 
         usuario.senha as senha_usuario_usuario, 
-        usuario.nivel as nivel_usuario_usuario
+        usuario.nivel as nivel_usuario_usuario, 
+        usuario.id_setor as id_setor_usuario_usuario
 		FROM tarefa_ocorrencia
 		INNER JOIN ocorrencia as ocorrencia ON ocorrencia.id = tarefa_ocorrencia.id_ocorrencia
 		INNER JOIN usuario as usuario ON usuario.id = tarefa_ocorrencia.id_usuario
@@ -661,6 +674,7 @@ class TarefaOcorrenciaDAO extends DAO {
                 $tarefaOcorrencia->getUsuario()->setLogin( $linha ['login_usuario_usuario'] );
                 $tarefaOcorrencia->getUsuario()->setSenha( $linha ['senha_usuario_usuario'] );
                 $tarefaOcorrencia->getUsuario()->setNivel( $linha ['nivel_usuario_usuario'] );
+                $tarefaOcorrencia->getUsuario()->setIdSetor( $linha ['id_setor_usuario_usuario'] );
                 
                 
 		    }

@@ -231,7 +231,8 @@ class OcorrenciaDAO extends DAO {
         usuario_cliente.email as email_usuario_usuario_cliente, 
         usuario_cliente.login as login_usuario_usuario_cliente, 
         usuario_cliente.senha as senha_usuario_usuario_cliente, 
-        usuario_cliente.nivel as nivel_usuario_usuario_cliente
+        usuario_cliente.nivel as nivel_usuario_usuario_cliente, 
+        usuario_cliente.id_setor as id_setor_usuario_usuario_cliente
 		FROM ocorrencia
 		INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel
 		INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico
@@ -281,6 +282,7 @@ class OcorrenciaDAO extends DAO {
                 $ocorrencia->getUsuarioCliente()->setLogin( $linha ['login_usuario_usuario_cliente'] );
                 $ocorrencia->getUsuarioCliente()->setSenha( $linha ['senha_usuario_usuario_cliente'] );
                 $ocorrencia->getUsuarioCliente()->setNivel( $linha ['nivel_usuario_usuario_cliente'] );
+                $ocorrencia->getUsuarioCliente()->setIdSetor( $linha ['id_setor_usuario_usuario_cliente'] );
                 $lista [] = $ocorrencia;
 
 	
@@ -328,7 +330,8 @@ class OcorrenciaDAO extends DAO {
         usuario_cliente.email as email_usuario_usuario_cliente, 
         usuario_cliente.login as login_usuario_usuario_cliente, 
         usuario_cliente.senha as senha_usuario_usuario_cliente, 
-        usuario_cliente.nivel as nivel_usuario_usuario_cliente
+        usuario_cliente.nivel as nivel_usuario_usuario_cliente, 
+        usuario_cliente.id_setor as id_setor_usuario_usuario_cliente
 		FROM ocorrencia
 		INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel
 		INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico
@@ -374,6 +377,7 @@ class OcorrenciaDAO extends DAO {
                 $ocorrencia->getUsuarioCliente()->setLogin( $linha ['login_usuario_usuario_cliente'] );
                 $ocorrencia->getUsuarioCliente()->setSenha( $linha ['senha_usuario_usuario_cliente'] );
                 $ocorrencia->getUsuarioCliente()->setNivel( $linha ['nivel_usuario_usuario_cliente'] );
+                $ocorrencia->getUsuarioCliente()->setIdSetor( $linha ['id_setor_usuario_usuario_cliente'] );
                 $lista [] = $ocorrencia;
 
 	
@@ -422,7 +426,8 @@ class OcorrenciaDAO extends DAO {
         usuario_cliente.email as email_usuario_usuario_cliente, 
         usuario_cliente.login as login_usuario_usuario_cliente, 
         usuario_cliente.senha as senha_usuario_usuario_cliente, 
-        usuario_cliente.nivel as nivel_usuario_usuario_cliente
+        usuario_cliente.nivel as nivel_usuario_usuario_cliente, 
+        usuario_cliente.id_setor as id_setor_usuario_usuario_cliente
 		FROM ocorrencia
 		INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel
 		INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico
@@ -468,6 +473,7 @@ class OcorrenciaDAO extends DAO {
                 $ocorrencia->getUsuarioCliente()->setLogin( $linha ['login_usuario_usuario_cliente'] );
                 $ocorrencia->getUsuarioCliente()->setSenha( $linha ['senha_usuario_usuario_cliente'] );
                 $ocorrencia->getUsuarioCliente()->setNivel( $linha ['nivel_usuario_usuario_cliente'] );
+                $ocorrencia->getUsuarioCliente()->setIdSetor( $linha ['id_setor_usuario_usuario_cliente'] );
                 $lista [] = $ocorrencia;
 
 	
@@ -516,7 +522,8 @@ class OcorrenciaDAO extends DAO {
         usuario_cliente.email as email_usuario_usuario_cliente, 
         usuario_cliente.login as login_usuario_usuario_cliente, 
         usuario_cliente.senha as senha_usuario_usuario_cliente, 
-        usuario_cliente.nivel as nivel_usuario_usuario_cliente
+        usuario_cliente.nivel as nivel_usuario_usuario_cliente, 
+        usuario_cliente.id_setor as id_setor_usuario_usuario_cliente
 		FROM ocorrencia
 		INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel
 		INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico
@@ -562,6 +569,7 @@ class OcorrenciaDAO extends DAO {
                 $ocorrencia->getUsuarioCliente()->setLogin( $linha ['login_usuario_usuario_cliente'] );
                 $ocorrencia->getUsuarioCliente()->setSenha( $linha ['senha_usuario_usuario_cliente'] );
                 $ocorrencia->getUsuarioCliente()->setNivel( $linha ['nivel_usuario_usuario_cliente'] );
+                $ocorrencia->getUsuarioCliente()->setIdSetor( $linha ['id_setor_usuario_usuario_cliente'] );
                 $lista [] = $ocorrencia;
 
 	
@@ -610,7 +618,8 @@ class OcorrenciaDAO extends DAO {
         usuario_cliente.email as email_usuario_usuario_cliente, 
         usuario_cliente.login as login_usuario_usuario_cliente, 
         usuario_cliente.senha as senha_usuario_usuario_cliente, 
-        usuario_cliente.nivel as nivel_usuario_usuario_cliente
+        usuario_cliente.nivel as nivel_usuario_usuario_cliente, 
+        usuario_cliente.id_setor as id_setor_usuario_usuario_cliente
 		FROM ocorrencia
 		INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel
 		INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico
@@ -656,6 +665,7 @@ class OcorrenciaDAO extends DAO {
                 $ocorrencia->getUsuarioCliente()->setLogin( $linha ['login_usuario_usuario_cliente'] );
                 $ocorrencia->getUsuarioCliente()->setSenha( $linha ['senha_usuario_usuario_cliente'] );
                 $ocorrencia->getUsuarioCliente()->setNivel( $linha ['nivel_usuario_usuario_cliente'] );
+                $ocorrencia->getUsuarioCliente()->setIdSetor( $linha ['id_setor_usuario_usuario_cliente'] );
                 $lista [] = $ocorrencia;
 
 	
@@ -704,7 +714,8 @@ class OcorrenciaDAO extends DAO {
         usuario_cliente.email as email_usuario_usuario_cliente, 
         usuario_cliente.login as login_usuario_usuario_cliente, 
         usuario_cliente.senha as senha_usuario_usuario_cliente, 
-        usuario_cliente.nivel as nivel_usuario_usuario_cliente
+        usuario_cliente.nivel as nivel_usuario_usuario_cliente, 
+        usuario_cliente.id_setor as id_setor_usuario_usuario_cliente
 		FROM ocorrencia
 		INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel
 		INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico
@@ -750,6 +761,7 @@ class OcorrenciaDAO extends DAO {
                 $ocorrencia->getUsuarioCliente()->setLogin( $linha ['login_usuario_usuario_cliente'] );
                 $ocorrencia->getUsuarioCliente()->setSenha( $linha ['senha_usuario_usuario_cliente'] );
                 $ocorrencia->getUsuarioCliente()->setNivel( $linha ['nivel_usuario_usuario_cliente'] );
+                $ocorrencia->getUsuarioCliente()->setIdSetor( $linha ['id_setor_usuario_usuario_cliente'] );
                 $lista [] = $ocorrencia;
 
 	
@@ -798,7 +810,8 @@ class OcorrenciaDAO extends DAO {
         usuario_cliente.email as email_usuario_usuario_cliente, 
         usuario_cliente.login as login_usuario_usuario_cliente, 
         usuario_cliente.senha as senha_usuario_usuario_cliente, 
-        usuario_cliente.nivel as nivel_usuario_usuario_cliente
+        usuario_cliente.nivel as nivel_usuario_usuario_cliente, 
+        usuario_cliente.id_setor as id_setor_usuario_usuario_cliente
 		FROM ocorrencia
 		INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel
 		INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico
@@ -844,6 +857,7 @@ class OcorrenciaDAO extends DAO {
                 $ocorrencia->getUsuarioCliente()->setLogin( $linha ['login_usuario_usuario_cliente'] );
                 $ocorrencia->getUsuarioCliente()->setSenha( $linha ['senha_usuario_usuario_cliente'] );
                 $ocorrencia->getUsuarioCliente()->setNivel( $linha ['nivel_usuario_usuario_cliente'] );
+                $ocorrencia->getUsuarioCliente()->setIdSetor( $linha ['id_setor_usuario_usuario_cliente'] );
                 $lista [] = $ocorrencia;
 
 	
@@ -892,7 +906,8 @@ class OcorrenciaDAO extends DAO {
         usuario_cliente.email as email_usuario_usuario_cliente, 
         usuario_cliente.login as login_usuario_usuario_cliente, 
         usuario_cliente.senha as senha_usuario_usuario_cliente, 
-        usuario_cliente.nivel as nivel_usuario_usuario_cliente
+        usuario_cliente.nivel as nivel_usuario_usuario_cliente, 
+        usuario_cliente.id_setor as id_setor_usuario_usuario_cliente
 		FROM ocorrencia
 		INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel
 		INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico
@@ -938,6 +953,7 @@ class OcorrenciaDAO extends DAO {
                 $ocorrencia->getUsuarioCliente()->setLogin( $linha ['login_usuario_usuario_cliente'] );
                 $ocorrencia->getUsuarioCliente()->setSenha( $linha ['senha_usuario_usuario_cliente'] );
                 $ocorrencia->getUsuarioCliente()->setNivel( $linha ['nivel_usuario_usuario_cliente'] );
+                $ocorrencia->getUsuarioCliente()->setIdSetor( $linha ['id_setor_usuario_usuario_cliente'] );
                 $lista [] = $ocorrencia;
 
 	
@@ -986,7 +1002,8 @@ class OcorrenciaDAO extends DAO {
         usuario_cliente.email as email_usuario_usuario_cliente, 
         usuario_cliente.login as login_usuario_usuario_cliente, 
         usuario_cliente.senha as senha_usuario_usuario_cliente, 
-        usuario_cliente.nivel as nivel_usuario_usuario_cliente
+        usuario_cliente.nivel as nivel_usuario_usuario_cliente, 
+        usuario_cliente.id_setor as id_setor_usuario_usuario_cliente
 		FROM ocorrencia
 		INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel
 		INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico
@@ -1032,6 +1049,7 @@ class OcorrenciaDAO extends DAO {
                 $ocorrencia->getUsuarioCliente()->setLogin( $linha ['login_usuario_usuario_cliente'] );
                 $ocorrencia->getUsuarioCliente()->setSenha( $linha ['senha_usuario_usuario_cliente'] );
                 $ocorrencia->getUsuarioCliente()->setNivel( $linha ['nivel_usuario_usuario_cliente'] );
+                $ocorrencia->getUsuarioCliente()->setIdSetor( $linha ['id_setor_usuario_usuario_cliente'] );
                 $lista [] = $ocorrencia;
 
 	
@@ -1080,7 +1098,8 @@ class OcorrenciaDAO extends DAO {
         usuario_cliente.email as email_usuario_usuario_cliente, 
         usuario_cliente.login as login_usuario_usuario_cliente, 
         usuario_cliente.senha as senha_usuario_usuario_cliente, 
-        usuario_cliente.nivel as nivel_usuario_usuario_cliente
+        usuario_cliente.nivel as nivel_usuario_usuario_cliente, 
+        usuario_cliente.id_setor as id_setor_usuario_usuario_cliente
 		FROM ocorrencia
 		INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel
 		INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico
@@ -1126,6 +1145,7 @@ class OcorrenciaDAO extends DAO {
                 $ocorrencia->getUsuarioCliente()->setLogin( $linha ['login_usuario_usuario_cliente'] );
                 $ocorrencia->getUsuarioCliente()->setSenha( $linha ['senha_usuario_usuario_cliente'] );
                 $ocorrencia->getUsuarioCliente()->setNivel( $linha ['nivel_usuario_usuario_cliente'] );
+                $ocorrencia->getUsuarioCliente()->setIdSetor( $linha ['id_setor_usuario_usuario_cliente'] );
                 $lista [] = $ocorrencia;
 
 	
@@ -1174,7 +1194,8 @@ class OcorrenciaDAO extends DAO {
         usuario_cliente.email as email_usuario_usuario_cliente, 
         usuario_cliente.login as login_usuario_usuario_cliente, 
         usuario_cliente.senha as senha_usuario_usuario_cliente, 
-        usuario_cliente.nivel as nivel_usuario_usuario_cliente
+        usuario_cliente.nivel as nivel_usuario_usuario_cliente, 
+        usuario_cliente.id_setor as id_setor_usuario_usuario_cliente
 		FROM ocorrencia
 		INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel
 		INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico
@@ -1220,6 +1241,7 @@ class OcorrenciaDAO extends DAO {
                 $ocorrencia->getUsuarioCliente()->setLogin( $linha ['login_usuario_usuario_cliente'] );
                 $ocorrencia->getUsuarioCliente()->setSenha( $linha ['senha_usuario_usuario_cliente'] );
                 $ocorrencia->getUsuarioCliente()->setNivel( $linha ['nivel_usuario_usuario_cliente'] );
+                $ocorrencia->getUsuarioCliente()->setIdSetor( $linha ['id_setor_usuario_usuario_cliente'] );
                 $lista [] = $ocorrencia;
 
 	
@@ -1268,7 +1290,8 @@ class OcorrenciaDAO extends DAO {
         usuario_cliente.email as email_usuario_usuario_cliente, 
         usuario_cliente.login as login_usuario_usuario_cliente, 
         usuario_cliente.senha as senha_usuario_usuario_cliente, 
-        usuario_cliente.nivel as nivel_usuario_usuario_cliente
+        usuario_cliente.nivel as nivel_usuario_usuario_cliente, 
+        usuario_cliente.id_setor as id_setor_usuario_usuario_cliente
 		FROM ocorrencia
 		INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel
 		INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico
@@ -1314,6 +1337,7 @@ class OcorrenciaDAO extends DAO {
                 $ocorrencia->getUsuarioCliente()->setLogin( $linha ['login_usuario_usuario_cliente'] );
                 $ocorrencia->getUsuarioCliente()->setSenha( $linha ['senha_usuario_usuario_cliente'] );
                 $ocorrencia->getUsuarioCliente()->setNivel( $linha ['nivel_usuario_usuario_cliente'] );
+                $ocorrencia->getUsuarioCliente()->setIdSetor( $linha ['id_setor_usuario_usuario_cliente'] );
                 $lista [] = $ocorrencia;
 
 	
@@ -1362,7 +1386,8 @@ class OcorrenciaDAO extends DAO {
         usuario_cliente.email as email_usuario_usuario_cliente, 
         usuario_cliente.login as login_usuario_usuario_cliente, 
         usuario_cliente.senha as senha_usuario_usuario_cliente, 
-        usuario_cliente.nivel as nivel_usuario_usuario_cliente
+        usuario_cliente.nivel as nivel_usuario_usuario_cliente, 
+        usuario_cliente.id_setor as id_setor_usuario_usuario_cliente
 		FROM ocorrencia
 		INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel
 		INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico
@@ -1408,6 +1433,7 @@ class OcorrenciaDAO extends DAO {
                 $ocorrencia->getUsuarioCliente()->setLogin( $linha ['login_usuario_usuario_cliente'] );
                 $ocorrencia->getUsuarioCliente()->setSenha( $linha ['senha_usuario_usuario_cliente'] );
                 $ocorrencia->getUsuarioCliente()->setNivel( $linha ['nivel_usuario_usuario_cliente'] );
+                $ocorrencia->getUsuarioCliente()->setIdSetor( $linha ['id_setor_usuario_usuario_cliente'] );
                 $lista [] = $ocorrencia;
 
 	
@@ -1456,7 +1482,8 @@ class OcorrenciaDAO extends DAO {
         usuario_cliente.email as email_usuario_usuario_cliente, 
         usuario_cliente.login as login_usuario_usuario_cliente, 
         usuario_cliente.senha as senha_usuario_usuario_cliente, 
-        usuario_cliente.nivel as nivel_usuario_usuario_cliente
+        usuario_cliente.nivel as nivel_usuario_usuario_cliente, 
+        usuario_cliente.id_setor as id_setor_usuario_usuario_cliente
 		FROM ocorrencia
 		INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel
 		INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico
@@ -1502,6 +1529,7 @@ class OcorrenciaDAO extends DAO {
                 $ocorrencia->getUsuarioCliente()->setLogin( $linha ['login_usuario_usuario_cliente'] );
                 $ocorrencia->getUsuarioCliente()->setSenha( $linha ['senha_usuario_usuario_cliente'] );
                 $ocorrencia->getUsuarioCliente()->setNivel( $linha ['nivel_usuario_usuario_cliente'] );
+                $ocorrencia->getUsuarioCliente()->setIdSetor( $linha ['id_setor_usuario_usuario_cliente'] );
                 $lista [] = $ocorrencia;
 
 	
@@ -1550,7 +1578,8 @@ class OcorrenciaDAO extends DAO {
         usuario_cliente.email as email_usuario_usuario_cliente, 
         usuario_cliente.login as login_usuario_usuario_cliente, 
         usuario_cliente.senha as senha_usuario_usuario_cliente, 
-        usuario_cliente.nivel as nivel_usuario_usuario_cliente
+        usuario_cliente.nivel as nivel_usuario_usuario_cliente, 
+        usuario_cliente.id_setor as id_setor_usuario_usuario_cliente
 		FROM ocorrencia
 		INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel
 		INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico
@@ -1596,6 +1625,7 @@ class OcorrenciaDAO extends DAO {
                 $ocorrencia->getUsuarioCliente()->setLogin( $linha ['login_usuario_usuario_cliente'] );
                 $ocorrencia->getUsuarioCliente()->setSenha( $linha ['senha_usuario_usuario_cliente'] );
                 $ocorrencia->getUsuarioCliente()->setNivel( $linha ['nivel_usuario_usuario_cliente'] );
+                $ocorrencia->getUsuarioCliente()->setIdSetor( $linha ['id_setor_usuario_usuario_cliente'] );
                 $lista [] = $ocorrencia;
 
 	
@@ -1644,7 +1674,8 @@ class OcorrenciaDAO extends DAO {
         usuario_cliente.email as email_usuario_usuario_cliente, 
         usuario_cliente.login as login_usuario_usuario_cliente, 
         usuario_cliente.senha as senha_usuario_usuario_cliente, 
-        usuario_cliente.nivel as nivel_usuario_usuario_cliente
+        usuario_cliente.nivel as nivel_usuario_usuario_cliente, 
+        usuario_cliente.id_setor as id_setor_usuario_usuario_cliente
 		FROM ocorrencia
 		INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel
 		INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico
@@ -1690,6 +1721,7 @@ class OcorrenciaDAO extends DAO {
                 $ocorrencia->getUsuarioCliente()->setLogin( $linha ['login_usuario_usuario_cliente'] );
                 $ocorrencia->getUsuarioCliente()->setSenha( $linha ['senha_usuario_usuario_cliente'] );
                 $ocorrencia->getUsuarioCliente()->setNivel( $linha ['nivel_usuario_usuario_cliente'] );
+                $ocorrencia->getUsuarioCliente()->setIdSetor( $linha ['id_setor_usuario_usuario_cliente'] );
                 $lista [] = $ocorrencia;
 
 	
@@ -1738,7 +1770,8 @@ class OcorrenciaDAO extends DAO {
         usuario_cliente.email as email_usuario_usuario_cliente, 
         usuario_cliente.login as login_usuario_usuario_cliente, 
         usuario_cliente.senha as senha_usuario_usuario_cliente, 
-        usuario_cliente.nivel as nivel_usuario_usuario_cliente
+        usuario_cliente.nivel as nivel_usuario_usuario_cliente, 
+        usuario_cliente.id_setor as id_setor_usuario_usuario_cliente
 		FROM ocorrencia
 		INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel
 		INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico
@@ -1784,6 +1817,7 @@ class OcorrenciaDAO extends DAO {
                 $ocorrencia->getUsuarioCliente()->setLogin( $linha ['login_usuario_usuario_cliente'] );
                 $ocorrencia->getUsuarioCliente()->setSenha( $linha ['senha_usuario_usuario_cliente'] );
                 $ocorrencia->getUsuarioCliente()->setNivel( $linha ['nivel_usuario_usuario_cliente'] );
+                $ocorrencia->getUsuarioCliente()->setIdSetor( $linha ['id_setor_usuario_usuario_cliente'] );
                 $lista [] = $ocorrencia;
 
 	
@@ -1831,7 +1865,8 @@ class OcorrenciaDAO extends DAO {
         usuario_cliente.email as email_usuario_usuario_cliente, 
         usuario_cliente.login as login_usuario_usuario_cliente, 
         usuario_cliente.senha as senha_usuario_usuario_cliente, 
-        usuario_cliente.nivel as nivel_usuario_usuario_cliente
+        usuario_cliente.nivel as nivel_usuario_usuario_cliente, 
+        usuario_cliente.id_setor as id_setor_usuario_usuario_cliente
 		FROM ocorrencia
 		INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel
 		INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico
@@ -1881,6 +1916,7 @@ class OcorrenciaDAO extends DAO {
                 $ocorrencia->getUsuarioCliente()->setLogin( $linha ['login_usuario_usuario_cliente'] );
                 $ocorrencia->getUsuarioCliente()->setSenha( $linha ['senha_usuario_usuario_cliente'] );
                 $ocorrencia->getUsuarioCliente()->setNivel( $linha ['nivel_usuario_usuario_cliente'] );
+                $ocorrencia->getUsuarioCliente()->setIdSetor( $linha ['id_setor_usuario_usuario_cliente'] );
                 
                 
 		    }
@@ -1925,7 +1961,8 @@ class OcorrenciaDAO extends DAO {
         usuario_cliente.email as email_usuario_usuario_cliente, 
         usuario_cliente.login as login_usuario_usuario_cliente, 
         usuario_cliente.senha as senha_usuario_usuario_cliente, 
-        usuario_cliente.nivel as nivel_usuario_usuario_cliente
+        usuario_cliente.nivel as nivel_usuario_usuario_cliente, 
+        usuario_cliente.id_setor as id_setor_usuario_usuario_cliente
 		FROM ocorrencia
 		INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel
 		INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico
@@ -1975,6 +2012,7 @@ class OcorrenciaDAO extends DAO {
                 $ocorrencia->getUsuarioCliente()->setLogin( $linha ['login_usuario_usuario_cliente'] );
                 $ocorrencia->getUsuarioCliente()->setSenha( $linha ['senha_usuario_usuario_cliente'] );
                 $ocorrencia->getUsuarioCliente()->setNivel( $linha ['nivel_usuario_usuario_cliente'] );
+                $ocorrencia->getUsuarioCliente()->setIdSetor( $linha ['id_setor_usuario_usuario_cliente'] );
                 
                 
 		    }
@@ -2019,7 +2057,8 @@ class OcorrenciaDAO extends DAO {
         usuario_cliente.email as email_usuario_usuario_cliente, 
         usuario_cliente.login as login_usuario_usuario_cliente, 
         usuario_cliente.senha as senha_usuario_usuario_cliente, 
-        usuario_cliente.nivel as nivel_usuario_usuario_cliente
+        usuario_cliente.nivel as nivel_usuario_usuario_cliente, 
+        usuario_cliente.id_setor as id_setor_usuario_usuario_cliente
 		FROM ocorrencia
 		INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel
 		INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico
@@ -2069,6 +2108,7 @@ class OcorrenciaDAO extends DAO {
                 $ocorrencia->getUsuarioCliente()->setLogin( $linha ['login_usuario_usuario_cliente'] );
                 $ocorrencia->getUsuarioCliente()->setSenha( $linha ['senha_usuario_usuario_cliente'] );
                 $ocorrencia->getUsuarioCliente()->setNivel( $linha ['nivel_usuario_usuario_cliente'] );
+                $ocorrencia->getUsuarioCliente()->setIdSetor( $linha ['id_setor_usuario_usuario_cliente'] );
                 
                 
 		    }
@@ -2113,7 +2153,8 @@ class OcorrenciaDAO extends DAO {
         usuario_cliente.email as email_usuario_usuario_cliente, 
         usuario_cliente.login as login_usuario_usuario_cliente, 
         usuario_cliente.senha as senha_usuario_usuario_cliente, 
-        usuario_cliente.nivel as nivel_usuario_usuario_cliente
+        usuario_cliente.nivel as nivel_usuario_usuario_cliente, 
+        usuario_cliente.id_setor as id_setor_usuario_usuario_cliente
 		FROM ocorrencia
 		INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel
 		INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico
@@ -2163,6 +2204,7 @@ class OcorrenciaDAO extends DAO {
                 $ocorrencia->getUsuarioCliente()->setLogin( $linha ['login_usuario_usuario_cliente'] );
                 $ocorrencia->getUsuarioCliente()->setSenha( $linha ['senha_usuario_usuario_cliente'] );
                 $ocorrencia->getUsuarioCliente()->setNivel( $linha ['nivel_usuario_usuario_cliente'] );
+                $ocorrencia->getUsuarioCliente()->setIdSetor( $linha ['id_setor_usuario_usuario_cliente'] );
                 
                 
 		    }
@@ -2207,7 +2249,8 @@ class OcorrenciaDAO extends DAO {
         usuario_cliente.email as email_usuario_usuario_cliente, 
         usuario_cliente.login as login_usuario_usuario_cliente, 
         usuario_cliente.senha as senha_usuario_usuario_cliente, 
-        usuario_cliente.nivel as nivel_usuario_usuario_cliente
+        usuario_cliente.nivel as nivel_usuario_usuario_cliente, 
+        usuario_cliente.id_setor as id_setor_usuario_usuario_cliente
 		FROM ocorrencia
 		INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel
 		INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico
@@ -2257,6 +2300,7 @@ class OcorrenciaDAO extends DAO {
                 $ocorrencia->getUsuarioCliente()->setLogin( $linha ['login_usuario_usuario_cliente'] );
                 $ocorrencia->getUsuarioCliente()->setSenha( $linha ['senha_usuario_usuario_cliente'] );
                 $ocorrencia->getUsuarioCliente()->setNivel( $linha ['nivel_usuario_usuario_cliente'] );
+                $ocorrencia->getUsuarioCliente()->setIdSetor( $linha ['id_setor_usuario_usuario_cliente'] );
                 
                 
 		    }
@@ -2301,7 +2345,8 @@ class OcorrenciaDAO extends DAO {
         usuario_cliente.email as email_usuario_usuario_cliente, 
         usuario_cliente.login as login_usuario_usuario_cliente, 
         usuario_cliente.senha as senha_usuario_usuario_cliente, 
-        usuario_cliente.nivel as nivel_usuario_usuario_cliente
+        usuario_cliente.nivel as nivel_usuario_usuario_cliente, 
+        usuario_cliente.id_setor as id_setor_usuario_usuario_cliente
 		FROM ocorrencia
 		INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel
 		INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico
@@ -2351,6 +2396,7 @@ class OcorrenciaDAO extends DAO {
                 $ocorrencia->getUsuarioCliente()->setLogin( $linha ['login_usuario_usuario_cliente'] );
                 $ocorrencia->getUsuarioCliente()->setSenha( $linha ['senha_usuario_usuario_cliente'] );
                 $ocorrencia->getUsuarioCliente()->setNivel( $linha ['nivel_usuario_usuario_cliente'] );
+                $ocorrencia->getUsuarioCliente()->setIdSetor( $linha ['id_setor_usuario_usuario_cliente'] );
                 
                 
 		    }
@@ -2395,7 +2441,8 @@ class OcorrenciaDAO extends DAO {
         usuario_cliente.email as email_usuario_usuario_cliente, 
         usuario_cliente.login as login_usuario_usuario_cliente, 
         usuario_cliente.senha as senha_usuario_usuario_cliente, 
-        usuario_cliente.nivel as nivel_usuario_usuario_cliente
+        usuario_cliente.nivel as nivel_usuario_usuario_cliente, 
+        usuario_cliente.id_setor as id_setor_usuario_usuario_cliente
 		FROM ocorrencia
 		INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel
 		INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico
@@ -2445,6 +2492,7 @@ class OcorrenciaDAO extends DAO {
                 $ocorrencia->getUsuarioCliente()->setLogin( $linha ['login_usuario_usuario_cliente'] );
                 $ocorrencia->getUsuarioCliente()->setSenha( $linha ['senha_usuario_usuario_cliente'] );
                 $ocorrencia->getUsuarioCliente()->setNivel( $linha ['nivel_usuario_usuario_cliente'] );
+                $ocorrencia->getUsuarioCliente()->setIdSetor( $linha ['id_setor_usuario_usuario_cliente'] );
                 
                 
 		    }
@@ -2489,7 +2537,8 @@ class OcorrenciaDAO extends DAO {
         usuario_cliente.email as email_usuario_usuario_cliente, 
         usuario_cliente.login as login_usuario_usuario_cliente, 
         usuario_cliente.senha as senha_usuario_usuario_cliente, 
-        usuario_cliente.nivel as nivel_usuario_usuario_cliente
+        usuario_cliente.nivel as nivel_usuario_usuario_cliente, 
+        usuario_cliente.id_setor as id_setor_usuario_usuario_cliente
 		FROM ocorrencia
 		INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel
 		INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico
@@ -2539,6 +2588,7 @@ class OcorrenciaDAO extends DAO {
                 $ocorrencia->getUsuarioCliente()->setLogin( $linha ['login_usuario_usuario_cliente'] );
                 $ocorrencia->getUsuarioCliente()->setSenha( $linha ['senha_usuario_usuario_cliente'] );
                 $ocorrencia->getUsuarioCliente()->setNivel( $linha ['nivel_usuario_usuario_cliente'] );
+                $ocorrencia->getUsuarioCliente()->setIdSetor( $linha ['id_setor_usuario_usuario_cliente'] );
                 
                 
 		    }
@@ -2583,7 +2633,8 @@ class OcorrenciaDAO extends DAO {
         usuario_cliente.email as email_usuario_usuario_cliente, 
         usuario_cliente.login as login_usuario_usuario_cliente, 
         usuario_cliente.senha as senha_usuario_usuario_cliente, 
-        usuario_cliente.nivel as nivel_usuario_usuario_cliente
+        usuario_cliente.nivel as nivel_usuario_usuario_cliente, 
+        usuario_cliente.id_setor as id_setor_usuario_usuario_cliente
 		FROM ocorrencia
 		INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel
 		INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico
@@ -2633,6 +2684,7 @@ class OcorrenciaDAO extends DAO {
                 $ocorrencia->getUsuarioCliente()->setLogin( $linha ['login_usuario_usuario_cliente'] );
                 $ocorrencia->getUsuarioCliente()->setSenha( $linha ['senha_usuario_usuario_cliente'] );
                 $ocorrencia->getUsuarioCliente()->setNivel( $linha ['nivel_usuario_usuario_cliente'] );
+                $ocorrencia->getUsuarioCliente()->setIdSetor( $linha ['id_setor_usuario_usuario_cliente'] );
                 
                 
 		    }
@@ -2677,7 +2729,8 @@ class OcorrenciaDAO extends DAO {
         usuario_cliente.email as email_usuario_usuario_cliente, 
         usuario_cliente.login as login_usuario_usuario_cliente, 
         usuario_cliente.senha as senha_usuario_usuario_cliente, 
-        usuario_cliente.nivel as nivel_usuario_usuario_cliente
+        usuario_cliente.nivel as nivel_usuario_usuario_cliente, 
+        usuario_cliente.id_setor as id_setor_usuario_usuario_cliente
 		FROM ocorrencia
 		INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel
 		INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico
@@ -2727,6 +2780,7 @@ class OcorrenciaDAO extends DAO {
                 $ocorrencia->getUsuarioCliente()->setLogin( $linha ['login_usuario_usuario_cliente'] );
                 $ocorrencia->getUsuarioCliente()->setSenha( $linha ['senha_usuario_usuario_cliente'] );
                 $ocorrencia->getUsuarioCliente()->setNivel( $linha ['nivel_usuario_usuario_cliente'] );
+                $ocorrencia->getUsuarioCliente()->setIdSetor( $linha ['id_setor_usuario_usuario_cliente'] );
                 
                 
 		    }
@@ -2771,7 +2825,8 @@ class OcorrenciaDAO extends DAO {
         usuario_cliente.email as email_usuario_usuario_cliente, 
         usuario_cliente.login as login_usuario_usuario_cliente, 
         usuario_cliente.senha as senha_usuario_usuario_cliente, 
-        usuario_cliente.nivel as nivel_usuario_usuario_cliente
+        usuario_cliente.nivel as nivel_usuario_usuario_cliente, 
+        usuario_cliente.id_setor as id_setor_usuario_usuario_cliente
 		FROM ocorrencia
 		INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel
 		INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico
@@ -2821,6 +2876,7 @@ class OcorrenciaDAO extends DAO {
                 $ocorrencia->getUsuarioCliente()->setLogin( $linha ['login_usuario_usuario_cliente'] );
                 $ocorrencia->getUsuarioCliente()->setSenha( $linha ['senha_usuario_usuario_cliente'] );
                 $ocorrencia->getUsuarioCliente()->setNivel( $linha ['nivel_usuario_usuario_cliente'] );
+                $ocorrencia->getUsuarioCliente()->setIdSetor( $linha ['id_setor_usuario_usuario_cliente'] );
                 
                 
 		    }
@@ -2865,7 +2921,8 @@ class OcorrenciaDAO extends DAO {
         usuario_cliente.email as email_usuario_usuario_cliente, 
         usuario_cliente.login as login_usuario_usuario_cliente, 
         usuario_cliente.senha as senha_usuario_usuario_cliente, 
-        usuario_cliente.nivel as nivel_usuario_usuario_cliente
+        usuario_cliente.nivel as nivel_usuario_usuario_cliente, 
+        usuario_cliente.id_setor as id_setor_usuario_usuario_cliente
 		FROM ocorrencia
 		INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel
 		INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico
@@ -2915,6 +2972,7 @@ class OcorrenciaDAO extends DAO {
                 $ocorrencia->getUsuarioCliente()->setLogin( $linha ['login_usuario_usuario_cliente'] );
                 $ocorrencia->getUsuarioCliente()->setSenha( $linha ['senha_usuario_usuario_cliente'] );
                 $ocorrencia->getUsuarioCliente()->setNivel( $linha ['nivel_usuario_usuario_cliente'] );
+                $ocorrencia->getUsuarioCliente()->setIdSetor( $linha ['id_setor_usuario_usuario_cliente'] );
                 
                 
 		    }
@@ -2959,7 +3017,8 @@ class OcorrenciaDAO extends DAO {
         usuario_cliente.email as email_usuario_usuario_cliente, 
         usuario_cliente.login as login_usuario_usuario_cliente, 
         usuario_cliente.senha as senha_usuario_usuario_cliente, 
-        usuario_cliente.nivel as nivel_usuario_usuario_cliente
+        usuario_cliente.nivel as nivel_usuario_usuario_cliente, 
+        usuario_cliente.id_setor as id_setor_usuario_usuario_cliente
 		FROM ocorrencia
 		INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel
 		INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico
@@ -3009,6 +3068,7 @@ class OcorrenciaDAO extends DAO {
                 $ocorrencia->getUsuarioCliente()->setLogin( $linha ['login_usuario_usuario_cliente'] );
                 $ocorrencia->getUsuarioCliente()->setSenha( $linha ['senha_usuario_usuario_cliente'] );
                 $ocorrencia->getUsuarioCliente()->setNivel( $linha ['nivel_usuario_usuario_cliente'] );
+                $ocorrencia->getUsuarioCliente()->setIdSetor( $linha ['id_setor_usuario_usuario_cliente'] );
                 
                 
 		    }
@@ -3053,7 +3113,8 @@ class OcorrenciaDAO extends DAO {
         usuario_cliente.email as email_usuario_usuario_cliente, 
         usuario_cliente.login as login_usuario_usuario_cliente, 
         usuario_cliente.senha as senha_usuario_usuario_cliente, 
-        usuario_cliente.nivel as nivel_usuario_usuario_cliente
+        usuario_cliente.nivel as nivel_usuario_usuario_cliente, 
+        usuario_cliente.id_setor as id_setor_usuario_usuario_cliente
 		FROM ocorrencia
 		INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel
 		INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico
@@ -3103,6 +3164,7 @@ class OcorrenciaDAO extends DAO {
                 $ocorrencia->getUsuarioCliente()->setLogin( $linha ['login_usuario_usuario_cliente'] );
                 $ocorrencia->getUsuarioCliente()->setSenha( $linha ['senha_usuario_usuario_cliente'] );
                 $ocorrencia->getUsuarioCliente()->setNivel( $linha ['nivel_usuario_usuario_cliente'] );
+                $ocorrencia->getUsuarioCliente()->setIdSetor( $linha ['id_setor_usuario_usuario_cliente'] );
                 
                 
 		    }
@@ -3147,7 +3209,8 @@ class OcorrenciaDAO extends DAO {
         usuario_cliente.email as email_usuario_usuario_cliente, 
         usuario_cliente.login as login_usuario_usuario_cliente, 
         usuario_cliente.senha as senha_usuario_usuario_cliente, 
-        usuario_cliente.nivel as nivel_usuario_usuario_cliente
+        usuario_cliente.nivel as nivel_usuario_usuario_cliente, 
+        usuario_cliente.id_setor as id_setor_usuario_usuario_cliente
 		FROM ocorrencia
 		INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel
 		INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico
@@ -3197,6 +3260,7 @@ class OcorrenciaDAO extends DAO {
                 $ocorrencia->getUsuarioCliente()->setLogin( $linha ['login_usuario_usuario_cliente'] );
                 $ocorrencia->getUsuarioCliente()->setSenha( $linha ['senha_usuario_usuario_cliente'] );
                 $ocorrencia->getUsuarioCliente()->setNivel( $linha ['nivel_usuario_usuario_cliente'] );
+                $ocorrencia->getUsuarioCliente()->setIdSetor( $linha ['id_setor_usuario_usuario_cliente'] );
                 
                 
 		    }
@@ -3241,7 +3305,8 @@ class OcorrenciaDAO extends DAO {
         usuario_cliente.email as email_usuario_usuario_cliente, 
         usuario_cliente.login as login_usuario_usuario_cliente, 
         usuario_cliente.senha as senha_usuario_usuario_cliente, 
-        usuario_cliente.nivel as nivel_usuario_usuario_cliente
+        usuario_cliente.nivel as nivel_usuario_usuario_cliente, 
+        usuario_cliente.id_setor as id_setor_usuario_usuario_cliente
 		FROM ocorrencia
 		INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel
 		INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico
@@ -3291,6 +3356,7 @@ class OcorrenciaDAO extends DAO {
                 $ocorrencia->getUsuarioCliente()->setLogin( $linha ['login_usuario_usuario_cliente'] );
                 $ocorrencia->getUsuarioCliente()->setSenha( $linha ['senha_usuario_usuario_cliente'] );
                 $ocorrencia->getUsuarioCliente()->setNivel( $linha ['nivel_usuario_usuario_cliente'] );
+                $ocorrencia->getUsuarioCliente()->setIdSetor( $linha ['id_setor_usuario_usuario_cliente'] );
                 
                 
 		    }

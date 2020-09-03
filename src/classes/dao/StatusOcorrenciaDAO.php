@@ -137,7 +137,8 @@ class StatusOcorrenciaDAO extends DAO {
         usuario.email as email_usuario_usuario, 
         usuario.login as login_usuario_usuario, 
         usuario.senha as senha_usuario_usuario, 
-        usuario.nivel as nivel_usuario_usuario
+        usuario.nivel as nivel_usuario_usuario, 
+        usuario.id_setor as id_setor_usuario_usuario
 		FROM status_ocorrencia
 		INNER JOIN ocorrencia as ocorrencia ON ocorrencia.id = status_ocorrencia.id_ocorrencia
 		INNER JOIN status as status ON status.id = status_ocorrencia.id_status
@@ -184,6 +185,7 @@ class StatusOcorrenciaDAO extends DAO {
                 $statusOcorrencia->getUsuario()->setLogin( $linha ['login_usuario_usuario'] );
                 $statusOcorrencia->getUsuario()->setSenha( $linha ['senha_usuario_usuario'] );
                 $statusOcorrencia->getUsuario()->setNivel( $linha ['nivel_usuario_usuario'] );
+                $statusOcorrencia->getUsuario()->setIdSetor( $linha ['id_setor_usuario_usuario'] );
                 $lista [] = $statusOcorrencia;
 
 	
@@ -228,7 +230,8 @@ class StatusOcorrenciaDAO extends DAO {
         usuario.email as email_usuario_usuario, 
         usuario.login as login_usuario_usuario, 
         usuario.senha as senha_usuario_usuario, 
-        usuario.nivel as nivel_usuario_usuario
+        usuario.nivel as nivel_usuario_usuario, 
+        usuario.id_setor as id_setor_usuario_usuario
 		FROM status_ocorrencia
 		INNER JOIN ocorrencia as ocorrencia ON ocorrencia.id = status_ocorrencia.id_ocorrencia
 		INNER JOIN status as status ON status.id = status_ocorrencia.id_status
@@ -271,6 +274,7 @@ class StatusOcorrenciaDAO extends DAO {
                 $statusOcorrencia->getUsuario()->setLogin( $linha ['login_usuario_usuario'] );
                 $statusOcorrencia->getUsuario()->setSenha( $linha ['senha_usuario_usuario'] );
                 $statusOcorrencia->getUsuario()->setNivel( $linha ['nivel_usuario_usuario'] );
+                $statusOcorrencia->getUsuario()->setIdSetor( $linha ['id_setor_usuario_usuario'] );
                 $lista [] = $statusOcorrencia;
 
 	
@@ -316,7 +320,8 @@ class StatusOcorrenciaDAO extends DAO {
         usuario.email as email_usuario_usuario, 
         usuario.login as login_usuario_usuario, 
         usuario.senha as senha_usuario_usuario, 
-        usuario.nivel as nivel_usuario_usuario
+        usuario.nivel as nivel_usuario_usuario, 
+        usuario.id_setor as id_setor_usuario_usuario
 		FROM status_ocorrencia
 		INNER JOIN ocorrencia as ocorrencia ON ocorrencia.id = status_ocorrencia.id_ocorrencia
 		INNER JOIN status as status ON status.id = status_ocorrencia.id_status
@@ -359,6 +364,7 @@ class StatusOcorrenciaDAO extends DAO {
                 $statusOcorrencia->getUsuario()->setLogin( $linha ['login_usuario_usuario'] );
                 $statusOcorrencia->getUsuario()->setSenha( $linha ['senha_usuario_usuario'] );
                 $statusOcorrencia->getUsuario()->setNivel( $linha ['nivel_usuario_usuario'] );
+                $statusOcorrencia->getUsuario()->setIdSetor( $linha ['id_setor_usuario_usuario'] );
                 $lista [] = $statusOcorrencia;
 
 	
@@ -404,7 +410,8 @@ class StatusOcorrenciaDAO extends DAO {
         usuario.email as email_usuario_usuario, 
         usuario.login as login_usuario_usuario, 
         usuario.senha as senha_usuario_usuario, 
-        usuario.nivel as nivel_usuario_usuario
+        usuario.nivel as nivel_usuario_usuario, 
+        usuario.id_setor as id_setor_usuario_usuario
 		FROM status_ocorrencia
 		INNER JOIN ocorrencia as ocorrencia ON ocorrencia.id = status_ocorrencia.id_ocorrencia
 		INNER JOIN status as status ON status.id = status_ocorrencia.id_status
@@ -447,6 +454,7 @@ class StatusOcorrenciaDAO extends DAO {
                 $statusOcorrencia->getUsuario()->setLogin( $linha ['login_usuario_usuario'] );
                 $statusOcorrencia->getUsuario()->setSenha( $linha ['senha_usuario_usuario'] );
                 $statusOcorrencia->getUsuario()->setNivel( $linha ['nivel_usuario_usuario'] );
+                $statusOcorrencia->getUsuario()->setIdSetor( $linha ['id_setor_usuario_usuario'] );
                 $lista [] = $statusOcorrencia;
 
 	
@@ -491,7 +499,8 @@ class StatusOcorrenciaDAO extends DAO {
         usuario.email as email_usuario_usuario, 
         usuario.login as login_usuario_usuario, 
         usuario.senha as senha_usuario_usuario, 
-        usuario.nivel as nivel_usuario_usuario
+        usuario.nivel as nivel_usuario_usuario, 
+        usuario.id_setor as id_setor_usuario_usuario
 		FROM status_ocorrencia
 		INNER JOIN ocorrencia as ocorrencia ON ocorrencia.id = status_ocorrencia.id_ocorrencia
 		INNER JOIN status as status ON status.id = status_ocorrencia.id_status
@@ -538,6 +547,7 @@ class StatusOcorrenciaDAO extends DAO {
                 $statusOcorrencia->getUsuario()->setLogin( $linha ['login_usuario_usuario'] );
                 $statusOcorrencia->getUsuario()->setSenha( $linha ['senha_usuario_usuario'] );
                 $statusOcorrencia->getUsuario()->setNivel( $linha ['nivel_usuario_usuario'] );
+                $statusOcorrencia->getUsuario()->setIdSetor( $linha ['id_setor_usuario_usuario'] );
                 
                 
 		    }
@@ -579,7 +589,8 @@ class StatusOcorrenciaDAO extends DAO {
         usuario.email as email_usuario_usuario, 
         usuario.login as login_usuario_usuario, 
         usuario.senha as senha_usuario_usuario, 
-        usuario.nivel as nivel_usuario_usuario
+        usuario.nivel as nivel_usuario_usuario, 
+        usuario.id_setor as id_setor_usuario_usuario
 		FROM status_ocorrencia
 		INNER JOIN ocorrencia as ocorrencia ON ocorrencia.id = status_ocorrencia.id_ocorrencia
 		INNER JOIN status as status ON status.id = status_ocorrencia.id_status
@@ -626,6 +637,7 @@ class StatusOcorrenciaDAO extends DAO {
                 $statusOcorrencia->getUsuario()->setLogin( $linha ['login_usuario_usuario'] );
                 $statusOcorrencia->getUsuario()->setSenha( $linha ['senha_usuario_usuario'] );
                 $statusOcorrencia->getUsuario()->setNivel( $linha ['nivel_usuario_usuario'] );
+                $statusOcorrencia->getUsuario()->setIdSetor( $linha ['id_setor_usuario_usuario'] );
                 
                 
 		    }
@@ -667,7 +679,8 @@ class StatusOcorrenciaDAO extends DAO {
         usuario.email as email_usuario_usuario, 
         usuario.login as login_usuario_usuario, 
         usuario.senha as senha_usuario_usuario, 
-        usuario.nivel as nivel_usuario_usuario
+        usuario.nivel as nivel_usuario_usuario, 
+        usuario.id_setor as id_setor_usuario_usuario
 		FROM status_ocorrencia
 		INNER JOIN ocorrencia as ocorrencia ON ocorrencia.id = status_ocorrencia.id_ocorrencia
 		INNER JOIN status as status ON status.id = status_ocorrencia.id_status
@@ -714,6 +727,7 @@ class StatusOcorrenciaDAO extends DAO {
                 $statusOcorrencia->getUsuario()->setLogin( $linha ['login_usuario_usuario'] );
                 $statusOcorrencia->getUsuario()->setSenha( $linha ['senha_usuario_usuario'] );
                 $statusOcorrencia->getUsuario()->setNivel( $linha ['nivel_usuario_usuario'] );
+                $statusOcorrencia->getUsuario()->setIdSetor( $linha ['id_setor_usuario_usuario'] );
                 
                 
 		    }

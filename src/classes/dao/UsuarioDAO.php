@@ -27,13 +27,15 @@ class UsuarioDAO extends DAO {
                 email = :email,
                 login = :login,
                 senha = :senha,
-                nivel = :nivel
+                nivel = :nivel,
+                id_setor = :idSetor
                 WHERE usuario.id = :id;";
 			$nome = $usuario->getNome();
 			$email = $usuario->getEmail();
 			$login = $usuario->getLogin();
 			$senha = $usuario->getSenha();
 			$nivel = $usuario->getNivel();
+			$idSetor = $usuario->getIdSetor();
             
         try {
             
@@ -44,6 +46,7 @@ class UsuarioDAO extends DAO {
 			$stmt->bindParam(":login", $login, PDO::PARAM_STR);
 			$stmt->bindParam(":senha", $senha, PDO::PARAM_STR);
 			$stmt->bindParam(":nivel", $nivel, PDO::PARAM_STR);
+			$stmt->bindParam(":idSetor", $idSetor, PDO::PARAM_INT);
             
             return $stmt->execute();
         } catch (PDOException $e) {
@@ -55,13 +58,13 @@ class UsuarioDAO extends DAO {
             
 
     public function inserir(Usuario $usuario){
-        $sql = "INSERT INTO usuario(nome, email, login, senha, nivel, id_setor) VALUES (:nome, :email, :login, :senha, :nivel, :setor);";
+        $sql = "INSERT INTO usuario(nome, email, login, senha, nivel, id_setor) VALUES (:nome, :email, :login, :senha, :nivel, :idSetor);";
 		$nome = $usuario->getNome();
 		$email = $usuario->getEmail();
 		$login = $usuario->getLogin();
 		$senha = $usuario->getSenha();
 		$nivel = $usuario->getNivel();
-		$setor = $usuario->getSetor()->getId();
+		$idSetor = $usuario->getIdSetor();
 		try {
 			$db = $this->getConexao();
 			$stmt = $db->prepare($sql);
@@ -70,7 +73,7 @@ class UsuarioDAO extends DAO {
 			$stmt->bindParam(":login", $login, PDO::PARAM_STR);
 			$stmt->bindParam(":senha", $senha, PDO::PARAM_STR);
 			$stmt->bindParam(":nivel", $nivel, PDO::PARAM_STR);
-			$stmt->bindParam(":setor", $setor, PDO::PARAM_INT);
+			$stmt->bindParam(":idSetor", $idSetor, PDO::PARAM_INT);
 			return $stmt->execute();
 		} catch(PDOException $e) {
 			echo '{"error":{"text":'. $e->getMessage() .'}}';
@@ -78,14 +81,14 @@ class UsuarioDAO extends DAO {
             
     }
     public function inserirComPK(Usuario $usuario){
-        $sql = "INSERT INTO usuario(id, nome, email, login, senha, nivel, id_area_responsavel_setor) VALUES (:id, :nome, :email, :login, :senha, :nivel, :setor);";
+        $sql = "INSERT INTO usuario(id, nome, email, login, senha, nivel, id_setor) VALUES (:id, :nome, :email, :login, :senha, :nivel, :idSetor);";
 		$id = $usuario->getId();
 		$nome = $usuario->getNome();
 		$email = $usuario->getEmail();
 		$login = $usuario->getLogin();
 		$senha = $usuario->getSenha();
 		$nivel = $usuario->getNivel();
-		$setor = $usuario->getSetor()->getId();
+		$idSetor = $usuario->getIdSetor();
 		try {
 			$db = $this->getConexao();
 			$stmt = $db->prepare($sql);
@@ -95,7 +98,7 @@ class UsuarioDAO extends DAO {
 			$stmt->bindParam(":login", $login, PDO::PARAM_STR);
 			$stmt->bindParam(":senha", $senha, PDO::PARAM_STR);
 			$stmt->bindParam(":nivel", $nivel, PDO::PARAM_STR);
-			$stmt->bindParam(":setor", $setor, PDO::PARAM_INT);
+			$stmt->bindParam(":idSetor", $idSetor, PDO::PARAM_INT);
 			return $stmt->execute();
 		} catch(PDOException $e) {
 			echo '{"error":{"text":'. $e->getMessage() .'}}';
@@ -129,12 +132,8 @@ class UsuarioDAO extends DAO {
         usuario.login, 
         usuario.senha, 
         usuario.nivel, 
-        setor.id as id_area_responsavel_setor, 
-        setor.nome as nome_area_responsavel_setor, 
-        setor.descricao as descricao_area_responsavel_setor, 
-        setor.email as email_area_responsavel_setor
+        usuario.id_setor
 		FROM usuario
-		INNER JOIN area_responsavel as setor ON setor.id = usuario.id_setor
                  LIMIT 1000";
 
         try {
@@ -155,10 +154,7 @@ class UsuarioDAO extends DAO {
                 $usuario->setLogin( $linha ['login'] );
                 $usuario->setSenha( $linha ['senha'] );
                 $usuario->setNivel( $linha ['nivel'] );
-                $usuario->getSetor()->setId( $linha ['id_area_responsavel_setor'] );
-                $usuario->getSetor()->setNome( $linha ['nome_area_responsavel_setor'] );
-                $usuario->getSetor()->setDescricao( $linha ['descricao_area_responsavel_setor'] );
-                $usuario->getSetor()->setEmail( $linha ['email_area_responsavel_setor'] );
+                $usuario->setIdSetor( $linha ['id_setor'] );
                 $lista [] = $usuario;
 
 	
@@ -182,12 +178,8 @@ class UsuarioDAO extends DAO {
         usuario.login, 
         usuario.senha, 
         usuario.nivel, 
-        setor.id as id_area_responsavel_setor, 
-        setor.nome as nome_area_responsavel_setor, 
-        setor.descricao as descricao_area_responsavel_setor, 
-        setor.email as email_area_responsavel_setor
+        usuario.id_setor
 		FROM usuario
-		INNER JOIN area_responsavel as setor ON setor.id = usuario.id_setor
             WHERE usuario.id = :id";
                 
         try {
@@ -204,10 +196,7 @@ class UsuarioDAO extends DAO {
                 $usuario->setLogin( $linha ['login'] );
                 $usuario->setSenha( $linha ['senha'] );
                 $usuario->setNivel( $linha ['nivel'] );
-                $usuario->getSetor()->setId( $linha ['id_area_responsavel_setor'] );
-                $usuario->getSetor()->setNome( $linha ['nome_area_responsavel_setor'] );
-                $usuario->getSetor()->setDescricao( $linha ['descricao_area_responsavel_setor'] );
-                $usuario->getSetor()->setEmail( $linha ['email_area_responsavel_setor'] );
+                $usuario->setIdSetor( $linha ['id_setor'] );
                 $lista [] = $usuario;
 
 	
@@ -232,12 +221,8 @@ class UsuarioDAO extends DAO {
         usuario.login, 
         usuario.senha, 
         usuario.nivel, 
-        setor.id as id_area_responsavel_setor, 
-        setor.nome as nome_area_responsavel_setor, 
-        setor.descricao as descricao_area_responsavel_setor, 
-        setor.email as email_area_responsavel_setor
+        usuario.id_setor
 		FROM usuario
-		INNER JOIN area_responsavel as setor ON setor.id = usuario.id_setor
             WHERE usuario.nome like :nome";
                 
         try {
@@ -254,10 +239,7 @@ class UsuarioDAO extends DAO {
                 $usuario->setLogin( $linha ['login'] );
                 $usuario->setSenha( $linha ['senha'] );
                 $usuario->setNivel( $linha ['nivel'] );
-                $usuario->getSetor()->setId( $linha ['id_area_responsavel_setor'] );
-                $usuario->getSetor()->setNome( $linha ['nome_area_responsavel_setor'] );
-                $usuario->getSetor()->setDescricao( $linha ['descricao_area_responsavel_setor'] );
-                $usuario->getSetor()->setEmail( $linha ['email_area_responsavel_setor'] );
+                $usuario->setIdSetor( $linha ['id_setor'] );
                 $lista [] = $usuario;
 
 	
@@ -282,12 +264,8 @@ class UsuarioDAO extends DAO {
         usuario.login, 
         usuario.senha, 
         usuario.nivel, 
-        setor.id as id_area_responsavel_setor, 
-        setor.nome as nome_area_responsavel_setor, 
-        setor.descricao as descricao_area_responsavel_setor, 
-        setor.email as email_area_responsavel_setor
+        usuario.id_setor
 		FROM usuario
-		INNER JOIN area_responsavel as setor ON setor.id = usuario.id_setor
             WHERE usuario.email like :email";
                 
         try {
@@ -304,10 +282,7 @@ class UsuarioDAO extends DAO {
                 $usuario->setLogin( $linha ['login'] );
                 $usuario->setSenha( $linha ['senha'] );
                 $usuario->setNivel( $linha ['nivel'] );
-                $usuario->getSetor()->setId( $linha ['id_area_responsavel_setor'] );
-                $usuario->getSetor()->setNome( $linha ['nome_area_responsavel_setor'] );
-                $usuario->getSetor()->setDescricao( $linha ['descricao_area_responsavel_setor'] );
-                $usuario->getSetor()->setEmail( $linha ['email_area_responsavel_setor'] );
+                $usuario->setIdSetor( $linha ['id_setor'] );
                 $lista [] = $usuario;
 
 	
@@ -332,12 +307,8 @@ class UsuarioDAO extends DAO {
         usuario.login, 
         usuario.senha, 
         usuario.nivel, 
-        setor.id as id_area_responsavel_setor, 
-        setor.nome as nome_area_responsavel_setor, 
-        setor.descricao as descricao_area_responsavel_setor, 
-        setor.email as email_area_responsavel_setor
+        usuario.id_setor
 		FROM usuario
-		INNER JOIN area_responsavel as setor ON setor.id = usuario.id_setor
             WHERE usuario.login like :login";
                 
         try {
@@ -354,10 +325,7 @@ class UsuarioDAO extends DAO {
                 $usuario->setLogin( $linha ['login'] );
                 $usuario->setSenha( $linha ['senha'] );
                 $usuario->setNivel( $linha ['nivel'] );
-                $usuario->getSetor()->setId( $linha ['id_area_responsavel_setor'] );
-                $usuario->getSetor()->setNome( $linha ['nome_area_responsavel_setor'] );
-                $usuario->getSetor()->setDescricao( $linha ['descricao_area_responsavel_setor'] );
-                $usuario->getSetor()->setEmail( $linha ['email_area_responsavel_setor'] );
+                $usuario->setIdSetor( $linha ['id_setor'] );
                 $lista [] = $usuario;
 
 	
@@ -382,12 +350,8 @@ class UsuarioDAO extends DAO {
         usuario.login, 
         usuario.senha, 
         usuario.nivel, 
-        setor.id as id_area_responsavel_setor, 
-        setor.nome as nome_area_responsavel_setor, 
-        setor.descricao as descricao_area_responsavel_setor, 
-        setor.email as email_area_responsavel_setor
+        usuario.id_setor
 		FROM usuario
-		INNER JOIN area_responsavel as setor ON setor.id = usuario.id_setor
             WHERE usuario.senha like :senha";
                 
         try {
@@ -404,10 +368,7 @@ class UsuarioDAO extends DAO {
                 $usuario->setLogin( $linha ['login'] );
                 $usuario->setSenha( $linha ['senha'] );
                 $usuario->setNivel( $linha ['nivel'] );
-                $usuario->getSetor()->setId( $linha ['id_area_responsavel_setor'] );
-                $usuario->getSetor()->setNome( $linha ['nome_area_responsavel_setor'] );
-                $usuario->getSetor()->setDescricao( $linha ['descricao_area_responsavel_setor'] );
-                $usuario->getSetor()->setEmail( $linha ['email_area_responsavel_setor'] );
+                $usuario->setIdSetor( $linha ['id_setor'] );
                 $lista [] = $usuario;
 
 	
@@ -432,12 +393,8 @@ class UsuarioDAO extends DAO {
         usuario.login, 
         usuario.senha, 
         usuario.nivel, 
-        setor.id as id_area_responsavel_setor, 
-        setor.nome as nome_area_responsavel_setor, 
-        setor.descricao as descricao_area_responsavel_setor, 
-        setor.email as email_area_responsavel_setor
+        usuario.id_setor
 		FROM usuario
-		INNER JOIN area_responsavel as setor ON setor.id = usuario.id_setor
             WHERE usuario.nivel like :nivel";
                 
         try {
@@ -454,10 +411,50 @@ class UsuarioDAO extends DAO {
                 $usuario->setLogin( $linha ['login'] );
                 $usuario->setSenha( $linha ['senha'] );
                 $usuario->setNivel( $linha ['nivel'] );
-                $usuario->getSetor()->setId( $linha ['id_area_responsavel_setor'] );
-                $usuario->getSetor()->setNome( $linha ['nome_area_responsavel_setor'] );
-                $usuario->getSetor()->setDescricao( $linha ['descricao_area_responsavel_setor'] );
-                $usuario->getSetor()->setEmail( $linha ['email_area_responsavel_setor'] );
+                $usuario->setIdSetor( $linha ['id_setor'] );
+                $lista [] = $usuario;
+
+	
+		    }
+    			    
+        } catch(PDOException $e) {
+            echo $e->getMessage();
+    			    
+        }
+		return $lista;
+    }
+                
+    public function pesquisaPorIdSetor(Usuario $usuario) {
+        $lista = array();
+	    $idSetor = $usuario->getIdSetor();
+                
+        $sql = "
+		SELECT
+        usuario.id, 
+        usuario.nome, 
+        usuario.email, 
+        usuario.login, 
+        usuario.senha, 
+        usuario.nivel, 
+        usuario.id_setor
+		FROM usuario
+            WHERE usuario.id_setor = :idSetor";
+                
+        try {
+                
+            $stmt = $this->conexao->prepare($sql);
+            $stmt->bindParam(":idSetor", $idSetor, PDO::PARAM_INT);
+            $stmt->execute();
+            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            foreach ( $result as $linha ){
+		        $usuario = new Usuario();
+                $usuario->setId( $linha ['id'] );
+                $usuario->setNome( $linha ['nome'] );
+                $usuario->setEmail( $linha ['email'] );
+                $usuario->setLogin( $linha ['login'] );
+                $usuario->setSenha( $linha ['senha'] );
+                $usuario->setNivel( $linha ['nivel'] );
+                $usuario->setIdSetor( $linha ['id_setor'] );
                 $lista [] = $usuario;
 
 	
@@ -481,12 +478,8 @@ class UsuarioDAO extends DAO {
         usuario.login, 
         usuario.senha, 
         usuario.nivel, 
-        setor.id as id_area_responsavel_setor, 
-        setor.nome as nome_area_responsavel_setor, 
-        setor.descricao as descricao_area_responsavel_setor, 
-        setor.email as email_area_responsavel_setor
+        usuario.id_setor
 		FROM usuario
-		INNER JOIN area_responsavel as setor ON setor.id = usuario.id_setor
                 WHERE usuario.id = :id
                  LIMIT 1000";
                 
@@ -507,10 +500,7 @@ class UsuarioDAO extends DAO {
                 $usuario->setLogin( $linha ['login'] );
                 $usuario->setSenha( $linha ['senha'] );
                 $usuario->setNivel( $linha ['nivel'] );
-                $usuario->getSetor()->setId( $linha ['id_area_responsavel_setor'] );
-                $usuario->getSetor()->setNome( $linha ['nome_area_responsavel_setor'] );
-                $usuario->getSetor()->setDescricao( $linha ['descricao_area_responsavel_setor'] );
-                $usuario->getSetor()->setEmail( $linha ['email_area_responsavel_setor'] );
+                $usuario->setIdSetor( $linha ['id_setor'] );
                 
                 
 		    }
@@ -531,12 +521,8 @@ class UsuarioDAO extends DAO {
         usuario.login, 
         usuario.senha, 
         usuario.nivel, 
-        setor.id as id_area_responsavel_setor, 
-        setor.nome as nome_area_responsavel_setor, 
-        setor.descricao as descricao_area_responsavel_setor, 
-        setor.email as email_area_responsavel_setor
+        usuario.id_setor
 		FROM usuario
-		INNER JOIN area_responsavel as setor ON setor.id = usuario.id_setor
                 WHERE usuario.nome = :nome
                  LIMIT 1000";
                 
@@ -557,10 +543,7 @@ class UsuarioDAO extends DAO {
                 $usuario->setLogin( $linha ['login'] );
                 $usuario->setSenha( $linha ['senha'] );
                 $usuario->setNivel( $linha ['nivel'] );
-                $usuario->getSetor()->setId( $linha ['id_area_responsavel_setor'] );
-                $usuario->getSetor()->setNome( $linha ['nome_area_responsavel_setor'] );
-                $usuario->getSetor()->setDescricao( $linha ['descricao_area_responsavel_setor'] );
-                $usuario->getSetor()->setEmail( $linha ['email_area_responsavel_setor'] );
+                $usuario->setIdSetor( $linha ['id_setor'] );
                 
                 
 		    }
@@ -581,12 +564,8 @@ class UsuarioDAO extends DAO {
         usuario.login, 
         usuario.senha, 
         usuario.nivel, 
-        setor.id as id_area_responsavel_setor, 
-        setor.nome as nome_area_responsavel_setor, 
-        setor.descricao as descricao_area_responsavel_setor, 
-        setor.email as email_area_responsavel_setor
+        usuario.id_setor
 		FROM usuario
-		INNER JOIN area_responsavel as setor ON setor.id = usuario.id_setor
                 WHERE usuario.email = :email
                  LIMIT 1000";
                 
@@ -607,10 +586,7 @@ class UsuarioDAO extends DAO {
                 $usuario->setLogin( $linha ['login'] );
                 $usuario->setSenha( $linha ['senha'] );
                 $usuario->setNivel( $linha ['nivel'] );
-                $usuario->getSetor()->setId( $linha ['id_area_responsavel_setor'] );
-                $usuario->getSetor()->setNome( $linha ['nome_area_responsavel_setor'] );
-                $usuario->getSetor()->setDescricao( $linha ['descricao_area_responsavel_setor'] );
-                $usuario->getSetor()->setEmail( $linha ['email_area_responsavel_setor'] );
+                $usuario->setIdSetor( $linha ['id_setor'] );
                 
                 
 		    }
@@ -631,12 +607,8 @@ class UsuarioDAO extends DAO {
         usuario.login, 
         usuario.senha, 
         usuario.nivel, 
-        setor.id as id_area_responsavel_setor, 
-        setor.nome as nome_area_responsavel_setor, 
-        setor.descricao as descricao_area_responsavel_setor, 
-        setor.email as email_area_responsavel_setor
+        usuario.id_setor
 		FROM usuario
-		INNER JOIN area_responsavel as setor ON setor.id = usuario.id_setor
                 WHERE usuario.login = :login
                  LIMIT 1000";
                 
@@ -657,10 +629,7 @@ class UsuarioDAO extends DAO {
                 $usuario->setLogin( $linha ['login'] );
                 $usuario->setSenha( $linha ['senha'] );
                 $usuario->setNivel( $linha ['nivel'] );
-                $usuario->getSetor()->setId( $linha ['id_area_responsavel_setor'] );
-                $usuario->getSetor()->setNome( $linha ['nome_area_responsavel_setor'] );
-                $usuario->getSetor()->setDescricao( $linha ['descricao_area_responsavel_setor'] );
-                $usuario->getSetor()->setEmail( $linha ['email_area_responsavel_setor'] );
+                $usuario->setIdSetor( $linha ['id_setor'] );
                 
                 
 		    }
@@ -681,12 +650,8 @@ class UsuarioDAO extends DAO {
         usuario.login, 
         usuario.senha, 
         usuario.nivel, 
-        setor.id as id_area_responsavel_setor, 
-        setor.nome as nome_area_responsavel_setor, 
-        setor.descricao as descricao_area_responsavel_setor, 
-        setor.email as email_area_responsavel_setor
+        usuario.id_setor
 		FROM usuario
-		INNER JOIN area_responsavel as setor ON setor.id = usuario.id_setor
                 WHERE usuario.senha = :senha
                  LIMIT 1000";
                 
@@ -707,10 +672,7 @@ class UsuarioDAO extends DAO {
                 $usuario->setLogin( $linha ['login'] );
                 $usuario->setSenha( $linha ['senha'] );
                 $usuario->setNivel( $linha ['nivel'] );
-                $usuario->getSetor()->setId( $linha ['id_area_responsavel_setor'] );
-                $usuario->getSetor()->setNome( $linha ['nome_area_responsavel_setor'] );
-                $usuario->getSetor()->setDescricao( $linha ['descricao_area_responsavel_setor'] );
-                $usuario->getSetor()->setEmail( $linha ['email_area_responsavel_setor'] );
+                $usuario->setIdSetor( $linha ['id_setor'] );
                 
                 
 		    }
@@ -731,12 +693,8 @@ class UsuarioDAO extends DAO {
         usuario.login, 
         usuario.senha, 
         usuario.nivel, 
-        setor.id as id_area_responsavel_setor, 
-        setor.nome as nome_area_responsavel_setor, 
-        setor.descricao as descricao_area_responsavel_setor, 
-        setor.email as email_area_responsavel_setor
+        usuario.id_setor
 		FROM usuario
-		INNER JOIN area_responsavel as setor ON setor.id = usuario.id_setor
                 WHERE usuario.nivel = :nivel
                  LIMIT 1000";
                 
@@ -757,10 +715,50 @@ class UsuarioDAO extends DAO {
                 $usuario->setLogin( $linha ['login'] );
                 $usuario->setSenha( $linha ['senha'] );
                 $usuario->setNivel( $linha ['nivel'] );
-                $usuario->getSetor()->setId( $linha ['id_area_responsavel_setor'] );
-                $usuario->getSetor()->setNome( $linha ['nome_area_responsavel_setor'] );
-                $usuario->getSetor()->setDescricao( $linha ['descricao_area_responsavel_setor'] );
-                $usuario->getSetor()->setEmail( $linha ['email_area_responsavel_setor'] );
+                $usuario->setIdSetor( $linha ['id_setor'] );
+                
+                
+		    }
+		} catch(PDOException $e) {
+		    echo $e->getMessage();
+ 		}
+		return $usuario;
+    }
+                
+    public function preenchePorIdSetor(Usuario $usuario) {
+        
+	    $idSetor = $usuario->getIdSetor();
+	    $sql = "
+		SELECT
+        usuario.id, 
+        usuario.nome, 
+        usuario.email, 
+        usuario.login, 
+        usuario.senha, 
+        usuario.nivel, 
+        usuario.id_setor
+		FROM usuario
+                WHERE usuario.id_setor = :idSetor
+                 LIMIT 1000";
+                
+        try {
+            $stmt = $this->conexao->prepare($sql);
+                
+		    if(!$stmt){
+                echo "<br>Mensagem de erro retornada: ".$this->conexao->errorInfo()[2]."<br>";
+		    }
+            $stmt->bindParam(":idSetor", $idSetor, PDO::PARAM_INT);
+            $stmt->execute();
+		    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+		    foreach ( $result as $linha )
+            {
+                $usuario->setId( $linha ['id'] );
+                $usuario->setNome( $linha ['nome'] );
+                $usuario->setEmail( $linha ['email'] );
+                $usuario->setLogin( $linha ['login'] );
+                $usuario->setSenha( $linha ['senha'] );
+                $usuario->setNivel( $linha ['nivel'] );
+                $usuario->setIdSetor( $linha ['id_setor'] );
                 
                 
 		    }

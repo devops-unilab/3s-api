@@ -16,10 +16,9 @@ class Usuario {
 	private $login;
 	private $senha;
 	private $nivel;
-	private $setor;
+	private $idSetor;
     public function __construct(){
 
-        $this->setor = new AreaResponsavel();
     }
 	public function setId($id) {
 		$this->id = $id;
@@ -63,15 +62,15 @@ class Usuario {
 	public function getNivel() {
 		return $this->nivel;
 	}
-	public function setSetor(AreaResponsavel $areaResponsavel) {
-		$this->setor = $areaResponsavel;
+	public function setIdSetor($idSetor) {
+		$this->idSetor = $idSetor;
 	}
 		    
-	public function getSetor() {
-		return $this->setor;
+	public function getIdSetor() {
+		return $this->idSetor;
 	}
 	public function __toString(){
-	    return $this->id.' - '.$this->nome.' - '.$this->email.' - '.$this->login.' - '.$this->senha.' - '.$this->nivel.' - '.$this->setor;
+	    return $this->id.' - '.$this->nome.' - '.$this->email.' - '.$this->login.' - '.$this->senha.' - '.$this->nivel.' - '.$this->idSetor;
 	}
                 
 

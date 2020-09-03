@@ -56,13 +56,10 @@ class UsuarioController {
 	public function cadastrar() {
             
         if(!isset($_POST['enviar_usuario'])){
-            $arearesponsavelDao = new AreaResponsavelDAO($this->dao->getConexao());
-            $listaAreaResponsavel = $arearesponsavelDao->retornaLista();
-
-            $this->view->mostraFormInserir($listaAreaResponsavel);
+            $this->view->mostraFormInserir();
 		    return;
 		}
-		if (! ( isset ( $_POST ['nome'] ) && isset ( $_POST ['email'] ) && isset ( $_POST ['login'] ) && isset ( $_POST ['senha'] ) && isset ( $_POST ['nivel'] ) &&  isset($_POST ['setor']))) {
+		if (! ( isset ( $_POST ['nome'] ) && isset ( $_POST ['email'] ) && isset ( $_POST ['login'] ) && isset ( $_POST ['senha'] ) && isset ( $_POST ['nivel'] ) && isset ( $_POST ['id_setor'] ))) {
 			echo '
                 <div class="alert alert-danger" role="alert">
                     Falha ao cadastrar. Algum campo deve estar faltando. 
@@ -78,7 +75,7 @@ class UsuarioController {
 		$usuario->setLogin ( $_POST ['login'] );
 		$usuario->setSenha ( $_POST ['senha'] );
 		$usuario->setNivel ( $_POST ['nivel'] );
-		$usuario->getSetor()->setId ( $_POST ['setor'] );
+		$usuario->setIdSetor ( $_POST ['id_setor'] );
             
 		if ($this->dao->inserir ( $usuario ))
         {
@@ -113,14 +110,11 @@ class UsuarioController {
 	    $this->dao->preenchePorId($selecionado);
 	        
         if(!isset($_POST['editar_usuario'])){
-            $arearesponsavelDao = new AreaResponsavelDAO($this->dao->getConexao());
-            $listaAreaResponsavel = $arearesponsavelDao->retornaLista();
-
-            $this->view->mostraFormEditar($listaAreaResponsavel, $selecionado);
+            $this->view->mostraFormEditar($selecionado);
             return;
         }
             
-		if (! ( isset ( $_POST ['nome'] ) && isset ( $_POST ['email'] ) && isset ( $_POST ['login'] ) && isset ( $_POST ['senha'] ) && isset ( $_POST ['nivel'] ) &&  isset($_POST ['setor']))) {
+		if (! ( isset ( $_POST ['nome'] ) && isset ( $_POST ['email'] ) && isset ( $_POST ['login'] ) && isset ( $_POST ['senha'] ) && isset ( $_POST ['nivel'] ) && isset ( $_POST ['id_setor'] ))) {
 			echo "Incompleto";
 			return;
 		}
@@ -130,6 +124,7 @@ class UsuarioController {
 		$selecionado->setLogin ( $_POST ['login'] );
 		$selecionado->setSenha ( $_POST ['senha'] );
 		$selecionado->setNivel ( $_POST ['nivel'] );
+		$selecionado->setIdSetor ( $_POST ['id_setor'] );
             
 		if ($this->dao->atualizar ($selecionado ))
         {
@@ -243,6 +238,7 @@ class UsuarioController {
 					'login' => $pesquisado->getLogin (), 
 					'senha' => $pesquisado->getSenha (), 
 					'nivel' => $pesquisado->getNivel (), 
+					'idSetor' => $pesquisado->getIdSetor ()
             
             
 			);
@@ -259,6 +255,7 @@ class UsuarioController {
 					'login' => $linha->getLogin (), 
 					'senha' => $linha->getSenha (), 
 					'nivel' => $linha->getNivel (), 
+					'idSetor' => $linha->getIdSetor ()
             
             
 			);
@@ -376,6 +373,11 @@ class UsuarioController {
         }
                     
 
+        if (isset($jsonBody['id_setor'])) {
+            $pesquisado->setIdSetor($jsonBody['id_setor']);
+        }
+                    
+
         if ($this->dao->atualizar($pesquisado)) {
             echo "Sucesso";
         } else {
@@ -403,7 +405,7 @@ class UsuarioController {
         $body = file_get_contents('php://input');
         $jsonBody = json_decode($body, true);
 
-        if (! ( isset ( $jsonBody ['nome'] ) && isset ( $jsonBody ['email'] ) && isset ( $jsonBody ['login'] ) && isset ( $jsonBody ['senha'] ) && isset ( $jsonBody ['nivel'] ) &&  isset($_POST ['setor']))) {
+        if (! ( isset ( $jsonBody ['nome'] ) && isset ( $jsonBody ['email'] ) && isset ( $jsonBody ['login'] ) && isset ( $jsonBody ['senha'] ) && isset ( $jsonBody ['nivel'] ) && isset ( $jsonBody ['idSetor'] ))) {
 			echo "Incompleto";
 			return;
 		}
@@ -420,6 +422,8 @@ class UsuarioController {
         $adicionado->setSenha($jsonBody['senha']);
 
         $adicionado->setNivel($jsonBody['nivel']);
+
+        $adicionado->setIdSetor($jsonBody['id_setor']);
 
         if ($this->dao->inserir($adicionado)) {
             echo "Sucesso";
