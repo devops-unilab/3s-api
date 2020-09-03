@@ -51,7 +51,7 @@ function autoload($classe) {
 
 }
 spl_autoload_register('autoload');
-
+$sessao = new Sessao();
 ?>
             
 <!doctype html>
