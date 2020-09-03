@@ -4,6 +4,10 @@ class NavBarController{
     
     
     public static function main(){
+        $sessao = new Sessao();
+        if($sessao->getNivelAcesso() == Sessao::NIVEL_DESLOGADO){
+            return;
+        }
         
         echo '
 
