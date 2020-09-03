@@ -66,34 +66,7 @@ spl_autoload_register('autoload');
 <link rel="stylesheet" type="text/css" href="css/list.css" />
 <link rel="stylesheet" type="text/css" href="css/selectize.default.css" />
 <link href="plugins/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
-<style type="text/css">
-.btn-circle {
-  width: 30px;
-  height: 30px;
-  text-align: center;
-  padding: 6px 0;
-  font-size: 12px;
-  line-height: 1.428571429;
-  border-radius: 15px;
-}
-.btn-circle.btn-lg {
-  width: 50px;
-  height: 50px;
-  padding: 10px 16px;
-  font-size: 18px;
-  line-height: 1.33;
-  border-radius: 25px;
-}
-.btn-circle.btn-xl {
-  width: 70px;
-  height: 70px;
-  padding: 10px 16px;
-  font-size: 24px;
-  line-height: 1.33;
-  border-radius: 35px;
-}
 
-</style>
 </head>
 <body>
 	<!--     Barra do Governo -->
@@ -126,57 +99,11 @@ spl_autoload_register('autoload');
     </div>
   </header>
 
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
+<?php 
 
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-  </button>
+NavBarController::main();
 
-  <div class="collapse navbar-collapse" id="navbarSupportedContent">
-    <ul class="navbar-nav mr-auto">
-      <li class="nav-item active">
-        <a class="nav-link" href=".">Início<span class="sr-only">(current)</span></a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="?pagina=ocorrencia&cadastrar=1">Adicionar</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="?pagina=painel">Painel</a>
-      </li>
-      <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          Relatórios
-        </a>
-        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-          <a class="dropdown-item" href="#">Action</a>
-          <a class="dropdown-item" href="#">Another action</a>
-          <div class="dropdown-divider"></div>
-          <a class="dropdown-item" href="#">Something else here</a>
-        </div>
-      </li>
-      <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          Configurações
-        </a>
-        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-          <a class="dropdown-item" href="#">Action</a>
-          <a class="dropdown-item" href="#">Another action</a>
-          <div class="dropdown-divider"></div>
-          <a class="dropdown-item" href="#">Something else here</a>
-        </div>
-      </li>
-    </ul>
-    <form class="form-inline my-2 my-lg-0">
-      <select class="form-control mr-sm-2">
-      	<option>Administrador</option>
-      	<option>Técnico</option>
-      	<option>Comum</option>
-      </select>
-      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Sair</button>
-    </form>
-  </div>
-</nav>
-
+?>
   
 
   
@@ -187,7 +114,9 @@ spl_autoload_register('autoload');
 
 
 <?php
+
 Principal::main();	    
+
 ?>
             
 
