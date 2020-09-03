@@ -7,7 +7,10 @@ class Principal{
     {
         if(isset($_GET['pagina'])){
             switch ($_GET['pagina']){
-               
+                case 'painel':
+                    $controller = new OcorrenciaCustomController();
+                    $controller->telaInicialPainel();
+                    break;
                 case 'ocorrencia':
                     $controller = new OcorrenciaCustomController();
                     $controller->main();

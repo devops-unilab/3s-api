@@ -141,7 +141,7 @@ spl_autoload_register('autoload');
         <a class="nav-link" href="?pagina=ocorrencia&cadastrar=1">Adicionar</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="#">Painel</a>
+        <a class="nav-link" href="?pagina=painel">Painel</a>
       </li>
       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -208,6 +208,8 @@ Principal::main();
             
 <script src="js/jquery-3.5.1.min.js"></script>
 <script src="js/selectize.js"></script>
+<script src="js/painel3s.js"></script>
+<script src="js/ocorrencia.js"></script>
 <script>
 $('#select-servicos').selectize({
     create: false,

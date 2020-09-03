@@ -194,14 +194,104 @@ class OcorrenciaCustomController  extends OcorrenciaController {
 	    echo '<META HTTP-EQUIV="REFRESH" CONTENT="3; URL=index.php?pagina=ocorrencia">';
 	}
 	
-	public function listar()
-	{
+	
+	public function telaInicialPainel(){
+	    $result = $this->dao->getConexao()->query("SELECT nome, descricao FROM area_responsavel");
+	    foreach($result as $linha){
+	        $setoresNomeCompleto[$linha['nome']] = $linha['nome'].' - '.$linha['descricao'];
+	    }
+
+	        
+	        	    echo '
+	        
+<div class="card mb-4">
+        <div class="card-body">
+
+	        
+	        
+    <section class="jumbotron text-center">
+      <div class="container">
+        <h1 class="jumbotron-heading">Acompanhamento do 3s</h1>
+        <p class="lead text-muted">Preencha um dos formulários</p>
+';
 	    
-	    $ocorrencia = new Ocorrencia();
+	    echo '
+	        
+      </div>
+    </section>
+
+        <div class="row">';
+	    echo '<div class="col-sm-8 col-md-8 col-xl-8">';
+	    echo '
+	        
+	        
+<div class="card">
+  <div class="card-body">
+    <h5 class="card-title">Quantidade de Chamados Por Campi</h5>
+    <form action="" id="form-tabela">
+	        
+    <input type="hidden" name="pagina" value="tabela">
+    <input type="hidden" name="setores" id="hidden-tabela" >
+    <select id="select-tabela">
+	        
+';
 	    
-	    $lista = $this->dao->retornaLista();
+	    echo '<option value="">Selecione um ou mais setores...</option>';
+	    foreach($setoresNomeCompleto as $chave => $valor){
+	        echo '<option value="'.$chave.'">'.$valor.'</option>';
+	    }
+	    echo '
+    </select>
+	        
+    <input class="btn btn-primary" type="submit">
+    </form>
+	        
+  </div>
+</div>
+	        
+';
 	    
-	    $this->view->exibirLista($lista);
+	    echo '</div>';
+	    echo '<div class="col-sm-4 col-md-4 col-xl-4">';
+	    echo '
+	        
+	        
+<div class="card">
+  <div class="card-body">
+    <h5 class="card-title">Quadro Kanban</h5>
+    <form action="">
+	        
+    <input type="hidden" name="pagina" value="quadro">
+    <select name="setor" id="select-setores">';
+	    
+	    echo '<option value="">Selecione um setor...</option>';
+	    foreach($setoresNomeCompleto as $chave => $valor){
+	        echo '<option value="'.$chave.'">'.$valor.'</option>';
+	    }
+	    echo '
+    </select>
+    <input type="date" class="form-control" name="data1" value="">
+    <input type="date" class="form-control" name="data2" value=""><br>
+    <input class="btn btn-primary" type="submit">
+    </form>
+	        
+  </div>
+</div>
+	        
+';
+	    echo '</div>';
+	    echo '
+	        
+	        
+        </div>
+	        
+      </div>
+    </div>
+	        
+
+';
+	    
+	    
 	}
 }
 ?>
