@@ -90,8 +90,8 @@ $sessao = new Sessao();
       <div class="col-xl-4 col-lg-12 col-md-12 col-sm-12  d-flex justify-content-center">
         <a class="text-muted" href="#"><img src="img/logo-header.png" alt="Logo 3s" /></a>
       </div>
-      <div class="col-xl-4 col-lg-12 col-md-12 col-sm-12 d-flex align-items-end  justify-content-center"">
-        <a class="blog-header-logo text-dark" href="#">JEFFERSON UCHOA PONTE</a>
+      <div class="col-xl-4 col-lg-12 col-md-12 col-sm-12 d-flex align-items-end  justify-content-center">
+        <?php echo '<p class="blog-header-logo text-dark">'.$sessao->getNome().'</p>'; ?>
       </div>
       <div class="col-xl-4 col-lg-12 col-md-12 col-sm-12 d-flex justify-content-center">
         <a class="text-muted" href="#"><img src="img/logo-unilab-branco.png" alt="Logo Unilab" /></a>
@@ -115,7 +115,8 @@ NavBarController::main();
 
 <?php
 
-Principal::main();	    
+$principal = new Principal();
+$principal->main();
 
 ?>
             
