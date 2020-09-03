@@ -9,7 +9,7 @@ class OcorrenciaCustomView extends OcorrenciaView {
 
     
     public function mostraFormInserir2($listaServico){
-
+        $sessao = new Sessao();
         echo '
             
 
@@ -65,7 +65,7 @@ class OcorrenciaCustomView extends OcorrenciaView {
             <div class="row"><!--Campus Local Sala Contato(Ramal e email)-->
                 <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
                     <label for="campus">Campus*</label>
-                    <select title="Campus Universitário."  rel="tooltip" name="campus" class="form-control" id="campus" required>
+                    <select name="campus" id="select-campus" required>
                         <option value="" selected>Selecione um Campus</option>
                         <option value="liberdade">Campus Liberdade</option>
                         <option value="auroras">Campus Auroras</option>
@@ -92,7 +92,7 @@ class OcorrenciaCustomView extends OcorrenciaView {
             
                 <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12">
                     <label for="ramal" >E-mail*</label>
-                    <input class="form-control" type="text" name="email" id="email" value="$_SESSION[\'email\']" required>
+                    <input class="form-control" type="text" name="email" id="email" value="'.$sessao->getEmail().'" required>
                 </div>
             
             </div>
