@@ -29,7 +29,7 @@ class OcorrenciaCustomController  extends OcorrenciaController {
             <div class="row">
                 <div class="col-md-8 blog-main">
                     <h3 class="pb-4 mb-4 font-italic border-bottom">
-                        #'.$selecionado->getId().' - Chamado Selecionado
+                        #'.$selecionado->getId().' - '.$selecionado->getServico()->getNome().'
                     </h3>
 
 ';
@@ -42,8 +42,33 @@ class OcorrenciaCustomController  extends OcorrenciaController {
                 </div>
                 <aside class="col-md-4 blog-sidebar">
                   <div class="p-4 mb-3 bg-light rounded">
-                    <h4 class="font-italic">Histórico</h4>
-                    <p class="mb-0">Lista de Status </p>
+                    <h4 class="font-italic">Histórico</h4>';
+	    
+	    echo '
+                    <div class="container">
+                    	<div class="row">
+                    		<div class="alert-group">
+                                <div class="alert alert-success alert-dismissable">
+                                    <strong>Well done!</strong> You successfully read this important alert message.
+                                </div>
+                                <div class="alert alert-info">
+                                    <strong>Heads up!</strong> This alert needs your attention, but it\'s not super important.
+                                </div>
+                                <div class="alert alert-warning alert-dismissable">
+                                    <strong>Warning!</strong> Better check yourself, you\'re not looking too good.
+                                </div>
+                                <div class="alert alert-danger alert-dismissable">
+                                    <strong>Oh snap!</strong> Change a few things up and try submitting again.
+                                </div>
+                            </div>
+                    	</div>
+                    </div>';
+	    
+	    
+	    
+	    echo '
+
+
                   </div>
 	        
                   <div class="p-4">
@@ -141,12 +166,26 @@ class OcorrenciaCustomController  extends OcorrenciaController {
 	        
                     </div>';
 	    
-	    $lista = $this->dao->retornaListaAbertos();
+	    $lista = $this->dao->retornaListaPorStatus('a');
+
 	    echo '<div class="panel panel-warning">';
 	    $this->view->exibirLista($lista);
 	    echo '</div>';
+
+	    $lista = $this->dao->retornaListaPorStatus('e');
+	    echo '<div class="panel panel-info">';
+	    $this->view->exibirLista($lista);
+	    echo '</div>';
 	    
-	    
+	    $lista = $this->dao->retornaListaPorStatus('d');
+	    echo '<div class="panel panel-danger">';
+	    $this->view->exibirLista($lista);
+	    echo '</div>';
+
+	    $lista = $this->dao->retornaListaPorStatus('f');
+	    echo '<div class="panel panel-success">';
+	    $this->view->exibirLista($lista);
+	    echo '</div>';
 	    
 	    echo '
 	        
