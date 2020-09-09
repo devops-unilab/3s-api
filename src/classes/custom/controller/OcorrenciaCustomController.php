@@ -34,7 +34,7 @@ class OcorrenciaCustomController  extends OcorrenciaController {
 
 ';
 	    
-	    $this->view->mostrarSelecionado($selecionado);
+	    $this->view->mostraFormEditar2($selecionado, array());
 	    
 	    echo '
 	    
@@ -52,11 +52,43 @@ class OcorrenciaCustomController  extends OcorrenciaController {
                     	<div class="row">
                     		<div class="alert-group">';
 	    
+	    
 	    foreach($listaStatus as $status){
+	        $strCartao = ' alert-warning ';
+	        if($status->getStatus()->getSigla() == 'a'){
+	            $strCartao = ' alert-warning ';
+	        }else if($status->getStatus()->getSigla() == 'e'){
+	            $strCartao = ' alert-info ';
+	        }
+	        else if($status->getStatus()->getSigla() == 'f'){
+	            $strCartao = 'alert-success ';
+	        }
+	        else if($status->getStatus()->getSigla() == 'g'){
+	            $strCartao = 'alert-success ';
+	        }
+	        else if($status->getStatus()->getSigla() == 'h'){
+	            $strCartao = ' alert-info ';
+	        }
+	        else if($status->getStatus()->getSigla() == 'r'){
+	            $strCartao = ' alert-warning ';
+	        }
+	        else if($status->getStatus()->getSigla() == 'b'){
+	            $strCartao = ' alert-warning ';
+	        }
+	        else if($status->getStatus()->getSigla() == 'c'){
+	            $strCartao = '  alert-secondary ';
+	        }
+	        else if($status->getStatus()->getSigla() == 'd'){
+	            $strCartao = ' alert-secondary ';
+	        }
+	        else if($status->getStatus()->getSigla() == 'i'){
+	            $strCartao = '  alert-secondary ';
+	        }
+	        
 	        
 	        echo '
-                                <div class="alert alert-success alert-dismissable">
-                                    <strong>'.$status->getStatus()->getNome().'</strong> 
+                                <div class="alert '.$strCartao.' alert-dismissable">
+                                    <strong>'.$status->getStatus()->getNome().'</strong> <br>
                                     '.$status->getMensagem().'<br>
                                     <strong>'.$status->getUsuario()->getNome().'<br>'.date('d/m/Y - h:i' ,strtotime($status->getDataMudanca())).'</strong> 
                                 </div>
@@ -343,17 +375,11 @@ class OcorrenciaCustomController  extends OcorrenciaController {
         <div class="card-body">
 
 	        
+
+<h3 class="pb-4 mb-4 font-italic border-bottom">
+                        Acompanhamento do 3s
+                    </h3>
 	        
-    <section class="jumbotron text-center">
-      <div class="container">
-        <h1 class="jumbotron-heading">Acompanhamento do 3s</h1>
-        <p class="lead text-muted">Preencha um dos formulários</p>
-';
-	    
-	    echo '
-	        
-      </div>
-    </section>
 
         <div class="row">';
 	    echo '<div class="col-sm-8 col-md-8 col-xl-8">';
