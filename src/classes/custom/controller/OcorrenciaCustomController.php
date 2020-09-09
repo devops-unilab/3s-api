@@ -44,10 +44,27 @@ class OcorrenciaCustomController  extends OcorrenciaController {
                   <div class="p-4 mb-3 bg-light rounded">
                     <h4 class="font-italic">Histórico</h4>';
 	    
+	    $statusDao = new StatusOcorrenciaCustomDAO($this->dao->getConexao());
+	    $listaStatus = $statusDao->pesquisaPorIdOcorrencia($selecionado);
+	    
 	    echo '
                     <div class="container">
                     	<div class="row">
-                    		<div class="alert-group">
+                    		<div class="alert-group">';
+	    
+	    foreach($listaStatus as $status){
+	        
+	        echo '
+                                <div class="alert alert-success alert-dismissable">
+                                    <strong>'.$status->getStatus()->getNome().'</strong> 
+                                    '.$status->getMensagem().'<br>
+                                    <strong>'.$status->getUsuario()->getNome().'<br>'.date('d/m/Y - h:i' ,strtotime($status->getDataMudanca())).'</strong> 
+                                </div>
+
+';
+	    }
+	    /*
+	    echo '
                                 <div class="alert alert-success alert-dismissable">
                                     <strong>Well done!</strong> You successfully read this important alert message.
                                 </div>
@@ -59,7 +76,11 @@ class OcorrenciaCustomController  extends OcorrenciaController {
                                 </div>
                                 <div class="alert alert-danger alert-dismissable">
                                     <strong>Oh snap!</strong> Change a few things up and try submitting again.
-                                </div>
+                                </div>';
+                                */
+	    
+	    
+	    echo '
                             </div>
                     	</div>
                     </div>';

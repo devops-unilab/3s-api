@@ -137,9 +137,8 @@ class OcorrenciaCustomView extends OcorrenciaView {
             
         <div class="card mb-4">
             <div class="card-body">
-                
-                Id Local: '.$ocorrencia->getIdLocal().'<br>
                 Descricao: '.$ocorrencia->getDescricao().'<br>
+                Servico: '.$ocorrencia->getServico().'<br>
                 Campus: '.$ocorrencia->getCampus().'<br>
                 Patrimonio: '.$ocorrencia->getPatrimonio().'<br>
                 Ramal: '.$ocorrencia->getRamal().'<br>
@@ -154,7 +153,7 @@ class OcorrenciaCustomView extends OcorrenciaView {
                 Anexo: '.$ocorrencia->getAnexo().'<br>
                 Local Sala: '.$ocorrencia->getLocalSala().'<br>
                 Area Responsavel: '.$ocorrencia->getAreaResponsavel().'<br>
-                Servico: '.$ocorrencia->getServico().'<br>
+                
                 Usuario Cliente: '.$ocorrencia->getUsuarioCliente().'<br>
                     
             </div>
