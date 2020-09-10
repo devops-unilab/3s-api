@@ -45,7 +45,7 @@ class  MensagemForumCustomDAO extends MensagemForumDAO {
 		INNER JOIN ocorrencia as ocorrencia ON ocorrencia.id = mensagem_forum.id_ocorrencia
 		LEFT JOIN usuario as usuario ON usuario.id = mensagem_forum.id_usuario
         WHERE ocorrencia.id = $id
-        ORDER BY mensagem_forum.id DESC
+        ORDER BY mensagem_forum.id DESC 
          LIMIT 1000";
         
         try {

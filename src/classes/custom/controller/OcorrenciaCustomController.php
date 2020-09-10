@@ -44,8 +44,9 @@ class OcorrenciaCustomController  extends OcorrenciaController {
 	    $statusDao = new StatusOcorrenciaCustomDAO($this->dao->getConexao());
 	    $listaStatus = $statusDao->pesquisaPorIdOcorrencia($selecionado);
 	    
-	    echo '<hr>
-                    <h4 class="font-italic">Forum</h4>
+	    echo '
+                    <h4 class="font-italic">Mensagens</h4>
+                    <hr>
                     <div class="container">';
 	    foreach($listaForum as $mensagemForum){
 	        
