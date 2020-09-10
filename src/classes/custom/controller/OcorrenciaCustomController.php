@@ -36,126 +36,132 @@ class OcorrenciaCustomController  extends OcorrenciaController {
 	    
 	    $this->view->mostraFormEditar2($selecionado, array());
 	    
+	    $mensagemDao = new MensagemForumCustomDAO($this->dao->getConexao());
+	    $listaForum = $mensagemDao->retornaListaPorOcorrencia($selecionado);
+	    
+	    
+	    
+	    $statusDao = new StatusOcorrenciaCustomDAO($this->dao->getConexao());
+	    $listaStatus = $statusDao->pesquisaPorIdOcorrencia($selecionado);
+	    
+	    echo '<hr>
+                    <h4 class="font-italic">Forum</h4>
+                    <div class="container">';
+	    foreach($listaForum as $mensagemForum){
+	        
+	        echo '
+	            
+	            
+                    <div class="notice notice-info">
+                        '.$mensagemForum->getMensagem().'<br>
+                        <strong>'.$mensagemForum->getUsuario()->getNome().'| '.date("d/m/Y H:i",strtotime($mensagemForum->getDataEnvio())).'</strong><br>
+            	    </div>
+                            
+                            
+                            
+';
+	        
+	    }
+	    echo '</div>';
+	    
 	    echo '
 	    
 	    
                 </div>
                 <aside class="col-md-4 blog-sidebar">
-                  <div class="p-4 mb-3 bg-light rounded">
-                    <h4 class="font-italic">Histórico</h4>';
-	    
-	    $statusDao = new StatusOcorrenciaCustomDAO($this->dao->getConexao());
-	    $listaStatus = $statusDao->pesquisaPorIdOcorrencia($selecionado);
-	    
-	    echo '
-                    <div class="container">
-                    	<div class="row">
-                    		<div class="alert-group">';
-	    
+
+
+                    <h4 class="font-italic">Histórico</h4>
+                    <div class="container">';
 	    
 	    foreach($listaStatus as $status){
 	        $strCartao = ' alert-warning ';
 	        if($status->getStatus()->getSigla() == 'a'){
-	            $strCartao = ' alert-warning ';
+	            $strCartao = '  notice-warning';
 	        }else if($status->getStatus()->getSigla() == 'e'){
-	            $strCartao = ' alert-info ';
+	            $strCartao = '  notice-info ';
 	        }
 	        else if($status->getStatus()->getSigla() == 'f'){
-	            $strCartao = 'alert-success ';
+	            $strCartao = 'notice-success ';
 	        }
 	        else if($status->getStatus()->getSigla() == 'g'){
-	            $strCartao = 'alert-success ';
+	            $strCartao = 'notice-success ';
 	        }
 	        else if($status->getStatus()->getSigla() == 'h'){
-	            $strCartao = ' alert-info ';
+	            $strCartao = ' notice-warning ';
 	        }
 	        else if($status->getStatus()->getSigla() == 'r'){
-	            $strCartao = ' alert-warning ';
+	            $strCartao = '  notice-warning ';
 	        }
 	        else if($status->getStatus()->getSigla() == 'b'){
-	            $strCartao = ' alert-warning ';
+	            $strCartao = '  notice-warning ';
 	        }
 	        else if($status->getStatus()->getSigla() == 'c'){
-	            $strCartao = '  alert-secondary ';
+	            $strCartao = '   notice-warning ';
 	        }
 	        else if($status->getStatus()->getSigla() == 'd'){
-	            $strCartao = ' alert-secondary ';
+	            $strCartao = '  notice-warning ';
 	        }
 	        else if($status->getStatus()->getSigla() == 'i'){
-	            $strCartao = '  alert-secondary ';
+	            $strCartao = ' notice-warning';
 	        }
 	        
 	        
 	        echo '
-                                <div class="alert '.$strCartao.' alert-dismissable">
-                                    <strong>'.$status->getStatus()->getNome().'</strong> <br>
-                                    '.$status->getMensagem().'<br>
-                                    <strong>'.$status->getUsuario()->getNome().'<br>'.date('d/m/Y - h:i' ,strtotime($status->getDataMudanca())).'</strong> 
-                                </div>
 
+
+                    <div class="notice '.$strCartao.'">
+            	       <strong>'.$status->getStatus()->getNome().'</strong><br>
+                        '.$status->getMensagem().'<br>
+                        <strong>'.$status->getUsuario()->getNome().'<br>'.date('d/m/Y - h:i' ,strtotime($status->getDataMudanca())).'</strong>
+            	    </div>
+
+                               
+                                        
 ';
 	    }
 	    /*
+	     <div class="notice notice-success">
+	     <strong>Notice</strong> notice-success
+	     </div>
+	     <div class="notice notice-danger">
+	     <strong>Notice</strong> notice-danger
+	     </div>
+	     <div class="notice notice-info">
+	     <strong>Notice</strong> notice-info
+	     </div>
+	     <div class="notice notice-warning">
+	     <strong>Notice</strong> notice-warning
+	     </div>
+	     <div class="notice notice-lg">
+	     <strong>Big notice</strong> notice-lg
+	     </div>
+	     <div class="notice notice-sm">
+	     <strong>Small notice</strong> notice-sm
+	     </div>
+	     */
+
 	    echo '
-                                <div class="alert alert-success alert-dismissable">
-                                    <strong>Well done!</strong> You successfully read this important alert message.
-                                </div>
-                                <div class="alert alert-info">
-                                    <strong>Heads up!</strong> This alert needs your attention, but it\'s not super important.
-                                </div>
-                                <div class="alert alert-warning alert-dismissable">
-                                    <strong>Warning!</strong> Better check yourself, you\'re not looking too good.
-                                </div>
-                                <div class="alert alert-danger alert-dismissable">
-                                    <strong>Oh snap!</strong> Change a few things up and try submitting again.
-                                </div>';
-                                */
-	    
-	    
-	    echo '
-                            </div>
+
+</div>
+
+
+
+                  <div class="p-4 mb-3 bg-light rounded">
+                    <h4 class="font-italic">Tarefas no Redmine</h4>
+                    <div class="container">
+                    	<div class="row">
+
                     	</div>
-                    </div>';
-	    
-	    
-	    
-	    echo '
-
-
+                    </div>
                   </div>
 	        
-                  <div class="p-4">
-                    <h4 class="font-italic">Archives</h4>
-                    <ol class="list-unstyled mb-0">
-                      <li><a href="#">March 2014</a></li>
-                      <li><a href="#">February 2014</a></li>
-                      <li><a href="#">January 2014</a></li>
-                      <li><a href="#">December 2013</a></li>
-                      <li><a href="#">November 2013</a></li>
-                      <li><a href="#">October 2013</a></li>
-                      <li><a href="#">September 2013</a></li>
-                      <li><a href="#">August 2013</a></li>
-                      <li><a href="#">July 2013</a></li>
-                      <li><a href="#">June 2013</a></li>
-                      <li><a href="#">May 2013</a></li>
-                      <li><a href="#">April 2013</a></li>
-                    </ol>
-                  </div>
+                  
 	        
-                  <div class="p-4">
-                    <h4 class="font-italic">Elsewhere</h4>
-                    <ol class="list-unstyled">
-                      <li><a href="#">GitHub</a></li>
-                      <li><a href="#">Twitter</a></li>
-                      <li><a href="#">Facebook</a></li>
-                    </ol>
-                  </div>
-                </aside><!-- /.blog-sidebar -->
-	        
-	        
-	        
+                  
+                </aside>
             </div>';
-	    echo '<hr>';
+
 	    
 
 
