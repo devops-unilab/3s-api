@@ -56,6 +56,11 @@ function autoload($classe) {
 }
 spl_autoload_register('autoload');
 $sessao = new Sessao();
+if (isset($_GET["sair"])) {
+    $sessao->mataSessao();
+    echo '<META HTTP-EQUIV="REFRESH" CONTENT="0; URL=index.php">';
+    
+}
 ?>
             
 <!doctype html>

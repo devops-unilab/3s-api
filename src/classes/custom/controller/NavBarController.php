@@ -65,8 +65,9 @@ class NavBarController{
       	<option>Técnico</option>
       	<option selected>Comum</option>
       </select>
-      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Sair</button>
+      
     </form>
+    <a class="btn btn-outline-success my-2 my-sm-0" href="?sair=1">Sair</a>
   </div>
 </nav>
 
