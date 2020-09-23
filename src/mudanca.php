@@ -8,13 +8,6 @@ define("DB_INI", "../../../3s/3s_bd.ini");
 $dao = new DAO();
 $dao->getConexao();
 
-
-//Alterar posi��o das colunas. 
-
-// 1. CREATE TABLE novo_nome AS SELECT id,cpf,nome FROM sua_tabela;
-// 2. DROP TABLE sua_tabela;
-// 3. ALTER TABLE novo_nome RENAME TO sua_tabela;
-
 $sqls = "
 
 DROP TABLE interrupcoes;
@@ -138,6 +131,8 @@ CREATE TABLE recesso (
 INSERT INTO grupo_servico(id, nome) VALUES (0, 'Indefinido');
 UPDATE servico SET id_area_responsavel = 1;
 UPDATE servico SET id_grupo_servico = 0;
+
+
 
 ";
 

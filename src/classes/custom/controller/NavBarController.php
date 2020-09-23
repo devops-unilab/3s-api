@@ -25,6 +25,10 @@ class NavBarController{
       <li class="nav-item">
         <a class="nav-link" href="?pagina=ocorrencia&cadastrar=1">Adicionar</a>
       </li>
+';
+        if($sessao->getNivelAcesso() == Sessao::NIVEL_ADM || $sessao->getNivelAcesso() == Sessao::NIVEL_TECNICO){
+            echo '
+                
       <li class="nav-item">
         <a class="nav-link" href="?pagina=painel">Painel</a>
       </li>
@@ -49,13 +53,17 @@ class NavBarController{
           <div class="dropdown-divider"></div>
           <a class="dropdown-item" href="#">Something else here</a>
         </div>
-      </li>
+      </li>';
+        }
+
+        
+        echo '
     </ul>
     <form class="form-inline my-2 my-lg-0">
       <select class="form-control mr-sm-2">
       	<option>Administrador</option>
       	<option>Técnico</option>
-      	<option>Comum</option>
+      	<option selected>Comum</option>
       </select>
       <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Sair</button>
     </form>
