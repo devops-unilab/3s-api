@@ -21,7 +21,8 @@ class  UsuarioCustomDAO extends UsuarioDAO {
         $senha = $usuario->getSenha() ;
         
         $sql = "SELECT * FROM 
-                usuario WHERE  LOWER(login) =  LOWER(:login) AND senha = :senha LIMIT 1";
+                usuario WHERE 
+                LOWER(login) =  LOWER(:login) AND senha = :senha LIMIT 1";
         
         try {
             
@@ -31,11 +32,15 @@ class  UsuarioCustomDAO extends UsuarioDAO {
             $stmt->execute();
             $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
             foreach ( $result as $linha ) {
-                
-                $usuario->setLogin ( $linha ['login'] );
                 $usuario->setId( $linha ['id'] );
+                $usuario->setLogin ( $linha ['login'] );
                 $usuario->setNivel($linha['nivel']);
-                return true;
+                if($this->usuarioAtivo($usuario)){
+                    return true;
+                }else{
+                    return false;
+                }
+                
             }
 
         } catch(PDOException $e) {
@@ -95,6 +100,37 @@ class  UsuarioCustomDAO extends UsuarioDAO {
         }
 
     }
+    /**
+     * Verifica na base de autenticação se usuário está ativo ou não.
+     * @param Usuario $usuario
+     * @return boolean
+     */
+    public function usuarioAtivo(Usuario $usuario){
+        $id = $usuario->getId();
+        $daoSIGAA = new DAO(null, DB_AUTENTICACAO);
+        $sql2 = "SELECT
+                *
+                FROM vw_autenticacao_3s
+                WHERE id = :id LIMIT 1";
+        try {
+            $stmt = $daoSIGAA->getConexao()->prepare($sql2);
+            $stmt->bindParam(":id", $id, PDO::PARAM_INT);
+            $stmt->execute();
+            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            foreach ( $result as $linha2 ) {
+                if($linha2['id_status_servidor'] != 1)
+                {
+                    return true;//Status Inativo
+                }
+            }
+        } catch(PDOException $e) {
+            echo $e->getMessage();
+            return false;
+        }
+        return false;
+        
+    }
+    
     
     
 //     if($linha['id_status_servidor'] == 1){
