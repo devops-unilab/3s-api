@@ -30,6 +30,7 @@ class  UsuarioCustomDAO extends UsuarioDAO {
             $stmt->execute();
             $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
             foreach ( $result as $linha ) {
+                
                 $usuario->setLogin ( $linha ['login'] );
                 $usuario->setId( $linha ['id'] );
                 if($linha['id_status_servidor'] == 1){
