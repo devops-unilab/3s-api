@@ -63,7 +63,7 @@ class  UsuarioCustomDAO extends UsuarioDAO {
             $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
             foreach ( $result as $linha2 ) {
                 $usuario->setId($linha2['id']);
-                if($linha['id_status_servidor'] != 1){
+                if($linha2['id_status_servidor'] != 1){
                     return false;//Status Inativo
                 }
                 if(sizeof($this->pesquisaPorId($usuario)) == 0)  
