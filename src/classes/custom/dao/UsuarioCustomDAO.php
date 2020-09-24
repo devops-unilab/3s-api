@@ -70,7 +70,7 @@ class  UsuarioCustomDAO extends UsuarioDAO {
                 {
                     $usuario->setNome($linha2['nome']);
                     $usuario->setEmail($linha2['email']);
-                    
+                    $usuario->setNivel(Sessao::NIVEL_COMUM);
                     $this->inserirComPK($usuario);
                     return true;
                 }
