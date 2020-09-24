@@ -43,8 +43,9 @@ class Principal{
         $usuario->setLogin($_POST['usuario']);
         $usuario->setSenha(md5($_POST['senha']));
         $usuarioDao = new UsuarioCustomDAO(null, DB_AUTENTICACAO);
-
+    
         if ($usuarioDao->autenticar($usuario)) {
+            
             
             echo '
 <div class="alert alert-success" role="alert">

@@ -139,8 +139,7 @@ $principal->main();
 </main><!-- /.container -->
 
 <footer class="blog-footer">
-  <p>Desenvolvido pela Diretoria de Tecnologia da Informação &copy; DTI /
-			Unilab<a href="https://dti.unilab.edu.br/"> dti.unilab.edu.br</a>.</p>
+  <p>Desenvolvido pela Diretoria de Tecnologia da Informação &copy; DTI / Unilab<a href="https://dti.unilab.edu.br/"> dti.unilab.edu.br</a>.</p>
   <p>
     <a href="#">Voltar ao Topo</a>
   </p>

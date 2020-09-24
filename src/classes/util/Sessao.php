@@ -25,6 +25,9 @@ class Sessao{
     public function mataSessao(){
         @session_destroy();
     }
+    public function setNivelDeAcesso($nivel){
+        $_SESSION['USUARIO_NIVEL'] = $nivel;
+    }
     public function getNivelAcesso(){
         if(isset($_SESSION['USUARIO_NIVEL'])){
             return $_SESSION['USUARIO_NIVEL'];
