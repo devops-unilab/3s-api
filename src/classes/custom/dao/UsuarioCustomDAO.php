@@ -48,9 +48,6 @@ class  UsuarioCustomDAO extends UsuarioDAO {
             return false;
         } 
         
-        
-
-        
         $daoSIGAA = new DAO(null, DB_AUTENTICACAO);
         
         

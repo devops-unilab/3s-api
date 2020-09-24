@@ -25,7 +25,8 @@ class UsuarioCustomController  extends UsuarioController {
 	    $usuario->setSenha(md5($_POST['senha']));
 
 	    if ($this->dao->autenticar($usuario)) {
-	        
+	        $sessao = new Sessao();
+	        $sessao->criaSessao($usuario->getId(), $usuario->getNivel(), $usuario->getLogin(), $usuario->getNome(), $usuario->getEmail(), "Teste", "teste");
 	        
 	        echo '
 <div class="alert alert-success" role="alert">
