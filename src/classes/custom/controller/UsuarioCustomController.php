@@ -23,9 +23,8 @@ class UsuarioCustomController  extends UsuarioController {
 	    $usuario = new Usuario();
 	    $usuario->setLogin($_POST['usuario']);
 	    $usuario->setSenha(md5($_POST['senha']));
-	    $usuarioDao = new UsuarioCustomDAO(null, DB_AUTENTICACAO);
-	    
-	    if ($usuarioDao->autenticar($usuario)) {
+
+	    if ($this->dao->autenticar($usuario)) {
 	        
 	        
 	        echo '
