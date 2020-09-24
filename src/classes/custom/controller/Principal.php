@@ -43,13 +43,15 @@ class Principal{
         $usuario->setLogin($_POST['usuario']);
         $usuario->setSenha(md5($_POST['senha']));
         $usuarioDao = new UsuarioCustomDAO(null, DB_AUTENTICACAO);
+
         if ($usuarioDao->autenticar($usuario)) {
+            
             echo '
 <div class="alert alert-success" role="alert">
   Login realizado com Sucesso
 </div>      
 ';
-            echo '<META HTTP-EQUIV="REFRESH" CONTENT="0; URL=index.php">';
+            echo '<META HTTP-EQUIV="REFRESH" CONTENT="3; URL=index.php">';
         } else {
             echo '
 <div class="alert alert-danger" role="alert">

@@ -19,7 +19,8 @@ class  UsuarioCustomDAO extends UsuarioDAO {
         
         $login = $usuario->getLogin();
         $senha = $usuario->getSenha() ;
-        $sql = "SELECT * FROM vw_autenticacao_3s WHERE login  = :login AND senha = :senha LIMIT 1";
+        $sql = "SELECT * FROM 
+                vw_autenticacao_3s WHERE login  = :login AND senha = :senha LIMIT 1";
         
         try {
             
@@ -33,7 +34,7 @@ class  UsuarioCustomDAO extends UsuarioDAO {
                 $usuario->setId( $linha ['id'] );
                 if($linha['id_status_servidor'] == 1){
                     $sessao = new Sessao();
-                    $sessao->criaSessao($linha ['id'], Sessao::NIVEL_COMUM, $linha['login'], $linha['nome'], $linha['email'], $linha['sigla_unidade'], $linha['id_unidade']);
+                    $sessao->criaSessao($linha ['id'], Sessao::NIVEL_ADM, $linha['login'], $linha['nome'], $linha['email'], $linha['sigla_unidade'], $linha['id_unidade']);
                     return true;
                 }   
             }
