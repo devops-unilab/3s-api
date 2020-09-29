@@ -260,8 +260,6 @@ class OcorrenciaCustomController  extends OcorrenciaController {
 	    
 	}
 	public function cadastrarAjax() {
-	    print_r($_POST);
-	    
 	    if(!isset($_POST['enviar_ocorrencia'])){
 	        return;
 	    }
@@ -281,6 +279,10 @@ class OcorrenciaCustomController  extends OcorrenciaController {
 	    }
 	    
 	    $ocorrencia = new Ocorrencia ();
+	    $usuario = new Usuario();
+	    $sessao = new Sessao();
+	    $usuario->setId($sessao->getIdUsuario());
+	    
 	    $ocorrencia->setIdLocal ( 1 );
 	    $ocorrencia->setLocal ( 'teste' );
 	    $ocorrencia->setStatus ( 'a');
@@ -296,16 +298,35 @@ class OcorrenciaCustomController  extends OcorrenciaController {
 	    
 	    $ocorrencia->getServico()->setId ( $_POST ['servico'] );
 	    
-	    $sessao = new Sessao();
+	    
 	    $ocorrencia->getUsuarioCliente()->setId ( $sessao->getIdUsuario() );
+
+	    $statusOcorrenciaDAO = new StatusOcorrenciaDAO($this->dao->getConexao());
+	    
+	    $statusOcorrencia = new StatusOcorrencia();
+	    $statusOcorrencia->setDataMudanca(date("Y-m-d H:i:s"));
+	    $statusOcorrencia->getStatus()->setId(2);
+	    $statusOcorrencia->setUsuario($usuario);
+	    $statusOcorrencia->setMensagem("Ocorrência liberada para que qualquer técnico possa atender.");
+	    
+	    $this->dao->getConexao()->beginTransaction();
 	    
 	    if ($this->dao->inserir ( $ocorrencia ))
 	    {
 	        $id = $this->dao->getConexao()->lastInsertId();
-	        echo ':sucesso:'.$id;
-	        
+	        $statusOcorrencia->getOcorrencia()->setId($id);
+	        if($statusOcorrenciaDAO->inserir($statusOcorrencia))
+	        {
+	            echo ':sucesso:'.$id;
+	            $this->dao->getConexao()->commit();
+	        }else
+	        {
+	            echo ':falha';
+	            $this->dao->getConexao()->rollBack();
+	        }
 	    } else {
 	        echo ':falha';
+	        $this->dao->getConexao()->rollBack();
 	    }
 	}
 	
