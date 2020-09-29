@@ -11,13 +11,15 @@ class OcorrenciaCustomView extends OcorrenciaView {
     public function mostraFormInserir2($listaServico){
         
         $sessao = new Sessao();
+        
         echo '
+
             
 
   <div class="card card-body">
             
             
-<form method="post" action="" enctype="multipart/form-data">
+<form  id="form_enviar_ocorrencia"  method="post" action="" enctype="multipart/form-data">
     <span class="titulo medio">Informe os dados para cadastro</span><br>
     <div class="row">
         <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12">
@@ -26,7 +28,7 @@ class OcorrenciaCustomView extends OcorrenciaView {
                     <label for="select-demanda">Serviço*</label>
                 </div>
                 <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
-                    <select id="select-servicos" name="item_ocorrencia" required>
+                    <select id="select-servicos" name="servico" required>
                         <option value="" selected="selected">Selecione um serviço</option>';        
         foreach($listaServico as $servico){
             if($servico->getDescricao() == ""){
@@ -46,8 +48,8 @@ class OcorrenciaCustomView extends OcorrenciaView {
             </div>
             <div class="row">
                 <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
-                    <label for="desc_problema">Descrição*</label>
-                    <textarea class="form-control" rows="3" name="desc_problema" id="desc_problema" required></textarea>
+                    <label for="descricao">Descrição*</label>
+                    <textarea class="form-control" rows="3" name="descricao" id="descricao" required></textarea>
                 </div>
             </div>
             <br>
@@ -105,7 +107,8 @@ class OcorrenciaCustomView extends OcorrenciaView {
       
   </div><br><br>
 <div class="d-flex justify-content-center m-3">
-        <input type="submit" id="btn-submit" name="enviar_ocorrencia" value="Cadastrar Ocorrência" class="btn btn-primary" >
+        <button form="form_enviar_ocorrencia" type="submit" class="btn btn-primary">Cadastrar Ocorrência</button>
+        
 </div><br><br>
 
             

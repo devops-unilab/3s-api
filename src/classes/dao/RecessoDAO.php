@@ -1,5 +1,5 @@
 <?php
-                
+            
 /**
  * Classe feita para manipulação do objeto Recesso
  * feita automaticamente com programa gerador de software inventado por
@@ -7,12 +7,12 @@
  *
  *
  */
-
-
-
+     
+     
+     
 class RecessoDAO extends DAO {
     
-
+    
 
             
             
@@ -42,6 +42,34 @@ class RecessoDAO extends DAO {
             
             
 
+	public function retornaLista() {
+		$lista = array ();
+		$sql = "SELECT recesso.id, recesso.data FROM recesso LIMIT 1000";
+
+        try {
+            $stmt = $this->conexao->prepare($sql);
+            
+		    if(!$stmt){   
+                echo "<br>Mensagem de erro retornada: ".$this->conexao->errorInfo()[2]."<br>";
+		        return $lista;
+		    }
+            $stmt->execute();
+		    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+		    foreach ( $result as $linha ) 
+            {
+		        $recesso = new Recesso();
+                $recesso->setId( $linha ['id'] );
+                $recesso->setData( $linha ['data'] );
+                $lista [] = $recesso;
+
+	
+		    }
+		} catch(PDOException $e) {
+		    echo $e->getMessage();
+ 		}
+        return $lista;	
+    }
+        
     public function inserir(Recesso $recesso){
         $sql = "INSERT INTO recesso(data) VALUES (:data);";
 		$data = $recesso->getData();
@@ -87,49 +115,12 @@ class RecessoDAO extends DAO {
 	}
 
 
-	public function retornaLista() {
-		$lista = array ();
-		$sql = "
-		SELECT
-        recesso.id, 
-        recesso.data
-		FROM recesso
-                 LIMIT 1000";
-
-        try {
-            $stmt = $this->conexao->prepare($sql);
-            
-		    if(!$stmt){   
-                echo "<br>Mensagem de erro retornada: ".$this->conexao->errorInfo()[2]."<br>";
-		        return $lista;
-		    }
-            $stmt->execute();
-		    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-		    foreach ( $result as $linha ) 
-            {
-		        $recesso = new Recesso();
-                $recesso->setId( $linha ['id'] );
-                $recesso->setData( $linha ['data'] );
-                $lista [] = $recesso;
-
-	
-		    }
-		} catch(PDOException $e) {
-		    echo $e->getMessage();
- 		}
-        return $lista;	
-    }
-        
                 
     public function pesquisaPorId(Recesso $recesso) {
         $lista = array();
 	    $id = $recesso->getId();
                 
-        $sql = "
-		SELECT
-        recesso.id, 
-        recesso.data
-		FROM recesso
+        $sql = "SELECT recesso.id, recesso.data FROM recesso
             WHERE recesso.id = :id";
                 
         try {
@@ -158,11 +149,7 @@ class RecessoDAO extends DAO {
         $lista = array();
 	    $data = $recesso->getData();
                 
-        $sql = "
-		SELECT
-        recesso.id, 
-        recesso.data
-		FROM recesso
+        $sql = "SELECT recesso.id, recesso.data FROM recesso
             WHERE recesso.data like :data";
                 
         try {
@@ -190,11 +177,7 @@ class RecessoDAO extends DAO {
     public function preenchePorId(Recesso $recesso) {
         
 	    $id = $recesso->getId();
-	    $sql = "
-		SELECT
-        recesso.id, 
-        recesso.data
-		FROM recesso
+	    $sql = "SELECT recesso.id, recesso.data FROM recesso
                 WHERE recesso.id = :id
                  LIMIT 1000";
                 
@@ -223,11 +206,7 @@ class RecessoDAO extends DAO {
     public function preenchePorData(Recesso $recesso) {
         
 	    $data = $recesso->getData();
-	    $sql = "
-		SELECT
-        recesso.id, 
-        recesso.data
-		FROM recesso
+	    $sql = "SELECT recesso.id, recesso.data FROM recesso
                 WHERE recesso.data = :data
                  LIMIT 1000";
                 

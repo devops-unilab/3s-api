@@ -261,6 +261,7 @@ class OcorrenciaCustomController  extends OcorrenciaController {
 	}
 	
 	public function cadastrar() {
+	    $sessao = new Sessao();
 	    echo '
             <div class="row">
                 <div class="col-md-12 blog-main">
@@ -286,7 +287,7 @@ class OcorrenciaCustomController  extends OcorrenciaController {
 	    if(!isset($_POST['enviar_ocorrencia'])){
 	       return;
 	    }
-        if (! ( isset ( $_POST ['id_local'] ) && isset ( $_POST ['descricao'] ) && isset ( $_POST ['campus'] ) && isset ( $_POST ['patrimonio'] ) && isset ( $_POST ['ramal'] ) && isset ( $_POST ['local'] ) && isset ( $_POST ['status'] ) && isset ( $_POST ['solucao'] ) && isset ( $_POST ['prioridade'] ) && isset ( $_POST ['avaliacao'] ) && isset ( $_POST ['email'] ) && isset ( $_POST ['anexo'] ) && isset ( $_POST ['local_sala'] ) &&  isset($_POST ['area_responsavel']) &&  isset($_POST ['servico']) &&  isset($_POST ['usuario_cliente']) &&  isset($_POST ['usuario_atendente']) &&  isset($_POST ['usuario_indicado']))) {
+        if (! ( isset ( $_POST ['descricao'] ) && isset ( $_POST ['campus'] )  && isset ( $_POST ['email'] ) && isset ( $_POST ['local_sala'] )  &&  isset($_POST ['servico']) &&  isset($_POST ['usuario_cliente']) &&  isset($_POST ['usuario_atendente']) &&  isset($_POST ['usuario_indicado']))) {
             echo '
             <div class="alert alert-danger" role="alert">
                 Falha ao cadastrar. Algum campo deve estar faltando.
@@ -299,24 +300,35 @@ class OcorrenciaCustomController  extends OcorrenciaController {
 	    
 	    
 	    $ocorrencia = new Ocorrencia ();
-	    $ocorrencia->setIdLocal ( $_POST ['id_local'] );
+	    
+	    
+	    $ocorrencia->setIdLocal ( 1 );
 	    $ocorrencia->setDescricao ( $_POST ['descricao'] );
 	    $ocorrencia->setCampus ( $_POST ['campus'] );
-	    $ocorrencia->setPatrimonio ( $_POST ['patrimonio'] );
-	    $ocorrencia->setRamal ( $_POST ['ramal'] );
-	    $ocorrencia->setLocal ( $_POST ['local'] );
-	    $ocorrencia->setStatus ( $_POST ['status'] );
-	    $ocorrencia->setSolucao ( $_POST ['solucao'] );
-	    $ocorrencia->setPrioridade ( $_POST ['prioridade'] );
-	    $ocorrencia->setAvaliacao ( $_POST ['avaliacao'] );
+	    $ocorrencia->setLocal ('teste');
+	    $ocorrencia->setStatus ( 'a' );
+	    $ocorrencia->setPrioridade ( 'b' );
 	    $ocorrencia->setEmail ( $_POST ['email'] );
-	    $ocorrencia->setAnexo ( $_POST ['anexo'] );
-	    $ocorrencia->setLocalSala ( $_POST ['local_sala'] );
-	    $ocorrencia->getAreaResponsavel()->setId ( $_POST ['area_responsavel'] );
+	    
+	    $ocorrencia->getAreaResponsavel()->setId ( 1 );
+	    
+	    if(isset($_POST['patrimonio']))
+	    {
+	        $ocorrencia->setPatrimonio ( $_POST ['patrimonio'] );
+	    }
+	    if(isset($_POST['ramal'])){
+	        $ocorrencia->setRamal ( $_POST ['ramal'] );
+	    }
+	    if(isset($_POST['anexo'])){
+	        $ocorrencia->setAnexo ( $_POST ['anexo'] );
+	    }
+	    if(isset($_POST['local_sala'])){
+	        $ocorrencia->setLocalSala ( $_POST ['local_sala'] );
+	    }
 	    $ocorrencia->getServico()->setId ( $_POST ['servico'] );
-	    $ocorrencia->getUsuarioCliente()->setId ( $_POST ['usuario_cliente'] );
-	    $ocorrencia->getUsuarioAtendente()->setId ( $_POST ['usuario_atendente'] );
-	    $ocorrencia->getUsuarioIndicado()->setId ( $_POST ['usuario_indicado'] );
+	    $ocorrencia->getUsuarioCliente()->setId ($sessao->getIdUsuario() );
+	    
+	    
 	    
 	    if ($this->dao->inserir ( $ocorrencia ))
 	    {

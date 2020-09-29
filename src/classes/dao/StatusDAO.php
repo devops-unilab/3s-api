@@ -1,5 +1,5 @@
 <?php
-                
+            
 /**
  * Classe feita para manipulação do objeto Status
  * feita automaticamente com programa gerador de software inventado por
@@ -7,12 +7,12 @@
  *
  *
  */
-
-
-
+     
+     
+     
 class StatusDAO extends DAO {
     
-
+    
 
             
             
@@ -45,6 +45,35 @@ class StatusDAO extends DAO {
             
             
 
+	public function retornaLista() {
+		$lista = array ();
+		$sql = "SELECT status.id, status.sigla, status.nome FROM status LIMIT 1000";
+
+        try {
+            $stmt = $this->conexao->prepare($sql);
+            
+		    if(!$stmt){   
+                echo "<br>Mensagem de erro retornada: ".$this->conexao->errorInfo()[2]."<br>";
+		        return $lista;
+		    }
+            $stmt->execute();
+		    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+		    foreach ( $result as $linha ) 
+            {
+		        $status = new Status();
+                $status->setId( $linha ['id'] );
+                $status->setSigla( $linha ['sigla'] );
+                $status->setNome( $linha ['nome'] );
+                $lista [] = $status;
+
+	
+		    }
+		} catch(PDOException $e) {
+		    echo $e->getMessage();
+ 		}
+        return $lista;	
+    }
+        
     public function inserir(Status $status){
         $sql = "INSERT INTO status(sigla, nome) VALUES (:sigla, :nome);";
 		$sigla = $status->getSigla();
@@ -94,52 +123,12 @@ class StatusDAO extends DAO {
 	}
 
 
-	public function retornaLista() {
-		$lista = array ();
-		$sql = "
-		SELECT
-        status.id, 
-        status.sigla, 
-        status.nome
-		FROM status
-                 LIMIT 1000";
-
-        try {
-            $stmt = $this->conexao->prepare($sql);
-            
-		    if(!$stmt){   
-                echo "<br>Mensagem de erro retornada: ".$this->conexao->errorInfo()[2]."<br>";
-		        return $lista;
-		    }
-            $stmt->execute();
-		    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-		    foreach ( $result as $linha ) 
-            {
-		        $status = new Status();
-                $status->setId( $linha ['id'] );
-                $status->setSigla( $linha ['sigla'] );
-                $status->setNome( $linha ['nome'] );
-                $lista [] = $status;
-
-	
-		    }
-		} catch(PDOException $e) {
-		    echo $e->getMessage();
- 		}
-        return $lista;	
-    }
-        
                 
     public function pesquisaPorId(Status $status) {
         $lista = array();
 	    $id = $status->getId();
                 
-        $sql = "
-		SELECT
-        status.id, 
-        status.sigla, 
-        status.nome
-		FROM status
+        $sql = "SELECT status.id, status.sigla, status.nome FROM status
             WHERE status.id = :id";
                 
         try {
@@ -169,12 +158,7 @@ class StatusDAO extends DAO {
         $lista = array();
 	    $sigla = $status->getSigla();
                 
-        $sql = "
-		SELECT
-        status.id, 
-        status.sigla, 
-        status.nome
-		FROM status
+        $sql = "SELECT status.id, status.sigla, status.nome FROM status
             WHERE status.sigla like :sigla";
                 
         try {
@@ -204,12 +188,7 @@ class StatusDAO extends DAO {
         $lista = array();
 	    $nome = $status->getNome();
                 
-        $sql = "
-		SELECT
-        status.id, 
-        status.sigla, 
-        status.nome
-		FROM status
+        $sql = "SELECT status.id, status.sigla, status.nome FROM status
             WHERE status.nome like :nome";
                 
         try {
@@ -238,12 +217,7 @@ class StatusDAO extends DAO {
     public function preenchePorId(Status $status) {
         
 	    $id = $status->getId();
-	    $sql = "
-		SELECT
-        status.id, 
-        status.sigla, 
-        status.nome
-		FROM status
+	    $sql = "SELECT status.id, status.sigla, status.nome FROM status
                 WHERE status.id = :id
                  LIMIT 1000";
                 
@@ -273,12 +247,7 @@ class StatusDAO extends DAO {
     public function preenchePorSigla(Status $status) {
         
 	    $sigla = $status->getSigla();
-	    $sql = "
-		SELECT
-        status.id, 
-        status.sigla, 
-        status.nome
-		FROM status
+	    $sql = "SELECT status.id, status.sigla, status.nome FROM status
                 WHERE status.sigla = :sigla
                  LIMIT 1000";
                 
@@ -308,12 +277,7 @@ class StatusDAO extends DAO {
     public function preenchePorNome(Status $status) {
         
 	    $nome = $status->getNome();
-	    $sql = "
-		SELECT
-        status.id, 
-        status.sigla, 
-        status.nome
-		FROM status
+	    $sql = "SELECT status.id, status.sigla, status.nome FROM status
                 WHERE status.nome = :nome
                  LIMIT 1000";
                 

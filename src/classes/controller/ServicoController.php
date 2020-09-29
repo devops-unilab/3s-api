@@ -29,18 +29,24 @@ class ServicoController {
             $this->view->confirmarDeletar($selecionado);
             return;
         }
-        if($this->dao->excluir($selecionado)){
-            echo '<div class="alert alert-success" role="alert">
-                        Servico excluído com sucesso!
-                    </div>';
-        }else{
-            echo '
-                    <div class="alert alert-danger" role="alert">
-                        Falha ao tentar excluir   Servico 
-                    </div>
+        if($this->dao->excluir($selecionado))
+        {
+			echo '
 
-                ';
-        }
+<div class="alert alert-success" role="alert">
+  Sucesso ao excluir Servico
+</div>
+
+';
+		} else {
+			echo '
+
+<div class="alert alert-danger" role="alert">
+  Falha ao tentar excluir Servico
+</div>
+
+';
+		}
     	echo '<META HTTP-EQUIV="REFRESH" CONTENT="2; URL=index.php?pagina=servico">';
     }
 
@@ -111,6 +117,41 @@ class ServicoController {
 
 
             
+	public function cadastrarAjax() {
+            
+        if(!isset($_POST['enviar_servico'])){
+            return;    
+        }
+        
+		    
+		
+		if (! ( isset ( $_POST ['nome'] ) && isset ( $_POST ['descricao'] ) && isset ( $_POST ['tempo_sla'] ) && isset ( $_POST ['visao'] ) &&  isset($_POST ['tipo_atividade']) &&  isset($_POST ['area_responsavel']) &&  isset($_POST ['grupo_servico']))) {
+			echo ':incompleto';
+			return;
+		}
+            
+		$servico = new Servico ();
+		$servico->setNome ( $_POST ['nome'] );
+		$servico->setDescricao ( $_POST ['descricao'] );
+		$servico->setTempoSla ( $_POST ['tempo_sla'] );
+		$servico->setVisao ( $_POST ['visao'] );
+		$servico->getTipoAtividade()->setId ( $_POST ['tipo_atividade'] );
+		$servico->getAreaResponsavel()->setId ( $_POST ['area_responsavel'] );
+		$servico->getGrupoServico()->setId ( $_POST ['grupo_servico'] );
+            
+		if ($this->dao->inserir ( $servico ))
+        {
+			$id = $this->dao->getConexao()->lastInsertId();
+            echo ':sucesso:'.$id;
+            
+		} else {
+			 echo ':falha';
+		}
+	}
+            
+            
+
+            
     public function editar(){
 	    if(!isset($_GET['editar'])){
 	        return;
@@ -145,10 +186,21 @@ class ServicoController {
             
 		if ($this->dao->atualizar ($selecionado ))
         {
-            
-			echo "Sucesso";
+			echo '
+
+<div class="alert alert-success" role="alert">
+  Sucesso 
+</div>
+
+';
 		} else {
-			echo "Fracasso";
+			echo '
+
+<div class="alert alert-danger" role="alert">
+  Falha 
+</div>
+
+';
 		}
         echo '<META HTTP-EQUIV="REFRESH" CONTENT="3; URL=index.php?pagina=servico">';
             
@@ -180,21 +232,31 @@ class ServicoController {
         echo '</div>';
             
     }
-    public static function mainREST()
+    public function mainAjax(){
+
+        $this->cadastrarAjax();
+        
+            
+    }
+    public function mainREST($arquivoIni)
     {
+        $config = parse_ini_file ( $arquivoIni );
+        $usuario = $config ['user'];
+        $senha = $config ['password'];
+        
         if(!isset($_SERVER['PHP_AUTH_USER'])){
             header("WWW-Authenticate: Basic realm=\"Private Area\" ");
             header("HTTP/1.0 401 Unauthorized");
             echo '{"erro":[{"status":"error","message":"Authentication failed"}]}';
             return;
         }
-        if($_SERVER['PHP_AUTH_USER'] == 'usuario' && ($_SERVER['PHP_AUTH_PW'] == 'senha@12')){
+        if($_SERVER['PHP_AUTH_USER'] == $usuario && ($_SERVER['PHP_AUTH_PW'] == $senha)){
             header('Content-type: application/json');
-            $controller = new ServicoController();
-            $controller->restGET();
+            
+            $this->restGET();
             //$controller->restPOST();
             //$controller->restPUT();
-            $controller->resDELETE();
+            $this->resDELETE();
         }else{
             header("WWW-Authenticate: Basic realm=\"Private Area\" ");
             header("HTTP/1.0 401 Unauthorized");
@@ -237,12 +299,12 @@ class ServicoController {
             return;
         }
 
-        if(isset($url[1])){
-            $parametro = $url[1];
+        if(isset($url[2])){
+            $parametro = $url[2];
             $id = intval($parametro);
             $pesquisado = new Servico();
             $pesquisado->setId($id);
-            $pesquisado = $this->dao->pesquisaPorId($pesquisado);
+            $pesquisado = $this->dao->preenchePorId($pesquisado);
             if ($pesquisado == null) {
                 echo "{}";
                 return;
@@ -381,11 +443,24 @@ class ServicoController {
         }
                     
 
-        if ($this->dao->atualizar($pesquisado)) {
-            echo "Sucesso";
-        } else {
-            echo "Erro";
-        }
+        if ($this->dao->atualizar($pesquisado)) 
+                {
+			echo '
+
+<div class="alert alert-success" role="alert">
+  Sucesso 
+</div>
+
+';
+		} else {
+			echo '
+
+<div class="alert alert-danger" role="alert">
+  Falha 
+</div>
+
+';
+		}
     }
 
     public function restPOST()
@@ -424,11 +499,24 @@ class ServicoController {
 
         $adicionado->setVisao($jsonBody['visao']);
 
-        if ($this->dao->inserir($adicionado)) {
-            echo "Sucesso";
-        } else {
-            echo "Fracasso";
-        }
+        if ($this->dao->inserir($adicionado)) 
+                {
+			echo '
+
+<div class="alert alert-success" role="alert">
+  Sucesso 
+</div>
+
+';
+		} else {
+			echo '
+
+<div class="alert alert-danger" role="alert">
+  Falha 
+</div>
+
+';
+		}
     }            
             
 		

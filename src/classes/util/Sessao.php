@@ -36,6 +36,8 @@ class Sessao{
         
     }
     public function getEmail(){
+        
+        
         if(!isset($_SESSION['USUARIO_EMAIL'])){
             $_SESSION['USUARIO_EMAIL'] = '0';
         }

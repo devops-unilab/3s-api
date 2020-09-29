@@ -1,5 +1,5 @@
 <?php
-                
+            
 /**
  * Classe feita para manipulação do objeto AreaResponsavel
  * feita automaticamente com programa gerador de software inventado por
@@ -7,12 +7,12 @@
  *
  *
  */
-
-
-
+     
+     
+     
 class AreaResponsavelDAO extends DAO {
     
-
+    
 
             
             
@@ -48,6 +48,36 @@ class AreaResponsavelDAO extends DAO {
             
             
 
+	public function retornaLista() {
+		$lista = array ();
+		$sql = "SELECT area_responsavel.id, area_responsavel.nome, area_responsavel.descricao, area_responsavel.email FROM area_responsavel LIMIT 1000";
+
+        try {
+            $stmt = $this->conexao->prepare($sql);
+            
+		    if(!$stmt){   
+                echo "<br>Mensagem de erro retornada: ".$this->conexao->errorInfo()[2]."<br>";
+		        return $lista;
+		    }
+            $stmt->execute();
+		    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+		    foreach ( $result as $linha ) 
+            {
+		        $areaResponsavel = new AreaResponsavel();
+                $areaResponsavel->setId( $linha ['id'] );
+                $areaResponsavel->setNome( $linha ['nome'] );
+                $areaResponsavel->setDescricao( $linha ['descricao'] );
+                $areaResponsavel->setEmail( $linha ['email'] );
+                $lista [] = $areaResponsavel;
+
+	
+		    }
+		} catch(PDOException $e) {
+		    echo $e->getMessage();
+ 		}
+        return $lista;	
+    }
+        
     public function inserir(AreaResponsavel $areaResponsavel){
         $sql = "INSERT INTO area_responsavel(nome, descricao, email) VALUES (:nome, :descricao, :email);";
 		$nome = $areaResponsavel->getNome();
@@ -101,55 +131,12 @@ class AreaResponsavelDAO extends DAO {
 	}
 
 
-	public function retornaLista() {
-		$lista = array ();
-		$sql = "
-		SELECT
-        area_responsavel.id, 
-        area_responsavel.nome, 
-        area_responsavel.descricao, 
-        area_responsavel.email
-		FROM area_responsavel
-                 LIMIT 1000";
-
-        try {
-            $stmt = $this->conexao->prepare($sql);
-            
-		    if(!$stmt){   
-                echo "<br>Mensagem de erro retornada: ".$this->conexao->errorInfo()[2]."<br>";
-		        return $lista;
-		    }
-            $stmt->execute();
-		    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-		    foreach ( $result as $linha ) 
-            {
-		        $areaResponsavel = new AreaResponsavel();
-                $areaResponsavel->setId( $linha ['id'] );
-                $areaResponsavel->setNome( $linha ['nome'] );
-                $areaResponsavel->setDescricao( $linha ['descricao'] );
-                $areaResponsavel->setEmail( $linha ['email'] );
-                $lista [] = $areaResponsavel;
-
-	
-		    }
-		} catch(PDOException $e) {
-		    echo $e->getMessage();
- 		}
-        return $lista;	
-    }
-        
                 
     public function pesquisaPorId(AreaResponsavel $areaResponsavel) {
         $lista = array();
 	    $id = $areaResponsavel->getId();
                 
-        $sql = "
-		SELECT
-        area_responsavel.id, 
-        area_responsavel.nome, 
-        area_responsavel.descricao, 
-        area_responsavel.email
-		FROM area_responsavel
+        $sql = "SELECT area_responsavel.id, area_responsavel.nome, area_responsavel.descricao, area_responsavel.email FROM area_responsavel
             WHERE area_responsavel.id = :id";
                 
         try {
@@ -180,13 +167,7 @@ class AreaResponsavelDAO extends DAO {
         $lista = array();
 	    $nome = $areaResponsavel->getNome();
                 
-        $sql = "
-		SELECT
-        area_responsavel.id, 
-        area_responsavel.nome, 
-        area_responsavel.descricao, 
-        area_responsavel.email
-		FROM area_responsavel
+        $sql = "SELECT area_responsavel.id, area_responsavel.nome, area_responsavel.descricao, area_responsavel.email FROM area_responsavel
             WHERE area_responsavel.nome like :nome";
                 
         try {
@@ -217,13 +198,7 @@ class AreaResponsavelDAO extends DAO {
         $lista = array();
 	    $descricao = $areaResponsavel->getDescricao();
                 
-        $sql = "
-		SELECT
-        area_responsavel.id, 
-        area_responsavel.nome, 
-        area_responsavel.descricao, 
-        area_responsavel.email
-		FROM area_responsavel
+        $sql = "SELECT area_responsavel.id, area_responsavel.nome, area_responsavel.descricao, area_responsavel.email FROM area_responsavel
             WHERE area_responsavel.descricao like :descricao";
                 
         try {
@@ -254,13 +229,7 @@ class AreaResponsavelDAO extends DAO {
         $lista = array();
 	    $email = $areaResponsavel->getEmail();
                 
-        $sql = "
-		SELECT
-        area_responsavel.id, 
-        area_responsavel.nome, 
-        area_responsavel.descricao, 
-        area_responsavel.email
-		FROM area_responsavel
+        $sql = "SELECT area_responsavel.id, area_responsavel.nome, area_responsavel.descricao, area_responsavel.email FROM area_responsavel
             WHERE area_responsavel.email like :email";
                 
         try {
@@ -290,13 +259,7 @@ class AreaResponsavelDAO extends DAO {
     public function preenchePorId(AreaResponsavel $areaResponsavel) {
         
 	    $id = $areaResponsavel->getId();
-	    $sql = "
-		SELECT
-        area_responsavel.id, 
-        area_responsavel.nome, 
-        area_responsavel.descricao, 
-        area_responsavel.email
-		FROM area_responsavel
+	    $sql = "SELECT area_responsavel.id, area_responsavel.nome, area_responsavel.descricao, area_responsavel.email FROM area_responsavel
                 WHERE area_responsavel.id = :id
                  LIMIT 1000";
                 
@@ -327,13 +290,7 @@ class AreaResponsavelDAO extends DAO {
     public function preenchePorNome(AreaResponsavel $areaResponsavel) {
         
 	    $nome = $areaResponsavel->getNome();
-	    $sql = "
-		SELECT
-        area_responsavel.id, 
-        area_responsavel.nome, 
-        area_responsavel.descricao, 
-        area_responsavel.email
-		FROM area_responsavel
+	    $sql = "SELECT area_responsavel.id, area_responsavel.nome, area_responsavel.descricao, area_responsavel.email FROM area_responsavel
                 WHERE area_responsavel.nome = :nome
                  LIMIT 1000";
                 
@@ -364,13 +321,7 @@ class AreaResponsavelDAO extends DAO {
     public function preenchePorDescricao(AreaResponsavel $areaResponsavel) {
         
 	    $descricao = $areaResponsavel->getDescricao();
-	    $sql = "
-		SELECT
-        area_responsavel.id, 
-        area_responsavel.nome, 
-        area_responsavel.descricao, 
-        area_responsavel.email
-		FROM area_responsavel
+	    $sql = "SELECT area_responsavel.id, area_responsavel.nome, area_responsavel.descricao, area_responsavel.email FROM area_responsavel
                 WHERE area_responsavel.descricao = :descricao
                  LIMIT 1000";
                 
@@ -401,13 +352,7 @@ class AreaResponsavelDAO extends DAO {
     public function preenchePorEmail(AreaResponsavel $areaResponsavel) {
         
 	    $email = $areaResponsavel->getEmail();
-	    $sql = "
-		SELECT
-        area_responsavel.id, 
-        area_responsavel.nome, 
-        area_responsavel.descricao, 
-        area_responsavel.email
-		FROM area_responsavel
+	    $sql = "SELECT area_responsavel.id, area_responsavel.nome, area_responsavel.descricao, area_responsavel.email FROM area_responsavel
                 WHERE area_responsavel.email = :email
                  LIMIT 1000";
                 

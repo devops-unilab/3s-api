@@ -29,18 +29,24 @@ class TarefaOcorrenciaController {
             $this->view->confirmarDeletar($selecionado);
             return;
         }
-        if($this->dao->excluir($selecionado)){
-            echo '<div class="alert alert-success" role="alert">
-                        Tarefa Ocorrencia excluído com sucesso!
-                    </div>';
-        }else{
-            echo '
-                    <div class="alert alert-danger" role="alert">
-                        Falha ao tentar excluir   Tarefa Ocorrencia 
-                    </div>
+        if($this->dao->excluir($selecionado))
+        {
+			echo '
 
-                ';
-        }
+<div class="alert alert-success" role="alert">
+  Sucesso ao excluir Tarefa Ocorrencia
+</div>
+
+';
+		} else {
+			echo '
+
+<div class="alert alert-danger" role="alert">
+  Falha ao tentar excluir Tarefa Ocorrencia
+</div>
+
+';
+		}
     	echo '<META HTTP-EQUIV="REFRESH" CONTENT="2; URL=index.php?pagina=tarefa_ocorrencia">';
     }
 
@@ -105,6 +111,38 @@ class TarefaOcorrenciaController {
 
 
             
+	public function cadastrarAjax() {
+            
+        if(!isset($_POST['enviar_tarefa_ocorrencia'])){
+            return;    
+        }
+        
+		    
+		
+		if (! ( isset ( $_POST ['tarefa'] ) && isset ( $_POST ['data_inclusao'] ) &&  isset($_POST ['ocorrencia']) &&  isset($_POST ['usuario']))) {
+			echo ':incompleto';
+			return;
+		}
+            
+		$tarefaOcorrencia = new TarefaOcorrencia ();
+		$tarefaOcorrencia->setTarefa ( $_POST ['tarefa'] );
+		$tarefaOcorrencia->setDataInclusao ( $_POST ['data_inclusao'] );
+		$tarefaOcorrencia->getOcorrencia()->setId ( $_POST ['ocorrencia'] );
+		$tarefaOcorrencia->getUsuario()->setId ( $_POST ['usuario'] );
+            
+		if ($this->dao->inserir ( $tarefaOcorrencia ))
+        {
+			$id = $this->dao->getConexao()->lastInsertId();
+            echo ':sucesso:'.$id;
+            
+		} else {
+			 echo ':falha';
+		}
+	}
+            
+            
+
+            
     public function editar(){
 	    if(!isset($_GET['editar'])){
 	        return;
@@ -134,10 +172,21 @@ class TarefaOcorrenciaController {
             
 		if ($this->dao->atualizar ($selecionado ))
         {
-            
-			echo "Sucesso";
+			echo '
+
+<div class="alert alert-success" role="alert">
+  Sucesso 
+</div>
+
+';
 		} else {
-			echo "Fracasso";
+			echo '
+
+<div class="alert alert-danger" role="alert">
+  Falha 
+</div>
+
+';
 		}
         echo '<META HTTP-EQUIV="REFRESH" CONTENT="3; URL=index.php?pagina=tarefa_ocorrencia">';
             
@@ -169,21 +218,31 @@ class TarefaOcorrenciaController {
         echo '</div>';
             
     }
-    public static function mainREST()
+    public function mainAjax(){
+
+        $this->cadastrarAjax();
+        
+            
+    }
+    public function mainREST($arquivoIni)
     {
+        $config = parse_ini_file ( $arquivoIni );
+        $usuario = $config ['user'];
+        $senha = $config ['password'];
+        
         if(!isset($_SERVER['PHP_AUTH_USER'])){
             header("WWW-Authenticate: Basic realm=\"Private Area\" ");
             header("HTTP/1.0 401 Unauthorized");
             echo '{"erro":[{"status":"error","message":"Authentication failed"}]}';
             return;
         }
-        if($_SERVER['PHP_AUTH_USER'] == 'usuario' && ($_SERVER['PHP_AUTH_PW'] == 'senha@12')){
+        if($_SERVER['PHP_AUTH_USER'] == $usuario && ($_SERVER['PHP_AUTH_PW'] == $senha)){
             header('Content-type: application/json');
-            $controller = new TarefaOcorrenciaController();
-            $controller->restGET();
+            
+            $this->restGET();
             //$controller->restPOST();
             //$controller->restPUT();
-            $controller->resDELETE();
+            $this->resDELETE();
         }else{
             header("WWW-Authenticate: Basic realm=\"Private Area\" ");
             header("HTTP/1.0 401 Unauthorized");
@@ -226,12 +285,12 @@ class TarefaOcorrenciaController {
             return;
         }
 
-        if(isset($url[1])){
-            $parametro = $url[1];
+        if(isset($url[2])){
+            $parametro = $url[2];
             $id = intval($parametro);
             $pesquisado = new TarefaOcorrencia();
             $pesquisado->setId($id);
-            $pesquisado = $this->dao->pesquisaPorId($pesquisado);
+            $pesquisado = $this->dao->preenchePorId($pesquisado);
             if ($pesquisado == null) {
                 echo "{}";
                 return;
@@ -356,11 +415,24 @@ class TarefaOcorrenciaController {
         }
                     
 
-        if ($this->dao->atualizar($pesquisado)) {
-            echo "Sucesso";
-        } else {
-            echo "Erro";
-        }
+        if ($this->dao->atualizar($pesquisado)) 
+                {
+			echo '
+
+<div class="alert alert-success" role="alert">
+  Sucesso 
+</div>
+
+';
+		} else {
+			echo '
+
+<div class="alert alert-danger" role="alert">
+  Falha 
+</div>
+
+';
+		}
     }
 
     public function restPOST()
@@ -395,11 +467,24 @@ class TarefaOcorrenciaController {
 
         $adicionado->setDataInclusao($jsonBody['data_inclusao']);
 
-        if ($this->dao->inserir($adicionado)) {
-            echo "Sucesso";
-        } else {
-            echo "Fracasso";
-        }
+        if ($this->dao->inserir($adicionado)) 
+                {
+			echo '
+
+<div class="alert alert-success" role="alert">
+  Sucesso 
+</div>
+
+';
+		} else {
+			echo '
+
+<div class="alert alert-danger" role="alert">
+  Falha 
+</div>
+
+';
+		}
     }            
             
 		

@@ -29,18 +29,24 @@ class OcorrenciaController {
             $this->view->confirmarDeletar($selecionado);
             return;
         }
-        if($this->dao->excluir($selecionado)){
-            echo '<div class="alert alert-success" role="alert">
-                        Ocorrencia excluído com sucesso!
-                    </div>';
-        }else{
-            echo '
-                    <div class="alert alert-danger" role="alert">
-                        Falha ao tentar excluir   Ocorrencia 
-                    </div>
+        if($this->dao->excluir($selecionado))
+        {
+			echo '
 
-                ';
-        }
+<div class="alert alert-success" role="alert">
+  Sucesso ao excluir Ocorrencia
+</div>
+
+';
+		} else {
+			echo '
+
+<div class="alert alert-danger" role="alert">
+  Falha ao tentar excluir Ocorrencia
+</div>
+
+';
+		}
     	echo '<META HTTP-EQUIV="REFRESH" CONTENT="2; URL=index.php?pagina=ocorrencia">';
     }
 
@@ -122,6 +128,52 @@ class OcorrenciaController {
 
 
             
+	public function cadastrarAjax() {
+            
+        if(!isset($_POST['enviar_ocorrencia'])){
+            return;    
+        }
+        
+		    
+		
+		if (! ( isset ( $_POST ['id_local'] ) && isset ( $_POST ['descricao'] ) && isset ( $_POST ['campus'] ) && isset ( $_POST ['patrimonio'] ) && isset ( $_POST ['ramal'] ) && isset ( $_POST ['local'] ) && isset ( $_POST ['status'] ) && isset ( $_POST ['solucao'] ) && isset ( $_POST ['prioridade'] ) && isset ( $_POST ['avaliacao'] ) && isset ( $_POST ['email'] ) && isset ( $_POST ['id_usuario_atendente'] ) && isset ( $_POST ['id_usuario_indicado'] ) && isset ( $_POST ['anexo'] ) && isset ( $_POST ['local_sala'] ) &&  isset($_POST ['area_responsavel']) &&  isset($_POST ['servico']) &&  isset($_POST ['usuario_cliente']))) {
+			echo ':incompleto';
+			return;
+		}
+            
+		$ocorrencia = new Ocorrencia ();
+		$ocorrencia->setIdLocal ( $_POST ['id_local'] );
+		$ocorrencia->setDescricao ( $_POST ['descricao'] );
+		$ocorrencia->setCampus ( $_POST ['campus'] );
+		$ocorrencia->setPatrimonio ( $_POST ['patrimonio'] );
+		$ocorrencia->setRamal ( $_POST ['ramal'] );
+		$ocorrencia->setLocal ( $_POST ['local'] );
+		$ocorrencia->setStatus ( $_POST ['status'] );
+		$ocorrencia->setSolucao ( $_POST ['solucao'] );
+		$ocorrencia->setPrioridade ( $_POST ['prioridade'] );
+		$ocorrencia->setAvaliacao ( $_POST ['avaliacao'] );
+		$ocorrencia->setEmail ( $_POST ['email'] );
+		$ocorrencia->setIdUsuarioAtendente ( $_POST ['id_usuario_atendente'] );
+		$ocorrencia->setIdUsuarioIndicado ( $_POST ['id_usuario_indicado'] );
+		$ocorrencia->setAnexo ( $_POST ['anexo'] );
+		$ocorrencia->setLocalSala ( $_POST ['local_sala'] );
+		$ocorrencia->getAreaResponsavel()->setId ( $_POST ['area_responsavel'] );
+		$ocorrencia->getServico()->setId ( $_POST ['servico'] );
+		$ocorrencia->getUsuarioCliente()->setId ( $_POST ['usuario_cliente'] );
+            
+		if ($this->dao->inserir ( $ocorrencia ))
+        {
+			$id = $this->dao->getConexao()->lastInsertId();
+            echo ':sucesso:'.$id;
+            
+		} else {
+			 echo ':falha';
+		}
+	}
+            
+            
+
+            
     public function editar(){
 	    if(!isset($_GET['editar'])){
 	        return;
@@ -167,10 +219,21 @@ class OcorrenciaController {
             
 		if ($this->dao->atualizar ($selecionado ))
         {
-            
-			echo "Sucesso";
+			echo '
+
+<div class="alert alert-success" role="alert">
+  Sucesso 
+</div>
+
+';
 		} else {
-			echo "Fracasso";
+			echo '
+
+<div class="alert alert-danger" role="alert">
+  Falha 
+</div>
+
+';
 		}
         echo '<META HTTP-EQUIV="REFRESH" CONTENT="3; URL=index.php?pagina=ocorrencia">';
             
@@ -202,21 +265,31 @@ class OcorrenciaController {
         echo '</div>';
             
     }
-    public static function mainREST()
+    public function mainAjax(){
+
+        $this->cadastrarAjax();
+        
+            
+    }
+    public function mainREST($arquivoIni)
     {
+        $config = parse_ini_file ( $arquivoIni );
+        $usuario = $config ['user'];
+        $senha = $config ['password'];
+        
         if(!isset($_SERVER['PHP_AUTH_USER'])){
             header("WWW-Authenticate: Basic realm=\"Private Area\" ");
             header("HTTP/1.0 401 Unauthorized");
             echo '{"erro":[{"status":"error","message":"Authentication failed"}]}';
             return;
         }
-        if($_SERVER['PHP_AUTH_USER'] == 'usuario' && ($_SERVER['PHP_AUTH_PW'] == 'senha@12')){
+        if($_SERVER['PHP_AUTH_USER'] == $usuario && ($_SERVER['PHP_AUTH_PW'] == $senha)){
             header('Content-type: application/json');
-            $controller = new OcorrenciaController();
-            $controller->restGET();
+            
+            $this->restGET();
             //$controller->restPOST();
             //$controller->restPUT();
-            $controller->resDELETE();
+            $this->resDELETE();
         }else{
             header("WWW-Authenticate: Basic realm=\"Private Area\" ");
             header("HTTP/1.0 401 Unauthorized");
@@ -259,12 +332,12 @@ class OcorrenciaController {
             return;
         }
 
-        if(isset($url[1])){
-            $parametro = $url[1];
+        if(isset($url[2])){
+            $parametro = $url[2];
             $id = intval($parametro);
             $pesquisado = new Ocorrencia();
             $pesquisado->setId($id);
-            $pesquisado = $this->dao->pesquisaPorId($pesquisado);
+            $pesquisado = $this->dao->preenchePorId($pesquisado);
             if ($pesquisado == null) {
                 echo "{}";
                 return;
@@ -480,11 +553,24 @@ class OcorrenciaController {
         }
                     
 
-        if ($this->dao->atualizar($pesquisado)) {
-            echo "Sucesso";
-        } else {
-            echo "Erro";
-        }
+        if ($this->dao->atualizar($pesquisado)) 
+                {
+			echo '
+
+<div class="alert alert-success" role="alert">
+  Sucesso 
+</div>
+
+';
+		} else {
+			echo '
+
+<div class="alert alert-danger" role="alert">
+  Falha 
+</div>
+
+';
+		}
     }
 
     public function restPOST()
@@ -545,11 +631,24 @@ class OcorrenciaController {
 
         $adicionado->setLocalSala($jsonBody['local_sala']);
 
-        if ($this->dao->inserir($adicionado)) {
-            echo "Sucesso";
-        } else {
-            echo "Fracasso";
-        }
+        if ($this->dao->inserir($adicionado)) 
+                {
+			echo '
+
+<div class="alert alert-success" role="alert">
+  Sucesso 
+</div>
+
+';
+		} else {
+			echo '
+
+<div class="alert alert-danger" role="alert">
+  Falha 
+</div>
+
+';
+		}
     }            
             
 		

@@ -1,5 +1,5 @@
 <?php
-                
+            
 /**
  * Classe feita para manipulação do objeto TipoAtividade
  * feita automaticamente com programa gerador de software inventado por
@@ -7,12 +7,12 @@
  *
  *
  */
-
-
-
+     
+     
+     
 class TipoAtividadeDAO extends DAO {
     
-
+    
 
             
             
@@ -42,6 +42,34 @@ class TipoAtividadeDAO extends DAO {
             
             
 
+	public function retornaLista() {
+		$lista = array ();
+		$sql = "SELECT tipo_atividade.id, tipo_atividade.nome FROM tipo_atividade LIMIT 1000";
+
+        try {
+            $stmt = $this->conexao->prepare($sql);
+            
+		    if(!$stmt){   
+                echo "<br>Mensagem de erro retornada: ".$this->conexao->errorInfo()[2]."<br>";
+		        return $lista;
+		    }
+            $stmt->execute();
+		    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+		    foreach ( $result as $linha ) 
+            {
+		        $tipoAtividade = new TipoAtividade();
+                $tipoAtividade->setId( $linha ['id'] );
+                $tipoAtividade->setNome( $linha ['nome'] );
+                $lista [] = $tipoAtividade;
+
+	
+		    }
+		} catch(PDOException $e) {
+		    echo $e->getMessage();
+ 		}
+        return $lista;	
+    }
+        
     public function inserir(TipoAtividade $tipoAtividade){
         $sql = "INSERT INTO tipo_atividade(nome) VALUES (:nome);";
 		$nome = $tipoAtividade->getNome();
@@ -87,49 +115,12 @@ class TipoAtividadeDAO extends DAO {
 	}
 
 
-	public function retornaLista() {
-		$lista = array ();
-		$sql = "
-		SELECT
-        tipo_atividade.id, 
-        tipo_atividade.nome
-		FROM tipo_atividade
-                 LIMIT 1000";
-
-        try {
-            $stmt = $this->conexao->prepare($sql);
-            
-		    if(!$stmt){   
-                echo "<br>Mensagem de erro retornada: ".$this->conexao->errorInfo()[2]."<br>";
-		        return $lista;
-		    }
-            $stmt->execute();
-		    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-		    foreach ( $result as $linha ) 
-            {
-		        $tipoAtividade = new TipoAtividade();
-                $tipoAtividade->setId( $linha ['id'] );
-                $tipoAtividade->setNome( $linha ['nome'] );
-                $lista [] = $tipoAtividade;
-
-	
-		    }
-		} catch(PDOException $e) {
-		    echo $e->getMessage();
- 		}
-        return $lista;	
-    }
-        
                 
     public function pesquisaPorId(TipoAtividade $tipoAtividade) {
         $lista = array();
 	    $id = $tipoAtividade->getId();
                 
-        $sql = "
-		SELECT
-        tipo_atividade.id, 
-        tipo_atividade.nome
-		FROM tipo_atividade
+        $sql = "SELECT tipo_atividade.id, tipo_atividade.nome FROM tipo_atividade
             WHERE tipo_atividade.id = :id";
                 
         try {
@@ -158,11 +149,7 @@ class TipoAtividadeDAO extends DAO {
         $lista = array();
 	    $nome = $tipoAtividade->getNome();
                 
-        $sql = "
-		SELECT
-        tipo_atividade.id, 
-        tipo_atividade.nome
-		FROM tipo_atividade
+        $sql = "SELECT tipo_atividade.id, tipo_atividade.nome FROM tipo_atividade
             WHERE tipo_atividade.nome like :nome";
                 
         try {
@@ -190,11 +177,7 @@ class TipoAtividadeDAO extends DAO {
     public function preenchePorId(TipoAtividade $tipoAtividade) {
         
 	    $id = $tipoAtividade->getId();
-	    $sql = "
-		SELECT
-        tipo_atividade.id, 
-        tipo_atividade.nome
-		FROM tipo_atividade
+	    $sql = "SELECT tipo_atividade.id, tipo_atividade.nome FROM tipo_atividade
                 WHERE tipo_atividade.id = :id
                  LIMIT 1000";
                 
@@ -223,11 +206,7 @@ class TipoAtividadeDAO extends DAO {
     public function preenchePorNome(TipoAtividade $tipoAtividade) {
         
 	    $nome = $tipoAtividade->getNome();
-	    $sql = "
-		SELECT
-        tipo_atividade.id, 
-        tipo_atividade.nome
-		FROM tipo_atividade
+	    $sql = "SELECT tipo_atividade.id, tipo_atividade.nome FROM tipo_atividade
                 WHERE tipo_atividade.nome = :nome
                  LIMIT 1000";
                 

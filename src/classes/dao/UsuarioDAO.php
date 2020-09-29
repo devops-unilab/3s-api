@@ -1,5 +1,5 @@
 <?php
-                
+            
 /**
  * Classe feita para manipulação do objeto Usuario
  * feita automaticamente com programa gerador de software inventado por
@@ -7,12 +7,12 @@
  *
  *
  */
-
-
-
+     
+     
+     
 class UsuarioDAO extends DAO {
     
-
+    
 
             
             
@@ -57,6 +57,39 @@ class UsuarioDAO extends DAO {
             
             
 
+	public function retornaLista() {
+		$lista = array ();
+		$sql = "SELECT usuario.id, usuario.nome, usuario.email, usuario.login, usuario.senha, usuario.nivel, usuario.id_setor FROM usuario LIMIT 1000";
+
+        try {
+            $stmt = $this->conexao->prepare($sql);
+            
+		    if(!$stmt){   
+                echo "<br>Mensagem de erro retornada: ".$this->conexao->errorInfo()[2]."<br>";
+		        return $lista;
+		    }
+            $stmt->execute();
+		    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+		    foreach ( $result as $linha ) 
+            {
+		        $usuario = new Usuario();
+                $usuario->setId( $linha ['id'] );
+                $usuario->setNome( $linha ['nome'] );
+                $usuario->setEmail( $linha ['email'] );
+                $usuario->setLogin( $linha ['login'] );
+                $usuario->setSenha( $linha ['senha'] );
+                $usuario->setNivel( $linha ['nivel'] );
+                $usuario->setIdSetor( $linha ['id_setor'] );
+                $lista [] = $usuario;
+
+	
+		    }
+		} catch(PDOException $e) {
+		    echo $e->getMessage();
+ 		}
+        return $lista;	
+    }
+        
     public function inserir(Usuario $usuario){
         $sql = "INSERT INTO usuario(nome, email, login, senha, nivel, id_setor) VALUES (:nome, :email, :login, :senha, :nivel, :idSetor);";
 		$nome = $usuario->getNome();
@@ -122,64 +155,12 @@ class UsuarioDAO extends DAO {
 	}
 
 
-	public function retornaLista() {
-		$lista = array ();
-		$sql = "
-		SELECT
-        usuario.id, 
-        usuario.nome, 
-        usuario.email, 
-        usuario.login, 
-        usuario.senha, 
-        usuario.nivel, 
-        usuario.id_setor
-		FROM usuario
-                 LIMIT 1000";
-
-        try {
-            $stmt = $this->conexao->prepare($sql);
-            
-		    if(!$stmt){   
-                echo "<br>Mensagem de erro retornada: ".$this->conexao->errorInfo()[2]."<br>";
-		        return $lista;
-		    }
-            $stmt->execute();
-		    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-		    foreach ( $result as $linha ) 
-            {
-		        $usuario = new Usuario();
-                $usuario->setId( $linha ['id'] );
-                $usuario->setNome( $linha ['nome'] );
-                $usuario->setEmail( $linha ['email'] );
-                $usuario->setLogin( $linha ['login'] );
-                $usuario->setSenha( $linha ['senha'] );
-                $usuario->setNivel( $linha ['nivel'] );
-                $usuario->setIdSetor( $linha ['id_setor'] );
-                $lista [] = $usuario;
-
-	
-		    }
-		} catch(PDOException $e) {
-		    echo $e->getMessage();
- 		}
-        return $lista;	
-    }
-        
                 
     public function pesquisaPorId(Usuario $usuario) {
         $lista = array();
 	    $id = $usuario->getId();
                 
-        $sql = "
-		SELECT
-        usuario.id, 
-        usuario.nome, 
-        usuario.email, 
-        usuario.login, 
-        usuario.senha, 
-        usuario.nivel, 
-        usuario.id_setor
-		FROM usuario
+        $sql = "SELECT usuario.id, usuario.nome, usuario.email, usuario.login, usuario.senha, usuario.nivel, usuario.id_setor FROM usuario
             WHERE usuario.id = :id";
                 
         try {
@@ -213,16 +194,7 @@ class UsuarioDAO extends DAO {
         $lista = array();
 	    $nome = $usuario->getNome();
                 
-        $sql = "
-		SELECT
-        usuario.id, 
-        usuario.nome, 
-        usuario.email, 
-        usuario.login, 
-        usuario.senha, 
-        usuario.nivel, 
-        usuario.id_setor
-		FROM usuario
+        $sql = "SELECT usuario.id, usuario.nome, usuario.email, usuario.login, usuario.senha, usuario.nivel, usuario.id_setor FROM usuario
             WHERE usuario.nome like :nome";
                 
         try {
@@ -256,16 +228,7 @@ class UsuarioDAO extends DAO {
         $lista = array();
 	    $email = $usuario->getEmail();
                 
-        $sql = "
-		SELECT
-        usuario.id, 
-        usuario.nome, 
-        usuario.email, 
-        usuario.login, 
-        usuario.senha, 
-        usuario.nivel, 
-        usuario.id_setor
-		FROM usuario
+        $sql = "SELECT usuario.id, usuario.nome, usuario.email, usuario.login, usuario.senha, usuario.nivel, usuario.id_setor FROM usuario
             WHERE usuario.email like :email";
                 
         try {
@@ -299,16 +262,7 @@ class UsuarioDAO extends DAO {
         $lista = array();
 	    $login = $usuario->getLogin();
                 
-        $sql = "
-		SELECT
-        usuario.id, 
-        usuario.nome, 
-        usuario.email, 
-        usuario.login, 
-        usuario.senha, 
-        usuario.nivel, 
-        usuario.id_setor
-		FROM usuario
+        $sql = "SELECT usuario.id, usuario.nome, usuario.email, usuario.login, usuario.senha, usuario.nivel, usuario.id_setor FROM usuario
             WHERE usuario.login like :login";
                 
         try {
@@ -342,16 +296,7 @@ class UsuarioDAO extends DAO {
         $lista = array();
 	    $senha = $usuario->getSenha();
                 
-        $sql = "
-		SELECT
-        usuario.id, 
-        usuario.nome, 
-        usuario.email, 
-        usuario.login, 
-        usuario.senha, 
-        usuario.nivel, 
-        usuario.id_setor
-		FROM usuario
+        $sql = "SELECT usuario.id, usuario.nome, usuario.email, usuario.login, usuario.senha, usuario.nivel, usuario.id_setor FROM usuario
             WHERE usuario.senha like :senha";
                 
         try {
@@ -385,16 +330,7 @@ class UsuarioDAO extends DAO {
         $lista = array();
 	    $nivel = $usuario->getNivel();
                 
-        $sql = "
-		SELECT
-        usuario.id, 
-        usuario.nome, 
-        usuario.email, 
-        usuario.login, 
-        usuario.senha, 
-        usuario.nivel, 
-        usuario.id_setor
-		FROM usuario
+        $sql = "SELECT usuario.id, usuario.nome, usuario.email, usuario.login, usuario.senha, usuario.nivel, usuario.id_setor FROM usuario
             WHERE usuario.nivel like :nivel";
                 
         try {
@@ -428,16 +364,7 @@ class UsuarioDAO extends DAO {
         $lista = array();
 	    $idSetor = $usuario->getIdSetor();
                 
-        $sql = "
-		SELECT
-        usuario.id, 
-        usuario.nome, 
-        usuario.email, 
-        usuario.login, 
-        usuario.senha, 
-        usuario.nivel, 
-        usuario.id_setor
-		FROM usuario
+        $sql = "SELECT usuario.id, usuario.nome, usuario.email, usuario.login, usuario.senha, usuario.nivel, usuario.id_setor FROM usuario
             WHERE usuario.id_setor = :idSetor";
                 
         try {
@@ -470,16 +397,7 @@ class UsuarioDAO extends DAO {
     public function preenchePorId(Usuario $usuario) {
         
 	    $id = $usuario->getId();
-	    $sql = "
-		SELECT
-        usuario.id, 
-        usuario.nome, 
-        usuario.email, 
-        usuario.login, 
-        usuario.senha, 
-        usuario.nivel, 
-        usuario.id_setor
-		FROM usuario
+	    $sql = "SELECT usuario.id, usuario.nome, usuario.email, usuario.login, usuario.senha, usuario.nivel, usuario.id_setor FROM usuario
                 WHERE usuario.id = :id
                  LIMIT 1000";
                 
@@ -513,16 +431,7 @@ class UsuarioDAO extends DAO {
     public function preenchePorNome(Usuario $usuario) {
         
 	    $nome = $usuario->getNome();
-	    $sql = "
-		SELECT
-        usuario.id, 
-        usuario.nome, 
-        usuario.email, 
-        usuario.login, 
-        usuario.senha, 
-        usuario.nivel, 
-        usuario.id_setor
-		FROM usuario
+	    $sql = "SELECT usuario.id, usuario.nome, usuario.email, usuario.login, usuario.senha, usuario.nivel, usuario.id_setor FROM usuario
                 WHERE usuario.nome = :nome
                  LIMIT 1000";
                 
@@ -556,16 +465,7 @@ class UsuarioDAO extends DAO {
     public function preenchePorEmail(Usuario $usuario) {
         
 	    $email = $usuario->getEmail();
-	    $sql = "
-		SELECT
-        usuario.id, 
-        usuario.nome, 
-        usuario.email, 
-        usuario.login, 
-        usuario.senha, 
-        usuario.nivel, 
-        usuario.id_setor
-		FROM usuario
+	    $sql = "SELECT usuario.id, usuario.nome, usuario.email, usuario.login, usuario.senha, usuario.nivel, usuario.id_setor FROM usuario
                 WHERE usuario.email = :email
                  LIMIT 1000";
                 
@@ -599,16 +499,7 @@ class UsuarioDAO extends DAO {
     public function preenchePorLogin(Usuario $usuario) {
         
 	    $login = $usuario->getLogin();
-	    $sql = "
-		SELECT
-        usuario.id, 
-        usuario.nome, 
-        usuario.email, 
-        usuario.login, 
-        usuario.senha, 
-        usuario.nivel, 
-        usuario.id_setor
-		FROM usuario
+	    $sql = "SELECT usuario.id, usuario.nome, usuario.email, usuario.login, usuario.senha, usuario.nivel, usuario.id_setor FROM usuario
                 WHERE usuario.login = :login
                  LIMIT 1000";
                 
@@ -642,16 +533,7 @@ class UsuarioDAO extends DAO {
     public function preenchePorSenha(Usuario $usuario) {
         
 	    $senha = $usuario->getSenha();
-	    $sql = "
-		SELECT
-        usuario.id, 
-        usuario.nome, 
-        usuario.email, 
-        usuario.login, 
-        usuario.senha, 
-        usuario.nivel, 
-        usuario.id_setor
-		FROM usuario
+	    $sql = "SELECT usuario.id, usuario.nome, usuario.email, usuario.login, usuario.senha, usuario.nivel, usuario.id_setor FROM usuario
                 WHERE usuario.senha = :senha
                  LIMIT 1000";
                 
@@ -685,16 +567,7 @@ class UsuarioDAO extends DAO {
     public function preenchePorNivel(Usuario $usuario) {
         
 	    $nivel = $usuario->getNivel();
-	    $sql = "
-		SELECT
-        usuario.id, 
-        usuario.nome, 
-        usuario.email, 
-        usuario.login, 
-        usuario.senha, 
-        usuario.nivel, 
-        usuario.id_setor
-		FROM usuario
+	    $sql = "SELECT usuario.id, usuario.nome, usuario.email, usuario.login, usuario.senha, usuario.nivel, usuario.id_setor FROM usuario
                 WHERE usuario.nivel = :nivel
                  LIMIT 1000";
                 
@@ -728,16 +601,7 @@ class UsuarioDAO extends DAO {
     public function preenchePorIdSetor(Usuario $usuario) {
         
 	    $idSetor = $usuario->getIdSetor();
-	    $sql = "
-		SELECT
-        usuario.id, 
-        usuario.nome, 
-        usuario.email, 
-        usuario.login, 
-        usuario.senha, 
-        usuario.nivel, 
-        usuario.id_setor
-		FROM usuario
+	    $sql = "SELECT usuario.id, usuario.nome, usuario.email, usuario.login, usuario.senha, usuario.nivel, usuario.id_setor FROM usuario
                 WHERE usuario.id_setor = :idSetor
                  LIMIT 1000";
                 
