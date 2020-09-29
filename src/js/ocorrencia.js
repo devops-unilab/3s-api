@@ -6,22 +6,25 @@ $(document).ready(function(e) {
         $('#modalAddOcorrencia').modal('hide');
 
 		var dados = jQuery( this ).serialize();
-		console.log(dados);
+		
 		jQuery.ajax({
             type: "POST",
             url: "index.php?ajax=ocorrencia",
             data: dados,
             success: function( data )
             {
-            
-				console.log("Dados retornados: "+data);    
+                
             	if(data.split(":")[1] == 'sucesso'){
             		
             		$("#botao-modal-resposta").click(function(){
             			window.location.href='?pagina=ocorrencia';
             		});
+            		$("#botao-modal-resposta").click(function(){
+            			window.location.href='?pagina=ocorrencia&selecionar='+data.split(":")[2];
+            		});
             		$("#textoModalResposta").text("Ocorrencia enviado com sucesso! ");                	
             		$("#modalResposta").modal("show");
+					
             		
             	}
             	else
