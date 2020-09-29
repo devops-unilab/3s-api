@@ -63,6 +63,19 @@ if (isset($_GET["sair"])) {
     
 }
 
+if(isset($_GET['ajax'])){
+    switch ($_GET['ajax']){
+        case 'ocorrencia':
+            $controller = new OcorrenciaCustomController();
+            $controller->mainAjax();
+            break;
+        default:
+            echo '<p>Página solicitada não encontrada.</p>';
+            break;
+    }
+    
+    exit(0);
+}
 ?>
             
 <!doctype html>
@@ -147,6 +160,28 @@ $principal->main();
   </p>
 </footer>
             
+            
+            
+<!-- Modal -->
+<div class="modal fade" id="modalResposta" tabindex="-1" role="dialog" aria-labelledby="labelModalResposta" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="labelModalResposta">Resposta</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <span id="textoModalResposta"></span>
+      </div>
+      <div class="modal-footer">
+        <button type="button" id="botao-modal-resposta" class="btn btn-primary" data-dismiss="modal">Continuar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <script src="js/jquery-3.5.1.min.js"></script>
 <script src="js/selectize.js"></script>
 <script src="js/painel3s.js"></script>

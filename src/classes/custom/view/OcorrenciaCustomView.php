@@ -83,8 +83,8 @@ class OcorrenciaCustomView extends OcorrenciaView {
                     <input class="form-control" type="text" name="local_sala" id="local_sala" value="" >
                 </div>
                 <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12">
-                    <label for="etiq_equipamento">Patrimônio</label>
-                    <input class="form-control" type="text" name="etiq_equipamento" id="etiq_equipamento" rel="tooltip" title="Identificação do Equipamento. (Opcional)" value="" />
+                    <label for="patrimonio">Patrimônio</label>
+                    <input class="form-control" type="text" name="patrimonio" id="patrimonio" value="" />
                 </div>
             </div>
             <div class="row">
@@ -94,13 +94,14 @@ class OcorrenciaCustomView extends OcorrenciaView {
                 </div>
             
                 <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12">
-                    <label for="ramal" >E-mail*</label>
+                    <label for="email" >E-mail*</label>
                     <input class="form-control" type="text" name="email" id="email" value="'.$sessao->getEmail().'" required>
                 </div>
             
             </div>
         </div>
     </div>
+    <input type="hidden" name="enviar_ocorrencia" value="1">
     
 </form>
             

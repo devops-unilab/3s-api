@@ -14,7 +14,7 @@ $(document).ready(function(e) {
             success: function( data )
             {
             
-
+				console.log("Dados retornados: "+data);    
             	if(data.split(":")[1] == 'sucesso'){
             		
             		$("#botao-modal-resposta").click(function(){
@@ -27,7 +27,8 @@ $(document).ready(function(e) {
             	else
             	{
             		
-                	$("#textoModalResposta").text("Falha ao inserir Ocorrencia, fale com o suporte. ");                	
+                	$("#textoModalResposta").text("Falha ao inserir Ocorrencia, fale com o suporte. ");
+					            	
             		$("#modalResposta").modal("show");
             	}
 

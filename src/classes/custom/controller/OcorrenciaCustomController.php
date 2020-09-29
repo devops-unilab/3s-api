@@ -259,97 +259,56 @@ class OcorrenciaCustomController  extends OcorrenciaController {
 	    
 	    
 	}
-	
-	public function cadastrar() {
-	    $sessao = new Sessao();
-	    echo '
-            <div class="row">
-                <div class="col-md-12 blog-main">
-                    <h3 class="pb-4 mb-4 font-italic border-bottom">
-                        Cadastrar Ocorrência
-                    </h3>
-	        
-';
-	    $servicoDao = new ServicoDAO($this->dao->getConexao());
-	    $listaServico = $servicoDao->retornaLista();
-	    
-	    $this->view->mostraFormInserir2($listaServico);
-
-	    
-	    echo '
-	        
-	        
-                </div>
-            </div>';
-	    
-	    
+	public function cadastrarAjax() {
+	    print_r($_POST);
 	    
 	    if(!isset($_POST['enviar_ocorrencia'])){
-	       return;
+	        return;
 	    }
-        if (! ( isset ( $_POST ['descricao'] ) && isset ( $_POST ['campus'] )  && isset ( $_POST ['email'] ) && isset ( $_POST ['local_sala'] )  &&  isset($_POST ['servico']) &&  isset($_POST ['usuario_cliente']) &&  isset($_POST ['usuario_atendente']) &&  isset($_POST ['usuario_indicado']))) {
-            echo '
-            <div class="alert alert-danger" role="alert">
-                Falha ao cadastrar. Algum campo deve estar faltando.
-            </div>
-                
-            ';
-            return;
-        }
 	    
 	    
+	    
+	    if (! ( 
+                isset ( $_POST ['descricao'] ) && 
+	            isset ( $_POST ['campus'] )  && 
+                isset ( $_POST ['email'] ) &&  
+                isset ( $_POST ['patrimonio'] ) &&
+                isset ( $_POST ['ramal'] ) &&
+                isset ( $_POST ['local_sala'] ) &&
+	            isset($_POST ['servico']))) {
+	        echo ':incompleto';
+	        return;
+	    }
 	    
 	    $ocorrencia = new Ocorrencia ();
-	    
-	    
 	    $ocorrencia->setIdLocal ( 1 );
-	    $ocorrencia->setDescricao ( $_POST ['descricao'] );
-	    $ocorrencia->setCampus ( $_POST ['campus'] );
-	    $ocorrencia->setLocal ('teste');
-	    $ocorrencia->setStatus ( 'a' );
-	    $ocorrencia->setPrioridade ( 'b' );
-	    $ocorrencia->setEmail ( $_POST ['email'] );
-	    
+	    $ocorrencia->setLocal ( 'teste' );
+	    $ocorrencia->setStatus ( 'a');
 	    $ocorrencia->getAreaResponsavel()->setId ( 1 );
 	    
-	    if(isset($_POST['patrimonio']))
-	    {
-	        $ocorrencia->setPatrimonio ( $_POST ['patrimonio'] );
-	    }
-	    if(isset($_POST['ramal'])){
-	        $ocorrencia->setRamal ( $_POST ['ramal'] );
-	    }
-	    if(isset($_POST['anexo'])){
-	        $ocorrencia->setAnexo ( $_POST ['anexo'] );
-	    }
-	    if(isset($_POST['local_sala'])){
-	        $ocorrencia->setLocalSala ( $_POST ['local_sala'] );
-	    }
+	    $ocorrencia->setDescricao ( $_POST ['descricao'] );
+	    $ocorrencia->setCampus ( $_POST ['campus'] );
+        $ocorrencia->setPatrimonio ( $_POST ['patrimonio'] );
+        $ocorrencia->setRamal ( $_POST ['ramal'] );
+	    $ocorrencia->setEmail ( $_POST ['email'] );
+// 	    $ocorrencia->setAnexo ( $_POST ['anexo'] );
+	    $ocorrencia->setLocalSala ( $_POST ['local_sala'] );
+	    
 	    $ocorrencia->getServico()->setId ( $_POST ['servico'] );
-	    $ocorrencia->getUsuarioCliente()->setId ($sessao->getIdUsuario() );
 	    
-	    
+	    $sessao = new Sessao();
+	    $ocorrencia->getUsuarioCliente()->setId ( $sessao->getIdUsuario() );
 	    
 	    if ($this->dao->inserir ( $ocorrencia ))
 	    {
-	        echo '
-	            
-<div class="alert alert-success" role="alert">
-  Sucesso ao inserir Ocorrencia
-</div>
-	            
-';
+	        $id = $this->dao->getConexao()->lastInsertId();
+	        echo ':sucesso:'.$id;
+	        
 	    } else {
-	        echo '
-	            
-<div class="alert alert-danger" role="alert">
-  Falha ao tentar Inserir Ocorrencia
-</div>
-	            
-';
+	        echo ':falha';
 	    }
-	    echo '<META HTTP-EQUIV="REFRESH" CONTENT="3; URL=index.php?pagina=ocorrencia">';
 	}
+	
 	
 	
 	public function telaInicialPainel(){
@@ -445,6 +404,96 @@ class OcorrenciaCustomController  extends OcorrenciaController {
 	    
 	}
 	
+	public function cadastrar() {
+	    $sessao = new Sessao();
+	    echo '
+            <div class="row">
+                <div class="col-md-12 blog-main">
+                    <h3 class="pb-4 mb-4 font-italic border-bottom">
+                        Cadastrar Ocorrência
+                    </h3>
+	        
+';
+	    $servicoDao = new ServicoDAO($this->dao->getConexao());
+	    $listaServico = $servicoDao->retornaLista();
+	    
+	    $this->view->mostraFormInserir2($listaServico);
+	    
+	    
+	    echo '
+	        
+	        
+                </div>
+            </div>';
+	    
+	    
+	    
+	    if(!isset($_POST['enviar_ocorrencia'])){
+	        return;
+	    }
+	    if (! ( isset ( $_POST ['descricao'] ) && isset ( $_POST ['campus'] )  && isset ( $_POST ['email'] ) && isset ( $_POST ['local_sala'] )  &&  isset($_POST ['servico']) &&  isset($_POST ['usuario_cliente']) &&  isset($_POST ['usuario_atendente']) &&  isset($_POST ['usuario_indicado']))) {
+	        echo '
+            <div class="alert alert-danger" role="alert">
+                Falha ao cadastrar. Algum campo deve estar faltando.
+            </div>
+	            
+            ';
+	        return;
+	    }
+	    
+	    
+	    
+	    $ocorrencia = new Ocorrencia ();
+	    
+	    
+	    $ocorrencia->setIdLocal ( 1 );
+	    $ocorrencia->setDescricao ( $_POST ['descricao'] );
+	    $ocorrencia->setCampus ( $_POST ['campus'] );
+	    $ocorrencia->setLocal ('teste');
+	    $ocorrencia->setStatus ( 'a' );
+	    $ocorrencia->setPrioridade ( 'b' );
+	    $ocorrencia->setEmail ( $_POST ['email'] );
+	    
+	    $ocorrencia->getAreaResponsavel()->setId ( 1 );
+	    
+	    if(isset($_POST['patrimonio']))
+	    {
+	        $ocorrencia->setPatrimonio ( $_POST ['patrimonio'] );
+	    }
+	    if(isset($_POST['ramal'])){
+	        $ocorrencia->setRamal ( $_POST ['ramal'] );
+	    }
+	    if(isset($_POST['anexo'])){
+	        $ocorrencia->setAnexo ( $_POST ['anexo'] );
+	    }
+	    if(isset($_POST['local_sala'])){
+	        $ocorrencia->setLocalSala ( $_POST ['local_sala'] );
+	    }
+	    $ocorrencia->getServico()->setId ( $_POST ['servico'] );
+	    $ocorrencia->getUsuarioCliente()->setId ($sessao->getIdUsuario() );
+	    
+	    
+	    
+	    if ($this->dao->inserir ( $ocorrencia ))
+	    {
+	        echo '
+	            
+<div class="alert alert-success" role="alert">
+  Sucesso ao inserir Ocorrencia
+</div>
+	            
+';
+	    } else {
+	        echo '
+	            
+<div class="alert alert-danger" role="alert">
+  Falha ao tentar Inserir Ocorrencia
+</div>
+	            
+';
+	    }
+	    echo '<META HTTP-EQUIV="REFRESH" CONTENT="3; URL=index.php?pagina=ocorrencia">';
+	}
 	
 	public function painelTabela() 
 	{
