@@ -36,6 +36,7 @@ class  UsuarioCustomDAO extends UsuarioDAO {
                 $usuario->setLogin ( $linha ['login'] );
                 $usuario->setNivel($linha['nivel']);
                 if($this->usuarioAtivo($usuario)){
+                    
                     return true;
                 }else{
                     return false;
@@ -115,7 +116,8 @@ class  UsuarioCustomDAO extends UsuarioDAO {
             $stmt->execute();
             $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
             foreach ( $result as $linha2 ) {
-                if($linha2['id_status_servidor'] != 1)
+                
+                if($linha2['id_status_servidor'] == 1)
                 {
                     return true;//Status Inativo
                 }
