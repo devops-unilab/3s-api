@@ -53,6 +53,7 @@ class OcorrenciaCustomView extends OcorrenciaView {
                 </div>
             </div>
             <br>
+<!--
             <div class="row">
                 <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
                     <div class="custom-file">
@@ -62,7 +63,7 @@ class OcorrenciaCustomView extends OcorrenciaView {
             
                 </div>
             </div>
-            
+    -->        
         </div>
         <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12">
             <div class="row"><!--Campus Local Sala Contato(Ramal e email)-->
@@ -157,6 +158,7 @@ class OcorrenciaCustomView extends OcorrenciaView {
                 </div>
             </div>
             <br>
+<!--
             <div class="row">
                 <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
                     <div class="custom-file">
@@ -166,6 +168,7 @@ class OcorrenciaCustomView extends OcorrenciaView {
             
                 </div>
             </div>
+-->
             
         </div>
         <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12">
