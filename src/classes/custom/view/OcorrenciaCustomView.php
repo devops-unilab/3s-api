@@ -9,6 +9,7 @@ class OcorrenciaCustomView extends OcorrenciaView {
 
     
     public function mostraFormInserir2($listaServico){
+        
         $sessao = new Sessao();
         echo '
             

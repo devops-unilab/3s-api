@@ -33,7 +33,8 @@ class  UsuarioCustomDAO extends UsuarioDAO {
             $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
             foreach ( $result as $linha ) {
                 $usuario->setId( $linha ['id'] );
-                $usuario->setLogin ( $linha ['login'] );
+                $usuario->setNome($linha['nome']);
+                $usuario->setEmail( $linha ['email'] );
                 $usuario->setNivel($linha['nivel']);
                 if($this->usuarioAtivo($usuario)){
                     
@@ -129,15 +130,4 @@ class  UsuarioCustomDAO extends UsuarioDAO {
         return false;
         
     }
-    
-    
-    
-//     if($linha['id_status_servidor'] == 1){
-//         return true;
-//     }   
-    
-//     $sessao = new Sessao();
-//     $sessao->criaSessao($linha ['id'], Sessao::NIVEL_ADM, $linha['login'], $linha['nome'], $linha['email'], $linha['sigla_unidade'], $linha['id_unidade']);
-
-
 }

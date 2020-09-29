@@ -232,20 +232,7 @@ class OcorrenciaCustomController  extends OcorrenciaController {
 	    $this->view->exibirLista($lista);
 	    echo '</div>';
 
-	    $lista = $this->dao->retornaListaPorStatus('e');
-	    echo '<div class="panel panel-info">';
-	    $this->view->exibirLista($lista);
-	    echo '</div>';
-	    
-	    $lista = $this->dao->retornaListaPorStatus('d');
-	    echo '<div class="panel panel-danger">';
-	    $this->view->exibirLista($lista);
-	    echo '</div>';
 
-	    $lista = $this->dao->retornaListaPorStatus('f');
-	    echo '<div class="panel panel-success">';
-	    $this->view->exibirLista($lista);
-	    echo '</div>';
 	    
 	    echo '
 	        

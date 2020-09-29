@@ -12,15 +12,12 @@ class Sessao{
     public function __construct(){
         if (!isset($_SESSION)) session_start();
     }
-    public function criaSessao($id, $nivel, $login, $nome, $email, $unidade, $idUnidade){
+    public function criaSessao($id, $nivel, $login, $nome, $email){
         $_SESSION['USUARIO_NIVEL'] = $nivel;
         $_SESSION['USUARIO_ID'] = $id;
         $_SESSION['USUARIO_LOGIN'] = $login;
         $_SESSION['USUARIO_NOME'] = $nome;
         $_SESSION['USUARIO_EMAIL'] = $email;
-        $_SESSION['ID_UNIDADE'] = $idUnidade;
-        $_SESSION['UNIDADE'] = $unidade;
-        
     }
     public function mataSessao(){
         @session_destroy();
