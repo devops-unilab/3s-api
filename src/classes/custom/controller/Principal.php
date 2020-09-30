@@ -16,6 +16,9 @@ class Principal{
         if(isset($_GET['pagina'])){
             switch ($_GET['pagina']){
                 case 'painel':
+                    if(!($sessao->getNivelAcesso() == Sessao::NIVEL_ADM || $sessao->getNivelAcesso() == Sessao::NIVEL_TECNICO)){
+                        return;
+                    }
                     $controller = new OcorrenciaCustomController();
                     $controller->telaInicialPainel();
                     break;

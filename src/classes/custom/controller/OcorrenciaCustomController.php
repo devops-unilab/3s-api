@@ -34,7 +34,7 @@ class OcorrenciaCustomController  extends OcorrenciaController {
 
 ';
 	    
-	    $this->view->mostraFormEditar2($selecionado, array());
+	    $this->view->mostrarSelecionado($selecionado);
 	    
 	    $mensagemDao = new MensagemForumCustomDAO($this->dao->getConexao());
 	    $listaForum = $mensagemDao->retornaListaPorOcorrencia($selecionado);
