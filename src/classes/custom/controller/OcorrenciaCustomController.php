@@ -34,15 +34,17 @@ class OcorrenciaCustomController  extends OcorrenciaController {
 
 ';
 	    
-	    $this->view->mostrarSelecionado($selecionado);
+	    $statusDao = new StatusOcorrenciaCustomDAO($this->dao->getConexao());
+	    $listaStatus = $statusDao->pesquisaPorIdOcorrencia($selecionado);
+	    
+	    
+	    $this->view->mostrarSelecionado2($selecionado, $listaStatus);
 	    
 	    $mensagemDao = new MensagemForumCustomDAO($this->dao->getConexao());
 	    $listaForum = $mensagemDao->retornaListaPorOcorrencia($selecionado);
 	    
 	    
 	    
-	    $statusDao = new StatusOcorrenciaCustomDAO($this->dao->getConexao());
-	    $listaStatus = $statusDao->pesquisaPorIdOcorrencia($selecionado);
 	    
 	    echo '
                     <h4 class="font-italic">Mensagens</h4>

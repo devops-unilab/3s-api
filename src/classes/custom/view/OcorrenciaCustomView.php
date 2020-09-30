@@ -238,23 +238,55 @@ class OcorrenciaCustomView extends OcorrenciaView {
                     </div>';
 
     }
+    public function calcularHoraSolucao($dataAbertura, $tempoSla)
+    {
+        
+
+        
+        $depois = date('d/m/Y H:i:s', strtotime("+$tempoSla hour", strtotime($dataAbertura)));
+
+        echo $depois;
+        return "Teste";
+        
+    }
     
-    
-    public function mostrarSelecionado(Ocorrencia $ocorrencia){
+    /**
+     * 
+     * @param Ocorrencia $ocorrencia
+     * @param array:StatusOcorrencia $listaStatus
+     */
+    public function mostrarSelecionado2(Ocorrencia $ocorrencia, $listaStatus){
+        
+        foreach($listaStatus as $statusOcorrencia){
+            if($statusOcorrencia->getStatus()->getSigla() == 'a'){
+                $dataAbertura = $statusOcorrencia->getDataMudanca();
+                break;
+            }
+        }
         echo '
             
             
         <div class="card mb-4">
             <div class="card-body">
-
-            <p>Servico: '.$ocorrencia->getServico()->getNome().' - 
-            
-            Prazo de Resolução: '.$ocorrencia->getServico()->getTempoSla();
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <p>Servico: '.$ocorrencia->getServico()->getNome().'</p>
+                        <p>Data de Abertura: '.date("d/m/Y H:i:s" , strtotime($dataAbertura)).'</p>
+                        <p>Prazo de Resolução: '.$ocorrencia->getServico()->getTempoSla();
             if($ocorrencia->getServico()->getTempoSla() > 1){
-                echo ' Horas';
+                echo ' Horas úteis';
+            }else if($ocorrencia->getServico()->getTempoSla() == 0){
+                echo 'SLA não definido.';
             }
-            echo '</p>
-            <p>Data e Hora Estimada para a Solução</p>
+            echo '
+                        </p>';
+            $dataEstimada = date('d/m/Y H:i:s', strtotime('+'.$ocorrencia->getServico()->getTempoSla().' hour', strtotime($dataAbertura)));
+            echo '
+                        <p>Solução Estimada Para: '.$dataEstimada.' </p>            
+                    </div>
+                </div>
+            
+            
             <div class="card mb-4">
                 <div class="card-body">
                     Descricao: '.$ocorrencia->getDescricao().'<br>
