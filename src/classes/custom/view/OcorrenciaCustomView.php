@@ -247,19 +247,32 @@ class OcorrenciaCustomView extends OcorrenciaView {
         <div class="card mb-4">
             <div class="card-body">
 
-            <p>Servico: '.$ocorrencia->getServico()->getNome().' - Prazo de Resolução: '.$ocorrencia->getServico()->getTempoSla().'</p>
-            <p>Hora estimada da resolução, considerando expediente do técnico de 8 horas diárias 08:00 às 11:00 e 12:00 às 17:00</p>
+            <p>Servico: '.$ocorrencia->getServico()->getNome().' - 
+            
+            Prazo de Resolução: '.$ocorrencia->getServico()->getTempoSla();
+            if($ocorrencia->getServico()->getTempoSla() > 1){
+                echo ' Horas';
+            }
+            echo '</p>
+            <p>Data e Hora Estimada para a Solução</p>
             <div class="card mb-4">
                 <div class="card-body">
                     Descricao: '.$ocorrencia->getDescricao().'<br>
                 </div>
             </div>
+            <div class="card mb-4">
+                <div class="card-body">
+                    Campus: '.$ocorrencia->getCampus().'<br>
+                    Local: '.$ocorrencia->getLocal().'<br>
+                    Local Sala: '.$ocorrencia->getLocalSala().'<br>
+                </div>
+            </div>
 
                 
-                Campus: '.$ocorrencia->getCampus().'<br>
+
                 Patrimonio: '.$ocorrencia->getPatrimonio().'<br>
                 Ramal: '.$ocorrencia->getRamal().'<br>
-                Local: '.$ocorrencia->getLocal().'<br>
+                
                 Status: '.$ocorrencia->getStatus().'<br>
                 Solucao: '.$ocorrencia->getSolucao().'<br>
                 Prioridade: '.$ocorrencia->getPrioridade().'<br>
@@ -268,7 +281,7 @@ class OcorrenciaCustomView extends OcorrenciaView {
                 Id Usuario Atendente: '.$ocorrencia->getIdUsuarioAtendente().'<br>
                 Id Usuario Indicado: '.$ocorrencia->getIdUsuarioIndicado().'<br>
                 Anexo: '.$ocorrencia->getAnexo().'<br>
-                Local Sala: '.$ocorrencia->getLocalSala().'<br>
+                
                 Area Responsavel: '.$ocorrencia->getAreaResponsavel().'<br>
                 
                 Usuario Cliente: '.$ocorrencia->getUsuarioCliente().'<br>
