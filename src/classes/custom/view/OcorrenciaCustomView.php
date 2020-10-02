@@ -240,13 +240,30 @@ class OcorrenciaCustomView extends OcorrenciaView {
     }
     public function calcularHoraSolucao($dataAbertura, $tempoSla)
     {
+        if($dataAbertura == null){
+            return "Indefinido";
+        }
+        $timeEstimado = strtotime('+'.$tempoSla.' hour', strtotime($dataAbertura));
+        for($i = 0; $i < $tempoSla; $i++)
+        {            
+            $timeEstimado = strtotime('+'.$i.' hour', strtotime($dataAbertura));
+            $horaContar = date('H', $timeEstimado);
+            $horaContar = intval($horaContar);
+            if($horaContar >= 16 || $horaContar < 8){
+                $tempoSla++;
+            }
+            if($horaContar == 11){
+                $tempoSla++;
+            }
+            
+            
+            
+        }
+        echo $tempoSla;
+        $horaEstimada = date('d/m/Y H:i:s', $timeEstimado);
         
 
-        
-        $depois = date('d/m/Y H:i:s', strtotime("+$tempoSla hour", strtotime($dataAbertura)));
-
-        echo $depois;
-        return "Teste";
+        return $horaEstimada;
         
     }
     
@@ -256,12 +273,16 @@ class OcorrenciaCustomView extends OcorrenciaView {
      * @param array:StatusOcorrencia $listaStatus
      */
     public function mostrarSelecionado2(Ocorrencia $ocorrencia, $listaStatus){
-        
+        $dataAbertura = null;
         foreach($listaStatus as $statusOcorrencia){
             if($statusOcorrencia->getStatus()->getSigla() == 'a'){
                 $dataAbertura = $statusOcorrencia->getDataMudanca();
                 break;
             }
+        }
+        if($dataAbertura == null){
+            echo  "Chamado não possui histórico de status<br>";
+            return;
         }
         echo '
             
@@ -271,7 +292,7 @@ class OcorrenciaCustomView extends OcorrenciaView {
                 <div class="card mb-4">
                     <div class="card-body">
                         <p>Servico: '.$ocorrencia->getServico()->getNome().'</p>
-                        <p>Data de Abertura: '.date("d/m/Y H:i:s" , strtotime($dataAbertura)).'</p>
+                        <p>Abertura: '.date("d/m/Y H:i:s" , strtotime($dataAbertura)).'</p>
                         <p>Prazo de Resolução: '.$ocorrencia->getServico()->getTempoSla();
             if($ocorrencia->getServico()->getTempoSla() > 1){
                 echo ' Horas úteis';
@@ -280,9 +301,10 @@ class OcorrenciaCustomView extends OcorrenciaView {
             }
             echo '
                         </p>';
-            $dataEstimada = date('d/m/Y H:i:s', strtotime('+'.$ocorrencia->getServico()->getTempoSla().' hour', strtotime($dataAbertura)));
+            $horaEstimada = $this->calcularHoraSolucao($dataAbertura, $ocorrencia->getServico()->getTempoSla());
+            
             echo '
-                        <p>Solução Estimada Para: '.$dataEstimada.' </p>            
+                        <p>Solução Estimada: '.$horaEstimada.' </p>            
                     </div>
                 </div>
             
