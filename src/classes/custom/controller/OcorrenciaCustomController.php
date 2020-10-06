@@ -18,8 +18,6 @@ class OcorrenciaCustomController  extends OcorrenciaController {
 
 	    $diaDaSemana = date('w', strtotime($data));
 	    $diaDaSemana = intval($diaDaSemana);
-	    echo '<br>'.$data.'<br>';
-	    echo '<br>'.$diaDaSemana.'<br>';
 	    if($diaDaSemana == 6 || $diaDaSemana == 0){
 	        return true;
 	    }
@@ -62,8 +60,6 @@ class OcorrenciaCustomController  extends OcorrenciaController {
 	        
 	        $timeEstimado = strtotime('+'.$i.' hour', strtotime($dataAbertura));
 	        $horaEstimada = date("Y-m-d H:i:s", $timeEstimado);
-	    
-	        echo "Vamos verificar ".$horaEstimada;
 	        while($this->fimDeSemana($horaEstimada)){
 	            $horaEstimada = date("Y-m-d 08:00:00", strtotime('+1 day', strtotime($horaEstimada)));
 	            $i = $i + 24;
@@ -75,8 +71,6 @@ class OcorrenciaCustomController  extends OcorrenciaController {
 	            $i++;
 	            $tempoSla++;
 	        }
-// 	        echo $horaEstimada.'<br>';
-	        
 	    }
 	    $horaEstimada = date('Y-m-d H:i:s', $timeEstimado);
 	    

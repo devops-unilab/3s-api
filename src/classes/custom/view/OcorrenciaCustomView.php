@@ -249,9 +249,7 @@ class OcorrenciaCustomView extends OcorrenciaView {
         
         echo '
             
-            
-        <div class="card mb-4">
-            <div class="card-body">
+     
                 <div class="card mb-4">
                     <div class="card-body">
                         <p>Servico: '.$ocorrencia->getServico()->getNome().'</p>
@@ -267,7 +265,8 @@ class OcorrenciaCustomView extends OcorrenciaView {
             
             
             echo '
-                        <p>Solução Estimada: '.$dataSolucao.' </p>            
+                        <p>Solução Estimada: '.date("d/m/Y H:i:s" , strtotime($dataSolucao)).'</p>      
+                        <p>Status: '.$ocorrencia->getStatus().'</p>      
                     </div>
                 </div>
             
@@ -279,29 +278,34 @@ class OcorrenciaCustomView extends OcorrenciaView {
             </div>
             <div class="card mb-4">
                 <div class="card-body">
+                    Cliente: '.$ocorrencia->getUsuarioCliente()->getNome().'<br>
                     Campus: '.$ocorrencia->getCampus().'<br>
                     Local: '.$ocorrencia->getLocal().'<br>
                     Local Sala: '.$ocorrencia->getLocalSala().'<br>
+                    Ramal: '.$ocorrencia->getRamal().'<br>
+                    Email: '.$ocorrencia->getEmail().'<br>
                 </div>
             </div>
 
-                
+                 
+        <div class="card mb-4">
+            <div class="card-body">      
 
                 Patrimonio: '.$ocorrencia->getPatrimonio().'<br>
-                Ramal: '.$ocorrencia->getRamal().'<br>
                 
-                Status: '.$ocorrencia->getStatus().'<br>
+                
+                
                 Solucao: '.$ocorrencia->getSolucao().'<br>
                 Prioridade: '.$ocorrencia->getPrioridade().'<br>
                 Avaliacao: '.$ocorrencia->getAvaliacao().'<br>
-                Email: '.$ocorrencia->getEmail().'<br>
+
                 Id Usuario Atendente: '.$ocorrencia->getIdUsuarioAtendente().'<br>
                 Id Usuario Indicado: '.$ocorrencia->getIdUsuarioIndicado().'<br>
                 Anexo: '.$ocorrencia->getAnexo().'<br>
                 
                 Area Responsavel: '.$ocorrencia->getAreaResponsavel().'<br>
                 
-                Usuario Cliente: '.$ocorrencia->getUsuarioCliente().'<br>
+               
                     
             </div>
         </div>
