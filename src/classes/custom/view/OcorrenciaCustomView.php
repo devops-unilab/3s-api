@@ -252,7 +252,6 @@ class OcorrenciaCustomView extends OcorrenciaView {
      
                 <div class="card mb-4">
                     <div class="card-body">
-                        <p>Servico: '.$ocorrencia->getServico()->getNome().'</p>
                         <p>Abertura: '.date("d/m/Y H:i:s" , strtotime($dataAbertura)).'</p>
                         <p>Prazo de Resolução: '.$ocorrencia->getServico()->getTempoSla();
             if($ocorrencia->getServico()->getTempoSla() > 1){

@@ -14,8 +14,8 @@ class OcorrenciaCustomController  extends OcorrenciaController {
 		$this->dao = new OcorrenciaCustomDAO();
 		$this->view = new OcorrenciaCustomView();
 	}
-	public function fimDeSemana($data){
 
+	public function fimDeSemana($data){
 	    $diaDaSemana = date('w', strtotime($data));
 	    $diaDaSemana = intval($diaDaSemana);
 	    if($diaDaSemana == 6 || $diaDaSemana == 0){
@@ -39,16 +39,43 @@ class OcorrenciaCustomController  extends OcorrenciaController {
 	    }
 	    return false;
 	}
+	public function dataPertenceALista($data, $listaRecesso){
+	    foreach($listaRecesso as $recesso){
+	        if(date("Y-m-d", strtotime($recesso->getData())) ==  date("Y-m-d", strtotime($data))){
+	            return true;
+	        }
+	    }
+	    return false;
+	}
 	public function calcularHoraSolucao($dataAbertura, $tempoSla)
 	{
 	    if($dataAbertura == null){
 	        return "Indefinido";
 	    }
+	    
+	    //Titulo de verificação
+// 	    $horasPuladas = array();
+// 	    $diasPulados = array();
+	    
+	    $recessoDao = new RecessoCustomDAO($this->dao->getConexao());
+	    $dataTeste = date("Y-m-d 08:00:00", strtotime('-1 day', strtotime($dataAbertura)));
+	    $listaRecesso = $recessoDao->listaApartirDe($dataTeste);
+
+	    
 	    while($this->fimDeSemana($dataAbertura)){
+	        $diasPulados[] = $dataAbertura.' (Fim de semana)';
+	        $dataAbertura = date("Y-m-d 08:00:00", strtotime('+1 day', strtotime($dataAbertura)));
+	     
+	    }
+	    
+	    while($this->dataPertenceALista($dataAbertura, $listaRecesso)){
+	        $diasPulados[] = $dataAbertura.' (Recesso)';;
 	        $dataAbertura = date("Y-m-d 08:00:00", strtotime('+1 day', strtotime($dataAbertura)));
 	    }
 	    
+	    
 	    while($this->foraDoExpediente($dataAbertura)){
+	        $horasPuladas[] = $dataAbertura.'(Fora do expediente)';
 	        $dataAbertura = date("Y-m-d H:00:00", strtotime('+1 hour', strtotime($dataAbertura)));    
 	    }
 
@@ -61,12 +88,22 @@ class OcorrenciaCustomController  extends OcorrenciaController {
 	        $timeEstimado = strtotime('+'.$i.' hour', strtotime($dataAbertura));
 	        $horaEstimada = date("Y-m-d H:i:s", $timeEstimado);
 	        while($this->fimDeSemana($horaEstimada)){
+	            $diasPulados[] = $horaEstimada.' (Fim de semana)';
+	            $horaEstimada = date("Y-m-d 08:00:00", strtotime('+1 day', strtotime($horaEstimada)));
+	            $i = $i + 24;
+	            $tempoSla += 24;
+	        }
+	        
+	        if($this->dataPertenceALista($horaEstimada, $listaRecesso))
+	        {
+	            $diasPulados[] = $horaEstimada.' (Recesso)';
 	            $horaEstimada = date("Y-m-d 08:00:00", strtotime('+1 day', strtotime($horaEstimada)));
 	            $i = $i + 24;
 	            $tempoSla += 24;
 	        }
 	        
 	        while($this->foraDoExpediente($horaEstimada)){
+	            $horasPuladas[] = $horaEstimada.' (Fora do expediente)';
 	            $horaEstimada = date("Y-m-d H:i:s", strtotime('+1 hour', strtotime($horaEstimada)));
 	            $i++;
 	            $tempoSla++;
@@ -74,6 +111,12 @@ class OcorrenciaCustomController  extends OcorrenciaController {
 	    }
 	    $horaEstimada = date('Y-m-d H:i:s', $timeEstimado);
 	    
+// 	    echo "Horas Puladas: <br>";
+// 	    echo '['.implode(",<br> ", $horasPuladas).']';
+// 	    echo '<br><hr>';
+// 	    echo "Dias Pulados: <br>";
+// 	    echo '['.implode(",<br> ", $diasPulados).']';
+// 	    echo '<br><hr>';
 	    
 	    return $horaEstimada;
 	    
@@ -101,6 +144,8 @@ class OcorrenciaCustomController  extends OcorrenciaController {
 	    $statusDao = new StatusOcorrenciaCustomDAO($this->dao->getConexao());
 	    $listaStatus = $statusDao->pesquisaPorIdOcorrencia($selecionado);
 	    
+	    $mensagemDao = new MensagemForumCustomDAO($this->dao->getConexao());
+	    $listaForum = $mensagemDao->retornaListaPorOcorrencia($selecionado);
 	    
 	    
 	    
@@ -119,12 +164,6 @@ class OcorrenciaCustomController  extends OcorrenciaController {
 	    
 	    $horaEstimada = $this->calcularHoraSolucao($dataAbertura, $selecionado->getServico()->getTempoSla());
 	    $this->view->mostrarSelecionado2($selecionado, $listaStatus, $dataAbertura, $horaEstimada);
-	    
-	    $mensagemDao = new MensagemForumCustomDAO($this->dao->getConexao());
-	    $listaForum = $mensagemDao->retornaListaPorOcorrencia($selecionado);
-	    
-	    
-	    
 	    
 	    echo '
                     <h4 class="font-italic">Mensagens</h4>
