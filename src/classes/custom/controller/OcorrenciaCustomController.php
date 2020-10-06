@@ -216,7 +216,7 @@ class OcorrenciaCustomController  extends OcorrenciaController {
                     <div class="notice '.$strCartao.'">
             	       <strong>'.$status->getStatus()->getNome().'</strong><br>
                         '.$status->getMensagem().'<br>
-                        <strong>'.$status->getUsuario()->getNome().'<br>'.date('d/m/Y - h:i' ,strtotime($status->getDataMudanca())).'</strong>
+                        <strong>'.$status->getUsuario()->getNome().'<br>'.date('d/m/Y - H:i' ,strtotime($status->getDataMudanca())).'</strong>
             	    </div>
 
                                
@@ -327,8 +327,10 @@ class OcorrenciaCustomController  extends OcorrenciaController {
                         </div>
 	        
                     </div>';
-	    
-	    $lista = $this->dao->retornaListaPorStatus('a');
+	    $ocorrencia = new Ocorrencia();
+	    $sessao = new Sessao();
+	    $ocorrencia->getUsuarioCliente()->setId($sessao->getIdUsuario());
+	    $lista = $this->dao->pesquisaPorCliente($ocorrencia);
 
 	    echo '<div class="panel panel-warning">';
 	    $this->view->exibirLista($lista);

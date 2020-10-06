@@ -226,16 +226,54 @@ class OcorrenciaCustomView extends OcorrenciaView {
         echo '
 
 
-                    <div class="list-group">';
-	    
+                   <div class="alert-group">';
+        $strClass = 'alert-warning';
 	    foreach($lista as $elemento){
+	        
+	        if($elemento->getStatus() == 'a'){
+	            $strClass = 'alert-warning';
+	        }else if($elemento->getStatus() == 'e'){//Em atendimento
+	            $strClass = 'alert-info';
+	        }else if($elemento->getStatus() == 'f'){//Fechado
+	            continue;
+	            $strClass = 'alert-success';
+	        }else if($elemento->getStatus() == 'g'){//Fechado confirmado
+	            continue;
+	            $strClass = 'alert-success';
+	        }else if($elemento->getStatus() == 'h'){//Cancelado
+	            continue;
+	            $strClass = 'alert-secondary';
+	        }else if($elemento->getStatus() == 'r'){//reaberto
+	            $strClass = 'alert-warning';
+	        }else if($elemento->getStatus() == 'b'){//reservado
+	            $strClass = 'alert-warning';
+	        }else if($elemento->getStatus() == 'c'){//em espera
+	            $strClass = 'alert-info';
+	        }else if($elemento->getStatus() == 'd'){//Aguardando usuario
+	            $strClass = 'alert-danger';
+	        }else if($elemento->getStatus() == 'i'){//Aguardando ativo
+	            $strClass = 'alert-danger';
+	        }
+	        
 	        echo '
-                        <a href="?pagina=ocorrencia&selecionar='.$elemento->getId().'" class="list-group-item active" data-toggle="tooltip" data-placement="top" title="'.$elemento->getDescricao().'">#'.$elemento->getId().' - '.$elemento->getServico()->getNome().'</a>';
+
+            <div class="alert '.$strClass.' alert-dismissable">
+                <a href="?pagina=ocorrencia&selecionar='.$elemento->getId().'" class="close"><i class="fa fa-search icone-maior"></i></a>
+                
+                <strong>#'.$elemento->getId().'</strong> 
+                 '.$elemento->getServico()->getNome().'
+            </div>
+                  ';
+	        
+	        //      <a href="" class="list-group-item active"> -</a>
 	        
 	    }
 	    
 	    echo '          
                     </div>';
+	    
+	    
+	    
 
     }
 
