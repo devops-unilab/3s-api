@@ -42,12 +42,14 @@ class OcorrenciaCustomController  extends OcorrenciaController {
 	    if($dataAbertura == null){
 	        return "Indefinido";
 	    }
-	    while($this->foraDoExpediente($dataAbertura)){
-	        $dataAbertura = date("Y-m-d H:00:00", strtotime('+1 hour', strtotime($dataAbertura)));
-	        
+	    while($this->fimDeSemana($dataAbertura)){
+	        $dataAbertura = date("Y-m-d 08:00:00", strtotime('+1 day', strtotime($dataAbertura)));
 	    }
-	    echo 'Chamado Chegou: '.$dataAbertura.'<br>';
 	    
+	    while($this->foraDoExpediente($dataAbertura)){
+	        $dataAbertura = date("Y-m-d H:00:00", strtotime('+1 hour', strtotime($dataAbertura)));    
+	    }
+
 	    
 	    $timeEstimado = strtotime($dataAbertura);
 	    $tempoSla++;
@@ -57,12 +59,14 @@ class OcorrenciaCustomController  extends OcorrenciaController {
 	        $timeEstimado = strtotime('+'.$i.' hour', strtotime($dataAbertura));
 	        $horaEstimada = date("Y-m-d H:i:s", $timeEstimado);
 	        
+	        
 	        while($this->foraDoExpediente($horaEstimada)){
 	            $horaEstimada = date("Y-m-d H:i:s", strtotime('+1 hour', strtotime($horaEstimada)));
 	            $i++;
 	            $tempoSla++;
 	        }
-	        //             echo $horaEstimada.'<br>';
+	        
+	        
 	    }
 	    $horaEstimada = date('Y-m-d H:i:s', $timeEstimado);
 	    
@@ -108,8 +112,9 @@ class OcorrenciaCustomController  extends OcorrenciaController {
 	        return;
 	    }
 	    
+	    
 	    $horaEstimada = $this->calcularHoraSolucao($dataAbertura, $selecionado->getServico()->getTempoSla());
-	    $this->view->mostrarSelecionado2($selecionado, $listaStatus, $dataAbertura, $horaEstimada );
+	    $this->view->mostrarSelecionado2($selecionado, $listaStatus, $dataAbertura, $horaEstimada);
 	    
 	    $mensagemDao = new MensagemForumCustomDAO($this->dao->getConexao());
 	    $listaForum = $mensagemDao->retornaListaPorOcorrencia($selecionado);
