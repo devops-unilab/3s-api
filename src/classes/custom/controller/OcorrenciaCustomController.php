@@ -47,80 +47,61 @@ class OcorrenciaCustomController  extends OcorrenciaController {
 	    }
 	    return false;
 	}
-	public function calcularHoraSolucao($dataAbertura, $tempoSla)
-	{
-	    if($dataAbertura == null){
-	        return "Indefinido";
-	    }
-	    
-	    //Titulo de verificação
-// 	    $horasPuladas = array();
-// 	    $diasPulados = array();
-	    
-	    $recessoDao = new RecessoCustomDAO($this->dao->getConexao());
-	    $dataTeste = date("Y-m-d 08:00:00", strtotime('-1 day', strtotime($dataAbertura)));
-	    $listaRecesso = $recessoDao->listaApartirDe($dataTeste);
-
-	    
-	    while($this->fimDeSemana($dataAbertura)){
-	        $diasPulados[] = $dataAbertura.' (Fim de semana)';
-	        $dataAbertura = date("Y-m-d 08:00:00", strtotime('+1 day', strtotime($dataAbertura)));
-	     
-	    }
-	    
-	    while($this->dataPertenceALista($dataAbertura, $listaRecesso)){
-	        $diasPulados[] = $dataAbertura.' (Recesso)';;
-	        $dataAbertura = date("Y-m-d 08:00:00", strtotime('+1 day', strtotime($dataAbertura)));
-	    }
-	    
-	    
-	    while($this->foraDoExpediente($dataAbertura)){
-	        $horasPuladas[] = $dataAbertura.'(Fora do expediente)';
-	        $dataAbertura = date("Y-m-d H:00:00", strtotime('+1 hour', strtotime($dataAbertura)));    
-	    }
-
-	    
-	    $timeEstimado = strtotime($dataAbertura);
-	    $tempoSla++;
-	    for($i = 0; $i < $tempoSla; $i++)
-	    {
-	        
-	        $timeEstimado = strtotime('+'.$i.' hour', strtotime($dataAbertura));
-	        $horaEstimada = date("Y-m-d H:i:s", $timeEstimado);
-	        while($this->fimDeSemana($horaEstimada)){
-	            $diasPulados[] = $horaEstimada.' (Fim de semana)';
-	            $horaEstimada = date("Y-m-d 08:00:00", strtotime('+1 day', strtotime($horaEstimada)));
-	            $i = $i + 24;
-	            $tempoSla += 24;
-	        }
-	        
-	        if($this->dataPertenceALista($horaEstimada, $listaRecesso))
-	        {
-	            $diasPulados[] = $horaEstimada.' (Recesso)';
-	            $horaEstimada = date("Y-m-d 08:00:00", strtotime('+1 day', strtotime($horaEstimada)));
-	            $i = $i + 24;
-	            $tempoSla += 24;
-	        }
-	        
-	        while($this->foraDoExpediente($horaEstimada)){
-	            $horasPuladas[] = $horaEstimada.' (Fora do expediente)';
-	            $horaEstimada = date("Y-m-d H:i:s", strtotime('+1 hour', strtotime($horaEstimada)));
-	            $i++;
-	            $tempoSla++;
-	        }
-	    }
-	    $horaEstimada = date('Y-m-d H:i:s', $timeEstimado);
-	    
-// 	    echo "Horas Puladas: <br>";
-// 	    echo '['.implode(",<br> ", $horasPuladas).']';
-// 	    echo '<br><hr>';
-// 	    echo "Dias Pulados: <br>";
-// 	    echo '['.implode(",<br> ", $diasPulados).']';
-// 	    echo '<br><hr>';
-	    
-	    return $horaEstimada;
-	    
-	}
+    public function calcularHoraSolucao($dataAbertura, $tempoSla)
+    {
+        if($dataAbertura == null){
+            return "Indefinido";
+        }        
+        $recessoDao = new RecessoCustomDAO($this->dao->getConexao());
+        $dataTeste = date("Y-m-d 08:00:00", strtotime('-1 day', strtotime($dataAbertura)));
+        $listaRecesso = $recessoDao->listaApartirDe($dataTeste);
+        
+        
+        while($this->fimDeSemana($dataAbertura)){
+            $dataAbertura = date("Y-m-d 08:00:00", strtotime('+1 day', strtotime($dataAbertura)));
+            
+        }
+        
+        while($this->dataPertenceALista($dataAbertura, $listaRecesso)){
+            $dataAbertura = date("Y-m-d 08:00:00", strtotime('+1 day', strtotime($dataAbertura)));
+        }
+        
+        
+        while($this->foraDoExpediente($dataAbertura)){
+            $dataAbertura = date("Y-m-d H:00:00", strtotime('+1 hour', strtotime($dataAbertura)));
+        }
+        
+        
+        $timeEstimado = strtotime($dataAbertura);
+        $tempoSla++;
+        for($i = 0; $i < $tempoSla; $i++)
+        {
+            
+            $timeEstimado = strtotime('+'.$i.' hour', strtotime($dataAbertura));
+            $horaEstimada = date("Y-m-d H:i:s", $timeEstimado);
+            while($this->fimDeSemana($horaEstimada)){
+                $horaEstimada = date("Y-m-d 08:00:00", strtotime('+1 day', strtotime($horaEstimada)));
+                $i = $i + 24;
+                $tempoSla += 24;
+            }
+            
+            if($this->dataPertenceALista($horaEstimada, $listaRecesso))
+            {
+                $horaEstimada = date("Y-m-d 08:00:00", strtotime('+1 day', strtotime($horaEstimada)));
+                $i = $i + 24;
+                $tempoSla += 24;
+            }
+            
+            while($this->foraDoExpediente($horaEstimada)){
+                $horaEstimada = date("Y-m-d H:i:s", strtotime('+1 hour', strtotime($horaEstimada)));
+                $i++;
+                $tempoSla++;
+            }
+        }
+        $horaEstimada = date('Y-m-d H:i:s', $timeEstimado);
+        return $horaEstimada;
+        
+    }
 	public function selecionar(){
 	    
 	    if(!isset($_GET['selecionar'])){
