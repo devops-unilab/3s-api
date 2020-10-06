@@ -14,6 +14,62 @@ class OcorrenciaCustomController  extends OcorrenciaController {
 		$this->dao = new OcorrenciaCustomDAO();
 		$this->view = new OcorrenciaCustomView();
 	}
+	public function fimDeSemana($data){
+	    $diaDaSemana = date('w', strtotime($data));
+	    $diaDaSemana = intval($diaDaSemana);
+	    if($diaDaSemana == 0 || $diaDaSemana == 6){
+	        true;
+	    }
+	}
+	public function foraDoExpediente($data){
+	    $hora = date('H', strtotime($data));
+	    $hora = intval($hora);
+	    if($hora >= 17){
+	        return true;
+	    }
+	    if($hora < 8)
+	    {
+	        return true;
+	    }
+	    if($hora == 11)
+	    {
+	        return true;
+	    }
+	    return false;
+	}
+	public function calcularHoraSolucao($dataAbertura, $tempoSla)
+	{
+	    if($dataAbertura == null){
+	        return "Indefinido";
+	    }
+	    while($this->foraDoExpediente($dataAbertura)){
+	        $dataAbertura = date("Y-m-d H:00:00", strtotime('+1 hour', strtotime($dataAbertura)));
+	        
+	    }
+	    echo 'Chamado Chegou: '.$dataAbertura.'<br>';
+	    
+	    
+	    $timeEstimado = strtotime($dataAbertura);
+	    $tempoSla++;
+	    for($i = 0; $i < $tempoSla; $i++)
+	    {
+	        
+	        $timeEstimado = strtotime('+'.$i.' hour', strtotime($dataAbertura));
+	        $horaEstimada = date("Y-m-d H:i:s", $timeEstimado);
+	        
+	        while($this->foraDoExpediente($horaEstimada)){
+	            $horaEstimada = date("Y-m-d H:i:s", strtotime('+1 hour', strtotime($horaEstimada)));
+	            $i++;
+	            $tempoSla++;
+	        }
+	        //             echo $horaEstimada.'<br>';
+	    }
+	    $horaEstimada = date('Y-m-d H:i:s', $timeEstimado);
+	    
+	    
+	    return $horaEstimada;
+	    
+	}
 	public function selecionar(){
 	    
 	    if(!isset($_GET['selecionar'])){
@@ -38,7 +94,22 @@ class OcorrenciaCustomController  extends OcorrenciaController {
 	    $listaStatus = $statusDao->pesquisaPorIdOcorrencia($selecionado);
 	    
 	    
-	    $this->view->mostrarSelecionado2($selecionado, $listaStatus);
+	    
+	    
+	    $dataAbertura = null;
+	    foreach($listaStatus as $statusOcorrencia){
+	        if($statusOcorrencia->getStatus()->getSigla() == 'a'){
+	            $dataAbertura = $statusOcorrencia->getDataMudanca();
+	            break;
+	        }
+	    }
+	    if($dataAbertura == null){
+	        echo  "Chamado não possui histórico de status<br>";
+	        return;
+	    }
+	    
+	    $horaEstimada = $this->calcularHoraSolucao($dataAbertura, $selecionado->getServico()->getTempoSla());
+	    $this->view->mostrarSelecionado2($selecionado, $listaStatus, $dataAbertura, $horaEstimada );
 	    
 	    $mensagemDao = new MensagemForumCustomDAO($this->dao->getConexao());
 	    $listaForum = $mensagemDao->retornaListaPorOcorrencia($selecionado);
