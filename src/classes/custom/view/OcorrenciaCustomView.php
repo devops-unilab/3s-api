@@ -238,29 +238,50 @@ class OcorrenciaCustomView extends OcorrenciaView {
                     </div>';
 
     }
+    public function foraDoExpediente($data){
+        $hora = date('H', strtotime($data));
+        $hora = intval($hora);
+        if($hora >= 17){
+            return true;
+        }
+        if($hora < 8)
+        {
+            return true;
+        }
+        if($hora == 11)
+        {
+            return true;
+        }
+        return false;
+    }
     public function calcularHoraSolucao($dataAbertura, $tempoSla)
     {
         if($dataAbertura == null){
             return "Indefinido";
         }
-        $timeEstimado = strtotime('+'.$tempoSla.' hour', strtotime($dataAbertura));
-        for($i = 0; $i < $tempoSla; $i++)
-        {            
-            $timeEstimado = strtotime('+'.$i.' hour', strtotime($dataAbertura));
-            $horaContar = date('H', $timeEstimado);
-            $horaContar = intval($horaContar);
-            if($horaContar >= 16 || $horaContar < 8){
-                $tempoSla++;
-            }
-            if($horaContar == 11){
-                $tempoSla++;
-            }
-            
-            
-            
+        while($this->foraDoExpediente($dataAbertura)){
+            $dataAbertura = date("Y-m-d H:00:00", strtotime('+1 hour', strtotime($dataAbertura)));
+
         }
-        echo $tempoSla;
-        $horaEstimada = date('d/m/Y H:i:s', $timeEstimado);
+        echo 'Abertura: '.$dataAbertura.'<br>';
+        
+
+        $timeEstimado = strtotime($dataAbertura);
+        $tempoSla++;
+        for($i = 0; $i < $tempoSla; $i++)
+        {  
+            
+            $timeEstimado = strtotime('+'.$i.' hour', strtotime($dataAbertura));
+            $horaEstimada = date("Y-m-d H:i:s", $timeEstimado);
+            
+            while($this->foraDoExpediente($horaEstimada)){
+                $horaEstimada = date("Y-m-d H:i:s", strtotime('+1 hour', strtotime($horaEstimada)));
+                $i++;
+                $tempoSla++;
+            }
+//             echo $horaEstimada.'<br>';
+        }
+        $horaEstimada = date('Y-m-d H:i:s', $timeEstimado);
         
 
         return $horaEstimada;
