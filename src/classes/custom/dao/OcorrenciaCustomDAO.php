@@ -113,7 +113,7 @@ class  OcorrenciaCustomDAO extends OcorrenciaDAO {
             ocorrencia.id_usuario_cliente  = :idUsuarioIndicado
             AND status <> 'f'
             ORDER BY ocorrencia.id DESC
-            LIMIT 100
+            LIMIT 50
 ";
         
         try {

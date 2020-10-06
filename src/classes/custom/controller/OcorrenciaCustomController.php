@@ -332,9 +332,10 @@ class OcorrenciaCustomController  extends OcorrenciaController {
 	    $ocorrencia->getUsuarioCliente()->setId($sessao->getIdUsuario());
 	    $lista = $this->dao->pesquisaPorCliente($ocorrencia);
 
-	    echo '<div class="panel panel-warning">';
+	    
+	    
 	    $this->view->exibirLista($lista);
-	    echo '</div>';
+	    
 
 
 	    

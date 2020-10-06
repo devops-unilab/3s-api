@@ -58,15 +58,21 @@ class NavBarController{
 
         
         echo '
-    </ul>
+    </ul>';
+        if($sessao->getNivelAcesso() != Sessao::NIVEL_COMUM){
+            echo '
+                
     <form class="form-inline my-2 my-lg-0">
       <select class="form-control mr-sm-2">
       	<option>Administrador</option>
       	<option>Técnico</option>
       	<option selected>Comum</option>
       </select>
-      
-    </form>
+                
+    </form>';
+        }
+        
+        echo '
     <a class="btn btn-outline-success my-2 my-sm-0" href="?sair=1">Sair</a>
   </div>
 </nav>

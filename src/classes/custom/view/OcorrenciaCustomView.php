@@ -222,11 +222,11 @@ class OcorrenciaCustomView extends OcorrenciaView {
     }
     public function exibirLista($lista)
     {
-        
         echo '
 
 
                    <div class="alert-group">';
+        
         $strClass = 'alert-warning';
 	    foreach($lista as $elemento){
 	        
@@ -269,6 +269,15 @@ class OcorrenciaCustomView extends OcorrenciaView {
 	        
 	    }
 	    
+	    if(count($lista) == 0){
+	        echo '
+	            
+            <div class="alert alert-light alert-dismissable text-center">              
+                <strong>Você não tem nenhum chamado aberto</strong>
+
+            </div>
+                  ';
+	    }
 	    echo '          
                     </div>';
 	    
