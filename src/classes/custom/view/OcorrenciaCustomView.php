@@ -349,10 +349,12 @@ class OcorrenciaCustomView extends OcorrenciaView {
         
         $strClass = "";
         $strText = "";
-        if($ocorrencia->getServico()->getTempoSla() >= 1)
+        if($ocorrencia->getServico()->getTempoSla() > 1)
         {                
             echo ' Horas úteis';
-        }else if($ocorrencia->getServico()->getTempoSla() == 0){
+        }else if($ocorrencia->getServico()->getTempoSla() == 1){
+            echo ' Hora útil';
+        }else{
             echo 'SLA não definido.';
         }
         
@@ -391,7 +393,7 @@ class OcorrenciaCustomView extends OcorrenciaView {
             <div class="progress">
 				<div class="progress-bar" role="progressbar" aria-valuenow="'.$percentual.'" aria-valuemin="0" aria-valuemax="100" style="width: '.$percentual.'%;" data-toggle="tooltip" data-placement="top" title="Solução">
 					<span class="sr-only">'.$percentual.'% Complete</span>
-					<span class="progress-type">Aguarde</span>
+					<span class="progress-type">Progresso '.intval($percentual).'% </span>
 				</div>
 			</div><br>
                         
