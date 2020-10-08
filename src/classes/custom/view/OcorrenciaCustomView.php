@@ -378,21 +378,23 @@ class OcorrenciaCustomView extends OcorrenciaView {
                     echo '
                         <p class="'.$strClass.'">Solução Estimada: '.date("d/m/Y H:i:s" , strtotime($dataSolucao)).'<br>'.$strText.'</p>';
                 }else{
-                    
+                    $total = $timeSolucaoEstimada - $timeAbertura;
+                    $percentual = ($timeRecorrido *100)/$total;
                     $strClass = "text-primary";
                     $strText = "Dentro do prazo. ";
                     $resultante = $timeSolucaoEstimada - $timeHoje;
-                    $strText .= 'Tempo Restante: <span id="tempo-restante">'. gmdate("H:i:s", $resultante).'</span>';
-                    $total = $timeSolucaoEstimada - $timeAbertura;
-                    $percentual = ($timeRecorrido *100)/$total;
-                     
+                    
+                    
+                    $strText .= '<br>Tempo Restante:
+                        <span id="tempo-total">'. gmdate("H:i:s", $resultante).'</span>';
                     echo '
                         <p class="'.$strClass.'">Solução Estimada: '.date("d/m/Y H:i:s" , strtotime($dataSolucao)).'<br>'.$strText.'</p>';
                     echo '
                         
+            <img src="img/bonequinho.gif" height="75">
             <div class="progress">
 				<div class="progress-bar" role="progressbar" aria-valuenow="'.$percentual.'" aria-valuemin="0" aria-valuemax="100" style="width: '.$percentual.'%;" data-toggle="tooltip" data-placement="top" title="Solução">
-					<span class="sr-only">'.$percentual.'% Complete</span>
+					<span class="sr-only">'.$percentual.'% Completo</span>
 					<span class="progress-type">Progresso '.intval($percentual).'% </span>
 				</div>
 			</div><br>
@@ -443,8 +445,4 @@ class OcorrenciaCustomView extends OcorrenciaView {
 ';
     }
     
-    ////////Digite seu código customizado aqui.
-    
-
-
 }

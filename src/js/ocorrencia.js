@@ -1,5 +1,6 @@
 
 $(document).ready(function(e) {
+	
 	$("#form_enviar_ocorrencia").on('submit', function(e) {
 		
 		e.preventDefault();
