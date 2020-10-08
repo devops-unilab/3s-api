@@ -222,6 +222,7 @@ class OcorrenciaCustomView extends OcorrenciaView {
     }
     public function exibirLista($lista)
     {
+        
         echo '
 
 
@@ -286,6 +287,49 @@ class OcorrenciaCustomView extends OcorrenciaView {
 
     }
 
+    /**
+     * Passe a sigla do status
+     * @param string $status
+     */
+    public function getStrStatus($status){
+        $strStatus = "Aberto";
+        switch ($status){
+            case 'a':
+                $strStatus = "Aberto";
+                break;
+            case 'e':
+                $strStatus = "Em atendimento";
+                break;
+            case 'f':
+                $strStatus = "Fechado";
+                break;
+            case 'g':
+                $strStatus = "Fechado Confirmado";
+                break;
+            case 'h':
+                $strStatus = "Cancelado";
+                break;
+            case 'r':
+                $strStatus = "Reaberto";
+                break;
+            case 'b':
+                $strStatus = "Aberto";
+                break;
+            case 'b':
+                $strStatus = "Reservado";
+                break;
+            case 'c':
+                $strStatus = "Em espera";
+                break;
+            case 'd':
+                $strStatus = "Aguardando Usuário";
+                break;
+            case 'i':
+                $strStatus = "Aguardando ativo da DTI";
+                break;
+        }
+        return $strStatus;
+    }
     
     /**
      * 
@@ -299,29 +343,70 @@ class OcorrenciaCustomView extends OcorrenciaView {
      
                 <div class="card mb-4">
                     <div class="card-body">
-                        <p>Abertura: '.date("d/m/Y H:i:s" , strtotime($dataAbertura)).'</p>
+                        <p>Abertura: '.date("d/m/Y H:i:s" , strtotime($dataAbertura)).'</p>';
+        echo '
                         <p>Prazo de Resolução: '.$ocorrencia->getServico()->getTempoSla();
-            if($ocorrencia->getServico()->getTempoSla() > 1){
-                echo ' Horas úteis';
-            }else if($ocorrencia->getServico()->getTempoSla() == 0){
-                echo 'SLA não definido.';
-            }
+        
+        $strClass = "";
+        $strText = "";
+        if($ocorrencia->getServico()->getTempoSla() >= 1)
+        {                
+            echo ' Horas úteis';
+        }else if($ocorrencia->getServico()->getTempoSla() == 0){
+            echo 'SLA não definido.';
+        }
+        
+        
+        
             echo '
                         </p>';
             
             
-            echo '
-                        <p>Solução Estimada: '.date("d/m/Y H:i:s" , strtotime($dataSolucao)).'</p>      
-                        <p>Status: '.$ocorrencia->getStatus().'</p>      
+
+            if($ocorrencia->getStatus() != 'f' && $ocorrencia->getStatus() != 'g' && $ocorrencia->getServico()->getTempoSla() != 0){
+                
+                $timeHoje = time();
+                $timeSolucaoEstimada = strtotime($dataSolucao);
+                $timeAbertura = strtotime($dataAbertura);
+                $timeRecorrido = $timeHoje - $timeAbertura;
+                
+                if($timeHoje > $timeSolucaoEstimada){
+                    $strClass = "text-danger";
+                    $strText = "Solução em Atraso. <br>Caso queira pressionar o atendente  <a href=\"send\">clique aqui</a>";
+                    echo '
+                        <p class="'.$strClass.'">Solução Estimada: '.date("d/m/Y H:i:s" , strtotime($dataSolucao)).'<br>'.$strText.'</p>';
+                }else{
+                    
+                    $strClass = "text-primary";
+                    $strText = "Dentro do prazo. ";
+                    $resultante = $timeSolucaoEstimada - $timeHoje;
+                    $strText .= 'Tempo Restante: <span id="tempo-restante">'. gmdate("H:i:s", $resultante).'</span>';
+                    $total = $timeSolucaoEstimada - $timeAbertura;
+                    $percentual = ($timeRecorrido *100)/$total;
+                     
+                    echo '
+                        <p class="'.$strClass.'">Solução Estimada: '.date("d/m/Y H:i:s" , strtotime($dataSolucao)).'<br>'.$strText.'</p>';
+                    echo '
+                        
+            <div class="progress">
+				<div class="progress-bar" role="progressbar" aria-valuenow="'.$percentual.'" aria-valuemin="0" aria-valuemax="100" style="width: '.$percentual.'%;" data-toggle="tooltip" data-placement="top" title="Solução">
+					<span class="sr-only">'.$percentual.'% Complete</span>
+					<span class="progress-type">Aguarde</span>
+				</div>
+			</div><br>
+                        
+';
+                    
+                }
+                
+                
+            }
+            
+            echo '<p>Status: '.$this->getStrStatus($ocorrencia->getStatus()).'</p>
+                        Descricao: '.$ocorrencia->getDescricao().'<br>      
                     </div>
                 </div>
             
-            
-            <div class="card mb-4">
-                <div class="card-body">
-                    Descricao: '.$ocorrencia->getDescricao().'<br>
-                </div>
-            </div>
             <div class="card mb-4">
                 <div class="card-body">
                     Cliente: '.$ocorrencia->getUsuarioCliente()->getNome().'<br>
@@ -335,16 +420,11 @@ class OcorrenciaCustomView extends OcorrenciaView {
 
                  
         <div class="card mb-4">
-            <div class="card-body">      
-
+            <div class="card-body">
                 Patrimonio: '.$ocorrencia->getPatrimonio().'<br>
-                
-                
-                
                 Solucao: '.$ocorrencia->getSolucao().'<br>
                 Prioridade: '.$ocorrencia->getPrioridade().'<br>
                 Avaliacao: '.$ocorrencia->getAvaliacao().'<br>
-
                 Id Usuario Atendente: '.$ocorrencia->getIdUsuarioAtendente().'<br>
                 Id Usuario Indicado: '.$ocorrencia->getIdUsuarioIndicado().'<br>
                 Anexo: '.$ocorrencia->getAnexo().'<br>
