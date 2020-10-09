@@ -371,31 +371,63 @@ class OcorrenciaCustomView extends OcorrenciaView {
                 $timeSolucaoEstimada = strtotime($dataSolucao);
                 $timeAbertura = strtotime($dataAbertura);
                 $timeRecorrido = $timeHoje - $timeAbertura;
+                $total = $timeSolucaoEstimada - $timeAbertura;
+                $resultante = $timeSolucaoEstimada - $timeHoje;
+                
+                
+                $date1 = new DateTime($dataAbertura);
+                $date2 = new DateTime($dataSolucao);
+                $diff = $date2->diff($date1);
+                $hours = $diff->h;
+                $hours = $hours + ($diff->days*24);
+                $minutos = $diff->i;
+                $segundos  = $diff->s;
+                
+
+                
                 
                 if($timeHoje > $timeSolucaoEstimada){
-                    $strClass = "text-danger";
-                    $strText = "Solução em Atraso. <br>Caso queira pressionar o atendente  <a href=\"send\">clique aqui</a>";
+                    
+                    
+                    
                     echo '
-                        <p class="'.$strClass.'">Solução Estimada: '.date("d/m/Y H:i:s" , strtotime($dataSolucao)).'<br>'.$strText.'</p>';
+                        
+                        <p class="text-danger">Solução Estimada: '.date("d/m/Y H:i:s" , strtotime($dataSolucao)).'
+                        <br>Total: '.$hours.' horas
+                        <br>Tempo Total: <span id="tempo-total">'. str_pad($hours, 2 , '0' , STR_PAD_LEFT).':'.str_pad($minutos, 2 , '0' , STR_PAD_LEFT).':'.str_pad($segundos, 2 , '0' , STR_PAD_LEFT).'</span>
+                        <br>Solução em Atraso. <br>Caso queira pressionar o atendente  <a href=\"send\">clique aqui</a></p>';
+                    
+  
                 }else{
-                    $total = $timeSolucaoEstimada - $timeAbertura;
                     $percentual = ($timeRecorrido *100)/$total;
-                    $strClass = "text-primary";
-                    $strText = "Dentro do prazo. ";
-                    $resultante = $timeSolucaoEstimada - $timeHoje;
-                    
-                    
-                    $strText .= '<br>Tempo Restante:
-                        <span id="tempo-total">'. gmdate("H:i:s", $resultante).'</span>';
                     echo '
-                        <p class="'.$strClass.'">Solução Estimada: '.date("d/m/Y H:i:s" , strtotime($dataSolucao)).'<br>'.$strText.'</p>';
+                        <p class="text-primary">Solução Estimada: '.date("d/m/Y H:i:s" , strtotime($dataSolucao)).'<br>Dentro do prazo.
+
+                        <br>Tempo Total:
+                        <span id="tempo-total">'. str_pad($hours, 2 , '0' , STR_PAD_LEFT).':'.str_pad($minutos, 2 , '0' , STR_PAD_LEFT).':'.str_pad($segundos, 2 , '0' , STR_PAD_LEFT).'</span>
+                        <br>Tempo Restante:';
+                    
+                    $date1 = new DateTime();
+                    $date2 = new DateTime($dataSolucao);
+                    $diff = $date2->diff($date1);
+                    $hours = $diff->h;
+                    $hours = $hours + ($diff->days*24);
+                    $minutos = $diff->i;
+                    $segundos  = $diff->s;
+                    
+                    
+                    echo '
+                        <span id="tempo-restante">'. str_pad($hours, 2 , '0' , STR_PAD_LEFT).':'.str_pad($minutos, 2 , '0' , STR_PAD_LEFT).':'.str_pad($segundos, 2 , '0' , STR_PAD_LEFT).'</span></p>
+
+';
+
                     echo '
                         
             <img src="img/bonequinho.gif" height="75">
             <div class="progress">
-				<div class="progress-bar" role="progressbar" aria-valuenow="'.$percentual.'" aria-valuemin="0" aria-valuemax="100" style="width: '.$percentual.'%;" data-toggle="tooltip" data-placement="top" title="Solução">
-					<span class="sr-only">'.$percentual.'% Completo</span>
-					<span class="progress-type">Progresso '.intval($percentual).'% </span>
+				<div id="barra-progresso" class="progress-bar" role="progressbar" aria-valuenow="'.$percentual.'" aria-valuemin="0" aria-valuemax="100" style="width: '.$percentual.'%;" data-toggle="tooltip" data-placement="top" title="Solução">
+					<span id="label-progresso" class="sr-only">'.$percentual.'% Completo</span>
+					<span id="label-progresso2" class="progress-type">Progresso '.intval($percentual).'% </span>
 				</div>
 			</div><br>
                         
