@@ -372,7 +372,7 @@ class OcorrenciaCustomView extends OcorrenciaView {
                 $timeAbertura = strtotime($dataAbertura);
                 $timeRecorrido = $timeHoje - $timeAbertura;
                 $total = $timeSolucaoEstimada - $timeAbertura;
-                $resultante = $timeSolucaoEstimada - $timeHoje;
+
                 
                 
                 $date1 = new DateTime($dataAbertura);
@@ -390,22 +390,17 @@ class OcorrenciaCustomView extends OcorrenciaView {
                     
                     
                     
-                    echo '
-                        
-                        <p class="text-danger">Solução Estimada: '.date("d/m/Y H:i:s" , strtotime($dataSolucao)).'
-                        <br>Total: '.$hours.' horas
-                        <br>Tempo Total: <span id="tempo-total">'. str_pad($hours, 2 , '0' , STR_PAD_LEFT).':'.str_pad($minutos, 2 , '0' , STR_PAD_LEFT).':'.str_pad($segundos, 2 , '0' , STR_PAD_LEFT).'</span>
-                        <br>Solução em Atraso. <br>Caso queira pressionar o atendente  <a href=\"send\">clique aqui</a></p>';
+                    echo '<p class="text-danger">Solução Estimada: '.date("d/m/Y H:i:s" , strtotime($dataSolucao)).'';
+                    echo '<br>Tempo Total: <span id="tempo-total">'. str_pad($hours, 2 , '0' , STR_PAD_LEFT).':'.str_pad($minutos, 2 , '0' , STR_PAD_LEFT).':'.str_pad($segundos, 2 , '0' , STR_PAD_LEFT).'</span>';
+                    echo '<br>Solução em Atraso. <br>Caso queira pressionar o atendente  <a href=\"send\">clique aqui</a></p>';
                     
   
                 }else{
                     $percentual = ($timeRecorrido *100)/$total;
                     echo '
-                        <p class="text-primary">Solução Estimada: '.date("d/m/Y H:i:s" , strtotime($dataSolucao)).'<br>Dentro do prazo.
-
-                        <br>Tempo Total:
-                        <span id="tempo-total">'. str_pad($hours, 2 , '0' , STR_PAD_LEFT).':'.str_pad($minutos, 2 , '0' , STR_PAD_LEFT).':'.str_pad($segundos, 2 , '0' , STR_PAD_LEFT).'</span>
-                        <br>Tempo Restante:';
+                        <p class="text-primary">Solução Estimada: '.date("d/m/Y H:i:s" , strtotime($dataSolucao)).'<br>Dentro do prazo.';
+                    echo '<br>Tempo Total: <span id="tempo-total">'. str_pad($hours, 2 , '0' , STR_PAD_LEFT).':'.str_pad($minutos, 2 , '0' , STR_PAD_LEFT).':'.str_pad($segundos, 2 , '0' , STR_PAD_LEFT).'</span>';
+                    echo '<br>Tempo Restante:';
                     
                     $date1 = new DateTime();
                     $date2 = new DateTime($dataSolucao);
