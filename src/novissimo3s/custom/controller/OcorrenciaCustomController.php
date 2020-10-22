@@ -5,7 +5,21 @@
  * @author Jefferson Uchôa Ponte <jefponte@gmail.com>
  */
 
+namespace novissimo3s\custom\controller;
+use novissimo3s\controller\OcorrenciaController;
+use novissimo3s\custom\dao\OcorrenciaCustomDAO;
+use novissimo3s\custom\view\OcorrenciaCustomView;
+use novissimo3s\custom\dao\RecessoCustomDAO;
+use novissimo3s\model\Ocorrencia;
+use novissimo3s\dao\StatusOcorrenciaDAO;
+use novissimo3s\custom\dao\StatusOcorrenciaCustomDAO;
+use novissimo3s\dao\ServicoDAO;
+use novissimo3s\custom\dao\MensagemForumCustomDAO;
+use novissimo3s\util\Sessao;
+use novissimo3s\model\Usuario;
+use novissimo3s\model\AreaResponsavel;
 
+use novissimo3s\model\StatusOcorrencia;
 
 class OcorrenciaCustomController  extends OcorrenciaController {
     
@@ -642,7 +656,7 @@ class OcorrenciaCustomController  extends OcorrenciaController {
 	    $result = $this->dao->getConexao()->query("SELECT id, nome FROM area_responsavel $filtro");
 	    $setores = array();
 	    foreach($result as $linha){
-	        $setor = new Setor();
+	        $setor = new AreaResponsavel();
 	        $setor->setNome($linha['nome']);
 	        $setor->setId($linha['id']);
 	        $setores[] = $setor;

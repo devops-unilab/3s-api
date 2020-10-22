@@ -14,40 +14,10 @@ define("DB_AUTENTICACAO", "../../../3s/3s_autenticacao_bd.ini");
 define("EMAIL_CONFIG", "../../../3s/3s_email.ini");
 
 function autoload($classe) {
-            
-    if (file_exists ( 'classes/dao/' . $classe . '.php' )){
-		include_once 'classes/dao/' . $classe . '.php';
-        return;
-	}
-	else if (file_exists ( 'classes/model/' . $classe . '.php' )){
-		include_once 'classes/model/' . $classe . '.php';
-        return;
-	}
-	else if (file_exists ( 'classes/controller/' . $classe . '.php' )){
-		include_once 'classes/controller/' . $classe . '.php';
-        return;
-	}
-	else if (file_exists ( 'classes/util/' . $classe . '.php' )){
-		include_once 'classes/util/' . $classe . '.php';
-        return;
-	}
-	else if (file_exists ( 'classes/view/' . $classe . '.php' )){
-		include_once 'classes/view/' . $classe . '.php';
-        return;
-	}else if (file_exists ( 'classes/custom/controller/' . $classe . '.php' )){
-		include_once 'classes/custom/controller/' . $classe . '.php';
-        return;
-	}
-    else if (file_exists ( 'classes/custom/view/' . $classe . '.php' )){
-		include_once 'classes/custom/view/' . $classe . '.php';
-        return;
-	}else if(file_exists ( 'classes/custom/dao/' . $classe . '.php' )){
-		include_once 'classes/custom/dao/' . $classe . '.php';
-        return;
-	}
 
-    $prefix = '3sDTI';
-    $base_dir = __DIR__ . '/src/classes/';
+
+    $prefix = 'novissimo3s';
+    $base_dir = 'novissimo3s';
     $len = strlen($prefix);
     if (strncmp($prefix, $classe, $len) !== 0) {
         return;
@@ -60,6 +30,8 @@ function autoload($classe) {
 
 }
 spl_autoload_register('autoload');
+use novissimo3s\util\Sessao;
+
 $sessao = new Sessao();
 if (isset($_GET["sair"])) {
     $sessao->mataSessao();
