@@ -15,6 +15,7 @@ use PDOException;
 class  OcorrenciaCustomDAO extends OcorrenciaDAO {
     
     public function pesquisaPorCliente(Ocorrencia $ocorrencia) {
+        
         $lista = array();
         $idUsuarioIndicado = $ocorrencia->getUsuarioCliente()->getId();
         
@@ -32,7 +33,9 @@ class  OcorrenciaCustomDAO extends OcorrenciaDAO {
             $stmt->bindParam(":idUsuarioIndicado", $idUsuarioIndicado, PDO::PARAM_INT);
             $stmt->execute();
             $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            
             foreach ( $result as $linha ){
+                
                 $ocorrencia = new Ocorrencia();
                 $ocorrencia->setId( $linha ['id'] );
                 $ocorrencia->setIdLocal( $linha ['id_local'] );

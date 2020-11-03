@@ -84,6 +84,7 @@ class OcorrenciaCustomController  extends OcorrenciaController {
 	    $ocorrencia = new Ocorrencia();
 	    $sessao = new Sessao();
 	    $ocorrencia->getUsuarioCliente()->setId($sessao->getIdUsuario());
+	    
 	    $lista = $this->dao->pesquisaPorCliente($ocorrencia);
 	    
 	    
