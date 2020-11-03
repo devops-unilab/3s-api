@@ -1,14 +1,14 @@
 
 
 $(document).ready(function(e) {
-	$("#insert_form_ocorrencia").on('submit', function(e) {
+	$("#insert_form_recesso").on('submit', function(e) {
 		e.preventDefault();
-        $('#modalAddOcorrencia').modal('hide');
+        $('#modalAddRecesso').modal('hide');
 
 		var dados = jQuery( this ).serialize();
 		jQuery.ajax({
             type: "POST",
-            url: "index.php?ajax=ocorrencia",
+            url: "index.php?ajax=recesso",
             data: dados,
             success: function( data )
             {
@@ -17,16 +17,16 @@ $(document).ready(function(e) {
             	if(data.split(":")[1] == 'sucesso'){
             		
             		$("#botao-modal-resposta").click(function(){
-            			window.location.href='?page=ocorrencia';
+            			window.location.href='?page=recesso';
             		});
-            		$("#textoModalResposta").text("Ocorrencia enviado com sucesso! ");                	
+            		$("#textoModalResposta").text("Recesso enviado com sucesso! ");                	
             		$("#modalResposta").modal("show");
             		
             	}
             	else
             	{
             		
-                	$("#textoModalResposta").text("Falha ao inserir Ocorrencia, fale com o suporte. ");                	
+                	$("#textoModalResposta").text("Falha ao inserir Recesso, fale com o suporte. ");                	
             		$("#modalResposta").modal("show");
             	}
 
