@@ -11,21 +11,16 @@ class Principal{
     {
         
         $sessao = new Sessao();
-        if($sessao->getNivelAcesso() == Sessao::NIVEL_DESLOGADO){
+        if($sessao->getNivelAcesso() == Sessao::NIVEL_DESLOGADO)
+        {
             $usuarioController = new UsuarioCustomController();
             $usuarioController->telaLogin();
             return;
         }
                 
-        if(isset($_GET['pagina'])){
-            switch ($_GET['pagina']){
-                case 'painel':
-                    if(!($sessao->getNivelAcesso() == Sessao::NIVEL_ADM || $sessao->getNivelAcesso() == Sessao::NIVEL_TECNICO)){
-                        return;
-                    }
-                    $controller = new OcorrenciaCustomController();
-                    $controller->telaInicialPainel();
-                    break;
+        if(isset($_GET['page'])){
+            switch ($_GET['page'])
+            {
                 case 'ocorrencia':
                     $controller = new OcorrenciaCustomController();
                     $controller->main();

@@ -212,11 +212,11 @@ class OcorrenciaView {
 				</tfoot>
 				<tbody>';
             
-            foreach($lista as $element){
+           foreach($lista as $element){//4823
                 echo '<tr>';
                 echo '<td>'.$element->getId().'</td>';
                 echo '<td>'.$element->getIdLocal().'</td>';
-                echo '<td>'.$element->getDescricao().'</td>';
+                echo '<td>'.strip_tags($element->getDescricao()).'</td>';
                 echo '<td>'.$element->getCampus().'</td>';
                 echo '<td>'.$element->getAreaResponsavel().'</td>';
                 echo '<td>'.$element->getServico().'</td>';
