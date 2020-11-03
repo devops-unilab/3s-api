@@ -18,8 +18,8 @@ class Principal{
             return;
         }
                 
-        if(isset($_GET['page'])){
-            switch ($_GET['page'])
+        if(isset($_GET['pagina'])){
+            switch ($_GET['pagina'])
             {
                 case 'ocorrencia':
                     $controller = new OcorrenciaCustomController();
@@ -31,7 +31,7 @@ class Principal{
             }
         }else{
             $controller = new OcorrenciaCustomController();
-//             $controller->main();
+            $controller->main();
             
         }
         

@@ -131,7 +131,7 @@ $principal->main();
 <footer class="blog-footer">
   <p>Desenvolvido pela Diretoria de Tecnologia da Informação &copy; DTI / Unilab<a href="https://dti.unilab.edu.br/"> dti.unilab.edu.br</a>.</p>
   <p>
-    <a href="#">Voltar ao Topo</a>
+    <a href="http://unilab.edu.br">unilab.edu.br</a>
   </p>
 </footer>
             
@@ -161,7 +161,7 @@ $principal->main();
 <script src="js/selectize.js"></script>
 <script src="js/painel3s.js"></script>
 <script src="js/ocorrencia.js"></script>
-<script src="js/contador.js?12"></script>
+<script src="js/contador.js"></script>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
