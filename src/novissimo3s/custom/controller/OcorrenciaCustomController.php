@@ -15,15 +15,272 @@ use novissimo3s\util\Sessao;
 use novissimo3s\model\StatusOcorrencia;
 use novissimo3s\dao\StatusOcorrenciaDAO;
 use novissimo3s\model\Usuario;
+use novissimo3s\custom\dao\StatusOcorrenciaCustomDAO;
+use novissimo3s\custom\dao\MensagemForumCustomDAO;
+use novissimo3s\custom\dao\RecessoCustomDAO;
 
 class OcorrenciaCustomController  extends OcorrenciaController {
-    
+    public function fimDeSemana($data){
+        $diaDaSemana = date('w', strtotime($data));
+        $diaDaSemana = intval($diaDaSemana);
+        if($diaDaSemana == 6 || $diaDaSemana == 0){
+            return true;
+        }
+        return false;
+    }
+    public function dataPertenceALista($data, $listaRecesso){
+        foreach($listaRecesso as $recesso){
+            if(date("Y-m-d", strtotime($recesso->getData())) ==  date("Y-m-d", strtotime($data))){
+                return true;
+            }
+        }
+        return false;
+    }
+    public function foraDoExpediente($data){
+        $hora = date('H', strtotime($data));
+        $hora = intval($hora);
+        if($hora >= 17){
+            return true;
+        }
+        if($hora < 8)
+        {
+            return true;
+        }
+        if($hora == 11)
+        {
+            return true;
+        }
+        return false;
+    }
+    public function calcularHoraSolucao($dataAbertura, $tempoSla)
+    {
+        if($dataAbertura == null){
+            return "Indefinido";
+        }
+        $recessoDao = new RecessoCustomDAO($this->dao->getConnection());
+        $dataTeste = date("Y-m-d 08:00:00", strtotime('-1 day', strtotime($dataAbertura)));
+        $listaRecesso = $recessoDao->listaApartirDe($dataTeste);
+        
+        
+        while($this->fimDeSemana($dataAbertura)){
+            $dataAbertura = date("Y-m-d 08:00:00", strtotime('+1 day', strtotime($dataAbertura)));
+            
+        }
+        
+        while($this->dataPertenceALista($dataAbertura, $listaRecesso)){
+            $dataAbertura = date("Y-m-d 08:00:00", strtotime('+1 day', strtotime($dataAbertura)));
+        }
+        
+        
+        while($this->foraDoExpediente($dataAbertura)){
+            $dataAbertura = date("Y-m-d H:00:00", strtotime('+1 hour', strtotime($dataAbertura)));
+        }
+        
+        
+        $timeEstimado = strtotime($dataAbertura);
+        $tempoSla++;
+        for($i = 0; $i < $tempoSla; $i++)
+        {
+            
+            $timeEstimado = strtotime('+'.$i.' hour', strtotime($dataAbertura));
+            $horaEstimada = date("Y-m-d H:i:s", $timeEstimado);
+            while($this->fimDeSemana($horaEstimada)){
+                $horaEstimada = date("Y-m-d 08:00:00", strtotime('+1 day', strtotime($horaEstimada)));
+                $i = $i + 24;
+                $tempoSla += 24;
+            }
+            
+            if($this->dataPertenceALista($horaEstimada, $listaRecesso))
+            {
+                $horaEstimada = date("Y-m-d 08:00:00", strtotime('+1 day', strtotime($horaEstimada)));
+                $i = $i + 24;
+                $tempoSla += 24;
+            }
+            
+            while($this->foraDoExpediente($horaEstimada)){
+                $horaEstimada = date("Y-m-d H:i:s", strtotime('+1 hour', strtotime($horaEstimada)));
+                $i++;
+                $tempoSla++;
+            }
+        }
+        $horaEstimada = date('Y-m-d H:i:s', $timeEstimado);
+        return $horaEstimada;
+        
+    }
 
 	public function __construct(){
 		$this->dao = new OcorrenciaCustomDAO();
 		$this->view = new OcorrenciaCustomView();
 	}
-	
+	public function selecionar(){
+	    
+	    if(!isset($_GET['selecionar'])){
+	        return;
+	    }
+	    
+	    
+	    $selecionado = new Ocorrencia();
+	    $selecionado->setId($_GET['selecionar']);
+	    $this->dao->preenchePorId($selecionado);
+	    
+	    echo '
+            <div class="row">
+                <div class="col-md-8 blog-main">
+                    <h3 class="pb-4 mb-4 font-italic border-bottom">
+                        #'.$selecionado->getId().' - '.$selecionado->getServico()->getNome().'
+                    </h3>
+                            
+';
+	    
+	    $statusDao = new StatusOcorrenciaCustomDAO($this->dao->getConnection());
+	    $listaStatus = $statusDao->pesquisaPorIdOcorrencia($selecionado);
+	    
+	    $mensagemDao = new MensagemForumCustomDAO($this->dao->getConnection());
+	    $listaForum = $mensagemDao->retornaListaPorOcorrencia($selecionado);
+	    
+	    
+	    
+	    $dataAbertura = null;
+	    foreach($listaStatus as $statusOcorrencia){
+	        if($statusOcorrencia->getStatus()->getSigla() == 'a'){
+	            $dataAbertura = $statusOcorrencia->getDataMudanca();
+	            break;
+	        }
+	    }
+	    if($dataAbertura == null){
+	        echo  "Chamado não possui histórico de status<br>";
+	        return;
+	    }
+	    
+	    
+	    $horaEstimada = $this->calcularHoraSolucao($dataAbertura, $selecionado->getServico()->getTempoSla());
+	    $this->view->mostrarSelecionado2($selecionado, $listaStatus, $dataAbertura, $horaEstimada);
+	    
+	    echo '
+                    <h4 class="font-italic">Mensagens</h4>
+                    <hr>
+                    <div class="container">';
+	    foreach($listaForum as $mensagemForum){
+	        
+	        echo '
+	            
+	            
+                    <div class="notice notice-info">
+                        '.$mensagemForum->getMensagem().'<br>
+                        <strong>'.$mensagemForum->getUsuario()->getNome().'| '.date("d/m/Y H:i",strtotime($mensagemForum->getDataEnvio())).'</strong><br>
+            	    </div>
+                            
+                            
+                            
+';
+	        
+	    }
+	    echo '</div>';
+	    
+	    echo '
+	        
+	        
+                </div>
+                <aside class="col-md-4 blog-sidebar">
+	        
+	        
+                    <h4 class="font-italic">Histórico</h4>
+                    <div class="container">';
+	    
+	    foreach($listaStatus as $status){
+	        $strCartao = ' alert-warning ';
+	        if($status->getStatus()->getSigla() == 'a'){
+	            $strCartao = '  notice-warning';
+	        }else if($status->getStatus()->getSigla() == 'e'){
+	            $strCartao = '  notice-info ';
+	        }
+	        else if($status->getStatus()->getSigla() == 'f'){
+	            $strCartao = 'notice-success ';
+	        }
+	        else if($status->getStatus()->getSigla() == 'g'){
+	            $strCartao = 'notice-success ';
+	        }
+	        else if($status->getStatus()->getSigla() == 'h'){
+	            $strCartao = ' notice-warning ';
+	        }
+	        else if($status->getStatus()->getSigla() == 'r'){
+	            $strCartao = '  notice-warning ';
+	        }
+	        else if($status->getStatus()->getSigla() == 'b'){
+	            $strCartao = '  notice-warning ';
+	        }
+	        else if($status->getStatus()->getSigla() == 'c'){
+	            $strCartao = '   notice-warning ';
+	        }
+	        else if($status->getStatus()->getSigla() == 'd'){
+	            $strCartao = '  notice-warning ';
+	        }
+	        else if($status->getStatus()->getSigla() == 'i'){
+	            $strCartao = ' notice-warning';
+	        }
+	        
+	        
+	        echo '
+	            
+	            
+                    <div class="notice '.$strCartao.'">
+            	       <strong>'.$status->getStatus()->getNome().'</strong><br>
+                        '.$status->getMensagem().'<br>
+                        <strong>'.$status->getUsuario()->getNome().'<br>'.date('d/m/Y - H:i' ,strtotime($status->getDataMudanca())).'</strong>
+            	    </div>
+                            
+                            
+                            
+';
+	    }
+	    /*
+	     <div class="notice notice-success">
+	     <strong>Notice</strong> notice-success
+	     </div>
+	     <div class="notice notice-danger">
+	     <strong>Notice</strong> notice-danger
+	     </div>
+	     <div class="notice notice-info">
+	     <strong>Notice</strong> notice-info
+	     </div>
+	     <div class="notice notice-warning">
+	     <strong>Notice</strong> notice-warning
+	     </div>
+	     <div class="notice notice-lg">
+	     <strong>Big notice</strong> notice-lg
+	     </div>
+	     <div class="notice notice-sm">
+	     <strong>Small notice</strong> notice-sm
+	     </div>
+	     */
+	    
+	    echo '
+	        
+</div>
+	        
+	        
+	        
+                  <div class="p-4 mb-3 bg-light rounded">
+                    <h4 class="font-italic">Tarefas no Redmine</h4>
+                    <div class="container">
+                    	<div class="row">
+	        
+                    	</div>
+                    </div>
+                  </div>
+	        
+	        
+	        
+	        
+                </aside>
+            </div>';
+	    
+	    
+	    
+	    
+	    
+	    
+	}
 	public function main(){
 	    
 	    echo '
@@ -32,7 +289,7 @@ class OcorrenciaCustomController  extends OcorrenciaController {
         <div class="card-body">';
 	    
 	    if(isset($_GET['selecionar'])){
-// 	        $this->selecionar();
+	        $this->selecionar();
 	    }else if(isset($_GET['cadastrar'])){
 	        $this->telaCadastro();
 	    }
