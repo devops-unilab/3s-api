@@ -10,6 +10,7 @@ use novissimo3s\model\TipoAtividade;
 use novissimo3s\model\AreaResponsavel;
 use novissimo3s\view\ServicoView;
 use novissimo3s\dao\ServicoDAO;
+use novissimo3s\model\GrupoServico;
 
 class Importador{
     
@@ -35,19 +36,32 @@ class Importador{
             }
             $linha = explode("|", $line);
             $servico = new Servico();
+            
+            $servico->setId($linha[0]);
+            $servico->setNome($linha[1]);
+            if($servico->getId() != null){
+                $servicoDao->fillById($servico);
+            }else{
+                $servicoDao->fillByNome($servico);
+            }
+            
             $servico->setNome($linha[1]);
             $servico->setDescricao($linha[2]);
-            $servico->setTempoSla(intval($linha[4]));
+            $servico->setTempoSla(intval($linha[3]));
             
             
             $tipoAtividade = new TipoAtividade();
-            $tipoAtividade->setNome(strtolower($linha[5]));
+            $tipoAtividade->setNome(strtolower($linha[4]));
             $listaTipo[$tipoAtividade->getNome()] = $tipoAtividade;
             $servico->setTipoAtividade($tipoAtividade);
             $servico->setVisao(1);
             
+            $grupoServico = new GrupoServico();
+            $grupoServico->setNome($linha[5]);
+            $servico->setGrupoServico($grupoServico);
+            
             $areaResponsavel = new AreaResponsavel();
-            $areaResponsavel->setNome($linha[7]);
+            $areaResponsavel->setNome($linha[6]);
             if($linha[7] == null || $linha[7] == '?'){
                 $areaResponsavel->setNome("DTI");
                 $areaResponsavel->setId(1);
@@ -59,16 +73,81 @@ class Importador{
         }
 
         
-        foreach($listaServicos as $servico){
-            $servicoDao->fillByNome($servico);
+
         
+        
+        $this->showList($listaServicos);
+        
+        
+    }
+    public function showList($lista){
+        echo '
+            
+            
+            
+            
+          <div class="card mb-4">
+                <div class="card-header">
+                  Lista Servico
+                </div>
+                <div class="card-body">
+            
+            
+		<div class="table-responsive">
+			<table class="table table-bordered" id="dataTable" width="100%"
+				cellspacing="0">
+				<thead>
+					<tr>
+                        <th>ID</th>
+                        <th>Nome</th>
+                        <th>Descrição</th>
+                        <th>SLA</th>
+						<th>Tipo de Atividade</th>
+                        <th>Grupo de Serviços</th>
+						<th>Setor Responsável</th>
+
+					</tr>
+				</thead>
+				<tfoot>
+					<tr>
+                        <th>ID</th>
+                        <th>Nome</th>
+                        <th>Descrição</th>
+                        <th>SLA</th>
+						<th>Tipo de Atividade</th>
+                        <th>Grupo de Serviços</th>
+						<th>Setor Responsável</th>
+
+                        
+					</tr>
+				</tfoot>
+				<tbody>';
+        
+        foreach($lista as $element){
+
+            echo '<tr>';
+            echo '<td>'.$element->getId().'</td>';
+            echo '<td>'.$element->getNome().'</td>';
+            echo '<td>'.$element->getDescricao().'</td>';
+            echo '<td>'.$element->getTempoSla().'</td>';
+            echo '<td>'.$element->getTipoAtividade()->getNome().'</td>';
+            echo '<td>'.$element->getGrupoServico()->getNome().'</td>';
+            echo '<td>'.$element->getAreaResponsavel()->getNome().'</td>';
+            echo '</tr>';
         }
         
-        
-        $servicoview = new ServicoView();
-        $servicoview->showList($listaServicos);
-        
-        
+        echo '
+				</tbody>
+			</table>
+		</div>
+            
+            
+            
+            
+  </div>
+</div>
+            
+';
     }
     
 }
