@@ -9,10 +9,12 @@ use novissimo3s\model\Servico;
 use novissimo3s\model\TipoAtividade;
 use novissimo3s\model\AreaResponsavel;
 use novissimo3s\view\ServicoView;
+use novissimo3s\dao\ServicoDAO;
 
 class Importador{
     
     public function importar(){
+        $servicoDao = new ServicoDAO();
         $listaTipo = array();
         $listaServicos = array();
         if (($handle = fopen("catalogo.csv", "r")) == FALSE) {
@@ -56,6 +58,13 @@ class Importador{
             $listaServicos[] = $servico;
         }
 
+        
+        foreach($listaServicos as $servico){
+            $servicoDao->fillByNome($servico);
+        
+        }
+        
+        
         $servicoview = new ServicoView();
         $servicoview->showList($listaServicos);
         
