@@ -39,12 +39,15 @@ class OcorrenciaCustomView extends OcorrenciaView {
                         <option value="" selected="selected">Selecione um serviço</option>';
         foreach($listaServico as $servico){
             if($servico->getDescricao() == ""){
-                $descricao = $servico->getNome();
+                
+                echo '
+                        <option value="'.$servico->getId().'">'.$servico->getNome().'</option>';
             }else{
-                $descricao = $servico->getDescricao();
+                echo '
+                        <option value="'.$servico->getId().'">'.$servico->getDescricao().'</option>';
+                
             }
-            echo '
-                        <option value="'.$servico->getId().'">'.$descricao.'</option>';
+            
         }
         echo '
             
@@ -351,18 +354,18 @@ class OcorrenciaCustomView extends OcorrenciaView {
                 <div class="card mb-4">
                     <div class="card-body">
                         <p>Abertura: '.date("d/m/Y H:i:s" , strtotime($dataAbertura)).'</p>';
-        echo '
-                        <p>Prazo de Resolução: '.$ocorrencia->getServico()->getTempoSla();
+       
         
         $strClass = "";
         $strText = "";
         if($ocorrencia->getServico()->getTempoSla() > 1)
         {
-            echo ' Horas úteis';
+            echo '
+                        <p>Prazo de Resolução: '.$ocorrencia->getServico()->getTempoSla(). ' Horas úteis';
         }else if($ocorrencia->getServico()->getTempoSla() == 1){
-            echo ' Hora útil';
+            echo '1 Hora útil';
         }else{
-            echo 'SLA não definido.';
+            echo ' SLA não definido.';
         }
         
         

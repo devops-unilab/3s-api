@@ -18,6 +18,7 @@ use novissimo3s\model\Usuario;
 use novissimo3s\custom\dao\StatusOcorrenciaCustomDAO;
 use novissimo3s\custom\dao\MensagemForumCustomDAO;
 use novissimo3s\custom\dao\RecessoCustomDAO;
+use novissimo3s\model\Servico;
 
 class OcorrenciaCustomController  extends OcorrenciaController {
     public function fimDeSemana($data){
@@ -388,7 +389,9 @@ class OcorrenciaCustomController  extends OcorrenciaController {
 	        
 ';
 	    $servicoDao = new ServicoCustomDAO($this->dao->getConnection());
-	    $listaServico = $servicoDao->fetch();
+	    $servico = new Servico();
+	    $servico->setVisao(1);
+	    $listaServico = $servicoDao->fetchByVisao($servico);
 	    //Javascript envia esses dados pelo $.ajax
 	    $this->view->mostraFormInserir2($listaServico);
 	    

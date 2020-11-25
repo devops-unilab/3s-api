@@ -167,7 +167,7 @@ class AreaResponsavelDAO extends DAO {
                 
     public function fetchByNome(AreaResponsavel $areaResponsavel) {
         $lista = array();
-	    $nome = $areaResponsavel->getNome();
+	    $nome = '%'.$areaResponsavel->getNome().'%';
                 
         $sql = "SELECT area_responsavel.id, area_responsavel.nome, area_responsavel.descricao, area_responsavel.email FROM area_responsavel
             WHERE area_responsavel.nome like :nome";

@@ -59,7 +59,7 @@ class UsuarioController {
 
 
 
-	public function list() 
+	public function lista() 
     {
 		$list = $this->dao->fetch();
 		$this->view->showList($list);

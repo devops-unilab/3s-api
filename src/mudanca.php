@@ -21,7 +21,7 @@ spl_autoload_register('autoload');
 
 
 $dao = new DAO();
-$dao->getConexao();
+
 
 $sqls = "
     
@@ -147,7 +147,9 @@ INSERT INTO grupo_servico(id, nome) VALUES (0, 'Indefinido');
 UPDATE servico SET id_area_responsavel = 1;
 UPDATE servico SET id_grupo_servico = 0;
 UPDATE servico SET visao = 0;
-    
+UPDATE servico SET id_tipo_atividade = 0;
+DELETE FROM tipo_atividade WHERE id <> 0;
+
     
 ";
 
@@ -155,7 +157,7 @@ UPDATE servico SET visao = 0;
 $lista = explode(';', $sqls);
 foreach($lista as $statement){
     echo $statement.'<br>';
-    echo $dao->getConexao()->exec($statement);
+    echo $dao->getConnection()->exec($statement);
     echo '<hr>';
 }
 

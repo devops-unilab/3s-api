@@ -11,6 +11,9 @@ use novissimo3s\model\AreaResponsavel;
 use novissimo3s\view\ServicoView;
 use novissimo3s\dao\ServicoDAO;
 use novissimo3s\model\GrupoServico;
+use novissimo3s\dao\AreaResponsavelDAO;
+use novissimo3s\dao\GrupoServicoDAO;
+use novissimo3s\dao\TipoAtividadeDAO;
 
 class Importador{
     
@@ -34,6 +37,7 @@ class Importador{
             if($line == null){
                 continue;
             }
+
             $linha = explode("|", $line);
             $servico = new Servico();
             
@@ -41,6 +45,7 @@ class Importador{
             $servico->setNome($linha[1]);
             if($servico->getId() != null){
                 $servicoDao->fillById($servico);
+                $servico->setNome($linha[1]);
             }else{
                 $servicoDao->fillByNome($servico);
             }
@@ -51,20 +56,39 @@ class Importador{
             
             
             $tipoAtividade = new TipoAtividade();
-            $tipoAtividade->setNome(strtolower($linha[4]));
-            $listaTipo[$tipoAtividade->getNome()] = $tipoAtividade;
+            $tipoAtividade->setNome($linha[4]);
+            
+            $tipoDao = new TipoAtividadeDAO($servicoDao->getConnection());
+            $tipoDao->fillByNome($tipoAtividade);
+            if($tipoAtividade->getId() == null){
+                $tipoDao->insert($tipoAtividade);
+                $tipoAtividade->setId($tipoDao->getConnection()->lastInsertId());
+            }
             $servico->setTipoAtividade($tipoAtividade);
             $servico->setVisao(1);
             
             $grupoServico = new GrupoServico();
             $grupoServico->setNome($linha[5]);
+            
+            $grupoDao = new GrupoServicoDAO($servicoDao->getConnection());
+            $grupoDao->fillByNome($grupoServico);
+            if($grupoServico->getId() == null){
+                $grupoDao->insert($grupoServico);
+                $grupoServico->setId($grupoDao->getConnection()->lastInsertId());
+            }
+            
+            
             $servico->setGrupoServico($grupoServico);
             
             $areaResponsavel = new AreaResponsavel();
             $areaResponsavel->setNome($linha[6]);
-            if($linha[7] == null || $linha[7] == '?'){
+            
+            if($linha[6] == null || $linha[6] == ''){
                 $areaResponsavel->setNome("DTI");
                 $areaResponsavel->setId(1);
+            }else{
+                $areaDao = new AreaResponsavelDAO($servicoDao->getConnection());
+                $areaDao->fillByNome($areaResponsavel);
             }
             
             
@@ -72,7 +96,14 @@ class Importador{
             $listaServicos[] = $servico;
         }
 
-        
+        foreach($listaServicos as $servico){
+            if($servico->getId() == null){
+                $servicoDao->insert($servico);
+                $servico->setId($servicoDao->getConnection()->lastInsertId());
+            }else{
+                $servicoDao->update($servico);
+            }
+        }
 
         
         
