@@ -71,7 +71,7 @@ class OcorrenciaController {
 
 
 
-	public function list() 
+	public function fetch() 
     {
 		$list = $this->dao->fetch();
 		$this->view->showList($list);
@@ -93,7 +93,7 @@ class OcorrenciaController {
             $this->view->showInsertForm($listAreaResponsavel, $listServico, $listUsuario);
 		    return;
 		}
-		if (! ( isset ( $_POST ['id_local'] ) && isset ( $_POST ['descricao'] ) && isset ( $_POST ['campus'] ) && isset ( $_POST ['patrimonio'] ) && isset ( $_POST ['ramal'] ) && isset ( $_POST ['local'] ) && isset ( $_POST ['status'] ) && isset ( $_POST ['solucao'] ) && isset ( $_POST ['prioridade'] ) && isset ( $_POST ['avaliacao'] ) && isset ( $_POST ['email'] ) && isset ( $_POST ['id_usuario_atendente'] ) && isset ( $_POST ['id_usuario_indicado'] ) && isset ( $_POST ['anexo'] ) && isset ( $_POST ['local_sala'] ) &&  isset($_POST ['area_responsavel']) &&  isset($_POST ['servico']) &&  isset($_POST ['usuario_cliente']))) {
+		if (! ( isset ( $_POST ['id_local'] ) && isset ( $_POST ['descricao'] ) && isset ( $_POST ['campus'] ) && isset ( $_POST ['patrimonio'] ) && isset ( $_POST ['ramal'] ) && isset ( $_POST ['local'] ) && isset ( $_POST ['status'] ) && isset ( $_POST ['solucao'] ) && isset ( $_POST ['prioridade'] ) && isset ( $_POST ['avaliacao'] ) && isset ( $_POST ['email'] ) && isset ( $_POST ['id_usuario_atendente'] ) && isset ( $_POST ['id_usuario_indicado'] ) && isset ( $_FILES ['anexo'] ) && isset ( $_POST ['local_sala'] ) &&  isset($_POST ['area_responsavel']) &&  isset($_POST ['servico']) &&  isset($_POST ['usuario_cliente']))) {
 			echo '
                 <div class="alert alert-danger" role="alert">
                     Failed to register. Some field must be missing. 
@@ -102,7 +102,8 @@ class OcorrenciaController {
                 ';
 			return;
 		}
-            
+		
+        
 		$ocorrencia = new Ocorrencia ();
 		$ocorrencia->setIdLocal ( $_POST ['id_local'] );
 		$ocorrencia->setDescricao ( $_POST ['descricao'] );
@@ -117,7 +118,23 @@ class OcorrenciaController {
 		$ocorrencia->setEmail ( $_POST ['email'] );
 		$ocorrencia->setIdUsuarioAtendente ( $_POST ['id_usuario_atendente'] );
 		$ocorrencia->setIdUsuarioIndicado ( $_POST ['id_usuario_indicado'] );
-		$ocorrencia->setAnexo ( $_POST ['anexo'] );
+
+		if(!file_exists('uploads/ocorrencia/anexo/')) {
+		    mkdir('uploads/ocorrencia/anexo/', 0777, true);
+		}
+
+		if(!move_uploaded_file($_FILES['anexo']['tmp_name'], 'uploads/ocorrencia/anexo/'. $_FILES['anexo']['name']))
+		{
+		    echo '
+                <div class="alert alert-danger" role="alert">
+                    Failed to send file.
+                </div>
+		        
+                ';
+		    return;
+		}
+		
+		$ocorrencia->setAnexo ( "uploads/ocorrencia/anexo/".$_FILES ['anexo']['name'] );
 		$ocorrencia->setLocalSala ( $_POST ['local_sala'] );
 		$ocorrencia->getAreaResponsavel()->setId ( $_POST ['area_responsavel'] );
 		$ocorrencia->getServico()->setId ( $_POST ['servico'] );
@@ -155,7 +172,7 @@ class OcorrenciaController {
         
 		    
 		
-		if (! ( isset ( $_POST ['id_local'] ) && isset ( $_POST ['descricao'] ) && isset ( $_POST ['campus'] ) && isset ( $_POST ['patrimonio'] ) && isset ( $_POST ['ramal'] ) && isset ( $_POST ['local'] ) && isset ( $_POST ['status'] ) && isset ( $_POST ['solucao'] ) && isset ( $_POST ['prioridade'] ) && isset ( $_POST ['avaliacao'] ) && isset ( $_POST ['email'] ) && isset ( $_POST ['id_usuario_atendente'] ) && isset ( $_POST ['id_usuario_indicado'] ) && isset ( $_POST ['anexo'] ) && isset ( $_POST ['local_sala'] ) &&  isset($_POST ['area_responsavel']) &&  isset($_POST ['servico']) &&  isset($_POST ['usuario_cliente']))) {
+		if (! ( isset ( $_POST ['id_local'] ) && isset ( $_POST ['descricao'] ) && isset ( $_POST ['campus'] ) && isset ( $_POST ['patrimonio'] ) && isset ( $_POST ['ramal'] ) && isset ( $_POST ['local'] ) && isset ( $_POST ['status'] ) && isset ( $_POST ['solucao'] ) && isset ( $_POST ['prioridade'] ) && isset ( $_POST ['avaliacao'] ) && isset ( $_POST ['email'] ) && isset ( $_POST ['id_usuario_atendente'] ) && isset ( $_POST ['id_usuario_indicado'] ) && isset ( $_FILES ['anexo'] ) && isset ( $_POST ['local_sala'] ) &&  isset($_POST ['area_responsavel']) &&  isset($_POST ['servico']) &&  isset($_POST ['usuario_cliente']))) {
 			echo ':incompleto';
 			return;
 		}
@@ -174,7 +191,18 @@ class OcorrenciaController {
 		$ocorrencia->setEmail ( $_POST ['email'] );
 		$ocorrencia->setIdUsuarioAtendente ( $_POST ['id_usuario_atendente'] );
 		$ocorrencia->setIdUsuarioIndicado ( $_POST ['id_usuario_indicado'] );
-		$ocorrencia->setAnexo ( $_POST ['anexo'] );
+                    
+		if(!file_exists('uploads/ocorrencia/anexo/')) {
+		    mkdir('uploads/ocorrencia/anexo/', 0777, true);
+		}
+		        
+		if(!move_uploaded_file($_FILES['anexo']['tmp_name'], 'uploads/ocorrencia/anexo/'. $_FILES['anexo']['name']))
+		{
+		    echo ':falha';
+		    return;
+		}
+		    
+		$ocorrencia->setAnexo ( "uploads/ocorrencia/anexo/".$_FILES ['anexo']['name'] );
 		$ocorrencia->setLocalSala ( $_POST ['local_sala'] );
 		$ocorrencia->getAreaResponsavel()->setId ( $_POST ['area_responsavel'] );
 		$ocorrencia->getServico()->setId ( $_POST ['servico'] );
@@ -278,7 +306,7 @@ class OcorrenciaController {
 	    }else{
             $this->add();
         }
-        $this->list();
+        $this->fetch();
         
         echo '</div>';
         echo '</div>';

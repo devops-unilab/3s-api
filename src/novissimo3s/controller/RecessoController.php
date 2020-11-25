@@ -59,7 +59,7 @@ class RecessoController {
 
 
 
-	public function list() 
+	public function fetch() 
     {
 		$list = $this->dao->fetch();
 		$this->view->showList($list);
@@ -81,7 +81,8 @@ class RecessoController {
                 ';
 			return;
 		}
-            
+		
+        
 		$recesso = new Recesso ();
 		$recesso->setData ( $_POST ['data'] );
             
@@ -200,7 +201,7 @@ class RecessoController {
 	    }else{
             $this->add();
         }
-        $this->list();
+        $this->fetch();
         
         echo '</div>';
         echo '</div>';

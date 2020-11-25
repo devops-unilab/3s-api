@@ -4,8 +4,9 @@ $(document).ready(function(e) {
 	$("#insert_form_tipo_atividade").on('submit', function(e) {
 		e.preventDefault();
         $('#modalAddTipoAtividade').modal('hide');
-
+        
 		var dados = jQuery( this ).serialize();
+        
 		jQuery.ajax({
             type: "POST",
             url: "index.php?ajax=tipo_atividade",

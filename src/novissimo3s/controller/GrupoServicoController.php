@@ -59,7 +59,7 @@ class GrupoServicoController {
 
 
 
-	public function list() 
+	public function fetch() 
     {
 		$list = $this->dao->fetch();
 		$this->view->showList($list);
@@ -81,7 +81,8 @@ class GrupoServicoController {
                 ';
 			return;
 		}
-            
+		
+        
 		$grupoServico = new GrupoServico ();
 		$grupoServico->setNome ( $_POST ['nome'] );
             
@@ -200,7 +201,7 @@ class GrupoServicoController {
 	    }else{
             $this->add();
         }
-        $this->list();
+        $this->fetch();
         
         echo '</div>';
         echo '</div>';

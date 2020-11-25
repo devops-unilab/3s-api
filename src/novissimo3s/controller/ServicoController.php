@@ -71,7 +71,7 @@ class ServicoController {
 
 
 
-	public function list() 
+	public function fetch() 
     {
 		$list = $this->dao->fetch();
 		$this->view->showList($list);
@@ -102,7 +102,8 @@ class ServicoController {
                 ';
 			return;
 		}
-            
+		
+        
 		$servico = new Servico ();
 		$servico->setNome ( $_POST ['nome'] );
 		$servico->setDescricao ( $_POST ['descricao'] );
@@ -245,7 +246,7 @@ class ServicoController {
 	    }else{
             $this->add();
         }
-        $this->list();
+        $this->fetch();
         
         echo '</div>';
         echo '</div>';

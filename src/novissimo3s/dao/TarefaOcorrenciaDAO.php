@@ -210,6 +210,59 @@ class TarefaOcorrenciaDAO extends DAO {
 		return $lista;
     }
                 
+    public function fetchByOcorrencia(TarefaOcorrencia $tarefaOcorrencia) {
+        $lista = array();
+	    $ocorrencia = $tarefaOcorrencia->getOcorrencia()->getId();
+                
+        $sql = "SELECT tarefa_ocorrencia.id, tarefa_ocorrencia.tarefa, tarefa_ocorrencia.data_inclusao, ocorrencia.id as id_ocorrencia_ocorrencia, ocorrencia.id_local as id_local_ocorrencia_ocorrencia, ocorrencia.descricao as descricao_ocorrencia_ocorrencia, ocorrencia.campus as campus_ocorrencia_ocorrencia, ocorrencia.patrimonio as patrimonio_ocorrencia_ocorrencia, ocorrencia.ramal as ramal_ocorrencia_ocorrencia, ocorrencia.local as local_ocorrencia_ocorrencia, ocorrencia.status as status_ocorrencia_ocorrencia, ocorrencia.solucao as solucao_ocorrencia_ocorrencia, ocorrencia.prioridade as prioridade_ocorrencia_ocorrencia, ocorrencia.avaliacao as avaliacao_ocorrencia_ocorrencia, ocorrencia.email as email_ocorrencia_ocorrencia, ocorrencia.id_usuario_atendente as id_usuario_atendente_ocorrencia_ocorrencia, ocorrencia.id_usuario_indicado as id_usuario_indicado_ocorrencia_ocorrencia, ocorrencia.anexo as anexo_ocorrencia_ocorrencia, ocorrencia.local_sala as local_sala_ocorrencia_ocorrencia, usuario.id as id_usuario_usuario, usuario.nome as nome_usuario_usuario, usuario.email as email_usuario_usuario, usuario.login as login_usuario_usuario, usuario.senha as senha_usuario_usuario, usuario.nivel as nivel_usuario_usuario, usuario.id_setor as id_setor_usuario_usuario FROM tarefa_ocorrencia INNER JOIN ocorrencia as ocorrencia ON ocorrencia.id = tarefa_ocorrencia.id_ocorrencia INNER JOIN usuario as usuario ON usuario.id = tarefa_ocorrencia.id_usuario
+            WHERE tarefa_ocorrencia.id_ocorrencia = :ocorrencia";
+                
+        try {
+                
+            $stmt = $this->connection->prepare($sql);
+            $stmt->bindParam(":ocorrencia", $ocorrencia, PDO::PARAM_INT);
+            $stmt->execute();
+            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            foreach ( $result as $row ){
+		        $tarefaOcorrencia = new TarefaOcorrencia();
+                $tarefaOcorrencia->setId( $row ['id'] );
+                $tarefaOcorrencia->setTarefa( $row ['tarefa'] );
+                $tarefaOcorrencia->setDataInclusao( $row ['data_inclusao'] );
+                $tarefaOcorrencia->getOcorrencia()->setId( $row ['id_ocorrencia_ocorrencia'] );
+                $tarefaOcorrencia->getOcorrencia()->setIdLocal( $row ['id_local_ocorrencia_ocorrencia'] );
+                $tarefaOcorrencia->getOcorrencia()->setDescricao( $row ['descricao_ocorrencia_ocorrencia'] );
+                $tarefaOcorrencia->getOcorrencia()->setCampus( $row ['campus_ocorrencia_ocorrencia'] );
+                $tarefaOcorrencia->getOcorrencia()->setPatrimonio( $row ['patrimonio_ocorrencia_ocorrencia'] );
+                $tarefaOcorrencia->getOcorrencia()->setRamal( $row ['ramal_ocorrencia_ocorrencia'] );
+                $tarefaOcorrencia->getOcorrencia()->setLocal( $row ['local_ocorrencia_ocorrencia'] );
+                $tarefaOcorrencia->getOcorrencia()->setStatus( $row ['status_ocorrencia_ocorrencia'] );
+                $tarefaOcorrencia->getOcorrencia()->setSolucao( $row ['solucao_ocorrencia_ocorrencia'] );
+                $tarefaOcorrencia->getOcorrencia()->setPrioridade( $row ['prioridade_ocorrencia_ocorrencia'] );
+                $tarefaOcorrencia->getOcorrencia()->setAvaliacao( $row ['avaliacao_ocorrencia_ocorrencia'] );
+                $tarefaOcorrencia->getOcorrencia()->setEmail( $row ['email_ocorrencia_ocorrencia'] );
+                $tarefaOcorrencia->getOcorrencia()->setIdUsuarioAtendente( $row ['id_usuario_atendente_ocorrencia_ocorrencia'] );
+                $tarefaOcorrencia->getOcorrencia()->setIdUsuarioIndicado( $row ['id_usuario_indicado_ocorrencia_ocorrencia'] );
+                $tarefaOcorrencia->getOcorrencia()->setAnexo( $row ['anexo_ocorrencia_ocorrencia'] );
+                $tarefaOcorrencia->getOcorrencia()->setLocalSala( $row ['local_sala_ocorrencia_ocorrencia'] );
+                $tarefaOcorrencia->getUsuario()->setId( $row ['id_usuario_usuario'] );
+                $tarefaOcorrencia->getUsuario()->setNome( $row ['nome_usuario_usuario'] );
+                $tarefaOcorrencia->getUsuario()->setEmail( $row ['email_usuario_usuario'] );
+                $tarefaOcorrencia->getUsuario()->setLogin( $row ['login_usuario_usuario'] );
+                $tarefaOcorrencia->getUsuario()->setSenha( $row ['senha_usuario_usuario'] );
+                $tarefaOcorrencia->getUsuario()->setNivel( $row ['nivel_usuario_usuario'] );
+                $tarefaOcorrencia->getUsuario()->setIdSetor( $row ['id_setor_usuario_usuario'] );
+                $lista [] = $tarefaOcorrencia;
+
+	
+		    }
+    			    
+        } catch(PDOException $e) {
+            echo $e->getMessage();
+    			    
+        }
+		return $lista;
+    }
+                
     public function fetchByTarefa(TarefaOcorrencia $tarefaOcorrencia) {
         $lista = array();
 	    $tarefa = $tarefaOcorrencia->getTarefa();
@@ -221,6 +274,59 @@ class TarefaOcorrenciaDAO extends DAO {
                 
             $stmt = $this->connection->prepare($sql);
             $stmt->bindParam(":tarefa", $tarefa, PDO::PARAM_INT);
+            $stmt->execute();
+            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            foreach ( $result as $row ){
+		        $tarefaOcorrencia = new TarefaOcorrencia();
+                $tarefaOcorrencia->setId( $row ['id'] );
+                $tarefaOcorrencia->setTarefa( $row ['tarefa'] );
+                $tarefaOcorrencia->setDataInclusao( $row ['data_inclusao'] );
+                $tarefaOcorrencia->getOcorrencia()->setId( $row ['id_ocorrencia_ocorrencia'] );
+                $tarefaOcorrencia->getOcorrencia()->setIdLocal( $row ['id_local_ocorrencia_ocorrencia'] );
+                $tarefaOcorrencia->getOcorrencia()->setDescricao( $row ['descricao_ocorrencia_ocorrencia'] );
+                $tarefaOcorrencia->getOcorrencia()->setCampus( $row ['campus_ocorrencia_ocorrencia'] );
+                $tarefaOcorrencia->getOcorrencia()->setPatrimonio( $row ['patrimonio_ocorrencia_ocorrencia'] );
+                $tarefaOcorrencia->getOcorrencia()->setRamal( $row ['ramal_ocorrencia_ocorrencia'] );
+                $tarefaOcorrencia->getOcorrencia()->setLocal( $row ['local_ocorrencia_ocorrencia'] );
+                $tarefaOcorrencia->getOcorrencia()->setStatus( $row ['status_ocorrencia_ocorrencia'] );
+                $tarefaOcorrencia->getOcorrencia()->setSolucao( $row ['solucao_ocorrencia_ocorrencia'] );
+                $tarefaOcorrencia->getOcorrencia()->setPrioridade( $row ['prioridade_ocorrencia_ocorrencia'] );
+                $tarefaOcorrencia->getOcorrencia()->setAvaliacao( $row ['avaliacao_ocorrencia_ocorrencia'] );
+                $tarefaOcorrencia->getOcorrencia()->setEmail( $row ['email_ocorrencia_ocorrencia'] );
+                $tarefaOcorrencia->getOcorrencia()->setIdUsuarioAtendente( $row ['id_usuario_atendente_ocorrencia_ocorrencia'] );
+                $tarefaOcorrencia->getOcorrencia()->setIdUsuarioIndicado( $row ['id_usuario_indicado_ocorrencia_ocorrencia'] );
+                $tarefaOcorrencia->getOcorrencia()->setAnexo( $row ['anexo_ocorrencia_ocorrencia'] );
+                $tarefaOcorrencia->getOcorrencia()->setLocalSala( $row ['local_sala_ocorrencia_ocorrencia'] );
+                $tarefaOcorrencia->getUsuario()->setId( $row ['id_usuario_usuario'] );
+                $tarefaOcorrencia->getUsuario()->setNome( $row ['nome_usuario_usuario'] );
+                $tarefaOcorrencia->getUsuario()->setEmail( $row ['email_usuario_usuario'] );
+                $tarefaOcorrencia->getUsuario()->setLogin( $row ['login_usuario_usuario'] );
+                $tarefaOcorrencia->getUsuario()->setSenha( $row ['senha_usuario_usuario'] );
+                $tarefaOcorrencia->getUsuario()->setNivel( $row ['nivel_usuario_usuario'] );
+                $tarefaOcorrencia->getUsuario()->setIdSetor( $row ['id_setor_usuario_usuario'] );
+                $lista [] = $tarefaOcorrencia;
+
+	
+		    }
+    			    
+        } catch(PDOException $e) {
+            echo $e->getMessage();
+    			    
+        }
+		return $lista;
+    }
+                
+    public function fetchByUsuario(TarefaOcorrencia $tarefaOcorrencia) {
+        $lista = array();
+	    $usuario = $tarefaOcorrencia->getUsuario()->getId();
+                
+        $sql = "SELECT tarefa_ocorrencia.id, tarefa_ocorrencia.tarefa, tarefa_ocorrencia.data_inclusao, ocorrencia.id as id_ocorrencia_ocorrencia, ocorrencia.id_local as id_local_ocorrencia_ocorrencia, ocorrencia.descricao as descricao_ocorrencia_ocorrencia, ocorrencia.campus as campus_ocorrencia_ocorrencia, ocorrencia.patrimonio as patrimonio_ocorrencia_ocorrencia, ocorrencia.ramal as ramal_ocorrencia_ocorrencia, ocorrencia.local as local_ocorrencia_ocorrencia, ocorrencia.status as status_ocorrencia_ocorrencia, ocorrencia.solucao as solucao_ocorrencia_ocorrencia, ocorrencia.prioridade as prioridade_ocorrencia_ocorrencia, ocorrencia.avaliacao as avaliacao_ocorrencia_ocorrencia, ocorrencia.email as email_ocorrencia_ocorrencia, ocorrencia.id_usuario_atendente as id_usuario_atendente_ocorrencia_ocorrencia, ocorrencia.id_usuario_indicado as id_usuario_indicado_ocorrencia_ocorrencia, ocorrencia.anexo as anexo_ocorrencia_ocorrencia, ocorrencia.local_sala as local_sala_ocorrencia_ocorrencia, usuario.id as id_usuario_usuario, usuario.nome as nome_usuario_usuario, usuario.email as email_usuario_usuario, usuario.login as login_usuario_usuario, usuario.senha as senha_usuario_usuario, usuario.nivel as nivel_usuario_usuario, usuario.id_setor as id_setor_usuario_usuario FROM tarefa_ocorrencia INNER JOIN ocorrencia as ocorrencia ON ocorrencia.id = tarefa_ocorrencia.id_ocorrencia INNER JOIN usuario as usuario ON usuario.id = tarefa_ocorrencia.id_usuario
+            WHERE tarefa_ocorrencia.id_usuario = :usuario";
+                
+        try {
+                
+            $stmt = $this->connection->prepare($sql);
+            $stmt->bindParam(":usuario", $usuario, PDO::PARAM_INT);
             $stmt->execute();
             $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
             foreach ( $result as $row ){

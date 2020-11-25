@@ -71,7 +71,7 @@ class StatusOcorrenciaController {
 
 
 
-	public function list() 
+	public function fetch() 
     {
 		$list = $this->dao->fetch();
 		$this->view->showList($list);
@@ -102,7 +102,8 @@ class StatusOcorrenciaController {
                 ';
 			return;
 		}
-            
+		
+        
 		$statusOcorrencia = new StatusOcorrencia ();
 		$statusOcorrencia->setMensagem ( $_POST ['mensagem'] );
 		$statusOcorrencia->setDataMudanca ( $_POST ['data_mudanca'] );
@@ -239,7 +240,7 @@ class StatusOcorrenciaController {
 	    }else{
             $this->add();
         }
-        $this->list();
+        $this->fetch();
         
         echo '</div>';
         echo '</div>';

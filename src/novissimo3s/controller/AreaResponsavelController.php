@@ -59,7 +59,7 @@ class AreaResponsavelController {
 
 
 
-	public function list() 
+	public function fetch() 
     {
 		$list = $this->dao->fetch();
 		$this->view->showList($list);
@@ -81,7 +81,8 @@ class AreaResponsavelController {
                 ';
 			return;
 		}
-            
+		
+        
 		$areaResponsavel = new AreaResponsavel ();
 		$areaResponsavel->setNome ( $_POST ['nome'] );
 		$areaResponsavel->setDescricao ( $_POST ['descricao'] );
@@ -206,7 +207,7 @@ class AreaResponsavelController {
 	    }else{
             $this->add();
         }
-        $this->list();
+        $this->fetch();
         
         echo '</div>';
         echo '</div>';

@@ -59,7 +59,7 @@ class TipoAtividadeController {
 
 
 
-	public function list() 
+	public function fetch() 
     {
 		$list = $this->dao->fetch();
 		$this->view->showList($list);
@@ -81,7 +81,8 @@ class TipoAtividadeController {
                 ';
 			return;
 		}
-            
+		
+        
 		$tipoAtividade = new TipoAtividade ();
 		$tipoAtividade->setNome ( $_POST ['nome'] );
             
@@ -200,7 +201,7 @@ class TipoAtividadeController {
 	    }else{
             $this->add();
         }
-        $this->list();
+        $this->fetch();
         
         echo '</div>';
         echo '</div>';

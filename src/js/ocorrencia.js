@@ -1,41 +1,48 @@
 
+
 $(document).ready(function(e) {
-	
-	$("#form_enviar_ocorrencia").on('submit', function(e) {
-		
+	$("#insert_form_ocorrencia").on('submit', function(e) {
 		e.preventDefault();
         $('#modalAddOcorrencia').modal('hide');
-
-		var dados = jQuery( this ).serialize();
-		
+        
+        var dados = new FormData(this);
+        
 		jQuery.ajax({
             type: "POST",
             url: "index.php?ajax=ocorrencia",
             data: dados,
             success: function( data )
             {
-                console.log(data);
+            
+
             	if(data.split(":")[1] == 'sucesso'){
             		
             		$("#botao-modal-resposta").click(function(){
-            			window.location.href='?pagina=ocorrencia';
-            		});
-            		$("#botao-modal-resposta").click(function(){
-            			window.location.href='?pagina=ocorrencia&selecionar='+data.split(":")[2];
+            			window.location.href='?page=ocorrencia';
             		});
             		$("#textoModalResposta").text("Ocorrencia enviado com sucesso! ");                	
             		$("#modalResposta").modal("show");
-					
             		
             	}
             	else
             	{
             		
-                	$("#textoModalResposta").text("Falha ao inserir Ocorrencia, fale com o suporte. ");
-					            	
+                	$("#textoModalResposta").text("Falha ao inserir Ocorrencia, fale com o suporte. ");                	
             		$("#modalResposta").modal("show");
             	}
 
+            },
+            cache: false,
+            contentType: false,
+            processData: false,
+            xhr: function() { // Custom XMLHttpRequest
+                var myXhr = $.ajaxSettings.xhr();
+                if (myXhr.upload) { // Avalia se tem suporte a propriedade upload
+                    myXhr.upload.addEventListener('progress', function() {
+                    /* faz alguma coisa durante o progresso do upload */
+                    }, false);
+                }
+                return myXhr;
             }
         });
 		
@@ -45,14 +52,3 @@ $(document).ready(function(e) {
 	
 });
    
-
-
-$('#select-servicos').selectize({
-    create: false,
-    sortField: 'text'
-});
-
-$('#select-campus').selectize({
-    create: false,
-    sortField: 'text'
-});

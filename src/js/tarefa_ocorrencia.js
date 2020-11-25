@@ -4,8 +4,9 @@ $(document).ready(function(e) {
 	$("#insert_form_tarefa_ocorrencia").on('submit', function(e) {
 		e.preventDefault();
         $('#modalAddTarefaOcorrencia').modal('hide');
-
+        
 		var dados = jQuery( this ).serialize();
+        
 		jQuery.ajax({
             type: "POST",
             url: "index.php?ajax=tarefa_ocorrencia",

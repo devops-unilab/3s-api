@@ -4,8 +4,9 @@ $(document).ready(function(e) {
 	$("#insert_form_status_ocorrencia").on('submit', function(e) {
 		e.preventDefault();
         $('#modalAddStatusOcorrencia').modal('hide');
-
+        
 		var dados = jQuery( this ).serialize();
+        
 		jQuery.ajax({
             type: "POST",
             url: "index.php?ajax=status_ocorrencia",

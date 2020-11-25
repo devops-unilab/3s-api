@@ -1,6 +1,6 @@
 <?php
 
-use novissimo3s\dao\DAO;
+
 define("DB_INI", "../../../3s/3s_bd.ini");
 function autoload($classe) {
     
@@ -19,6 +19,7 @@ function autoload($classe) {
 }
 spl_autoload_register('autoload');
 
+use novissimo3s\dao\DAO;
 
 $dao = new DAO();
 

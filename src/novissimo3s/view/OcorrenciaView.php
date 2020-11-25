@@ -33,7 +33,7 @@ class OcorrenciaView {
         
 
 
-          <form id="insert_form_ocorrencia" class="user" method="post">
+          <form id="insert_form_ocorrencia" class="user" method="post" enctype="multipart/form-data" >
             <input type="hidden" name="enviar_ocorrencia" value="1">                
 
 
@@ -105,7 +105,7 @@ class OcorrenciaView {
 
                                         <div class="form-group">
                                             <label for="anexo">Anexo</label>
-                                            <input type="text" class="form-control"  name="anexo" id="anexo" placeholder="Anexo">
+                                            <input type="file" class="form-control"  name="anexo" id="anexo"  accept="image/png, image/jpeg">
                                         </div>
 
                                         <div class="form-group">
@@ -212,11 +212,11 @@ class OcorrenciaView {
 				</tfoot>
 				<tbody>';
             
-           foreach($lista as $element){//4823
+            foreach($lista as $element){
                 echo '<tr>';
                 echo '<td>'.$element->getId().'</td>';
                 echo '<td>'.$element->getIdLocal().'</td>';
-                echo '<td>'.strip_tags($element->getDescricao()).'</td>';
+                echo '<td>'.$element->getDescricao().'</td>';
                 echo '<td>'.$element->getCampus().'</td>';
                 echo '<td>'.$element->getAreaResponsavel().'</td>';
                 echo '<td>'.$element->getServico().'</td>';
@@ -314,7 +314,7 @@ class OcorrenciaView {
                 						</div>
                                         <div class="form-group">
                                             <label for="anexo">Anexo</label>
-                                            <input type="text" class="form-control" value="'.$selecionado->getAnexo().'"  name="anexo" id="anexo" placeholder="Anexo">
+                                            <input type="file" class="form-control" value="'.$selecionado->getAnexo().'"  name="anexo" id="anexo" placeholder="Anexo">
                 						</div>
                                         <div class="form-group">
                                             <label for="local_sala">Local Sala</label>

@@ -4,8 +4,9 @@ $(document).ready(function(e) {
 	$("#insert_form_area_responsavel").on('submit', function(e) {
 		e.preventDefault();
         $('#modalAddAreaResponsavel').modal('hide');
-
+        
 		var dados = jQuery( this ).serialize();
+        
 		jQuery.ajax({
             type: "POST",
             url: "index.php?ajax=area_responsavel",

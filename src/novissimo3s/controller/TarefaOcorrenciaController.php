@@ -67,7 +67,7 @@ class TarefaOcorrenciaController {
 
 
 
-	public function list() 
+	public function fetch() 
     {
 		$list = $this->dao->fetch();
 		$this->view->showList($list);
@@ -95,7 +95,8 @@ class TarefaOcorrenciaController {
                 ';
 			return;
 		}
-            
+		
+        
 		$tarefaOcorrencia = new TarefaOcorrencia ();
 		$tarefaOcorrencia->setTarefa ( $_POST ['tarefa'] );
 		$tarefaOcorrencia->setDataInclusao ( $_POST ['data_inclusao'] );
@@ -227,7 +228,7 @@ class TarefaOcorrenciaController {
 	    }else{
             $this->add();
         }
-        $this->list();
+        $this->fetch();
         
         echo '</div>';
         echo '</div>';

@@ -67,7 +67,7 @@ class MensagemForumController {
 
 
 
-	public function list() 
+	public function fetch() 
     {
 		$list = $this->dao->fetch();
 		$this->view->showList($list);
@@ -95,7 +95,8 @@ class MensagemForumController {
                 ';
 			return;
 		}
-            
+		
+        
 		$mensagemForum = new MensagemForum ();
 		$mensagemForum->setTipo ( $_POST ['tipo'] );
 		$mensagemForum->setMensagem ( $_POST ['mensagem'] );
@@ -230,7 +231,7 @@ class MensagemForumController {
 	    }else{
             $this->add();
         }
-        $this->list();
+        $this->fetch();
         
         echo '</div>';
         echo '</div>';

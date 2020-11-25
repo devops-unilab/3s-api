@@ -4,8 +4,9 @@ $(document).ready(function(e) {
 	$("#insert_form_mensagem_forum").on('submit', function(e) {
 		e.preventDefault();
         $('#modalAddMensagemForum').modal('hide');
-
+        
 		var dados = jQuery( this ).serialize();
+        
 		jQuery.ajax({
             type: "POST",
             url: "index.php?ajax=mensagem_forum",

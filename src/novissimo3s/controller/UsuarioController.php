@@ -59,7 +59,7 @@ class UsuarioController {
 
 
 
-	public function lista() 
+	public function fetch() 
     {
 		$list = $this->dao->fetch();
 		$this->view->showList($list);
@@ -81,7 +81,8 @@ class UsuarioController {
                 ';
 			return;
 		}
-            
+		
+        
 		$usuario = new Usuario ();
 		$usuario->setNome ( $_POST ['nome'] );
 		$usuario->setEmail ( $_POST ['email'] );
@@ -215,7 +216,7 @@ class UsuarioController {
 	    }else{
             $this->add();
         }
-        $this->list();
+        $this->fetch();
         
         echo '</div>';
         echo '</div>';

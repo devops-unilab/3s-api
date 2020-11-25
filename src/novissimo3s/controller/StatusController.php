@@ -59,7 +59,7 @@ class StatusController {
 
 
 
-	public function list() 
+	public function fetch() 
     {
 		$list = $this->dao->fetch();
 		$this->view->showList($list);
@@ -81,7 +81,8 @@ class StatusController {
                 ';
 			return;
 		}
-            
+		
+        
 		$status = new Status ();
 		$status->setSigla ( $_POST ['sigla'] );
 		$status->setNome ( $_POST ['nome'] );
@@ -203,7 +204,7 @@ class StatusController {
 	    }else{
             $this->add();
         }
-        $this->list();
+        $this->fetch();
         
         echo '</div>';
         echo '</div>';
