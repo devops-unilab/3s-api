@@ -402,6 +402,7 @@ class OcorrenciaCustomController  extends OcorrenciaController {
 	
 	
 	public function mainAjax() {
+	    echo "Teste";
 	    if(!isset($_POST['enviar_ocorrencia'])){
 	        return;
 	    }
