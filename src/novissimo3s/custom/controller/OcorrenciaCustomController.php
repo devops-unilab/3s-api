@@ -402,7 +402,6 @@ class OcorrenciaCustomController  extends OcorrenciaController {
 	
 	
 	public function mainAjax() {
-	    echo "Teste";
 	    if(!isset($_POST['enviar_ocorrencia'])){
 	        return;
 	    }
@@ -436,7 +435,23 @@ class OcorrenciaCustomController  extends OcorrenciaController {
 	        $ocorrencia->setPatrimonio ( $_POST ['patrimonio'] );
 	        $ocorrencia->setRamal ( $_POST ['ramal'] );
 	        $ocorrencia->setEmail ( $_POST ['email'] );
-	        // 	    $ocorrencia->setAnexo ( $_POST ['anexo'] );
+	        
+	        if(!file_exists('uploads/ocorrencia/anexo/')) {
+	            mkdir('uploads/ocorrencia/anexo/', 0777, true);
+	        }
+	        
+	        if($_FILES['anexo']['tmp_name'] != null){
+	            if(!move_uploaded_file($_FILES['anexo']['tmp_name'], 'uploads/ocorrencia/anexo/'. $_FILES['anexo']['name']))
+    	        {
+    	            echo ':falha';
+    	            return;
+    	        }
+    	        $ocorrencia->setAnexo ( "uploads/ocorrencia/anexo/".$_FILES ['anexo']['name'] );
+	        }
+	        else{
+	            echo "Arquivo foi nulo";
+	        }
+	        
 	        $ocorrencia->setLocalSala ( $_POST ['local_sala'] );
 	        
 	        $ocorrencia->getServico()->setId ( $_POST ['servico'] );
