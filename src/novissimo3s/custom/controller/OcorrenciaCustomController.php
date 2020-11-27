@@ -448,9 +448,6 @@ class OcorrenciaCustomController  extends OcorrenciaController {
     	        }
     	        $ocorrencia->setAnexo ( "uploads/ocorrencia/anexo/".$_FILES ['anexo']['name'] );
 	        }
-	        else{
-	            echo "Arquivo foi nulo";
-	        }
 	        
 	        $ocorrencia->setLocalSala ( $_POST ['local_sala'] );
 	        
