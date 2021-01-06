@@ -7,10 +7,7 @@
  */
 
 namespace novissimo3s\controller;
-
 use novissimo3s\dao\GrupoServicoDAO;
-
-
 use novissimo3s\model\GrupoServico;
 use novissimo3s\view\GrupoServicoView;
 
@@ -81,12 +78,10 @@ class GrupoServicoController {
                 ';
 			return;
 		}
-		
-        
 		$grupoServico = new GrupoServico ();
 		$grupoServico->setNome ( $_POST ['nome'] );
             
-		if ($this->dao->insert ( $grupoServico ))
+		if ($this->dao->insert ($grupoServico ))
         {
 			echo '
 
@@ -185,13 +180,13 @@ class GrupoServicoController {
     public function main(){
         
         if (isset($_GET['select'])){
-            echo '<div class="row justify-content-center">';
+            echo '<div class="row">';
                 $this->select();
             echo '</div>';
             return;
         }
         echo '
-		<div class="row justify-content-center">';
+		<div class="row">';
         echo '<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">';
         
         if(isset($_GET['edit'])){
@@ -224,7 +219,7 @@ class GrupoServicoController {
 	    $selected->setId($_GET['select']);
 	        
         $this->dao->fillById($selected);
-            
+
         echo '<div class="col-xl-7 col-lg-7 col-md-12 col-sm-12">';
 	    $this->view->showSelected($selected);
         echo '</div>';

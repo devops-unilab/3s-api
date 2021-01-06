@@ -11,7 +11,6 @@ use PDO;
 use PDOException;
 use novissimo3s\model\TipoAtividade;
 
-
 class TipoAtividadeDAO extends DAO {
     
     
@@ -70,7 +69,7 @@ class TipoAtividadeDAO extends DAO {
 		} catch(PDOException $e) {
 			echo '{"error":{"text":'. $e->getMessage() .'}}';
 		}
-
+            
     }
 
 	public function delete(TipoAtividade $tipoAtividade){

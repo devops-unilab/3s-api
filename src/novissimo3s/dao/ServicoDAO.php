@@ -11,7 +11,6 @@ use PDO;
 use PDOException;
 use novissimo3s\model\Servico;
 
-
 class ServicoDAO extends DAO {
     
     
@@ -79,7 +78,7 @@ class ServicoDAO extends DAO {
             
     }
     public function insertWithPK(Servico $servico){
-        $sql = "INSERT INTO servico(id, nome, descricao, id_tipo_atividade_tipo_atividade, tempo_sla, visao, id_area_responsavel_area_responsavel, id_grupo_servico_grupo_servico) VALUES (:id, :nome, :descricao, :tipoAtividade, :tempoSla, :visao, :areaResponsavel, :grupoServico);";
+        $sql = "INSERT INTO servico(id, nome, descricao, id_tipo_atividade, tempo_sla, visao, id_area_responsavel, id_grupo_servico) VALUES (:id, :nome, :descricao, :tipoAtividade, :tempoSla, :visao, :areaResponsavel, :grupoServico);";
 		$id = $servico->getId();
 		$nome = $servico->getNome();
 		$descricao = $servico->getDescricao();
@@ -103,7 +102,7 @@ class ServicoDAO extends DAO {
 		} catch(PDOException $e) {
 			echo '{"error":{"text":'. $e->getMessage() .'}}';
 		}
-
+            
     }
 
 	public function delete(Servico $servico){

@@ -7,22 +7,10 @@
  */
 
 namespace novissimo3s\controller;
-
 use novissimo3s\dao\OcorrenciaDAO;
-
-
 use novissimo3s\dao\AreaResponsavelDAO;
-
-
-
 use novissimo3s\dao\ServicoDAO;
-
-
-
 use novissimo3s\dao\UsuarioDAO;
-
-
-
 use novissimo3s\model\Ocorrencia;
 use novissimo3s\view\OcorrenciaView;
 
@@ -81,8 +69,8 @@ class OcorrenciaController {
 	public function add() {
             
         if(!isset($_POST['enviar_ocorrencia'])){
-            $arearesponsavelDao = new AreaResponsavelDAO($this->dao->getConnection());
-            $listAreaResponsavel = $arearesponsavelDao->fetch();
+            $areaResponsavelDao = new AreaResponsavelDAO($this->dao->getConnection());
+            $listAreaResponsavel = $areaResponsavelDao->fetch();
 
             $servicoDao = new ServicoDAO($this->dao->getConnection());
             $listServico = $servicoDao->fetch();
@@ -102,8 +90,6 @@ class OcorrenciaController {
                 ';
 			return;
 		}
-		
-        
 		$ocorrencia = new Ocorrencia ();
 		$ocorrencia->setIdLocal ( $_POST ['id_local'] );
 		$ocorrencia->setDescricao ( $_POST ['descricao'] );
@@ -119,28 +105,30 @@ class OcorrenciaController {
 		$ocorrencia->setIdUsuarioAtendente ( $_POST ['id_usuario_atendente'] );
 		$ocorrencia->setIdUsuarioIndicado ( $_POST ['id_usuario_indicado'] );
 
-		if(!file_exists('uploads/ocorrencia/anexo/')) {
-		    mkdir('uploads/ocorrencia/anexo/', 0777, true);
-		}
+        if($_FILES['anexo']['name'] != null){
 
-		if(!move_uploaded_file($_FILES['anexo']['tmp_name'], 'uploads/ocorrencia/anexo/'. $_FILES['anexo']['name']))
-		{
-		    echo '
-                <div class="alert alert-danger" role="alert">
-                    Failed to send file.
-                </div>
-		        
-                ';
-		    return;
-		}
-		
-		$ocorrencia->setAnexo ( "uploads/ocorrencia/anexo/".$_FILES ['anexo']['name'] );
+            if(!file_exists('uploads/ocorrencia/anexo/')) {
+    		    mkdir('uploads/ocorrencia/anexo/', 0777, true);
+    		}
+    
+    		if(!move_uploaded_file($_FILES['anexo']['tmp_name'], 'uploads/ocorrencia/anexo/'. $_FILES['anexo']['name']))
+    		{
+    		    echo '
+                    <div class="alert alert-danger" role="alert">
+                        Failed to send file.
+                    </div>
+    		        
+                    ';
+    		    return;
+    		}
+            $ocorrencia->setAnexo ( "uploads/ocorrencia/anexo/".$_FILES ['anexo']['name'] );
+        }
 		$ocorrencia->setLocalSala ( $_POST ['local_sala'] );
 		$ocorrencia->getAreaResponsavel()->setId ( $_POST ['area_responsavel'] );
 		$ocorrencia->getServico()->setId ( $_POST ['servico'] );
 		$ocorrencia->getUsuarioCliente()->setId ( $_POST ['usuario_cliente'] );
             
-		if ($this->dao->insert ( $ocorrencia ))
+		if ($this->dao->insert ($ocorrencia ))
         {
 			echo '
 
@@ -191,18 +179,18 @@ class OcorrenciaController {
 		$ocorrencia->setEmail ( $_POST ['email'] );
 		$ocorrencia->setIdUsuarioAtendente ( $_POST ['id_usuario_atendente'] );
 		$ocorrencia->setIdUsuarioIndicado ( $_POST ['id_usuario_indicado'] );
-                    
-		if(!file_exists('uploads/ocorrencia/anexo/')) {
-		    mkdir('uploads/ocorrencia/anexo/', 0777, true);
-		}
-		        
-		if(!move_uploaded_file($_FILES['anexo']['tmp_name'], 'uploads/ocorrencia/anexo/'. $_FILES['anexo']['name']))
-		{
-		    echo ':falha';
-		    return;
-		}
-		    
-		$ocorrencia->setAnexo ( "uploads/ocorrencia/anexo/".$_FILES ['anexo']['name'] );
+        if($_FILES['anexo']['name'] != null){
+    		if(!file_exists('uploads/ocorrencia/anexo/')) {
+    		    mkdir('uploads/ocorrencia/anexo/', 0777, true);
+    		}
+    		        
+    		if(!move_uploaded_file($_FILES['anexo']['tmp_name'], 'uploads/ocorrencia/anexo/'. $_FILES['anexo']['name']))
+    		{
+    		    echo ':falha';
+    		    return;
+    		}
+            $ocorrencia->setAnexo ( "uploads/ocorrencia/anexo/".$_FILES ['anexo']['name'] );
+        }
 		$ocorrencia->setLocalSala ( $_POST ['local_sala'] );
 		$ocorrencia->getAreaResponsavel()->setId ( $_POST ['area_responsavel'] );
 		$ocorrencia->getServico()->setId ( $_POST ['servico'] );
@@ -290,13 +278,13 @@ class OcorrenciaController {
     public function main(){
         
         if (isset($_GET['select'])){
-            echo '<div class="row justify-content-center">';
+            echo '<div class="row">';
                 $this->select();
             echo '</div>';
             return;
         }
         echo '
-		<div class="row justify-content-center">';
+		<div class="row">';
         echo '<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">';
         
         if(isset($_GET['edit'])){
@@ -329,7 +317,7 @@ class OcorrenciaController {
 	    $selected->setId($_GET['select']);
 	        
         $this->dao->fillById($selected);
-            
+
         echo '<div class="col-xl-7 col-lg-7 col-md-12 col-sm-12">';
 	    $this->view->showSelected($selected);
         echo '</div>';

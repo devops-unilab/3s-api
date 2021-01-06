@@ -11,7 +11,6 @@ use PDO;
 use PDOException;
 use novissimo3s\model\MensagemForum;
 
-
 class MensagemForumDAO extends DAO {
     
     
@@ -72,7 +71,7 @@ class MensagemForumDAO extends DAO {
             
     }
     public function insertWithPK(MensagemForum $mensagemForum){
-        $sql = "INSERT INTO mensagem_forum(id, id_ocorrencia_ocorrencia, tipo, mensagem, id_usuario_usuario, data_envio) VALUES (:id, :ocorrencia, :tipo, :mensagem, :usuario, :dataEnvio);";
+        $sql = "INSERT INTO mensagem_forum(id, id_ocorrencia, tipo, mensagem, id_usuario, data_envio) VALUES (:id, :ocorrencia, :tipo, :mensagem, :usuario, :dataEnvio);";
 		$id = $mensagemForum->getId();
 		$ocorrencia = $mensagemForum->getOcorrencia()->getId();
 		$tipo = $mensagemForum->getTipo();
@@ -92,7 +91,7 @@ class MensagemForumDAO extends DAO {
 		} catch(PDOException $e) {
 			echo '{"error":{"text":'. $e->getMessage() .'}}';
 		}
-
+            
     }
 
 	public function delete(MensagemForum $mensagemForum){

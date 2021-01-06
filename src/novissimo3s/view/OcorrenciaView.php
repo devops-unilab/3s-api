@@ -10,7 +10,6 @@ namespace novissimo3s\view;
 use novissimo3s\model\Ocorrencia;
 
 
-
 class OcorrenciaView {
     public function showInsertForm($listaAreaResponsavel, $listaServico, $listaUsuarioCliente) {
 		echo '
@@ -30,9 +29,6 @@ class OcorrenciaView {
         </button>
       </div>
       <div class="modal-body">
-        
-
-
           <form id="insert_form_ocorrencia" class="user" method="post" enctype="multipart/form-data" >
             <input type="hidden" name="enviar_ocorrencia" value="1">                
 
@@ -176,7 +172,7 @@ class OcorrenciaView {
                                             
                                             
 
-          <div class="card mb-4">
+          <div class="card">
                 <div class="card-header">
                   Lista Ocorrencia
                 </div>
@@ -249,17 +245,14 @@ class OcorrenciaView {
 		echo '
 	    
 	    
-	    
-				<div class="card o-hidden border-0 shadow-lg my-5">
-					<div class="card-body p-0">
-						<div class="row">
-	    
-							<div class="col-lg-12">
-								<div class="p-5">
-									<div class="text-center">
-										<h1 class="h4 text-gray-900 mb-4"> Edit Ocorrencia</h1>
-									</div>
-						              <form class="user" method="post">
+
+<div class="card o-hidden border-0 shadow-lg mb-4">
+    <div class="card">
+        <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+            <h6 class="m-0 font-weight-bold text-primary">Edit Ocorrencia</h6>
+        </div>
+        <div class="card-body">
+            <form class="user" method="post" id="edit_form_ocorrencia">
                                         <div class="form-group">
                                             <label for="id_local">Id Local</label>
                                             <input type="number" class="form-control" value="'.$selecionado->getIdLocal().'"  name="id_local" id="id_local" placeholder="Id Local">
@@ -356,19 +349,20 @@ class OcorrenciaView {
         echo '
                                           </select>
                 						</div>
-                                        <input type="submit" class="btn btn-primary btn-user btn-block" value="Alterar" name="edit_ocorrencia">
-                                        <hr>
-                                            
-						              </form>
-                                            
-								</div>
-							</div>
-						</div>
-					</div>
-                                            
-                                            
-                                            
-	</div>';
+                <input type="hidden" value="1" name="edit_ocorrencia">
+                </form>
+
+        </div>
+        <div class="modal-footer">
+            <button form="edit_form_ocorrencia" type="submit" class="btn btn-primary">Cadastrar</button>
+        </div>
+    </div>
+</div>
+
+	    
+
+										
+						              ';
 	}
 
 
@@ -378,8 +372,8 @@ class OcorrenciaView {
         public function showSelected(Ocorrencia $ocorrencia){
             echo '
             
-	<div class="card o-hidden border-0 shadow-lg my-5">
-        <div class="card mb-4">
+	<div class="card o-hidden border-0 shadow-lg">
+        <div class="card">
             <div class="card-header">
                   Ocorrencia selecionado
             </div>
@@ -419,7 +413,7 @@ class OcorrenciaView {
         
         
         
-				<div class="card o-hidden border-0 shadow-lg my-5">
+				<div class="card o-hidden border-0 shadow-lg">
 					<div class="card-body p-0">
 						<!-- Nested Row within Card Body -->
 						<div class="row">

@@ -11,7 +11,6 @@ use PDO;
 use PDOException;
 use novissimo3s\model\Ocorrencia;
 
-
 class OcorrenciaDAO extends DAO {
     
     
@@ -134,7 +133,7 @@ class OcorrenciaDAO extends DAO {
             
     }
     public function insertWithPK(Ocorrencia $ocorrencia){
-        $sql = "INSERT INTO ocorrencia(id, id_area_responsavel_area_responsavel, id_servico_servico, id_local, id_usuario_usuario_cliente, descricao, campus, patrimonio, ramal, local, status, solucao, prioridade, avaliacao, email, id_usuario_atendente, id_usuario_indicado, anexo, local_sala) VALUES (:id, :areaResponsavel, :servico, :idLocal, :usuarioCliente, :descricao, :campus, :patrimonio, :ramal, :local, :status, :solucao, :prioridade, :avaliacao, :email, :idUsuarioAtendente, :idUsuarioIndicado, :anexo, :localSala);";
+        $sql = "INSERT INTO ocorrencia(id, id_area_responsavel, id_servico, id_local, id_usuario_cliente, descricao, campus, patrimonio, ramal, local, status, solucao, prioridade, avaliacao, email, id_usuario_atendente, id_usuario_indicado, anexo, local_sala) VALUES (:id, :areaResponsavel, :servico, :idLocal, :usuarioCliente, :descricao, :campus, :patrimonio, :ramal, :local, :status, :solucao, :prioridade, :avaliacao, :email, :idUsuarioAtendente, :idUsuarioIndicado, :anexo, :localSala);";
 		$id = $ocorrencia->getId();
 		$areaResponsavel = $ocorrencia->getAreaResponsavel()->getId();
 		$servico = $ocorrencia->getServico()->getId();
@@ -180,7 +179,7 @@ class OcorrenciaDAO extends DAO {
 		} catch(PDOException $e) {
 			echo '{"error":{"text":'. $e->getMessage() .'}}';
 		}
-
+            
     }
 
 	public function delete(Ocorrencia $ocorrencia){

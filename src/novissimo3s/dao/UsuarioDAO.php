@@ -11,7 +11,6 @@ use PDO;
 use PDOException;
 use novissimo3s\model\Usuario;
 
-
 class UsuarioDAO extends DAO {
     
     
@@ -105,7 +104,7 @@ class UsuarioDAO extends DAO {
 		} catch(PDOException $e) {
 			echo '{"error":{"text":'. $e->getMessage() .'}}';
 		}
-
+            
     }
 
 	public function delete(Usuario $usuario){

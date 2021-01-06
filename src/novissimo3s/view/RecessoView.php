@@ -10,7 +10,6 @@ namespace novissimo3s\view;
 use novissimo3s\model\Recesso;
 
 
-
 class RecessoView {
     public function showInsertForm() {
 		echo '
@@ -30,9 +29,6 @@ class RecessoView {
         </button>
       </div>
       <div class="modal-body">
-        
-
-
           <form id="insert_form_recesso" class="user" method="post">
             <input type="hidden" name="enviar_recesso" value="1">                
 
@@ -70,7 +66,7 @@ class RecessoView {
                                             
                                             
 
-          <div class="card mb-4">
+          <div class="card">
                 <div class="card-header">
                   Lista Recesso
                 </div>
@@ -128,34 +124,32 @@ class RecessoView {
 		echo '
 	    
 	    
-	    
-				<div class="card o-hidden border-0 shadow-lg my-5">
-					<div class="card-body p-0">
-						<div class="row">
-	    
-							<div class="col-lg-12">
-								<div class="p-5">
-									<div class="text-center">
-										<h1 class="h4 text-gray-900 mb-4"> Edit Recesso</h1>
-									</div>
-						              <form class="user" method="post">
+
+<div class="card o-hidden border-0 shadow-lg mb-4">
+    <div class="card">
+        <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+            <h6 class="m-0 font-weight-bold text-primary">Edit Recesso</h6>
+        </div>
+        <div class="card-body">
+            <form class="user" method="post" id="edit_form_recesso">
                                         <div class="form-group">
                                             <label for="data">Data</label>
                                             <input type="date" class="form-control" value="'.$selecionado->getData().'"  name="data" id="data" placeholder="Data">
                 						</div>
-                                        <input type="submit" class="btn btn-primary btn-user btn-block" value="Alterar" name="edit_recesso">
-                                        <hr>
-                                            
-						              </form>
-                                            
-								</div>
-							</div>
-						</div>
-					</div>
-                                            
-                                            
-                                            
-	</div>';
+                <input type="hidden" value="1" name="edit_recesso">
+                </form>
+
+        </div>
+        <div class="modal-footer">
+            <button form="edit_form_recesso" type="submit" class="btn btn-primary">Cadastrar</button>
+        </div>
+    </div>
+</div>
+
+	    
+
+										
+						              ';
 	}
 
 
@@ -165,8 +159,8 @@ class RecessoView {
         public function showSelected(Recesso $recesso){
             echo '
             
-	<div class="card o-hidden border-0 shadow-lg my-5">
-        <div class="card mb-4">
+	<div class="card o-hidden border-0 shadow-lg">
+        <div class="card">
             <div class="card-header">
                   Recesso selecionado
             </div>
@@ -189,7 +183,7 @@ class RecessoView {
         
         
         
-				<div class="card o-hidden border-0 shadow-lg my-5">
+				<div class="card o-hidden border-0 shadow-lg">
 					<div class="card-body p-0">
 						<!-- Nested Row within Card Body -->
 						<div class="row">

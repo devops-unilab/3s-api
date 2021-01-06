@@ -11,7 +11,6 @@ use PDO;
 use PDOException;
 use novissimo3s\model\TarefaOcorrencia;
 
-
 class TarefaOcorrenciaDAO extends DAO {
     
     
@@ -67,7 +66,7 @@ class TarefaOcorrenciaDAO extends DAO {
             
     }
     public function insertWithPK(TarefaOcorrencia $tarefaOcorrencia){
-        $sql = "INSERT INTO tarefa_ocorrencia(id, id_ocorrencia_ocorrencia, tarefa, id_usuario_usuario, data_inclusao) VALUES (:id, :ocorrencia, :tarefa, :usuario, :dataInclusao);";
+        $sql = "INSERT INTO tarefa_ocorrencia(id, id_ocorrencia, tarefa, id_usuario, data_inclusao) VALUES (:id, :ocorrencia, :tarefa, :usuario, :dataInclusao);";
 		$id = $tarefaOcorrencia->getId();
 		$ocorrencia = $tarefaOcorrencia->getOcorrencia()->getId();
 		$tarefa = $tarefaOcorrencia->getTarefa();
@@ -85,7 +84,7 @@ class TarefaOcorrenciaDAO extends DAO {
 		} catch(PDOException $e) {
 			echo '{"error":{"text":'. $e->getMessage() .'}}';
 		}
-
+            
     }
 
 	public function delete(TarefaOcorrencia $tarefaOcorrencia){

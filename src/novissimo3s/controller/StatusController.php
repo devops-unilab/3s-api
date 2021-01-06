@@ -7,10 +7,7 @@
  */
 
 namespace novissimo3s\controller;
-
 use novissimo3s\dao\StatusDAO;
-
-
 use novissimo3s\model\Status;
 use novissimo3s\view\StatusView;
 
@@ -81,13 +78,11 @@ class StatusController {
                 ';
 			return;
 		}
-		
-        
 		$status = new Status ();
 		$status->setSigla ( $_POST ['sigla'] );
 		$status->setNome ( $_POST ['nome'] );
             
-		if ($this->dao->insert ( $status ))
+		if ($this->dao->insert ($status ))
         {
 			echo '
 
@@ -188,13 +183,13 @@ class StatusController {
     public function main(){
         
         if (isset($_GET['select'])){
-            echo '<div class="row justify-content-center">';
+            echo '<div class="row">';
                 $this->select();
             echo '</div>';
             return;
         }
         echo '
-		<div class="row justify-content-center">';
+		<div class="row">';
         echo '<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">';
         
         if(isset($_GET['edit'])){
@@ -227,7 +222,7 @@ class StatusController {
 	    $selected->setId($_GET['select']);
 	        
         $this->dao->fillById($selected);
-            
+
         echo '<div class="col-xl-7 col-lg-7 col-md-12 col-sm-12">';
 	    $this->view->showSelected($selected);
         echo '</div>';

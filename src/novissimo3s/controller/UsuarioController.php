@@ -7,10 +7,7 @@
  */
 
 namespace novissimo3s\controller;
-
 use novissimo3s\dao\UsuarioDAO;
-
-
 use novissimo3s\model\Usuario;
 use novissimo3s\view\UsuarioView;
 
@@ -81,8 +78,6 @@ class UsuarioController {
                 ';
 			return;
 		}
-		
-        
 		$usuario = new Usuario ();
 		$usuario->setNome ( $_POST ['nome'] );
 		$usuario->setEmail ( $_POST ['email'] );
@@ -91,7 +86,7 @@ class UsuarioController {
 		$usuario->setNivel ( $_POST ['nivel'] );
 		$usuario->setIdSetor ( $_POST ['id_setor'] );
             
-		if ($this->dao->insert ( $usuario ))
+		if ($this->dao->insert ($usuario ))
         {
 			echo '
 
@@ -200,13 +195,13 @@ class UsuarioController {
     public function main(){
         
         if (isset($_GET['select'])){
-            echo '<div class="row justify-content-center">';
+            echo '<div class="row">';
                 $this->select();
             echo '</div>';
             return;
         }
         echo '
-		<div class="row justify-content-center">';
+		<div class="row">';
         echo '<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">';
         
         if(isset($_GET['edit'])){
@@ -239,7 +234,7 @@ class UsuarioController {
 	    $selected->setId($_GET['select']);
 	        
         $this->dao->fillById($selected);
-            
+
         echo '<div class="col-xl-7 col-lg-7 col-md-12 col-sm-12">';
 	    $this->view->showSelected($selected);
         echo '</div>';

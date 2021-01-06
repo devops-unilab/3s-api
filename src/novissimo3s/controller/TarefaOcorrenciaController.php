@@ -7,18 +7,9 @@
  */
 
 namespace novissimo3s\controller;
-
 use novissimo3s\dao\TarefaOcorrenciaDAO;
-
-
 use novissimo3s\dao\OcorrenciaDAO;
-
-
-
 use novissimo3s\dao\UsuarioDAO;
-
-
-
 use novissimo3s\model\TarefaOcorrencia;
 use novissimo3s\view\TarefaOcorrenciaView;
 
@@ -95,15 +86,13 @@ class TarefaOcorrenciaController {
                 ';
 			return;
 		}
-		
-        
 		$tarefaOcorrencia = new TarefaOcorrencia ();
 		$tarefaOcorrencia->setTarefa ( $_POST ['tarefa'] );
 		$tarefaOcorrencia->setDataInclusao ( $_POST ['data_inclusao'] );
 		$tarefaOcorrencia->getOcorrencia()->setId ( $_POST ['ocorrencia'] );
 		$tarefaOcorrencia->getUsuario()->setId ( $_POST ['usuario'] );
             
-		if ($this->dao->insert ( $tarefaOcorrencia ))
+		if ($this->dao->insert ($tarefaOcorrencia ))
         {
 			echo '
 
@@ -212,13 +201,13 @@ class TarefaOcorrenciaController {
     public function main(){
         
         if (isset($_GET['select'])){
-            echo '<div class="row justify-content-center">';
+            echo '<div class="row">';
                 $this->select();
             echo '</div>';
             return;
         }
         echo '
-		<div class="row justify-content-center">';
+		<div class="row">';
         echo '<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">';
         
         if(isset($_GET['edit'])){
@@ -251,7 +240,7 @@ class TarefaOcorrenciaController {
 	    $selected->setId($_GET['select']);
 	        
         $this->dao->fillById($selected);
-            
+
         echo '<div class="col-xl-7 col-lg-7 col-md-12 col-sm-12">';
 	    $this->view->showSelected($selected);
         echo '</div>';

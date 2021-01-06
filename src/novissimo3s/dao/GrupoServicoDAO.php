@@ -11,7 +11,6 @@ use PDO;
 use PDOException;
 use novissimo3s\model\GrupoServico;
 
-
 class GrupoServicoDAO extends DAO {
     
     
@@ -70,7 +69,7 @@ class GrupoServicoDAO extends DAO {
 		} catch(PDOException $e) {
 			echo '{"error":{"text":'. $e->getMessage() .'}}';
 		}
-
+            
     }
 
 	public function delete(GrupoServico $grupoServico){

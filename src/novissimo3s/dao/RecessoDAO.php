@@ -11,7 +11,6 @@ use PDO;
 use PDOException;
 use novissimo3s\model\Recesso;
 
-
 class RecessoDAO extends DAO {
     
     
@@ -70,7 +69,7 @@ class RecessoDAO extends DAO {
 		} catch(PDOException $e) {
 			echo '{"error":{"text":'. $e->getMessage() .'}}';
 		}
-
+            
     }
 
 	public function delete(Recesso $recesso){

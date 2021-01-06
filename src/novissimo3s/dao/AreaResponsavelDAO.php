@@ -11,7 +11,6 @@ use PDO;
 use PDOException;
 use novissimo3s\model\AreaResponsavel;
 
-
 class AreaResponsavelDAO extends DAO {
     
     
@@ -84,7 +83,7 @@ class AreaResponsavelDAO extends DAO {
 		} catch(PDOException $e) {
 			echo '{"error":{"text":'. $e->getMessage() .'}}';
 		}
-
+            
     }
 
 	public function delete(AreaResponsavel $areaResponsavel){

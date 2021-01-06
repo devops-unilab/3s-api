@@ -11,7 +11,6 @@ use PDO;
 use PDOException;
 use novissimo3s\model\Status;
 
-
 class StatusDAO extends DAO {
     
     
@@ -77,7 +76,7 @@ class StatusDAO extends DAO {
 		} catch(PDOException $e) {
 			echo '{"error":{"text":'. $e->getMessage() .'}}';
 		}
-
+            
     }
 
 	public function delete(Status $status){

@@ -11,7 +11,6 @@ use PDO;
 use PDOException;
 use novissimo3s\model\StatusOcorrencia;
 
-
 class StatusOcorrenciaDAO extends DAO {
     
     
@@ -69,7 +68,7 @@ class StatusOcorrenciaDAO extends DAO {
             
     }
     public function insertWithPK(StatusOcorrencia $statusOcorrencia){
-        $sql = "INSERT INTO status_ocorrencia(id, id_ocorrencia_ocorrencia, id_status_status, mensagem, id_usuario_usuario, data_mudanca) VALUES (:id, :ocorrencia, :status, :mensagem, :usuario, :dataMudanca);";
+        $sql = "INSERT INTO status_ocorrencia(id, id_ocorrencia, id_status, mensagem, id_usuario, data_mudanca) VALUES (:id, :ocorrencia, :status, :mensagem, :usuario, :dataMudanca);";
 		$id = $statusOcorrencia->getId();
 		$ocorrencia = $statusOcorrencia->getOcorrencia()->getId();
 		$status = $statusOcorrencia->getStatus()->getId();
@@ -89,7 +88,7 @@ class StatusOcorrenciaDAO extends DAO {
 		} catch(PDOException $e) {
 			echo '{"error":{"text":'. $e->getMessage() .'}}';
 		}
-
+            
     }
 
 	public function delete(StatusOcorrencia $statusOcorrencia){

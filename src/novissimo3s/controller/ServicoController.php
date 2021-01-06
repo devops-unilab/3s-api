@@ -7,22 +7,10 @@
  */
 
 namespace novissimo3s\controller;
-
 use novissimo3s\dao\ServicoDAO;
-
-
 use novissimo3s\dao\TipoAtividadeDAO;
-
-
-
 use novissimo3s\dao\AreaResponsavelDAO;
-
-
-
 use novissimo3s\dao\GrupoServicoDAO;
-
-
-
 use novissimo3s\model\Servico;
 use novissimo3s\view\ServicoView;
 
@@ -81,14 +69,14 @@ class ServicoController {
 	public function add() {
             
         if(!isset($_POST['enviar_servico'])){
-            $tipoatividadeDao = new TipoAtividadeDAO($this->dao->getConnection());
-            $listTipoAtividade = $tipoatividadeDao->fetch();
+            $tipoAtividadeDao = new TipoAtividadeDAO($this->dao->getConnection());
+            $listTipoAtividade = $tipoAtividadeDao->fetch();
 
-            $arearesponsavelDao = new AreaResponsavelDAO($this->dao->getConnection());
-            $listAreaResponsavel = $arearesponsavelDao->fetch();
+            $areaResponsavelDao = new AreaResponsavelDAO($this->dao->getConnection());
+            $listAreaResponsavel = $areaResponsavelDao->fetch();
 
-            $gruposervicoDao = new GrupoServicoDAO($this->dao->getConnection());
-            $listGrupoServico = $gruposervicoDao->fetch();
+            $grupoServicoDao = new GrupoServicoDAO($this->dao->getConnection());
+            $listGrupoServico = $grupoServicoDao->fetch();
 
             $this->view->showInsertForm($listTipoAtividade, $listAreaResponsavel, $listGrupoServico);
 		    return;
@@ -102,8 +90,6 @@ class ServicoController {
                 ';
 			return;
 		}
-		
-        
 		$servico = new Servico ();
 		$servico->setNome ( $_POST ['nome'] );
 		$servico->setDescricao ( $_POST ['descricao'] );
@@ -113,7 +99,7 @@ class ServicoController {
 		$servico->getAreaResponsavel()->setId ( $_POST ['area_responsavel'] );
 		$servico->getGrupoServico()->setId ( $_POST ['grupo_servico'] );
             
-		if ($this->dao->insert ( $servico ))
+		if ($this->dao->insert ($servico ))
         {
 			echo '
 
@@ -230,13 +216,13 @@ class ServicoController {
     public function main(){
         
         if (isset($_GET['select'])){
-            echo '<div class="row justify-content-center">';
+            echo '<div class="row">';
                 $this->select();
             echo '</div>';
             return;
         }
         echo '
-		<div class="row justify-content-center">';
+		<div class="row">';
         echo '<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">';
         
         if(isset($_GET['edit'])){
@@ -269,7 +255,7 @@ class ServicoController {
 	    $selected->setId($_GET['select']);
 	        
         $this->dao->fillById($selected);
-            
+
         echo '<div class="col-xl-7 col-lg-7 col-md-12 col-sm-12">';
 	    $this->view->showSelected($selected);
         echo '</div>';

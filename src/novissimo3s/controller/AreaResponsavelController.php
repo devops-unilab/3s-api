@@ -7,10 +7,7 @@
  */
 
 namespace novissimo3s\controller;
-
 use novissimo3s\dao\AreaResponsavelDAO;
-
-
 use novissimo3s\model\AreaResponsavel;
 use novissimo3s\view\AreaResponsavelView;
 
@@ -81,14 +78,12 @@ class AreaResponsavelController {
                 ';
 			return;
 		}
-		
-        
 		$areaResponsavel = new AreaResponsavel ();
 		$areaResponsavel->setNome ( $_POST ['nome'] );
 		$areaResponsavel->setDescricao ( $_POST ['descricao'] );
 		$areaResponsavel->setEmail ( $_POST ['email'] );
             
-		if ($this->dao->insert ( $areaResponsavel ))
+		if ($this->dao->insert ($areaResponsavel ))
         {
 			echo '
 
@@ -191,13 +186,13 @@ class AreaResponsavelController {
     public function main(){
         
         if (isset($_GET['select'])){
-            echo '<div class="row justify-content-center">';
+            echo '<div class="row">';
                 $this->select();
             echo '</div>';
             return;
         }
         echo '
-		<div class="row justify-content-center">';
+		<div class="row">';
         echo '<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">';
         
         if(isset($_GET['edit'])){
@@ -230,7 +225,7 @@ class AreaResponsavelController {
 	    $selected->setId($_GET['select']);
 	        
         $this->dao->fillById($selected);
-            
+
         echo '<div class="col-xl-7 col-lg-7 col-md-12 col-sm-12">';
 	    $this->view->showSelected($selected);
         echo '</div>';

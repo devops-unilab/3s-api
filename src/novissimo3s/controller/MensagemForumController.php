@@ -7,18 +7,9 @@
  */
 
 namespace novissimo3s\controller;
-
 use novissimo3s\dao\MensagemForumDAO;
-
-
 use novissimo3s\dao\OcorrenciaDAO;
-
-
-
 use novissimo3s\dao\UsuarioDAO;
-
-
-
 use novissimo3s\model\MensagemForum;
 use novissimo3s\view\MensagemForumView;
 
@@ -95,8 +86,6 @@ class MensagemForumController {
                 ';
 			return;
 		}
-		
-        
 		$mensagemForum = new MensagemForum ();
 		$mensagemForum->setTipo ( $_POST ['tipo'] );
 		$mensagemForum->setMensagem ( $_POST ['mensagem'] );
@@ -104,7 +93,7 @@ class MensagemForumController {
 		$mensagemForum->getOcorrencia()->setId ( $_POST ['ocorrencia'] );
 		$mensagemForum->getUsuario()->setId ( $_POST ['usuario'] );
             
-		if ($this->dao->insert ( $mensagemForum ))
+		if ($this->dao->insert ($mensagemForum ))
         {
 			echo '
 
@@ -215,13 +204,13 @@ class MensagemForumController {
     public function main(){
         
         if (isset($_GET['select'])){
-            echo '<div class="row justify-content-center">';
+            echo '<div class="row">';
                 $this->select();
             echo '</div>';
             return;
         }
         echo '
-		<div class="row justify-content-center">';
+		<div class="row">';
         echo '<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">';
         
         if(isset($_GET['edit'])){
@@ -254,7 +243,7 @@ class MensagemForumController {
 	    $selected->setId($_GET['select']);
 	        
         $this->dao->fillById($selected);
-            
+
         echo '<div class="col-xl-7 col-lg-7 col-md-12 col-sm-12">';
 	    $this->view->showSelected($selected);
         echo '</div>';
