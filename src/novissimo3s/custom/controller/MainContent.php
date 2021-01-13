@@ -4,7 +4,7 @@ namespace novissimo3s\custom\controller;
 use novissimo3s\util\Sessao;
 
 
-class Principal{
+class MainContent{
     
     
     public function main()

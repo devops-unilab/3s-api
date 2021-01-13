@@ -18,6 +18,7 @@ use novissimo3s\dao\TipoAtividadeDAO;
 class Importador{
     
     public function importar(){
+        /*
         $servicoDao = new ServicoDAO();
         $listaTipo = array();
         $listaServicos = array();
@@ -108,6 +109,7 @@ class Importador{
         
         
         $this->showList($listaServicos);
+        */
         
         
     }
