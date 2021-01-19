@@ -1,132 +1,54 @@
-ID,Nome,Descrição,SLA(Horas),Tipo de Atividade,Grupo de Serviços,Setor Responsável,Meio de solicitação,Nível de Acesso ,Prazo de atendimento,Quem deve solicitar
-320,Alteração cadastral de conta para acesso ao domínio institucional,,4,serviço,SUPORTE A ACESSO AO DOMÍNIO INSTITUCIONAL,SAU,abertura de ocorrência 3S,Comum,até 04h,próprio(a) usuário(a) da conta
-321,Cadastro de conta para acesso ao domínio institucional,Acesso ao computador;,4,serviço,SUPORTE A ACESSO AO DOMÍNIO INSTITUCIONAL,SAU,abertura de ocorrência 3S,Comum,até 04h,chefia imediata do(a) usuário(a) solicitante
-322,Correção de falha de acesso ao domínio institucional,,2,incidente,SUPORTE A ACESSO AO DOMÍNIO INSTITUCIONAL,,abertura de ocorrência 3S,Comum,até 02h,próprio(a) usuário(a) da conta
-323,Desbloqueio de conta para acesso ao domínio institucional,Dasativar conta de acesso ao domínio institucional,4,serviço,SUPORTE A ACESSO AO DOMÍNIO INSTITUCIONAL,SAU,abertura de ocorrência 3S,Comum,até 04h,chefia imediata do(a) usuário(a) solicitante
-325,"Redefinição da senha de conta para acesso ao domínio institucional (Perfis TAE, Professor ou Terceirizado)",,4,serviço,SUPORTE A ACESSO AO DOMÍNIO INSTITUCIONAL,,abertura de ocorrência 3S,Comum,até 04h,próprio(a) usuário(a) da conta
-326,Redefinição da senha de conta para acesso ao domínio institucional (Perfil Bolsista),,4,serviço,SUPORTE A ACESSO AO DOMÍNIO INSTITUCIONAL,SAU,abertura de ocorrência 3S,Comum,até 04h,chefia imediata do(a) usuário(a) solicitante
-327,Falha/Problema em Banco de Dados,,0,incidente,SUPORTE A BANCO DE DADOS,DSI,abertura de ocorrência 3S,Comum,Mediante análise técnica da demanda,usuário(a) cadastrado(a) no sistema 3S
-328,Dúvida/Sugestão de Banco de Dados,,0,serviço,SUPORTE A BANCO DE DADOS,DSI,abertura de ocorrência 3S,Comum,ate 05h,usuário(a) cadastrado(a) no sistema 3S
-329,Relatórios/Consulta em Banco de Dados,,0,serviço,SUPORTE A BANCO DE DADOS,DSI,abertura de ocorrência 3S,Comum,Mediante análise técnica da demanda,usuário(a) cadastrado(a) no sistema 3S
-330,Coleta de Dados,,0,serviço,SUPORTE A BANCO DE DADOS,DSI,abertura de ocorrência 3S,Comum,Mediante análise técnica da demanda,usuário(a) cadastrado(a) no sistema 3S
-331,Desenvolvimento de Scripts em Banco de Dados,,0,serviço,SUPORTE A BANCO DE DADOS,DSI,abertura de ocorrência 3S,Técnico,Mediante análise técnica da demanda,usuário(a) cadastrado(a) no sistema 3S
-332,Execução de scripts em Banco de Dados,,0,serviço,SUPORTE A BANCO DE DADOS,DSI,abertura de ocorrência 3S,Técnico,Mediante análise técnica da demanda,usuário(a) cadastrado(a) no sistema 3S
-333,Backup de Banco de Dados,,0,serviço,SUPORTE A BANCO DE DADOS,DSI,abertura de ocorrência 3S,Técnico,Mediante análise técnica da demanda,usuário(a) cadastrado(a) no sistema 3S
-334,Restore de Banco de Dados,,0,serviço,SUPORTE A BANCO DE DADOS,DSI,abertura de ocorrência 3S,Técnico,Mediante análise técnica da demanda,usuário(a) cadastrado(a) no sistema 3S
-335,Suporte/Manutenção de Banco de dados,,0,serviço,SUPORTE A BANCO DE DADOS,DSI,abertura de ocorrência 3S,Comum,Mediante análise técnica da demanda,usuário(a) cadastrado(a) no sistema 3S
-336,Alteração de Informação em Banco de Dados,,0,serviço,SUPORTE A BANCO DE DADOS,DSI,abertura de ocorrência 3S,Técnico,Mediante análise técnica da demanda,usuário(a) cadastrado(a) no sistema 3S
-337,Criação de Banco de dados,,0,serviço,SUPORTE A BANCO DE DADOS,DSI,abertura de ocorrência 3S,Técnico,Mediante análise técnica da demanda,usuário(a) cadastrado(a) no sistema 3S
-338,Elaboração de projeto de Contratação de Bem do PDTI,,0,projeto,SUPORTE À CONTRATAÇÃO DE SOLUÇÃO DE TI,,PDTI vigente,Administrador,de 30 a 180 dias,diretoria da DTI
-339,Elaboração de projeto de Contratação de Serviço do PDTI,,0,projeto,SUPORTE À CONTRATAÇÃO DE SOLUÇÃO DE TI,,PDTI vigente,Administrador,de 30 a 180 dias,diretoria da DTI
-340,Alteração cadastral de conta de usuário(a) para uso de e-mail institucional (Perfil Terceirizado),,4,serviço,SUPORTE A E-MAIL INSTITUCIONAL,SAU,abertura de ocorrência 3S,,até 04h,usuário(a) responsável pela conta
-341,"Alteração cadastral de conta para uso de e-mail institucional (Perfis Setor Administrativo, Projeto de Pesquisa ou Comissão)",,4,serviço,SUPORTE A E-MAIL INSTITUCIONAL,SAU,abertura de ocorrência 3S,,até 04h,usuário(a) responsável pela conta
-342,Alteração cadastral de conta para uso de e-mail institucional (Perfis TAE ou Professor),,4,serviço,SUPORTE A E-MAIL INSTITUCIONAL,,abertura de ocorrência 3S,,até 04h,usuário(a) responsável pela conta
-356,Elaboração de laudo técnico de equipamento computacional,,24,serviço,SUPORTE A EQUIPAMENTO E PERIFÉRICO COMPUTACIONAIS,SAU,abertura de ocorrência 3S,,até 08h,usuário(a) cadastrado(a) no 3S
-357,Elaboração de laudo técnico de periférico computacional,"Laudo técnico de monitor, mouse, impressora ou teclado;",24,serviço,SUPORTE A EQUIPAMENTO E PERIFÉRICO COMPUTACIONAIS,SAU,abertura de ocorrência 3S,,até 08h,usuário(a) cadastrado(a) no 3S
-358,Falha de funcionamento de equipamento computacional,Computador apitando;,12,incidente,SUPORTE A EQUIPAMENTO E PERIFÉRICO COMPUTACIONAIS,SAU,abertura de ocorrência 3S,,até 04h,usuário(a) cadastrado(a) no 3S
-359,Falha de funcionamento de periférico computacional,Impressora com problema; Impressora não liga;,48,incidente,SUPORTE A EQUIPAMENTO E PERIFÉRICO COMPUTACIONAIS,SAU,abertura de ocorrência 3S,,até 04h,usuário(a) cadastrado(a) no 3S
-360,Instalação de equipamento computacional,Instalar computador;,24,serviço,SUPORTE A EQUIPAMENTO E PERIFÉRICO COMPUTACIONAIS,SAU,abertura de ocorrência 3S,,até 24h,usuário(a) cadastrado(a) no 3S
-361,Instalação de periférico computacional,Instalar teclado; Instalação de mouse;,12,serviço,SUPORTE A EQUIPAMENTO E PERIFÉRICO COMPUTACIONAIS,SAU,abertura de ocorrência 3S,,até 04h,usuário(a) cadastrado(a) no 3S
-363,Instalação de equipamento computacional remanejado,Montar;  instalar e ligar o computador,24,serviço,SUPORTE A EQUIPAMENTO E PERIFÉRICO COMPUTACIONAIS,SAU,abertura de ocorrência 3S,,até 04h,usuário(a) cadastrado(a) no 3S
-364,Manutenção preventiva em equipamento computacional,,24,serviço,SUPORTE A EQUIPAMENTO E PERIFÉRICO COMPUTACIONAIS,SAU,abertura de ocorrência 3S,,até 24h,usuário(a) cadastrado(a) no 3S
-365,Acompanhamento do PDTI,,0,projeto,SUPORTE À GOVERNANÇA DE TI,,PDTI vigente,,de 30 a 180 dias,comitê de TI e diretoria da DTI
-366,Apoio no desenvolvimento do referencial estratégico da DTI,,0,tarefa,SUPORTE À GOVERNANÇA DE TI,,abertura de ocorrência 3S,,até 05 dias,diretoria da DTI
-368,Elaboração de Planejamento Estratégico de Tecnologia da Informação - PETI,,0,projeto,SUPORTE À GOVERNANÇA DE TI,,portaria,,de 30 a 180 dias,comitê de TI e Reitoria
-369,Elaboração de Plano Diretor de Tecnologia da Informação - PDTI,,0,projeto,SUPORTE À GOVERNANÇA DE TI,,portaria,,de 30 a 180 dias,comitê de TI e Reitoria
-370,"Elaboração de proposta de minuta de documento, padrão ou norma de TI",,0,projeto,SUPORTE À GOVERNANÇA DE TI,,abertura de ocorrência 3S,,de 30 a 180 dias,"comitê de TI, diretoria da DTI e Reitoria"
-371,Execução de projeto de Governança do PDTI,,0,projeto,SUPORTE À GOVERNANÇA DE TI,,PDTI vigente,,de 30 a 180 dias,diretoria da DTI
-372,Mapeamento de processo da DTI,,0,projeto,SUPORTE À GOVERNANÇA DE TI,,abertura de ocorrência 3S,,de 30 a 180 dias,diretoria da DTI
-373,Melhoria de serviços de TI,,0,tarefa,SUPORTE À GOVERNANÇA DE TI,,abertura de ocorrência 3S,,até 24h,gestores da DTI
-374,Melhoria de processos de TI,,0,tarefa,SUPORTE À GOVERNANÇA DE TI,,abertura de ocorrência 3S,,até 24h,gestores da DTI
-375,Configuração de equipamento multifuncional de impressão,,12,serviço,SUPORTE À IMPRESSÃO CORPORATIVA,SAU,abertura de ocorrência 3S,,até 04h,usuário(a) cadastrado(a) no sistema 3S
-377,Instalação de equipamento multifuncional de impressão,"Montar, instalar e ligar a impressora",24,serviço,SUPORTE À IMPRESSÃO CORPORATIVA,SAU,abertura de ocorrência 3S,,até 04h,responsável pelo setor administrativo
-379,Verificação de falha em equipamento multifuncional de impressão,"Impressora parou de funcionar, travou ou não imprime",24,incidente,SUPORTE À IMPRESSÃO CORPORATIVA,SAU,abertura de ocorrência 3S,,até 04h,usuário(a) cadastrado(a) no sistema 3S
-380,Alteração de recurso de servidor virtual,,0,serviço,SUPORTE À INFRAESTRUTURA DE DATA CENTER,,abertura de ocorrência 3S,,até 04h,equipes técnicas da DSI/DTI e da DISIR/DTI
-381,Armazenamento de dados em equipamento servidor,,0,serviço,SUPORTE À INFRAESTRUTURA DE DATA CENTER,,abertura de ocorrência 3S,,até 08h,equipes técnicas da DSI/DTI e da DISIR/DTI
-382,Configuração de equipamento servidor,,0,serviço,SUPORTE À INFRAESTRUTURA DE DATA CENTER,,abertura de ocorrência 3S,,até 24h,gestor(a) DISIR/DTI
-383,Correção de falha em equipamento servidor,,0,incidente,SUPORTE À INFRAESTRUTURA DE DATA CENTER,,abertura de ocorrência 3S,,até 08h,gestor(a) DISIR/DTI
-384,Desinstalação de equipamento servidor,,0,serviço,SUPORTE À INFRAESTRUTURA DE DATA CENTER,,abertura de ocorrência 3S,,até 08h,gestor(a) DISIR/DTI
-385,Disponibilização de servidor virtual,,0,serviço,SUPORTE À INFRAESTRUTURA DE DATA CENTER,,abertura de ocorrência 3S,,até 08h,equipes técnicas da DSI/DTI e da DISIR/DTI
-386,Hospedagem de site em servidor virtual,,0,serviço,SUPORTE À INFRAESTRUTURA DE DATA CENTER,,abertura de ocorrência 3S,,até 08h,equipes técnicas da DSI/DTI e da DISIR/DTI
-387,Implantação de aplicação em servidor virtual,,0,serviço,SUPORTE À INFRAESTRUTURA DE DATA CENTER,,abertura de ocorrência 3S,,até 08h,equipes técnicas da DSI/DTI e da DISIR/DTI
-388,Instalação de equipamento servidor,,0,serviço,SUPORTE À INFRAESTRUTURA DE DATA CENTER,,abertura de ocorrência 3S,,até 08h,gestor(a) DISIR/DTI
-389,Manutenção preventiva em sistema de rede estabilizada UPS Nobreaks,,0,serviço,SUPORTE À INFRAESTRUTURA DE DATA CENTER,,abertura de ocorrência 3S,,até 04h,gestor(a) DISIR/DTI
-391,Ativação lógica de dispositivo passivo de rede,,0,serviço,SUPORTE À INFRAESTRUTURA DE REDE,,abertura de ocorrência 3S,,até 04h,equipe técnica da DISIR/DTI
-392,Atualização de firmware de equipamento ativo de rede,,0,serviço,SUPORTE À INFRAESTRUTURA DE REDE,,abertura de ocorrência 3S,,até 04h,equipe técnica da DISIR/DTI
-393,Configuração de equipamento ativo de rede,,0,serviço,SUPORTE À INFRAESTRUTURA DE REDE,,abertura de ocorrência 3S,,até 02h,equipe técnica da DISIR/DTI
-394,Correção de falha no serviço DHCP,,0,serviço,SUPORTE À INFRAESTRUTURA DE REDE,,abertura de ocorrência 3S,,até 02h,equipe técnica da DISIR/DTI
-395,Correção de falha no serviço DNS,,0,serviço,SUPORTE À INFRAESTRUTURA DE REDE,,abertura de ocorrência 3S,,até 02h,equipe técnica da DISIR/DTI
-396,Correção de falha no serviço SMTP,,0,serviço,SUPORTE À INFRAESTRUTURA DE REDE,,abertura de ocorrência 3S,,até 02h,equipe técnica da DISIR/DTI
-397,Correção de falha no sistema de monitoramento,,0,serviço,SUPORTE À INFRAESTRUTURA DE REDE,,abertura de ocorrência 3S,,até 02h,equipe técnica da DISIR/DTI
-398,Desativação lógica de dispositivo passivo de rede,,0,serviço,SUPORTE À INFRAESTRUTURA DE REDE,,abertura de ocorrência 3S,,até 04h,equipe técnica da DISIR/DTI
-399,Desinstalação de equipamento ativo de rede,,0,serviço,SUPORTE À INFRAESTRUTURA DE REDE,,abertura de ocorrência 3S,,até 04h,equipe técnica da DISIR/DTI
-400,Gerenciamento de serviço DHCP,,0,serviço,SUPORTE À INFRAESTRUTURA DE REDE,,abertura de ocorrência 3S,,até 04h,equipe técnica da DISIR/DTI
-401,Gerenciamento de serviço DNS,,0,serviço,SUPORTE À INFRAESTRUTURA DE REDE,,abertura de ocorrência 3S,,até 04h,equipe técnica da DISIR/DTI
-402,Gerenciamento do sistema de monitoramento de ativos de rede,,0,serviço,SUPORTE À INFRAESTRUTURA DE REDE,,abertura de ocorrência 3S,,até 04h,equipe técnica da DISIR/DTI
-403,Instalação de equipamento ativo de rede,,0,serviço,SUPORTE À INFRAESTRUTURA DE REDE,,abertura de ocorrência 3S,,até 04h,equipe técnica da DISIR/DTI
-404,Manutenção corretiva em dispositivo passivo de rede,,0,incidente,SUPORTE À INFRAESTRUTURA DE REDE,,abertura de ocorrência 3S,,até 04h,equipe técnica da DISIR/DTI
-405,Manutenção corretiva em equipamento ativo de rede,,0,incidente,SUPORTE À INFRAESTRUTURA DE REDE,,abertura de ocorrência 3S,,até 04h,equipe técnica da DISIR/DTI
-406,Manutenção preventiva em dispositivo passivo de rede,,0,serviço,SUPORTE À INFRAESTRUTURA DE REDE,,abertura de ocorrência 3S,,até 02h,equipe técnica da DISIR/DTI
-407,Manutenção preventiva em equipamento ativo de rede,,0,serviço,SUPORTE À INFRAESTRUTURA DE REDE,,abertura de ocorrência 3S,,até 02h,equipe técnica da DISIR/DTI
-408,Bloqueio de acesso à site,,0,serviço,SUPORTE À INTERNET E COMPARTILHAMENTO EM REDE,,abertura de ocorrência 3S,,até 04h,gestores e DTI
-409,Compartilhamento de recurso em rede,,0,serviço,SUPORTE À INTERNET E COMPARTILHAMENTO EM REDE,,abertura de ocorrência 3S,,até 04h,usuário(a) cadastrado(a) no sistema 3S
-410,Correção de falha de acesso à site,,0,incidente,SUPORTE À INTERNET E COMPARTILHAMENTO EM REDE,,abertura de ocorrência 3S,,até 02h,usuário(a) cadastrado(a) no sistema 3S
-411,Correção de falha de autenticação à rede virtual privada VPN,,0,incidente,SUPORTE À INTERNET E COMPARTILHAMENTO EM REDE,,abertura de ocorrência 3S,,até 02h,usuário(a) cadastrado(a) no sistema 3S
-412,Correção de falha de conectividade de equipamento computacional à Internet (rede cabeada),,0,incidente,SUPORTE À INTERNET E COMPARTILHAMENTO EM REDE,,abertura de ocorrência 3S,,até 02h,usuário(a) cadastrado(a) no sistema 3S
-413,Correção de falha de conectividade de equipamento computacional à Internet (rede sem fio),,0,incidente,SUPORTE À INTERNET E COMPARTILHAMENTO EM REDE,,abertura de ocorrência 3S,,até 02h,usuário(a) cadastrado(a) no sistema 3S
-414,Correção de falha de conectividade em recurso compartilhado em rede,,0,incidente,SUPORTE À INTERNET E COMPARTILHAMENTO EM REDE,,abertura de ocorrência 3S,,até 02h,usuário(a) cadastrado(a) no sistema 3S
-415,Disponibilização de endereço IP fixo,,0,serviço,SUPORTE À INTERNET E COMPARTILHAMENTO EM REDE,,abertura de ocorrência 3S,,até 02h,gestores e DTI
-416,Exclusão de recurso compartilhado em rede,,0,serviço,SUPORTE À INTERNET E COMPARTILHAMENTO EM REDE,,abertura de ocorrência 3S,,até 04h,usuário(a) cadastrado(a) no sistema 3S
-418,Liberação de porta ou endereço IP para acesso externo à rede institucional,,0,serviço,SUPORTE À INTERNET E COMPARTILHAMENTO EM REDE,,abertura de ocorrência 3S,,até 02h,usuário(a) cadastrado(a) no sistema 3S
-419,Verificação de conectividade de equipamento computacional à Internet (rede cabeada),,12,serviço,SUPORTE À INTERNET E COMPARTILHAMENTO EM REDE,SAU,abertura de ocorrência 3S,,até 04h,usuário(a) cadastrado(a) no sistema 3S
-420,Verificação de conectividade de equipamento computacional à Internet (rede sem fio),,0,serviço,SUPORTE À INTERNET E COMPARTILHAMENTO EM REDE,,abertura de ocorrência 3S,,até 02h,usuário(a) cadastrado(a) no sistema 3S
-425,Correção de falha em AD,,0,incidente,SUPORTE À PERMISSÃO DE ACESSO EM SISTEMAS,,abertura de ocorrência 3S,,até 02h,equipe técnica da DISIR/DTI
-426,Correção de falha em Firewall,,0,incidente,SUPORTE À PERMISSÃO DE ACESSO EM SISTEMAS,,abertura de ocorrência 3S,,até 02h,equipe técnica da DISIR/DTI
-427,Correção de falha de segurança em ativo de rede,,0,incidente,SUPORTE À PERMISSÃO DE ACESSO EM SISTEMAS,,abertura de ocorrência 3S,,até 02h,equipe técnica da DISIR/DTI
-428,Disponibilização de relatório de logs do Firewall,,0,serviço,SUPORTE À PERMISSÃO DE ACESSO EM SISTEMAS,,abertura de ocorrência 3S,,até 04h,gestores e equipe técnica da DISIR/DTI
-430,Execução de antivírus em equipamento servidor,,0,serviço,SUPORTE À PERMISSÃO DE ACESSO EM SISTEMAS,,abertura de ocorrência 3S,,até 04h,equipe técnica da DISIR/DTI
-431,Gerenciamento de AD,,0,serviço,SUPORTE À PERMISSÃO DE ACESSO EM SISTEMAS,,abertura de ocorrência 3S,,até 04h,equipe técnica da DISIR/DTI
-432,Gerenciamento de Certificado Digital,,0,serviço,SUPORTE À PERMISSÃO DE ACESSO EM SISTEMAS,,abertura de ocorrência 3S,,até 04h,gestores e equipe técnica da DTI
-433,Gerenciamento de Firewall,,0,serviço,SUPORTE À PERMISSÃO DE ACESSO EM SISTEMAS,,abertura de ocorrência 3S,,até 04h,equipe técnica da DISIR/DTI
-434,Inserção de captura centralizada de logs do Firewall,,0,serviço,SUPORTE À PERMISSÃO DE ACESSO EM SISTEMAS,,abertura de ocorrência 3S,,até 04h,gestores e equipe técnica da DISIR/DTI
-435,Alteração de template de layout para Site e Portal web,,0,serviço,SUPORTE A SITE E PORTAL WEB,,abertura de ocorrência 3S,,mediante análise técnica da demanda,responsável pelo site ou portal web requisitado
-436,Criação de template de layout para Site e Portal web,,0,serviço,SUPORTE A SITE E PORTAL WEB,,abertura de ocorrência 3S,,mediante análise técnica da demanda,responsável pelo site ou portal web requisitado
-437,Disponibilização de portal web Wordpress,,0,serviço,SUPORTE A SITE E PORTAL WEB,,abertura de ocorrência 3S,,Mediante análise técnica da demanda,ASSECOM
-439,Desinstalação de software,Desinstalar programa,12,serviço,SUPORTE A SOFTWARE E RECURSO INTEGRADO,SAU,abertura de ocorrência 3S,,até 04h,usuário(a) cadastrado(a) no sistema 3S
-441,Falha de funcionamento de software,,12,incidente,SUPORTE A SOFTWARE E RECURSO INTEGRADO,SAU,abertura de ocorrência 3S,,até 02h,usuário(a) cadastrado(a) no sistema 3S
-443,Instalação de software,instalar programa,12,serviço,SUPORTE A SOFTWARE E RECURSO INTEGRADO,SAU,abertura de ocorrência 3S,,até 04h,usuário(a) cadastrado(a) no sistema 3S
-444,Manutenção preventiva de sistema operacional,Manutenção preventiva de sistema operacional Windows,12,serviço,SUPORTE A SOFTWARE E RECURSO INTEGRADO,SAU,abertura de ocorrência 3S,,até 24h,usuário(a) cadastrado(a) no sistema 3S
-445,Suporte à configuração e conectividade para videoconferência,,24,serviço,SUPORTE A SOFTWARE E RECURSO INTEGRADO,,abertura de ocorrência 3S,,01h de antecedência do evento,responsável pelo agendamento do evento
-449,Integração entre o Sistema Pergamum e o Sistema SIG,,0,projeto,SUPORTE AO SISTEMA PERGAMUM,,PDTI vigente,,conforme previsto no PDTI vigente,responsável pelo sistema Pergamum institucional
-450,"Reunião sobre Infraestrutura, Segurança da Informação ou Redes",,0,reunião,SUPORTE AO USUÁRIO(A) DE TI,,abertura de ocorrência 3S,,até 02 dias,usuário(a) cadastrado(a) no sistema 3S
-451,Reunião sobre Planejamento e Governança de TI,,0,reunião,SUPORTE AO USUÁRIO(A) DE TI,,abertura de ocorrência 3S,,até 02 dias,usuário(a) cadastrado(a) no sistema 3S
-452,Reunião sobre Sistemas da Informação,,0,reunião,SUPORTE AO USUÁRIO(A) DE TI,,abertura de ocorrência 3S,,até 02 dias,usuário(a) cadastrado(a) no sistema 3S
-453,Tira-dúvidas sobre suporte a Acesso ao Domínio Institucional,,8,dúvida,SUPORTE AO USUÁRIO(A) DE TI,SAU,abertura de ocorrência 3S,,até 02h,usuário(a) cadastrado(a) no sistema 3S
-454,Tira-dúvidas sobre suporte a Banco de Dados,,0,dúvida,SUPORTE AO USUÁRIO(A) DE TI,,abertura de ocorrência 3S,,até 02h,usuário(a) cadastrado(a) no sistema 3S
-455,Tira-dúvidas sobre suporte à Contratação de Solução de TI,,0,dúvida,SUPORTE AO USUÁRIO(A) DE TI,,abertura de ocorrência 3S,,até 02h,usuário(a) cadastrado(a) no sistema 3S
-456,Tira-dúvidas sobre suporte a E-mail Institucional,,8,dúvida,SUPORTE AO USUÁRIO(A) DE TI,SAU,abertura de ocorrência 3S,,até 02h,usuário(a) cadastrado(a) no sistema 3S
-457,Tira-dúvidas sobre suporte a Equipamentos e Periféricos Computacionais,,8,dúvida,SUPORTE AO USUÁRIO(A) DE TI,SAU,abertura de ocorrência 3S,,até 02h,usuário(a) cadastrado(a) no sistema 3S
-458,Tira-dúvidas sobre suporte à Governança de TI,,0,dúvida,SUPORTE AO USUÁRIO(A) DE TI,,abertura de ocorrência 3S,,até 02h,usuário(a) cadastrado(a) no sistema 3S
-459,Tira-dúvidas sobre suporte à Impressão Corporativa,,8,dúvida,SUPORTE AO USUÁRIO(A) DE TI,SAU,abertura de ocorrência 3S,,até 02h,usuário(a) cadastrado(a) no sistema 3S
-460,Tira-dúvidas sobre suporte à Infraestrutura de Data Center,,0,dúvida,SUPORTE AO USUÁRIO(A) DE TI,,abertura de ocorrência 3S,,até 02h,usuário(a) cadastrado(a) no sistema 3S
-461,Tira-dúvidas sobre suporte à Infraestrutura de Rede,,0,dúvida,SUPORTE AO USUÁRIO(A) DE TI,,abertura de ocorrência 3S,,até 02h,usuário(a) cadastrado(a) no sistema 3S
-462,Tira-dúvidas sobre suporte à Internet e Compartilhamento em Rede,,8,dúvida,SUPORTE AO USUÁRIO(A) DE TI,SAU,abertura de ocorrência 3S,,até 02h,usuário(a) cadastrado(a) no sistema 3S
-463,Tira-dúvidas sobre suporte à Permissão de Acesso em Sistemas,,8,dúvida,SUPORTE AO USUÁRIO(A) DE TI,SAU,abertura de ocorrência 3S,,até 02h,usuário(a) cadastrado(a) no sistema 3S
-464,Tira-dúvidas sobre suporte à Segurança da Informação,,0,dúvida,SUPORTE AO USUÁRIO(A) DE TI,,abertura de ocorrência 3S,,até 02h,usuário(a) cadastrado(a) no sistema 3S
-465,,,,,,,,,,
-466,Tira-dúvidas sobre suporte a Softwares e Recursos Integrados,,8,dúvida,SUPORTE AO USUÁRIO(A) DE TI,SAU,abertura de ocorrência 3S,,até 02h,usuário(a) cadastrado(a) no sistema 3S
-467,Tira-dúvidas sobre suporte à Teleconferência Digital,,0,dúvida,SUPORTE AO USUÁRIO(A) DE TI,,abertura de ocorrência 3S,,até 02h,usuário(a) cadastrado(a) no sistema 3S
-468,Tira-dúvidas sobre suporte ao Sistema Eletrônico de Informações (SEI),,8,dúvida,SUPORTE AO USUÁRIO(A) DE TI,SAU,abertura de ocorrência 3S,,até 02h,usuário(a) cadastrado(a) no sistema 3S
-469,Falha/Erro/Problema em Sistemas Institucionais ,,0,serviço,SUPORTE A SISTEMA DE APOIO À GESTÃO,DSI,abertura de ocorrência 3S,Comum,mediante análise técnica da demanda,usuário(a) cadastrado(a) no sistema 3S
-470,Alteração/Ajuste/Adequação em Sistemas Institucionais,,0,serviço,SUPORTE A SISTEMA DE APOIO À GESTÃO,DSI,abertura de ocorrência 3S,Comum,mediante análise técnica da demanda,usuário(a) cadastrado(a) no sistema 3S
-471,Dúvida/Sugestão/Reclamação de Sistemas Institucionais,,0,serviço,SUPORTE A SISTEMA DE APOIO À GESTÃO,DSI,abertura de ocorrência 3S,Comum,até 05 hs,usuário(a) cadastrado(a) no sistema 3S
-472,Deploy em Sistemas,,0,serviço,SUPORTE A SISTEMA DE APOIO À GESTÃO,DSI,abertura de ocorrência 3S,Técnico,mediante análise técnica da demanda,usuário(a) cadastrado(a) no sistema 3S
-473,Permissão de Acesso em Sistemas Institucionais,,0,serviço,SUPORTE A SISTEMA DE APOIO À GESTÃO,DSI,abertura de ocorrência 3S,Comum,até 05 hs,gestor(a)responsável pelo setor requisitante
-474,Implantação de Módulo em Sistema Institucional,,0,projeto,SUPORTE A SISTEMA DE APOIO À GESTÃO,DSI,PDTI vigente,Comum,conforme previsto no PDTI vigente,gestor(a)responsável pelo setor requisitante
-476,Desenvolvimento de novo sistema institucional,,0,projeto,SUPORTE A SISTEMA DE APOIO À GESTÃO,DSI,PDTI vigente,Comum,conforme previsto no PDTI vigente,gestor(a)responsável pelo setor requisitante
-478,Processamento de Matrícula,,,serviço,SUPORTE A SISTEMA DE APOIO À GESTÃO,DSI,abertura de ocorrência 3S,Comum,mediante análise técnica da demanda,gestor(a)responsável pelo setor requisitante
-307,Execução de projeto de Governança de TIC,Serviço utilizado para realizar a execução de projeto de Governança de TIC previsto no PDTI vigente; Projeto de governança,0,projeto,Serviços - Governança de TIC,DPG,Abertura de ocorrência através do sistema 3S,,de 30 a 180 dias,Gerente da DPG
-308,Execução de tarefa de Governança de TIC,Serviço utilizado para realizar a execução de tarefa de Governança de TIC; Tarefa de Governança,0,tarefa,Serviços - Governança de TIC,DPG,Abertura de ocorrência através do sistema 3S,,até 05 dias úteis,Diretor(a) da DTI e Gerente da DPG
+ID,Nome,Descricao,SLA,Tipo_Atividade,Grupo_Servico,Setor_Responsavel,Meio de solicitação,Nivel_Acesso,Prazo de atendimento,Quem deve solicitar
+,Alteração cadastral de conta para acesso ao domínio institucional,,4,serviço,SUPORTE A ACESSO AO DOMÍNIO INSTITUCIONAL,SAU,abertura de ocorrência 3S,Comum,até 04h,próprio(a) usuário(a) da conta
+,Cadastro de conta para acesso ao domínio institucional,Acesso ao computador;,4,serviço,SUPORTE A ACESSO AO DOMÍNIO INSTITUCIONAL,SAU,abertura de ocorrência 3S,Comum,até 04h,chefia imediata do(a) usuário(a) solicitante
+,Desbloqueio de conta para acesso ao domínio institucional,Dasativar conta de acesso ao domínio institucional,4,serviço,SUPORTE A ACESSO AO DOMÍNIO INSTITUCIONAL,SAU,abertura de ocorrência 3S,Comum,até 04h,chefia imediata do(a) usuário(a) solicitante
+,Redefinição da senha de conta para acesso ao domínio institucional (Perfil Bolsista),,4,serviço,SUPORTE A ACESSO AO DOMÍNIO INSTITUCIONAL,SAU,abertura de ocorrência 3S,Comum,até 04h,chefia imediata do(a) usuário(a) solicitante
+,Falha/Problema em Banco de Dados,,0,incidente,SUPORTE A BANCO DE DADOS,DSI,abertura de ocorrência 3S,Comum,Mediante análise técnica da demanda,usuário(a) cadastrado(a) no sistema 3S
+,Dúvida/Sugestão de Banco de Dados,,0,serviço,SUPORTE A BANCO DE DADOS,DSI,abertura de ocorrência 3S,Comum,ate 05h,usuário(a) cadastrado(a) no sistema 3S
+,Relatórios/Consulta em Banco de Dados,,0,serviço,SUPORTE A BANCO DE DADOS,DSI,abertura de ocorrência 3S,Comum,Mediante análise técnica da demanda,usuário(a) cadastrado(a) no sistema 3S
+,Coleta de Dados,,0,serviço,SUPORTE A BANCO DE DADOS,DSI,abertura de ocorrência 3S,Comum,Mediante análise técnica da demanda,usuário(a) cadastrado(a) no sistema 3S
+,Desenvolvimento de Scripts em Banco de Dados,,0,serviço,SUPORTE A BANCO DE DADOS,DSI,abertura de ocorrência 3S,Técnico,Mediante análise técnica da demanda,usuário(a) cadastrado(a) no sistema 3S
+,Execução de scripts em Banco de Dados,,0,serviço,SUPORTE A BANCO DE DADOS,DSI,abertura de ocorrência 3S,Técnico,Mediante análise técnica da demanda,usuário(a) cadastrado(a) no sistema 3S
+,Backup de Banco de Dados,,0,serviço,SUPORTE A BANCO DE DADOS,DSI,abertura de ocorrência 3S,Técnico,Mediante análise técnica da demanda,usuário(a) cadastrado(a) no sistema 3S
+,Restore de Banco de Dados,,0,serviço,SUPORTE A BANCO DE DADOS,DSI,abertura de ocorrência 3S,Técnico,Mediante análise técnica da demanda,usuário(a) cadastrado(a) no sistema 3S
+,Suporte/Manutenção de Banco de dados,,0,serviço,SUPORTE A BANCO DE DADOS,DSI,abertura de ocorrência 3S,Comum,Mediante análise técnica da demanda,usuário(a) cadastrado(a) no sistema 3S
+,Alteração de Informação em Banco de Dados,,0,serviço,SUPORTE A BANCO DE DADOS,DSI,abertura de ocorrência 3S,Técnico,Mediante análise técnica da demanda,usuário(a) cadastrado(a) no sistema 3S
+,Criação de Banco de dados,,0,serviço,SUPORTE A BANCO DE DADOS,DSI,abertura de ocorrência 3S,Técnico,Mediante análise técnica da demanda,usuário(a) cadastrado(a) no sistema 3S
+,Alteração cadastral de conta de usuário(a) para uso de e-mail institucional (Perfil Terceirizado),,4,serviço,SUPORTE A E-MAIL INSTITUCIONAL,SAU,abertura de ocorrência 3S,,até 04h,usuário(a) responsável pela conta
+,"Alteração cadastral de conta para uso de e-mail institucional (Perfis Setor Administrativo, Projeto de Pesquisa ou Comissão)",,4,serviço,SUPORTE A E-MAIL INSTITUCIONAL,SAU,abertura de ocorrência 3S,,até 04h,usuário(a) responsável pela conta
+,Elaboração de laudo técnico de equipamento computacional,,24,serviço,SUPORTE A EQUIPAMENTO E PERIFÉRICO COMPUTACIONAIS,SAU,abertura de ocorrência 3S,,até 08h,usuário(a) cadastrado(a) no 3S
+,Elaboração de laudo técnico de periférico computacional,"Laudo técnico de monitor, mouse, impressora ou teclado;",24,serviço,SUPORTE A EQUIPAMENTO E PERIFÉRICO COMPUTACIONAIS,SAU,abertura de ocorrência 3S,,até 08h,usuário(a) cadastrado(a) no 3S
+,Falha de funcionamento de equipamento computacional,Computador apitando;,12,incidente,SUPORTE A EQUIPAMENTO E PERIFÉRICO COMPUTACIONAIS,SAU,abertura de ocorrência 3S,,até 04h,usuário(a) cadastrado(a) no 3S
+,Falha de funcionamento de periférico computacional,Impressora com problema; Impressora não liga;,48,incidente,SUPORTE A EQUIPAMENTO E PERIFÉRICO COMPUTACIONAIS,SAU,abertura de ocorrência 3S,,até 04h,usuário(a) cadastrado(a) no 3S
+,Instalação de equipamento computacional,Instalar computador;,24,serviço,SUPORTE A EQUIPAMENTO E PERIFÉRICO COMPUTACIONAIS,SAU,abertura de ocorrência 3S,,até 24h,usuário(a) cadastrado(a) no 3S
+,Instalação de periférico computacional,Instalar teclado; Instalação de mouse;,12,serviço,SUPORTE A EQUIPAMENTO E PERIFÉRICO COMPUTACIONAIS,SAU,abertura de ocorrência 3S,,até 04h,usuário(a) cadastrado(a) no 3S
+,Instalação de equipamento computacional remanejado,Montar; instalar e ligar o computador,24,serviço,SUPORTE A EQUIPAMENTO E PERIFÉRICO COMPUTACIONAIS,SAU,abertura de ocorrência 3S,,até 04h,usuário(a) cadastrado(a) no 3S
+,Manutenção preventiva em equipamento computacional,,24,serviço,SUPORTE A EQUIPAMENTO E PERIFÉRICO COMPUTACIONAIS,SAU,abertura de ocorrência 3S,,até 24h,usuário(a) cadastrado(a) no 3S
+,Configuração de equipamento multifuncional de impressão,,12,serviço,SUPORTE À IMPRESSÃO CORPORATIVA,SAU,abertura de ocorrência 3S,,até 04h,usuário(a) cadastrado(a) no sistema 3S
+,Instalação de equipamento multifuncional de impressão,"Montar, instalar e ligar a impressora",24,serviço,SUPORTE À IMPRESSÃO CORPORATIVA,SAU,abertura de ocorrência 3S,,até 04h,responsável pelo setor administrativo
+,Verificação de falha em equipamento multifuncional de impressão,"Impressora parou de funcionar, travou ou não imprime",24,incidente,SUPORTE À IMPRESSÃO CORPORATIVA,SAU,abertura de ocorrência 3S,,até 04h,usuário(a) cadastrado(a) no sistema 3S
+,Desinstalação de software,Desinstalar programa,12,serviço,SUPORTE A SOFTWARE E RECURSO INTEGRADO,SAU,abertura de ocorrência 3S,,até 04h,usuário(a) cadastrado(a) no sistema 3S
+,Falha de funcionamento de software,,12,incidente,SUPORTE A SOFTWARE E RECURSO INTEGRADO,SAU,abertura de ocorrência 3S,,até 02h,usuário(a) cadastrado(a) no sistema 3S
+,Instalação de software,instalar programa,12,serviço,SUPORTE A SOFTWARE E RECURSO INTEGRADO,SAU,abertura de ocorrência 3S,,até 04h,usuário(a) cadastrado(a) no sistema 3S
+,Manutenção preventiva de sistema operacional,Manutenção preventiva de sistema operacional Windows,12,serviço,SUPORTE A SOFTWARE E RECURSO INTEGRADO,SAU,abertura de ocorrência 3S,,até 24h,usuário(a) cadastrado(a) no sistema 3S
+,Tira-dúvidas sobre suporte a Acesso ao Domínio Institucional,,8,dúvida,SUPORTE AO USUÁRIO(A) DE TI,SAU,abertura de ocorrência 3S,,até 02h,usuário(a) cadastrado(a) no sistema 3S
+,Tira-dúvidas sobre suporte a E-mail Institucional,,8,dúvida,SUPORTE AO USUÁRIO(A) DE TI,SAU,abertura de ocorrência 3S,,até 02h,usuário(a) cadastrado(a) no sistema 3S
+,Tira-dúvidas sobre suporte a Equipamentos e Periféricos Computacionais,,8,dúvida,SUPORTE AO USUÁRIO(A) DE TI,SAU,abertura de ocorrência 3S,,até 02h,usuário(a) cadastrado(a) no sistema 3S
+,Tira-dúvidas sobre suporte à Impressão Corporativa,,8,dúvida,SUPORTE AO USUÁRIO(A) DE TI,SAU,abertura de ocorrência 3S,,até 02h,usuário(a) cadastrado(a) no sistema 3S
+,Tira-dúvidas sobre suporte à Internet e Compartilhamento em Rede,,8,dúvida,SUPORTE AO USUÁRIO(A) DE TI,SAU,abertura de ocorrência 3S,,até 02h,usuário(a) cadastrado(a) no sistema 3S
+,Tira-dúvidas sobre suporte à Permissão de Acesso em Sistemas,,8,dúvida,SUPORTE AO USUÁRIO(A) DE TI,SAU,abertura de ocorrência 3S,,até 02h,usuário(a) cadastrado(a) no sistema 3S
+,Tira-dúvidas sobre suporte a Softwares e Recursos Integrados,,8,dúvida,SUPORTE AO USUÁRIO(A) DE TI,SAU,abertura de ocorrência 3S,,até 02h,usuário(a) cadastrado(a) no sistema 3S
+,Tira-dúvidas sobre suporte ao Sistema Eletrônico de Informações (SEI),,8,dúvida,SUPORTE AO USUÁRIO(A) DE TI,SAU,abertura de ocorrência 3S,,até 02h,usuário(a) cadastrado(a) no sistema 3S
+,Falha/Erro/Problema em Sistemas Institucionais ,,0,serviço,SUPORTE A SISTEMA DE APOIO À GESTÃO,DSI,abertura de ocorrência 3S,Comum,mediante análise técnica da demanda,usuário(a) cadastrado(a) no sistema 3S
+,Alteração/Ajuste/Adequação em Sistemas Institucionais,,0,serviço,SUPORTE A SISTEMA DE APOIO À GESTÃO,DSI,abertura de ocorrência 3S,Comum,mediante análise técnica da demanda,usuário(a) cadastrado(a) no sistema 3S
+,Dúvida/Sugestão/Reclamação de Sistemas Institucionais,,0,serviço,SUPORTE A SISTEMA DE APOIO À GESTÃO,DSI,abertura de ocorrência 3S,Comum,até 05 hs,usuário(a) cadastrado(a) no sistema 3S
+,Deploy em Sistemas,,0,serviço,SUPORTE A SISTEMA DE APOIO À GESTÃO,DSI,abertura de ocorrência 3S,Técnico,mediante análise técnica da demanda,usuário(a) cadastrado(a) no sistema 3S
+,Permissão de Acesso em Sistemas Institucionais,,0,serviço,SUPORTE A SISTEMA DE APOIO À GESTÃO,DSI,abertura de ocorrência 3S,Comum,até 05 hs,gestor(a)responsável pelo setor requisitante
+,Implantação de Módulo em Sistema Institucional,,0,projeto,SUPORTE A SISTEMA DE APOIO À GESTÃO,DSI,PDTI vigente,Comum,conforme previsto no PDTI vigente,gestor(a)responsável pelo setor requisitante
+,Desenvolvimento de novo sistema institucional,,0,projeto,SUPORTE A SISTEMA DE APOIO À GESTÃO,DSI,PDTI vigente,Comum,conforme previsto no PDTI vigente,gestor(a)responsável pelo setor requisitante
+,Processamento de Matrícula,,,serviço,SUPORTE A SISTEMA DE APOIO À GESTÃO,DSI,abertura de ocorrência 3S,Comum,mediante análise técnica da demanda,gestor(a)responsável pelo setor requisitante
+,Execução de projeto de Governança de TIC,Serviço utilizado para realizar a execução de projeto de Governança de TIC previsto no PDTI vigente; Projeto de governança,0,projeto,Serviços - Governança de TIC,DPG,Abertura de ocorrência através do sistema 3S,,de 30 a 180 dias,Gerente da DPG
+,Execução de tarefa de Governança de TIC,Serviço utilizado para realizar a execução de tarefa de Governança de TIC; Tarefa de Governança,0,tarefa,Serviços - Governança de TIC,DPG,Abertura de ocorrência através do sistema 3S,,até 05 dias úteis,Diretor(a) da DTI e Gerente da DPG
 ,Execução de projeto de Contratação de Solução de TIC,Serviço utilizado para realizar a execução de projeto de Contratação de Solução de TIC previsto no PDTI vigente; Projeto de contratação,0,projeto,Serviços – Contratação de Solução de TIC,DPG,Abertura de ocorrência através do sistema 3S,,de 30 a 180 dias,Gerente da DPG
 ,Execução de tarefa de Contratação de Solução de TIC,Serviço utilizado para realizar a execução de tarefa de Contratação de Solução de TIC; Tarefa de contratação,0,tarefa,Serviços – Contratação de Solução de TIC,DPG,Abertura de ocorrência através do sistema 3S,,até 05 dias úteis,Diretor(a) da DTI e Gerente da DPG
 ,Execução de projeto de Planejamento Interno,Serviço utilizado para realizar a execução de projeto de Planejamento Interno; Projeto de Planejamento Interno; Projeto Interno,0,projeto,Serviços – Planejamento Interno,DPG,Abertura de ocorrência através do sistema 3S,,de 30 a 180 dias,Diretor(a) da DTI e Gerente da DPG

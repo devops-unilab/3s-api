@@ -25,6 +25,10 @@ class MainContent{
                     $controller = new OcorrenciaCustomController();
                     $controller->main();
                     break;
+                case 'importador':
+                    $controller = new Importador();
+                    $controller->main();
+                    break;
                 default:
                     echo '<p>Página solicitada não encontrada.</p>';
                     break;
