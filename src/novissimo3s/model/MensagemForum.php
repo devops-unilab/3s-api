@@ -10,14 +10,12 @@ namespace novissimo3s\model;
 
 class MensagemForum {
 	private $id;
-	private $ocorrencia;
 	private $tipo;
 	private $mensagem;
 	private $usuario;
 	private $dataEnvio;
     public function __construct(){
 
-        $this->ocorrencia = new Ocorrencia();
         $this->usuario = new Usuario();
     }
 	public function setId($id) {
@@ -26,13 +24,6 @@ class MensagemForum {
 		    
 	public function getId() {
 		return $this->id;
-	}
-	public function setOcorrencia(Ocorrencia $ocorrencia) {
-		$this->ocorrencia = $ocorrencia;
-	}
-		    
-	public function getOcorrencia() {
-		return $this->ocorrencia;
 	}
 	public function setTipo($tipo) {
 		$this->tipo = $tipo;
@@ -63,7 +54,7 @@ class MensagemForum {
 		return $this->dataEnvio;
 	}
 	public function __toString(){
-	    return $this->id.' - '.$this->ocorrencia.' - '.$this->tipo.' - '.$this->mensagem.' - '.$this->usuario.' - '.$this->dataEnvio;
+	    return $this->id.' - '.$this->tipo.' - '.$this->mensagem.' - '.$this->usuario.' - '.$this->dataEnvio;
 	}
                 
 

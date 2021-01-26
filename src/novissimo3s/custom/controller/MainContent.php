@@ -17,7 +17,11 @@ class MainContent{
             $usuarioController->telaLogin();
             return;
         }
-                
+        
+        $this->contentComum();
+    }
+
+    public function contentComum(){
         if(isset($_GET['page'])){
             switch ($_GET['page'])
             {
@@ -38,10 +42,7 @@ class MainContent{
             $controller->main();
             
         }
-        
-        
     }
-
 
     
     

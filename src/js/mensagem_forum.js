@@ -1,6 +1,20 @@
+$("#muda-tipo").on('change', function(e){
+	
+	if($("#muda-tipo").is(':checked')){
+		$("#campo-texto").addClass("escondido");
+		$("#campo-anexo").removeClass("escondido");	
+	}else{
+
+		$("#campo-texto").removeClass("escondido");
+		$("#campo-anexo").addClass("escondido");	
+	}
+});
 
 
 $(document).ready(function(e) {
+	
+
+
 	$("#insert_form_mensagem_forum").on('submit', function(e) {
 		e.preventDefault();
         $('#modalAddMensagemForum').modal('hide');

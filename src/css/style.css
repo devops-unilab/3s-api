@@ -142,3 +142,6 @@ h1, h2, h3, h4, h5, h6 {
   line-height: 1.33;
   border-radius: 35px;
 }
+.escondido{
+	display: none;
+}

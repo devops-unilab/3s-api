@@ -25,7 +25,6 @@ CREATE TABLE IF NOT EXISTS grupo_servico (
 CREATE TABLE IF NOT EXISTS mensagem_forum (
         id  INT NOT NULL AUTO_INCREMENT , 
         PRIMARY KEY (id), 
-        id_ocorrencia INT NOT NULL, 
         tipo INT, 
         mensagem VARCHAR(400), 
         id_usuario INT NOT NULL, 
@@ -116,10 +115,6 @@ ALTER TABLE tarefa_ocorrencia
     REFERENCES usuario (id);
 
 ALTER TABLE mensagem_forum
-    ADD CONSTRAINT fk_mensagem_forum_ocorrencia FOREIGN KEY (id_ocorrencia)
-    REFERENCES ocorrencia (id);
-
-ALTER TABLE mensagem_forum
     ADD CONSTRAINT fk_mensagem_forum_usuario FOREIGN KEY (id_usuario)
     REFERENCES usuario (id);
 
@@ -158,3 +153,10 @@ ALTER TABLE status_ocorrencia
 ALTER TABLE status_ocorrencia
     ADD CONSTRAINT fk_status_ocorrencia_usuario FOREIGN KEY (id_usuario)
     REFERENCES usuario (id);
+
+ALTER TABLE mensagem_forum ADD COLUMN  id_ocorrencia  INT ;
+                        
+ALTER TABLE mensagem_forum
+    ADD CONSTRAINT
+    fk_ocorrencia_mensagens FOREIGN KEY (id_ocorrencia)
+    REFERENCES ocorrencia (id);

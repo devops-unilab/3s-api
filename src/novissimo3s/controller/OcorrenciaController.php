@@ -323,6 +323,13 @@ class OcorrenciaController {
         echo '</div>';
             
 
+        $this->dao->fetchMensagens($selected);
+        echo '<div class="col-xl-6 col-lg-6 col-md-12 col-sm-12">';
+        $this->view->showMensagens($selected);
+        echo '</div>';
+            
+
+
             
     }
 }

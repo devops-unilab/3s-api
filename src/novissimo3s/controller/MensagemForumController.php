@@ -8,8 +8,9 @@
 
 namespace novissimo3s\controller;
 use novissimo3s\dao\MensagemForumDAO;
-use novissimo3s\dao\OcorrenciaDAO;
 use novissimo3s\dao\UsuarioDAO;
+use novissimo3s\model\Ocorrencia;
+use novissimo3s\dao\OcorrenciaDAO;
 use novissimo3s\model\MensagemForum;
 use novissimo3s\view\MensagemForumView;
 
@@ -68,16 +69,16 @@ class MensagemForumController {
 	public function add() {
             
         if(!isset($_POST['enviar_mensagem_forum'])){
-            $ocorrenciaDao = new OcorrenciaDAO($this->dao->getConnection());
-            $listOcorrencia = $ocorrenciaDao->fetch();
-
             $usuarioDao = new UsuarioDAO($this->dao->getConnection());
             $listUsuario = $usuarioDao->fetch();
 
-            $this->view->showInsertForm($listOcorrencia, $listUsuario);
+            $ocorrenciaDao = new OcorrenciaDAO($this->dao->getConnection());
+            $listOcorrencia = $ocorrenciaDao->fetch();            
+
+            $this->view->showInsertForm($listUsuario, $listOcorrencia);
 		    return;
 		}
-		if (! ( isset ( $_POST ['tipo'] ) && isset ( $_POST ['mensagem'] ) && isset ( $_POST ['data_envio'] ) &&  isset($_POST ['ocorrencia']) &&  isset($_POST ['usuario']))) {
+		if (! ( isset ( $_POST ['tipo'] ) && isset ( $_POST ['mensagem'] ) && isset ( $_POST ['data_envio'] ) && isset ( $_POST ['ocorrencia'] ) &&  isset($_POST ['usuario']))) {
 			echo '
                 <div class="alert alert-danger" role="alert">
                     Failed to register. Some field must be missing. 
@@ -90,10 +91,12 @@ class MensagemForumController {
 		$mensagemForum->setTipo ( $_POST ['tipo'] );
 		$mensagemForum->setMensagem ( $_POST ['mensagem'] );
 		$mensagemForum->setDataEnvio ( $_POST ['data_envio'] );
-		$mensagemForum->getOcorrencia()->setId ( $_POST ['ocorrencia'] );
 		$mensagemForum->getUsuario()->setId ( $_POST ['usuario'] );
+        $ocorrencia = new Ocorrencia();
+        $ocorrencia->setId($_POST['ocorrencia']);
+
             
-		if ($this->dao->insert ($mensagemForum ))
+		if ($this->dao->insert ($mensagemForum, $ocorrencia ))
         {
 			echo '
 
@@ -125,7 +128,7 @@ class MensagemForumController {
         
 		    
 		
-		if (! ( isset ( $_POST ['tipo'] ) && isset ( $_POST ['mensagem'] ) && isset ( $_POST ['data_envio'] ) &&  isset($_POST ['ocorrencia']) &&  isset($_POST ['usuario']))) {
+		if (! ( isset ( $_POST ['tipo'] ) && isset ( $_POST ['mensagem'] ) && isset ( $_POST ['data_envio'] ) && isset ( $_POST ['ocorrencia'] ) &&  isset($_POST ['usuario']))) {
 			echo ':incompleto';
 			return;
 		}
@@ -134,10 +137,12 @@ class MensagemForumController {
 		$mensagemForum->setTipo ( $_POST ['tipo'] );
 		$mensagemForum->setMensagem ( $_POST ['mensagem'] );
 		$mensagemForum->setDataEnvio ( $_POST ['data_envio'] );
-		$mensagemForum->getOcorrencia()->setId ( $_POST ['ocorrencia'] );
 		$mensagemForum->getUsuario()->setId ( $_POST ['usuario'] );
+        $ocorrencia = new Ocorrencia();
+        $ocorrencia->setId($_POST['ocorrencia']);
+
             
-		if ($this->dao->insert ( $mensagemForum ))
+		if ($this->dao->insert ( $mensagemForum, $ocorrencia ))
         {
 			$id = $this->dao->getConnection()->lastInsertId();
             echo ':sucesso:'.$id;
@@ -159,17 +164,14 @@ class MensagemForumController {
 	    $this->dao->fillById($selected);
 	        
         if(!isset($_POST['edit_mensagem_forum'])){
-            $ocorrenciaDao = new OcorrenciaDAO($this->dao->getConnection());
-            $listOcorrencia = $ocorrenciaDao->fetch();
-
             $usuarioDao = new UsuarioDAO($this->dao->getConnection());
             $listUsuario = $usuarioDao->fetch();
 
-            $this->view->showEditForm($listOcorrencia, $listUsuario, $selected);
+            $this->view->showEditForm($listUsuario, $selected);
             return;
         }
             
-		if (! ( isset ( $_POST ['tipo'] ) && isset ( $_POST ['mensagem'] ) && isset ( $_POST ['data_envio'] ) &&  isset($_POST ['ocorrencia']) &&  isset($_POST ['usuario']))) {
+		if (! ( isset ( $_POST ['tipo'] ) && isset ( $_POST ['mensagem'] ) && isset ( $_POST ['data_envio'] ) &&  isset($_POST ['usuario']))) {
 			echo "Incompleto";
 			return;
 		}

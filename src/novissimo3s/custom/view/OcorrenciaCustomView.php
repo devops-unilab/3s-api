@@ -356,8 +356,7 @@ class OcorrenciaCustomView extends OcorrenciaView {
                         <p>Abertura: '.date("d/m/Y H:i:s" , strtotime($dataAbertura)).'</p>';
        
         
-        $strClass = "";
-        $strText = "";
+
         if($ocorrencia->getServico()->getTempoSla() > 1)
         {
             echo '

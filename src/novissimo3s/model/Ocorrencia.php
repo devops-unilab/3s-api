@@ -28,11 +28,13 @@ class Ocorrencia {
 	private $idUsuarioIndicado;
 	private $anexo;
 	private $localSala;
+	private $mensagens;
     public function __construct(){
 
         $this->areaResponsavel = new AreaResponsavel();
         $this->servico = new Servico();
         $this->usuarioCliente = new Usuario();
+        $this->mensagens = array();
     }
 	public function setId($id) {
 		$this->id = $id;
@@ -167,8 +169,20 @@ class Ocorrencia {
 	public function getLocalSala() {
 		return $this->localSala;
 	}
+
+	public function setMensagens($mensagens) {
+		$this->mensagens = $mensagens;
+	}
+         
+    public function addMensagemForum(MensagemForum $mensagemForum){
+        $this->mensagens[] = $mensagemForum;
+            
+    }
+	public function getMensagens() {
+		return $this->mensagens;
+	}
 	public function __toString(){
-	    return $this->id.' - '.$this->areaResponsavel.' - '.$this->servico.' - '.$this->idLocal.' - '.$this->usuarioCliente.' - '.$this->descricao.' - '.$this->campus.' - '.$this->patrimonio.' - '.$this->ramal.' - '.$this->local.' - '.$this->status.' - '.$this->solucao.' - '.$this->prioridade.' - '.$this->avaliacao.' - '.$this->email.' - '.$this->idUsuarioAtendente.' - '.$this->idUsuarioIndicado.' - '.$this->anexo.' - '.$this->localSala;
+	    return $this->id.' - '.$this->areaResponsavel.' - '.$this->servico.' - '.$this->idLocal.' - '.$this->usuarioCliente.' - '.$this->descricao.' - '.$this->campus.' - '.$this->patrimonio.' - '.$this->ramal.' - '.$this->local.' - '.$this->status.' - '.$this->solucao.' - '.$this->prioridade.' - '.$this->avaliacao.' - '.$this->email.' - '.$this->idUsuarioAtendente.' - '.$this->idUsuarioIndicado.' - '.$this->anexo.' - '.$this->localSala.' - '.'Lista: '.implode(", ", $this->mensagens);
 	}
                 
 

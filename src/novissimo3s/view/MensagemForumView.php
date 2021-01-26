@@ -11,7 +11,7 @@ use novissimo3s\model\MensagemForum;
 
 
 class MensagemForumView {
-    public function showInsertForm($listaOcorrencia, $listaUsuario) {
+    public function showInsertForm($listaUsuario, $listaOcorrencia) {
 		echo '
 <!-- Button trigger modal -->
 <button type="button" class="btn btn-primary m-3" data-toggle="modal" data-target="#modalAddMensagemForum">
@@ -49,18 +49,6 @@ class MensagemForumView {
                                             <input type="datetime-local" class="form-control"  name="data_envio" id="data_envio" placeholder="Data Envio">
                                         </div>
                                         <div class="form-group">
-                                          <label for="ocorrencia">Ocorrencia</label>
-                						  <select class="form-control" id="ocorrencia" name="ocorrencia">
-                                            <option value="">Selecione o Ocorrencia</option>';
-                                                
-        foreach( $listaOcorrencia as $element){
-            echo '<option value="'.$element->getId().'">'.$element.'</option>';
-        }
-            
-        echo '
-                                          </select>
-                						</div>
-                                        <div class="form-group">
                                           <label for="usuario">Usuario</label>
                 						  <select class="form-control" id="usuario" name="usuario">
                                             <option value="">Selecione o Usuario</option>';
@@ -69,6 +57,18 @@ class MensagemForumView {
             echo '<option value="'.$element->getId().'">'.$element.'</option>';
         }
             
+        echo '
+                                          </select>
+                						</div>
+                                        <div class="form-group">
+                                          <label for="ocorrencia">Ocorrencia</label>
+                						  <select class="form-control" id="ocorrencia" name="ocorrencia">
+                                            <option value="">Selecione o Ocorrencia</option>';
+                                                
+        foreach( $listaOcorrencia as $element){
+            echo '<option value="'.$element->getId().'">'.$element.'</option>';
+        }
+                
         echo '
                                           </select>
                 						</div>
@@ -116,7 +116,6 @@ class MensagemForumView {
 						<th>Tipo</th>
 						<th>Mensagem</th>
 						<th>Data Envio</th>
-						<th>Ocorrencia</th>
 						<th>Usuario</th>
                         <th>Actions</th>
 					</tr>
@@ -127,7 +126,6 @@ class MensagemForumView {
                         <th>Tipo</th>
                         <th>Mensagem</th>
                         <th>Data Envio</th>
-						<th>Ocorrencia</th>
 						<th>Usuario</th>
                         <th>Actions</th>
 					</tr>
@@ -140,7 +138,6 @@ class MensagemForumView {
                 echo '<td>'.$element->getTipo().'</td>';
                 echo '<td>'.$element->getMensagem().'</td>';
                 echo '<td>'.$element->getDataEnvio().'</td>';
-                echo '<td>'.$element->getOcorrencia().'</td>';
                 echo '<td>'.$element->getUsuario().'</td>';
                 echo '<td>
                         <a href="?page=mensagem_forum&select='.$element->getId().'" class="btn btn-info text-white">Select</a>
@@ -166,7 +163,7 @@ class MensagemForumView {
             
 
             
-	public function showEditForm($listaOcorrencia, $listaUsuario, MensagemForum $selecionado) {
+	public function showEditForm($listaUsuario, MensagemForum $selecionado) {
 		echo '
 	    
 	    
@@ -189,18 +186,6 @@ class MensagemForumView {
                                         <div class="form-group">
                                             <label for="data_envio">Data Envio</label>
                                             <input type="datetime-local" class="form-control" value="'.$selecionado->getDataEnvio().'"  name="data_envio" id="data_envio" placeholder="Data Envio">
-                						</div>
-                                        <div class="form-group">
-                                          <label for="ocorrencia">Ocorrencia</label>
-                						  <select class="form-control" id="ocorrencia" name="ocorrencia">
-                                            <option value="">Selecione o Ocorrencia</option>';
-                                                
-        foreach( $listaOcorrencia as $element){
-            echo '<option value="'.$element->getId().'">'.$element.'</option>';
-        }
-            
-        echo '
-                                          </select>
                 						</div>
                                         <div class="form-group">
                                           <label for="usuario">Usuario</label>
@@ -247,7 +232,6 @@ class MensagemForumView {
                 Tipo: '.$mensagemforum->getTipo().'<br>
                 Mensagem: '.$mensagemforum->getMensagem().'<br>
                 Data Envio: '.$mensagemforum->getDataEnvio().'<br>
-                Ocorrencia: '.$mensagemforum->getOcorrencia().'<br>
                 Usuario: '.$mensagemforum->getUsuario().'<br>
             
             </div>

@@ -21,7 +21,6 @@ CREATE TABLE grupo_servico (
 
 CREATE TABLE mensagem_forum (
     id INTEGER     PRIMARY KEY AUTOINCREMENT,
-    id_ocorrencia INTEGER NOT NULL,
     tipo INTEGER ,
     mensagem TEXT ,
     id_usuario INTEGER NOT NULL,
@@ -95,3 +94,5 @@ CREATE TABLE usuario (
     nivel TEXT ,
     id_setor INTEGER 
 );
+
+ALTER TABLE mensagem_forum ADD COLUMN  id_ocorrencia  INTEGER ;

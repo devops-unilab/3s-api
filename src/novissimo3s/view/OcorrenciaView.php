@@ -443,4 +443,64 @@ class OcorrenciaView {
                       
 
 
+    public function showMensagens(Ocorrencia $ocorrencia){
+        echo '
+        
+    	<div class="card o-hidden border-0 shadow-lg">
+              <div class="card">
+                <div class="card-header">
+                  MensagemForum do Ocorrencia
+                </div>
+                <div class="card-body">
+                      
+                      
+		<div class="table-responsive">
+			<table class="table table-bordered" id="dataTable" width="100%"
+				cellspacing="0">
+				<thead>
+					<tr>
+						<th>id</th>
+						<th>tipo</th>
+						<th>mensagem</th><th>Actions</th>
+					</tr>
+				</thead>
+				<tfoot>
+					<tr>
+                        <th>id</th>
+                        <th>tipo</th>
+                        <th>mensagem</th><th>Actions</th>
+					</tr>
+				</tfoot>
+				<tbody>';
+                
+            foreach($ocorrencia->getMensagens() as $element){
+                echo '<tr>';
+                echo '<td>'.$element->getId().'</td>';
+                echo '<td>'.$element->getTipo().'</td>';
+                echo '<td>'.$element->getMensagem().'</td>';echo '<td>
+                        <a href="?page=mensagem_forum&select='.$element->getId().'" class="btn btn-info">Selecionar</a>
+                        <a href="?page=ocorrencia&select='.$ocorrencia->getId().'&remover_mensagem_forum='.$element->getId().'" class="btn btn-danger">Remover</a>
+                      </td>';
+                echo '<tr>';
+            }
+                
+        echo '
+				</tbody>
+			</table>
+		</div>
+                
+                
+                
+                
+      </div>
+  </div>
+</div>
+                
+                
+                
+        ';
+                
+    }
+                
+
 }

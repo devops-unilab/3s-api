@@ -19,6 +19,7 @@ use novissimo3s\custom\dao\StatusOcorrenciaCustomDAO;
 use novissimo3s\custom\dao\MensagemForumCustomDAO;
 use novissimo3s\custom\dao\RecessoCustomDAO;
 use novissimo3s\model\Servico;
+use novissimo3s\controller\MensagemForumController;
 
 class OcorrenciaCustomController  extends OcorrenciaController {
     public function fimDeSemana($data){
@@ -118,11 +119,9 @@ class OcorrenciaCustomController  extends OcorrenciaController {
 	    if(!isset($_GET['selecionar'])){
 	        return;
 	    }
-	    
-	    
 	    $selecionado = new Ocorrencia();
 	    $selecionado->setId($_GET['selecionar']);
-	    $this->dao->preenchePorId($selecionado);
+	    $this->dao->fillById($selecionado);
 	    
 	    echo '
             <div class="row">
@@ -135,12 +134,6 @@ class OcorrenciaCustomController  extends OcorrenciaController {
 	    
 	    $statusDao = new StatusOcorrenciaCustomDAO($this->dao->getConnection());
 	    $listaStatus = $statusDao->pesquisaPorIdOcorrencia($selecionado);
-	    
-	    $mensagemDao = new MensagemForumCustomDAO($this->dao->getConnection());
-	    $listaForum = $mensagemDao->retornaListaPorOcorrencia($selecionado);
-	    
-	    
-	    
 	    $dataAbertura = null;
 	    foreach($listaStatus as $statusOcorrencia){
 	        if($statusOcorrencia->getStatus()->getSigla() == 'a'){
@@ -157,26 +150,7 @@ class OcorrenciaCustomController  extends OcorrenciaController {
 	    $horaEstimada = $this->calcularHoraSolucao($dataAbertura, $selecionado->getServico()->getTempoSla());
 	    $this->view->mostrarSelecionado2($selecionado, $listaStatus, $dataAbertura, $horaEstimada);
 	    
-	    echo '
-                    <h4 class="font-italic">Mensagens</h4>
-                    <hr>
-                    <div class="container">';
-	    foreach($listaForum as $mensagemForum){
-	        
-	        echo '
-	            
-	            
-                    <div class="notice notice-info">
-                        '.$mensagemForum->getMensagem().'<br>
-                        <strong>'.$mensagemForum->getUsuario()->getNome().'| '.date("d/m/Y H:i",strtotime($mensagemForum->getDataEnvio())).'</strong><br>
-            	    </div>
-                            
-                            
-                            
-';
-	        
-	    }
-	    echo '</div>';
+
 	    
 	    echo '
 	        
@@ -260,17 +234,27 @@ class OcorrenciaCustomController  extends OcorrenciaController {
 </div>
 	        
 	        
-	        
+';
+	    
+	    $mensagemController = new MensagemForumCustomController();
+	    
+	    $this->dao->fetchMensagens($selecionado);
+	    $mensagemController->mainOcorrencia($selecionado);
+
+	    
+
+        
+	    
+	    echo '
                   <div class="p-4 mb-3 bg-light rounded">
-                    <h4 class="font-italic">Tarefas no Redmine</h4>
+                    <h4 class="font-italic">Redmine</h4>
                     <div class="container">
-                    	<div class="row">
-	        
+                    	<div class="row">';
+	    echo '
                     	</div>
                     </div>
                   </div>
-	        
-	        
+	          
 	        
 	        
                 </aside>
