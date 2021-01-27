@@ -18,7 +18,7 @@ $(document).ready(function(e) {
             	if(data.split(":")[1] == 'sucesso'){
             		
             		$("#botao-modal-resposta").click(function(){
-            			window.location.href='?page=ocorrencia';
+            			window.location.href='?page=ocorrencia&selecionar='+data.split(":")[2];
             		});
             		$("#textoModalResposta").text("Ocorrencia enviado com sucesso! ");                	
             		$("#modalResposta").modal("show");

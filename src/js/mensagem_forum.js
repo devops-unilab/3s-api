@@ -19,7 +19,7 @@ $(document).ready(function(e) {
 		e.preventDefault();
         $('#modalAddMensagemForum').modal('hide');
         
-		var dados = jQuery( this ).serialize();
+        var dados = new FormData(this);
         
 		jQuery.ajax({
             type: "POST",
@@ -44,6 +44,20 @@ $(document).ready(function(e) {
                 	$("#textoModalResposta").text("Falha ao inserir Mensagem Forum, fale com o suporte. ");                	
             		$("#modalResposta").modal("show");
             	}
+
+            },
+            cache: false,
+            contentType: false,
+            processData: false,
+            xhr: function() { // Custom XMLHttpRequest
+                var myXhr = $.ajaxSettings.xhr();
+                if (myXhr.upload) { // Avalia se tem suporte a propriedade upload
+                    myXhr.upload.addEventListener('progress', function() {
+                    /* faz alguma coisa durante o progresso do upload */
+                    }, false);
+                }
+                return myXhr;
+
 
             }
         });
