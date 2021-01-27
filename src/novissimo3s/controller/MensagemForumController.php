@@ -13,6 +13,8 @@ use novissimo3s\model\Ocorrencia;
 use novissimo3s\dao\OcorrenciaDAO;
 use novissimo3s\model\MensagemForum;
 use novissimo3s\view\MensagemForumView;
+use novissimo3s\util\Sessao;
+use novissimo3s\custom\controller\MensagemForumCustomController;
 
 
 class MensagemForumController {
@@ -119,40 +121,7 @@ class MensagemForumController {
 
 
 
-            
-	public function addAjax() {
-            
-        if(!isset($_POST['enviar_mensagem_forum'])){
-            return;    
-        }
-        
-		    
-		
-		if (! ( isset ( $_POST ['tipo'] ) && isset ( $_POST ['mensagem'] ) && isset ( $_POST ['data_envio'] ) && isset ( $_POST ['ocorrencia'] ) &&  isset($_POST ['usuario']))) {
-			echo ':incompleto';
-			return;
-		}
-            
-		$mensagemForum = new MensagemForum ();
-		$mensagemForum->setTipo ( $_POST ['tipo'] );
-		$mensagemForum->setMensagem ( $_POST ['mensagem'] );
-		$mensagemForum->setDataEnvio ( $_POST ['data_envio'] );
-		$mensagemForum->getUsuario()->setId ( $_POST ['usuario'] );
-        $ocorrencia = new Ocorrencia();
-        $ocorrencia->setId($_POST['ocorrencia']);
-
-            
-		if ($this->dao->insert ( $mensagemForum, $ocorrencia ))
-        {
-			$id = $this->dao->getConnection()->lastInsertId();
-            echo ':sucesso:'.$id;
-            
-		} else {
-			 echo ':falha';
-		}
-	}
-            
-            
+  
 
             
     public function edit(){

@@ -9,11 +9,12 @@
 namespace novissimo3s\custom\view;
 use novissimo3s\view\MensagemForumView;
 use novissimo3s\custom\controller\MensagemForumCustomController;
+use novissimo3s\model\Ocorrencia;
 
 
 class MensagemForumCustomView extends MensagemForumView {
 
-    public function showInsertForm2() {
+    public function showInsertForm2(Ocorrencia $ocorrencia) {
         echo '
           <form id="insert_form_mensagem_forum" class="user" method="post">
             <input type="hidden" name="enviar_mensagem_forum" value="1">
@@ -23,6 +24,7 @@ class MensagemForumCustomView extends MensagemForumView {
                           <label class="custom-control-label" for="muda-tipo">Enviar Arquivo</label>
                         </div>
                            
+                        <input type="hidden" name="ocorrencia" value="'.$ocorrencia->getId().'">
                         <input type="hidden" name="tipo" value="'.MensagemForumCustomController::TIPO_TEXTO.'">
 
                         <div class="form-floating" id="campo-texto">

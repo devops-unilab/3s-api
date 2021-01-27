@@ -17,8 +17,6 @@ class MensagemForumCustomController  extends MensagemForumController {
     const TIPO_ARQUIVO = 2;
     const TIPO_TEXTO = 1;
     public function add() {
-        $sessao = new Sessao();
-        
         if(!isset($_GET['selecionar'])){
             return;
         }
@@ -26,46 +24,48 @@ class MensagemForumCustomController  extends MensagemForumController {
         $ocorrencia->setId($_GET['selecionar']);
         
         if(!isset($_POST['enviar_mensagem_forum'])){
-            $this->view->showInsertForm2();
+            $this->view->showInsertForm2($ocorrencia);
             return;
         }
-        if (! ( isset ( $_POST ['mensagem'] )  && isset ( $_POST ['ocorrencia'] ))) {
-            echo '
-                <div class="alert alert-danger" role="alert">
-                    Failed to register. Some field must be missing.
-                </div>
-                
-                ';
-            return;
-        }
-        $mensagemForum = new MensagemForum();
-        $mensagemForum->setTipo ( self::TIPO_TEXTO );
-        $mensagemForum->setMensagem ( $_POST ['mensagem'] );
-        $mensagemForum->setDataEnvio ( date("Y-m-d G:i:s") );
-        $mensagemForum->getUsuario()->setId ( $sessao->getIdUsuario() );
         
-        
-        
-        if ($this->dao->insert ($mensagemForum, $ocorrencia ))
-        {
-            echo '
-                
-<div class="alert alert-success" role="alert">
-  Sucesso ao inserir Mensagem Forum
-</div>
-                
-';
-        } else {
-            echo '
-                
-<div class="alert alert-danger" role="alert">
-  Falha ao tentar Inserir Mensagem Forum
-</div>
-                
-';
-        }
-        echo '<META HTTP-EQUIV="REFRESH" CONTENT="3; URL=index.php?page=mensagem_forum">';
     }
+    
+    
+    
+    public function addAjax() {
+        
+        $sessao = new Sessao();
+        if(!isset($_POST['enviar_mensagem_forum'])){
+            return;
+        }
+        if (! ( isset ( $_POST ['tipo'] )
+            && isset ( $_POST ['mensagem'] )
+            && isset ( $_POST ['ocorrencia'] ) )) {
+                echo ':incompleto';
+                return;
+            }
+            
+            $mensagemForum = new MensagemForum ();
+            $mensagemForum->setTipo ( MensagemForumCustomController::TIPO_TEXTO );
+            $mensagemForum->setMensagem ( $_POST ['mensagem'] );
+            $mensagemForum->setDataEnvio (date("Y-m-d G:i:s") );
+            
+            $mensagemForum->getUsuario()->setId ( $sessao->getIdUsuario() );
+            $ocorrencia = new Ocorrencia();
+            $ocorrencia->setId($_POST['ocorrencia']);
+            
+            
+            if ($this->dao->insert ( $mensagemForum, $ocorrencia ))
+            {
+                $id = $this->dao->getConnection()->lastInsertId();
+                echo ':sucesso:'.$id;
+                
+            } else {
+                echo ':falha';
+            }
+    }
+    
+    
     
     
     public function mainOcorrencia(Ocorrencia $ocorrencia){
