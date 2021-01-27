@@ -25,7 +25,7 @@ class MensagemForumCustomView extends MensagemForumView {
                         </div>
                            
                         <input type="hidden" name="ocorrencia" value="'.$ocorrencia->getId().'">
-                        <input type="hidden" name="tipo" value="'.MensagemForumCustomController::TIPO_TEXTO.'">
+                        <input type="hidden" id="campo_tipo" name="tipo" value="'.MensagemForumCustomController::TIPO_TEXTO.'">
 
                         <div class="form-floating" id="campo-texto">
                           <textarea class="form-control" placeholder="Deixar uma mensagem"  name="mensagem" id="mensagem" ></textarea>

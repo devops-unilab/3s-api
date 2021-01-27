@@ -47,7 +47,26 @@ class MensagemForumCustomController  extends MensagemForumController {
             
             $mensagemForum = new MensagemForum ();
             $mensagemForum->setTipo ( MensagemForumCustomController::TIPO_TEXTO );
-            $mensagemForum->setMensagem ( $_POST ['mensagem'] );
+            
+            if($_POST['tipo'] == MensagemForumCustomController::TIPO_TEXTO){
+                $mensagemForum->setMensagem ( $_POST ['mensagem'] );
+            }else{
+                if($_FILES['anexo']['name'] != null){
+                    if(!file_exists('uploads/ocorrencia/anexo/')) {
+                        mkdir('uploads/ocorrencia/anexo/', 0777, true);
+                    }
+                    
+                    if(!move_uploaded_file($_FILES['anexo']['tmp_name'], 'uploads/ocorrencia/anexo/'. $_FILES['anexo']['name']))
+                    {
+                        echo ':falha';
+                        return;
+                    }
+                    $mensagemForum->setMensagem ( "uploads/ocorrencia/anexo/".$_FILES ['anexo']['name'] );
+                }
+                
+            }
+            
+            
             $mensagemForum->setDataEnvio (date("Y-m-d G:i:s") );
             
             $mensagemForum->getUsuario()->setId ( $sessao->getIdUsuario() );

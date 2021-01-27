@@ -2,11 +2,14 @@ $("#muda-tipo").on('change', function(e){
 	
 	if($("#muda-tipo").is(':checked')){
 		$("#campo-texto").addClass("escondido");
-		$("#campo-anexo").removeClass("escondido");	
+		$("#campo-anexo").removeClass("escondido");
+		$("#campo_tipo").val(2);	
 	}else{
 
 		$("#campo-texto").removeClass("escondido");
 		$("#campo-anexo").addClass("escondido");	
+		$("#campo_tipo").val(1);
+		
 	}
 });
 
