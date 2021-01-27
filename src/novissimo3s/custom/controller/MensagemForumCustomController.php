@@ -58,7 +58,7 @@ class MensagemForumCustomController  extends MensagemForumController {
             if ($this->dao->insert ( $mensagemForum, $ocorrencia ))
             {
                 $id = $this->dao->getConnection()->lastInsertId();
-                echo ':sucesso:'.$id;
+                echo ':sucesso:'.$ocorrencia->getId();
                 
             } else {
                 echo ':falha';

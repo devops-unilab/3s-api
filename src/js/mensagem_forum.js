@@ -31,8 +31,8 @@ $(document).ready(function(e) {
 
             	if(data.split(":")[1] == 'sucesso'){
             		
-            		$("#botao-modal-resposta").click(function(){
-            			window.location.href='?page=mensagem_forum';
+            		$("#botao-modal-resposta").click(function(){						
+            			window.location.href='?page=ocorrencia&selecionar='+data.split(":")[2];
             		});
             		$("#textoModalResposta").text("Mensagem Forum enviado com sucesso! ");                	
             		$("#modalResposta").modal("show");
