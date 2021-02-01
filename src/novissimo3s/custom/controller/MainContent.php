@@ -17,11 +17,45 @@ class MainContent{
             $usuarioController->telaLogin();
             return;
         }
+        switch ($sessao->getNivelAcesso()){
+            case Sessao::NIVEL_TECNICO:
+                $this->contentTec();
+                break;
+            case Sessao::NIVEL_ADM:
+                $this->contentAdmin();
+                break;
+            case Sessao::NIVEL_COMUM:
+                $this->contentComum();
+                break;
+            default:
+                $usuarioController = new UsuarioCustomController();
+                $usuarioController->telaLogin();
+                break;
+        }
         
-        $this->contentComum();
     }
 
     public function contentComum(){
+        if(isset($_GET['page'])){
+            switch ($_GET['page'])
+            {
+                case 'ocorrencia':
+                    $controller = new OcorrenciaCustomController();
+                    $controller->main();
+                    break;
+                default:
+                    echo '<p>Página solicitada não encontrada.</p>';
+                    break;
+            }
+        }else{
+            $controller = new OcorrenciaCustomController();
+            $controller->main();
+            
+        }
+    }
+
+    
+    public function contentAdmin(){
         if(isset($_GET['page'])){
             switch ($_GET['page'])
             {
@@ -43,7 +77,31 @@ class MainContent{
             
         }
     }
-
+    
+    
+    public function contentTec(){
+        if(isset($_GET['page'])){
+            switch ($_GET['page'])
+            {
+                case 'ocorrencia':
+                    $controller = new OcorrenciaCustomController();
+                    $controller->main();
+                    break;
+                case 'importador':
+                    $controller = new Importador();
+                    $controller->main();
+                    break;
+                default:
+                    echo '<p>Página solicitada não encontrada.</p>';
+                    break;
+            }
+        }else{
+            $controller = new OcorrenciaCustomController();
+            $controller->main();
+            
+        }
+    }
+    
     
     
 }

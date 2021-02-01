@@ -46,22 +46,28 @@ class MensagemForumCustomController  extends MensagemForumController {
             }
             
             $mensagemForum = new MensagemForum ();
-            $mensagemForum->setTipo ( MensagemForumCustomController::TIPO_TEXTO );
+            $mensagemForum->setTipo ($_POST ['tipo']);
             
             if($_POST['tipo'] == MensagemForumCustomController::TIPO_TEXTO){
                 $mensagemForum->setMensagem ( $_POST ['mensagem'] );
             }else{
                 if($_FILES['anexo']['name'] != null){
-                    if(!file_exists('uploads/ocorrencia/anexo/')) {
-                        mkdir('uploads/ocorrencia/anexo/', 0777, true);
+                    if(!file_exists('uploads/')) {
+                        mkdir('uploads/', 0777, true);
                     }
+                    $novoNome =$_FILES['anexo']['name'];
                     
-                    if(!move_uploaded_file($_FILES['anexo']['tmp_name'], 'uploads/ocorrencia/anexo/'. $_FILES['anexo']['name']))
+                    if(file_exists('uploads/'.$_FILES['anexo']['name'])) 
+                    {
+                        $novoNome = uniqid().'_'.$novoNome;
+                        
+                    }
+                    if(!move_uploaded_file($_FILES['anexo']['tmp_name'], 'uploads/'. $novoNome))
                     {
                         echo ':falha';
                         return;
                     }
-                    $mensagemForum->setMensagem ( "uploads/ocorrencia/anexo/".$_FILES ['anexo']['name'] );
+                    $mensagemForum->setMensagem ( $novoNome );
                 }
                 
             }
@@ -88,32 +94,42 @@ class MensagemForumCustomController  extends MensagemForumController {
     
     public function mainOcorrencia(Ocorrencia $ocorrencia){
         echo '	        
-            <div class="p-4 mb-3 bg-light rounded">
+            <div class="container">
                 <h4 class="font-italic">Mensagens</h4>
                 <div class="container">
-                	<div class="row">';
+                	';
 
-        $this->add();
+        
 	    $listaForum = $ocorrencia->getMensagens();
 	    foreach($listaForum as $mensagemForum){
 
 	        echo '
 
-
-                    <div class="notice notice-info">
-                        '.$mensagemForum->getMensagem().'<br>
+<div class="row">
+                    <div class="notice notice-info">';
+	        if($mensagemForum->getTipo() == self::TIPO_ARQUIVO){
+	            echo 'Anexo<br>';
+	        }else{
+	            echo '
+                        '.$mensagemForum->getMensagem().'<br>';
+	        }
+	        
+	        echo '
                         <strong>'.$mensagemForum->getUsuario()->getNome().'| '.date("d/m/Y H:i",strtotime($mensagemForum->getDataEnvio())).'</strong><br>
             	    </div>
-
+</div>
 ';
 
 	    }
         
         
         echo '
-                    	</div>
+                    	
                     </div>
                   </div>';
+        echo '<div class="p-4 mb-3 bg-light rounded">';
+        $this->add();
+        echo '</div>';
 	
         
     }

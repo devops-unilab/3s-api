@@ -11,6 +11,7 @@ use novissimo3s\dao\OcorrenciaDAO;
 use novissimo3s\model\Ocorrencia;
 use PDO;
 use PDOException;
+use novissimo3s\model\MensagemForum;
 
 class  OcorrenciaCustomDAO extends OcorrenciaDAO {
     
@@ -268,6 +269,44 @@ class  OcorrenciaCustomDAO extends OcorrenciaDAO {
         return $lista;
     }
     
+    
+    public function fetchMensagens(Ocorrencia $ocorrencia){
+        $id = $ocorrencia->getId();
+        $sql = "SELECT mensagem_forum.id, mensagem_forum.tipo, mensagem_forum.mensagem, mensagem_forum.data_envio, usuario.id as id_usuario_usuario, usuario.nome as nome_usuario_usuario, usuario.email as email_usuario_usuario, usuario.login as login_usuario_usuario, usuario.senha as senha_usuario_usuario, usuario.nivel as nivel_usuario_usuario, usuario.id_setor as id_setor_usuario_usuario FROM mensagem_forum INNER JOIN usuario as usuario ON usuario.id = mensagem_forum.id_usuario
+            WHERE id_ocorrencia = :id ORDER BY mensagem_forum.id ASC;";
+        try {
+            
+            $stmt = $this->connection->prepare($sql);
+            $stmt->bindParam(":id", $id, PDO::PARAM_INT);
+            $stmt->execute();
+            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            foreach ( $result as $row ){
+                
+                $mensagemForum = new MensagemForum();
+                
+                $mensagemForum->setId( $row ['id'] );
+                $mensagemForum->setTipo( $row ['tipo'] );
+                $mensagemForum->setMensagem( $row ['mensagem'] );
+                $mensagemForum->getUsuario()->setId( $row ['id_usuario_usuario'] );
+                $mensagemForum->getUsuario()->setNome( $row ['nome_usuario_usuario'] );
+                $mensagemForum->getUsuario()->setEmail( $row ['email_usuario_usuario'] );
+                $mensagemForum->getUsuario()->setLogin( $row ['login_usuario_usuario'] );
+                $mensagemForum->getUsuario()->setSenha( $row ['senha_usuario_usuario'] );
+                $mensagemForum->getUsuario()->setNivel( $row ['nivel_usuario_usuario'] );
+                $mensagemForum->getUsuario()->setIdSetor( $row ['id_setor_usuario_usuario'] );
+                $mensagemForum->setDataEnvio( $row ['data_envio'] );
+                $ocorrencia->addMensagemForum($mensagemForum);
+            }
+            
+        } catch(PDOException $e) {
+            echo $e->getMessage();
+            
+        }
+        
+        
+        
+        
+    }
     
 
 }

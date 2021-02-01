@@ -207,28 +207,7 @@ class OcorrenciaCustomController  extends OcorrenciaController {
                             
                             
 ';
-	    }
-	    /*
-	     <div class="notice notice-success">
-	     <strong>Notice</strong> notice-success
-	     </div>
-	     <div class="notice notice-danger">
-	     <strong>Notice</strong> notice-danger
-	     </div>
-	     <div class="notice notice-info">
-	     <strong>Notice</strong> notice-info
-	     </div>
-	     <div class="notice notice-warning">
-	     <strong>Notice</strong> notice-warning
-	     </div>
-	     <div class="notice notice-lg">
-	     <strong>Big notice</strong> notice-lg
-	     </div>
-	     <div class="notice notice-sm">
-	     <strong>Small notice</strong> notice-sm
-	     </div>
-	     */
-	    
+	    }	    
 	    echo '
 	        
 </div>
@@ -244,16 +223,8 @@ class OcorrenciaCustomController  extends OcorrenciaController {
 	    
 
         
-	    
+
 	    echo '
-                  <div class="p-4 mb-3 bg-light rounded">
-                    <h4 class="font-italic">Redmine</h4>
-                    <div class="container">
-                    	<div class="row">';
-	    echo '
-                    	</div>
-                    </div>
-                  </div>
 	          
 	        
 	        
