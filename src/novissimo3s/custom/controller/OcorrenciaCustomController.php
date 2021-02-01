@@ -16,10 +16,8 @@ use novissimo3s\model\StatusOcorrencia;
 use novissimo3s\dao\StatusOcorrenciaDAO;
 use novissimo3s\model\Usuario;
 use novissimo3s\custom\dao\StatusOcorrenciaCustomDAO;
-use novissimo3s\custom\dao\MensagemForumCustomDAO;
 use novissimo3s\custom\dao\RecessoCustomDAO;
 use novissimo3s\model\Servico;
-use novissimo3s\controller\MensagemForumController;
 
 class OcorrenciaCustomController  extends OcorrenciaController {
     public function fimDeSemana($data){
@@ -114,6 +112,62 @@ class OcorrenciaCustomController  extends OcorrenciaController {
 		$this->dao = new OcorrenciaCustomDAO();
 		$this->view = new OcorrenciaCustomView();
 	}
+
+	public function painelTecnico(){
+	    $sessao = new Sessao();
+	    if($sessao->getNivelAcesso() != Sessao::NIVEL_TECNICO && $sessao->getNivelAcesso() != Sessao::NIVEL_ADM){
+	        return;
+	    }
+	    echo '
+
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Atender Ocorrência</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="form-group">
+            <label for="exampleInputPassword1">Confirme Com Sua Senha</label>
+            <input type="password" class="form-control" id="exampleInputPassword1">
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Sair</button>
+        <button type="button" class="btn btn-primary">Confirmar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="card">
+    <div class="card-body">
+    <div class="alert alert-danger" role="alert">
+      Status Aaberto
+    </div>
+    
+    <!-- Button trigger modal -->
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+      Atender Ocorrência
+    </button>
+    
+  </div>
+</div>
+
+
+
+
+
+';
+	}
 	public function selecionar(){
 	    
 	    if(!isset($_GET['selecionar'])){
@@ -155,8 +209,13 @@ class OcorrenciaCustomController  extends OcorrenciaController {
 	    echo '
 	        
 	        
-                </div>
-                <aside class="col-md-4 blog-sidebar">
+                </div>';
+
+	    echo '
+                <aside class="col-md-4 blog-sidebar">';
+	    $this->painelTecnico();
+	    echo '
+
 	        
 	        
                     <h4 class="font-italic">Histórico</h4>

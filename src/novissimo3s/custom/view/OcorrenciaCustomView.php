@@ -353,6 +353,10 @@ class OcorrenciaCustomView extends OcorrenciaView {
             
                 <div class="card mb-4">
                     <div class="card-body">
+
+                        <div class="alert alert-danger" role="alert">
+                            Status: '.$this->getStrStatus($ocorrencia->getStatus()).'
+                        </div>
                         <p>Abertura: '.date("d/m/Y H:i:s" , strtotime($dataAbertura)).'</p>';
        
         
@@ -442,8 +446,11 @@ class OcorrenciaCustomView extends OcorrenciaView {
             
         }
         
-        echo '<p>Status: '.$this->getStrStatus($ocorrencia->getStatus()).'</p>
-                        Descricao: '.$ocorrencia->getDescricao().'<br>
+        echo '
+
+
+                
+                    Descricao: '.$ocorrencia->getDescricao().'<br>
                     </div>
                 </div>
                             
