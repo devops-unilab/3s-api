@@ -127,11 +127,29 @@ class MensagemForumCustomController  extends MensagemForumController {
                     	
                     </div>
                   </div>';
+        if($ocorrencia->getStatus() == StatusCustomController::STATUS_FECHADO){
+            return;
+        }
+        if($ocorrencia->getStatus() == StatusCustomController::STATUS_FECHADO_CONFIRMADO){
+            return;
+        }
+        $sessao = new Sessao();
+        if($sessao->getNivelAcesso() == SESSAO::NIVEL_COMUM){
+            if($sessao->getIdUsuario() != $ocorrencia->getUsuarioCliente()->getId()){
+                return;
+            }
+        }
+        if($sessao->getNivelAcesso() == Sessao::NIVEL_TECNICO){
+            if($ocorrencia->getIdUsuarioAtendente() != $sessao->getIdUsuario())
+            {
+                if($sessao->getIdUsuario() != $ocorrencia->getUsuarioCliente()->getId()){
+                    return;
+                }
+            }
+        }
         echo '<div class="p-4 mb-3 bg-light rounded">';
         $this->add();
         echo '</div>';
-	
-        
     }
 
 	public function __construct(){

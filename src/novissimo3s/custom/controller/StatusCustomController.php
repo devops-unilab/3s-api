@@ -39,10 +39,10 @@ class StatusCustomController  extends StatusController {
 	public function avaliar(){
 	    //Só permitir isso se o usuário for cliente do chamado
 	    //O chamado deve estar fechado.
-	    if($this->sessao->getIdUsuario() != $this->selecionado->getUsuarioCliente()->getId()){
+	    if($this->sessao->getIdUsuario() != $this->ocorrencia->getUsuarioCliente()->getId()){
 	        return;
 	    }
-	    if($this->selecionado->getStatus() == self::STATUS_FECHADO){
+	    if($this->ocorrencia->getStatus() == self::STATUS_FECHADO){
 	        return;
 	    }
 	    echo 'Avaliar ocorrência';
@@ -62,16 +62,16 @@ class StatusCustomController  extends StatusController {
 	
 	
 	public function cancelar(){
-	    if($this->sessao->getIdUsuario() != $this->selecionado->getUsuarioCliente()->getId()){
+	    if($this->sessao->getIdUsuario() != $this->ocorrencia->getUsuarioCliente()->getId()){
 	        return;
 	    }
-	    if($this->selecionado->getStatus() == self::STATUS_FECHADO){
+	    if($this->ocorrencia->getStatus() == self::STATUS_FECHADO){
 	        return;
 	    }
-	    if($this->selecionado->getStatus() == self::STATUS_FECHADO_CONFIRMADO){
+	    if($this->ocorrencia->getStatus() == self::STATUS_FECHADO_CONFIRMADO){
 	        return;
 	    }
-	    if($this->selecionado->getStatus() == self::STATUS_REABERTO){
+	    if($this->ocorrencia->getStatus() == self::STATUS_REABERTO){
 	        return;
 	    }
 	    echo '
