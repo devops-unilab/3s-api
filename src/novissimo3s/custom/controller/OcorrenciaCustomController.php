@@ -113,58 +113,16 @@ class OcorrenciaCustomController  extends OcorrenciaController {
 		$this->view = new OcorrenciaCustomView();
 	}
 
-	public function cancelar(){
-	    //Só permite isso se o usuário for o cliente do chamado. 
-	    
-	    if($this->selecionado->getUsuarioCliente()->getId() != $this->sessao->getIdUsuario()){
-	        echo "Voce não é o cliente do chamado";
-	        return;
-	    }
-	    echo "Voce é o cliente do chamado";
-	    
-	}
-	public function atender(){
-	    //So permitir isso se o usuário for técnico ou administrador
-	}
-	public function fechar(){
-	    
-	}
+
+
 	public function editarSolucao(){
 	    //
 	}
-	public function reservar(){
-	    //Só permitir isso se o usuário for administrador
-	    
+	
+	public function alterarServico(){
+	    //
 	}
-	public function avaliar(){
-	    //Só permitir isso se o usuário for cliente do chamado 
-	    //O chamado deve estar fechado. 
-	}
-	public function painelStatus(){
-	    
-	    
-	    echo '
-<div class="card">
-    <div class="card-body">
-    <div class="alert alert-danger" role="alert">
-      Status Aaberto
-    </div>';
-	    
-	    $this->avaliar();
-	    $this->cancelar();
-	    
-	    echo '
-    
-    
-  </div>
-</div>
-
-
-
-
-
-';
-	}
+	
 	private $selecionado; 
 	private $sessao;
 	
@@ -236,7 +194,9 @@ class OcorrenciaCustomController  extends OcorrenciaController {
 
 	    echo '
                 <aside class="col-md-4 blog-sidebar">';
-	    $this->painelStatus();
+	    $statusController = new StatusCustomController();
+	    
+	    $statusController->painelStatus($this->selecionado);
 	    echo '
 
 	        
