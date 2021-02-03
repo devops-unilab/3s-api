@@ -11,6 +11,7 @@ use novissimo3s\custom\dao\StatusCustomDAO;
 use novissimo3s\custom\view\StatusCustomView;
 use novissimo3s\model\Ocorrencia;
 use novissimo3s\util\Sessao;
+use novissimo3s\custom\view\OcorrenciaCustomView;
 
 class StatusCustomController  extends StatusController {
     
@@ -116,20 +117,25 @@ class StatusCustomController  extends StatusController {
 	public function painelStatus(Ocorrencia $ocorrencia){
 	    $this->ocorrencia = $ocorrencia;
 	    $this->sessao = new Sessao();
-	    
+	    $ocorrenciaView = new OcorrenciaCustomView();
+	    $strStatus = $ocorrenciaView->getStrStatus($ocorrencia->getStatus());
 	    echo '
 <div class="card">
     <div class="card-body">
     <div class="alert alert-danger" role="alert">
-      Status Aaberto
+      Status '.$strStatus.'
     </div>';
 	    
 	    $this->avaliar();
 	    $this->cancelar();
 	    
+	    
+	    $this->reservar();
+	    $this->atender();
+	    $this->fechar();
+	    
+	    
 	    echo '
-	        
-	        
   </div>
 </div>
 	        
