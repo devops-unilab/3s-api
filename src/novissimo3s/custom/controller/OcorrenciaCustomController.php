@@ -113,51 +113,48 @@ class OcorrenciaCustomController  extends OcorrenciaController {
 		$this->view = new OcorrenciaCustomView();
 	}
 
-	public function painelTecnico(){
-	    $sessao = new Sessao();
-	    if($sessao->getNivelAcesso() != Sessao::NIVEL_TECNICO && $sessao->getNivelAcesso() != Sessao::NIVEL_ADM){
+	public function cancelar(){
+	    //Só permite isso se o usuário for o cliente do chamado. 
+	    
+	    if($this->selecionado->getUsuarioCliente()->getId() != $this->sessao->getIdUsuario()){
+	        echo "Voce não é o cliente do chamado";
 	        return;
 	    }
+	    echo "Voce é o cliente do chamado";
+	    
+	}
+	public function atender(){
+	    //So permitir isso se o usuário for técnico ou administrador
+	}
+	public function fechar(){
+	    
+	}
+	public function editarSolucao(){
+	    //
+	}
+	public function reservar(){
+	    //Só permitir isso se o usuário for administrador
+	    
+	}
+	public function avaliar(){
+	    //Só permitir isso se o usuário for cliente do chamado 
+	    //O chamado deve estar fechado. 
+	}
+	public function painelStatus(){
+	    
+	    
 	    echo '
-
-
-<!-- Modal -->
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Atender Ocorrência</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <form>
-          <div class="form-group">
-            <label for="exampleInputPassword1">Confirme Com Sua Senha</label>
-            <input type="password" class="form-control" id="exampleInputPassword1">
-          </div>
-        </form>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Sair</button>
-        <button type="button" class="btn btn-primary">Confirmar</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-
 <div class="card">
     <div class="card-body">
     <div class="alert alert-danger" role="alert">
       Status Aaberto
-    </div>
+    </div>';
+	    
+	    $this->avaliar();
+	    $this->cancelar();
+	    
+	    echo '
     
-    <!-- Button trigger modal -->
-    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
-      Atender Ocorrência
-    </button>
     
   </div>
 </div>
@@ -168,26 +165,52 @@ class OcorrenciaCustomController  extends OcorrenciaController {
 
 ';
 	}
+	private $selecionado; 
+	private $sessao;
+	
+	public function parteInteressada(){
+	    if($this->sessao->getNivelAcesso() == Sessao::NIVEL_TECNICO ){
+	        return true;
+	    }else if($this->sessao->getNivelAcesso() == Sessao::NIVEL_ADM){
+	        return true;
+	    }else if($this->selecionado->getUsuarioCliente()->getId() == $this->sessao->getIdUsuario()){
+	        return true;
+	    }else{
+	        return false;
+	    }
+	}
 	public function selecionar(){
 	    
 	    if(!isset($_GET['selecionar'])){
 	        return;
 	    }
-	    $selecionado = new Ocorrencia();
-	    $selecionado->setId($_GET['selecionar']);
-	    $this->dao->fillById($selecionado);
+	    $this->sessao = new Sessao();
+	    $this->selecionado = new Ocorrencia();
+	    $this->selecionado->setId($_GET['selecionar']);
+	    $this->dao->fillById($this->selecionado);
+	    
+
+	    if(!$this->parteInteressada()) 
+	    {
+	        echo '
+            <div class="alert alert-danger" role="alert">
+                Você não é cliente deste chamado, nem técnico para atendê-lo. 
+            </div>
+            ';
+	        return;
+	    }
 	    
 	    echo '
             <div class="row">
                 <div class="col-md-8 blog-main">
                     <h3 class="pb-4 mb-4 font-italic border-bottom">
-                        #'.$selecionado->getId().' - '.$selecionado->getServico()->getNome().'
+                        #'.$this->selecionado->getId().' - '.$this->selecionado->getServico()->getNome().'
                     </h3>
                             
 ';
 	    
 	    $statusDao = new StatusOcorrenciaCustomDAO($this->dao->getConnection());
-	    $listaStatus = $statusDao->pesquisaPorIdOcorrencia($selecionado);
+	    $listaStatus = $statusDao->pesquisaPorIdOcorrencia($this->selecionado);
 	    $dataAbertura = null;
 	    foreach($listaStatus as $statusOcorrencia){
 	        if($statusOcorrencia->getStatus()->getSigla() == 'a'){
@@ -201,8 +224,8 @@ class OcorrenciaCustomController  extends OcorrenciaController {
 	    }
 	    
 	    
-	    $horaEstimada = $this->calcularHoraSolucao($dataAbertura, $selecionado->getServico()->getTempoSla());
-	    $this->view->mostrarSelecionado2($selecionado, $listaStatus, $dataAbertura, $horaEstimada);
+	    $horaEstimada = $this->calcularHoraSolucao($dataAbertura, $this->selecionado->getServico()->getTempoSla());
+	    $this->view->mostrarSelecionado2($this->selecionado, $listaStatus, $dataAbertura, $horaEstimada);
 	    
 
 	    
@@ -213,7 +236,7 @@ class OcorrenciaCustomController  extends OcorrenciaController {
 
 	    echo '
                 <aside class="col-md-4 blog-sidebar">';
-	    $this->painelTecnico();
+	    $this->painelStatus();
 	    echo '
 
 	        
@@ -276,8 +299,8 @@ class OcorrenciaCustomController  extends OcorrenciaController {
 	    
 	    $mensagemController = new MensagemForumCustomController();
 	    
-	    $this->dao->fetchMensagens($selecionado);
-	    $mensagemController->mainOcorrencia($selecionado);
+	    $this->dao->fetchMensagens($this->selecionado);
+	    $mensagemController->mainOcorrencia($this->selecionado);
 
 	    
 
