@@ -1,9 +1,9 @@
 
 
 $(document).ready(function(e) {
-	$("#insert_form_status_ocorrencia").on('submit', function(e) {
+	$(".form_status").on('submit', function(e) {
 		e.preventDefault();
-        $('#modalAddStatusOcorrencia').modal('hide');
+        $('#modalCancelar').modal('hide');
         
 		var dados = jQuery( this ).serialize();
         
@@ -14,7 +14,6 @@ $(document).ready(function(e) {
             success: function( data )
             {
             
-
             	if(data.split(":")[1] == 'sucesso'){
             		
             		$("#botao-modal-resposta").click(function(){

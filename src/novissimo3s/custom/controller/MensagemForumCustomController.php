@@ -127,10 +127,10 @@ class MensagemForumCustomController  extends MensagemForumController {
                     	
                     </div>
                   </div>';
-        if($ocorrencia->getStatus() == StatusCustomController::STATUS_FECHADO){
+        if($ocorrencia->getStatus() == StatusOcorrenciaCustomController::STATUS_FECHADO){
             return;
         }
-        if($ocorrencia->getStatus() == StatusCustomController::STATUS_FECHADO_CONFIRMADO){
+        if($ocorrencia->getStatus() == StatusOcorrenciaCustomController::STATUS_FECHADO_CONFIRMADO){
             return;
         }
         $sessao = new Sessao();

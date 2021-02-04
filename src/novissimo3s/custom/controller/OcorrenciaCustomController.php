@@ -194,7 +194,7 @@ class OcorrenciaCustomController  extends OcorrenciaController {
 
 	    echo '
                 <aside class="col-md-4 blog-sidebar">';
-	    $statusController = new StatusCustomController();
+	    $statusController = new StatusOcorrenciaCustomController();
 	    
 	    $statusController->painelStatus($this->selecionado);
 	    echo '

@@ -15,6 +15,10 @@ class MainAjax{
                 $controller = new MensagemForumCustomController();
                 $controller->mainAjax();
                 break;
+            case 'status_ocorrencia':
+                $controller = new StatusOcorrenciaCustomController();
+                $controller->mainAjax();
+                break;
             default:
                 echo ':falha';
                 break;
