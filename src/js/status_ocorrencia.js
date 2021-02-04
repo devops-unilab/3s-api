@@ -3,7 +3,7 @@
 $(document).ready(function(e) {
 	$(".form_status").on('submit', function(e) {
 		e.preventDefault();
-        $('#modalCancelar').modal('hide');
+        $('.modal_form_status').modal('hide');
         
 		var dados = jQuery( this ).serialize();
         
@@ -14,12 +14,13 @@ $(document).ready(function(e) {
             success: function( data )
             {
             
+				console.log(data);
             	if(data.split(":")[1] == 'sucesso'){
             		
             		$("#botao-modal-resposta").click(function(){
-            			window.location.href='?page=status_ocorrencia';
+            			window.location.href='?page=ocorrencia&selecionar='+data.split(":")[2];
             		});
-            		$("#textoModalResposta").text("Status Ocorrencia enviado com sucesso! ");                	
+            		$("#textoModalResposta").text(data.split(":")[3]);                	
             		$("#modalResposta").modal("show");
             		
             	}

@@ -12,6 +12,10 @@ use novissimo3s\custom\view\StatusOcorrenciaCustomView;
 use novissimo3s\model\Ocorrencia;
 use novissimo3s\util\Sessao;
 use novissimo3s\custom\view\OcorrenciaCustomView;
+use novissimo3s\dao\OcorrenciaDAO;
+use novissimo3s\model\StatusOcorrencia;
+use novissimo3s\model\Status;
+use novissimo3s\dao\StatusDAO;
 
 class StatusOcorrenciaCustomController  extends StatusOcorrenciaController {
     
@@ -76,9 +80,71 @@ class StatusOcorrenciaCustomController  extends StatusOcorrenciaController {
 	    if($this->ocorrencia->getStatus() == self::STATUS_REABERTO){
 	        return;
 	    }
-        $this->view->formCancelar();
+        $this->view->formCancelar($this->ocorrencia);
 	}
 	
+	
+	public function ajaxCancelar(){
+	    if(!isset($_POST['status_acao'])){
+	        return;
+	    }
+	    if($_POST['status_acao'] != 'cancelar'){
+	        return;
+	    }
+	    if(!isset($_POST['id_ocorrencia'])){
+	        return;
+	    }
+	    //Proceda ao cancelar.
+	    
+	    $this->sessao = new Sessao();
+	    $this->ocorrencia = new Ocorrencia();
+	    $this->ocorrencia->setId($_POST['id_ocorrencia']);
+	    $ocorrenciaDao = new OcorrenciaDAO($this->dao->getConnection());
+	    $ocorrenciaDao->fillById($this->ocorrencia);
+	    
+	    if($this->sessao->getIdUsuario() != $this->ocorrencia->getUsuarioCliente()->getId()){
+	        return;
+	    }
+	    if($this->ocorrencia->getStatus() == self::STATUS_FECHADO){
+	        return;
+	    }
+	    if($this->ocorrencia->getStatus() == self::STATUS_FECHADO_CONFIRMADO){
+	        return;
+	    }
+	    if($this->ocorrencia->getStatus() == self::STATUS_REABERTO){
+	        return;
+	    }
+	    $this->ocorrencia->setStatus(self::STATUS_CANCELADO);
+	    
+	    $ocorrenciaDao->getConnection()->beginTransaction();
+	    
+	    if(!$ocorrenciaDao->update($this->ocorrencia)){
+	        echo ':falha:';
+	        $ocorrenciaDao->getConnection()->rollBack();
+	        return;
+	    }
+
+	    $status = new Status();
+	    $status->setSigla(self::STATUS_CANCELADO);
+	    
+	    $statusDao = new StatusDAO($this->dao->getConnection());
+	    $statusDao->fillBySigla($status);
+	    
+	    $statusOcorrencia = new StatusOcorrencia();
+	    $statusOcorrencia->setOcorrencia($this->ocorrencia);
+	    $statusOcorrencia->setStatus($status);
+	    $statusOcorrencia->setDataMudanca(date("Y-m-d G:i:s"));
+	    $statusOcorrencia->getUsuario()->setId($this->sessao->getIdUsuario());
+	    $statusOcorrencia->setMensagem("Ocorrência cancelada pelo usuário");
+	    
+	    if(!$this->dao->insert($statusOcorrencia)){
+	        echo ':falha:';
+	        return;
+	    }
+	    $ocorrenciaDao->getConnection()->commit();
+	    echo ':sucesso:'.$this->ocorrencia->getId().':Chamado cancelado com sucesso!';
+	    
+	}
 	public function painelStatus(Ocorrencia $ocorrencia){
 	    $this->ocorrencia = $ocorrencia;
 	    $this->sessao = new Sessao();
@@ -108,10 +174,17 @@ class StatusOcorrenciaCustomController  extends StatusOcorrenciaController {
 	}
 	public function mainAjax(){
 	    //Verifica-se qual o form que foi submetido. 
-	    print_r($_POST);
-	    echo "Vamos testar";
-	    
-	    
+	    if(!isset($_POST['status_acao'])){
+	        return;
+	    }
+	    switch($_POST['status_acao']){
+	        case 'cancelar':
+	            $this->ajaxCancelar();
+	            break;
+	        default:
+	            echo ':falha';
+	            break;
+	    }
 	}
 	        
 }
