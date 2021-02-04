@@ -26,8 +26,7 @@ $(document).ready(function(e) {
             	}
             	else
             	{
-            		
-                	$("#textoModalResposta").text("Falha ao inserir Status Ocorrencia, fale com o suporte. ");                	
+                	$("#textoModalResposta").text(data.split(":")[2]);
             		$("#modalResposta").modal("show");
             	}
 

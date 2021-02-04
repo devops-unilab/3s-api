@@ -133,6 +133,9 @@ class MensagemForumCustomController  extends MensagemForumController {
         if($ocorrencia->getStatus() == StatusOcorrenciaCustomController::STATUS_FECHADO_CONFIRMADO){
             return;
         }
+        if($ocorrencia->getStatus() == StatusOcorrenciaCustomController::STATUS_CANCELADO){
+            return;
+        }
         $sessao = new Sessao();
         if($sessao->getNivelAcesso() == SESSAO::NIVEL_COMUM){
             if($sessao->getIdUsuario() != $ocorrencia->getUsuarioCliente()->getId()){

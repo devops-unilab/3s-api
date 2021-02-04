@@ -16,6 +16,8 @@ use novissimo3s\dao\OcorrenciaDAO;
 use novissimo3s\model\StatusOcorrencia;
 use novissimo3s\model\Status;
 use novissimo3s\dao\StatusDAO;
+use novissimo3s\custom\dao\UsuarioCustomDAO;
+use novissimo3s\model\Usuario;
 
 class StatusOcorrenciaCustomController  extends StatusOcorrenciaController {
     
@@ -74,6 +76,9 @@ class StatusOcorrenciaCustomController  extends StatusOcorrenciaController {
 	    if($this->ocorrencia->getStatus() == self::STATUS_FECHADO){
 	        return;
 	    }
+	    if($this->ocorrencia->getStatus() == self::STATUS_CANCELADO){
+	        return;
+	    }
 	    if($this->ocorrencia->getStatus() == self::STATUS_FECHADO_CONFIRMADO){
 	        return;
 	    }
@@ -94,7 +99,9 @@ class StatusOcorrenciaCustomController  extends StatusOcorrenciaController {
 	    if(!isset($_POST['id_ocorrencia'])){
 	        return;
 	    }
-	    //Proceda ao cancelar.
+	    if(!isset($_POST['senha'])){
+	        return;
+	    }
 	    
 	    $this->sessao = new Sessao();
 	    $this->ocorrencia = new Ocorrencia();
@@ -108,18 +115,36 @@ class StatusOcorrenciaCustomController  extends StatusOcorrenciaController {
 	    if($this->ocorrencia->getStatus() == self::STATUS_FECHADO){
 	        return;
 	    }
+	    if($this->ocorrencia->getStatus() == self::STATUS_CANCELADO){
+	        return;
+	    }
 	    if($this->ocorrencia->getStatus() == self::STATUS_FECHADO_CONFIRMADO){
 	        return;
 	    }
 	    if($this->ocorrencia->getStatus() == self::STATUS_REABERTO){
 	        return;
 	    }
-	    $this->ocorrencia->setStatus(self::STATUS_CANCELADO);
 	    
+	    $usuario = new Usuario();
+	    $usuario->setSenha(md5($_POST['senha']));
+	    $usuario->setLogin($this->sessao->getLoginUsuario());
+	    
+	    $usuarioDao = new UsuarioCustomDAO($this->dao->getConnection());
+	    if(!$usuarioDao->autenticar($usuario)){
+	        echo ":falha:Senha Incorreta.";
+	        return;
+	    }
+	    if($usuario->getId() != $this->sessao->getIdUsuario()){
+	        echo ":falha:Senha Incorreta.";
+	        return;
+	    }
+	    
+	    $this->ocorrencia->setStatus(self::STATUS_CANCELADO);
+	    	    
 	    $ocorrenciaDao->getConnection()->beginTransaction();
 	    
 	    if(!$ocorrenciaDao->update($this->ocorrencia)){
-	        echo ':falha:';
+	        echo ':falha:Falha na alteração do status da ocorrência.';
 	        $ocorrenciaDao->getConnection()->rollBack();
 	        return;
 	    }
@@ -138,7 +163,7 @@ class StatusOcorrenciaCustomController  extends StatusOcorrenciaController {
 	    $statusOcorrencia->setMensagem("Ocorrência cancelada pelo usuário");
 	    
 	    if(!$this->dao->insert($statusOcorrencia)){
-	        echo ':falha:';
+	        echo ':falha:Falha ao tentar inserir histórico.';
 	        return;
 	    }
 	    $ocorrenciaDao->getConnection()->commit();
@@ -146,6 +171,7 @@ class StatusOcorrenciaCustomController  extends StatusOcorrenciaController {
 	    
 	}
 	public function painelStatus(Ocorrencia $ocorrencia){
+	    
 	    $this->ocorrencia = $ocorrencia;
 	    $this->sessao = new Sessao();
 	    $ocorrenciaView = new OcorrenciaCustomView();
