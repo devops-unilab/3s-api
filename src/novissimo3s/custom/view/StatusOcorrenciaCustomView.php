@@ -56,5 +56,49 @@ class StatusOcorrenciaCustomView extends StatusOcorrenciaView {
 ';
         
     }
+    
+    
+    
+    public function formAtender(Ocorrencia $ocorrencia){
+        echo '
+<!-- Modal -->
+<div class="modal fade modal_form_status" id="modalAtender" tabindex="-1" aria-labelledby="labelModalCancelar" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="labelModalCancelar">Atender Ocorrência</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form method="post" id="form_status_atender" class="form_status">
+          <div class="form-group">
+            <input type="hidden" name="status_acao" value="atender">
+            <input type="hidden" name="id_ocorrencia" value="'.$ocorrencia->getId().'">
+            <label for="senha1">Confirme Com Sua Senha</label>
+            <input type="password" id="senha1" name="senha" class="form-control" autocomplete="on">
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Sair</button>
+        <button form="form_status_atender" type="submit"  class="btn btn-primary">Confirmar</button>
+      </div>
+    </div>
+  </div>
+</div>
+                
+                
+                
+<hr>
+    <!-- Button trigger modal -->
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalAtender">
+      Atender Ocorrência
+    </button>
+                
+';
+        
+    }
 
 }

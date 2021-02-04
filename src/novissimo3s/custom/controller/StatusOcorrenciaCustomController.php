@@ -58,7 +58,11 @@ class StatusOcorrenciaCustomController  extends StatusOcorrenciaController {
 	}
 	
 	public function atender(){
-	    //So permitir isso se o usuário for técnico ou administrador
+	    
+	    if(!$this->possoAtender()){
+	        return;
+	    }
+	    $this->view->formAtender($this->ocorrencia);
 	}
 	public function fechar(){
 	    
@@ -67,28 +71,89 @@ class StatusOcorrenciaCustomController  extends StatusOcorrenciaController {
 	    //Só permitir isso se o usuário for administrador
 	    
 	}
-	
-	
-	public function cancelar(){
+	public function possoAtender(){
+	    if($this->sessao->getNivelAcesso() == Sessao::NIVEL_DESLOGADO
+	        || $this->sessao->getNivelAcesso() == Sessao::NIVEL_COMUM)
+	    {
+	        return false;
+	    }
+	    if($this->ocorrencia->getStatus() == self::STATUS_FECHADO || $this->ocorrencia->getStatus() == self::STATUS_FECHADO_CONFIRMADO )
+	    {
+	        return false;
+	    }
+	    if($this->ocorrencia->getStatus() == self::STATUS_RESERVADO)
+	    {
+	        if($this->sessao->getIdUsuario() != $this->ocorrencia->getIdUsuarioIndicado())
+	        {
+	            return false;
+	        }
+	    }
+	    if(
+	        $this->ocorrencia->getStatus() == self::STATUS_AGUARDANDO_ATIVO
+	        || $this->ocorrencia->getStatus() == self::STATUS_AGUARDANDO_USUARIO
+	        || $this->ocorrencia->getStatus() == self::STATUS_EM_ESPERA
+	        )
+	    {
+	        if($this->sessao->getIdUsuario() != $this->ocorrencia->getIdUsuarioAtendente()){
+	            return false;
+	        }
+	    }
+	    if($this->ocorrencia->getStatus() == self::STATUS_ABERTO || $this->ocorrencia->getStatus() == self::STATUS_REABERTO){
+	        return true;
+	    }
+	    
+	    return true;
+	}
+	public function possoCancelar(){
+	    if($this->sessao == null){
+	        $this->sessao = new Sessao();
+	    }
 	    if($this->sessao->getIdUsuario() != $this->ocorrencia->getUsuarioCliente()->getId()){
-	        return;
+	        return false;
 	    }
 	    if($this->ocorrencia->getStatus() == self::STATUS_FECHADO){
-	        return;
+	        return false;
 	    }
 	    if($this->ocorrencia->getStatus() == self::STATUS_CANCELADO){
-	        return;
+	        return false;
 	    }
 	    if($this->ocorrencia->getStatus() == self::STATUS_FECHADO_CONFIRMADO){
-	        return;
+	        return false;
 	    }
 	    if($this->ocorrencia->getStatus() == self::STATUS_REABERTO){
+	        return false;
+	    }
+	    return true;
+	}
+	public function cancelar(){
+	    if(!$this->possoCancelar()){
 	        return;
 	    }
         $this->view->formCancelar($this->ocorrencia);
 	}
 	
-	
+	public function ajaxAtender(){
+	    if(!isset($_POST['status_acao'])){
+	        return;
+	    }
+	    if($_POST['status_acao'] != 'atender'){
+	        return;
+	    }
+	    if(!isset($_POST['id_ocorrencia'])){
+	        return;
+	    }
+	    if(!isset($_POST['senha'])){
+	        return;
+	    }
+	    $this->sessao = new Sessao();
+	    $this->ocorrencia = new Ocorrencia();
+	    $this->ocorrencia->setId($_POST['id_ocorrencia']);
+	    $ocorrenciaDao = new OcorrenciaDAO($this->dao->getConnection());
+	    $ocorrenciaDao->fillById($this->ocorrencia);
+	    
+	    
+	    
+	}
 	public function ajaxCancelar(){
 	    if(!isset($_POST['status_acao'])){
 	        return;
@@ -109,19 +174,8 @@ class StatusOcorrenciaCustomController  extends StatusOcorrenciaController {
 	    $ocorrenciaDao = new OcorrenciaDAO($this->dao->getConnection());
 	    $ocorrenciaDao->fillById($this->ocorrencia);
 	    
-	    if($this->sessao->getIdUsuario() != $this->ocorrencia->getUsuarioCliente()->getId()){
-	        return;
-	    }
-	    if($this->ocorrencia->getStatus() == self::STATUS_FECHADO){
-	        return;
-	    }
-	    if($this->ocorrencia->getStatus() == self::STATUS_CANCELADO){
-	        return;
-	    }
-	    if($this->ocorrencia->getStatus() == self::STATUS_FECHADO_CONFIRMADO){
-	        return;
-	    }
-	    if($this->ocorrencia->getStatus() == self::STATUS_REABERTO){
+	    if(!$this->possoCancelar()){
+	        echo ":falha:Este chamado não pode ser cancelado.";
 	        return;
 	    }
 	    
@@ -207,8 +261,15 @@ class StatusOcorrenciaCustomController  extends StatusOcorrenciaController {
 	        case 'cancelar':
 	            $this->ajaxCancelar();
 	            break;
+	        case 'atender':
+	            $this->ajaxAtender();
+	            break;
+	        case 'reservar':
+	            echo "Reservar";
+	            break;
+	            
 	        default:
-	            echo ':falha';
+	            echo ':falha:Ação não encontrada';
 	            break;
 	    }
 	}
