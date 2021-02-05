@@ -10,6 +10,7 @@ namespace novissimo3s\custom\view;
 use novissimo3s\view\OcorrenciaView;
 use novissimo3s\util\Sessao;
 use novissimo3s\model\Ocorrencia;
+use novissimo3s\custom\controller\StatusOcorrenciaCustomController;
 
 
 class OcorrenciaCustomView extends OcorrenciaView {
@@ -301,37 +302,34 @@ class OcorrenciaCustomView extends OcorrenciaView {
     public function getStrStatus($status){
         $strStatus = "Aberto";
         switch ($status){
-            case 'a':
+            case StatusOcorrenciaCustomController::STATUS_ABERTO:
                 $strStatus = "Aberto";
                 break;
-            case 'e':
+            case StatusOcorrenciaCustomController::STATUS_ATENDIMENTO:
                 $strStatus = "Em atendimento";
                 break;
-            case 'f':
+            case StatusOcorrenciaCustomController::STATUS_FECHADO:
                 $strStatus = "Fechado";
                 break;
-            case 'g':
+            case StatusOcorrenciaCustomController::STATUS_FECHADO_CONFIRMADO:
                 $strStatus = "Fechado Confirmado";
                 break;
-            case 'h':
+            case StatusOcorrenciaCustomController::STATUS_CANCELADO:
                 $strStatus = "Cancelado";
                 break;
-            case 'r':
+            case StatusOcorrenciaCustomController::STATUS_REABERTO:
                 $strStatus = "Reaberto";
                 break;
-            case 'b':
-                $strStatus = "Aberto";
-                break;
-            case 'b':
+            case StatusOcorrenciaCustomController::STATUS_RESERVADO:
                 $strStatus = "Reservado";
                 break;
-            case 'c':
+            case StatusOcorrenciaCustomController::STATUS_EM_ESPERA:
                 $strStatus = "Em espera";
                 break;
-            case 'd':
+            case StatusOcorrenciaCustomController::STATUS_AGUARDANDO_USUARIO:
                 $strStatus = "Aguardando Usuário";
                 break;
-            case 'i':
+            case StatusOcorrenciaCustomController::STATUS_AGUARDANDO_ATIVO:
                 $strStatus = "Aguardando ativo da DTI";
                 break;
         }
