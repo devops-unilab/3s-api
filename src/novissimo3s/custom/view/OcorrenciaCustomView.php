@@ -12,6 +12,7 @@ use novissimo3s\util\Sessao;
 use novissimo3s\model\Ocorrencia;
 use novissimo3s\custom\controller\StatusOcorrenciaCustomController;
 use novissimo3s\model\Usuario;
+use novissimo3s\dao\UsuarioDAO;
 
 
 class OcorrenciaCustomView extends OcorrenciaView {
@@ -487,22 +488,27 @@ class OcorrenciaCustomView extends OcorrenciaView {
         <div class="card mb-4">
             <div class="card-body">';
         
+
+        
+        
+        
+        echo 'Setor Responsável: '.$ocorrencia->getAreaResponsavel()->getNome().
+        ' - '.$ocorrencia->getAreaResponsavel()->getDescricao().'<br>';
+        
+        $usuarioDao = new UsuarioDAO();
         
         if($ocorrencia->getIdUsuarioAtendente() != null){
             $atendente = new Usuario();
             $atendente->setId($ocorrencia->getIdUsuarioAtendente());
-            echo 'Id Usuario Atendente: '.$ocorrencia->getIdUsuarioAtendente();
+            $usuarioDao->fillById($atendente);
+            echo '<br>Atendente: '.$atendente->getNome();
         }
         if($ocorrencia->getIdUsuarioIndicado() != null){
             $indicado = new Usuario();
             $indicado->setId($ocorrencia->getIdUsuarioIndicado());
-            echo 'Id Usuario Indicado: '.$ocorrencia->getIdUsuarioIndicado();
+            $usuarioDao->fillById($indicado);
+            echo '<br>Técnico Indicado: '.$indicado->getNome();
         }
-        
-        
-        
-        
-        echo 'Setor Responsável: '.$ocorrencia->getAreaResponsavel()->getNome().' - '.$ocorrencia->getAreaResponsavel()->getDescricao().'<br>';
         
         echo '
                     
