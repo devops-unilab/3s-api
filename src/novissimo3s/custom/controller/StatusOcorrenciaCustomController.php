@@ -379,7 +379,47 @@ class StatusOcorrenciaCustomController  extends StatusOcorrenciaController {
 	    
 	    
 	}
-	public function avaliarAjax(){
+	public function ajaxAvaliar(){
+	    if(!isset($_POST['avaliacao'])){
+	        echo ':falha:Faça uma avaliação';
+	        return;
+	    }
+	    if(!$this->possoAvaliar()){
+	        return;
+	    }
+	    
+	    $ocorrenciaDao = new OcorrenciaDAO($this->dao->getConnection());
+	    $this->ocorrencia->setStatus(self::STATUS_FECHADO_CONFIRMADO);
+	    
+	    $status = new Status();
+	    $status->setSigla(self::STATUS_FECHADO_CONFIRMADO);
+	    
+	    $statusDao = new StatusDAO($this->dao->getConnection());
+	    $statusDao->fillBySigla($status);
+	    
+	    $statusOcorrencia = new StatusOcorrencia();
+	    $statusOcorrencia->setOcorrencia($this->ocorrencia);
+	    $statusOcorrencia->setStatus($status);
+	    $statusOcorrencia->setDataMudanca(date("Y-m-d G:i:s"));
+	    $statusOcorrencia->getUsuario()->setId($this->sessao->getIdUsuario());
+	    $statusOcorrencia->setMensagem("Atendimento avaliado pelo cliente");
+	    
+	    
+	    $ocorrenciaDao->getConnection()->beginTransaction();
+	    $this->ocorrencia->setAvaliacao($_POST['avaliacao']);
+	    
+	    
+	    if(!$ocorrenciaDao->update($this->ocorrencia)){
+	        echo ':falha:Falha na alteração do status da ocorrência.';
+	        $ocorrenciaDao->getConnection()->rollBack();
+	        return;
+	    }
+	    
+	    if(!$this->dao->insert($statusOcorrencia)){
+	        echo ':falha:Falha ao tentar inserir histórico.';
+	        return;
+	    }
+	    $ocorrenciaDao->getConnection()->commit();
 	    
 	    echo ':sucesso:'.$this->ocorrencia->getId().':Atendimento avaliado com sucesso!';
 	}
@@ -417,7 +457,7 @@ class StatusOcorrenciaCustomController  extends StatusOcorrenciaController {
 	            echo "Reservar";
 	            break;
 	        case 'avaliar':
-	            
+	            $this->ajaxAvaliar();
 	            break;
 	        default:
 	            echo ':falha:Ação não encontrada';
