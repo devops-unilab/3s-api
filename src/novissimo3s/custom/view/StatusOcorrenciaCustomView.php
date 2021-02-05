@@ -15,7 +15,7 @@ class StatusOcorrenciaCustomView extends StatusOcorrenciaView {
 
     ////////Digite seu código customizado aqui.
 
-    public function modalFormStatus(Ocorrencia $ocorrencia){
+    public function modalFormStatus(Ocorrencia $ocorrencia, $listaTecnicos){
         echo '<!-- Modal -->
 <div class="modal fade modal_form_status" id="modalStatus" tabindex="-1" aria-labelledby="labelModalCancelar" aria-hidden="true">
   <div class="modal-dialog">
@@ -28,8 +28,22 @@ class StatusOcorrenciaCustomView extends StatusOcorrenciaView {
       </div>
       <div class="modal-body">
         <form method="post" id="form_status_alterar" class="form_status">
-          <div id="container-avaliacao" class="form-group escondido">
-            Faça sua avaliação:<br> 
+            
+            <div id="container-reservar" class="form-group escondido">
+                
+                <label for="select-tecnico">Selecione um Técnico</label>
+                <select name="tecnico" id="select-tecnico" required>
+                    <option value="" selected>Selecione um Técnico</option>';
+        foreach($listaTecnicos as $tecnico){
+            echo '
+                    <option value="'.$tecnico->getId().'">'.$tecnico->getNome().'</option>';
+        }
+        
+        echo '
+                </select>
+            </div>
+            <div id="container-avaliacao" class="form-group escondido">
+                Faça sua avaliação:<br> 
 
 
 
@@ -100,11 +114,12 @@ class StatusOcorrenciaCustomView extends StatusOcorrenciaView {
 ';
         
     }
+    
     public function botaoReservar(){
         echo '
     <hr>
     <!-- Button trigger modal -->
-    <button type="button" acao="reservar"  class="btn btn-primary botao-status" data-toggle="modal" data-target="#modalStatus">
+    <button type="button" acao="reservar" id="botao-reservar" class="btn btn-primary" data-toggle="modal" data-target="#modalStatus">
       Reservar Ocorrência
     </button>
             

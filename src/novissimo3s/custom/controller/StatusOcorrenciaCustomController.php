@@ -18,6 +18,7 @@ use novissimo3s\model\Status;
 use novissimo3s\dao\StatusDAO;
 use novissimo3s\custom\dao\UsuarioCustomDAO;
 use novissimo3s\model\Usuario;
+use novissimo3s\dao\UsuarioDAO;
 
 class StatusOcorrenciaCustomController  extends StatusOcorrenciaController {
     
@@ -245,6 +246,15 @@ class StatusOcorrenciaCustomController  extends StatusOcorrenciaController {
 	    echo ':sucesso:'.$this->ocorrencia->getId().':Chamado cancelado com sucesso!';
 	    
 	}
+	public function getTecnicos(){
+	    $usuarioDao = new UsuarioDAO($this->dao->getConnection());
+	    $usuario = new Usuario();
+	    $usuario->setNivel(Sessao::NIVEL_TECNICO);
+	    $listaUsuarios = $usuarioDao->fetchByNivel($usuario);
+	    $usuario->setNivel(Sessao::NIVEL_ADM);
+	    return array_merge($listaUsuarios, $usuarioDao->fetchByNivel($usuario));
+	    
+	}
 	public function painelStatus(Ocorrencia $ocorrencia){
 	    
 	    $this->ocorrencia = $ocorrencia;
@@ -258,8 +268,12 @@ class StatusOcorrenciaCustomController  extends StatusOcorrenciaController {
       Status '.$strStatus.'
     </div>';
 	    
+	    $listaUsuarios = array();
+	    if($this->sessao->getNivelAcesso() == Sessao::NIVEL_ADM){
+	        $listaUsuarios = $this->getTecnicos();
+	    }
 	    
-	    $this->view->modalFormStatus($this->ocorrencia);
+	    $this->view->modalFormStatus($this->ocorrencia, $listaUsuarios);
 	    
 	    
 	    if($this->possoCancelar()){
@@ -423,10 +437,62 @@ class StatusOcorrenciaCustomController  extends StatusOcorrenciaController {
 	    
 	    echo ':sucesso:'.$this->ocorrencia->getId().':Atendimento avaliado com sucesso!';
 	}
+	public function ajaxReservar(){
+	    if(!isset($_POST['tecnico'])){
+	        echo ':falha:Técnico especificado';
+	        return;
+	    }
+	    if(!$this->possoReservar()){
+	        echo ':falha:Você não pode reservar esse chamado.';
+	        return;
+	    }
+	    
+	    $usuario = new Usuario();
+	    $usuario->setId($_POST['tecnico']);
+	    
+	    $usuarioDao = new UsuarioDAO($this->dao->getConnection());
+	    $usuarioDao->fillById($usuario);
+	    
+	    
+	    $ocorrenciaDao = new OcorrenciaDAO($this->dao->getConnection());
+	    $this->ocorrencia->setStatus(self::STATUS_RESERVADO);
+	    
+	    $status = new Status();
+	    $status->setSigla(self::STATUS_RESERVADO);
+	    
+	    $statusDao = new StatusDAO($this->dao->getConnection());
+	    $statusDao->fillBySigla($status);
+	    
+	    $statusOcorrencia = new StatusOcorrencia();
+	    $statusOcorrencia->setOcorrencia($this->ocorrencia);
+	    $statusOcorrencia->setStatus($status);
+	    $statusOcorrencia->setDataMudanca(date("Y-m-d G:i:s"));
+	    $statusOcorrencia->getUsuario()->setId($this->sessao->getIdUsuario());
+	    $statusOcorrencia->setMensagem('Atendimento reservado para '.$usuario->getNome());
+	    
+	    
+	    $ocorrenciaDao->getConnection()->beginTransaction();
+	    $this->ocorrencia->setIdUsuarioIndicado($usuario->getId());
+	    
+	    
+	    if(!$ocorrenciaDao->update($this->ocorrencia)){
+	        echo ':falha:Falha na alteração do status da ocorrência.';
+	        $ocorrenciaDao->getConnection()->rollBack();
+	        return;
+	    }
+	    
+	    if(!$this->dao->insert($statusOcorrencia)){
+	        echo ':falha:Falha ao tentar inserir histórico.';
+	        return;
+	    }
+	    $ocorrenciaDao->getConnection()->commit();
+	    
+	    echo ':sucesso:'.$this->ocorrencia->getId().':Reservado com sucesso!';
+	    
+	    
+	}
 	public function mainAjax(){
 	    //Verifica-se qual o form que foi submetido. 
-	    
-
 	    
 	    if(!isset($_POST['status_acao'])){
 	        echo ':falha:Ação não especificada';
@@ -454,7 +520,7 @@ class StatusOcorrenciaCustomController  extends StatusOcorrenciaController {
 	            $this->ajaxFechar();
 	            break;
 	        case 'reservar':
-	            echo "Reservar";
+	            $this->ajaxReservar();
 	            break;
 	        case 'avaliar':
 	            $this->ajaxAvaliar();

@@ -1,6 +1,12 @@
 
 
 $(document).ready(function(e) {
+	$('#select-tecnico').selectize({
+	    create: false,
+	    sortField: 'text'
+	});
+
+	
 	$('.star').on('click', function(e){
 		
 		var nota = $(this).attr('nota');
@@ -23,9 +29,18 @@ $(document).ready(function(e) {
 		$('#campo_acao').val(acao);
 		
 	});
+	$('#botao-reservar').on('click', function(e){
+		$('#container-reservar').removeClass("escondido");
+		
+		var acao = $(this).attr('acao');
+		$('#campo_acao').val(acao);
+		
+	});
 	
 	$('.botao-status').on('click', function(e){
 		$('#container-avaliacao').addClass("escondido");
+		$('#container-reservar').addClass("escondido");
+		
 		
 		var acao = $(this).attr('acao');
 		$('#campo_acao').val(acao);
