@@ -588,8 +588,6 @@ class StatusOcorrenciaCustomController  extends StatusOcorrenciaController {
 	    
 	    $this->ocorrencia->getAreaResponsavel()->setId($this->ocorrencia->getServico()->getAreaResponsavel()->getId());
 	    
-	    
-	    
 	    if(!$ocorrenciaDao->update($this->ocorrencia)){
 	        echo ':falha:Falha na alteração do status da ocorrência.';
 	        $ocorrenciaDao->getConnection()->rollBack();

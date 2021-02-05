@@ -11,6 +11,7 @@ use novissimo3s\view\OcorrenciaView;
 use novissimo3s\util\Sessao;
 use novissimo3s\model\Ocorrencia;
 use novissimo3s\custom\controller\StatusOcorrenciaCustomController;
+use novissimo3s\model\Usuario;
 
 
 class OcorrenciaCustomView extends OcorrenciaView {
@@ -442,36 +443,68 @@ class OcorrenciaCustomView extends OcorrenciaView {
         }
         
         echo '
+                    Descricao: '.$ocorrencia->getDescricao().'<br>';
+        if(trim($ocorrencia->getPatrimonio()) != ""){
+            echo 'Patrimonio: '.$ocorrencia->getPatrimonio().' | ';
+        }
+        if(trim($ocorrencia->getAnexo()) != ""){
+            echo 'Anexo: '.$ocorrencia->getAnexo().' | ';
+        }
+        if(trim($ocorrencia->getSolucao()) != ""){
+            echo 'Solucao: '.$ocorrencia->getSolucao().'<br>';
+        }
+        echo '
 
 
-                
-                    Descricao: '.$ocorrencia->getDescricao().'<br>
                     </div>
                 </div>
                             
             <div class="card mb-4">
                 <div class="card-body">
-                    Cliente: '.$ocorrencia->getUsuarioCliente()->getNome().'<br>
-                    Campus: '.$ocorrencia->getCampus().'<br>
-                    Local: '.$ocorrencia->getLocal().'<br>
-                    Local Sala: '.$ocorrencia->getLocalSala().'<br>
-                    Ramal: '.$ocorrencia->getRamal().'<br>
-                    Email: '.$ocorrencia->getEmail().'<br>
+                    Cliente: '.$ocorrencia->getUsuarioCliente()->getNome().' | 
+                    Campus: '.$ocorrencia->getCampus().' | 
+                    Email: '.$ocorrencia->getEmail().' | ';
+        
+        if(trim($ocorrencia->getLocal()) != ""){
+            echo ' | Local: '.$ocorrencia->getLocal().'<br>';
+        }
+        if(trim($ocorrencia->getLocalSala()) != ""){
+            echo 'Local Sala: '.$ocorrencia->getLocalSala().'<br>';
+        }
+        if(trim($ocorrencia->getRamal()) != ""){
+            echo ' | Ramal: '.$ocorrencia->getRamal().'<br>';
+        }
+        
+
+                    
+        echo '
                 </div>
             </div>
                         
-                        
+
+            
+            
         <div class="card mb-4">
-            <div class="card-body">
-                Patrimonio: '.$ocorrencia->getPatrimonio().'<br>
-                Solucao: '.$ocorrencia->getSolucao().'<br>
-                Prioridade: '.$ocorrencia->getPrioridade().'<br>
-                Avaliacao: '.$ocorrencia->getAvaliacao().'<br>
-                Id Usuario Atendente: '.$ocorrencia->getIdUsuarioAtendente().'<br>
-                Id Usuario Indicado: '.$ocorrencia->getIdUsuarioIndicado().'<br>
-                Anexo: '.$ocorrencia->getAnexo().'<br>
-                    
-                Area Responsavel: '.$ocorrencia->getAreaResponsavel().'<br>
+            <div class="card-body">';
+        
+        
+        if($ocorrencia->getIdUsuarioAtendente() != null){
+            $atendente = new Usuario();
+            $atendente->setId($ocorrencia->getIdUsuarioAtendente());
+            echo 'Id Usuario Atendente: '.$ocorrencia->getIdUsuarioAtendente();
+        }
+        if($ocorrencia->getIdUsuarioIndicado() != null){
+            $indicado = new Usuario();
+            $indicado->setId($ocorrencia->getIdUsuarioIndicado());
+            echo 'Id Usuario Indicado: '.$ocorrencia->getIdUsuarioIndicado();
+        }
+        
+        
+        
+        
+        echo 'Setor Responsável: '.$ocorrencia->getAreaResponsavel()->getNome().' - '.$ocorrencia->getAreaResponsavel()->getDescricao().'<br>';
+        
+        echo '
                     
                     
                     
