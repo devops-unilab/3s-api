@@ -32,7 +32,7 @@ class StatusOcorrenciaCustomView extends StatusOcorrenciaView {
             <div id="container-reservar" class="form-group escondido">
                 
                 <label for="select-tecnico">Selecione um Técnico</label>
-                <select name="tecnico" id="select-tecnico" required>
+                <select name="tecnico" id="select-tecnico">
                     <option value="" selected>Selecione um Técnico</option>';
         foreach($listaTecnicos as $tecnico){
             echo '
@@ -125,13 +125,27 @@ class StatusOcorrenciaCustomView extends StatusOcorrenciaView {
             
 ';
         
+        
     }
+    
     public function botaoFechar(){
         echo '
     <hr>
     <!-- Button trigger modal -->
     <button type="button" acao="fechar"  class="btn btn-primary botao-status" data-toggle="modal" data-target="#modalStatus">
       Fechar Ocorrência
+    </button>
+            
+';
+        
+    }
+    
+    public function botaoLiberar(){
+        echo '
+    <hr>
+    <!-- Button trigger modal -->
+    <button type="button" acao="liberar_atendimento"  class="btn btn-primary botao-status" data-toggle="modal" data-target="#modalStatus">
+      Liberar Ocorrência
     </button>
             
 ';

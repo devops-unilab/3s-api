@@ -19,6 +19,8 @@ use novissimo3s\dao\StatusDAO;
 use novissimo3s\custom\dao\UsuarioCustomDAO;
 use novissimo3s\model\Usuario;
 use novissimo3s\dao\UsuarioDAO;
+use novissimo3s\custom\dao\OcorrenciaCustomDAO;
+use novissimo3s\dao\ServicoDAO;
 
 class StatusOcorrenciaCustomController  extends StatusOcorrenciaController {
     
@@ -292,6 +294,9 @@ class StatusOcorrenciaCustomController  extends StatusOcorrenciaController {
 	    if($this->possoFechar()){
 	        $this->view->botaoFechar();
 	    }
+	    if($this->possoLiberar()){
+	        $this->view->botaoLiberar();
+	    }
 	    
 	    echo '
   </div>
@@ -437,6 +442,7 @@ class StatusOcorrenciaCustomController  extends StatusOcorrenciaController {
 	    
 	    echo ':sucesso:'.$this->ocorrencia->getId().':Atendimento avaliado com sucesso!';
 	}
+	
 	public function ajaxReservar(){
 	    if(!isset($_POST['tecnico'])){
 	        echo ':falha:Técnico especificado';
@@ -454,7 +460,7 @@ class StatusOcorrenciaCustomController  extends StatusOcorrenciaController {
 	    $usuarioDao->fillById($usuario);
 	    
 	    
-	    $ocorrenciaDao = new OcorrenciaDAO($this->dao->getConnection());
+	    $ocorrenciaDao = new OcorrenciaCustomDAO($this->dao->getConnection());
 	    $this->ocorrencia->setStatus(self::STATUS_RESERVADO);
 	    
 	    $status = new Status();
@@ -473,6 +479,7 @@ class StatusOcorrenciaCustomController  extends StatusOcorrenciaController {
 	    
 	    $ocorrenciaDao->getConnection()->beginTransaction();
 	    $this->ocorrencia->setIdUsuarioIndicado($usuario->getId());
+	    $this->ocorrencia->getAreaResponsavel()->setId($usuario->getIdSetor());
 	    
 	    
 	    if(!$ocorrenciaDao->update($this->ocorrencia)){
@@ -522,6 +529,9 @@ class StatusOcorrenciaCustomController  extends StatusOcorrenciaController {
 	        case 'reservar':
 	            $this->ajaxReservar();
 	            break;
+	        case 'liberar_atendimento':
+	            $this->ajaxLiberar();
+	            break;
 	        case 'avaliar':
 	            $this->ajaxAvaliar();
 	            break;
@@ -529,6 +539,72 @@ class StatusOcorrenciaCustomController  extends StatusOcorrenciaController {
 	            echo ':falha:Ação não encontrada';
 	            break;
 	    }
+	}
+	public function possoLiberar(){
+	    if($this->sessao->getNivelAcesso() != Sessao::NIVEL_ADM){
+	        return false;
+	    }
+	    if($this->ocorrencia->getStatus() == self::STATUS_FECHADO){
+	        return false;
+	    }
+	    if($this->ocorrencia->getStatus() == self::STATUS_FECHADO_CONFIRMADO){
+	        return false;
+	    }
+	    if($this->ocorrencia->getStatus() == self::STATUS_ABERTO){
+	        return false;
+	    }
+	    return true;
+	}
+	public function ajaxLiberar(){
+	    if(!$this->possoLiberar()){
+	        echo ':falha:Não é possível liberar esse atendimento.';
+	        return;
+	    }
+	    
+	    $ocorrenciaDao = new OcorrenciaCustomDAO($this->dao->getConnection());
+	    $this->ocorrencia->setStatus(self::STATUS_ABERTO);
+	    
+	    $status = new Status();
+	    $status->setSigla(self::STATUS_ABERTO);
+	    
+	    $statusDao = new StatusDAO($this->dao->getConnection());
+	    $statusDao->fillBySigla($status);
+	    
+	    $statusOcorrencia = new StatusOcorrencia();
+	    $statusOcorrencia->setOcorrencia($this->ocorrencia);
+	    $statusOcorrencia->setStatus($status);
+	    $statusOcorrencia->setDataMudanca(date("Y-m-d G:i:s"));
+	    $statusOcorrencia->getUsuario()->setId($this->sessao->getIdUsuario());
+	    $statusOcorrencia->setMensagem('Liberado para atendimento');
+	    
+	    
+	    $ocorrenciaDao->getConnection()->beginTransaction();
+	    $this->ocorrencia->setIdUsuarioIndicado(null);
+	    $this->ocorrencia->setIdUsuarioAtendente(null);
+	    
+	    $servicoDao = new ServicoDAO($this->dao->getConnection());
+	    $servicoDao->fillById($this->ocorrencia->getServico());
+	    
+	    
+	    $this->ocorrencia->getAreaResponsavel()->setId($this->ocorrencia->getServico()->getAreaResponsavel()->getId());
+	    
+	    
+	    
+	    if(!$ocorrenciaDao->update($this->ocorrencia)){
+	        echo ':falha:Falha na alteração do status da ocorrência.';
+	        $ocorrenciaDao->getConnection()->rollBack();
+	        return;
+	    }
+	    
+	    if(!$this->dao->insert($statusOcorrencia)){
+	        echo ':falha:Falha ao tentar inserir histórico.';
+	        return;
+	    }
+	    $ocorrenciaDao->getConnection()->commit();
+	    
+	    echo ':sucesso:'.$this->ocorrencia->getId().':Liberado com sucesso!';
+	    
+	    
 	}
 	        
 }

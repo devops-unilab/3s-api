@@ -15,6 +15,75 @@ use novissimo3s\model\MensagemForum;
 
 class  OcorrenciaCustomDAO extends OcorrenciaDAO {
     
+    
+    public function update(Ocorrencia $ocorrencia)
+    {
+        $id = $ocorrencia->getId();
+        
+        
+        $sql = "UPDATE ocorrencia
+                SET
+                id_local = :idLocal,
+                descricao = :descricao,
+                campus = :campus,
+                patrimonio = :patrimonio,
+                ramal = :ramal,
+                local = :local,
+                status = :status,
+                solucao = :solucao,
+                prioridade = :prioridade,
+                avaliacao = :avaliacao,
+                email = :email,
+                id_usuario_atendente = :idUsuarioAtendente,
+                id_usuario_indicado = :idUsuarioIndicado,
+                anexo = :anexo,
+                local_sala = :localSala, 
+                id_area_responsavel = :idArea
+                WHERE ocorrencia.id = :id;";
+        $idLocal = $ocorrencia->getIdLocal();
+        $descricao = $ocorrencia->getDescricao();
+        $campus = $ocorrencia->getCampus();
+        $patrimonio = $ocorrencia->getPatrimonio();
+        $ramal = $ocorrencia->getRamal();
+        $local = $ocorrencia->getLocal();
+        $status = $ocorrencia->getStatus();
+        $solucao = $ocorrencia->getSolucao();
+        $prioridade = $ocorrencia->getPrioridade();
+        $avaliacao = $ocorrencia->getAvaliacao();
+        $email = $ocorrencia->getEmail();
+        $idUsuarioAtendente = $ocorrencia->getIdUsuarioAtendente();
+        $idUsuarioIndicado = $ocorrencia->getIdUsuarioIndicado();
+        $anexo = $ocorrencia->getAnexo();
+        $localSala = $ocorrencia->getLocalSala();
+        $idArea = $ocorrencia->getAreaResponsavel()->getId();
+        
+        try {
+            
+            $stmt = $this->getConnection()->prepare($sql);
+            $stmt->bindParam(":id", $id, PDO::PARAM_INT);
+            $stmt->bindParam(":idLocal", $idLocal, PDO::PARAM_INT);
+            $stmt->bindParam(":descricao", $descricao, PDO::PARAM_STR);
+            $stmt->bindParam(":campus", $campus, PDO::PARAM_STR);
+            $stmt->bindParam(":patrimonio", $patrimonio, PDO::PARAM_STR);
+            $stmt->bindParam(":ramal", $ramal, PDO::PARAM_STR);
+            $stmt->bindParam(":local", $local, PDO::PARAM_STR);
+            $stmt->bindParam(":status", $status, PDO::PARAM_STR);
+            $stmt->bindParam(":solucao", $solucao, PDO::PARAM_STR);
+            $stmt->bindParam(":prioridade", $prioridade, PDO::PARAM_STR);
+            $stmt->bindParam(":avaliacao", $avaliacao, PDO::PARAM_STR);
+            $stmt->bindParam(":email", $email, PDO::PARAM_STR);
+            $stmt->bindParam(":idUsuarioAtendente", $idUsuarioAtendente, PDO::PARAM_INT);
+            $stmt->bindParam(":idUsuarioIndicado", $idUsuarioIndicado, PDO::PARAM_INT);
+            $stmt->bindParam(":anexo", $anexo, PDO::PARAM_STR);
+            $stmt->bindParam(":localSala", $localSala, PDO::PARAM_STR);
+            $stmt->bindParam(":idArea", $idArea, PDO::PARAM_INT);
+            
+            return $stmt->execute();
+        } catch (PDOException $e) {
+            echo $e->getMessage();
+        }
+        
+    }
     public function retornaListaPorStatus($status) {
         $lista = array ();
         $sql = "
