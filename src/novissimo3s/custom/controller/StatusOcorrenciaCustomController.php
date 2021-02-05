@@ -77,6 +77,12 @@ class StatusOcorrenciaCustomController  extends StatusOcorrenciaController {
 	    {
 	        return false;
 	    }
+	    if($this->ocorrencia->getStatus() == self::STATUS_ATENDIMENTO){
+	        return false;
+	    }
+	    if($this->ocorrencia->getStatus() == self::STATUS_CANCELADO){
+	        return false;
+	    }
 	    if($this->ocorrencia->getStatus() == self::STATUS_FECHADO || $this->ocorrencia->getStatus() == self::STATUS_FECHADO_CONFIRMADO )
 	    {
 	        return false;
@@ -131,7 +137,25 @@ class StatusOcorrenciaCustomController  extends StatusOcorrenciaController {
 	    }
         $this->view->formCancelar($this->ocorrencia);
 	}
-	
+	public function verificarSenha(){
+	    $this->sessao = new Sessao();
+	    
+	    $usuario = new Usuario();
+	    $usuario->setSenha(md5($_POST['senha']));
+	    $usuario->setLogin($this->sessao->getLoginUsuario());
+	    
+	    $usuarioDao = new UsuarioCustomDAO($this->dao->getConnection());
+	    if(!$usuarioDao->autenticar($usuario)){
+	        
+	        return false;
+	    }
+	    if($usuario->getId() != $this->sessao->getIdUsuario()){
+	        echo ":falha:Senha Incorreta.";
+	        return false;
+	    }
+	    
+	    return true;
+	}
 	public function ajaxAtender(){
 	    if(!isset($_POST['status_acao'])){
 	        return;
@@ -151,6 +175,47 @@ class StatusOcorrenciaCustomController  extends StatusOcorrenciaController {
 	    $ocorrenciaDao = new OcorrenciaDAO($this->dao->getConnection());
 	    $ocorrenciaDao->fillById($this->ocorrencia);
 	    
+	    if(!$this->possoAtender()){
+	        echo ':falha:Não é possível atender este chamado.';
+	        return;
+	    }
+	    if(!$this->verificarSenha()){
+	        echo ':falha:Senha incorreta';
+	        return;
+	    }
+	    
+	    
+	    $this->ocorrencia->setStatus(self::STATUS_ATENDIMENTO);
+	    
+	    $status = new Status();
+	    $status->setSigla(self::STATUS_ATENDIMENTO);
+	    
+	    $statusDao = new StatusDAO($this->dao->getConnection());
+	    $statusDao->fillBySigla($status);
+	    
+	    $statusOcorrencia = new StatusOcorrencia();
+	    $statusOcorrencia->setOcorrencia($this->ocorrencia);
+	    $statusOcorrencia->setStatus($status);
+	    $statusOcorrencia->setDataMudanca(date("Y-m-d G:i:s"));
+	    $statusOcorrencia->getUsuario()->setId($this->sessao->getIdUsuario());
+	    $statusOcorrencia->setMensagem("Ocorrência em atendimento");
+	    
+	    
+	    $ocorrenciaDao->getConnection()->beginTransaction();
+	    
+	    if(!$ocorrenciaDao->update($this->ocorrencia)){
+	        echo ':falha:Falha na alteração do status da ocorrência.';
+	        $ocorrenciaDao->getConnection()->rollBack();
+	        return;
+	    }
+	    
+	    if(!$this->dao->insert($statusOcorrencia)){
+	        echo ':falha:Falha ao tentar inserir histórico.';
+	        return;
+	    }
+	    
+	    $ocorrenciaDao->getConnection()->commit();
+	    echo ':sucesso:'.$this->ocorrencia->getId().':Chamado am atendimento!';
 	    
 	    
 	}
@@ -179,29 +244,12 @@ class StatusOcorrenciaCustomController  extends StatusOcorrenciaController {
 	        return;
 	    }
 	    
-	    $usuario = new Usuario();
-	    $usuario->setSenha(md5($_POST['senha']));
-	    $usuario->setLogin($this->sessao->getLoginUsuario());
-	    
-	    $usuarioDao = new UsuarioCustomDAO($this->dao->getConnection());
-	    if(!$usuarioDao->autenticar($usuario)){
-	        echo ":falha:Senha Incorreta.";
-	        return;
-	    }
-	    if($usuario->getId() != $this->sessao->getIdUsuario()){
-	        echo ":falha:Senha Incorreta.";
+	    if(!$this->verificarSenha()){
+	        echo ':falha:Senha incorreta';
 	        return;
 	    }
 	    
 	    $this->ocorrencia->setStatus(self::STATUS_CANCELADO);
-	    	    
-	    $ocorrenciaDao->getConnection()->beginTransaction();
-	    
-	    if(!$ocorrenciaDao->update($this->ocorrencia)){
-	        echo ':falha:Falha na alteração do status da ocorrência.';
-	        $ocorrenciaDao->getConnection()->rollBack();
-	        return;
-	    }
 
 	    $status = new Status();
 	    $status->setSigla(self::STATUS_CANCELADO);
@@ -215,6 +263,15 @@ class StatusOcorrenciaCustomController  extends StatusOcorrenciaController {
 	    $statusOcorrencia->setDataMudanca(date("Y-m-d G:i:s"));
 	    $statusOcorrencia->getUsuario()->setId($this->sessao->getIdUsuario());
 	    $statusOcorrencia->setMensagem("Ocorrência cancelada pelo usuário");
+	
+	    
+	    $ocorrenciaDao->getConnection()->beginTransaction();
+	    
+	    if(!$ocorrenciaDao->update($this->ocorrencia)){
+	        echo ':falha:Falha na alteração do status da ocorrência.';
+	        $ocorrenciaDao->getConnection()->rollBack();
+	        return;
+	    }
 	    
 	    if(!$this->dao->insert($statusOcorrencia)){
 	        echo ':falha:Falha ao tentar inserir histórico.';

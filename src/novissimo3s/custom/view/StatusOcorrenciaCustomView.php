@@ -15,6 +15,7 @@ class StatusOcorrenciaCustomView extends StatusOcorrenciaView {
 
     ////////Digite seu código customizado aqui.
 
+    
     public function formCancelar(Ocorrencia $ocorrencia){
         echo '
 <!-- Modal -->
@@ -49,7 +50,7 @@ class StatusOcorrenciaCustomView extends StatusOcorrenciaView {
                 
 <hr>
     <!-- Button trigger modal -->
-    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalCancelar">
+    <button type="button" acao="cancelar" class="btn btn-primary" data-toggle="modal" data-target="#modalCancelar">
       Cancelar Ocorrência
     </button>
                 
