@@ -304,10 +304,11 @@ class StatusOcorrenciaCustomController  extends StatusOcorrenciaController {
 	}
 	
 	public function possoFechar(){
-	    if($this->sessao->getNivelAcesso() != Sessao::NIVEL_COMUM){
+	    
+	    if($this->sessao->getNivelAcesso() == Sessao::NIVEL_COMUM){
 	        return false;
 	    }
-	    if($this->sessao->getNivelAcesso() != Sessao::NIVEL_DESLOGADO){
+	    if($this->sessao->getNivelAcesso() == Sessao::NIVEL_DESLOGADO){
 	        return false;
 	    }
 	    
@@ -316,7 +317,9 @@ class StatusOcorrenciaCustomController  extends StatusOcorrenciaController {
 	            return true;
 	        }
 	        
+	        
 	    }
+
 	    return false;
 	}
 	public function possoReservar(){
@@ -355,7 +358,7 @@ class StatusOcorrenciaCustomController  extends StatusOcorrenciaController {
 	    $statusOcorrencia->setStatus($status);
 	    $statusOcorrencia->setDataMudanca(date("Y-m-d G:i:s"));
 	    $statusOcorrencia->getUsuario()->setId($this->sessao->getIdUsuario());
-	    $statusOcorrencia->setMensagem("Ocorrência cancelada pelo usuário");
+	    $statusOcorrencia->setMensagem("Ocorrência fechada pelo atendente");
 	    
 	    
 	    $ocorrenciaDao->getConnection()->beginTransaction();
