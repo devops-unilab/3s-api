@@ -379,6 +379,10 @@ class StatusOcorrenciaCustomController  extends StatusOcorrenciaController {
 	    
 	    
 	}
+	public function avaliarAjax(){
+	    
+	    echo ':sucesso:'.$this->ocorrencia->getId().':Atendimento avaliado com sucesso!';
+	}
 	public function mainAjax(){
 	    //Verifica-se qual o form que foi submetido. 
 	    
@@ -406,13 +410,15 @@ class StatusOcorrenciaCustomController  extends StatusOcorrenciaController {
 	        case 'atender':
 	            $this->ajaxAtender();
 	            break;
-	        case 'reservar':
-	            echo "Reservar";
-	            break;
 	        case 'fechar':
 	            $this->ajaxFechar();
 	            break;
+	        case 'reservar':
+	            echo "Reservar";
+	            break;
+	        case 'avaliar':
 	            
+	            break;
 	        default:
 	            echo ':falha:Ação não encontrada';
 	            break;

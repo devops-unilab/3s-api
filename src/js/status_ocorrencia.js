@@ -1,8 +1,32 @@
 
 
 $(document).ready(function(e) {
+	$('.star').on('click', function(e){
+		
+		var nota = $(this).attr('nota');
+		var i;
+		
+		for(i = 1; i <= 5; i++){
+			$('.estrela-'+i).attr('src', 'img/star0.png');	
+		}
+		for(i = 1; i <= nota; i++){
+			$('.estrela-'+i).attr('src', 'img/star1.png');	
+		}
+		$('#campo-avaliacao').val(nota);
+		
+	});
+	
+	$('#botao-avaliar').on('click', function(e){
+		$('#container-avaliacao').removeClass("escondido");
+		
+		var acao = $(this).attr('acao');
+		$('#campo_acao').val(acao);
+		
+	});
 	
 	$('.botao-status').on('click', function(e){
+		$('#container-avaliacao').addClass("escondido");
+		
 		var acao = $(this).attr('acao');
 		$('#campo_acao').val(acao);
 	});

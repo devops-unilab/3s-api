@@ -28,6 +28,20 @@ class StatusOcorrenciaCustomView extends StatusOcorrenciaView {
       </div>
       <div class="modal-body">
         <form method="post" id="form_status_alterar" class="form_status">
+          <div id="container-avaliacao" class="form-group escondido">
+            Faça sua avaliação:<br> 
+
+
+
+            ';
+            for($i = 1; $i < 6; $i++){
+                echo '<img class="m-2 star estrela-'.$i.'" nota="'.$i.'"  src="img/star0.png" alt="1">';
+            }
+            
+            echo '
+            <input type="hidden" value="5" name="avaliacao" id="campo-avaliacao">
+            
+          </div>
           <div class="form-group">
             <input type="hidden" id="campo_acao" name="status_acao" value="">
             <input type="hidden" name="id_ocorrencia" value="'.$ocorrencia->getId().'">
@@ -79,7 +93,7 @@ class StatusOcorrenciaCustomView extends StatusOcorrenciaView {
         echo '
     <hr>
     <!-- Button trigger modal -->
-    <button type="button" acao="avaliar"  class="btn btn-primary botao-status" data-toggle="modal" data-target="#modalStatus">
+    <button type="button" id="botao-avaliar" acao="avaliar"  class="btn btn-primary" data-toggle="modal" data-target="#modalStatus">
       Avaliar Ocorrência
     </button>
             

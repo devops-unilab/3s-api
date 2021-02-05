@@ -246,13 +246,10 @@ class OcorrenciaCustomView extends OcorrenciaView {
             }else if($elemento->getStatus() == 'e'){//Em atendimento
                 $strClass = 'alert-info';
             }else if($elemento->getStatus() == 'f'){//Fechado
-                continue;
                 $strClass = 'alert-success';
             }else if($elemento->getStatus() == 'g'){//Fechado confirmado
-                continue;
                 $strClass = 'alert-success';
             }else if($elemento->getStatus() == 'h'){//Cancelado
-                continue;
                 $strClass = 'alert-secondary';
             }else if($elemento->getStatus() == 'r'){//reaberto
                 $strClass = 'alert-warning';
