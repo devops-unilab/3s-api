@@ -43,34 +43,7 @@ class StatusOcorrenciaCustomController  extends StatusOcorrenciaController {
 	const STATUS_AGUARDANDO_ATIVO = 'i';
 	const STATUS_REABERTO = 'r';
 	
-	
-	public function avaliar(){
-	    //Só permitir isso se o usuário for cliente do chamado
-	    //O chamado deve estar fechado.
-	    if($this->sessao->getIdUsuario() != $this->ocorrencia->getUsuarioCliente()->getId()){
-	        return;
-	    }
-	    if($this->ocorrencia->getStatus() != self::STATUS_FECHADO){
-	        return;
-	    }
-	    echo 'Avaliar ocorrência';
-	    
-	}
-	
-	public function atender(){
-	    
-	    if(!$this->possoAtender()){
-	        return;
-	    }
-	    $this->view->formAtender($this->ocorrencia);
-	}
-	public function fechar(){
-	    
-	}
-	public function reservar(){
-	    //Só permitir isso se o usuário for administrador
-	    
-	}
+
 	public function possoAtender(){
 	    if($this->sessao->getNivelAcesso() == Sessao::NIVEL_DESLOGADO
 	        || $this->sessao->getNivelAcesso() == Sessao::NIVEL_COMUM)
@@ -131,15 +104,12 @@ class StatusOcorrenciaCustomController  extends StatusOcorrenciaController {
 	    }
 	    return true;
 	}
-	public function cancelar(){
-	    if(!$this->possoCancelar()){
-	        return;
-	    }
-        $this->view->formCancelar($this->ocorrencia);
-	}
+
 	public function verificarSenha(){
 	    $this->sessao = new Sessao();
-	    
+	    if(!isset($_POST['senha'])){
+	        return false;
+	    }
 	    $usuario = new Usuario();
 	    $usuario->setSenha(md5($_POST['senha']));
 	    $usuario->setLogin($this->sessao->getLoginUsuario());
@@ -169,21 +139,22 @@ class StatusOcorrenciaCustomController  extends StatusOcorrenciaController {
 	    if(!isset($_POST['senha'])){
 	        return;
 	    }
-	    $this->sessao = new Sessao();
-	    $this->ocorrencia = new Ocorrencia();
-	    $this->ocorrencia->setId($_POST['id_ocorrencia']);
-	    $ocorrenciaDao = new OcorrenciaDAO($this->dao->getConnection());
-	    $ocorrenciaDao->fillById($this->ocorrencia);
 	    
 	    if(!$this->possoAtender()){
 	        echo ':falha:Não é possível atender este chamado.';
 	        return;
 	    }
-	    if(!$this->verificarSenha()){
-	        echo ':falha:Senha incorreta';
-	        return;
-	    }
 	    
+	    $this->sessao = new Sessao();
+	    $this->ocorrencia = new Ocorrencia();
+	    $this->ocorrencia->setId($_POST['id_ocorrencia']);
+	    
+	    
+	    
+	    $ocorrenciaDao = new OcorrenciaDAO($this->dao->getConnection());
+	    $ocorrenciaDao->fillById($this->ocorrencia);
+	    
+	    $this->ocorrencia->setIdUsuarioAtendente($this->sessao->getIdUsuario());
 	    
 	    $this->ocorrencia->setStatus(self::STATUS_ATENDIMENTO);
 	    
@@ -233,22 +204,15 @@ class StatusOcorrenciaCustomController  extends StatusOcorrenciaController {
 	        return;
 	    }
 	    
-	    $this->sessao = new Sessao();
-	    $this->ocorrencia = new Ocorrencia();
-	    $this->ocorrencia->setId($_POST['id_ocorrencia']);
-	    $ocorrenciaDao = new OcorrenciaDAO($this->dao->getConnection());
-	    $ocorrenciaDao->fillById($this->ocorrencia);
+	    
 	    
 	    if(!$this->possoCancelar()){
 	        echo ":falha:Este chamado não pode ser cancelado.";
 	        return;
 	    }
 	    
-	    if(!$this->verificarSenha()){
-	        echo ':falha:Senha incorreta';
-	        return;
-	    }
 	    
+	    $ocorrenciaDao = new OcorrenciaDAO($this->dao->getConnection());
 	    $this->ocorrencia->setStatus(self::STATUS_CANCELADO);
 
 	    $status = new Status();
@@ -294,11 +258,27 @@ class StatusOcorrenciaCustomController  extends StatusOcorrenciaController {
       Status '.$strStatus.'
     </div>';
 	    
-	    $this->avaliar();
-	    $this->cancelar();
-	    $this->reservar();
-	    $this->atender();
-	    $this->fechar();
+	    
+	    $this->view->modalFormStatus($this->ocorrencia);
+	    
+	    
+	    if($this->possoCancelar()){
+	        $this->view->botaoCancelar($this->ocorrencia);
+	    }
+	    if($this->possoAtender()){
+	        $this->view->botaoAtender($this->ocorrencia);
+	    }
+	    if($this->possoAvaliar()){
+	        $this->view->botaoAvaliar();
+	    }
+	    
+	    if($this->possoReservar()){
+	        $this->view->botaoReservar();
+	    }
+	    if($this->possoFechar()){
+	        $this->view->botaoFechar();
+	    }
+	    
 	    echo '
   </div>
 </div>
@@ -309,11 +289,113 @@ class StatusOcorrenciaCustomController  extends StatusOcorrenciaController {
 	        
 ';
 	}
-	public function mainAjax(){
-	    //Verifica-se qual o form que foi submetido. 
-	    if(!isset($_POST['status_acao'])){
+	
+	
+	public function possoAvaliar(){
+	    //Só permitir isso se o usuário for cliente do chamado
+	    //O chamado deve estar fechado.
+	    if($this->sessao->getIdUsuario() != $this->ocorrencia->getUsuarioCliente()->getId()){
+	        return false;
+	    }
+	    if($this->ocorrencia->getStatus() != self::STATUS_FECHADO){
+	        return false;
+	    }
+	    return true;
+	}
+	
+	public function possoFechar(){
+	    if($this->sessao->getNivelAcesso() != Sessao::NIVEL_COMUM){
+	        return false;
+	    }
+	    if($this->sessao->getNivelAcesso() != Sessao::NIVEL_DESLOGADO){
+	        return false;
+	    }
+	    
+	    if($this->ocorrencia->getStatus() == Self::STATUS_ATENDIMENTO){
+	        if($this->sessao->getIdUsuario() == $this->ocorrencia->getIdUsuarioAtendente()){
+	            return true;
+	        }
+	        
+	    }
+	    return false;
+	}
+	public function possoReservar(){
+	    if($this->sessao->getNivelAcesso() != Sessao::NIVEL_ADM){
+	        return false;
+	    }
+	    if($this->ocorrencia->getStatus() == Self::STATUS_FECHADO){
+	        return false;
+	    }
+	    if($this->ocorrencia->getStatus() == Self::STATUS_FECHADO_CONFIRMADO){
+	        return false;
+	    }
+	    if($this->ocorrencia->getStatus() == Self::STATUS_CANCELADO){
+	        return false;
+	    }
+	    
+	    return true;
+	}
+	public function ajaxFechar(){
+	    if(!$this->possoFechar()){
+	        echo ':falha:Não é possível fechar este chamado.';
 	        return;
 	    }
+	    
+	    $ocorrenciaDao = new OcorrenciaDAO($this->dao->getConnection());
+	    $this->ocorrencia->setStatus(self::STATUS_FECHADO);
+	    
+	    $status = new Status();
+	    $status->setSigla(self::STATUS_FECHADO);
+	    
+	    $statusDao = new StatusDAO($this->dao->getConnection());
+	    $statusDao->fillBySigla($status);
+	    
+	    $statusOcorrencia = new StatusOcorrencia();
+	    $statusOcorrencia->setOcorrencia($this->ocorrencia);
+	    $statusOcorrencia->setStatus($status);
+	    $statusOcorrencia->setDataMudanca(date("Y-m-d G:i:s"));
+	    $statusOcorrencia->getUsuario()->setId($this->sessao->getIdUsuario());
+	    $statusOcorrencia->setMensagem("Ocorrência cancelada pelo usuário");
+	    
+	    
+	    $ocorrenciaDao->getConnection()->beginTransaction();
+	    
+	    if(!$ocorrenciaDao->update($this->ocorrencia)){
+	        echo ':falha:Falha na alteração do status da ocorrência.';
+	        $ocorrenciaDao->getConnection()->rollBack();
+	        return;
+	    }
+	    
+	    if(!$this->dao->insert($statusOcorrencia)){
+	        echo ':falha:Falha ao tentar inserir histórico.';
+	        return;
+	    }
+	    $ocorrenciaDao->getConnection()->commit();
+	    echo ':sucesso:'.$this->ocorrencia->getId().':Chamado fechado com sucesso!';
+	    
+	    
+	    
+	}
+	public function mainAjax(){
+	    //Verifica-se qual o form que foi submetido. 
+	    
+
+	    
+	    if(!isset($_POST['status_acao'])){
+	        echo ':falha:Ação não especificada';
+	        return;
+	    }
+	    if(!$this->verificarSenha()){
+	        echo ':falha:Senha incorreta';
+	        return;
+	    }
+
+	    $this->sessao = new Sessao();
+	    $this->ocorrencia = new Ocorrencia();
+	    $this->ocorrencia->setId($_POST['id_ocorrencia']);
+	    $ocorrenciaDao = new OcorrenciaDAO($this->dao->getConnection());
+	    $ocorrenciaDao->fillById($this->ocorrencia);
+	    
 	    switch($_POST['status_acao']){
 	        case 'cancelar':
 	            $this->ajaxCancelar();
@@ -323,6 +405,9 @@ class StatusOcorrenciaCustomController  extends StatusOcorrenciaController {
 	            break;
 	        case 'reservar':
 	            echo "Reservar";
+	            break;
+	        case 'fechar':
+	            $this->ajaxFechar();
 	            break;
 	            
 	        default:

@@ -1,6 +1,12 @@
 
 
 $(document).ready(function(e) {
+	
+	$('.botao-status').on('click', function(e){
+		var acao = $(this).attr('acao');
+		$('#campo_acao').val(acao);
+	});
+	
 	$(".form_status").on('submit', function(e) {
 		e.preventDefault();
         $('.modal_form_status').modal('hide');
