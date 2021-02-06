@@ -445,15 +445,15 @@ class OcorrenciaCustomView extends OcorrenciaView {
             return;
         }
         
-        if($ocorrencia->getStatus() != StatusOcorrenciaCustomController::STATUS_FECHADO)
+        if($ocorrencia->getStatus() == StatusOcorrenciaCustomController::STATUS_FECHADO)
         {
             return;
         }
-        if($ocorrencia->getStatus() != StatusOcorrenciaCustomController::STATUS_FECHADO_CONFIRMADO)
+        if($ocorrencia->getStatus() == StatusOcorrenciaCustomController::STATUS_FECHADO_CONFIRMADO)
         {
             return;
         }
-        if($ocorrencia->getStatus() != StatusOcorrenciaCustomController::STATUS_FECHADO)
+        if($ocorrencia->getStatus() == StatusOcorrenciaCustomController::STATUS_FECHADO)
         {
             return;
         }
