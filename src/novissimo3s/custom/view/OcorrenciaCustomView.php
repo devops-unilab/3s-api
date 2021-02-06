@@ -17,6 +17,7 @@ use novissimo3s\dao\UsuarioDAO;
 
 class OcorrenciaCustomView extends OcorrenciaView {
 
+   
     
     public function mostraFormInserir2($listaServico){
         
@@ -386,7 +387,7 @@ class OcorrenciaCustomView extends OcorrenciaView {
             echo ' | Local: '.$ocorrencia->getLocal().'<br>';
         }
         if(trim($ocorrencia->getLocalSala()) != ""){
-            echo 'Local Sala: '.$ocorrencia->getLocalSala().'<br>';
+            echo ' Local Sala: '.$ocorrencia->getLocalSala().'<br>';
         }
         if(trim($ocorrencia->getRamal()) != ""){
             echo ' | Ramal: '.$ocorrencia->getRamal().'<br>';
