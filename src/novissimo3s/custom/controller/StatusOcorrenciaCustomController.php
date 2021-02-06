@@ -154,7 +154,7 @@ class StatusOcorrenciaCustomController  extends StatusOcorrenciaController {
 	    
 	    
 	    
-	    $ocorrenciaDao = new OcorrenciaDAO($this->dao->getConnection());
+	    $ocorrenciaDao = new OcorrenciaCustomDAO($this->dao->getConnection());
 	    $ocorrenciaDao->fillById($this->ocorrencia);
 	    
 	    $this->ocorrencia->setIdUsuarioAtendente($this->sessao->getIdUsuario());
@@ -173,6 +173,14 @@ class StatusOcorrenciaCustomController  extends StatusOcorrenciaController {
 	    $statusOcorrencia->setDataMudanca(date("Y-m-d G:i:s"));
 	    $statusOcorrencia->getUsuario()->setId($this->sessao->getIdUsuario());
 	    $statusOcorrencia->setMensagem("Ocorrência em atendimento");
+	    
+	    
+	    $usuarioDao = new UsuarioDAO($this->dao->getConnection());
+	    $usuario = new Usuario();
+	    $usuario->setId($this->sessao->getIdUsuario());
+	    $usuarioDao->fillById($usuario);
+	    
+	    $this->ocorrencia->getAreaResponsavel()->setId($usuario->getIdSetor());
 	    
 	    
 	    $ocorrenciaDao->getConnection()->beginTransaction();

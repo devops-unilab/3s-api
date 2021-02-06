@@ -344,107 +344,21 @@ class OcorrenciaCustomView extends OcorrenciaView {
      * @param array:StatusOcorrencia $listaStatus
      */
     public function mostrarSelecionado2(Ocorrencia $ocorrencia, $listaStatus, $dataAbertura, $dataSolucao){
-        
         echo '
             
             
                 <div class="card mb-4">
                     <div class="card-body">
-
+            
                         <div class="alert alert-danger" role="alert">
                             Status: '.$this->getStrStatus($ocorrencia->getStatus()).'
                         </div>
-                        <p>Abertura: '.date("d/m/Y H:i:s" , strtotime($dataAbertura)).'</p>';
-       
-        
-
-        if($ocorrencia->getServico()->getTempoSla() > 1)
-        {
-            echo '
-                        <p>Prazo de Resolução: '.$ocorrencia->getServico()->getTempoSla(). ' Horas úteis';
-        }else if($ocorrencia->getServico()->getTempoSla() == 1){
-            echo '1 Hora útil';
-        }else{
-            echo ' SLA não definido.';
-        }
+                            <p>Abertura: '.date("d/m/Y H:i:s" , strtotime($dataAbertura)).'</p>';
         
         
-        
+        $this->painelSLA($ocorrencia, $listaStatus, $dataAbertura, $dataSolucao);
         echo '
-                        </p>';
-        
-        
-        
-        if($ocorrencia->getStatus() != 'f' && $ocorrencia->getStatus() != 'g' && $ocorrencia->getServico()->getTempoSla() != 0){
-            
-            $timeHoje = time();
-            $timeSolucaoEstimada = strtotime($dataSolucao);
-            $timeAbertura = strtotime($dataAbertura);
-            $timeRecorrido = $timeHoje - $timeAbertura;
-            $total = $timeSolucaoEstimada - $timeAbertura;
-            
-            
-            
-            $date1 = new \DateTime($dataAbertura);
-            $date2 = new \DateTime($dataSolucao);
-            $diff = $date2->diff($date1);
-            $hours = $diff->h;
-            $hours = $hours + ($diff->days*24);
-            $minutos = $diff->i;
-            $segundos  = $diff->s;
-            
-            
-            
-            
-            if($timeHoje > $timeSolucaoEstimada){
-                
-                
-                
-                echo '<p class="text-danger">Solução Estimada: '.date("d/m/Y H:i:s" , strtotime($dataSolucao)).'';
-                echo '<br>Tempo Total: <span id="tempo-total">'. str_pad($hours, 2 , '0' , STR_PAD_LEFT).':'.str_pad($minutos, 2 , '0' , STR_PAD_LEFT).':'.str_pad($segundos, 2 , '0' , STR_PAD_LEFT).'</span>';
-                echo '<br>Solução em Atraso. <br>Caso queira pressionar o atendente  <a href=\"send\">clique aqui</a></p>';
-                
-                
-            }else{
-                $percentual = ($timeRecorrido *100)/$total;
-                echo '
-                        <p class="text-primary">Solução Estimada: '.date("d/m/Y H:i:s" , strtotime($dataSolucao)).'<br>Dentro do prazo.';
-                echo '<br>Tempo Total: <span id="tempo-total">'. str_pad($hours, 2 , '0' , STR_PAD_LEFT).':'.str_pad($minutos, 2 , '0' , STR_PAD_LEFT).':'.str_pad($segundos, 2 , '0' , STR_PAD_LEFT).'</span>';
-                echo '<br>Tempo Restante:';
-                
-                $date1 = new \DateTime();
-                $date2 = new \DateTime($dataSolucao);
-                $diff = $date2->diff($date1);
-                $hours = $diff->h;
-                $hours = $hours + ($diff->days*24);
-                $minutos = $diff->i;
-                $segundos  = $diff->s;
-                
-                
-                echo '
-                        <span id="tempo-restante">'. str_pad($hours, 2 , '0' , STR_PAD_LEFT).':'.str_pad($minutos, 2 , '0' , STR_PAD_LEFT).':'.str_pad($segundos, 2 , '0' , STR_PAD_LEFT).'</span></p>
-                            
-';
-                
-                echo '
-                    
-            <img src="img/bonequinho.gif" height="75">
-            <div class="progress">
-				<div id="barra-progresso" class="progress-bar" role="progressbar" aria-valuenow="'.$percentual.'" aria-valuemin="0" aria-valuemax="100" style="width: '.$percentual.'%;" data-toggle="tooltip" data-placement="top" title="Solução">
-					<span id="label-progresso" class="sr-only">'.$percentual.'% Completo</span>
-					<span id="label-progresso2" class="progress-type">Progresso '.intval($percentual).'% </span>
-				</div>
-			</div><br>
-					    
-';
-                
-            }
-            
-            
-        }
-        
-        echo '
-                    Descricao: '.$ocorrencia->getDescricao().'<br>';
+                    <br> Descricao: '.$ocorrencia->getDescricao().'<br>';
         if(trim($ocorrencia->getPatrimonio()) != ""){
             echo 'Patrimonio: '.$ocorrencia->getPatrimonio().' | ';
         }
@@ -455,15 +369,17 @@ class OcorrenciaCustomView extends OcorrenciaView {
             echo 'Solucao: '.$ocorrencia->getSolucao().'<br>';
         }
         echo '
-
-
+            
+            
                     </div>
-                </div>
-                            
+                </div>';
+        
+        echo '
+            
             <div class="card mb-4">
                 <div class="card-body">
-                    Cliente: '.$ocorrencia->getUsuarioCliente()->getNome().' | 
-                    Campus: '.$ocorrencia->getCampus().' | 
+                    Cliente: '.$ocorrencia->getUsuarioCliente()->getNome().' |
+                    Campus: '.$ocorrencia->getCampus().' |
                     Email: '.$ocorrencia->getEmail().' | ';
         
         if(trim($ocorrencia->getLocal()) != ""){
@@ -476,22 +392,15 @@ class OcorrenciaCustomView extends OcorrenciaView {
             echo ' | Ramal: '.$ocorrencia->getRamal().'<br>';
         }
         
-
-                    
         echo '
                 </div>
-            </div>
-                        
-
-            
-            
+            </div>';
+        
+        
+        echo '
+        
         <div class="card mb-4">
             <div class="card-body">';
-        
-
-        
-        
-        
         echo 'Setor Responsável: '.$ocorrencia->getAreaResponsavel()->getNome().
         ' - '.$ocorrencia->getAreaResponsavel()->getDescricao().'<br>';
         
@@ -511,16 +420,113 @@ class OcorrenciaCustomView extends OcorrenciaView {
         }
         
         echo '
-                    
-                    
-                    
+            
+            
+            
             </div>
         </div>
-                    
-                    
-                    
+            
+            
+            
 ';
     }
+    
+    public function painelSLA(Ocorrencia $ocorrencia, $listaStatus, $dataAbertura, $dataSolucao){
+ 
+        
+        if($ocorrencia->getServico()->getTempoSla() > 1)
+        {
+            echo 'Prazo de Resolução: '.$ocorrencia->getServico()->getTempoSla(). ' Horas úteis';
+        }else if($ocorrencia->getServico()->getTempoSla() == 1){
+            echo '1 Hora útil';
+            
+        }else{
+            echo ' SLA não definido.';
+            return;
+        }
+        
+        if($ocorrencia->getStatus() != StatusOcorrenciaCustomController::STATUS_FECHADO)
+        {
+            return;
+        }
+        if($ocorrencia->getStatus() != StatusOcorrenciaCustomController::STATUS_FECHADO_CONFIRMADO)
+        {
+            return;
+        }
+        if($ocorrencia->getStatus() != StatusOcorrenciaCustomController::STATUS_FECHADO)
+        {
+            return;
+        }
+        
+        $timeHoje = time();
+        $timeSolucaoEstimada = strtotime($dataSolucao);
+        $timeAbertura = strtotime($dataAbertura);
+        $timeRecorrido = $timeHoje - $timeAbertura;
+        $total = $timeSolucaoEstimada - $timeAbertura;
+            
+            
+            
+        $date1 = new \DateTime($dataAbertura);
+        $date2 = new \DateTime($dataSolucao);
+        $diff = $date2->diff($date1);
+        $hours = $diff->h;
+        $hours = $hours + ($diff->days*24);
+        $minutos = $diff->i;
+        $segundos  = $diff->s;
+            
+            
+            
+            
+        if($timeHoje > $timeSolucaoEstimada){
+            
+            
+            
+            echo '<p class="text-danger">Solução Estimada: '.date("d/m/Y H:i:s" , strtotime($dataSolucao)).'';
+            echo '<br>Tempo Total: <span id="tempo-total">'. str_pad($hours, 2 , '0' , STR_PAD_LEFT).':'.str_pad($minutos, 2 , '0' , STR_PAD_LEFT).':'.str_pad($segundos, 2 , '0' , STR_PAD_LEFT).'</span>';
+            echo '<br>Solução em Atraso. <br>Caso queira pressionar o atendente  <a href=\"send\">clique aqui</a></p>';
+            
+            
+        }else{
+            $percentual = ($timeRecorrido *100)/$total;
+            echo '
+                    <p class="text-primary">Solução Estimada: '.date("d/m/Y H:i:s" , strtotime($dataSolucao)).'<br>Dentro do prazo.';
+            echo '<br>Tempo Total: <span id="tempo-total">'. str_pad($hours, 2 , '0' , STR_PAD_LEFT).':'.str_pad($minutos, 2 , '0' , STR_PAD_LEFT).':'.str_pad($segundos, 2 , '0' , STR_PAD_LEFT).'</span>';
+            echo '<br>Tempo Restante:';
+            
+            $date1 = new \DateTime();
+            $date2 = new \DateTime($dataSolucao);
+            $diff = $date2->diff($date1);
+            $hours = $diff->h;
+            $hours = $hours + ($diff->days*24);
+            $minutos = $diff->i;
+            $segundos  = $diff->s;
+                
+                
+            echo '
+                        <span id="tempo-restante">'. str_pad($hours, 2 , '0' , STR_PAD_LEFT).':'.str_pad($minutos, 2 , '0' , STR_PAD_LEFT).':'.str_pad($segundos, 2 , '0' , STR_PAD_LEFT).'</span></p>
+                            
+';
+                
+                echo '
+                    
+            <img src="img/bonequinho.gif" height="75">
+            <div class="progress">
+				<div id="barra-progresso" class="progress-bar" role="progressbar" aria-valuenow="'.$percentual.'" aria-valuemin="0" aria-valuemax="100" style="width: '.$percentual.'%;" data-toggle="tooltip" data-placement="top" title="Solução">
+					<span id="label-progresso" class="sr-only">'.$percentual.'% Completo</span>
+					<span id="label-progresso2" class="progress-type">Progresso '.intval($percentual).'% </span>
+				</div>
+			</div><br>
+					    
+';
+                
+        }
+            
+            
+        
+        
+
+    }
+
 
 
 }
