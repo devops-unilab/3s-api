@@ -20,6 +20,19 @@ use novissimo3s\custom\dao\RecessoCustomDAO;
 use novissimo3s\model\Servico;
 
 class OcorrenciaCustomController  extends OcorrenciaController {
+    
+    
+    private $selecionado;
+    private $sessao;
+    
+    public function __construct(){
+        $this->dao = new OcorrenciaCustomDAO();
+        $this->view = new OcorrenciaCustomView();
+    }
+    
+    
+    
+    
     public function fimDeSemana($data){
         $diaDaSemana = date('w', strtotime($data));
         $diaDaSemana = intval($diaDaSemana);
@@ -108,24 +121,7 @@ class OcorrenciaCustomController  extends OcorrenciaController {
         
     }
 
-	public function __construct(){
-		$this->dao = new OcorrenciaCustomDAO();
-		$this->view = new OcorrenciaCustomView();
-	}
 
-
-
-	public function editarSolucao(){
-	    //
-	}
-	
-	public function alterarServico(){
-	    //
-	}
-	
-	private $selecionado; 
-	private $sessao;
-	
 	public function parteInteressada(){
 	    if($this->sessao->getNivelAcesso() == Sessao::NIVEL_TECNICO ){
 	        return true;

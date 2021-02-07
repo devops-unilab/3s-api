@@ -5,6 +5,10 @@ $(document).ready(function(e) {
 	    create: false,
 	    sortField: 'text'
 	});
+	$('#select-servico').selectize({
+	    create: false,
+	    sortField: 'text'
+	});
 
 	
 	$('.star').on('click', function(e){

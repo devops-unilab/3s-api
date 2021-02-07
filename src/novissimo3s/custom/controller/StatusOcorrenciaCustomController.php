@@ -21,6 +21,8 @@ use novissimo3s\model\Usuario;
 use novissimo3s\dao\UsuarioDAO;
 use novissimo3s\custom\dao\OcorrenciaCustomDAO;
 use novissimo3s\dao\ServicoDAO;
+use novissimo3s\custom\dao\ServicoCustomDAO;
+use novissimo3s\model\Servico;
 
 class StatusOcorrenciaCustomController  extends StatusOcorrenciaController {
     
@@ -265,6 +267,16 @@ class StatusOcorrenciaCustomController  extends StatusOcorrenciaController {
 	    return array_merge($listaUsuarios, $usuarioDao->fetchByNivel($usuario));
 	    
 	}
+	public function getServicos(){
+	    $listaServicos = array();
+	    
+	    $servicoDao = new ServicoCustomDAO($this->dao->getConnection());
+	    $servico = new Servico();
+	    $servico->setVisao(1);
+	    $listaServicos = $servicoDao->fetchByVisao($servico);
+	    
+	    return $listaServicos;
+	}
 	public function painelStatus(Ocorrencia $ocorrencia){
 	    
 	    $this->ocorrencia = $ocorrencia;
@@ -279,11 +291,17 @@ class StatusOcorrenciaCustomController  extends StatusOcorrenciaController {
     </div>';
 	    
 	    $listaUsuarios = array();
-	    if($this->sessao->getNivelAcesso() == Sessao::NIVEL_ADM){
+	    $listaServicos = array();
+	    
+	    if($this->possoReservar())
+	    {
 	        $listaUsuarios = $this->getTecnicos();
 	    }
+	    if($this->possoEditarServico()){
+	        $listaServicos = $this->getServicos();
+	    }
 	    
-	    $this->view->modalFormStatus($this->ocorrencia, $listaUsuarios);
+	    $this->view->modalFormStatus($this->ocorrencia, $listaUsuarios, $listaServicos);
 	    
 	    
 	    if($this->possoCancelar()){
@@ -331,9 +349,27 @@ class StatusOcorrenciaCustomController  extends StatusOcorrenciaController {
 ';
 	}
 	public function possoAguardarUsuario(){
+	    if($this->sessao->getNivelAcesso() == Sessao::NIVEL_COMUM || $this->sessao->getNivelAcesso() == Sessao::NIVEL_DESLOGADO){
+	        return false;
+	    }
+	    if($this->ocorrencia->getStatus() != self::STATUS_ATENDIMENTO){
+	        return false;
+	    }
+	    if($this->sessao->getIdUsuario() != $this->ocorrencia->getIdUsuarioAtendente()){
+	        return false;
+	    }
 	    return true;
 	}
 	public function possoAguardarAtivos(){
+	    if($this->sessao->getNivelAcesso() == Sessao::NIVEL_COMUM || $this->sessao->getNivelAcesso() == Sessao::NIVEL_DESLOGADO){
+	        return false;
+	    }
+	    if($this->ocorrencia->getStatus() != self::STATUS_ATENDIMENTO){
+	        return false;
+	    }
+	    if($this->sessao->getIdUsuario() != $this->ocorrencia->getIdUsuarioAtendente()){
+	        return false;
+	    }
 	    return true;
 	}
 	public function possoEditarServico(){
@@ -622,6 +658,7 @@ class StatusOcorrenciaCustomController  extends StatusOcorrenciaController {
 	public function ajaxEditarSolucao(){
 	    if(!$this->possoEditarSolucao()){
 	        echo ':falha:Esta solução não pode ser editada.';
+	        return;
 	    }
 	    
 	    echo ':falha:funcionalidade não implementada';
@@ -629,6 +666,11 @@ class StatusOcorrenciaCustomController  extends StatusOcorrenciaController {
 	public function ajaxEditarServico(){
 	    if(!$this->possoEditarServico()){
 	        echo ':falha:Este serviço não pode ser editado.';
+	        return;
+	    }
+	    if(!isset($_POST['id_servico'])){
+	        echo ':falha:Selecione um serviço.';
+	        return;
 	    }
 	    
 	    echo ':falha:funcionalidade não implementada';

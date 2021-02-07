@@ -29,10 +29,23 @@ class StatusOcorrenciaCustomView extends StatusOcorrenciaView {
       <div class="modal-body">
         <form method="post" id="form_status_alterar" class="form_status">
             <div id="container-editar-servico" class="form-group escondido">
-                Editar Serviço: 
+                
+                <label for="select-servico">Selecione um Serviço</label>
+                <select name="id_servico" id="select-servico">
+                    <option value="" selected>Selecione um Serviço</option>';
+        foreach($listaServicos as $servico){
+            echo '
+                    <option value="'.$servico->getId().'">'.$servico->getNome().'</option>';
+        }
+        
+        echo '
+                </select>
             </div>
-            <div id="container-editar-solucao" class="form-group escondido">
-                Editar Solução: 
+            <div id="container-editar-solucao" class="form-group escondido"> 
+                <label for="solucao">Solução</label>
+                <textarea class="form-control" id="solucao" name="solucao" rows="2">
+                '.strip_tags($ocorrencia->getSolucao()).'
+                </textarea>
             </div>
 
             <div id="container-reservar" class="form-group escondido">
