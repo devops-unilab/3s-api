@@ -43,9 +43,7 @@ class StatusOcorrenciaCustomView extends StatusOcorrenciaView {
             </div>
             <div id="container-editar-solucao" class="form-group escondido"> 
                 <label for="solucao">Solução</label>
-                <textarea class="form-control" id="solucao" name="solucao" rows="2">
-                '.strip_tags($ocorrencia->getSolucao()).'
-                </textarea>
+                <textarea class="form-control" id="solucao" name="solucao" rows="2">'.strip_tags($ocorrencia->getSolucao()).'</textarea>
             </div>
 
             <div id="container-reservar" class="form-group escondido">

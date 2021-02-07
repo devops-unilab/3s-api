@@ -23,7 +23,8 @@ $(document).ready(function(e) {
         $('#modalAddMensagemForum').modal('hide');
         
         var dados = new FormData(this);
-        
+        $('#botao-enviar-mensagem').attr('disabled', true);
+		
 		jQuery.ajax({
             type: "POST",
             url: "index.php?ajax=mensagem_forum",

@@ -40,7 +40,7 @@ class MensagemForumCustomView extends MensagemForumView {
                         </div>
 
                         <div class="form-floating" id="campo-texto">
-                            <button form="insert_form_mensagem_forum" type="submit" class="btn btn-primary">Cadastrar</button>
+                            <button id="botao-enviar-mensagem" form="insert_form_mensagem_forum" type="submit" class="btn btn-primary">Cadastrar</button>
                         </div> 
 
 	              </form>

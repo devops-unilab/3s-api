@@ -629,10 +629,10 @@ class StatusOcorrenciaCustomController  extends StatusOcorrenciaController {
 	        case 'editar_solucao':
 	            $this->ajaxEditarSolucao();
 	            break;
-	        case 'aguardando_ativo':
+	        case 'aguardar_ativos':
 	            $this->ajaxAguardandoAtivo();
 	            break;
-	        case 'aguardando_usuario':
+	        case 'aguardar_usuario':
 	            $this->ajaxAguardandoUsuario();
 	            break;
 	        default:
@@ -645,14 +645,75 @@ class StatusOcorrenciaCustomController  extends StatusOcorrenciaController {
 	        echo ':falha:Esta solução não pode ser editada.';
 	    }
 	    
-	    echo ':falha:funcionalidade não implementada';
+	    $ocorrenciaDao = new OcorrenciaDAO($this->dao->getConnection());
+	    $this->ocorrencia->setStatus(self::STATUS_AGUARDANDO_ATIVO);
+	    
+	    $status = new Status();
+	    $status->setSigla(self::STATUS_AGUARDANDO_ATIVO);
+	    
+	    $statusDao = new StatusDAO($this->dao->getConnection());
+	    $statusDao->fillBySigla($status);
+	    
+	    $statusOcorrencia = new StatusOcorrencia();
+	    $statusOcorrencia->setOcorrencia($this->ocorrencia);
+	    $statusOcorrencia->setStatus($status);
+	    $statusOcorrencia->setDataMudanca(date("Y-m-d G:i:s"));
+	    $statusOcorrencia->getUsuario()->setId($this->sessao->getIdUsuario());
+	    $statusOcorrencia->setMensagem("Aguardando ativo de TI");
+	    
+	    
+	    $ocorrenciaDao->getConnection()->beginTransaction();
+	    
+	    if(!$ocorrenciaDao->update($this->ocorrencia)){
+	        echo ':falha:Falha na alteração do status da ocorrência.';
+	        $ocorrenciaDao->getConnection()->rollBack();
+	        return;
+	    }
+	    
+	    if(!$this->dao->insert($statusOcorrencia)){
+	        echo ':falha:Falha ao tentar inserir histórico.';
+	        return;
+	    }
+	    $ocorrenciaDao->getConnection()->commit();
+	    echo ':sucesso:'.$this->ocorrencia->getId().':Alterado para aguardando ativo de ti!';
+	    
 	}
 	public function ajaxAguardandoUsuario(){
 	    if(!$this->possoEditarSolucao()){
 	        echo ':falha:Esta solução não pode ser editada.';
 	    }
+	    $ocorrenciaDao = new OcorrenciaDAO($this->dao->getConnection());
+	    $this->ocorrencia->setStatus(self::STATUS_AGUARDANDO_USUARIO);
 	    
-	    echo ':falha:funcionalidade não implementada';
+	    $status = new Status();
+	    $status->setSigla(self::STATUS_AGUARDANDO_USUARIO);
+	    
+	    $statusDao = new StatusDAO($this->dao->getConnection());
+	    $statusDao->fillBySigla($status);
+	    
+	    $statusOcorrencia = new StatusOcorrencia();
+	    $statusOcorrencia->setOcorrencia($this->ocorrencia);
+	    $statusOcorrencia->setStatus($status);
+	    $statusOcorrencia->setDataMudanca(date("Y-m-d G:i:s"));
+	    $statusOcorrencia->getUsuario()->setId($this->sessao->getIdUsuario());
+	    $statusOcorrencia->setMensagem("Aguardando ativo de TI");
+	    
+	    
+	    $ocorrenciaDao->getConnection()->beginTransaction();
+	    
+	    if(!$ocorrenciaDao->update($this->ocorrencia)){
+	        echo ':falha:Falha na alteração do status da ocorrência.';
+	        $ocorrenciaDao->getConnection()->rollBack();
+	        return;
+	    }
+	    
+	    if(!$this->dao->insert($statusOcorrencia)){
+	        echo ':falha:Falha ao tentar inserir histórico.';
+	        return;
+	    }
+	    $ocorrenciaDao->getConnection()->commit();
+	    echo ':sucesso:'.$this->ocorrencia->getId().':Alterado para aguardando usuário!';
+	    
 	}
 	
 	public function ajaxEditarSolucao(){
@@ -660,8 +721,49 @@ class StatusOcorrenciaCustomController  extends StatusOcorrenciaController {
 	        echo ':falha:Esta solução não pode ser editada.';
 	        return;
 	    }
+	    if(!isset($_POST['solucao'])){
+	        echo ':falha:Digite uma solução.';
+	        return;
+	    }
+	    if(trim($_POST['solucao']) == ""){
+	        echo ':falha:Digite uma solução.';
+	        return;
+	    }
 	    
-	    echo ':falha:funcionalidade não implementada';
+	   
+	    
+	    $ocorrenciaDao = new OcorrenciaCustomDAO($this->dao->getConnection());
+	    $status = new Status();
+	    $status->setSigla($this->ocorrencia->getStatus());
+	    
+	    $statusDao = new StatusDAO($this->dao->getConnection());
+	    $statusDao->fillBySigla($status);
+	    
+	    $statusOcorrencia = new StatusOcorrencia();
+	    $statusOcorrencia->setOcorrencia($this->ocorrencia);
+	    $statusOcorrencia->setStatus($status);
+	    $statusOcorrencia->setDataMudanca(date("Y-m-d G:i:s"));
+	    $statusOcorrencia->getUsuario()->setId($this->sessao->getIdUsuario());
+	    $statusOcorrencia->setMensagem('Técnico editou a solução. ');
+	    
+	    $this->ocorrencia->setSolucao(strip_tags($_POST['solucao']));
+	    $ocorrenciaDao->getConnection()->beginTransaction();
+	    
+	    
+	    if(!$ocorrenciaDao->update($this->ocorrencia)){
+	        echo ':falha:Falha na alteração do status da ocorrência.';
+	        $ocorrenciaDao->getConnection()->rollBack();
+	        return;
+	    }
+	    
+	    if(!$this->dao->insert($statusOcorrencia)){
+	        echo ':falha:Falha ao tentar inserir histórico.';
+	        return;
+	    }
+	    $ocorrenciaDao->getConnection()->commit();
+	    
+	    echo ':sucesso:'.$this->ocorrencia->getId().':Solução editada com sucesso!';
+	    
 	}
 	public function ajaxEditarServico(){
 	    if(!$this->possoEditarServico()){
@@ -673,7 +775,52 @@ class StatusOcorrenciaCustomController  extends StatusOcorrenciaController {
 	        return;
 	    }
 	    
-	    echo ':falha:funcionalidade não implementada';
+	    
+	    $servico = new Servico();
+	    $servico->setId($_POST['id_servico']);
+	    
+	    $servicoDao = new ServicoCustomDAO($this->dao->getConnection());
+	    $servicoDao->fillById($servico);
+	    
+	    
+	    $ocorrenciaDao = new OcorrenciaCustomDAO($this->dao->getConnection());
+
+	    
+	    $status = new Status();
+	    $status->setSigla($this->ocorrencia->getStatus());
+	    
+	    $statusDao = new StatusDAO($this->dao->getConnection());
+	    $statusDao->fillBySigla($status);
+	    
+	    $statusOcorrencia = new StatusOcorrencia();
+	    $statusOcorrencia->setOcorrencia($this->ocorrencia);
+	    $statusOcorrencia->setStatus($status);
+	    $statusOcorrencia->setDataMudanca(date("Y-m-d G:i:s"));
+	    $statusOcorrencia->getUsuario()->setId($this->sessao->getIdUsuario());
+	    $statusOcorrencia->setMensagem('Técnico editou o serviço ');
+	    
+	    $this->ocorrencia->getAreaResponsavel()->setId($servico->getAreaResponsavel()->getId());
+	    $this->ocorrencia->getServico()->setId($servico->getId());
+	    
+	    $ocorrenciaDao->getConnection()->beginTransaction();
+	    
+	    
+	    
+	    
+	    if(!$ocorrenciaDao->update($this->ocorrencia)){
+	        echo ':falha:Falha na alteração do status da ocorrência.';
+	        $ocorrenciaDao->getConnection()->rollBack();
+	        return;
+	    }
+	    
+	    if(!$this->dao->insert($statusOcorrencia)){
+	        echo ':falha:Falha ao tentar inserir histórico.';
+	        return;
+	    }
+	    $ocorrenciaDao->getConnection()->commit();
+	    
+	    echo ':sucesso:'.$this->ocorrencia->getId().':Serviço editado com sucesso!';
+	    
 	}
 	public function possoLiberar(){
 	    if($this->sessao->getNivelAcesso() != Sessao::NIVEL_ADM){
