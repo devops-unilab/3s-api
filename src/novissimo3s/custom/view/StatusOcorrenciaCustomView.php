@@ -15,7 +15,7 @@ class StatusOcorrenciaCustomView extends StatusOcorrenciaView {
 
     ////////Digite seu código customizado aqui.
 
-    public function modalFormStatus(Ocorrencia $ocorrencia, $listaTecnicos){
+    public function modalFormStatus(Ocorrencia $ocorrencia, $listaTecnicos = array(), $listaServicos = array()){
         echo '<!-- Modal -->
 <div class="modal fade modal_form_status" id="modalStatus" tabindex="-1" aria-labelledby="labelModalCancelar" aria-hidden="true">
   <div class="modal-dialog">
@@ -28,7 +28,13 @@ class StatusOcorrenciaCustomView extends StatusOcorrenciaView {
       </div>
       <div class="modal-body">
         <form method="post" id="form_status_alterar" class="form_status">
-            
+            <div id="container-editar-servico" class="form-group escondido">
+                Editar Serviço: 
+            </div>
+            <div id="container-editar-solucao" class="form-group escondido">
+                Editar Solução: 
+            </div>
+
             <div id="container-reservar" class="form-group escondido">
                 
                 <label for="select-tecnico">Selecione um Técnico</label>
@@ -151,4 +157,56 @@ class StatusOcorrenciaCustomView extends StatusOcorrenciaView {
 ';
         
     }
+    
+    public function botaoEditarServico(){
+        echo '
+    <hr>
+    <!-- Button trigger modal -->
+    <button type="button" id="botao-editar-servico" acao="editar_servico"  class="btn btn-primary" data-toggle="modal" data-target="#modalStatus">
+      Editar Serviço
+    </button>
+            
+';
+        
+    }
+    
+    
+    public function botaoEditarSolucao(){
+        echo '
+    <hr>
+    <!-- Button trigger modal -->
+    <button id="botao-editar-solucao" type="button" acao="editar_solucao"  class="btn btn-primary" data-toggle="modal" data-target="#modalStatus">
+      Editar Solução
+    </button>
+            
+';
+        
+    }
+    
+    
+    public function botaoAguardarUsuario(){
+        echo '
+    <hr>
+    <!-- Button trigger modal -->
+    <button type="button" acao="aguardar_usuario"  class="btn btn-primary botao-status" data-toggle="modal" data-target="#modalStatus">
+      Aguardar Usuário
+    </button>
+            
+';
+        
+    }
+    
+    
+    public function botaoAguardarAtivos(){
+        echo '
+    <hr>
+    <!-- Button trigger modal -->
+    <button type="button" acao="aguardar_ativos"  class="btn btn-primary botao-status" data-toggle="modal" data-target="#modalStatus">
+      Aguardar Ativos de TI
+    </button>
+            
+';
+        
+    }
+    
 }

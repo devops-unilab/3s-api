@@ -305,6 +305,20 @@ class StatusOcorrenciaCustomController  extends StatusOcorrenciaController {
 	    if($this->possoLiberar()){
 	        $this->view->botaoLiberar();
 	    }
+	    if($this->possoEditarServico()){
+	        $this->view->botaoEditarServico();
+	    }
+	    if($this->possoEditarSolucao()){
+	        $this->view->botaoEditarSolucao();
+	    }
+	    
+	    
+	    if($this->possoAguardarUsuario()){
+	        $this->view->botaoAguardarUsuario();
+	    }
+	    if($this->possoAguardarAtivos()){
+	        $this->view->botaoAguardarAtivos();
+	    }
 	    
 	    echo '
   </div>
@@ -316,8 +330,38 @@ class StatusOcorrenciaCustomController  extends StatusOcorrenciaController {
 	        
 ';
 	}
-	
-	
+	public function possoAguardarUsuario(){
+	    return true;
+	}
+	public function possoAguardarAtivos(){
+	    return true;
+	}
+	public function possoEditarServico(){
+	    if($this->sessao->getNivelAcesso() == Sessao::NIVEL_COMUM || $this->sessao->getNivelAcesso() == Sessao::NIVEL_DESLOGADO){
+	        return false;
+	    }
+	    if($this->ocorrencia->getStatus() != self::STATUS_ATENDIMENTO){
+	        return false;
+	    }
+	    if($this->sessao->getIdUsuario() != $this->ocorrencia->getIdUsuarioAtendente()){
+	        return false;
+	    }
+	    return true;
+	    
+	}
+	public function possoEditarSolucao(){
+	    if($this->sessao->getNivelAcesso() == Sessao::NIVEL_COMUM || $this->sessao->getNivelAcesso() == Sessao::NIVEL_DESLOGADO){
+	        return false;
+	    }
+	    if($this->ocorrencia->getStatus() != self::STATUS_ATENDIMENTO){
+	        return false;
+	    }
+	    if($this->sessao->getIdUsuario() != $this->ocorrencia->getIdUsuarioAtendente()){
+	        return false;
+	    }
+	    return true;
+	    
+	}
 	public function possoAvaliar(){
 	    //Só permitir isso se o usuário for cliente do chamado
 	    //O chamado deve estar fechado.
@@ -543,10 +587,51 @@ class StatusOcorrenciaCustomController  extends StatusOcorrenciaController {
 	        case 'avaliar':
 	            $this->ajaxAvaliar();
 	            break;
+	        case 'editar_servico':
+	            $this->ajaxEditarServico();
+	            break;
+	        case 'editar_solucao':
+	            $this->ajaxEditarSolucao();
+	            break;
+	        case 'aguardando_ativo':
+	            $this->ajaxAguardandoAtivo();
+	            break;
+	        case 'aguardando_usuario':
+	            $this->ajaxAguardandoUsuario();
+	            break;
 	        default:
 	            echo ':falha:Ação não encontrada';
 	            break;
 	    }
+	}
+	public function ajaxAguardandoAtivo(){
+	    if(!$this->possoEditarSolucao()){
+	        echo ':falha:Esta solução não pode ser editada.';
+	    }
+	    
+	    echo ':falha:funcionalidade não implementada';
+	}
+	public function ajaxAguardandoUsuario(){
+	    if(!$this->possoEditarSolucao()){
+	        echo ':falha:Esta solução não pode ser editada.';
+	    }
+	    
+	    echo ':falha:funcionalidade não implementada';
+	}
+	
+	public function ajaxEditarSolucao(){
+	    if(!$this->possoEditarSolucao()){
+	        echo ':falha:Esta solução não pode ser editada.';
+	    }
+	    
+	    echo ':falha:funcionalidade não implementada';
+	}
+	public function ajaxEditarServico(){
+	    if(!$this->possoEditarServico()){
+	        echo ':falha:Este serviço não pode ser editado.';
+	    }
+	    
+	    echo ':falha:funcionalidade não implementada';
 	}
 	public function possoLiberar(){
 	    if($this->sessao->getNivelAcesso() != Sessao::NIVEL_ADM){

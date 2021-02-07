@@ -21,15 +21,40 @@ $(document).ready(function(e) {
 		$('#campo-avaliacao').val(nota);
 		
 	});
+	function esconderTodos(){
+		$('#container-avaliacao').addClass("escondido");
+		$('#container-reservar').addClass("escondido");
+		$('#container-editar-servico').addClass("escondido");
+		$('#container-editar-solucao').addClass("escondido");
+	}
 	
 	$('#botao-avaliar').on('click', function(e){
+		esconderTodos();
 		$('#container-avaliacao').removeClass("escondido");
+		var acao = $(this).attr('acao');
+		$('#campo_acao').val(acao);
+		
+	});
+	$('#botao-editar-servico').on('click', function(e){
+		esconderTodos();
+		$('#container-editar-servico').removeClass("escondido");
 		
 		var acao = $(this).attr('acao');
 		$('#campo_acao').val(acao);
 		
 	});
+	
+	$('#botao-editar-solucao').on('click', function(e){
+		esconderTodos();
+		$('#container-editar-solucao').removeClass("escondido");
+		
+		var acao = $(this).attr('acao');
+		$('#campo_acao').val(acao);
+		
+	});
+		
 	$('#botao-reservar').on('click', function(e){
+		esconderTodos();
 		$('#container-reservar').removeClass("escondido");
 		
 		var acao = $(this).attr('acao');
@@ -38,14 +63,12 @@ $(document).ready(function(e) {
 	});
 	
 	$('.botao-status').on('click', function(e){
-		$('#container-avaliacao').addClass("escondido");
-		$('#container-reservar').addClass("escondido");
-		
-		
+		esconderTodos();
 		var acao = $(this).attr('acao');
 		$('#campo_acao').val(acao);
 	});
 	
+
 	$(".form_status").on('submit', function(e) {
 		e.preventDefault();
         $('.modal_form_status').modal('hide');
