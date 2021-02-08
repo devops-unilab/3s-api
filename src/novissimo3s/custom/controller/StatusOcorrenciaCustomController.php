@@ -411,7 +411,9 @@ class StatusOcorrenciaCustomController  extends StatusOcorrenciaController {
 	}
 	
 	public function possoFechar(){
-	    
+	    if(trim($this->ocorrencia->getSolucao()) == ""){
+	        return false;
+	    }
 	    if($this->sessao->getNivelAcesso() == Sessao::NIVEL_COMUM){
 	        return false;
 	    }
