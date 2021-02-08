@@ -19,6 +19,7 @@ use novissimo3s\custom\dao\StatusOcorrenciaCustomDAO;
 use novissimo3s\custom\dao\RecessoCustomDAO;
 use novissimo3s\model\Servico;
 use novissimo3s\dao\ServicoDAO;
+use novissimo3s\dao\UsuarioDAO;
 
 class OcorrenciaCustomController  extends OcorrenciaController {
     
@@ -168,19 +169,21 @@ class OcorrenciaCustomController  extends OcorrenciaController {
 	    $listaStatus = $statusDao->pesquisaPorIdOcorrencia($this->selecionado);
 	    $dataAbertura = null;
 	    foreach($listaStatus as $statusOcorrencia){
-	        if($statusOcorrencia->getStatus()->getSigla() == 'a'){
+	        if($statusOcorrencia->getStatus()->getSigla() == StatusOcorrenciaCustomController::STATUS_ABERTO || $statusOcorrencia->getStatus()->getSigla() == StatusOcorrenciaCustomController::STATUS_RESERVADO){
 	            $dataAbertura = $statusOcorrencia->getDataMudanca();
 	            break;
 	        }
 	    }
 	    if($dataAbertura == null){
-	        echo  "Chamado não possui histórico de status<br>";
-	        return;
+	        echo  "Data de abertura não localizada<br>";
+	        
+	    }else{
+	        $horaEstimada = $this->calcularHoraSolucao($dataAbertura, $this->selecionado->getServico()->getTempoSla());
+	        $this->view->mostrarSelecionado2($this->selecionado, $listaStatus, $dataAbertura, $horaEstimada);
 	    }
 	    
 	    
-	    $horaEstimada = $this->calcularHoraSolucao($dataAbertura, $this->selecionado->getServico()->getTempoSla());
-	    $this->view->mostrarSelecionado2($this->selecionado, $listaStatus, $dataAbertura, $horaEstimada);
+	    
 	    
 
 	    
@@ -334,10 +337,37 @@ class OcorrenciaCustomController  extends OcorrenciaController {
 	        
                     </div>';
 	    $ocorrencia = new Ocorrencia();
-	    $sessao = new Sessao();
-	    $ocorrencia->getUsuarioCliente()->setId($sessao->getIdUsuario());
 	    
-	    $lista = $this->dao->pesquisaPorCliente($ocorrencia);
+	    
+	    $this->sessao = new Sessao();
+	    
+	    if($this->sessao->getNivelAcesso() == Sessao::NIVEL_COMUM)
+	    {
+	       $ocorrencia->getUsuarioCliente()->setId($this->sessao->getIdUsuario());
+	       $lista = $this->dao->pesquisaPorCliente($ocorrencia);
+	       
+	    }else if($this->sessao->getNivelAcesso() == Sessao::NIVEL_TECNICO){
+	        
+	        
+	        $ocorrencia->getUsuarioCliente()->setId($this->sessao->getIdUsuario());
+	        $ocorrencia->setIdUsuarioAtendente($this->sessao->getIdUsuario());
+	        $ocorrencia->setIdUsuarioIndicado($this->sessao->getIdUsuario());
+	        
+	        $usuario = new Usuario();
+	        $usuario->setId($this->sessao->getIdUsuario());
+	        $usuarioDao = new UsuarioDAO($this->dao->getConnection());
+	        $usuarioDao->fillById($usuario);
+	        $ocorrencia->getAreaResponsavel()->setId($usuario->getIdSetor());
+	        
+	        
+	        $lista = $this->dao->pesquisaParaTec($ocorrencia);
+	        
+	        
+	    }else if($this->sessao->getNivelAcesso() == Sessao::NIVEL_ADM){
+	        $ocorrencia->getUsuarioCliente()->setId($this->sessao->getIdUsuario());
+	        $lista = $this->dao->fetchByUsuarioCliente($ocorrencia);
+	    }
+	    
 	    
 	    
 	    
