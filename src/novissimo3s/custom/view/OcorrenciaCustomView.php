@@ -359,7 +359,7 @@ class OcorrenciaCustomView extends OcorrenciaView {
         
         $this->painelSLA($ocorrencia, $listaStatus, $dataAbertura, $dataSolucao);
         echo '
-                    <br> Descricao: '.$ocorrencia->getDescricao().'<br>';
+                    <br> Descricao: '.strip_tags($ocorrencia->getDescricao()).'<br>';
         if(trim($ocorrencia->getPatrimonio()) != ""){
             echo 'Patrimonio: '.$ocorrencia->getPatrimonio().' | ';
         }
@@ -367,7 +367,7 @@ class OcorrenciaCustomView extends OcorrenciaView {
             echo 'Anexo: '.$ocorrencia->getAnexo().' | ';
         }
         if(trim($ocorrencia->getSolucao()) != ""){
-            echo 'Solucao: '.$ocorrencia->getSolucao().'<br>';
+            echo 'Solucao: '.strip_tags($ocorrencia->getSolucao()).'<br>';
         }
         echo '
             

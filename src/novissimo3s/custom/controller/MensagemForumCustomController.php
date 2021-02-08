@@ -111,7 +111,7 @@ class MensagemForumCustomController  extends MensagemForumController {
 	            echo 'Anexo<br>';
 	        }else{
 	            echo '
-                        '.$mensagemForum->getMensagem().'<br>';
+                        '.strip_tags($mensagemForum->getMensagem()).'<br>';
 	        }
 	        
 	        echo '
