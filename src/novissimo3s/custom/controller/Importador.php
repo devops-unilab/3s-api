@@ -12,11 +12,12 @@ use novissimo3s\dao\ServicoDAO;
 use novissimo3s\dao\TipoAtividadeDAO;
 use novissimo3s\dao\AreaResponsavelDAO;
 use novissimo3s\dao\GrupoServicoDAO;
+use novissimo3s\custom\dao\ServicoCustomDAO;
 
 class Importador{
     
     public function main(){
-        $servicoDao = new ServicoDAO();
+        $servicoDao = new ServicoCustomDAO();
         $tipoDao = new TipoAtividadeDAO($servicoDao->getConnection());
         $areaDao = new AreaResponsavelDAO($servicoDao->getConnection());
         $grupoDao = new GrupoServicoDAO($servicoDao->getConnection());
@@ -27,7 +28,7 @@ class Importador{
             $nomeAtividade = $servico->getTipoAtividade()->getNome();
             $nomeGruposervico = $servico->getGrupoServico()->getNome();
             $descricao = $servico->getDescricao();
-            
+            $nomeArea = $servico->getAreaResponsavel()->getNome();
             if($servico->getId() != null){
                 $servicoDao->fillById($servico);
                 $servico->setNome($nomeServico);
@@ -60,12 +61,17 @@ class Importador{
             }
             
             
+            
+            $areaDao->fillByNome($servico->getAreaResponsavel());
+            
+            $servico->getAreaResponsavel()->setNome($nomeArea);
+            
             if($servico->getAreaResponsavel()->getNome() == null){
                 $servico->getAreaResponsavel()->setNome("DTI");
                 $servico->getAreaResponsavel()->setId(1);
             }else{
-                
                 $areaDao->fillByNome($servico->getAreaResponsavel());
+                
             }
             if($servico->getAreaResponsavel()->getId() == null){
                 $areaDao->insert($servico->getAreaResponsavel());
