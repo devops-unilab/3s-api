@@ -123,7 +123,7 @@ class OcorrenciaCustomView extends OcorrenciaView {
                         
   </div><br><br>
 <div class="d-flex justify-content-center m-3">
-        <button form="insert_form_ocorrencia" type="submit" class="btn btn-primary">Cadastrar Ocorrência</button>
+        <button id="btn-inserir-ocorrencia" form="insert_form_ocorrencia" type="submit" class="btn btn-primary">Cadastrar Ocorrência</button>
                         
 </div><br><br>
                         

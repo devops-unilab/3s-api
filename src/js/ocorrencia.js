@@ -6,7 +6,10 @@ $(document).ready(function(e) {
         $('#modalAddOcorrencia').modal('hide');
         
         var dados = new FormData(this);
-        
+        //
+        $('#btn-inserir-ocorrencia').attr('disabled', true);		
+		$('#btn-inserir-ocorrencia').text("Aguarde...");
+
 		jQuery.ajax({
             type: "POST",
             url: "index.php?ajax=ocorrencia",

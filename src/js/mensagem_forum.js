@@ -23,7 +23,9 @@ $(document).ready(function(e) {
         $('#modalAddMensagemForum').modal('hide');
         
         var dados = new FormData(this);
-        $('#botao-enviar-mensagem').attr('disabled', true);
+        $('#botao-enviar-mensagem').attr('disabled', true);		
+		$('#botao-enviar-mensagem').text("Aguarde...");
+	
 		
 		jQuery.ajax({
             type: "POST",
