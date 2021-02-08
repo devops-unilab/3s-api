@@ -108,7 +108,7 @@ class MensagemForumCustomController  extends MensagemForumController {
 <div class="row">
                     <div class="notice notice-info">';
 	        if($mensagemForum->getTipo() == self::TIPO_ARQUIVO){
-	            echo 'Anexo<br>';
+	            echo 'Anexo: <a href="'.$mensagemForum->getMensagem().'">Clique aqui</a><br>';
 	        }else{
 	            echo '
                         '.strip_tags($mensagemForum->getMensagem()).'<br>';

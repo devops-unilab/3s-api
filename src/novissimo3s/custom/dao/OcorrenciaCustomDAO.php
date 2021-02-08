@@ -185,6 +185,8 @@ class  OcorrenciaCustomDAO extends OcorrenciaDAO {
     
     public function pesquisaAdmin(Ocorrencia $ocorrencia) {
         $lista = array();
+        $idUsuarioIndicado = $ocorrencia->getUsuarioCliente()->getId();
+        $statusCancelado = StatusOcorrenciaCustomController::STATUS_CANCELADO;
         
         $sql = "SELECT ocorrencia.id, ocorrencia.id_local,
             ocorrencia.descricao, ocorrencia.campus, ocorrencia.patrimonio,
@@ -207,6 +209,8 @@ class  OcorrenciaCustomDAO extends OcorrenciaDAO {
             INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico
             LEFT JOIN usuario as usuario_cliente
             ON usuario_cliente.id = ocorrencia.id_usuario_cliente
+            WHERE
+            ocorrencia.status <> '$statusCancelado'
             ORDER BY ocorrencia.id DESC
             LIMIT 100
 ";
@@ -417,7 +421,7 @@ class  OcorrenciaCustomDAO extends OcorrenciaDAO {
         $idAreaResponsavel = $ocorrencia->getAreaResponsavel()->getId();
         
         $statusCancelado = StatusOcorrenciaCustomController::STATUS_CANCELADO;
-        $statusFechado = StatusOcorrenciaCustomController::STATUS_FECHADO;
+//         $statusFechado = StatusOcorrenciaCustomController::STATUS_FECHADO;
         $statusConfirmado = StatusOcorrenciaCustomController::STATUS_FECHADO_CONFIRMADO;
         
         $sql = "SELECT ocorrencia.id, ocorrencia.id_local,
@@ -451,7 +455,6 @@ class  OcorrenciaCustomDAO extends OcorrenciaDAO {
             ocorrencia.id_area_responsavel = :idAreaResponsavel
             )
             AND ocorrencia.status <> '$statusCancelado'
-            AND ocorrencia.status <> '$statusFechado'
             AND ocorrencia.status <> '$statusConfirmado'
             ORDER BY ocorrencia.id DESC
             LIMIT 80

@@ -168,8 +168,12 @@ class OcorrenciaCustomController  extends OcorrenciaController {
 	    $statusDao = new StatusOcorrenciaCustomDAO($this->dao->getConnection());
 	    $listaStatus = $statusDao->pesquisaPorIdOcorrencia($this->selecionado);
 	    $dataAbertura = null;
+	    
 	    foreach($listaStatus as $statusOcorrencia){
 	        if($statusOcorrencia->getStatus()->getSigla() == StatusOcorrenciaCustomController::STATUS_ABERTO || $statusOcorrencia->getStatus()->getSigla() == StatusOcorrenciaCustomController::STATUS_RESERVADO){
+	            $dataAbertura = $statusOcorrencia->getDataMudanca();
+	            break;
+	        }else{
 	            $dataAbertura = $statusOcorrencia->getDataMudanca();
 	            break;
 	        }
@@ -363,9 +367,9 @@ class OcorrenciaCustomController  extends OcorrenciaController {
 	        $lista = $this->dao->pesquisaParaTec($ocorrencia);
 	        
 	        
-	    }else if($this->sessao->getNivelAcesso() == Sessao::NIVEL_ADM){
-	        $ocorrencia->getUsuarioCliente()->setId($this->sessao->getIdUsuario());
-	        $lista = $this->dao->fetchByUsuarioCliente($ocorrencia);
+	    }else if($this->sessao->getNivelAcesso() == Sessao::NIVEL_ADM)
+	    {
+	        $lista = $this->dao->pesquisaAdmin($ocorrencia);
 	    }
 	    
 	    

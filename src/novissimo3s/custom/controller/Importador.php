@@ -29,6 +29,7 @@ class Importador{
             $nomeGruposervico = $servico->getGrupoServico()->getNome();
             $descricao = $servico->getDescricao();
             $nomeArea = $servico->getAreaResponsavel()->getNome();
+            $tempoSla = $servico->getTempoSla();
             if($servico->getId() != null){
                 $servicoDao->fillById($servico);
                 $servico->setNome($nomeServico);
@@ -77,6 +78,8 @@ class Importador{
                 $areaDao->insert($servico->getAreaResponsavel());
                 $servico->getAreaResponsavel()->setId($areaDao->getConnection()->lastInsertId());
             }
+            
+            $servico->setTempoSla($tempoSla);
             
             if($servico->getId() == null){
                 $servicoDao->insert($servico);
