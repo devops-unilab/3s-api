@@ -20,6 +20,7 @@ use novissimo3s\custom\dao\RecessoCustomDAO;
 use novissimo3s\model\Servico;
 use novissimo3s\dao\ServicoDAO;
 use novissimo3s\dao\UsuarioDAO;
+use novissimo3s\custom\dao\UsuarioCustomDAO;
 
 class OcorrenciaCustomController  extends OcorrenciaController {
     
@@ -449,8 +450,23 @@ class OcorrenciaCustomController  extends OcorrenciaController {
 	        $sessao = new Sessao();
 	        $usuario->setId($sessao->getIdUsuario());
 	        
-	        $ocorrencia->setIdLocal ( 1 );
-	        $ocorrencia->setLocal ( 'teste' );
+	        
+	        $usuarioDao = new UsuarioCustomDAO($this->dao->getConnection());
+	        $idUnidade = $usuarioDao->getIdUnidade($usuario);
+	        
+	        if(count($idUnidade) > 0){
+	            foreach($idUnidade as $id => $sigla){
+	                $ocorrencia->setIdLocal ( $id );
+	                $ocorrencia->setLocal ( $sigla );
+	            }
+	        }
+	        if(trim($ocorrencia->getLocal()) == ""){
+	            $ocorrencia->setLocal ( 'teste' );
+	        }
+	        if(trim($ocorrencia->getIdLocal()) == ""){
+	            $ocorrencia->setIdLocal ( 1 );
+	        }
+	        
 	        $ocorrencia->setStatus ( 'a');
 	        
 	        $ocorrencia->getServico()->setId ( $_POST ['servico'] );

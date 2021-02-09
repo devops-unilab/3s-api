@@ -185,7 +185,6 @@ class  OcorrenciaCustomDAO extends OcorrenciaDAO {
     
     public function pesquisaAdmin(Ocorrencia $ocorrencia) {
         $lista = array();
-        $idUsuarioIndicado = $ocorrencia->getUsuarioCliente()->getId();
         $statusCancelado = StatusOcorrenciaCustomController::STATUS_CANCELADO;
         
         $sql = "SELECT ocorrencia.id, ocorrencia.id_local,
