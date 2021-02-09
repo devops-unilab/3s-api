@@ -8,7 +8,6 @@ namespace novissimo3s\custom\controller;
 
 
 use novissimo3s\model\Servico;
-use novissimo3s\dao\ServicoDAO;
 use novissimo3s\dao\TipoAtividadeDAO;
 use novissimo3s\dao\AreaResponsavelDAO;
 use novissimo3s\dao\GrupoServicoDAO;
