@@ -416,7 +416,16 @@ class OcorrenciaCustomController  extends OcorrenciaController {
 	    $servicoDao = new ServicoCustomDAO($this->dao->getConnection());
 	    $servico = new Servico();
 	    $servico->setVisao(1);
+	    
 	    $listaServico = $servicoDao->fetchByVisao($servico);
+	    $this->sessao = new Sessao();
+	    if($this->sessao->getNivelAcesso() == Sessao::NIVEL_ADM || $this->sessao->getNivelAcesso() == Sessao::NIVEL_TECNICO){
+	        $servico->setVisao(2);
+	        $lista2 = $servicoDao->fetchByVisao($servico);
+	        $listaServico = array_merge($listaServico, $lista2);
+	    }
+	    
+	    
 	    //Javascript envia esses dados pelo $.ajax
 	    $this->view->mostraFormInserir2($listaServico);
 	    

@@ -273,7 +273,12 @@ class StatusOcorrenciaCustomController  extends StatusOcorrenciaController {
 	    $servicoDao = new ServicoCustomDAO($this->dao->getConnection());
 	    $servico = new Servico();
 	    $servico->setVisao(1);
+	    
 	    $listaServicos = $servicoDao->fetchByVisao($servico);
+	    $servico->setVisao(2);
+	    $lista2 = $servicoDao->fetchByVisao($servico);
+	    $listaServicos = array_merge($listaServicos, $lista2);
+	    
 	    
 	    return $listaServicos;
 	}
