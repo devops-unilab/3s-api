@@ -32,14 +32,14 @@ function autoload($classe) {
 spl_autoload_register('autoload');
 
 use novissimo3s\custom\controller\MainIndex;
-use novissimo3s\util\Mail;
+// use novissimo3s\util\Mail;
 
 $main = new MainIndex();
 $main->main();
 
 
 // $mail = new Mail();
-// $mail->enviarEmail("jefponte@gmail.com", "Jefferson Uchoa Ponte", "Teste com autoload", "Terceiro teste.");
+// $mail->enviarEmail("jefponte@gmail.com", "Jefferson Uchoa Ponte", "Novo teste", "Novo teste.");
 
 
 ?>
