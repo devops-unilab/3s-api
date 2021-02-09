@@ -22,6 +22,9 @@ class Importador{
         $areaDao = new AreaResponsavelDAO($servicoDao->getConnection());
         $grupoDao = new GrupoServicoDAO($servicoDao->getConnection());
         
+        $sqlZerarVisao = "UPDATE servico set visao = 0; ";
+        $servicoDao->getConnection()->exec($sqlZerarVisao);
+        
         $lista = $this->buscar();
         foreach($lista as $servico){
             $nomeServico = $servico->getNome();
@@ -30,6 +33,8 @@ class Importador{
             $descricao = $servico->getDescricao();
             $nomeArea = $servico->getAreaResponsavel()->getNome();
             $tempoSla = $servico->getTempoSla();
+            $visao = $servico->getVisao();
+            
             if($servico->getId() != null){
                 $servicoDao->fillById($servico);
                 $servico->setNome($nomeServico);
@@ -48,7 +53,9 @@ class Importador{
                 $tipoDao->insert($servico->getTipoAtividade());
                 $servico->getTipoAtividade()->setId($tipoDao->getConnection()->lastInsertId());
             }
-            $servico->setVisao(1);
+            
+            $servico->setVisao($visao);
+            
             
             
             
@@ -159,7 +166,7 @@ class Importador{
                 }
                 
                 if(!isset($registro['Nivel_Acesso'])){
-                    $this->erro('<p>Erro na planilha, campo Cidade_Moradia não encontrado</p>');
+                    $this->erro('<p>Erro na planilha, campo Nivel_Acesso não encontrado</p>');
                     break;
                 }
 
@@ -171,6 +178,19 @@ class Importador{
                 $servico->getTipoAtividade()->setNome($registro['Tipo_Atividade']);
                 $servico->getAreaResponsavel()->setNome($registro['Setor_Responsavel']);
                 $servico->getGrupoServico()->setNome($registro['Grupo_Servico']);
+                
+                $nivel = trim($registro['Nivel_Acesso']);
+                if($nivel != ""){
+                    $nivel = substr($nivel, 0, 1);
+                }else{
+                    $nivel = "C";
+                }
+                
+                if($nivel == "C"){
+                    $servico->setVisao(1);
+                }else if($nivel == "T"){
+                    $servico->setVisao(2);
+                }
                 
                 $lista[] = $servico;
             }
