@@ -71,7 +71,7 @@ class OcorrenciaCustomView extends OcorrenciaView {
             <div class="row">
                 <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
                     <div class="custom-file">
-                      <input type="file" class="custom-file-input" name="anexo" id="anexo">
+                      <input type="file" class="custom-file-input" name="anexo" id="anexo" accept="image/*,.pdf">
                       <label class="custom-file-label" for="anexo" data-browse="Anexar">Anexar um Arquivo</label>
                     </div>
             
@@ -364,7 +364,7 @@ class OcorrenciaCustomView extends OcorrenciaView {
             echo 'Patrimonio: '.$ocorrencia->getPatrimonio().' | ';
         }
         if(trim($ocorrencia->getAnexo()) != ""){
-            echo 'Anexo: <a href="'.$ocorrencia->getAnexo().'"> Clique aqui</a> ';
+            echo 'Anexo: <a href="uploads/'.$ocorrencia->getAnexo().'"> Clique aqui</a> ';
         }
         if(trim($ocorrencia->getSolucao()) != ""){
             echo 'Solucao: '.strip_tags($ocorrencia->getSolucao()).'<br>';

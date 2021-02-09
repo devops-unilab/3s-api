@@ -468,14 +468,35 @@ class OcorrenciaCustomController  extends OcorrenciaController {
 	            mkdir('uploads/ocorrencia/anexo/', 0777, true);
 	        }
 	        
-	        if($_FILES['anexo']['tmp_name'] != null){
-	            if(!move_uploaded_file($_FILES['anexo']['tmp_name'], 'uploads/ocorrencia/anexo/'. $_FILES['anexo']['name']))
-    	        {
-    	            echo ':falha';
-    	            return;
-    	        }
-    	        $ocorrencia->setAnexo ( "uploads/ocorrencia/anexo/".$_FILES ['anexo']['name'] );
+	        if($_FILES['anexo']['name'] != null){
+	            if(!file_exists('uploads/')) {
+	                mkdir('uploads/', 0777, true);
+	            }
+	            $novoNome =$_FILES['anexo']['name'];
+	            
+	            if(file_exists('uploads/'.$_FILES['anexo']['name']))
+	            {
+	                $novoNome = uniqid().'_'.$novoNome;
+	                
+	            }
+	            $extensao = end(explode('.', $novoNome));
+	            $extensoes_permitidas = array('jpg', 'gif', 'png', 'pdf', 'jpeg');
+	            if(!(in_array($extensao, $extensoes_permitidas))){
+	                echo ':falha:Extensão não permitida';
+	                return;
+	            }
+	            
+	            
+	            if(!move_uploaded_file($_FILES['anexo']['tmp_name'], 'uploads/'. $novoNome))
+	            {
+	                echo ':falha:arquivo não pode ser enviado';
+	                return;
+	            }
+	            $ocorrencia->setAnexo ( $novoNome);
+	            
 	        }
+	        
+	        
 	        
 	        $ocorrencia->setLocalSala ( $_POST ['local_sala'] );
 	        

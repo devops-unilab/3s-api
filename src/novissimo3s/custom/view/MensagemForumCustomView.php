@@ -35,7 +35,7 @@ class MensagemForumCustomView extends MensagemForumView {
 
 
                         <div class="custom-file mb-3 escondido" id="campo-anexo">
-                          <input type="file" class="custom-file-input" name="anexo" id="anexo">
+                          <input type="file" class="custom-file-input" name="anexo" id="anexo" accept="image/*,.pdf">
                           <label class="custom-file-label" for="anexo" data-browse="Anexar">Anexar um Arquivo</label>
                         </div>
 
