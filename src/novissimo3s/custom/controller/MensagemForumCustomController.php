@@ -63,13 +63,15 @@ class MensagemForumCustomController  extends MensagemForumController {
                         
                     }
                     
-                    $extensao = end(explode('.', $novoNome));
+                    $extensaoArr = explode('.', $novoNome);
+                    $extensao = strtolower(end($extensaoArr));
+                    
                     $extensoes_permitidas = array('jpg', 'gif', 'png', 'pdf', 'jpeg');
                     if(!(in_array($extensao, $extensoes_permitidas))){
+                        echo $extensao;
                         echo ':falha:Extensão não permitida';
                         return;
                     }
-                    
                     
                     if(!move_uploaded_file($_FILES['anexo']['tmp_name'], 'uploads/'. $novoNome))
                     {

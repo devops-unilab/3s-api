@@ -479,9 +479,13 @@ class OcorrenciaCustomController  extends OcorrenciaController {
 	                $novoNome = uniqid().'_'.$novoNome;
 	                
 	            }
-	            $extensao = end(explode('.', $novoNome));
+	            
+	            $extensaoArr = explode('.', $novoNome);
+	            $extensao = strtolower(end($extensaoArr));
+	            
 	            $extensoes_permitidas = array('jpg', 'gif', 'png', 'pdf', 'jpeg');
 	            if(!(in_array($extensao, $extensoes_permitidas))){
+	                echo $extensao;
 	                echo ':falha:Extensão não permitida';
 	                return;
 	            }
