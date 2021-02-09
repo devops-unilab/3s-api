@@ -491,8 +491,8 @@ class OcorrenciaCustomView extends OcorrenciaView {
             $percentual = ($timeRecorrido *100)/$total;
             echo '
                     <p class="text-primary">Solução Estimada: '.date("d/m/Y H:i:s" , strtotime($dataSolucao)).'<br>Dentro do prazo.';
-            echo '<br>Tempo Total: <span id="tempo-total">'. str_pad($hours, 2 , '0' , STR_PAD_LEFT).':'.str_pad($minutos, 2 , '0' , STR_PAD_LEFT).':'.str_pad($segundos, 2 , '0' , STR_PAD_LEFT).'</span>';
-            echo '<br>Tempo Restante:';
+            echo '<p class="escondido">Tempo Total: <span id="tempo-total">'. str_pad($hours, 2 , '0' , STR_PAD_LEFT).':'.str_pad($minutos, 2 , '0' , STR_PAD_LEFT).':'.str_pad($segundos, 2 , '0' , STR_PAD_LEFT).'</span></p>';
+            echo '';
             
             $date1 = new \DateTime();
             $date2 = new \DateTime($dataSolucao);
@@ -503,13 +503,11 @@ class OcorrenciaCustomView extends OcorrenciaView {
             $segundos  = $diff->s;
                 
                 
-            echo '
-                        <span id="tempo-restante">'. str_pad($hours, 2 , '0' , STR_PAD_LEFT).':'.str_pad($minutos, 2 , '0' , STR_PAD_LEFT).':'.str_pad($segundos, 2 , '0' , STR_PAD_LEFT).'</span></p>
+            echo '<p class="escondido">Tempo Restante:<span id="tempo-restante">'. str_pad($hours, 2 , '0' , STR_PAD_LEFT).':'.str_pad($minutos, 2 , '0' , STR_PAD_LEFT).':'.str_pad($segundos, 2 , '0' , STR_PAD_LEFT).'</span></p>
                             
 ';
                 
                 echo '
-                    
             <img src="img/bonequinho.gif" height="75">
             <div class="progress">
 				<div id="barra-progresso" class="progress-bar" role="progressbar" aria-valuenow="'.$percentual.'" aria-valuemin="0" aria-valuemax="100" style="width: '.$percentual.'%;" data-toggle="tooltip" data-placement="top" title="Solução">
