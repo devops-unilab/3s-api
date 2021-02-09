@@ -34,12 +34,14 @@ class StatusOcorrenciaCustomView extends StatusOcorrenciaView {
                 <select name="id_servico" id="select-servico">
                     <option value="" selected>Selecione um Serviço</option>';
         foreach($listaServicos as $servico){
-            $descricao = $servico->getDescricao();
-            if(trim($servico->getDescricao() == "")){
-                $descricao = $servico->getNome();
-            }
             echo '
-                    <option value="'.$servico->getId().'">'.$descricao.'</option>';
+                        <option value="'.$servico->getId().'">'.$servico->getNome();
+            if($servico->getDescricao() != ""){
+                echo ' - ('.$servico->getDescricao().') ';
+                
+                
+            }
+            echo '</option>';
         }
         
         echo '

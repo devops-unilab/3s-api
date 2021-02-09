@@ -42,15 +42,14 @@ class OcorrenciaCustomView extends OcorrenciaView {
                     <select id="select-servicos" name="servico" required>
                         <option value="" selected="selected">Selecione um serviço</option>';
         foreach($listaServico as $servico){
-            if($servico->getDescricao() == ""){
+            echo '
+                        <option value="'.$servico->getId().'">'.$servico->getNome();
+            if($servico->getDescricao() != ""){
+                echo ' - ('.$servico->getDescricao().') ';
                 
-                echo '
-                        <option value="'.$servico->getId().'">'.$servico->getNome().'</option>';
-            }else{
-                echo '
-                        <option value="'.$servico->getId().'">'.$servico->getDescricao().'</option>';
-                
+
             }
+            echo '</option>';
             
         }
         echo '
