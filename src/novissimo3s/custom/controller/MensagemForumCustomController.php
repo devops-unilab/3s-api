@@ -67,7 +67,7 @@ class MensagemForumCustomController  extends MensagemForumController {
                         echo ':falha';
                         return;
                     }
-                    $mensagemForum->setMensagem ('uploads/'. $novoNome );
+                    $mensagemForum->setMensagem ( $novoNome );
                 }
                 
             }
@@ -108,7 +108,7 @@ class MensagemForumCustomController  extends MensagemForumController {
 <div class="row">
                     <div class="notice notice-info">';
 	        if($mensagemForum->getTipo() == self::TIPO_ARQUIVO){
-	            echo 'Anexo: <a href="'.$mensagemForum->getMensagem().'">Clique aqui</a><br>';
+	            echo 'Anexo: <a href="uploads/'.$mensagemForum->getMensagem().'">Clique aqui</a><br>';
 	        }else{
 	            echo '
                         '.strip_tags($mensagemForum->getMensagem()).'<br>';
