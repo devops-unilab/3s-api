@@ -362,11 +362,7 @@ class OcorrenciaCustomController  extends OcorrenciaController {
 	        $usuarioDao = new UsuarioDAO($this->dao->getConnection());
 	        $usuarioDao->fillById($usuario);
 	        $ocorrencia->getAreaResponsavel()->setId($usuario->getIdSetor());
-	        
-	        
 	        $lista = $this->dao->pesquisaParaTec($ocorrencia);
-	        
-	        
 	    }else if($this->sessao->getNivelAcesso() == Sessao::NIVEL_ADM)
 	    {
 	        $lista = $this->dao->pesquisaAdmin($ocorrencia);

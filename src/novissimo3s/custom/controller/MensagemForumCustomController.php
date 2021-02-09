@@ -67,7 +67,7 @@ class MensagemForumCustomController  extends MensagemForumController {
                         echo ':falha';
                         return;
                     }
-                    $mensagemForum->setMensagem ( $novoNome );
+                    $mensagemForum->setMensagem ('uploads/'. $novoNome );
                 }
                 
             }
