@@ -483,7 +483,7 @@ class OcorrenciaCustomView extends OcorrenciaView {
             
             echo '<p class="text-danger">Solução Estimada: '.date("d/m/Y H:i:s" , strtotime($dataSolucao)).'';
             echo '<br>Tempo Total: <span id="tempo-total">'. str_pad($hours, 2 , '0' , STR_PAD_LEFT).':'.str_pad($minutos, 2 , '0' , STR_PAD_LEFT).':'.str_pad($segundos, 2 , '0' , STR_PAD_LEFT).'</span>';
-            echo '<br>Solução em Atraso. <br>Caso queira pressionar o atendente  <a href=\"send\">clique aqui</a></p>';
+            echo '<br>Solução em Atraso. <br>Botão de pedir ajuda em desenvolvimento.</p>';
             
             
         }else{
