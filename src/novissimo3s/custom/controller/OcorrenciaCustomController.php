@@ -609,24 +609,32 @@ class OcorrenciaCustomController  extends OcorrenciaController {
 	        echo ':falha:';
 	        return;
 	    }
-	    echo $ocorrencia->getAreaResponsavel()->getNome();
+	    
 	    $usuarioDao = new UsuarioDAO($this->dao->getConnection());
 	    $usuario = new Usuario();
-	    $usuario->setIdSetor($ocorrencia->getServico()->getAreaResponsavel()->getId());
+	    $usuario->setIdSetor($ocorrencia->getAreaResponsavel()->getId());
 	    
 	    $lista = $usuarioDao->fetchByIdSetor($usuario);
-	    $listaAdm = array();
-	    foreach($lista as $elemento){
-	        if($elemento->getNivel() == Sessao::NIVEL_ADM){
-	           $listaAdm = $elemento;
-	        }
-	    }
-	    $strNome = "";
-	    foreach($listaAdm as $adm){
-	        $strNome .= $adm->getNome();
+	    
+
+	    $mail = new Mail();
+	    
+	    $assunto = "[3S] - Chamado Nº ".$ocorrencia->getId();
+	    $corpo = '<p>A solicitação Nº'.$ocorrencia->getId().' está com atraso em relação ao SLA e o cliente solicitou ajuda</p>';
+	    $corpo .= '<ul>
+                        <li>Serviço Solicitado: '. $ocorrencia->getServico()->getNome().'</li>
+                        <li>Descrição do Problema: '.$ocorrencia->getDescricao().'</li>
+                        <li>Setor Responsável: '. $ocorrencia->getServico()->getAreaResponsavel()->getNome().' -
+                        '.$ocorrencia->getServico()->getAreaResponsavel()->getDescricao().'</li>
+                </ul><br><p>Mensagem enviada pelo sistema 3S. Favor não responder.</p>';
+	    
+	    
+	    foreach($lista as $adm){
+	        $saudacao =  '<p>Prezado(a) ' . $adm->getNome().' ,</p>';
+	        $mail->enviarEmail($adm->getEmail(), $adm->getNome(), $assunto, $saudacao.$corpo);
 	    }	    
-// 	    $_SESSION['pediu_ajuda'] = 1;
-	    echo ':sucesso:UM e-mail foi enviado aos chefes: '.$strNome;
+	    $_SESSION['pediu_ajuda'] = 1;
+	    echo ':sucesso:UM e-mail foi enviado aos chefes:';
 	    
 	    
 	}
