@@ -552,6 +552,9 @@ class StatusOcorrenciaCustomController  extends StatusOcorrenciaController {
 	        return false;
 	    }
 	    
+	    $ocorrenciaDao = new OcorrenciaCustomDAO($this->dao->getConnection());
+	    $ocorrenciaDao->fillById($this->ocorrencia);
+	    
 	    $usuario = new Usuario();
 	    $usuario->setId($_POST['tecnico']);
 	    
@@ -559,7 +562,8 @@ class StatusOcorrenciaCustomController  extends StatusOcorrenciaController {
 	    $usuarioDao->fillById($usuario);
 	    
 	    
-	    $ocorrenciaDao = new OcorrenciaCustomDAO($this->dao->getConnection());
+	    
+	    
 	    $this->ocorrencia->setStatus(self::STATUS_RESERVADO);
 	    
 	    $status = new Status();
