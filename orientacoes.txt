@@ -1,0 +1,37 @@
+Segurança
+Manutenibilidade
+Compatibilidade com novas versões do PHP
+
+
+--------------------------------------------------------
+
+
+
+Retirar:(tempo total, tempo restante)  OK
+Refazer importação da planilha;  OK
+
+
+Trabalhar com e-mails; 
+	- Trabalhando com e-mails; 
+
+
+
+- Situações de envio de e-mail: 
+	- Abertura de chamado; 
+	- Qualquer mudança de status; 
+
+	
+
+Botão de pedir ajuda, enviar e-mail. 
+	- Enviar e-mail ao clicar em pedir ajudar; 
+
+
+Listar chamados em atraso. 
+
+
+Disponibilizar listar/adicionar/editar serviços; 
+
+
+Exibição da lista inicial
+	- Mostrar somente chamados abertos; 
+	- Botão collapse para chamados fechados e fechado confirmado; 

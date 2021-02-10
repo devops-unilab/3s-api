@@ -577,7 +577,7 @@ class OcorrenciaCustomController  extends OcorrenciaController {
 	    $nome = $statusOcorrencia->getUsuario()->getNome();
 	    $assunto = "[3S] - Abertura do Chamado Nº ".$statusOcorrencia->getOcorrencia()->getId();
 	    $corpo =  '<p>Prezado(a) ' . $statusOcorrencia->getUsuario()->getNome().' ,</p>';
-	    $corpo .= '<p>Sua solicitação foi realizada com sucesso, solicitação Nº'.$statusOcorrencia->getId().'</p>';
+	    $corpo .= '<p>Sua solicitação foi realizada com sucesso, solicitação Nº'.$statusOcorrencia->getOcorrencia()->getId().'</p>';
 	    $corpo .= '<ul>
                         <li>Serviço Solicitado: '. $statusOcorrencia->getOcorrencia()->getServico()->getNome().'</li>
                         <li>Descrição do Problema: '.$statusOcorrencia->getOcorrencia()->getDescricao().'</li>

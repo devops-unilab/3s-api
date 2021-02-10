@@ -109,7 +109,7 @@ class OcorrenciaCustomView extends OcorrenciaView {
             
                 <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12">
                     <label for="email" >E-mail*</label>
-                    <input class="form-control" type="text" name="email" id="email" value="'.$sessao->getEmail().'" required>
+                    <input class="form-control" type="text" name="email" id="email" value="'.trim($sessao->getEmail()).'" required>
                 </div>
                         
             </div>
