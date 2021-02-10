@@ -12,6 +12,10 @@ use novissimo3s\custom\view\MensagemForumCustomView;
 use novissimo3s\model\Ocorrencia;
 use novissimo3s\model\MensagemForum;
 use novissimo3s\util\Sessao;
+use novissimo3s\util\Mail;
+use novissimo3s\dao\OcorrenciaDAO;
+use novissimo3s\model\Usuario;
+use novissimo3s\dao\UsuarioDAO;
 
 class MensagemForumCustomController  extends MensagemForumController {
     const TIPO_ARQUIVO = 2;
@@ -94,13 +98,68 @@ class MensagemForumCustomController  extends MensagemForumController {
             if ($this->dao->insert ( $mensagemForum, $ocorrencia ))
             {
                 echo ':sucesso:'.$ocorrencia->getId();
+                $this->enviaEmail($mensagemForum, $ocorrencia);
                 
             } else {
                 echo ':falha';
             }
     }
-    
-    
+    public function enviaEmail(MensagemForum $mensagemForum, Ocorrencia $ocorrencia){
+        $mail = new Mail();
+        
+        $ocorrenciaDao = new OcorrenciaDAO($this->dao->getConnection());
+        $ocorrenciaDao->fillById($ocorrencia);
+        
+        $assunto = "[3S] - Chamado Nº ".$ocorrencia->getId();
+        
+        
+        
+        $saldacao =  '<p>Prezado(a) ' . $ocorrencia->getUsuarioCliente()->getNome().' ,</p>';
+        $corpo = '<p>Avisamos que houve uma mudança no status da solicitação Nº'.$ocorrencia->getId().'</p>';
+        
+        $corpo .= '<ul>
+
+                        <li>Corpo: '.$mensagemForum->getMensagem().'</li>
+                        <li>Serviço Solicitado: '. $ocorrencia->getServico()->getNome().'</li>
+                        <li>Descrição do Problema: '.$ocorrencia->getDescricao().'</li>
+                        <li>Setor Responsável: '. $ocorrencia->getServico()->getAreaResponsavel()->getNome().' -
+                        '.$ocorrencia->getServico()->getAreaResponsavel()->getDescricao().'</li>
+                        <li>Cliente: '.$ocorrencia->getUsuarioCliente()->getNome().'</li>
+                </ul><br><p>Mensagem enviada pelo sistema 3S. Favor não responder.</p>';
+        
+        
+        $destinatario = $this->statusOcorrencia->getOcorrencia()->getEmail();
+        $nome = $this->statusOcorrencia->getOcorrencia()->getUsuarioCliente()->getNome();
+        $mail->enviarEmail($destinatario, $nome, $assunto, $saldacao.$corpo);
+        
+        
+        $usuarioDao = new UsuarioDAO($this->dao->getConnection());
+        if($ocorrencia->getIdUsuarioAtendente() != null){
+            
+            $atendente = new Usuario();
+            $atendente->setId($ocorrencia->getIdUsuarioAtendente());
+            $usuarioDao->fillById($atendente);
+            $destinatario = $atendente->getEmail();
+            $nome = $atendente->getNome();
+            
+            $saldacao =  '<p>Prezado(a) ' . $nome.' ,</p>';
+            $mail->enviarEmail($destinatario, $nome, $assunto, $saldacao.$corpo);
+            
+        }
+        else if($ocorrencia->getIdUsuarioIndicado() != null)
+        {
+            
+            $indicado = new Usuario();
+            $indicado->setId($ocorrencia->getIdUsuarioIndicado());
+            $usuarioDao->fillById($indicado);
+            $destinatario = $indicado->getEmail();
+            $nome = $indicado->getNome();
+            
+            $saldacao =  '<p>Prezado(a) ' . $nome.' ,</p>';
+            $mail->enviarEmail($destinatario, $nome, $assunto, $saldacao.$corpo);
+        }
+        
+    }
     
     
     public function mainOcorrencia(Ocorrencia $ocorrencia){
@@ -166,6 +225,7 @@ class MensagemForumCustomController  extends MensagemForumController {
         echo '</div>';
     }
 
+    
 	public function __construct(){
 		$this->dao = new MensagemForumCustomDAO();
 		$this->view = new MensagemForumCustomView();

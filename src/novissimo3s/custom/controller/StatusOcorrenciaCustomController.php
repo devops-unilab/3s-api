@@ -672,8 +672,9 @@ class StatusOcorrenciaCustomController  extends StatusOcorrenciaController {
 	    
 
 	    
-	    $corpo =  '<p>Prezado(a) ' . $this->statusOcorrencia->getUsuario()->getNome().' ,</p>';
-	    $corpo .= '<p>Avisamos que houve uma mudança no status da solicitação Nº'.$this->statusOcorrencia->getOcorrencia()->getId().'</p>';
+	    $saldacao =  '<p>Prezado(a) ' . $this->statusOcorrencia->getUsuario()->getNome().' ,</p>';
+	    
+	    $corpo = '<p>Avisamos que houve uma mudança no status da solicitação Nº'.$this->statusOcorrencia->getOcorrencia()->getId().'</p>';
 	    $corpo .= $mensagem;
 	    $corpo .= '<ul>
                         <li>Serviço Solicitado: '. $this->statusOcorrencia->getOcorrencia()->getServico()->getNome().'</li>
@@ -686,7 +687,7 @@ class StatusOcorrenciaCustomController  extends StatusOcorrenciaController {
 	    
 	    $destinatario = $this->statusOcorrencia->getOcorrencia()->getEmail();
 	    $nome = $this->statusOcorrencia->getOcorrencia()->getUsuarioCliente()->getNome();
-	    $mail->enviarEmail($destinatario, $nome, $assunto, $corpo);
+	    $mail->enviarEmail($destinatario, $nome, $assunto, $saldacao.$corpo);
 	    
 	    $usuarioDao = new UsuarioDAO($this->dao->getConnection());
 	    
@@ -698,7 +699,8 @@ class StatusOcorrenciaCustomController  extends StatusOcorrenciaController {
 	        $destinatario = $atendente->getEmail();
 	        $nome = $atendente->getNome();
 	        
-	        $mail->enviarEmail($destinatario, $nome, $assunto, $corpo);
+	        $saldacao =  '<p>Prezado(a) ' . $nome.' ,</p>';
+	        $mail->enviarEmail($destinatario, $nome, $assunto, $saldacao.$corpo);
 	        
 	    }
 	    else if($this->statusOcorrencia->getOcorrencia()->getIdUsuarioIndicado() != null)
@@ -710,7 +712,8 @@ class StatusOcorrenciaCustomController  extends StatusOcorrenciaController {
 	        $destinatario = $indicado->getEmail();
 	        $nome = $indicado->getNome();
 	        
-	        $mail->enviarEmail($destinatario, $nome, $assunto, $corpo);
+	        $saldacao =  '<p>Prezado(a) ' . $nome.' ,</p>';
+	        $mail->enviarEmail($destinatario, $nome, $assunto, $saldacao.$corpo);
 	    }
 	    
 	}
