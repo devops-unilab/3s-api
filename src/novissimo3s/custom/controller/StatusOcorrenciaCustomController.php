@@ -563,7 +563,6 @@ class StatusOcorrenciaCustomController  extends StatusOcorrenciaController {
 	    
 	    
 	    
-	    
 	    $this->ocorrencia->setStatus(self::STATUS_RESERVADO);
 	    
 	    $status = new Status();
@@ -683,9 +682,9 @@ class StatusOcorrenciaCustomController  extends StatusOcorrenciaController {
 	    $corpo .= '<ul>
                         <li>Serviço Solicitado: '. $this->statusOcorrencia->getOcorrencia()->getServico()->getNome().'</li>
                         <li>Descrição do Problema: '.$this->statusOcorrencia->getOcorrencia()->getDescricao().'</li>
-                        <li>Setor Responsável: '. $this->statusOcorrencia->getOcorrencia()->getServico()->getAreaResponsavel()->getNome().' -
-                        '.$this->statusOcorrencia->getOcorrencia()->getServico()->getAreaResponsavel()->getDescricao().'</li>
-                        <li>Cliente: '.$this->statusOcorrencia->getUsuario()->getNome().'</li>
+                        <li>Setor Responsável: '. $this->statusOcorrencia->getOcorrencia()->getAreaResponsavel()->getNome().' -
+                        '.$this->statusOcorrencia->getOcorrencia()->getAreaResponsavel()->getDescricao().'</li>
+                        <li>Cliente: '.$this->ocorrencia->getUsuarioCliente()->getNome().'</li>
                 </ul><br><p>Mensagem enviada pelo sistema 3S. Favor não responder.</p>';
 	    
 	    

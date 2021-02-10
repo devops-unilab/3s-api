@@ -13,7 +13,7 @@ $(document).ready(function(e) {
             data: dados,
             success: function( data )
             {
-				console.log(data);
+
             	if(data.split(":")[1] == 'sucesso')
 				{
 					$("#botao-modal-resposta").click(function(){
@@ -26,7 +26,6 @@ $(document).ready(function(e) {
             	}
             	else
             	{
-            		
                 	$("#textoModalResposta").text("Falha ao tentar pedir ajuda. ");                	
             		$("#modalResposta").modal("show");
             	}
