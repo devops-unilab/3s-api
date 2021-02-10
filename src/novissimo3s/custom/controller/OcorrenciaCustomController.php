@@ -528,13 +528,7 @@ class OcorrenciaCustomController  extends OcorrenciaController {
 	            
 	        }
 	        
-	        
-	        
 	        $ocorrencia->setLocalSala ( $_POST ['local_sala'] );
-	        
-	        
-	        
-	        
 	        
 	        $ocorrencia->getUsuarioCliente()->setId ( $sessao->getIdUsuario() );
 	        
@@ -556,7 +550,7 @@ class OcorrenciaCustomController  extends OcorrenciaController {
 	            if($statusOcorrenciaDAO->insert($statusOcorrencia))
 	            {
 	                echo ':sucesso:'.$id;
-	                $this->enviarEmail($statusOcorrencia);
+	                $this->emailAbertura($statusOcorrencia);
 	                $this->dao->getConnection()->commit();
 	            }else
 	            {
@@ -570,7 +564,7 @@ class OcorrenciaCustomController  extends OcorrenciaController {
 	        
 	}
 	
-	public function enviarEmail(StatusOcorrencia $statusOcorrencia)
+	public function emailAbertura(StatusOcorrencia $statusOcorrencia)
 	{
 	    $mail = new Mail();
 	    $destinatario = $statusOcorrencia->getOcorrencia()->getEmail();
