@@ -483,7 +483,17 @@ class OcorrenciaCustomView extends OcorrenciaView {
             
             echo '<p class="text-danger">Solução Estimada: '.date("d/m/Y H:i:s" , strtotime($dataSolucao)).'';
             echo '<br>Tempo Total: <span id="tempo-total">'. str_pad($hours, 2 , '0' , STR_PAD_LEFT).':'.str_pad($minutos, 2 , '0' , STR_PAD_LEFT).':'.str_pad($segundos, 2 , '0' , STR_PAD_LEFT).'</span>';
-            echo '<br>Solução em Atraso. <br>Botão de pedir ajuda em desenvolvimento.</p>';
+            echo '<br>Solução em Atraso.';
+            $sessao = new Sessao();
+            if(!isset($_SESSION['pediu_ajuda'])){
+                echo '<br>Caso queira pedir ajuda clique no botão abaixo.</p>';
+                $this->modalPedirAjuda($ocorrencia);
+            }else{
+                echo '<br>Você solicitou ajuda, aguarde a resposta.</p>';
+            }
+
+
+            //O form do modal vai chamar o ajax no controller
             
             
         }else{
@@ -525,6 +535,47 @@ class OcorrenciaCustomView extends OcorrenciaView {
 
     }
 
+    public function modalPedirAjuda(Ocorrencia $ocorrencia){
+        echo '
+
+<!-- Button trigger modal -->
+<button type="button" id="botao-pedir-ajuda" class="btn btn-primary m-3" data-toggle="modal" data-target="#modalPedirAjuda">
+  Pedir Ajuda
+</button>
+            
+<!-- Modal -->
+<div class="modal fade" id="modalPedirAjuda" tabindex="-1" role="dialog" aria-labelledby="labelAddRecesso" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="labelAddRecesso">Pedir Ajuda</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+          <form id="form_pedir_ajuda" class="user" method="post">
+            <input type="hidden" name="pedir_ajuda" value="1">
+            <input type="hidden" name="ocorrencia" value="'.$ocorrencia->getId().'">
+            
+            <span>Clique em solicitar ajuda para enviar um e-mail aos responsáveis pelo setor</span>    
+            
+		</form>
+            
+            
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+        <button form="form_pedir_ajuda" type="submit" class="btn btn-primary">Solicitar Ajuda</button>
+      </div>
+    </div>
+  </div>
+</div>
+            
+            
+            
+';
+    }
 
 
 }

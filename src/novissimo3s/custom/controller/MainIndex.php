@@ -124,7 +124,7 @@ echo '
 <script src="js/jquery-3.5.1.min.js"></script>
 <script src="js/selectize.js"></script>
 <script src="js/painel3s.js"></script>
-<script src="js/ocorrencia.js"></script>
+<script src="js/ocorrencia.js?a=12"></script>
 <script src="js/status_ocorrencia.js"></script>
 <script src="js/mensagem_forum.js"></script>
 <script src="js/ocorrencia_selectize.js"></script>

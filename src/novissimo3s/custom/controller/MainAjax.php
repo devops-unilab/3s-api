@@ -19,10 +19,15 @@ class MainAjax{
                 $controller = new StatusOcorrenciaCustomController();
                 $controller->mainAjax();
                 break;
+            case 'pedir_ajuda':
+                $controller = new OcorrenciaCustomController();
+                $controller->ajaxPedirAjuda();
+                break;
             default:
                 echo ':falha';
                 break;
         }
+        
     }
 }
 

@@ -582,6 +582,54 @@ class OcorrenciaCustomController  extends OcorrenciaController {
 	    $mail->enviarEmail($destinatario, $nome, $assunto, $corpo);
 	    
 	}
+	public function possoPedirAjuda(){
+	    if($this->sessao == Sessao::NIVEL_DESLOGADO){
+	        return false;
+	    }
+	    return true;
+	}
+	public function ajaxPedirAjuda(){
+	    $this->sessao = new Sessao();
+
+
+	    if(!isset($_POST['pedir_ajuda'])){
+	        echo ':falha: Não posso pedir ajuda';
+	        return;
+	    }
+	    if(!isset($_POST['ocorrencia'])){
+	        echo ':falha:Falta ocorrencia';
+	        return;
+	    }
+	    $ocorrencia = new Ocorrencia();
+	    $ocorrencia->setId($_POST['ocorrencia']);
+	    
+	    $this->dao->fillById($ocorrencia);
+	    
+	    if(!$this->possoPedirAjuda()){
+	        echo ':falha:';
+	        return;
+	    }
+	    echo $ocorrencia->getAreaResponsavel()->getNome();
+	    $usuarioDao = new UsuarioDAO($this->dao->getConnection());
+	    $usuario = new Usuario();
+	    $usuario->setIdSetor($ocorrencia->getServico()->getAreaResponsavel()->getId());
+	    
+	    $lista = $usuarioDao->fetchByIdSetor($usuario);
+	    $listaAdm = array();
+	    foreach($lista as $elemento){
+	        if($elemento->getNivel() == Sessao::NIVEL_ADM){
+	           $listaAdm = $elemento;
+	        }
+	    }
+	    $strNome = "";
+	    foreach($listaAdm as $adm){
+	        $strNome .= $adm->getNome();
+	    }	    
+// 	    $_SESSION['pediu_ajuda'] = 1;
+	    echo ':sucesso:UM e-mail foi enviado aos chefes: '.$strNome;
+	    
+	    
+	}
 
 	        
 }
