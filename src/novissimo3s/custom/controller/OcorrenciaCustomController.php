@@ -21,6 +21,7 @@ use novissimo3s\model\Servico;
 use novissimo3s\dao\ServicoDAO;
 use novissimo3s\dao\UsuarioDAO;
 use novissimo3s\custom\dao\UsuarioCustomDAO;
+use novissimo3s\util\Mail;
 
 class OcorrenciaCustomController  extends OcorrenciaController {
     
@@ -32,7 +33,6 @@ class OcorrenciaCustomController  extends OcorrenciaController {
         $this->dao = new OcorrenciaCustomDAO();
         $this->view = new OcorrenciaCustomView();
     }
-    
     
     
     
@@ -461,6 +461,9 @@ class OcorrenciaCustomController  extends OcorrenciaController {
 	        
 	        
 	        $usuarioDao = new UsuarioCustomDAO($this->dao->getConnection());
+	        
+	        $usuarioDao->fillById($usuario);
+	        
 	        $idUnidade = $usuarioDao->getIdUnidade($usuario);
 	        
 	        if(count($idUnidade) > 0){
@@ -548,10 +551,12 @@ class OcorrenciaCustomController  extends OcorrenciaController {
 	        if ($this->dao->insert( $ocorrencia ))
 	        {
 	            $id = $this->dao->getConnection()->lastInsertId();
-	            $statusOcorrencia->getOcorrencia()->setId($id);
+	            $ocorrencia->setId($id);
+	            $statusOcorrencia->setOcorrencia($ocorrencia);
 	            if($statusOcorrenciaDAO->insert($statusOcorrencia))
 	            {
 	                echo ':sucesso:'.$id;
+	                $this->enviarEmail($statusOcorrencia);
 	                $this->dao->getConnection()->commit();
 	            }else
 	            {
@@ -563,6 +568,25 @@ class OcorrenciaCustomController  extends OcorrenciaController {
 	            $this->dao->getConnection()->rollBack();
 	        }
 	        
+	}
+	
+	public function enviarEmail(StatusOcorrencia $statusOcorrencia)
+	{
+	    $mail = new Mail();
+	    $destinatario = $statusOcorrencia->getOcorrencia()->getEmail();
+	    $nome = $statusOcorrencia->getUsuario()->getNome();
+	    $assunto = "[3S] - Abertura do Chamado Nº ".$statusOcorrencia->getOcorrencia()->getId();
+	    $corpo =  '<p>Prezado(a) ' . $statusOcorrencia->getUsuario()->getNome().' ,</p>';
+	    $corpo .= '<p>Sua solicitação foi realizada com sucesso, solicitação Nº'.$statusOcorrencia->getId().'</p>';
+	    $corpo .= '<ul>
+                        <li>Serviço Solicitado: '. $statusOcorrencia->getOcorrencia()->getServico()->getNome().'</li>
+                        <li>Descrição do Problema: '.$statusOcorrencia->getOcorrencia()->getDescricao().'</li>
+                        <li>Setor Responsável: '. $statusOcorrencia->getOcorrencia()->getServico()->getAreaResponsavel()->getNome().' -
+                        '.$statusOcorrencia->getOcorrencia()->getServico()->getAreaResponsavel()->getDescricao().'</li>
+                </ul><br><p>Mensagem enviada pelo sistema 3S. Favor não responder.</p>';
+                
+	    $mail->enviarEmail($destinatario, $nome, $assunto, $corpo);
+	    
 	}
 	
 	        
