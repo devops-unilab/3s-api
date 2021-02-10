@@ -630,8 +630,10 @@ class OcorrenciaCustomController  extends OcorrenciaController {
 	    
 	    
 	    foreach($lista as $adm){
-	        $saudacao =  '<p>Prezado(a) ' . $adm->getNome().' ,</p>';
-	        $mail->enviarEmail($adm->getEmail(), $adm->getNome(), $assunto, $saudacao.$corpo);
+	        if($adm->getNivel() == Sessao::NIVEL_ADM){
+	            $saudacao =  '<p>Prezado(a) ' . $adm->getNome().' ,</p>';
+	            $mail->enviarEmail($adm->getEmail(), $adm->getNome(), $assunto, $saudacao.$corpo);
+	        }
 	    }	    
 	    $_SESSION['pediu_ajuda'] = 1;
 	    echo ':sucesso:UM e-mail foi enviado aos chefes:';
