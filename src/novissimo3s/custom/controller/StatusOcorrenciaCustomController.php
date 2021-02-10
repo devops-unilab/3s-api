@@ -23,6 +23,7 @@ use novissimo3s\custom\dao\OcorrenciaCustomDAO;
 use novissimo3s\dao\ServicoDAO;
 use novissimo3s\custom\dao\ServicoCustomDAO;
 use novissimo3s\model\Servico;
+use novissimo3s\util\Mail;
 
 class StatusOcorrenciaCustomController  extends StatusOcorrenciaController {
     
@@ -133,21 +134,21 @@ class StatusOcorrenciaCustomController  extends StatusOcorrenciaController {
 	}
 	public function ajaxAtender(){
 	    if(!isset($_POST['status_acao'])){
-	        return;
+	        return false;
 	    }
 	    if($_POST['status_acao'] != 'atender'){
-	        return;
+	        return false;
 	    }
 	    if(!isset($_POST['id_ocorrencia'])){
-	        return;
+	        return false;
 	    }
 	    if(!isset($_POST['senha'])){
-	        return;
+	        return false;
 	    }
 	    
 	    if(!$this->possoAtender()){
 	        echo ':falha:Não é possível atender este chamado.';
-	        return;
+	        return false;
 	    }
 	    
 	    $this->sessao = new Sessao();
@@ -169,12 +170,12 @@ class StatusOcorrenciaCustomController  extends StatusOcorrenciaController {
 	    $statusDao = new StatusDAO($this->dao->getConnection());
 	    $statusDao->fillBySigla($status);
 	    
-	    $statusOcorrencia = new StatusOcorrencia();
-	    $statusOcorrencia->setOcorrencia($this->ocorrencia);
-	    $statusOcorrencia->setStatus($status);
-	    $statusOcorrencia->setDataMudanca(date("Y-m-d G:i:s"));
-	    $statusOcorrencia->getUsuario()->setId($this->sessao->getIdUsuario());
-	    $statusOcorrencia->setMensagem("Ocorrência em atendimento");
+	    $this->statusOcorrencia = new StatusOcorrencia();
+	    $this->statusOcorrencia->setOcorrencia($this->ocorrencia);
+	    $this->statusOcorrencia->setStatus($status);
+	    $this->statusOcorrencia->setDataMudanca(date("Y-m-d G:i:s"));
+	    $this->statusOcorrencia->getUsuario()->setId($this->sessao->getIdUsuario());
+	    $this->statusOcorrencia->setMensagem("Ocorrência em atendimento");
 	    
 	    
 	    $usuarioDao = new UsuarioDAO($this->dao->getConnection());
@@ -190,38 +191,39 @@ class StatusOcorrenciaCustomController  extends StatusOcorrenciaController {
 	    if(!$ocorrenciaDao->update($this->ocorrencia)){
 	        echo ':falha:Falha na alteração do status da ocorrência.';
 	        $ocorrenciaDao->getConnection()->rollBack();
-	        return;
+	        return false;
 	    }
 	    
-	    if(!$this->dao->insert($statusOcorrencia)){
+	    if(!$this->dao->insert($this->statusOcorrencia)){
 	        echo ':falha:Falha ao tentar inserir histórico.';
-	        return;
+	        return false;
 	    }
 	    
 	    $ocorrenciaDao->getConnection()->commit();
 	    echo ':sucesso:'.$this->ocorrencia->getId().':Chamado am atendimento!';
+	    return true;
 	    
 	    
 	}
 	public function ajaxCancelar(){
 	    if(!isset($_POST['status_acao'])){
-	        return;
+	        return false;
 	    }
 	    if($_POST['status_acao'] != 'cancelar'){
-	        return;
+	        return false;
 	    }
 	    if(!isset($_POST['id_ocorrencia'])){
-	        return;
+	        return false;
 	    }
 	    if(!isset($_POST['senha'])){
-	        return;
+	        return false;
 	    }
 	    
 	    
 	    
 	    if(!$this->possoCancelar()){
 	        echo ":falha:Este chamado não pode ser cancelado.";
-	        return;
+	        return false;
 	    }
 	    
 	    
@@ -234,12 +236,12 @@ class StatusOcorrenciaCustomController  extends StatusOcorrenciaController {
 	    $statusDao = new StatusDAO($this->dao->getConnection());
 	    $statusDao->fillBySigla($status);
 	    
-	    $statusOcorrencia = new StatusOcorrencia();
-	    $statusOcorrencia->setOcorrencia($this->ocorrencia);
-	    $statusOcorrencia->setStatus($status);
-	    $statusOcorrencia->setDataMudanca(date("Y-m-d G:i:s"));
-	    $statusOcorrencia->getUsuario()->setId($this->sessao->getIdUsuario());
-	    $statusOcorrencia->setMensagem("Ocorrência cancelada pelo usuário");
+	    $this->statusOcorrencia = new StatusOcorrencia();
+	    $this->statusOcorrencia->setOcorrencia($this->ocorrencia);
+	    $this->statusOcorrencia->setStatus($status);
+	    $this->statusOcorrencia->setDataMudanca(date("Y-m-d G:i:s"));
+	    $this->statusOcorrencia->getUsuario()->setId($this->sessao->getIdUsuario());
+	    $this->statusOcorrencia->setMensagem("Ocorrência cancelada pelo usuário");
 	
 	    
 	    $ocorrenciaDao->getConnection()->beginTransaction();
@@ -247,15 +249,16 @@ class StatusOcorrenciaCustomController  extends StatusOcorrenciaController {
 	    if(!$ocorrenciaDao->update($this->ocorrencia)){
 	        echo ':falha:Falha na alteração do status da ocorrência.';
 	        $ocorrenciaDao->getConnection()->rollBack();
-	        return;
+	        return false;
 	    }
 	    
-	    if(!$this->dao->insert($statusOcorrencia)){
+	    if(!$this->dao->insert($this->statusOcorrencia)){
 	        echo ':falha:Falha ao tentar inserir histórico.';
-	        return;
+	        return false;
 	    }
 	    $ocorrenciaDao->getConnection()->commit();
 	    echo ':sucesso:'.$this->ocorrencia->getId().':Chamado cancelado com sucesso!';
+	    return true;
 	    
 	}
 	public function getTecnicos(){
@@ -455,7 +458,7 @@ class StatusOcorrenciaCustomController  extends StatusOcorrenciaController {
 	public function ajaxFechar(){
 	    if(!$this->possoFechar()){
 	        echo ':falha:Não é possível fechar este chamado.';
-	        return;
+	        return false;
 	    }
 	    
 	    $ocorrenciaDao = new OcorrenciaDAO($this->dao->getConnection());
@@ -467,12 +470,12 @@ class StatusOcorrenciaCustomController  extends StatusOcorrenciaController {
 	    $statusDao = new StatusDAO($this->dao->getConnection());
 	    $statusDao->fillBySigla($status);
 	    
-	    $statusOcorrencia = new StatusOcorrencia();
-	    $statusOcorrencia->setOcorrencia($this->ocorrencia);
-	    $statusOcorrencia->setStatus($status);
-	    $statusOcorrencia->setDataMudanca(date("Y-m-d G:i:s"));
-	    $statusOcorrencia->getUsuario()->setId($this->sessao->getIdUsuario());
-	    $statusOcorrencia->setMensagem("Ocorrência fechada pelo atendente");
+	    $this->statusOcorrencia = new StatusOcorrencia();
+	    $this->statusOcorrencia->setOcorrencia($this->ocorrencia);
+	    $this->statusOcorrencia->setStatus($status);
+	    $this->statusOcorrencia->setDataMudanca(date("Y-m-d G:i:s"));
+	    $this->statusOcorrencia->getUsuario()->setId($this->sessao->getIdUsuario());
+	    $this->statusOcorrencia->setMensagem("Ocorrência fechada pelo atendente");
 	    
 	    
 	    $ocorrenciaDao->getConnection()->beginTransaction();
@@ -480,26 +483,26 @@ class StatusOcorrenciaCustomController  extends StatusOcorrenciaController {
 	    if(!$ocorrenciaDao->update($this->ocorrencia)){
 	        echo ':falha:Falha na alteração do status da ocorrência.';
 	        $ocorrenciaDao->getConnection()->rollBack();
-	        return;
+	        return false;
 	    }
 	    
-	    if(!$this->dao->insert($statusOcorrencia)){
+	    if(!$this->dao->insert($this->statusOcorrencia)){
 	        echo ':falha:Falha ao tentar inserir histórico.';
-	        return;
+	        return false;
 	    }
 	    $ocorrenciaDao->getConnection()->commit();
 	    echo ':sucesso:'.$this->ocorrencia->getId().':Chamado fechado com sucesso!';
 	    
-	    
+	    return true;
 	    
 	}
 	public function ajaxAvaliar(){
 	    if(!isset($_POST['avaliacao'])){
 	        echo ':falha:Faça uma avaliação';
-	        return;
+	        return false;
 	    }
 	    if(!$this->possoAvaliar()){
-	        return;
+	        return false;
 	    }
 	    
 	    $ocorrenciaDao = new OcorrenciaDAO($this->dao->getConnection());
@@ -511,12 +514,12 @@ class StatusOcorrenciaCustomController  extends StatusOcorrenciaController {
 	    $statusDao = new StatusDAO($this->dao->getConnection());
 	    $statusDao->fillBySigla($status);
 	    
-	    $statusOcorrencia = new StatusOcorrencia();
-	    $statusOcorrencia->setOcorrencia($this->ocorrencia);
-	    $statusOcorrencia->setStatus($status);
-	    $statusOcorrencia->setDataMudanca(date("Y-m-d G:i:s"));
-	    $statusOcorrencia->getUsuario()->setId($this->sessao->getIdUsuario());
-	    $statusOcorrencia->setMensagem("Atendimento avaliado pelo cliente");
+	    $this->statusOcorrencia = new StatusOcorrencia();
+	    $this->statusOcorrencia->setOcorrencia($this->ocorrencia);
+	    $this->statusOcorrencia->setStatus($status);
+	    $this->statusOcorrencia->setDataMudanca(date("Y-m-d G:i:s"));
+	    $this->statusOcorrencia->getUsuario()->setId($this->sessao->getIdUsuario());
+	    $this->statusOcorrencia->setMensagem("Atendimento avaliado pelo cliente");
 	    
 	    
 	    $ocorrenciaDao->getConnection()->beginTransaction();
@@ -526,26 +529,27 @@ class StatusOcorrenciaCustomController  extends StatusOcorrenciaController {
 	    if(!$ocorrenciaDao->update($this->ocorrencia)){
 	        echo ':falha:Falha na alteração do status da ocorrência.';
 	        $ocorrenciaDao->getConnection()->rollBack();
-	        return;
+	        return false;
 	    }
 	    
-	    if(!$this->dao->insert($statusOcorrencia)){
+	    if(!$this->dao->insert($this->statusOcorrencia)){
 	        echo ':falha:Falha ao tentar inserir histórico.';
-	        return;
+	        return false;
 	    }
 	    $ocorrenciaDao->getConnection()->commit();
 	    
 	    echo ':sucesso:'.$this->ocorrencia->getId().':Atendimento avaliado com sucesso!';
+	    return true;
 	}
 	
 	public function ajaxReservar(){
 	    if(!isset($_POST['tecnico'])){
 	        echo ':falha:Técnico especificado';
-	        return;
+	        return false;
 	    }
 	    if(!$this->possoReservar()){
 	        echo ':falha:Você não pode reservar esse chamado.';
-	        return;
+	        return false;
 	    }
 	    
 	    $usuario = new Usuario();
@@ -564,12 +568,12 @@ class StatusOcorrenciaCustomController  extends StatusOcorrenciaController {
 	    $statusDao = new StatusDAO($this->dao->getConnection());
 	    $statusDao->fillBySigla($status);
 	    
-	    $statusOcorrencia = new StatusOcorrencia();
-	    $statusOcorrencia->setOcorrencia($this->ocorrencia);
-	    $statusOcorrencia->setStatus($status);
-	    $statusOcorrencia->setDataMudanca(date("Y-m-d G:i:s"));
-	    $statusOcorrencia->getUsuario()->setId($this->sessao->getIdUsuario());
-	    $statusOcorrencia->setMensagem('Atendimento reservado para '.$usuario->getNome());
+	    $this->statusOcorrencia = new StatusOcorrencia();
+	    $this->statusOcorrencia->setOcorrencia($this->ocorrencia);
+	    $this->statusOcorrencia->setStatus($status);
+	    $this->statusOcorrencia->setDataMudanca(date("Y-m-d G:i:s"));
+	    $this->statusOcorrencia->getUsuario()->setId($this->sessao->getIdUsuario());
+	    $this->statusOcorrencia->setMensagem('Atendimento reservado para '.$usuario->getNome());
 	    
 	    
 	    $ocorrenciaDao->getConnection()->beginTransaction();
@@ -580,17 +584,17 @@ class StatusOcorrenciaCustomController  extends StatusOcorrenciaController {
 	    if(!$ocorrenciaDao->update($this->ocorrencia)){
 	        echo ':falha:Falha na alteração do status da ocorrência.';
 	        $ocorrenciaDao->getConnection()->rollBack();
-	        return;
+	        return false;
 	    }
 	    
-	    if(!$this->dao->insert($statusOcorrencia)){
+	    if(!$this->dao->insert($this->statusOcorrencia)){
 	        echo ':falha:Falha ao tentar inserir histórico.';
-	        return;
+	        return false;
 	    }
 	    $ocorrenciaDao->getConnection()->commit();
 	    
 	    echo ':sucesso:'.$this->ocorrencia->getId().':Reservado com sucesso!';
-	    
+	    return true;
 	    
 	}
 	public function mainAjax(){
@@ -610,46 +614,111 @@ class StatusOcorrenciaCustomController  extends StatusOcorrenciaController {
 	    $this->ocorrencia->setId($_POST['id_ocorrencia']);
 	    $ocorrenciaDao = new OcorrenciaDAO($this->dao->getConnection());
 	    $ocorrenciaDao->fillById($this->ocorrencia);
-	    
+	    $status = false;
+	    $mensagem = "";
 	    switch($_POST['status_acao']){
 	        case 'cancelar':
-	            $this->ajaxCancelar();
+	            $status = $this->ajaxCancelar();
+	            $mensagem = '<p>Chamado cancelado</p>';
 	            break;
 	        case 'atender':
-	            $this->ajaxAtender();
+	            $status = $this->ajaxAtender();
+	            $mensagem = '<p>Chamado em atendimento</p>';
 	            break;
 	        case 'fechar':
-	            $this->ajaxFechar();
+	            $status = $this->ajaxFechar();
+	            $mensagem = '<p>Chamado fechado</p>';
 	            break;
 	        case 'reservar':
-	            $this->ajaxReservar();
+	            $status = $this->ajaxReservar();
+	            $mensagem = '<p>Chamado reservado</p>';
 	            break;
 	        case 'liberar_atendimento':
-	            $this->ajaxLiberar();
+	            $status = $this->ajaxLiberar();
+	            $mensagem = '<p>Chamado Liberado para atendimento</p>';
 	            break;
 	        case 'avaliar':
-	            $this->ajaxAvaliar();
+	            $status = $this->ajaxAvaliar();
+	            $mensagem = '<p>Chamado avaliado</p>';
 	            break;
 	        case 'editar_servico':
-	            $this->ajaxEditarServico();
+	            $status = $this->ajaxEditarServico();
+	            $mensagem = '<p>Serviço alterado</p>';
 	            break;
 	        case 'editar_solucao':
-	            $this->ajaxEditarSolucao();
+	            $status = $this->ajaxEditarSolucao();
+	            $mensagem = '<p>Solução editada</p>';
 	            break;
 	        case 'aguardar_ativos':
-	            $this->ajaxAguardandoAtivo();
+	            $status = $this->ajaxAguardandoAtivo();
+	            $mensagem = '<p>Aguardando ativo de TI</p>';
 	            break;
 	        case 'aguardar_usuario':
-	            $this->ajaxAguardandoUsuario();
+	            $status = $this->ajaxAguardandoUsuario();
+	            $mensagem = '<p>Aguardando resposta do cliente</p>';
 	            break;
 	        default:
 	            echo ':falha:Ação não encontrada';
 	            break;
 	    }
+	    if($status){
+	        $this->enviarEmail($mensagem);
+	    }
+	    
 	}
+	public function enviarEmail($mensagem = ""){
+	    $mail = new Mail();
+	    $assunto = "[3S] - Chamado Nº ".$this->statusOcorrencia->getOcorrencia()->getId();
+	    
+
+	    
+	    $corpo =  '<p>Prezado(a) ' . $this->statusOcorrencia->getUsuario()->getNome().' ,</p>';
+	    $corpo .= '<p>Avisamos que houve uma mudança no status da solicitação Nº'.$this->statusOcorrencia->getOcorrencia()->getId().'</p>';
+	    $corpo .= $mensagem;
+	    $corpo .= '<ul>
+                        <li>Serviço Solicitado: '. $this->statusOcorrencia->getOcorrencia()->getServico()->getNome().'</li>
+                        <li>Descrição do Problema: '.$this->statusOcorrencia->getOcorrencia()->getDescricao().'</li>
+                        <li>Setor Responsável: '. $this->statusOcorrencia->getOcorrencia()->getServico()->getAreaResponsavel()->getNome().' -
+                        '.$this->statusOcorrencia->getOcorrencia()->getServico()->getAreaResponsavel()->getDescricao().'</li>
+                        <li>Cliente: '.$this->statusOcorrencia->getUsuario()->getNome().'</li>
+                </ul><br><p>Mensagem enviada pelo sistema 3S. Favor não responder.</p>';
+	    
+	    
+	    $destinatario = $this->statusOcorrencia->getOcorrencia()->getEmail();
+	    $nome = $this->statusOcorrencia->getOcorrencia()->getUsuarioCliente()->getNome();
+	    $mail->enviarEmail($destinatario, $nome, $assunto, $corpo);
+	    
+	    $usuarioDao = new UsuarioDAO($this->dao->getConnection());
+	    
+	    if($this->statusOcorrencia->getOcorrencia()->getIdUsuarioAtendente() != null){
+	        
+	        $atendente = new Usuario();
+	        $atendente->setId($this->statusOcorrencia->getOcorrencia()->getIdUsuarioAtendente());
+	        $usuarioDao->fillById($atendente);
+	        $destinatario = $atendente->getEmail();
+	        $nome = $atendente->getNome();
+	        
+	        $mail->enviarEmail($destinatario, $nome, $assunto, $corpo);
+	        
+	    }
+	    else if($this->statusOcorrencia->getOcorrencia()->getIdUsuarioIndicado() != null)
+	    {
+	        
+	        $indicado = new Usuario();
+	        $indicado->setId($this->statusOcorrencia->getOcorrencia()->getIdUsuarioIndicado());
+	        $usuarioDao->fillById($indicado);
+	        $destinatario = $indicado->getEmail();
+	        $nome = $indicado->getNome();
+	        
+	        $mail->enviarEmail($destinatario, $nome, $assunto, $corpo);
+	    }
+	    
+	}
+	private $statusOcorrencia; 
 	public function ajaxAguardandoAtivo(){
 	    if(!$this->possoEditarSolucao()){
 	        echo ':falha:Esta solução não pode ser editada.';
+	        return false;
 	    }
 	    
 	    $ocorrenciaDao = new OcorrenciaDAO($this->dao->getConnection());
@@ -661,12 +730,12 @@ class StatusOcorrenciaCustomController  extends StatusOcorrenciaController {
 	    $statusDao = new StatusDAO($this->dao->getConnection());
 	    $statusDao->fillBySigla($status);
 	    
-	    $statusOcorrencia = new StatusOcorrencia();
-	    $statusOcorrencia->setOcorrencia($this->ocorrencia);
-	    $statusOcorrencia->setStatus($status);
-	    $statusOcorrencia->setDataMudanca(date("Y-m-d G:i:s"));
-	    $statusOcorrencia->getUsuario()->setId($this->sessao->getIdUsuario());
-	    $statusOcorrencia->setMensagem("Aguardando ativo de TI");
+	    $this->statusOcorrencia = new StatusOcorrencia();
+	    $this->statusOcorrencia->setOcorrencia($this->ocorrencia);
+	    $this->statusOcorrencia->setStatus($status);
+	    $this->statusOcorrencia->setDataMudanca(date("Y-m-d G:i:s"));
+	    $this->statusOcorrencia->getUsuario()->setId($this->sessao->getIdUsuario());
+	    $this->statusOcorrencia->setMensagem("Aguardando ativo de TI");
 	    
 	    
 	    $ocorrenciaDao->getConnection()->beginTransaction();
@@ -674,20 +743,22 @@ class StatusOcorrenciaCustomController  extends StatusOcorrenciaController {
 	    if(!$ocorrenciaDao->update($this->ocorrencia)){
 	        echo ':falha:Falha na alteração do status da ocorrência.';
 	        $ocorrenciaDao->getConnection()->rollBack();
-	        return;
+	        return false;
 	    }
 	    
-	    if(!$this->dao->insert($statusOcorrencia)){
+	    if(!$this->dao->insert($this->statusOcorrencia)){
 	        echo ':falha:Falha ao tentar inserir histórico.';
-	        return;
+	        return false;
 	    }
 	    $ocorrenciaDao->getConnection()->commit();
 	    echo ':sucesso:'.$this->ocorrencia->getId().':Alterado para aguardando ativo de ti!';
+	    return true;
 	    
 	}
 	public function ajaxAguardandoUsuario(){
 	    if(!$this->possoEditarSolucao()){
 	        echo ':falha:Esta solução não pode ser editada.';
+	        return false;
 	    }
 	    $ocorrenciaDao = new OcorrenciaDAO($this->dao->getConnection());
 	    $this->ocorrencia->setStatus(self::STATUS_AGUARDANDO_USUARIO);
@@ -698,12 +769,12 @@ class StatusOcorrenciaCustomController  extends StatusOcorrenciaController {
 	    $statusDao = new StatusDAO($this->dao->getConnection());
 	    $statusDao->fillBySigla($status);
 	    
-	    $statusOcorrencia = new StatusOcorrencia();
-	    $statusOcorrencia->setOcorrencia($this->ocorrencia);
-	    $statusOcorrencia->setStatus($status);
-	    $statusOcorrencia->setDataMudanca(date("Y-m-d G:i:s"));
-	    $statusOcorrencia->getUsuario()->setId($this->sessao->getIdUsuario());
-	    $statusOcorrencia->setMensagem("Aguardando ativo de TI");
+	    $this->statusOcorrencia = new StatusOcorrencia();
+	    $this->statusOcorrencia->setOcorrencia($this->ocorrencia);
+	    $this->statusOcorrencia->setStatus($status);
+	    $this->statusOcorrencia->setDataMudanca(date("Y-m-d G:i:s"));
+	    $this->statusOcorrencia->getUsuario()->setId($this->sessao->getIdUsuario());
+	    $this->statusOcorrencia->setMensagem("Aguardando ativo de TI");
 	    
 	    
 	    $ocorrenciaDao->getConnection()->beginTransaction();
@@ -711,30 +782,31 @@ class StatusOcorrenciaCustomController  extends StatusOcorrenciaController {
 	    if(!$ocorrenciaDao->update($this->ocorrencia)){
 	        echo ':falha:Falha na alteração do status da ocorrência.';
 	        $ocorrenciaDao->getConnection()->rollBack();
-	        return;
+	        return false;
 	    }
 	    
-	    if(!$this->dao->insert($statusOcorrencia)){
+	    if(!$this->dao->insert($this->statusOcorrencia)){
 	        echo ':falha:Falha ao tentar inserir histórico.';
-	        return;
+	        return false;
 	    }
 	    $ocorrenciaDao->getConnection()->commit();
 	    echo ':sucesso:'.$this->ocorrencia->getId().':Alterado para aguardando usuário!';
+	    return true;
 	    
 	}
 	
 	public function ajaxEditarSolucao(){
 	    if(!$this->possoEditarSolucao()){
 	        echo ':falha:Esta solução não pode ser editada.';
-	        return;
+	        return false;
 	    }
 	    if(!isset($_POST['solucao'])){
 	        echo ':falha:Digite uma solução.';
-	        return;
+	        return false;
 	    }
 	    if(trim($_POST['solucao']) == ""){
 	        echo ':falha:Digite uma solução.';
-	        return;
+	        return false;
 	    }
 	    
 	   
@@ -746,12 +818,12 @@ class StatusOcorrenciaCustomController  extends StatusOcorrenciaController {
 	    $statusDao = new StatusDAO($this->dao->getConnection());
 	    $statusDao->fillBySigla($status);
 	    
-	    $statusOcorrencia = new StatusOcorrencia();
-	    $statusOcorrencia->setOcorrencia($this->ocorrencia);
-	    $statusOcorrencia->setStatus($status);
-	    $statusOcorrencia->setDataMudanca(date("Y-m-d G:i:s"));
-	    $statusOcorrencia->getUsuario()->setId($this->sessao->getIdUsuario());
-	    $statusOcorrencia->setMensagem('Técnico editou a solução. ');
+	    $this->statusOcorrencia = new StatusOcorrencia();
+	    $this->statusOcorrencia->setOcorrencia($this->ocorrencia);
+	    $this->statusOcorrencia->setStatus($status);
+	    $this->statusOcorrencia->setDataMudanca(date("Y-m-d G:i:s"));
+	    $this->statusOcorrencia->getUsuario()->setId($this->sessao->getIdUsuario());
+	    $this->statusOcorrencia->setMensagem('Técnico editou a solução. ');
 	    
 	    $this->ocorrencia->setSolucao(strip_tags($_POST['solucao']));
 	    $ocorrenciaDao->getConnection()->beginTransaction();
@@ -760,26 +832,27 @@ class StatusOcorrenciaCustomController  extends StatusOcorrenciaController {
 	    if(!$ocorrenciaDao->update($this->ocorrencia)){
 	        echo ':falha:Falha na alteração do status da ocorrência.';
 	        $ocorrenciaDao->getConnection()->rollBack();
-	        return;
+	        return false;
 	    }
 	    
-	    if(!$this->dao->insert($statusOcorrencia)){
+	    if(!$this->dao->insert($this->statusOcorrencia)){
 	        echo ':falha:Falha ao tentar inserir histórico.';
-	        return;
+	        return false;
 	    }
 	    $ocorrenciaDao->getConnection()->commit();
 	    
 	    echo ':sucesso:'.$this->ocorrencia->getId().':Solução editada com sucesso!';
+	    return true;
 	    
 	}
 	public function ajaxEditarServico(){
 	    if(!$this->possoEditarServico()){
 	        echo ':falha:Este serviço não pode ser editado.';
-	        return;
+	        return false;
 	    }
 	    if(!isset($_POST['id_servico'])){
 	        echo ':falha:Selecione um serviço.';
-	        return;
+	        return false;
 	    }
 	    
 	    
@@ -799,12 +872,12 @@ class StatusOcorrenciaCustomController  extends StatusOcorrenciaController {
 	    $statusDao = new StatusDAO($this->dao->getConnection());
 	    $statusDao->fillBySigla($status);
 	    
-	    $statusOcorrencia = new StatusOcorrencia();
-	    $statusOcorrencia->setOcorrencia($this->ocorrencia);
-	    $statusOcorrencia->setStatus($status);
-	    $statusOcorrencia->setDataMudanca(date("Y-m-d G:i:s"));
-	    $statusOcorrencia->getUsuario()->setId($this->sessao->getIdUsuario());
-	    $statusOcorrencia->setMensagem('Técnico editou o serviço ');
+	    $this->statusOcorrencia = new StatusOcorrencia();
+	    $this->statusOcorrencia->setOcorrencia($this->ocorrencia);
+	    $this->statusOcorrencia->setStatus($status);
+	    $this->statusOcorrencia->setDataMudanca(date("Y-m-d G:i:s"));
+	    $this->statusOcorrencia->getUsuario()->setId($this->sessao->getIdUsuario());
+	    $this->statusOcorrencia->setMensagem('Técnico editou o serviço ');
 	    
 	    $this->ocorrencia->getAreaResponsavel()->setId($servico->getAreaResponsavel()->getId());
 	    $this->ocorrencia->getServico()->setId($servico->getId());
@@ -817,16 +890,17 @@ class StatusOcorrenciaCustomController  extends StatusOcorrenciaController {
 	    if(!$ocorrenciaDao->update($this->ocorrencia)){
 	        echo ':falha:Falha na alteração do status da ocorrência.';
 	        $ocorrenciaDao->getConnection()->rollBack();
-	        return;
+	        return false;
 	    }
 	    
-	    if(!$this->dao->insert($statusOcorrencia)){
+	    if(!$this->dao->insert($this->statusOcorrencia)){
 	        echo ':falha:Falha ao tentar inserir histórico.';
-	        return;
+	        return false;
 	    }
 	    $ocorrenciaDao->getConnection()->commit();
 	    
 	    echo ':sucesso:'.$this->ocorrencia->getId().':Serviço editado com sucesso!';
+	    return true;
 	    
 	}
 	public function possoLiberar(){
@@ -847,7 +921,7 @@ class StatusOcorrenciaCustomController  extends StatusOcorrenciaController {
 	public function ajaxLiberar(){
 	    if(!$this->possoLiberar()){
 	        echo ':falha:Não é possível liberar esse atendimento.';
-	        return;
+	        return false;
 	    }
 	    
 	    $ocorrenciaDao = new OcorrenciaCustomDAO($this->dao->getConnection());
@@ -859,12 +933,12 @@ class StatusOcorrenciaCustomController  extends StatusOcorrenciaController {
 	    $statusDao = new StatusDAO($this->dao->getConnection());
 	    $statusDao->fillBySigla($status);
 	    
-	    $statusOcorrencia = new StatusOcorrencia();
-	    $statusOcorrencia->setOcorrencia($this->ocorrencia);
-	    $statusOcorrencia->setStatus($status);
-	    $statusOcorrencia->setDataMudanca(date("Y-m-d G:i:s"));
-	    $statusOcorrencia->getUsuario()->setId($this->sessao->getIdUsuario());
-	    $statusOcorrencia->setMensagem('Liberado para atendimento');
+	    $this->statusOcorrencia = new StatusOcorrencia();
+	    $this->statusOcorrencia->setOcorrencia($this->ocorrencia);
+	    $this->statusOcorrencia->setStatus($status);
+	    $this->statusOcorrencia->setDataMudanca(date("Y-m-d G:i:s"));
+	    $this->statusOcorrencia->getUsuario()->setId($this->sessao->getIdUsuario());
+	    $this->statusOcorrencia->setMensagem('Liberado para atendimento');
 	    
 	    
 	    $ocorrenciaDao->getConnection()->beginTransaction();
@@ -880,18 +954,18 @@ class StatusOcorrenciaCustomController  extends StatusOcorrenciaController {
 	    if(!$ocorrenciaDao->update($this->ocorrencia)){
 	        echo ':falha:Falha na alteração do status da ocorrência.';
 	        $ocorrenciaDao->getConnection()->rollBack();
-	        return;
+	        return false;
 	    }
 	    
-	    if(!$this->dao->insert($statusOcorrencia)){
+	    if(!$this->dao->insert($this->statusOcorrencia)){
 	        echo ':falha:Falha ao tentar inserir histórico.';
-	        return;
+	        return false;
 	    }
 	    $ocorrenciaDao->getConnection()->commit();
 	    
 	    echo ':sucesso:'.$this->ocorrencia->getId().':Liberado com sucesso!';
 	    
-	    
+	    return true;
 	}
 	        
 }

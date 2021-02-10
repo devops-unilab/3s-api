@@ -569,7 +569,7 @@ class OcorrenciaCustomController  extends OcorrenciaController {
 	    $mail = new Mail();
 	    $destinatario = $statusOcorrencia->getOcorrencia()->getEmail();
 	    $nome = $statusOcorrencia->getUsuario()->getNome();
-	    $assunto = "[3S] - Abertura do Chamado Nº ".$statusOcorrencia->getOcorrencia()->getId();
+	    $assunto = "[3S] - Chamado Nº ".$statusOcorrencia->getOcorrencia()->getId();
 	    $corpo =  '<p>Prezado(a) ' . $statusOcorrencia->getUsuario()->getNome().' ,</p>';
 	    $corpo .= '<p>Sua solicitação foi realizada com sucesso, solicitação Nº'.$statusOcorrencia->getOcorrencia()->getId().'</p>';
 	    $corpo .= '<ul>

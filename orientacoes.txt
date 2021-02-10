@@ -19,12 +19,14 @@ Trabalhar com e-mails;
 - Situações de envio de e-mail: 
 	- Abertura de chamado; OK
 	- Qualquer mudança de status; 
-		- Todos os envolvidos (Atendente, Indicado, Cliente)
+		- Todos os envolvidos (Atendente, Indicado, Cliente) OK
 	- Qualquer mensagem no forum; 
 		- Todos os envolvidos (Atendente, Indicado, Cliente)	
-
-Botão de pedir ajuda, enviar e-mail. 
+	- Botão de pedir ajuda, enviar e-mail. (Chefe do setor)
 	- Enviar e-mail ao clicar em pedir ajudar; 
+		- E-mail para: Administradores do setor; Atendente, Tec Indicado; 
+			
+		
 
 
 Listar chamados em atraso. 

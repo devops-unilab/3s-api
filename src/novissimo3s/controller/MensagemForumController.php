@@ -13,8 +13,6 @@ use novissimo3s\model\Ocorrencia;
 use novissimo3s\dao\OcorrenciaDAO;
 use novissimo3s\model\MensagemForum;
 use novissimo3s\view\MensagemForumView;
-use novissimo3s\util\Sessao;
-use novissimo3s\custom\controller\MensagemForumCustomController;
 
 
 class MensagemForumController {
