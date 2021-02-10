@@ -588,7 +588,7 @@ class OcorrenciaCustomController  extends OcorrenciaController {
 	    $mail->enviarEmail($destinatario, $nome, $assunto, $corpo);
 	    
 	}
-	
+
 	        
 }
 ?>

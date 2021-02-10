@@ -17,10 +17,11 @@ Trabalhar com e-mails;
 
 
 - Situações de envio de e-mail: 
-	- Abertura de chamado; 
+	- Abertura de chamado; OK
 	- Qualquer mudança de status; 
-
-	
+		- Todos os envolvidos (Atendente, Indicado, Cliente)
+	- Qualquer mensagem no forum; 
+		- Todos os envolvidos (Atendente, Indicado, Cliente)	
 
 Botão de pedir ajuda, enviar e-mail. 
 	- Enviar e-mail ao clicar em pedir ajudar; 
