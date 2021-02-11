@@ -369,10 +369,14 @@ class OcorrenciaCustomController  extends OcorrenciaController {
 	        $lista = $this->dao->pesquisaAdmin($ocorrencia);
 	    }
 	    
+	    if(isset($_GET['tab'])){
+	        $this->view->exibirListaTab($lista);
+	    }else{
+	        $this->view->exibirLista($lista);
+	    }
 	    
 	    
 	    
-	    $this->view->exibirLista($lista);
 	    
 	    
 	    

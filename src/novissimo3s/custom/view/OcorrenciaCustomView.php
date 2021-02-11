@@ -236,6 +236,97 @@ class OcorrenciaCustomView extends OcorrenciaView {
                         
 ';
     }
+    public function exibirListaTab($lista)
+    {
+        
+        echo '
+            
+            
+                   <div class="alert-group">';
+        
+        
+        
+        
+        echo '
+            
+<div class="table-responsive">
+			<table class="table table-bordered" id="dataTable" width="100%"
+				cellspacing="0">
+				<thead>
+					<tr>
+						<th>Id</th>
+						<th>Campus</th>
+						<th>Setor</th>
+						<th>Servico</th>
+						<th>Usuario Cliente</th>
+                        <th>Actions</th>
+					</tr>
+				</thead>
+				<tfoot>
+					<tr>
+                        <th>Id</th>
+                        <th>Campus</th>
+						<th>Setor</th>
+						<th>Servico</th>
+						<th>Usuario Cliente</th>
+                        <th>Actions</th>
+					</tr>
+				</tfoot>
+				<tbody>';
+        
+        foreach($lista as $elemento){
+            $strClass = 'alert-warning';
+            if($elemento->getStatus() == 'a'){
+                $strClass = 'alert-warning';
+            }else if($elemento->getStatus() == 'e'){//Em atendimento
+                $strClass = 'alert-info';
+            }else if($elemento->getStatus() == 'f'){//Fechado
+                $strClass = 'alert-success';
+            }else if($elemento->getStatus() == 'g'){//Fechado confirmado
+                $strClass = 'alert-success';
+            }else if($elemento->getStatus() == 'h'){//Cancelado
+                $strClass = 'alert-secondary';
+            }else if($elemento->getStatus() == 'r'){//reaberto
+                $strClass = 'alert-warning';
+            }else if($elemento->getStatus() == 'b'){//reservado
+                $strClass = 'alert-warning';
+            }else if($elemento->getStatus() == 'c'){//em espera
+                $strClass = 'alert-info';
+            }else if($elemento->getStatus() == 'd'){//Aguardando usuario
+                $strClass = 'alert-danger';
+            }else if($elemento->getStatus() == 'i'){//Aguardando ativo
+                $strClass = 'alert-danger';
+            }
+            
+
+            
+            echo '<tr class="alert '.$strClass.' alert-dismissable">';
+            echo '<td>'.$elemento->getId().'</td>';
+            echo '<td>'.$elemento->getCampus().'</td>';
+            echo '<td>'.$elemento->getAreaResponsavel()->getNome().'</td>';
+            echo '<td>'.$elemento->getServico()->getNome().'</td>';
+            echo '<td>'.$elemento->getUsuarioCliente()->getNome().'</td>';
+            echo '<td>
+                    <a href="?page=ocorrencia&selecionar='.$elemento->getId().'" class="btn btn-info text-white"><i class="fa fa-search icone-maior"></i></a>
+                  </td>';
+            echo '</tr>';
+            
+
+            //      <a href="" class="list-group-item active"> -</a>
+            
+        }
+        echo '
+				</tbody>
+			</table>
+		</div>';
+        
+        echo '
+                    </div>';
+        
+        
+        
+        
+    }
     public function exibirLista($lista)
     {
         
