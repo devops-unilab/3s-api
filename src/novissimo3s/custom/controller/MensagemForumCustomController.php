@@ -128,8 +128,8 @@ class MensagemForumCustomController  extends MensagemForumController {
                 </ul><br><p>Mensagem enviada pelo sistema 3S. Favor não responder.</p>';
         
         
-        $destinatario = $this->statusOcorrencia->getOcorrencia()->getEmail();
-        $nome = $this->statusOcorrencia->getOcorrencia()->getUsuarioCliente()->getNome();
+        $destinatario = $ocorrencia->getEmail();
+        $nome = $ocorrencia->getUsuarioCliente()->getNome();
         $mail->enviarEmail($destinatario, $nome, $assunto, $saldacao.$corpo);
         
         

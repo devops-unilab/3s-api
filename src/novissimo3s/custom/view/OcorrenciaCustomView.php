@@ -17,6 +17,7 @@ use DateTime;
 
 
 
+
 class OcorrenciaCustomView extends OcorrenciaView {
 
    
@@ -505,8 +506,8 @@ class OcorrenciaCustomView extends OcorrenciaView {
             echo '<p class="escondido">Tempo Total: <span id="tempo-total">'. str_pad($hours, 2 , '0' , STR_PAD_LEFT).':'.str_pad($minutos, 2 , '0' , STR_PAD_LEFT).':'.str_pad($segundos, 2 , '0' , STR_PAD_LEFT).'</span></p>';
             echo '';
             
-            $date1 = new \DateTime();
-            $date2 = new \DateTime($dataSolucao);
+            $date1 = new DateTime();
+            $date2 = new DateTime($dataSolucao);
             $diff = $date2->diff($date1);
             $hours = $diff->h;
             $hours = $hours + ($diff->days*24);
