@@ -12,20 +12,14 @@ Refazer importação da planilha;  OK
 
 
 Trabalhar com e-mails; 
-	- Trabalhando com e-mails; 
-
-
-
-- Situações de envio de e-mail: 
 	- Abertura de chamado; OK
-	- Qualquer mudança de status; 
-		- Todos os envolvidos (Atendente, Indicado, Cliente) OK
+	- Qualquer mudança de status; OK
 	- Qualquer mensagem no forum;  OK
-		- Todos os envolvidos (Atendente, Indicado, Cliente)	
-	- Botão de pedir ajuda, enviar e-mail. (Chefe do setor)
+	- Botão de pedir ajuda, enviar e-mail. (Chefe do setor) OK
 
-		
-
+Exibição da lista inicial 
+	- Mostrar somente chamados abertos; 
+	- Botão collapse para chamados fechados e fechado confirmado; 
 
 Listar chamados em atraso. 
 
@@ -33,6 +27,3 @@ Listar chamados em atraso.
 Disponibilizar listar/adicionar/editar serviços; 
 
 
-Exibição da lista inicial
-	- Mostrar somente chamados abertos; 
-	- Botão collapse para chamados fechados e fechado confirmado; 

@@ -13,6 +13,8 @@ use novissimo3s\model\Ocorrencia;
 use novissimo3s\custom\controller\StatusOcorrenciaCustomController;
 use novissimo3s\model\Usuario;
 use novissimo3s\dao\UsuarioDAO;
+use DateTime;
+
 
 
 class OcorrenciaCustomView extends OcorrenciaView {
@@ -466,8 +468,8 @@ class OcorrenciaCustomView extends OcorrenciaView {
             
             
             
-        $date1 = new \DateTime($dataAbertura);
-        $date2 = new \DateTime($dataSolucao);
+        $date1 = new DateTime($dataAbertura);
+        $date2 = new DateTime($dataSolucao);
         $diff = $date2->diff($date1);
         $hours = $diff->h;
         $hours = $hours + ($diff->days*24);
@@ -485,14 +487,14 @@ class OcorrenciaCustomView extends OcorrenciaView {
             echo '<br>Tempo Total: <span id="tempo-total">'. str_pad($hours, 2 , '0' , STR_PAD_LEFT).':'.str_pad($minutos, 2 , '0' , STR_PAD_LEFT).':'.str_pad($segundos, 2 , '0' , STR_PAD_LEFT).'</span>';
             echo '<br>Solução em Atraso.';
             $sessao = new Sessao();
-            if(!isset($_SESSION['pediu_ajuda'])){
-                echo '<br>Caso queira pedir ajuda clique no botão abaixo.</p>';
-                $this->modalPedirAjuda($ocorrencia);
-            }else{
-                echo '<br>Você solicitou ajuda, aguarde a resposta.</p>';
+            if($ocorrencia->getUsuarioCliente()->getId() == $sessao->getIdUsuario()){
+                if(!isset($_SESSION['pediu_ajuda'])){
+                    echo '<br>Caso queira pedir ajuda clique no botão abaixo.</p>';
+                    $this->modalPedirAjuda($ocorrencia);
+                }else{
+                    echo '<br>Você solicitou ajuda, aguarde a resposta.</p>';
+                }
             }
-
-
             //O form do modal vai chamar o ajax no controller
             
             
