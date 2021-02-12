@@ -366,7 +366,7 @@ class OcorrenciaCustomView extends OcorrenciaView {
                 <a href="?pagina=ocorrencia&selecionar='.$elemento->getId().'" class="close"><i class="fa fa-search icone-maior"></i></a>
                     
                 <strong>#'.$elemento->getId().'</strong>
-                 '.$elemento->getServico()->getNome().'
+                 '.substr($elemento->getDescricao(), 0, 80).'...
             </div>
                   ';
             

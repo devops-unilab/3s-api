@@ -327,7 +327,7 @@ class OcorrenciaCustomController  extends OcorrenciaController {
             <div class="row">
                     <div class="col-md-10">
                         <h3 class="pb-4 mb-4 font-italic border-bottom">
-                            Ocorrências Pendentes
+                            Ocorrências Em Aberto
                         </h3>
 	        
                     </div>
@@ -351,7 +351,7 @@ class OcorrenciaCustomController  extends OcorrenciaController {
             <div class="row">
                     <div class="col-md-10">
                         <h3 class="pb-4 mb-4 font-italic border-bottom">
-                            Ocorrências Fechadas
+                            Ocorrências Encerradas
                         </h3>
 	        
                     </div>
@@ -405,6 +405,24 @@ class OcorrenciaCustomController  extends OcorrenciaController {
 	    
 	    
 	}
+	public function arrayStatusPendente(){
+	    $arrStatus = array();
+	    $arrStatus[] = StatusOcorrenciaCustomController::STATUS_ABERTO;
+	    $arrStatus[] = StatusOcorrenciaCustomController::STATUS_AGUARDANDO_ATIVO;
+	    $arrStatus[] = StatusOcorrenciaCustomController::STATUS_AGUARDANDO_USUARIO;
+	    $arrStatus[] = StatusOcorrenciaCustomController::STATUS_ATENDIMENTO;
+	    $arrStatus[] = StatusOcorrenciaCustomController::STATUS_REABERTO;
+	    return $arrStatus;
+	}
+	public function arrayStatusFinalizado(){
+	    
+	    $arrStatus = array();
+	    $arrStatus[] = StatusOcorrenciaCustomController::STATUS_FECHADO;
+	    $arrStatus[] = StatusOcorrenciaCustomController::STATUS_FECHADO_CONFIRMADO;
+	    $arrStatus[] = StatusOcorrenciaCustomController::STATUS_CANCELADO;
+	    return $arrStatus;
+	}
+	
 	public function listar(){
 	    
 	    
@@ -416,9 +434,9 @@ class OcorrenciaCustomController  extends OcorrenciaController {
 	    if($this->sessao->getNivelAcesso() == Sessao::NIVEL_COMUM)
 	    {
 	       $ocorrencia->getUsuarioCliente()->setId($this->sessao->getIdUsuario());
-	       $lista = $this->dao->pesquisaPorCliente($ocorrencia);
-	       
-	       $this->exibirListagem($lista, $lista);
+	       $lista = $this->dao->pesquisaPorCliente($ocorrencia, $this->arrayStatusPendente());
+	       $lista2 = $this->dao->pesquisaPorCliente($ocorrencia, $this->arrayStatusFinalizado());
+	       $this->exibirListagem($lista, $lista2);
 	       
 	    }else if($this->sessao->getNivelAcesso() == Sessao::NIVEL_TECNICO){
 	        
@@ -432,29 +450,17 @@ class OcorrenciaCustomController  extends OcorrenciaController {
 	        $usuarioDao = new UsuarioDAO($this->dao->getConnection());
 	        $usuarioDao->fillById($usuario);
 	        $ocorrencia->getAreaResponsavel()->setId($usuario->getIdSetor());
-	        $lista = $this->dao->pesquisaParaTec($ocorrencia);
+
+	        $lista = $this->dao->pesquisaParaTec($ocorrencia, $this->arrayStatusPendente());
+	        $lista2 = $this->dao->pesquisaParaTec($ocorrencia, $this->arrayStatusFinalizado());
 	        
-	        $this->exibirListagem($lista, $lista);
+	        $this->exibirListagem($lista, $lista2);
+	        
 	    }else if($this->sessao->getNivelAcesso() == Sessao::NIVEL_ADM)
 	    {
-	        $arrStatus = array();
-// 	        $arrStatus[] = StatusOcorrenciaCustomController::STATUS_ABERTO;
-// 	        $arrStatus[] = StatusOcorrenciaCustomController::STATUS_AGUARDANDO_ATIVO;
-// 	        $arrStatus[] = StatusOcorrenciaCustomController::STATUS_AGUARDANDO_USUARIO;
-// 	        $arrStatus[] = StatusOcorrenciaCustomController::STATUS_ATENDIMENTO;
-// 	        $arrStatus[] = StatusOcorrenciaCustomController::STATUS_REABERTO;
-// 	        $arrStatus[] = StatusOcorrenciaCustomController::STATUS_RESERVADO;
 	        
-	        $lista = $this->dao->pesquisaAdmin($ocorrencia, $arrStatus);
-	        
-	        
-	        $arrStatus = array();
-// 	        $arrStatus[] = StatusOcorrenciaCustomController::STATUS_FECHADO;
-// 	        $arrStatus[] = StatusOcorrenciaCustomController::STATUS_FECHADO_CONFIRMADO;
-// 	        $arrStatus[] = StatusOcorrenciaCustomController::STATUS_CANCELADO;
-	        
-	        $lista2 = $this->dao->pesquisaAdmin($ocorrencia, $arrStatus);
-	        
+	        $lista = $this->dao->pesquisaAdmin($ocorrencia, $this->arrayStatusPendente());
+	        $lista2 = $this->dao->pesquisaAdmin($ocorrencia, $this->arrayStatusFinalizado());
 	        $this->exibirListagem($lista, $lista2);
 	        
 	    }

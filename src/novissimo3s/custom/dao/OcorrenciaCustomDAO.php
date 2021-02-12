@@ -182,20 +182,25 @@ class  OcorrenciaCustomDAO extends OcorrenciaDAO {
         }
         return $lista;
     }
-    
+    public function filtroStatus($arrStatus = array('a')){
+        
+        $arrPices = array();
+        $strWhere = "(";
+        foreach($arrStatus as $status){
+            
+            $arrPices[] =  "status = '$status'";
+            
+        }
+        $strWhere .= implode(" OR ", $arrPices);
+        $strWhere .= ") ";
+        return $strWhere;
+        
+    }
     public function pesquisaAdmin(Ocorrencia $ocorrencia, $arrStatus = array('a')) 
     {
         $lista = array();
-        $statusCancelado = StatusOcorrenciaCustomController::STATUS_CANCELADO;
         
-        
-//         $strWhere = "(";
-//         foreach($arrStatus as $status){
-//             $strWhere .= "status = '$status'";
-            
-//         }
-//         $strWhere .= ") AND";
-//         $strWhere  
+        $strWhere = $this->filtroStatus($arrStatus);
         $sql = "SELECT ocorrencia.id, ocorrencia.id_local,
             ocorrencia.descricao, ocorrencia.campus, ocorrencia.patrimonio,
             ocorrencia.ramal, ocorrencia.local, ocorrencia.status,
@@ -218,8 +223,7 @@ class  OcorrenciaCustomDAO extends OcorrenciaDAO {
             LEFT JOIN usuario as usuario_cliente
             ON usuario_cliente.id = ocorrencia.id_usuario_cliente
             WHERE
-           
-            ocorrencia.status <> '$statusCancelado' 
+            $strWhere  
             ORDER BY ocorrencia.id DESC
             LIMIT 100
 ";
@@ -276,10 +280,11 @@ class  OcorrenciaCustomDAO extends OcorrenciaDAO {
     }
     
     
-    public function pesquisaPorCliente(Ocorrencia $ocorrencia) {
+    public function pesquisaPorCliente(Ocorrencia $ocorrencia, $arrStatus = array('a')) {
         $lista = array();
         $idUsuarioIndicado = $ocorrencia->getUsuarioCliente()->getId();
-        $statusCancelado = StatusOcorrenciaCustomController::STATUS_CANCELADO;
+        
+        $strWhere = $this->filtroStatus($arrStatus);
         
         $sql = "SELECT ocorrencia.id, ocorrencia.id_local,
             ocorrencia.descricao, ocorrencia.campus, ocorrencia.patrimonio, 
@@ -303,8 +308,8 @@ class  OcorrenciaCustomDAO extends OcorrenciaDAO {
             LEFT JOIN usuario as usuario_cliente 
             ON usuario_cliente.id = ocorrencia.id_usuario_cliente
             WHERE
-            ocorrencia.id_usuario_cliente  = :idUsuarioIndicado
-            AND ocorrencia.status <> '$statusCancelado'
+            (ocorrencia.id_usuario_cliente  = :idUsuarioIndicado)
+            AND $strWhere
             ORDER BY ocorrencia.id DESC
             LIMIT 10
 ";
@@ -422,17 +427,15 @@ class  OcorrenciaCustomDAO extends OcorrenciaDAO {
         return $ocorrencia;
     }
     
-    public function pesquisaParaTec(Ocorrencia $ocorrencia) {
+    public function pesquisaParaTec(Ocorrencia $ocorrencia,  $arrStatus = array('a')) {
         $lista = array();
         $idUsuarioCliente = $ocorrencia->getUsuarioCliente()->getId();
         $idUsuarioIndicado = $ocorrencia->getIdUsuarioIndicado();
         $idUsuarioAtendente = $ocorrencia->getIdUsuarioAtendente();
         $idAreaResponsavel = $ocorrencia->getAreaResponsavel()->getId();
         
-        $statusCancelado = StatusOcorrenciaCustomController::STATUS_CANCELADO;
-//         $statusFechado = StatusOcorrenciaCustomController::STATUS_FECHADO;
-        $statusConfirmado = StatusOcorrenciaCustomController::STATUS_FECHADO_CONFIRMADO;
-        
+        $strWhere = $this->filtroStatus($arrStatus);
+
         $sql = "SELECT ocorrencia.id, ocorrencia.id_local,
             ocorrencia.descricao, ocorrencia.campus, ocorrencia.patrimonio,
             ocorrencia.ramal, ocorrencia.local, ocorrencia.status,
@@ -462,9 +465,7 @@ class  OcorrenciaCustomDAO extends OcorrenciaDAO {
             ocorrencia.id_usuario_atendente  = :idUsuarioAtendente
             OR 
             ocorrencia.id_area_responsavel = :idAreaResponsavel
-            )
-            AND ocorrencia.status <> '$statusCancelado'
-            AND ocorrencia.status <> '$statusConfirmado'
+            ) AND $strWhere
             ORDER BY ocorrencia.id DESC
             LIMIT 80
 ";

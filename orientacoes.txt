@@ -21,6 +21,10 @@ Exibição da lista inicial
 	- Mostrar somente chamados abertos; 
 	- Botão collapse para chamados fechados e fechado confirmado; 
 
+
+Melhorar o chat; 
+
+
 Listar chamados em atraso. 
 
 
