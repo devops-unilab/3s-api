@@ -326,13 +326,13 @@ class OcorrenciaCustomController  extends OcorrenciaController {
 	    echo '
             <div class="row">
                     <div class="col-md-10">
-                        <h3 class="pb-4 mb-4 font-italic border-bottom">
+                        <h3 id="titulo-pendentes" class="pb-4 mb-4 font-italic border-bottom">
                             Ocorrências Em Aberto
                         </h3>
 	        
                     </div>
                     <div class="col-md-2">
-                        <button type="button" class="btn btn-warning btn-circle btn-lg"  data-toggle="collapse" href="#collapsePendentes" role="button" aria-expanded="false" aria-controls="collapsePendentes"><i class="fa fa-filter icone-maior"></i></button>
+                        <button type="button" class="btn btn-warning btn-circle btn-lg"  data-toggle="collapse" href="#collapsePendentes" role="button" aria-expanded="false" aria-controls="collapsePendentes"><i class="fa fa-expand icone-maior"></i></button>
                     </div>
                     </div>
                     <div class="row">
@@ -350,18 +350,18 @@ class OcorrenciaCustomController  extends OcorrenciaController {
 	    echo '
             <div class="row">
                     <div class="col-md-10">
-                        <h3 class="pb-4 mb-4 font-italic border-bottom">
+                        <h3 id="titulo-encerrados" class="pb-4 mb-4 font-italic border-bottom">
                             Ocorrências Encerradas
                         </h3>
 	        
                     </div>
                     <div class="col-md-2">
-                        <button type="button" class="btn btn-warning btn-circle btn-lg"  data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample"><i class="fa fa-filter icone-maior"></i></button>
+                        <button type="button" class="btn btn-warning btn-circle btn-lg"  data-toggle="collapse" href="#collapseEncerrados" role="button" aria-expanded="false" aria-controls="collapseEncerrados"><i class="fa fa-expand icone-maior"></i></button>
                     </div>
                     </div>
                     <div class="row">
                         <div class="col-md-12">
-                            <div class="collapse" id="collapseExample">
+                            <div class="collapse" id="collapseEncerrados">
                               <div class="card card-body">
                                 ';
 	    $this->view->exibirLista($lista2);
