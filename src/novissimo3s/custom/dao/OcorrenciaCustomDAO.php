@@ -183,10 +183,19 @@ class  OcorrenciaCustomDAO extends OcorrenciaDAO {
         return $lista;
     }
     
-    public function pesquisaAdmin(Ocorrencia $ocorrencia) {
+    public function pesquisaAdmin(Ocorrencia $ocorrencia, $arrStatus = array('a')) 
+    {
         $lista = array();
         $statusCancelado = StatusOcorrenciaCustomController::STATUS_CANCELADO;
         
+        
+//         $strWhere = "(";
+//         foreach($arrStatus as $status){
+//             $strWhere .= "status = '$status'";
+            
+//         }
+//         $strWhere .= ") AND";
+//         $strWhere  
         $sql = "SELECT ocorrencia.id, ocorrencia.id_local,
             ocorrencia.descricao, ocorrencia.campus, ocorrencia.patrimonio,
             ocorrencia.ramal, ocorrencia.local, ocorrencia.status,
@@ -209,7 +218,8 @@ class  OcorrenciaCustomDAO extends OcorrenciaDAO {
             LEFT JOIN usuario as usuario_cliente
             ON usuario_cliente.id = ocorrencia.id_usuario_cliente
             WHERE
-            ocorrencia.status <> '$statusCancelado'
+           
+            ocorrencia.status <> '$statusCancelado' 
             ORDER BY ocorrencia.id DESC
             LIMIT 100
 ";

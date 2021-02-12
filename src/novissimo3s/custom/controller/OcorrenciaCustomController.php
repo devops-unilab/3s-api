@@ -22,6 +22,7 @@ use novissimo3s\dao\ServicoDAO;
 use novissimo3s\dao\UsuarioDAO;
 use novissimo3s\custom\dao\UsuarioCustomDAO;
 use novissimo3s\util\Mail;
+use novissimo3s\controller\StatusOcorrenciaController;
 
 class OcorrenciaCustomController  extends OcorrenciaController {
     
@@ -314,16 +315,43 @@ class OcorrenciaCustomController  extends OcorrenciaController {
 ';
 	    
 	}
-	
-	public function listar(){
+	public function exibirListagem($lista1, $lista2){
 	    echo '
             <div class="row">
                 <div class="col-md-8 blog-main">';
+	    
+	    
+	    
+	    
 	    echo '
             <div class="row">
                     <div class="col-md-10">
                         <h3 class="pb-4 mb-4 font-italic border-bottom">
-                            Lista de Ocorrências
+                            Ocorrências Pendentes
+                        </h3>
+	        
+                    </div>
+                    <div class="col-md-2">
+                        <button type="button" class="btn btn-warning btn-circle btn-lg"  data-toggle="collapse" href="#collapsePendentes" role="button" aria-expanded="false" aria-controls="collapsePendentes"><i class="fa fa-filter icone-maior"></i></button>
+                    </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="collapse" id="collapsePendentes">
+                              <div class="card card-body">
+                                ';
+	    $this->view->exibirLista($lista1);
+	    echo '
+                              </div><br><br>
+                            </div>
+                        </div>
+	        
+                    </div>';
+	    echo '
+            <div class="row">
+                    <div class="col-md-10">
+                        <h3 class="pb-4 mb-4 font-italic border-bottom">
+                            Ocorrências Fechadas
                         </h3>
 	        
                     </div>
@@ -335,45 +363,17 @@ class OcorrenciaCustomController  extends OcorrenciaController {
                         <div class="col-md-12">
                             <div class="collapse" id="collapseExample">
                               <div class="card card-body">
-                                Local reservado para o formulário de edição de filtros.
+                                ';
+	    $this->view->exibirLista($lista2);
+	    echo '
                               </div><br><br>
                             </div>
                         </div>
 	        
                     </div>';
-	    $ocorrencia = new Ocorrencia();
 	    
 	    
-	    $this->sessao = new Sessao();
 	    
-	    if($this->sessao->getNivelAcesso() == Sessao::NIVEL_COMUM)
-	    {
-	       $ocorrencia->getUsuarioCliente()->setId($this->sessao->getIdUsuario());
-	       $lista = $this->dao->pesquisaPorCliente($ocorrencia);
-	       
-	    }else if($this->sessao->getNivelAcesso() == Sessao::NIVEL_TECNICO){
-	        
-	        
-	        $ocorrencia->getUsuarioCliente()->setId($this->sessao->getIdUsuario());
-	        $ocorrencia->setIdUsuarioAtendente($this->sessao->getIdUsuario());
-	        $ocorrencia->setIdUsuarioIndicado($this->sessao->getIdUsuario());
-	        
-	        $usuario = new Usuario();
-	        $usuario->setId($this->sessao->getIdUsuario());
-	        $usuarioDao = new UsuarioDAO($this->dao->getConnection());
-	        $usuarioDao->fillById($usuario);
-	        $ocorrencia->getAreaResponsavel()->setId($usuario->getIdSetor());
-	        $lista = $this->dao->pesquisaParaTec($ocorrencia);
-	    }else if($this->sessao->getNivelAcesso() == Sessao::NIVEL_ADM)
-	    {
-	        $lista = $this->dao->pesquisaAdmin($ocorrencia);
-	    }
-	    
-	    if(isset($_GET['tab'])){
-	        $this->view->exibirListaTab($lista);
-	    }else{
-	        $this->view->exibirLista($lista);
-	    }
 	    
 	    
 	    
@@ -402,6 +402,63 @@ class OcorrenciaCustomController  extends OcorrenciaController {
 	        
 	        
             </div>';
+	    
+	    
+	}
+	public function listar(){
+	    
+	    
+	    $ocorrencia = new Ocorrencia();
+	    
+	    
+	    $this->sessao = new Sessao();
+	    
+	    if($this->sessao->getNivelAcesso() == Sessao::NIVEL_COMUM)
+	    {
+	       $ocorrencia->getUsuarioCliente()->setId($this->sessao->getIdUsuario());
+	       $lista = $this->dao->pesquisaPorCliente($ocorrencia);
+	       
+	       $this->exibirListagem($lista, $lista);
+	       
+	    }else if($this->sessao->getNivelAcesso() == Sessao::NIVEL_TECNICO){
+	        
+	        
+	        $ocorrencia->getUsuarioCliente()->setId($this->sessao->getIdUsuario());
+	        $ocorrencia->setIdUsuarioAtendente($this->sessao->getIdUsuario());
+	        $ocorrencia->setIdUsuarioIndicado($this->sessao->getIdUsuario());
+	        
+	        $usuario = new Usuario();
+	        $usuario->setId($this->sessao->getIdUsuario());
+	        $usuarioDao = new UsuarioDAO($this->dao->getConnection());
+	        $usuarioDao->fillById($usuario);
+	        $ocorrencia->getAreaResponsavel()->setId($usuario->getIdSetor());
+	        $lista = $this->dao->pesquisaParaTec($ocorrencia);
+	        
+	        $this->exibirListagem($lista, $lista);
+	    }else if($this->sessao->getNivelAcesso() == Sessao::NIVEL_ADM)
+	    {
+	        $arrStatus = array();
+// 	        $arrStatus[] = StatusOcorrenciaCustomController::STATUS_ABERTO;
+// 	        $arrStatus[] = StatusOcorrenciaCustomController::STATUS_AGUARDANDO_ATIVO;
+// 	        $arrStatus[] = StatusOcorrenciaCustomController::STATUS_AGUARDANDO_USUARIO;
+// 	        $arrStatus[] = StatusOcorrenciaCustomController::STATUS_ATENDIMENTO;
+// 	        $arrStatus[] = StatusOcorrenciaCustomController::STATUS_REABERTO;
+// 	        $arrStatus[] = StatusOcorrenciaCustomController::STATUS_RESERVADO;
+	        
+	        $lista = $this->dao->pesquisaAdmin($ocorrencia, $arrStatus);
+	        
+	        
+	        $arrStatus = array();
+// 	        $arrStatus[] = StatusOcorrenciaCustomController::STATUS_FECHADO;
+// 	        $arrStatus[] = StatusOcorrenciaCustomController::STATUS_FECHADO_CONFIRMADO;
+// 	        $arrStatus[] = StatusOcorrenciaCustomController::STATUS_CANCELADO;
+	        
+	        $lista2 = $this->dao->pesquisaAdmin($ocorrencia, $arrStatus);
+	        
+	        $this->exibirListagem($lista, $lista2);
+	        
+	    }
+	    
 	    
 	    
 	    
