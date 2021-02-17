@@ -37,6 +37,7 @@ class MainIndex{
 <link rel="stylesheet" href="vendor/bootstrap-4.6.0/css/bootstrap.min.css">
 <link rel="stylesheet" type="text/css" href="css/style.css" />
 <link rel="stylesheet" type="text/css" href="css/list.css" />
+<link rel="stylesheet" type="text/css" href="css/chat.css" />
 <link rel="stylesheet" type="text/css" href="css/selectize.default.css" />
 <link href="plugins/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
 

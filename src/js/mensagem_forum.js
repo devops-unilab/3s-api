@@ -1,3 +1,24 @@
+(function($) {
+    $(document).ready(function() {
+        var $chatbox = $('.chatbox');
+		var $chatboxTitle = $('.chatbox__title');
+        var $chatboxTitleClose = $('.chatbox__title__close');
+
+        $chatboxTitle.on('click', function() {
+            $chatbox.toggleClass('chatbox--tray');
+        });
+        $chatboxTitleClose.on('click', function(e) {
+            e.stopPropagation();
+            $chatbox.addClass('chatbox--closed');
+        });
+        $chatbox.on('transitionend', function() {
+            if ($chatbox.hasClass('chatbox--closed')) $chatbox.remove();
+        });
+        
+    });
+})(jQuery);
+
+
 $("#muda-tipo").on('change', function(e){
 	
 	if($("#muda-tipo").is(':checked')){

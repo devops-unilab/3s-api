@@ -20,17 +20,8 @@ use novissimo3s\dao\UsuarioDAO;
 class MensagemForumCustomController  extends MensagemForumController {
     const TIPO_ARQUIVO = 2;
     const TIPO_TEXTO = 1;
+
     public function add() {
-        if(!isset($_GET['selecionar'])){
-            return;
-        }
-        $ocorrencia = new Ocorrencia();
-        $ocorrencia->setId($_GET['selecionar']);
-        
-        if(!isset($_POST['enviar_mensagem_forum'])){
-            $this->view->showInsertForm2($ocorrencia);
-            return;
-        }
         
     }
     
@@ -160,68 +151,166 @@ class MensagemForumCustomController  extends MensagemForumController {
         }
         
     }
-    
     public function mainOcorrencia(Ocorrencia $ocorrencia){
-        echo '	        
-            <div class="container">
-                <h4 class="font-italic">Mensagens</h4>
-                <div class="container">
-                	';
-
         
-	    $listaForum = $ocorrencia->getMensagens();
-	    foreach($listaForum as $mensagemForum){
+        echo '
+<div class="container">
+		<div class="row">
+			<div class="chatbox chatbox22">
+				<div class="chatbox__title">
+					<h5 class="text-white">#'.$ocorrencia->getId().'</h5>
+					<!--<button class="chatbox__title__tray">
+            <span></span>
+        </button>-->
+					<button class="chatbox__title__close">
+						<span> <svg viewBox="0 0 12 12" width="12px" height="12px">
+                    <line stroke="#FFFFFF" x1="11.75" y1="0.25"
+									x2="0.25" y2="11.75"></line>
+                    <line stroke="#FFFFFF" x1="11.75" y1="11.75"
+									x2="0.25" y2="0.25"></line>
+                </svg>
+						</span>
+					</button>
+				</div>
+				<div class="chatbox__body">';
+        
+        $listaForum = $ocorrencia->getMensagens();
+        foreach($listaForum as $mensagemForum){
+            echo '
+            			<div class="chatbox__body__message chatbox__body__message--left">
+            
+            				<div class="chatbox_timing">
+            					<ul>
+            						<li><a href="#"><i class="fa fa-calendar"></i> '.date("d/m/Y",strtotime($mensagemForum->getDataEnvio())).'</a></li>
+            						<li><a href="#"><i class="fa fa-clock-o"></i> '.date("H:i",strtotime($mensagemForum->getDataEnvio())).'</a></a></li>
+            					</ul>
+            				</div>
+            				<!-- <img src="https://www.gstatic.com/webp/gallery/2.jpg" 
+            					alt="Picture">-->
+            				<div class="clearfix"></div>
+            				<div class="ul_section_full">
+            					<ul class="ul_msg">
+            						<li><strong>'.$mensagemForum->getUsuario()->getNome().'</strong></li>';
+            if($mensagemForum->getTipo() == self::TIPO_ARQUIVO){
+                echo '<li>Anexo: <a href="uploads/'.$mensagemForum->getMensagem().'">Clique aqui</a></li>';
+            }else{
+                echo '
+                        <li>'.strip_tags($mensagemForum->getMensagem()).'</li>';
+            }
+            echo '
+            						
+            					</ul>
+            					<div class="clearfix"></div>
 
-	        echo '
+            				</div>
+            
+            			</div>';
+        }
+        
+//         echo '
+// 					<div class="chatbox__body__message chatbox__body__message--left">
 
-<div class="row">
-                    <div class="notice notice-info">';
-	        if($mensagemForum->getTipo() == self::TIPO_ARQUIVO){
-	            echo 'Anexo: <a href="uploads/'.$mensagemForum->getMensagem().'">Clique aqui</a><br>';
-	        }else{
-	            echo '
-                        '.strip_tags($mensagemForum->getMensagem()).'<br>';
-	        }
-	        
-	        echo '
-                        <strong>'.$mensagemForum->getUsuario()->getNome().'| '.date("d/m/Y H:i",strtotime($mensagemForum->getDataEnvio())).'</strong><br>
-            	    </div>
-</div>
-';
+// 						<div class="chatbox_timing">
+// 							<ul>
+// 								<li><a href="#"><i class="fa fa-calendar"></i> 22/11/2018</a></li>
+// 								<li><a href="#"><i class="fa fa-clock-o"></i> 7:00 PM</a></a></li>
+// 							</ul>
+// 						</div>
+// 						<img src="https://www.gstatic.com/webp/gallery/2.jpg"
+// 							alt="Picture">
+// 						<div class="clearfix"></div>
+// 						<div class="ul_section_full">
+// 							<ul class="ul_msg">
+// 								<li><strong>Person Name</strong></li>
+// 								<li>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</li>
+// 							</ul>
+// 							<div class="clearfix"></div>
+// 							<ul class="ul_msg2">
+// 								<li><a href="#"><i class="fa fa-pencil"></i> </a></li>
+// 								<li><a href="#"><i class="fa fa-trash chat-trash"></i></a></li>
+// 							</ul>
+// 						</div>
 
-	    }
+// 					</div>';
+//         echo '
+// 					<div class="chatbox__body__message chatbox__body__message--right">
+
+// 						<div class="chatbox_timing">
+// 							<ul>
+// 								<li><a href="#"><i class="fa fa-calendar"></i> 22/11/2018</a></li>
+// 								<li><a href="#"><i class="fa fa-clock-o"></i> 7:00 PM</a></a></li>
+// 							</ul>
+// 						</div>
+
+// 						<img src="https://www.gstatic.com/webp/gallery/2.jpg"
+// 							alt="Picture">
+// 						<div class="clearfix"></div>
+// 						<div class="ul_section_full">
+// 							<ul class="ul_msg">
+// 								<li><strong>Person Name</strong></li>
+// 								<li>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</li>
+// 							</ul>
+// 							<div class="clearfix"></div>
+// 							<ul class="ul_msg2">
+// 								<li><a href="#"><i class="fa fa-pencil"></i> </a></li>
+// 								<li><a href="#"><i class="fa fa-trash chat-trash"></i></a></li>
+// 							</ul>
+// 						</div>
+
+// 					</div>';
+        
         
         
         echo '
-                    	
-                    </div>
-                  </div>';
+					
+
+				</div>
+				<div class="panel-footer">';
+        if($this->possoEnviarMensagem($ocorrencia)){
+            $this->view->showInsertForm2($ocorrencia);
+        }
+        
+        echo '
+                    
+
+
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+';
+        
+    }
+    
+    
+    public function possoEnviarMensagem(Ocorrencia $ocorrencia){
+        
         if($ocorrencia->getStatus() == StatusOcorrenciaCustomController::STATUS_FECHADO){
-            return;
+            return false;
         }
         if($ocorrencia->getStatus() == StatusOcorrenciaCustomController::STATUS_FECHADO_CONFIRMADO){
-            return;
+            return false;
         }
         if($ocorrencia->getStatus() == StatusOcorrenciaCustomController::STATUS_CANCELADO){
-            return;
+            return false;
         }
         $sessao = new Sessao();
         if($sessao->getNivelAcesso() == SESSAO::NIVEL_COMUM){
             if($sessao->getIdUsuario() != $ocorrencia->getUsuarioCliente()->getId()){
-                return;
+                return false;
             }
         }
         if($sessao->getNivelAcesso() == Sessao::NIVEL_TECNICO){
             if($ocorrencia->getIdUsuarioAtendente() != $sessao->getIdUsuario())
             {
                 if($sessao->getIdUsuario() != $ocorrencia->getUsuarioCliente()->getId()){
-                    return;
+                    return false;
                 }
             }
         }
-        echo '<div class="p-4 mb-3 bg-light rounded">';
-        $this->add();
-        echo '</div>';
+        return true;
     }
 
     
