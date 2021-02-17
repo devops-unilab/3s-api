@@ -326,7 +326,7 @@ class OcorrenciaCustomController  extends OcorrenciaController {
 	    echo '
             <div class="row">
                     <div class="col-md-10">
-                        <h3 id="titulo-pendentes" class="pb-4 mb-4 font-italic border-bottom">
+                        <h3 class="pb-4 mb-4 font-italic border-bottom">
                             Ocorrências Em Aberto
                         </h3>
 	        
@@ -350,7 +350,7 @@ class OcorrenciaCustomController  extends OcorrenciaController {
 	    echo '
             <div class="row">
                     <div class="col-md-10">
-                        <h3 id="titulo-encerrados" class="pb-4 mb-4 font-italic border-bottom">
+                        <h3 class="pb-4 mb-4 font-italic border-bottom">
                             Ocorrências Encerradas
                         </h3>
 	        

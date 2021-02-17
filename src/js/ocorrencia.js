@@ -1,12 +1,7 @@
 
 
 $(document).ready(function(e) {
-	$('#titulo-pendentes').on('click', function(e){
-		$('#collapsePendentes').collapse().toggle();
-	});
-	$('#titulo-encerrados').on('click', function(e){
-		$('#collapseEncerrados').collapse().toggle();
-	});
+
 	$("#form_pedir_ajuda").on('submit', function(e) {
 		e.preventDefault();
         $('#modalPedirAjuda').modal('hide');
