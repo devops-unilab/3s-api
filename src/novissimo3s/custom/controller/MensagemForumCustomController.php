@@ -106,7 +106,7 @@ class MensagemForumCustomController  extends MensagemForumController {
         
         
         $saldacao =  '<p>Prezado(a) ' . $ocorrencia->getUsuarioCliente()->getNome().' ,</p>';
-        $corpo = '<p>Avisamos que houve uma mudança no status da solicitação Nº'.$ocorrencia->getId().'</p>';
+        $corpo = '<p>Avisamos que houve uma mensagem nova na solicitação Nº'.$ocorrencia->getId().'</p>';
         
         $corpo .= '<ul>
 
@@ -206,60 +206,6 @@ class MensagemForumCustomController  extends MensagemForumController {
             
             			</div>';
         }
-        
-//         echo '
-// 					<div class="chatbox__body__message chatbox__body__message--left">
-
-// 						<div class="chatbox_timing">
-// 							<ul>
-// 								<li><a href="#"><i class="fa fa-calendar"></i> 22/11/2018</a></li>
-// 								<li><a href="#"><i class="fa fa-clock-o"></i> 7:00 PM</a></a></li>
-// 							</ul>
-// 						</div>
-// 						<img src="https://www.gstatic.com/webp/gallery/2.jpg"
-// 							alt="Picture">
-// 						<div class="clearfix"></div>
-// 						<div class="ul_section_full">
-// 							<ul class="ul_msg">
-// 								<li><strong>Person Name</strong></li>
-// 								<li>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</li>
-// 							</ul>
-// 							<div class="clearfix"></div>
-// 							<ul class="ul_msg2">
-// 								<li><a href="#"><i class="fa fa-pencil"></i> </a></li>
-// 								<li><a href="#"><i class="fa fa-trash chat-trash"></i></a></li>
-// 							</ul>
-// 						</div>
-
-// 					</div>';
-//         echo '
-// 					<div class="chatbox__body__message chatbox__body__message--right">
-
-// 						<div class="chatbox_timing">
-// 							<ul>
-// 								<li><a href="#"><i class="fa fa-calendar"></i> 22/11/2018</a></li>
-// 								<li><a href="#"><i class="fa fa-clock-o"></i> 7:00 PM</a></a></li>
-// 							</ul>
-// 						</div>
-
-// 						<img src="https://www.gstatic.com/webp/gallery/2.jpg"
-// 							alt="Picture">
-// 						<div class="clearfix"></div>
-// 						<div class="ul_section_full">
-// 							<ul class="ul_msg">
-// 								<li><strong>Person Name</strong></li>
-// 								<li>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</li>
-// 							</ul>
-// 							<div class="clearfix"></div>
-// 							<ul class="ul_msg2">
-// 								<li><a href="#"><i class="fa fa-pencil"></i> </a></li>
-// 								<li><a href="#"><i class="fa fa-trash chat-trash"></i></a></li>
-// 							</ul>
-// 						</div>
-
-// 					</div>';
-        
-        
         
         echo '
 					
