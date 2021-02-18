@@ -56,7 +56,7 @@ function alocaMensagem(item, index){
 	if(item.tipo == 1){
 		div += '<li>'+item.mensagem+'</li>';
 	}else{
-		div += '<li>Anexo: <a href="uploads/'+item.mensagem+'">'+item.mensagem+'</a></li>';	
+		div += '<li>Anexo: <a href="uploads/'+item.mensagem+'">Download</a></li>';	
 	}
 	
 	div += '</ul>';
@@ -67,8 +67,9 @@ function alocaMensagem(item, index){
 	
 }
 
-var idOcorrencia = 23383;
-var idUltima = 0;
+
+var idOcorrencia = $("#id-ocorrencia").text();
+var idUltima = $("#ultimo-id-post").text();
 var urlApiMensagem  = "?api=api/mensagem_forum/";
 var url1 = urlApiMensagem+idOcorrencia+"/"+idUltima;
 
@@ -114,6 +115,7 @@ $(document).ready(function(e)
             		//window.location.href='?page=ocorrencia&selecionar='+data.split(":")[2];
 					$('#botao-enviar-mensagem').attr('disabled', false);		
 					$('#botao-enviar-mensagem').text("Enviar");
+					$("#campo-texto").val("");
             		
             	}
             	else

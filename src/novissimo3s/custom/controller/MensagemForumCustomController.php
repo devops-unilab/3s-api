@@ -158,7 +158,7 @@ class MensagemForumCustomController  extends MensagemForumController {
 		<div class="row">
 			<div class="chatbox chatbox22">
 				<div class="chatbox__title">
-					<h5 class="text-white">#'.$ocorrencia->getId().'</h5>
+					<h5 class="text-white">#<span id="id-ocorrencia">'.$ocorrencia->getId().'</span></h5>
 					<!--<button class="chatbox__title__tray">
             <span></span>
         </button>-->
@@ -174,39 +174,41 @@ class MensagemForumCustomController  extends MensagemForumController {
 				</div>
 				<div id="corpo-chat" class="chatbox__body">';
         
-//         $listaForum = $ocorrencia->getMensagens();
-//         foreach($listaForum as $mensagemForum){
-//             echo '
-//             			<div class="chatbox__body__message chatbox__body__message--left">
+        $listaForum = $ocorrencia->getMensagens();
+        $ultimoId = 0;
+        foreach($listaForum as $mensagemForum){
+            $ultimoId = $mensagemForum->getId();
+            echo '
+            			<div class="chatbox__body__message chatbox__body__message--left">
             
-//             				<div class="chatbox_timing">
-//             					<ul>
-//             						<li><a href="#"><i class="fa fa-calendar"></i> '.date("d/m/Y",strtotime($mensagemForum->getDataEnvio())).'</a></li>
-//             						<li><a href="#"><i class="fa fa-clock-o"></i> '.date("H:i",strtotime($mensagemForum->getDataEnvio())).'</a></a></li>
-//             					</ul>
-//             				</div>
-//             				<!-- <img src="https://www.gstatic.com/webp/gallery/2.jpg" 
-//             					alt="Picture">-->
-//             				<div class="clearfix"></div>
-//             				<div class="ul_section_full">
-//             					<ul class="ul_msg">
-//             						<li><strong>'.$mensagemForum->getUsuario()->getNome().'</strong></li>';
-//             if($mensagemForum->getTipo() == self::TIPO_ARQUIVO){
-//                 echo '<li>Anexo: <a href="uploads/'.$mensagemForum->getMensagem().'">Clique aqui</a></li>';
-//             }else{
-//                 echo '
-//                         <li>'.strip_tags($mensagemForum->getMensagem()).'</li>';
-//             }
-//             echo '
+            				<div class="chatbox_timing">
+            					<ul>
+            						<li><a href="#"><i class="fa fa-calendar"></i> '.date("d/m/Y",strtotime($mensagemForum->getDataEnvio())).'</a></li>
+            						<li><a href="#"><i class="fa fa-clock-o"></i> '.date("H:i",strtotime($mensagemForum->getDataEnvio())).'</a></a></li>
+            					</ul>
+            				</div>
+            				<!-- <img src="https://www.gstatic.com/webp/gallery/2.jpg" 
+            					alt="Picture">-->
+            				<div class="clearfix"></div>
+            				<div class="ul_section_full">
+            					<ul class="ul_msg">
+            						<li><strong>'.$mensagemForum->getUsuario()->getNome().'</strong></li>';
+            if($mensagemForum->getTipo() == self::TIPO_ARQUIVO){
+                echo '<li>Anexo: <a href="uploads/'.$mensagemForum->getMensagem().'">Clique aqui</a></li>';
+            }else{
+                echo '
+                        <li>'.strip_tags($mensagemForum->getMensagem()).'</li>';
+            }
+            echo '
             						
-//             					</ul>
-//             					<div class="clearfix"></div>
+            					</ul>
+            					<div class="clearfix"></div>
 
-//             				</div>
+            				</div>
             
-//             			</div>';
-//         }
-        
+            			</div>';
+        }
+        echo '<span id="ultimo-id-post" class="escondido">'.$ultimoId.'</span>';
         echo '
 					
 
