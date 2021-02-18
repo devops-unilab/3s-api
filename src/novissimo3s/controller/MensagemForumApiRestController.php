@@ -10,6 +10,8 @@ namespace novissimo3s\controller;
 use novissimo3s\dao\MensagemForumDAO;
 use novissimo3s\model\MensagemForum;
 use novissimo3s\util\Sessao;
+use novissimo3s\custom\dao\OcorrenciaCustomDAO;
+use novissimo3s\model\Ocorrencia;
 
 class MensagemForumApiRestController {
 
@@ -28,21 +30,26 @@ class MensagemForumApiRestController {
         
         $sessao = new Sessao();
         if($sessao->getNivelAcesso() == Sessao::NIVEL_DESLOGADO){
-            header("WWW-Authenticate: Basic realm=\"Private Area\" ");
-            header("HTTP/1.0 401 Unauthorized");
+//             header("WWW-Authenticate: Basic realm=\"Private Area\" ");
+//             header("HTTP/1.0 401 Unauthorized");
             return;
         }
         
         header('Content-type: application/json');
-
-        
-//         $this->get();
-//         $this->post();
-//         $this->put();
-//         $this->delete();
-
-
-            
+        $this->get();
+    }
+    
+    public function parteInteressada(Ocorrencia $selecionado){
+        $sessao = new Sessao();
+        if($sessao->getNivelAcesso() == Sessao::NIVEL_TECNICO ){
+            return true;
+        }else if($sessao->getNivelAcesso() == Sessao::NIVEL_ADM){
+            return true;
+        }else if($selecionado->getUsuarioCliente()->getId() == $this->sessao->getIdUsuario()){
+            return true;
+        }else{
+            return false;
+        }
     }
 
     public function get()
@@ -51,10 +58,11 @@ class MensagemForumApiRestController {
         if ($_SERVER['REQUEST_METHOD'] != 'GET') {
             return;
         }
-
+        
         if(!isset($_REQUEST['api'])){
             return;
         }
+        
         $url = explode("/", $_REQUEST['api']);
         if (count($url) == 0 || $url[0] == "") {
             return;
@@ -65,20 +73,40 @@ class MensagemForumApiRestController {
         if ($url[1] != 'mensagem_forum') {
             return;
         }
-
-        if(isset($url[2]) && $url[2] != ''){
-
-            $id = $url[2];
-            $selected = new MensagemForum();
-            $selected->setId($id);
-            $list = $this->dao->fetchById($selected);
-            if (count($list) == 0) {
-                echo "{}";
-                return;
-            }
-        }else{
-            $list = $this->dao->fetch();
+        if(!isset($url[2])){
+            return;
         }
+        if(isset($url[2]) == ""){
+            return;
+        }
+        
+        $id = intval($url[2]);
+        
+        $ocorrencia = new Ocorrencia();
+        $ocorrencia->setId($id);
+        $ocorrenciaDao = new OcorrenciaCustomDAO($this->dao->getConnection());
+        $ocorrenciaDao->fillById($ocorrencia);
+        
+        if(!$this->parteInteressada($ocorrencia)){
+            echo "{Acesso Negado}";
+            return;
+        }
+        
+        
+        if(isset($url[3]) && $url[3] != ''){
+            $idM = intval($url[3]);
+            $ocorrenciaDao->fetchMensagensPag($ocorrencia, $idM);
+        }else{
+            $ocorrenciaDao->fetchMensagens($ocorrencia);
+        }
+        
+        $list = $ocorrencia->getMensagens();
+        
+        if (count($list) == 0) {
+            echo "{}";
+            return;
+        }
+
         
         $listagem = array();
         foreach ( $list as $linha ) {
@@ -86,16 +114,13 @@ class MensagemForumApiRestController {
 					'id' => $linha->getId (), 
 					'tipo' => $linha->getTipo (), 
 					'mensagem' => $linha->getMensagem (), 
-					'dataEnvio' => $linha->getDataEnvio (), 
+					'data_envio' => $linha->getDataEnvio (), 
+                    'nome_usuario' => $linha->getUsuario()->getNome()
             
             
 			);
 		}
 		echo json_encode ( $listagem );
-    
-		
-		
-		
 		
 	}
 

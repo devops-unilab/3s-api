@@ -1,3 +1,6 @@
+
+
+
 (function($) {
     $(document).ready(function() {
         var $chatbox = $('.chatbox');
@@ -35,9 +38,59 @@ $("#muda-tipo").on('change', function(e){
 });
 
 
-$(document).ready(function(e) {
-	
 
+
+
+
+function alocaMensagem(item, index){
+	
+	var div = '<div class="chatbox__body__message chatbox__body__message--left">';
+	div += '<div class="chatbox_timing">';
+	div += '<ul><li><a href="#"><i class="fa fa-calendar"></i> 12/02/2021</a></li>';
+	div += '<li><a href="#"><i class="fa fa-clock-o"></i> 15:45</a></li>';
+	div += '</ul>';
+	div += '</div>';
+	div += '<div class="clearfix"></div>';
+	div += '<div class="ul_section_full"><ul class="ul_msg">';
+	div += '<li><strong>'+item.nome_usuario+'</strong></li>';
+	if(item.tipo == 1){
+		div += '<li>'+item.mensagem+'</li>';
+	}else{
+		div += '<li>Anexo: <a href="uploads/'+item.mensagem+'">'+item.mensagem+'</a></li>';	
+	}
+	
+	div += '</ul>';
+	div += '<div class="clearfix"></div>';
+	div += '</div></div>';	
+	$("#corpo-chat").append(div);
+	
+	
+}
+
+var idOcorrencia = 23383;
+var idUltima = 0;
+var urlApiMensagem  = "?api=api/mensagem_forum/";
+var url1 = urlApiMensagem+idOcorrencia+"/"+idUltima;
+
+function carregarDados(url2) {
+    $.ajax({
+      url:url2,  
+      success: function(data) {
+		if(data.length > 0){
+			carregarDados(urlApiMensagem+idOcorrencia+"/"+data[data.length-1].id);
+			data.forEach(alocaMensagem);	
+		}
+		else{
+			carregarDados(url2);
+		}
+      }
+   });	 
+}
+carregarDados(url1);
+
+
+$(document).ready(function(e) 
+{
 
 	$("#insert_form_mensagem_forum").on('submit', function(e) {
 		e.preventDefault();
@@ -57,12 +110,10 @@ $(document).ready(function(e) {
             
 
             	if(data.split(":")[1] == 'sucesso'){
-            		
-            		$("#botao-modal-resposta").click(function(){						
-            			window.location.href='?page=ocorrencia&selecionar='+data.split(":")[2];
-            		});
-            		$("#textoModalResposta").text("Mensagem Forum enviado com sucesso! ");                	
-            		$("#modalResposta").modal("show");
+            		               	
+            		//window.location.href='?page=ocorrencia&selecionar='+data.split(":")[2];
+					$('#botao-enviar-mensagem').attr('disabled', false);		
+					$('#botao-enviar-mensagem').text("Enviar");
             		
             	}
             	else

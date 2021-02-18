@@ -19,6 +19,11 @@ class MainIndex{
             $mainAjax->main();
             exit(0);
         }
+        if(isset($_REQUEST['api'])){
+            $mainApi = new MainApi();
+            $mainApi->main();
+            exit(0);
+        }
         $this->pagina();
     }
 
@@ -130,7 +135,7 @@ echo '
 <script src="js/painel3s.js"></script>
 <script src="js/ocorrencia.js?a=1"></script>
 <script src="js/status_ocorrencia.js"></script>
-<script src="js/mensagem_forum.js?a=12"></script>
+<script src="js/mensagem_forum.js?a=13"></script>
 <script src="js/ocorrencia_selectize.js"></script>
 <script src="js/contador.js"></script>
 

@@ -172,40 +172,40 @@ class MensagemForumCustomController  extends MensagemForumController {
 						</span>
 					</button>
 				</div>
-				<div class="chatbox__body">';
+				<div id="corpo-chat" class="chatbox__body">';
         
-        $listaForum = $ocorrencia->getMensagens();
-        foreach($listaForum as $mensagemForum){
-            echo '
-            			<div class="chatbox__body__message chatbox__body__message--left">
+//         $listaForum = $ocorrencia->getMensagens();
+//         foreach($listaForum as $mensagemForum){
+//             echo '
+//             			<div class="chatbox__body__message chatbox__body__message--left">
             
-            				<div class="chatbox_timing">
-            					<ul>
-            						<li><a href="#"><i class="fa fa-calendar"></i> '.date("d/m/Y",strtotime($mensagemForum->getDataEnvio())).'</a></li>
-            						<li><a href="#"><i class="fa fa-clock-o"></i> '.date("H:i",strtotime($mensagemForum->getDataEnvio())).'</a></a></li>
-            					</ul>
-            				</div>
-            				<!-- <img src="https://www.gstatic.com/webp/gallery/2.jpg" 
-            					alt="Picture">-->
-            				<div class="clearfix"></div>
-            				<div class="ul_section_full">
-            					<ul class="ul_msg">
-            						<li><strong>'.$mensagemForum->getUsuario()->getNome().'</strong></li>';
-            if($mensagemForum->getTipo() == self::TIPO_ARQUIVO){
-                echo '<li>Anexo: <a href="uploads/'.$mensagemForum->getMensagem().'">Clique aqui</a></li>';
-            }else{
-                echo '
-                        <li>'.strip_tags($mensagemForum->getMensagem()).'</li>';
-            }
-            echo '
+//             				<div class="chatbox_timing">
+//             					<ul>
+//             						<li><a href="#"><i class="fa fa-calendar"></i> '.date("d/m/Y",strtotime($mensagemForum->getDataEnvio())).'</a></li>
+//             						<li><a href="#"><i class="fa fa-clock-o"></i> '.date("H:i",strtotime($mensagemForum->getDataEnvio())).'</a></a></li>
+//             					</ul>
+//             				</div>
+//             				<!-- <img src="https://www.gstatic.com/webp/gallery/2.jpg" 
+//             					alt="Picture">-->
+//             				<div class="clearfix"></div>
+//             				<div class="ul_section_full">
+//             					<ul class="ul_msg">
+//             						<li><strong>'.$mensagemForum->getUsuario()->getNome().'</strong></li>';
+//             if($mensagemForum->getTipo() == self::TIPO_ARQUIVO){
+//                 echo '<li>Anexo: <a href="uploads/'.$mensagemForum->getMensagem().'">Clique aqui</a></li>';
+//             }else{
+//                 echo '
+//                         <li>'.strip_tags($mensagemForum->getMensagem()).'</li>';
+//             }
+//             echo '
             						
-            					</ul>
-            					<div class="clearfix"></div>
+//             					</ul>
+//             					<div class="clearfix"></div>
 
-            				</div>
+//             				</div>
             
-            			</div>';
-        }
+//             			</div>';
+//         }
         
         echo '
 					
