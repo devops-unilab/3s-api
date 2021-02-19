@@ -45,7 +45,7 @@ class MensagemForumApiRestController {
             return true;
         }else if($sessao->getNivelAcesso() == Sessao::NIVEL_ADM){
             return true;
-        }else if($selecionado->getUsuarioCliente()->getId() == $this->sessao->getIdUsuario()){
+        }else if($selecionado->getUsuarioCliente()->getId() == $sessao->getIdUsuario()){
             return true;
         }else{
             return false;

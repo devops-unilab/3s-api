@@ -63,6 +63,7 @@ function alocaMensagem(item, index){
 	div += '<div class="clearfix"></div>';
 	div += '</div></div>';	
 	$("#corpo-chat").append(div);
+	$("#corpo-chat").scrollTop($("#corpo-chat")[0].scrollHeight);
 	
 	
 }
@@ -116,6 +117,7 @@ $(document).ready(function(e)
 					$('#botao-enviar-mensagem').attr('disabled', false);		
 					$('#botao-enviar-mensagem').text("Enviar");
 					$("#campo-texto").val("");
+					$("#corpo-chat").scrollTop($("#corpo-chat")[0].scrollHeight);
             		
             	}
             	else
