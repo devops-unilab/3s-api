@@ -113,7 +113,7 @@ class MensagemForumApiRestController {
 			$listagem [] = array (
 					'id' => $linha->getId (), 
 					'tipo' => $linha->getTipo (), 
-					'mensagem' => $linha->getMensagem (), 
+                    'mensagem' => strip_tags($linha->getMensagem ()), 
 					'data_envio' => $linha->getDataEnvio (), 
                     'nome_usuario' => $linha->getUsuario()->getNome()
             

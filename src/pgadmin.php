@@ -4,7 +4,7 @@ use novissimo3s\dao\DAO;
 use SimplesAdminPG\AdminPG;
 use novissimo3s\util\Sessao;
 include_once "SimplesAdminPG/AdminPG.php";
-define("DB_AUTENTICACAO", "../../../3s/3s_autenticacao_bd.ini");
+
 define("DB_INI", "../../../3s/3s_bd.ini");
 function autoload($classe) {
     
@@ -26,7 +26,7 @@ spl_autoload_register('autoload');
 $sessao = new Sessao();
 if($sessao->getLoginUsuario() == 'jefponte'){
     
-    $dao = new DAO(null, DB_AUTENTICACAO);
+    $dao = new DAO();
     $conexao = $dao->getConnection();
     AdminPG::main($conexao);
     
