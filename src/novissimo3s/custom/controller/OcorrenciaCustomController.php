@@ -358,7 +358,7 @@ class OcorrenciaCustomController  extends OcorrenciaController {
                     <div class="col-md-2">
                         <button type="button" class="btn btn-warning btn-circle btn-lg"  data-toggle="collapse" href="#collapseEncerrados" role="button" aria-expanded="false" aria-controls="collapseEncerrados"><i class="fa fa-expand icone-maior"></i></button>
                     </div>
-                    </div>
+            </div>
                     <div class="row">
                         <div class="col-md-12">
                             <div class="collapse" id="collapseEncerrados">
@@ -422,7 +422,14 @@ class OcorrenciaCustomController  extends OcorrenciaController {
 	    $arrStatus[] = StatusOcorrenciaCustomController::STATUS_CANCELADO;
 	    return $arrStatus;
 	}
-	
+	public function listarAtraso(){
+	    $this->sessao = new Sessao();
+	    if($this->sessao->getNivelAcesso() != Sessao::NIVEL_ADM){
+	        return;
+	    }
+	    
+	    
+	}
 	public function listar(){
 	    
 	    
