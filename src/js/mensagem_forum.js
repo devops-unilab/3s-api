@@ -93,7 +93,7 @@ carregarDados(url1);
 
 $(document).ready(function(e) 
 {
-
+	$("#corpo-chat").scrollTop($("#corpo-chat")[0].scrollHeight);
 	$("#insert_form_mensagem_forum").on('submit', function(e) {
 		e.preventDefault();
         $('#modalAddMensagemForum').modal('hide');

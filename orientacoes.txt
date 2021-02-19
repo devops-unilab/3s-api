@@ -18,11 +18,12 @@ Trabalhar com e-mails;
 	- Botão de pedir ajuda, enviar e-mail. (Chefe do setor) 
 Exibição da lista inicial 
 Alterar icone de expandir; 
+Melhorar o chat; 
 
 --------------Pendente----------------------------
 
 Listar chamados em atraso. 
 Disponibilizar listar/adicionar/editar serviços; 
-Melhorar o chat; 
+
 
 
