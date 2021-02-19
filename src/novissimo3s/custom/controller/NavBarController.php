@@ -62,6 +62,24 @@ class NavBarController{
 
 ';
         }
+        if($sessao->getNivelAcesso() == Sessao::NIVEL_ADM){
+            echo '
+
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              Gerenciamento
+            </a>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <a class="dropdown-item" href="?page=servico">Serviços</a>
+                <a class="dropdown-item" href="#">Listar Atraso</a>
+<!--              
+              <div class="dropdown-divider"></div>
+              <a class="dropdown-item" href="#">Something else here</a> -->
+            </div>
+        </li>
+
+';
+        }
 
         
         echo '
@@ -81,6 +99,7 @@ class NavBarController{
 
 ';
         }
+        
         
         echo '
     <a class="btn btn-outline-success my-2 my-sm-0" href="?sair=1">Sair</a>

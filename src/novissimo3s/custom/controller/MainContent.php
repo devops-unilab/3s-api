@@ -67,6 +67,10 @@ class MainContent{
                     $controller = new Importador();
                     $controller->main();
                     break;
+                case 'servico':
+                    $controller = new ServicoCustomController();
+                    $controller->main();
+                    break;
                 default:
                     echo '<p>Página solicitada não encontrada.</p>';
                     break;

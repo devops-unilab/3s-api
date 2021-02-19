@@ -18,7 +18,41 @@ class ServicoCustomController  extends ServicoController {
 		$this->view = new ServicoCustomView();
 	}
 
-
+	
+	public function main(){
+	    echo '
+	        
+        <div class="card mb-4">
+            <div class="card-body">';
+	    if (isset($_GET['select'])){
+	        echo '<div class="row">';
+	        $this->select();
+	        echo '</div>';
+	        
+	    }
+	    echo '
+		<div class="row">';
+	    echo '<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">';
+	    
+	    if(isset($_GET['edit'])){
+	        $this->edit();
+	    }else if(isset($_GET['delete'])){
+	        $this->delete();
+	    }else{
+	        $this->add();
+	    }
+	    $this->fetch();
+	    
+	    echo '</div>';
+	    echo '</div>';
+	    
+	    echo '</div></div>';
+	    
+	    
+	    
+	    
+	    
+	}
 	        
 }
 ?>
