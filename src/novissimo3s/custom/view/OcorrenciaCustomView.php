@@ -378,7 +378,7 @@ class OcorrenciaCustomView extends OcorrenciaView {
             echo '
                 
             <div class="alert alert-light alert-dismissable text-center">
-                <strong>Você não tem nenhum chamado aberto</strong>
+                <strong>Nenhuma Ocorrência</strong>
                 
             </div>
                   ';

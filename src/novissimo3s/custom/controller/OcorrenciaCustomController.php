@@ -315,69 +315,69 @@ class OcorrenciaCustomController  extends OcorrenciaController {
 ';
 	    
 	}
-	public function exibirListagem($lista1, $lista2){
+	public function exibirListagem($lista1, $lista2, $listaAtrasados = array()){
 	    echo '
             <div class="row">
                 <div class="col-md-8 blog-main">';
-	    
-	    
-	    
-	    
 	    echo '
-            <div class="row">
-                    <div class="col-md-10">
-                        <h3 class="pb-4 mb-4 font-italic border-bottom">
-                            Ocorrências Em Aberto
-                        </h3>
-	        
-                    </div>
-                    <div class="col-md-2">
-                        <button type="button" class="btn btn-warning btn-circle btn-lg"  data-toggle="collapse" href="#collapsePendentes" role="button" aria-expanded="false" aria-controls="collapsePendentes"><i class="fa fa-expand icone-maior"></i></button>
-                    </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="collapse" id="collapsePendentes">
-                              <div class="card card-body">
-                                ';
-	    $this->view->exibirLista($lista1);
-	    echo '
-                              </div><br><br>
-                            </div>
-                        </div>
-	        
-                    </div>';
-	    echo '
-            <div class="row">
-                    <div class="col-md-10">
-                        <h3 class="pb-4 mb-4 font-italic border-bottom">
-                            Ocorrências Encerradas
-                        </h3>
-	        
-                    </div>
-                    <div class="col-md-2">
-                        <button type="button" class="btn btn-warning btn-circle btn-lg"  data-toggle="collapse" href="#collapseEncerrados" role="button" aria-expanded="false" aria-controls="collapseEncerrados"><i class="fa fa-expand icone-maior"></i></button>
-                    </div>
+
+<div class="panel-group" id="accordion">';
+    
+	    
+	    if(count($listaAtrasados) > 0){
+	        echo '
+    <div class="panel panel-default" id="panel1">
+        <div class="panel-heading">
+            <h3 class="pb-4 mb-4 font-italic border-bottom" data-toggle="collapse" data-target="#collapseOne" href="#collapseOne">Ocorrências Em Atraso</h3>
+        </div>
+        <div id="collapseOne" class="panel-collapse collapse in">
+            <div class="panel-body">';
+	        $this->view->exibirLista(array());
+	        echo '
+	            
             </div>
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="collapse" id="collapseEncerrados">
-                              <div class="card card-body">
-                                ';
-	    $this->view->exibirLista($lista2);
+        </div>
+    </div>';
+	    }
+        
+	    
 	    echo '
-                              </div><br><br>
-                            </div>
-                        </div>
-	        
-                    </div>';
-	    
-	    
-	    
-	    
-	    
-	    
-	    
+    <div class="panel panel-default" id="panel2">
+        <div class="panel-heading">
+            <h3 class="pb-4 mb-4 font-italic border-bottom" data-toggle="collapse" data-target="#collapseTwo" 
+           href="#collapseTwo" class="collapsed">
+              Ocorrências Em Aberto
+            </h3>
+
+        </div>
+        <div id="collapseTwo" class="panel-collapse collapse show">
+            <div class="panel-body">';
+	       
+            $this->view->exibirLista($lista1);
+            
+           echo '</div>
+        </div>
+    </div>
+    <div class="panel panel-default" id="panel3">
+        <div class="panel-heading">
+            <h3 class="pb-4 mb-4 font-italic border-bottom" data-toggle="collapse" data-target="#collapseThree" href="#collapseThree" class="collapsed">
+                Ocorrências Encerradas
+            </h3>
+        </div>
+        <div id="collapseThree" class="panel-collapse collapse">
+            <div class="panel-body">';
+           $this->view->exibirLista($lista2);
+           echo '
+
+            </div>
+        </div>
+    </div>
+</div>
+
+';
+
+//<button type="button" class="btn btn-warning btn-circle btn-lg"  data-toggle="collapse" href="#collapsePendentes" role="button" aria-expanded="false" aria-controls="collapsePendentes"><i class="fa fa-expand icone-maior"></i></button>
+
 	    
 	    
 	    
