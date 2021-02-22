@@ -139,13 +139,11 @@ echo '
 
 <script src="vendor/popper.min.js"></script>
 <script src="vendor/bootstrap-4.6.0//js/bootstrap.min.js"></script>
-
-<!--
-Data table, se for necessário usar descomente. 
+ 
 <script src="vendor/datatables/jquery.dataTables.min.js"></script>
 <script src="vendor/datatables/dataTables.bootstrap4.min.js"></script>
 <script src="js/demo/datatables-demo.js"></script>
--->
+
 </body>
 </html>
 

@@ -370,8 +370,6 @@ class OcorrenciaCustomView extends OcorrenciaView {
             </div>
                   ';
             
-            //      <a href="" class="list-group-item active"> -</a>
-            
         }
         
         if(count($lista) == 0){

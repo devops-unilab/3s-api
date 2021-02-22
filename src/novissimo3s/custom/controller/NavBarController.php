@@ -71,7 +71,7 @@ class NavBarController{
             </a>
             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                 <a class="dropdown-item" href="?page=servico">Serviços</a>
-                <a class="dropdown-item" href="#">Listar Atraso</a>
+                
 <!--              
               <div class="dropdown-divider"></div>
               <a class="dropdown-item" href="#">Something else here</a> -->

@@ -22,7 +22,6 @@ use novissimo3s\dao\ServicoDAO;
 use novissimo3s\dao\UsuarioDAO;
 use novissimo3s\custom\dao\UsuarioCustomDAO;
 use novissimo3s\util\Mail;
-use novissimo3s\controller\StatusOcorrenciaController;
 
 class OcorrenciaCustomController  extends OcorrenciaController {
     
@@ -328,15 +327,15 @@ class OcorrenciaCustomController  extends OcorrenciaController {
 	        echo '
     <div class="panel panel-default" id="panel1">
         <div class="panel-heading">
-            <h3 class="pb-4 mb-4 font-italic border-bottom" data-toggle="collapse" data-target="#collapseOne" href="#collapseAtraso">Ocorrências Em Atraso
+            <h3 class="pb-4 mb-4 font-italic border-bottom" data-toggle="collapse" data-target="#collapseAtraso" href="#collapseAtraso">Ocorrências Em Atraso
 
-            <button type="button" class="btn ml-3 btn-warning btn-circle btn-lg"  data-toggle="collapse" href="#collapseAtraso" role="button" aria-expanded="false" aria-controls="collapseAtraso"><i class="fa fa-expand icone-maior"></i></button>
+            <button type="button" class="float-right btn ml-3 btn-warning btn-circle btn-lg"  data-toggle="collapse" href="#collapseAtraso" role="button" aria-expanded="false" aria-controls="collapseAtraso"><i class="fa fa-expand icone-maior"></i></button>
             </h3>
 
         </div>
         <div id="collapseAtraso" class="panel-collapse collapse in">
             <div class="panel-body">';
-	        $this->view->exibirLista(array());
+	        $this->view->exibirLista($listaAtrasados);
 	        echo '
 	            
             </div>
@@ -350,7 +349,7 @@ class OcorrenciaCustomController  extends OcorrenciaController {
         <div class="panel-heading">
             <h3 class="pb-4 mb-4 font-italic border-bottom" data-toggle="collapse" data-target="#collapsePendentes" 
            href="#collapseTwo" class="collapsed">
-              Ocorrências Em Aberto <button type="button" class="btn ml-3 btn-warning btn-circle btn-lg"  data-toggle="collapse" href="#collapsePendentes" role="button" aria-expanded="false" aria-controls="collapsePendentes"><i class="fa fa-expand icone-maior"></i></button>
+              Ocorrências Em Aberto <button type="button" class="float-right btn ml-3 btn-warning btn-circle btn-lg"  data-toggle="collapse" href="#collapsePendentes" role="button" aria-expanded="false" aria-controls="collapsePendentes"><i class="fa fa-expand icone-maior"></i></button>
             </h3>
 
         </div>
@@ -365,7 +364,7 @@ class OcorrenciaCustomController  extends OcorrenciaController {
     <div class="panel panel-default" id="panel3">
         <div class="panel-heading">
             <h3 class="pb-4 mb-4 font-italic border-bottom" data-toggle="collapse" data-target="#collapseEncerrados" href="#collapseEncerrados" class="collapsed">
-                Ocorrências Encerradas <button type="button" class="btn ml-3 btn-warning btn-circle btn-lg"  data-toggle="collapse" href="#collapseEncerrados" role="button" aria-expanded="false" aria-controls="collapseEncerrados"><i class="fa fa-expand icone-maior"></i></button>
+                Ocorrências Encerradas <button type="button" class="float-right btn ml-3 btn-warning btn-circle btn-lg"  data-toggle="collapse" href="#collapseEncerrados" role="button" aria-expanded="false" aria-controls="collapseEncerrados"><i class="fa fa-expand icone-maior"></i></button>
             </h3>
         </div>
         <div id="collapseEncerrados" class="panel-collapse collapse">
@@ -472,7 +471,8 @@ class OcorrenciaCustomController  extends OcorrenciaController {
 	        
 	        $lista = $this->dao->pesquisaAdmin($ocorrencia, $this->arrayStatusPendente());
 	        $lista2 = $this->dao->pesquisaAdmin($ocorrencia, $this->arrayStatusFinalizado());
-	        $this->exibirListagem($lista, $lista2);
+	        $listaAtrasados = $lista;
+	        $this->exibirListagem($lista, $lista2, $listaAtrasados);
 	        
 	    }
 	    
