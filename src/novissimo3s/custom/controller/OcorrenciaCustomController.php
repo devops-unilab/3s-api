@@ -328,9 +328,13 @@ class OcorrenciaCustomController  extends OcorrenciaController {
 	        echo '
     <div class="panel panel-default" id="panel1">
         <div class="panel-heading">
-            <h3 class="pb-4 mb-4 font-italic border-bottom" data-toggle="collapse" data-target="#collapseOne" href="#collapseOne">Ocorrências Em Atraso</h3>
+            <h3 class="pb-4 mb-4 font-italic border-bottom" data-toggle="collapse" data-target="#collapseOne" href="#collapseAtraso">Ocorrências Em Atraso
+
+            <button type="button" class="btn ml-3 btn-warning btn-circle btn-lg"  data-toggle="collapse" href="#collapseAtraso" role="button" aria-expanded="false" aria-controls="collapseAtraso"><i class="fa fa-expand icone-maior"></i></button>
+            </h3>
+
         </div>
-        <div id="collapseOne" class="panel-collapse collapse in">
+        <div id="collapseAtraso" class="panel-collapse collapse in">
             <div class="panel-body">';
 	        $this->view->exibirLista(array());
 	        echo '
@@ -344,13 +348,13 @@ class OcorrenciaCustomController  extends OcorrenciaController {
 	    echo '
     <div class="panel panel-default" id="panel2">
         <div class="panel-heading">
-            <h3 class="pb-4 mb-4 font-italic border-bottom" data-toggle="collapse" data-target="#collapseTwo" 
+            <h3 class="pb-4 mb-4 font-italic border-bottom" data-toggle="collapse" data-target="#collapsePendentes" 
            href="#collapseTwo" class="collapsed">
-              Ocorrências Em Aberto
+              Ocorrências Em Aberto <button type="button" class="btn ml-3 btn-warning btn-circle btn-lg"  data-toggle="collapse" href="#collapsePendentes" role="button" aria-expanded="false" aria-controls="collapsePendentes"><i class="fa fa-expand icone-maior"></i></button>
             </h3>
 
         </div>
-        <div id="collapseTwo" class="panel-collapse collapse show">
+        <div id="collapsePendentes" class="panel-collapse collapse">
             <div class="panel-body">';
 	       
             $this->view->exibirLista($lista1);
@@ -360,11 +364,11 @@ class OcorrenciaCustomController  extends OcorrenciaController {
     </div>
     <div class="panel panel-default" id="panel3">
         <div class="panel-heading">
-            <h3 class="pb-4 mb-4 font-italic border-bottom" data-toggle="collapse" data-target="#collapseThree" href="#collapseThree" class="collapsed">
-                Ocorrências Encerradas
+            <h3 class="pb-4 mb-4 font-italic border-bottom" data-toggle="collapse" data-target="#collapseEncerrados" href="#collapseEncerrados" class="collapsed">
+                Ocorrências Encerradas <button type="button" class="btn ml-3 btn-warning btn-circle btn-lg"  data-toggle="collapse" href="#collapseEncerrados" role="button" aria-expanded="false" aria-controls="collapseEncerrados"><i class="fa fa-expand icone-maior"></i></button>
             </h3>
         </div>
-        <div id="collapseThree" class="panel-collapse collapse">
+        <div id="collapseEncerrados" class="panel-collapse collapse">
             <div class="panel-body">';
            $this->view->exibirLista($lista2);
            echo '
@@ -376,7 +380,7 @@ class OcorrenciaCustomController  extends OcorrenciaController {
 
 ';
 
-//<button type="button" class="btn btn-warning btn-circle btn-lg"  data-toggle="collapse" href="#collapsePendentes" role="button" aria-expanded="false" aria-controls="collapsePendentes"><i class="fa fa-expand icone-maior"></i></button>
+//
 
 	    
 	    

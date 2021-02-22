@@ -29,9 +29,7 @@ class MainIndex{
 
     public function pagina(){
         $sessao = new Sessao();
-        echo '
-
-<!doctype html>
+        echo '<!doctype html>
 <html lang="pt-br">
 <head>
 <link rel="icon" type="image/x-icon" href="img/favicon.ico">
