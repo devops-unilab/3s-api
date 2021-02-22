@@ -577,7 +577,7 @@ class OcorrenciaCustomView extends OcorrenciaView {
             
             echo '<p class="text-danger">Solução Estimada: '.date("d/m/Y H:i:s" , strtotime($dataSolucao)).'';
             echo '<br>Tempo Total: <span id="tempo-total">'. str_pad($hours, 2 , '0' , STR_PAD_LEFT).':'.str_pad($minutos, 2 , '0' , STR_PAD_LEFT).':'.str_pad($segundos, 2 , '0' , STR_PAD_LEFT).'</span>';
-            echo '<br>Solução em Atraso.';
+            echo '<br>Solução em Atraso.</p>';
             $sessao = new Sessao();
             if($ocorrencia->getUsuarioCliente()->getId() == $sessao->getIdUsuario()){
                 if(!isset($_SESSION['pediu_ajuda'])){

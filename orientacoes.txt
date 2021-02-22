@@ -22,8 +22,6 @@ Melhorar o chat;
 
 --------------Pendente----------------------------
 
-Listar chamados em atraso. 
 Disponibilizar listar/adicionar/editar serviços; 
-
-
-
+Listar chamados em atraso. 
+Adaptar tela do Kamban; 
