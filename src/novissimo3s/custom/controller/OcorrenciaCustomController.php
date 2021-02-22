@@ -314,97 +314,61 @@ class OcorrenciaCustomController  extends OcorrenciaController {
 ';
 	    
 	}
+	public function painel($lista, $strTitulo, $id){
+	    echo '
+    <div class="panel panel-default" id="panel1">
+        <div class="panel-heading">
+            <h3 class="pb-4 mb-4 font-italic border-bottom" 
+            data-toggle="collapse" data-target="#'.$id.'" href="#'.$id.'">
+                '.$strTitulo.'
+	        
+            <button type="button" class="float-right btn ml-3 
+                btn-warning btn-circle btn-lg"  data-toggle="collapse" href="#'.$id.'" role="button" aria-expanded="false" 
+                aria-controls="'.$id.'"><i class="fa fa-expand icone-maior"></i></button>
+            </h3>
+	        
+        </div>
+        <div id="'.$id.'" class="panel-collapse collapse in">
+            <div class="panel-body">';
+	    $this->view->exibirLista($lista);
+	    echo '
+	        
+            </div>
+        </div>
+    </div>';
+	}
+	
 	public function exibirListagem($lista1, $lista2, $listaAtrasados = array()){
 	    echo '
             <div class="row">
                 <div class="col-md-8 blog-main">';
 	    echo '
 
-<div class="panel-group" id="accordion">';
-    
-	    
+                    <div class="panel-group" id="accordion">';
 	    if(count($listaAtrasados) > 0){
-	        echo '
-    <div class="panel panel-default" id="panel1">
-        <div class="panel-heading">
-            <h3 class="pb-4 mb-4 font-italic border-bottom" data-toggle="collapse" data-target="#collapseAtraso" href="#collapseAtraso">Ocorrências Em Atraso
-
-            <button type="button" class="float-right btn ml-3 btn-warning btn-circle btn-lg"  data-toggle="collapse" href="#collapseAtraso" role="button" aria-expanded="false" aria-controls="collapseAtraso"><i class="fa fa-expand icone-maior"></i></button>
-            </h3>
-
-        </div>
-        <div id="collapseAtraso" class="panel-collapse collapse in">
-            <div class="panel-body">';
-	        $this->view->exibirLista($listaAtrasados);
-	        echo '
-	            
-            </div>
-        </div>
-    </div>';
+	        $this->painel($listaAtrasados, "Ocorrências Em Atraso", 'collapseAtraso');
+	        
 	    }
-        
+	    $this->painel($lista1, "Ocorrências Em Aberto", 'collapseAberto');
+	    $this->painel($lista2, "Ocorrências Encerradas", 'collapseEncerrada');
+	    
+        echo '    
+                    </div>';//Fecha panel-group
+        echo '</div>';//fecha col-md-8
 	    
 	    echo '
-    <div class="panel panel-default" id="panel2">
-        <div class="panel-heading">
-            <h3 class="pb-4 mb-4 font-italic border-bottom" data-toggle="collapse" data-target="#collapsePendentes" 
-           href="#collapseTwo" class="collapsed">
-              Ocorrências Em Aberto <button type="button" class="float-right btn ml-3 btn-warning btn-circle btn-lg"  data-toggle="collapse" href="#collapsePendentes" role="button" aria-expanded="false" aria-controls="collapsePendentes"><i class="fa fa-expand icone-maior"></i></button>
-            </h3>
-
-        </div>
-        <div id="collapsePendentes" class="panel-collapse collapse">
-            <div class="panel-body">';
-	       
-            $this->view->exibirLista($lista1);
-            
-           echo '</div>
-        </div>
-    </div>
-    <div class="panel panel-default" id="panel3">
-        <div class="panel-heading">
-            <h3 class="pb-4 mb-4 font-italic border-bottom" data-toggle="collapse" data-target="#collapseEncerrados" href="#collapseEncerrados" class="collapsed">
-                Ocorrências Encerradas <button type="button" class="float-right btn ml-3 btn-warning btn-circle btn-lg"  data-toggle="collapse" href="#collapseEncerrados" role="button" aria-expanded="false" aria-controls="collapseEncerrados"><i class="fa fa-expand icone-maior"></i></button>
-            </h3>
-        </div>
-        <div id="collapseEncerrados" class="panel-collapse collapse">
-            <div class="panel-body">';
-           $this->view->exibirLista($lista2);
-           echo '
-
-            </div>
-        </div>
-    </div>
-</div>
-
-';
-
-//
-
-	    
-	    
-	    
-	    echo '
-	        
-	        
-	        
-	        
-                </div>
                 <aside class="col-md-4 blog-sidebar">
                   <div class="p-4 mb-3 bg-light rounded">
-                    <h4 class="font-italic">Sobre o novíssimo 3s</h4>
-                    <p class="mb-0">Esta é uma aplicação completamente nova desenvolvida pela DTI. Tudo foi refeito, desde o design até a estrutura de banco de dados.
-                                    Os chamados antigos foram preservados em uma nova estrutura,
-                                    a responsividade foi adicionada e muitas falhas de segurança foram sanadas. </p>
+                    <h4 class="font-italic">Sobre o Novíssimo 3s</h4>
+                    <p class="mb-0">
+                        Esta é uma aplicação completamente nova desenvolvida pela DTI do zero. 
+                        Tudo foi refeito, desde o design até a estrutura de banco de dados.
+                        Os chamados antigos foram preservados em uma nova estrutura de banco de dados.
+                        
+                    </p>
                   </div>
-	        
-	        
-	        
                 </aside><!-- /.blog-sidebar -->
-	        
-	        
-	        
-            </div>';
+            </div>';//Fecha row
 	    
 	    
 	}
@@ -425,20 +389,44 @@ class OcorrenciaCustomController  extends OcorrenciaController {
 	    $arrStatus[] = StatusOcorrenciaCustomController::STATUS_CANCELADO;
 	    return $arrStatus;
 	}
-	public function listarAtraso(){
-	    $this->sessao = new Sessao();
-	    if($this->sessao->getNivelAcesso() != Sessao::NIVEL_ADM){
-	        return;
+
+	public function atrasado(Ocorrencia $ocorrencia)
+	{
+	    
+	    $statusDao = new StatusOcorrenciaCustomDAO($this->dao->getConnection());
+	    $listaStatus = $statusDao->pesquisaPorIdOcorrencia($ocorrencia);
+	    $dataAbertura = null;
+
+	    foreach($listaStatus as $statusOcorrencia){
+	        if($statusOcorrencia->getStatus()->getSigla() == StatusOcorrenciaCustomController::STATUS_ABERTO || $statusOcorrencia->getStatus()->getSigla() == StatusOcorrenciaCustomController::STATUS_RESERVADO){
+	            $dataAbertura = $statusOcorrencia->getDataMudanca();
+	            break;
+	        }else{
+	            $dataAbertura = $statusOcorrencia->getDataMudanca();
+	            break;
+	        }
+	    }
+	    if($dataAbertura == null){
+	        return false;
+	    }else
+	    {
+	        $horaEstimada = $this->calcularHoraSolucao($dataAbertura, $ocorrencia->getServico()->getTempoSla());
 	    }
 	    
 	    
+	    $timeHoje = time();
+	    $timeSolucaoEstimada = strtotime($horaEstimada);
+	    
+	    if($timeHoje > $timeSolucaoEstimada){
+            return true;    
+	    }else{
+            return false;
+	    }
 	}
 	public function listar(){
 	    
 	    
 	    $ocorrencia = new Ocorrencia();
-	    
-	    
 	    $this->sessao = new Sessao();
 	    
 	    if($this->sessao->getNivelAcesso() == Sessao::NIVEL_COMUM)
@@ -471,7 +459,13 @@ class OcorrenciaCustomController  extends OcorrenciaController {
 	        
 	        $lista = $this->dao->pesquisaAdmin($ocorrencia, $this->arrayStatusPendente());
 	        $lista2 = $this->dao->pesquisaAdmin($ocorrencia, $this->arrayStatusFinalizado());
-	        $listaAtrasados = $lista;
+	        $listaAtrasados = array();
+	        foreach($lista as $ocorrencia){
+	            if($this->atrasado($ocorrencia))
+	            {
+	                $listaAtrasados[] = $ocorrencia;
+	            }
+	        }
 	        $this->exibirListagem($lista, $lista2, $listaAtrasados);
 	        
 	    }
