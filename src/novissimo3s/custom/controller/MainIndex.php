@@ -63,7 +63,7 @@ class MainIndex{
 	<!--     Fim da Barra do Governo -->
 
 
- <div class="container">
+ <div id="cabecalho" class="container">
   <header>
     <div class="row">
       <div class="col-xl-4 col-lg-12 col-md-12 col-sm-12  d-flex justify-content-center">
@@ -144,7 +144,7 @@ echo '
 <script src="js/barra_2.0.js"></script>
 <script src="js/jquery-3.5.1.min.js"></script>
 <script src="js/selectize.js"></script>
-<script src="js/painel3s.js"></script>
+<script src="js/painel_kamban.js"></script>
 <script src="js/ocorrencia.js?a=1"></script>
 ';
         if(isset($_GET['pagina']) && isset($_GET['selecionar']))
