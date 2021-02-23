@@ -40,12 +40,14 @@ class  UsuarioCustomDAO extends UsuarioDAO {
                 $usuario->setNome($linha['nome']);
                 $usuario->setEmail( $linha ['email'] );
                 $usuario->setNivel($linha['nivel']);
-                if($this->usuarioAtivo($usuario)){
+                
+                return true;
+//                 if($this->usuarioAtivo($usuario)){
                     
-                    return true;
-                }else{
-                    return false;
-                }
+//                     return true;
+//                 }else{
+//                     return false;
+//                 }
                 
             }
             
