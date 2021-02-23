@@ -71,6 +71,10 @@ class MainContent{
                     $controller = new ServicoCustomController();
                     $controller->main();
                     break;
+                case 'painel_kamban':
+                    $controller = new PainelKambanController();
+                    $controller->main();
+                    break;
                 default:
                     echo '<p>Página solicitada não encontrada.</p>';
                     break;
@@ -93,6 +97,10 @@ class MainContent{
                     break;
                 case 'importador':
                     $controller = new Importador();
+                    $controller->main();
+                    break;
+                case 'painel_kamban':
+                    $controller = new PainelKambanController();
                     $controller->main();
                     break;
                 default:

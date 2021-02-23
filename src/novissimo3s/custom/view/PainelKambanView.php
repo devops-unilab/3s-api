@@ -5,7 +5,13 @@
  * @author Jefferson Uchôa Ponte <j.pontee@gmail.com>
  *
  */
-class ChamadoView
+
+namespace novissimo3s\custom\view;
+
+use novissimo3s\model\Ocorrencia;
+use novissimo3s\custom\controller\StatusOcorrenciaCustomController;
+
+class PainelKambanView
 {
 
     public function mostrarQuadro($listaDeChamados, $listaFechados)
@@ -27,8 +33,12 @@ class ChamadoView
                         <div class="row">';
         
 
+        
         foreach($listaDeChamados as $chamado){
-            if($chamado->getStatus() == 'Aberto' || $chamado->getStatus() == 'Reaberto' || $chamado->getStatus() == 'Reservado'){
+            if($chamado->getStatus() == StatusOcorrenciaCustomController::STATUS_ABERTO 
+                || $chamado->getStatus() == StatusOcorrenciaCustomController::STATUS_REABERTO 
+                || $chamado->getStatus() == StatusOcorrenciaCustomController::STATUS_RESERVADO)
+            {
                 $this->exibirCartao($chamado);
             }
         }
@@ -54,7 +64,10 @@ class ChamadoView
 
         
         foreach($listaDeChamados as $chamado){
-            if($chamado->getStatus() == 'Em atendimento' || $chamado->getStatus() == 'Em espera' || substr($chamado->getStatus(), 0, 10) == 'Aguardando' )
+            if($chamado->getStatus() == StatusOcorrenciaCustomController::STATUS_ATENDIMENTO
+                || $chamado->getStatus() == StatusOcorrenciaCustomController::STATUS_EM_ESPERA 
+                ||  $chamado->getStatus() == StatusOcorrenciaCustomController::STATUS_AGUARDANDO_ATIVO
+                ||  $chamado->getStatus() == StatusOcorrenciaCustomController::STATUS_AGUARDANDO_USUARIO)
             {
                 $this->exibirCartao($chamado);
             }
@@ -80,8 +93,12 @@ class ChamadoView
         
         echo '
                 <div class="row">';
+        
+        
         foreach($listaFechados as $chamado){
-            if(substr($chamado->getStatus(), 0, 7) == 'Fechado'){
+            if($chamado->getStatus() == StatusOcorrenciaCustomController::STATUS_FECHADO
+                || $chamado->getStatus() == StatusOcorrenciaCustomController::STATUS_FECHADO_CONFIRMADO
+                ){
                 $this->exibirCartao($chamado);
             }
         }
@@ -100,7 +117,7 @@ class ChamadoView
 ';
     }
 
-    public function exibirCartao(Chamado $chamado, $class = 6)
+    public function exibirCartao(Ocorrencia $chamado, $class = 6)
     {
         echo '<div class="col-sm-12 col-md-12 col-xl-'.$class.'">';
         $bgCard = "";
@@ -108,39 +125,39 @@ class ChamadoView
         $texto = "text-black-50";
         
         switch ($chamado->getStatus()) {
-            case 'Aberto':
+            case StatusOcorrenciaCustomController::STATUS_ABERTO :
                 $bgCard = 'bg-warning';
                 $texto = "text-light";
                 break;
-            case 'Em atendimento':
+            case StatusOcorrenciaCustomController::STATUS_ATENDIMENTO:
                 $bgCard = 'bg-info';
                 $texto = "text-light";
                 break;
-            case 'Fechado':
+            case StatusOcorrenciaCustomController::STATUS_FECHADO:
                 $bgCard = 'bg-success';
                 $texto = "text-light";
                 break;
-            case 'Fechado Confirmado':
+            case StatusOcorrenciaCustomController::STATUS_FECHADO_CONFIRMADO:
                 $bgCard = 'bg-success';
                 $texto = "text-light";
                 break;
-            case 'Cancelado':
+            case StatusOcorrenciaCustomController::STATUS_CANCELADO:
                 $bgCard = 'bg-light';
                 $texto = "text-light";
                 break;
-            case 'Reservado':
+            case StatusOcorrenciaCustomController::STATUS_RESERVADO:
                 $bgCard = 'bg-secondary';
                 $texto = "text-light";
                 break;
-            case 'Em espera':
+            case StatusOcorrenciaCustomController::STATUS_EM_ESPERA:
                 $bgCard = 'bg-secondary';
                 $texto = "text-light";
                 break;
-            case 'Aguardando Usuário':
+            case StatusOcorrenciaCustomController::STATUS_AGUARDANDO_USUARIO:
                 $bgCard = 'bg-danger';
                 $texto = "text-light";
                 break;
-            case 'Aguardando ativo da DTI':
+            case StatusOcorrenciaCustomController::STATUS_AGUARDANDO_ATIVO:
                 $bgCard = 'bg-danger';
                 $texto = "text-light";
                 break;
@@ -165,54 +182,56 @@ class ChamadoView
                                    '.substr($chamado->getDescricao(), 0, 75).'[...]
                                 </p>';
         
-        $nome = explode(" ", $chamado->getDemandante());
-        echo '<small  class="'.$texto.'">Demandante: '.ucfirst(strtolower($nome[0])).' '.ucfirst(strtolower($nome[1])).' ('.trim($chamado->getSetorDemandante()).') </small><br>';
-        echo '<small  class="'.$texto.'">'.$chamado->getStatus().'</small>';
+ 
+//         $nome = explode(" ", $chamado->getUsuarioCliente()->getNome());
+//         echo '<small  class="'.$texto.'">Demandante: '.ucfirst(strtolower($nome[0])).' '.ucfirst(strtolower($nome[1])).' ('.trim($chamado->getUsuarioCliente()->getNome()).') </small><br>';
+//         echo '<small  class="'.$texto.'">'.$chamado->getStatus().'</small>';
         
         
-        $nomeAtendente = explode(" ", $chamado->getAtendente());
-        if(count($nomeAtendente) > 1){
-            echo '<br><small class="'.$texto.'">Atendente: '.ucfirst(strtolower($nomeAtendente[0])).' '.ucfirst(strtolower($nomeAtendente[1])).'</small>';
-        }
-        if($chamado->getStatus() == 'Aberto' || $chamado->getStatus() == 'Reaberto' || $chamado->getStatus() == 'Reservado'){
+//         $nomeAtendente = explode(" ", $chamado->getAtendente()->getNome());
+//         $nomeAtendente[] = "Teste";
+//         if(count($nomeAtendente) > 1){
+//             echo '<br><small class="'.$texto.'">Atendente: '.ucfirst(strtolower($nomeAtendente[0])).' '.ucfirst(strtolower($nomeAtendente[1])).'</small>';
+//         }
+//         if($chamado->getStatus() == 'a' || $chamado->getStatus() == 'r' || $chamado->getStatus() == 'g'){
             
-            $timeAbert = strtotime($chamado->getAbertura());
-            $timeHoje =  time();
-            $diferenca = $timeHoje - $timeAbert;
-            $dias = $diferenca/(86400);
-            $resto = $diferenca % 86400;
-            $resto = intval($resto/(60*60));
-            echo '<br><small class="'.$texto.'">Aberto há '.intval($dias).' dia';
-            if($dias > 1){
-                echo 's';
-                if(isset($resto)){
+//             $timeAbert = strtotime($chamado->getAbertura());
+//             $timeHoje =  time();
+//             $diferenca = $timeHoje - $timeAbert;
+//             $dias = $diferenca/(86400);
+//             $resto = $diferenca % 86400;
+//             $resto = intval($resto/(60*60));
+//             echo '<br><small class="'.$texto.'">Aberto há '.intval($dias).' dia';
+//             if($dias > 1){
+//                 echo 's';
+//                 if(isset($resto)){
                     
-                    echo ' e '.$resto.' horas';
-                }
-            }
-            echo '</small>';
+//                     echo ' e '.$resto.' horas';
+//                 }
+//             }
+//             echo '</small>';
             
             
-        }
-        if($chamado->getStatus() == 'Em atendimento' || $chamado->getStatus() == 'Em espera' || substr($chamado->getStatus(), 0, 10) == 'Aguardando' ){
+//         }
+//         if($chamado->getStatus() == 'Em atendimento' || $chamado->getStatus() == 'Em espera' || substr($chamado->getStatus(), 0, 10) == 'Aguardando' ){
             
-            $timeAbert = strtotime($chamado->getAtendimento());
-            $timeHoje =  time();
-            $diferenca = $timeHoje - $timeAbert;
-            $dias = $diferenca/(86400);
-            $resto = $diferenca % 86400;
-            $resto = intval($resto/(60*60));
-            echo '<br><small class="'.$texto.'">Em atendimento há '.intval($dias).' dia';
-            if($dias > 1){
-                echo 's';
-                if(isset($resto)){   
-                    echo ' e '.$resto.' horas';
-                }
-            }
-            echo '</small>';
+//             $timeAbert = strtotime($chamado->getAtendimento());
+//             $timeHoje =  time();
+//             $diferenca = $timeHoje - $timeAbert;
+//             $dias = $diferenca/(86400);
+//             $resto = $diferenca % 86400;
+//             $resto = intval($resto/(60*60));
+//             echo '<br><small class="'.$texto.'">Em atendimento há '.intval($dias).' dia';
+//             if($dias > 1){
+//                 echo 's';
+//                 if(isset($resto)){   
+//                     echo ' e '.$resto.' horas';
+//                 }
+//             }
+//             echo '</small>';
             
             
-        }
+//         }
         echo '
                             </div>
                         </div>
@@ -220,70 +239,8 @@ class ChamadoView
         echo '</div>';
     }
 
-    public static function diferencaEntreDatas($data1, $data2){
-        
-    }
-    public function exibirLista($lista)
-    {
-        echo '
-                                            
-                                            
-                                            
-	<div class="card o-hidden border-0 shadow-lg my-5">
-              <div class="card mb-4">
-                <div class="card-header">
-                  Lista
-                </div>
-                <div class="card-body">
-                                            
-                                            
-		<div class="table-responsive">
-			<table class="table table-bordered" id="dataTable" width="100%"
-				cellspacing="0">
-				<thead>
-					<tr>
-						<th>id</th>
-						<th>descricao</th>
-						<th>abertura</th>
-						<th>atendimento</th>
 
-					</tr>
-				</thead>
-				<tfoot>
-					<tr>
-                        <th>id</th>
-                        <th>descricao</th>
-                        <th>abertura</th>
-                        <th>atendimento</th>
 
-					</tr>
-				</tfoot>
-				<tbody>';
-
-        foreach ($lista as $elemento) {
-            echo '<tr>';
-            echo '<td>' . $elemento->getId() . '</td>';
-            echo '<td>' . $elemento->getDescricao() . '</td>';
-            echo '<td>' . $elemento->getAbertura() . '</td>';
-            echo '<td>' . $elemento->getAtendimento() . '</td>';
-
-            echo '</tr>';
-        }
-
-        echo '
-				</tbody>
-			</table>
-		</div>
-            
-            
-            
-            
-      </div>
-  </div>
-</div>
-            
-';
-    }
 
 
     public function mensagem($mensagem)

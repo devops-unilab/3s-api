@@ -39,6 +39,7 @@ class MainIndex{
 <!-- Bootstrap CSS -->
 <link rel="stylesheet" href="vendor/bootstrap-4.6.0/css/bootstrap.min.css">
 <link rel="stylesheet" type="text/css" href="css/style.css" />
+<link rel="stylesheet" type="text/css" href="css/style_kamban.css" />
 <link rel="stylesheet" type="text/css" href="css/list.css" />
 <link rel="stylesheet" type="text/css" href="css/chat.css" />
 <link rel="stylesheet" type="text/css" href="css/selectize.default.css" />

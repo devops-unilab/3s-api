@@ -1,3 +1,19 @@
+
+.card.draggable {
+    margin-bottom: 1rem;
+    cursor: grab;
+}
+
+.droppable {
+    background-color: var(--success);
+    min-height: 120px;
+    margin-bottom: 1rem;
+}
+#select-setores{
+	display: block;
+
+}
+
 body {
 	margin: 70px 0;
 	padding: 0;
