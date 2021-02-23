@@ -126,17 +126,40 @@ echo '
       </div>
     </div>
   </div>
-</div>
+</div>';
+    $this->mainJS();
+    
+echo '
 
+
+
+</body>
+</html>
+
+';
+    }
+    
+    public function mainJS(){
+        echo '
 <script src="js/barra_2.0.js"></script>
 <script src="js/jquery-3.5.1.min.js"></script>
 <script src="js/selectize.js"></script>
 <script src="js/painel3s.js"></script>
 <script src="js/ocorrencia.js?a=1"></script>
-<script src="js/status_ocorrencia.js"></script>
-<script src="js/mensagem_forum.js?a=14"></script>
-<script src="js/ocorrencia_selectize.js"></script>
+';
+        if(isset($_GET['pagina']) && isset($_GET['selecionar']))
+        {
+            if($_GET['pagina'] == 'ocorrencia'){
+                echo '
 <script src="js/contador.js"></script>
+<script src="js/status_ocorrencia.js"></script>
+<script src="js/mensagem_forum.js?a=14"></script>';
+                
+            }
+        }
+        echo '
+<script src="js/ocorrencia_selectize.js"></script>
+
 
 <script src="vendor/popper.min.js"></script>
 <script src="vendor/bootstrap-4.6.0//js/bootstrap.min.js"></script>
@@ -145,10 +168,8 @@ echo '
 <script src="vendor/datatables/dataTables.bootstrap4.min.js"></script>
 <script src="js/demo/datatables-demo.js"></script>
 
-</body>
-</html>
-
 ';
+        
     }
 }
 

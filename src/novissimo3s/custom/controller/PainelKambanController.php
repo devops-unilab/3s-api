@@ -4,7 +4,7 @@ namespace novissimo3s\custom\controller;
 use novissimo3s\custom\view\PainelKambanView;
 use novissimo3s\custom\dao\OcorrenciaCustomDAO;
 use novissimo3s\model\Ocorrencia;
-use novissimo3s\util\Sessao;
+
 
 class PainelKambanController extends OcorrenciaCustomController{
     
@@ -21,11 +21,13 @@ class PainelKambanController extends OcorrenciaCustomController{
 <div class="card mb-4">
         <div class="card-body">';
         
-        echo "<h3>Painel Kamban</h3>";
+        echo '<h3 class="pb-4 mb-4 font-italic border-bottom collapsed" data-toggle="collapse" data-target="#collapseAtraso" href="#collapseAtraso" aria-expanded="false">
+                Painel Kamban
+	        
+            <button type="button" class="float-right btn ml-3 btn-warning btn-circle btn-lg collapsed" data-toggle="collapse" href="#collapseAtraso" role="button" aria-expanded="false" aria-controls="collapseAtraso"><i class="fa fa-expand icone-maior"></i></button>
+            </h3>';
         
         $ocorrencia = new Ocorrencia();
-//         $sessao = new Sessao();
-        
         $pendentes = $this->dao->pesquisaAdmin($ocorrencia, $this->arrayStatusPendente());
         $finalizados = $this->dao->pesquisaAdmin($ocorrencia, $this->arrayStatusFinalizado());
         
