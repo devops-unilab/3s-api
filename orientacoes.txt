@@ -19,9 +19,10 @@ Trabalhar com e-mails;
 Exibição da lista inicial 
 Alterar icone de expandir; 
 Melhorar o chat; 
-
---------------Pendente----------------------------
-
 Disponibilizar listar/adicionar/editar serviços; 
 Listar chamados em atraso. 
+
+------------Pendente----------------------------------
+
+
 Adaptar tela do Kamban; 

@@ -457,16 +457,19 @@ class OcorrenciaCustomController  extends OcorrenciaController {
 	    }else if($this->sessao->getNivelAcesso() == Sessao::NIVEL_ADM)
 	    {
 	        
-	        $lista = $this->dao->pesquisaAdmin($ocorrencia, $this->arrayStatusPendente());
+	        $listaPendentes = $this->dao->pesquisaAdmin($ocorrencia, $this->arrayStatusPendente());
 	        $lista2 = $this->dao->pesquisaAdmin($ocorrencia, $this->arrayStatusFinalizado());
 	        $listaAtrasados = array();
-	        foreach($lista as $ocorrencia){
+	        $listaNaoAtrasados = array();
+	        foreach($listaPendentes as $ocorrencia){
 	            if($this->atrasado($ocorrencia))
 	            {
 	                $listaAtrasados[] = $ocorrencia;
+	            }else{
+	                $listaNaoAtrasados[] = $ocorrencia;
 	            }
 	        }
-	        $this->exibirListagem($lista, $lista2, $listaAtrasados);
+	        $this->exibirListagem($listaNaoAtrasados, $lista2, $listaAtrasados);
 	        
 	    }
 	    
