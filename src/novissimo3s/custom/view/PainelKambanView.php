@@ -10,12 +10,21 @@ namespace novissimo3s\custom\view;
 
 use novissimo3s\model\Ocorrencia;
 use novissimo3s\custom\controller\StatusOcorrenciaCustomController;
+use novissimo3s\model\Usuario;
+use novissimo3s\custom\dao\StatusOcorrenciaCustomDAO;
+use novissimo3s\dao\UsuarioDAO;
+
 
 class PainelKambanView
 {
 
-    public function mostrarQuadro($listaDeChamados, $listaFechados)
+    private $matrixStatus; 
+    private $dao; 
+    
+    public function mostrarQuadro($listaDeChamados, $listaFechados, $matrixStatus = array())
     {        
+        $this->dao = new UsuarioDAO();
+        $this->matrixStatus = $matrixStatus;
         
         echo '
 
@@ -117,6 +126,7 @@ class PainelKambanView
 ';
     }
 
+
     public function exibirCartao(Ocorrencia $chamado, $class = 6)
     {
         echo '<div class="col-sm-12 col-md-12 col-xl-'.$class.'">';
@@ -171,7 +181,7 @@ class PainelKambanView
                             <div class="card-body p-2">
                                 <div class="card-title">
 
-                                    <a href="http://3s.unilab.edu.br/painel.php?m=ocorrencias&t=visualizar&id='.$chamado->getId().'" class="'.$link.'">
+                                    <a href="?pagina=ocorrencia&selecionar='.$chamado->getId().'" class="'.$link.'">
                                        #'.$chamado->getId().'
                                     </a>';
         
@@ -183,55 +193,96 @@ class PainelKambanView
                                 </p>';
         
  
-//         $nome = explode(" ", $chamado->getUsuarioCliente()->getNome());
-//         echo '<small  class="'.$texto.'">Demandante: '.ucfirst(strtolower($nome[0])).' '.ucfirst(strtolower($nome[1])).' ('.trim($chamado->getUsuarioCliente()->getNome()).') </small><br>';
-//         echo '<small  class="'.$texto.'">'.$chamado->getStatus().'</small>';
+        $nome = explode(" ", $chamado->getUsuarioCliente()->getNome());
+        echo '<small  class="'.$texto.'">Demandante: ';
+        if(isset($nome[0])){
+            echo ucfirst(strtolower($nome[0]));
+        }
+        if(isset($nome[1])){
+            echo ' '.ucfirst(strtolower($nome[1]));
+        }
         
         
-//         $nomeAtendente = explode(" ", $chamado->getAtendente()->getNome());
-//         $nomeAtendente[] = "Teste";
-//         if(count($nomeAtendente) > 1){
-//             echo '<br><small class="'.$texto.'">Atendente: '.ucfirst(strtolower($nomeAtendente[0])).' '.ucfirst(strtolower($nomeAtendente[1])).'</small>';
-//         }
-//         if($chamado->getStatus() == 'a' || $chamado->getStatus() == 'r' || $chamado->getStatus() == 'g'){
+        
+        echo ' </small><br>';
+        $ocorrenciaView = new OcorrenciaCustomView();
+        echo '<small  class="'.$texto.'">'.$ocorrenciaView->getStrStatus($chamado->getStatus()).'</small>';
+        
+        
+        
+        if($chamado->getIdUsuarioAtendente() > 0){
+            $usuario = new Usuario();
+            $usuario->setId($chamado->getIdUsuarioAtendente());
+            $this->dao->fillById($usuario);
+            $nomeAtendente = explode(" ", $usuario->getNome());
+            if(count($nomeAtendente) > 1){
+                echo '<br><small class="'.$texto.'">Atendente: '.ucfirst(strtolower($nomeAtendente[0])).' '.ucfirst(strtolower($nomeAtendente[1])).'</small>';
+            }
+        }
+        $abertura = "";
+        $dataAtendimento = "";
+        
+        if(isset($this->matrixStatus[$chamado->getId()])){
+            foreach($this->matrixStatus[$chamado->getId()] as $elemento){
+                if($abertura == ""){
+                    $abertura = $elemento->getDataMudanca();
+                }
+                if($dataAtendimento == ""){
+                    if($elemento->getStatus()->getSigla() == StatusOcorrenciaCustomController::STATUS_ATENDIMENTO){
+                        $dataAtendimento = $elemento->getDataMudanca();
+                    }
+                }
+            }
+        }
+        
+        
+        if($chamado->getStatus() == StatusOcorrenciaCustomController::STATUS_ABERTO 
+            || $chamado->getStatus() == StatusOcorrenciaCustomController::STATUS_REABERTO 
+            || $chamado->getStatus() == StatusOcorrenciaCustomController::STATUS_FECHADO_CONFIRMADO){
+                
             
-//             $timeAbert = strtotime($chamado->getAbertura());
-//             $timeHoje =  time();
-//             $diferenca = $timeHoje - $timeAbert;
-//             $dias = $diferenca/(86400);
-//             $resto = $diferenca % 86400;
-//             $resto = intval($resto/(60*60));
-//             echo '<br><small class="'.$texto.'">Aberto há '.intval($dias).' dia';
-//             if($dias > 1){
-//                 echo 's';
-//                 if(isset($resto)){
-                    
-//                     echo ' e '.$resto.' horas';
-//                 }
-//             }
-//             echo '</small>';
+                $timeAbert = strtotime($abertura);
+                $timeHoje =  time();
+                $diferenca = $timeHoje - $timeAbert;
+                $dias = $diferenca/(86400);
+                $resto = $diferenca % 86400;
+                $resto = intval($resto/(60*60));
+                echo '<br><small class="'.$texto.'">Aberto há '.intval($dias).' dia';
+                if($dias > 1){
+                    echo 's';
+                    if(isset($resto)){
+                        
+                        echo ' e '.$resto.' horas';
+                    }
+                }else if($dias < 1){
+                    echo ' e '.$resto.' horas';
+                }
+                echo '</small>';
             
             
-//         }
-//         if($chamado->getStatus() == 'Em atendimento' || $chamado->getStatus() == 'Em espera' || substr($chamado->getStatus(), 0, 10) == 'Aguardando' ){
+        }
+        if($chamado->getStatus() == StatusOcorrenciaCustomController::STATUS_ATENDIMENTO 
+            || $chamado->getStatus() == StatusOcorrenciaCustomController::STATUS_EM_ESPERA 
+            || $chamado->getStatus() == StatusOcorrenciaCustomController::STATUS_AGUARDANDO_ATIVO
+            || $chamado->getStatus() == StatusOcorrenciaCustomController::STATUS_AGUARDANDO_USUARIO){
             
-//             $timeAbert = strtotime($chamado->getAtendimento());
-//             $timeHoje =  time();
-//             $diferenca = $timeHoje - $timeAbert;
-//             $dias = $diferenca/(86400);
-//             $resto = $diferenca % 86400;
-//             $resto = intval($resto/(60*60));
-//             echo '<br><small class="'.$texto.'">Em atendimento há '.intval($dias).' dia';
-//             if($dias > 1){
-//                 echo 's';
-//                 if(isset($resto)){   
-//                     echo ' e '.$resto.' horas';
-//                 }
-//             }
-//             echo '</small>';
+            $timeAbert = strtotime($dataAtendimento);
+            $timeHoje =  time();
+            $diferenca = $timeHoje - $timeAbert;
+            $dias = $diferenca/(86400);
+            $resto = $diferenca % 86400;
+            $resto = intval($resto/(60*60));
+            echo '<br><small class="'.$texto.'">Em atendimento há '.intval($dias).' dia';
+            if($dias > 1){
+                echo 's';
+                if(isset($resto)){   
+                    echo ' e '.$resto.' horas';
+                }
+            }
+            echo '</small>';
             
             
-//         }
+        }
         echo '
                             </div>
                         </div>
