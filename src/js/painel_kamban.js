@@ -31,6 +31,17 @@ $(document).ready(function(e){
 		$( "#barra-brasil" ).toggleClass("escondido");
 	});
 	
+	setInterval (function () {
+		$.ajax({
+			type: 'GET',
+			url: '?ajax=painel_kamban',
+			success: function (response){
+				$('#quadro-kanban').html(response);
+			}
+		});
+	}, 2000);
+	
+	
 });
 
 

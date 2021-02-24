@@ -213,8 +213,7 @@ class PainelKambanView
         if($chamado->getIdUsuarioAtendente() > 0){
             $usuario = new Usuario();
             $usuario->setId($chamado->getIdUsuarioAtendente());
-            $this->dao->fillById($usuario);
-            $nomeAtendente = explode(" ", $usuario->getNome());
+            $nomeAtendente = explode(" ", TEste);
             if(count($nomeAtendente) > 1){
                 echo '<br><small class="'.$texto.'">Atendente: '.ucfirst(strtolower($nomeAtendente[0])).' '.ucfirst(strtolower($nomeAtendente[1])).'</small>';
             }

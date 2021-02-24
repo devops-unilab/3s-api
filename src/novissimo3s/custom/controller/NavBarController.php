@@ -26,14 +26,14 @@ class NavBarController{
         <a class="nav-link" href=".">Início<span class="sr-only">(current)</span></a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="?pagina=ocorrencia&cadastrar=1">Adicionar</a>
+        <a class="nav-link" href="?page=ocorrencia&cadastrar=1">Adicionar</a>
       </li>
 ';
         if($sessao->getNivelAcesso() == Sessao::NIVEL_ADM || $sessao->getNivelAcesso() == Sessao::NIVEL_TECNICO){
             echo '
                 <!--
       <li class="nav-item">
-        <a class="nav-link" href="?pagina=painel">Painel</a>
+        <a class="nav-link" href="?page=painel">Painel</a>
       </li>
       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

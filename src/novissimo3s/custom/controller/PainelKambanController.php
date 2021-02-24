@@ -65,7 +65,28 @@ class PainelKambanController extends OcorrenciaCustomController{
         echo '
                 <button id="btn-expandir-tela" type="button" class="float-right btn ml-3 btn-warning btn-circle btn-lg collapsed"><i class="fa fa-expand icone-maior"></i></button>
             </div>
-            <div class="card-body">';
+            <div class="card-body" id="quadro-kanban">';
+        $this->quadroKamban();
+        echo '
+	</div>
+</div>
+            
+            
+            
+            
+';
+        
+    }
+    public function quadroKamban(){
+        $sessao = new Sessao();
+        if(
+            $sessao->getNivelAcesso() != Sessao::NIVEL_TECNICO
+            &&
+            $sessao->getNivelAcesso() != Sessao::NIVEL_ADM
+            ){
+            echo "Acesso Negado";
+            return;
+        }
         $ocorrencia = new Ocorrencia();
         $pendentes = $this->dao->pesquisaAdmin($ocorrencia, $this->arrayStatusPendente());
         $finalizados = $this->dao->pesquisaAdmin($ocorrencia, $this->arrayStatusFinalizado());
@@ -82,17 +103,6 @@ class PainelKambanController extends OcorrenciaCustomController{
         
         
         $this->view->mostrarQuadro($pendentes, $finalizados, $matrixStatus);
-        
-        echo '
-            
-            
-	</div>
-</div>
-            
-            
-            
-            
-';
         
     }
     

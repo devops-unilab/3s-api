@@ -143,34 +143,58 @@ echo '
         echo '
 <script src="js/barra_2.0.js"></script>
 <script src="js/jquery-3.5.1.min.js"></script>
-<script src="js/selectize.js"></script>
-<script src="js/painel_kamban.js"></script>
-<script src="js/ocorrencia.js?a=1"></script>
-';
-        if(isset($_GET['pagina']) && isset($_GET['selecionar']))
-        {
-            if($_GET['pagina'] == 'ocorrencia'){
-                echo '
-<script src="js/contador.js"></script>
-<script src="js/status_ocorrencia.js"></script>
-<script src="js/mensagem_forum.js?a=14"></script>';
-                
-            }
-        }
-        echo '
-<script src="js/ocorrencia_selectize.js"></script>
-
-
 <script src="vendor/popper.min.js"></script>
 <script src="vendor/bootstrap-4.6.0//js/bootstrap.min.js"></script>
  
 <script src="vendor/datatables/jquery.dataTables.min.js"></script>
 <script src="vendor/datatables/dataTables.bootstrap4.min.js"></script>
 <script src="js/demo/datatables-demo.js"></script>
-
+<script src="js/selectize.js"></script>
 ';
+        $this->pageJS();
         
     }
+    
+    public function pageJS(){
+        if(isset($_GET['page'])){
+            switch ($_GET['page'])
+            {
+                case 'ocorrencia':
+                    
+                    echo '
+<script src="js/ocorrencia_selectize.js"></script>
+<script src="js/ocorrencia.js?a=1"></script>
+
+<script src="js/status_ocorrencia.js"></script>';
+                    if(isset($_GET['selecionar'])){
+                        echo '
+<script src="js/contador.js"></script>
+<script src="js/mensagem_forum.js?a=14"></script>';
+                    }
+                    
+                    break;
+                case 'painel_kamban':
+                    echo '
+<script src="js/painel_kamban.js"></script>';
+                    break;
+                default:
+                    break;
+            }
+        }else{
+            echo '
+<script src="js/ocorrencia_selectize.js"></script>
+<script src="js/ocorrencia.js?a=1"></script>
+<script src="js/status_ocorrencia.js"></script>';
+            if(isset($_GET['selecionar'])){
+                echo '
+<script src="js/contador.js"></script>
+<script src="js/mensagem_forum.js?a=14"></script>';
+            }
+            
+        }
+    }
+    
+    
 }
 
 ?>

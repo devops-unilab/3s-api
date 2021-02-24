@@ -23,6 +23,10 @@ class MainAjax{
                 $controller = new OcorrenciaCustomController();
                 $controller->ajaxPedirAjuda();
                 break;
+            case 'painel_kamban':
+                $controller = new PainelKambanController();
+                $controller->quadroKamban();
+                break;
             default:
                 echo ':falha';
                 break;

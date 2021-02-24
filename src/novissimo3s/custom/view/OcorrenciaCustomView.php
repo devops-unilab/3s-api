@@ -363,7 +363,7 @@ class OcorrenciaCustomView extends OcorrenciaView {
             echo '
                 
             <div class="alert '.$strClass.' alert-dismissable">
-                <a href="?pagina=ocorrencia&selecionar='.$elemento->getId().'" class="close"><i class="fa fa-search icone-maior"></i></a>
+                <a href="?page=ocorrencia&selecionar='.$elemento->getId().'" class="close"><i class="fa fa-search icone-maior"></i></a>
                     
                 <strong>#'.$elemento->getId().'</strong>
                  '.substr($elemento->getDescricao(), 0, 80).'...
