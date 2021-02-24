@@ -88,9 +88,8 @@ class PainelKambanController extends OcorrenciaCustomController{
             return;
         }
         $ocorrencia = new Ocorrencia();
-        
-        $pendentes = $this->dao->pesquisaAdmin($ocorrencia, array_merge($this->arrayStatusPendente(), $this->arrayStatusFinalizado()));
-        
+        $pendentes = $this->dao->pesquisaAdmin($ocorrencia, $this->arrayStatusPendente());
+        $finalizados = $this->dao->pesquisaAdmin($ocorrencia, $this->arrayStatusFinalizado());
         
         
 //         $statusDao = new StatusOcorrenciaCustomDAO($this->dao->getConnection());
@@ -102,8 +101,8 @@ class PainelKambanController extends OcorrenciaCustomController{
 //             $matrixStatus[$ocorrencia->getId()] = $statusDao->pesquisaPorIdOcorrencia($ocorrencia);
 //         }
         
-        
-        $this->view->mostrarQuadro($pendentes, $matrixStatus);
+        $lista = array_merge($pendentes, $finalizados);
+        $this->view->mostrarQuadro($lista, $matrixStatus);
         
     }
     

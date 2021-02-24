@@ -210,14 +210,14 @@ class PainelKambanView
         
         
         
-        if($chamado->getIdUsuarioAtendente() > 0){
-            $usuario = new Usuario();
-            $usuario->setId($chamado->getIdUsuarioAtendente());
-            $nomeAtendente = explode(" ", "TEste");
-            if(count($nomeAtendente) > 1){
-                echo '<br><small class="'.$texto.'">Atendente: '.ucfirst(strtolower($nomeAtendente[0])).' '.ucfirst(strtolower($nomeAtendente[1])).'</small>';
-            }
-        }
+//         if($chamado->getIdUsuarioAtendente() > 0){
+//             $usuario = new Usuario();
+//             $usuario->setId($chamado->getIdUsuarioAtendente());
+//             $nomeAtendente = explode(" ", "TEste");
+//             if(count($nomeAtendente) > 1){
+//                 echo '<br><small class="'.$texto.'">Atendente: '.ucfirst(strtolower($nomeAtendente[0])).' '.ucfirst(strtolower($nomeAtendente[1])).'</small>';
+//             }
+//         }
         $abertura = "";
         $dataAtendimento = "";
         
@@ -235,53 +235,53 @@ class PainelKambanView
         }
         
         
-        if($chamado->getStatus() == StatusOcorrenciaCustomController::STATUS_ABERTO 
-            || $chamado->getStatus() == StatusOcorrenciaCustomController::STATUS_REABERTO 
-            || $chamado->getStatus() == StatusOcorrenciaCustomController::STATUS_FECHADO_CONFIRMADO){
+//         if($chamado->getStatus() == StatusOcorrenciaCustomController::STATUS_ABERTO 
+//             || $chamado->getStatus() == StatusOcorrenciaCustomController::STATUS_REABERTO 
+//             || $chamado->getStatus() == StatusOcorrenciaCustomController::STATUS_FECHADO_CONFIRMADO){
                 
             
-                $timeAbert = strtotime($abertura);
-                $timeHoje =  time();
-                $diferenca = $timeHoje - $timeAbert;
-                $dias = $diferenca/(86400);
-                $resto = $diferenca % 86400;
-                $resto = intval($resto/(60*60));
-                echo '<br><small class="'.$texto.'">Aberto há '.intval($dias).' dia';
-                if($dias > 1){
-                    echo 's';
-                    if(isset($resto)){
+//                 $timeAbert = strtotime($abertura);
+//                 $timeHoje =  time();
+//                 $diferenca = $timeHoje - $timeAbert;
+//                 $dias = $diferenca/(86400);
+//                 $resto = $diferenca % 86400;
+//                 $resto = intval($resto/(60*60));
+//                 echo '<br><small class="'.$texto.'">Aberto há '.intval($dias).' dia';
+//                 if($dias > 1){
+//                     echo 's';
+//                     if(isset($resto)){
                         
-                        echo ' e '.$resto.' horas';
-                    }
-                }else if($dias < 1){
-                    echo ' e '.$resto.' horas';
-                }
-                echo '</small>';
+//                         echo ' e '.$resto.' horas';
+//                     }
+//                 }else if($dias < 1){
+//                     echo ' e '.$resto.' horas';
+//                 }
+//                 echo '</small>';
             
             
-        }
-        if($chamado->getStatus() == StatusOcorrenciaCustomController::STATUS_ATENDIMENTO 
-            || $chamado->getStatus() == StatusOcorrenciaCustomController::STATUS_EM_ESPERA 
-            || $chamado->getStatus() == StatusOcorrenciaCustomController::STATUS_AGUARDANDO_ATIVO
-            || $chamado->getStatus() == StatusOcorrenciaCustomController::STATUS_AGUARDANDO_USUARIO){
+//         }
+//         if($chamado->getStatus() == StatusOcorrenciaCustomController::STATUS_ATENDIMENTO 
+//             || $chamado->getStatus() == StatusOcorrenciaCustomController::STATUS_EM_ESPERA 
+//             || $chamado->getStatus() == StatusOcorrenciaCustomController::STATUS_AGUARDANDO_ATIVO
+//             || $chamado->getStatus() == StatusOcorrenciaCustomController::STATUS_AGUARDANDO_USUARIO){
             
-            $timeAbert = strtotime($dataAtendimento);
-            $timeHoje =  time();
-            $diferenca = $timeHoje - $timeAbert;
-            $dias = $diferenca/(86400);
-            $resto = $diferenca % 86400;
-            $resto = intval($resto/(60*60));
-            echo '<br><small class="'.$texto.'">Em atendimento há '.intval($dias).' dia';
-            if($dias > 1){
-                echo 's';
-                if(isset($resto)){   
-                    echo ' e '.$resto.' horas';
-                }
-            }
-            echo '</small>';
+//             $timeAbert = strtotime($dataAtendimento);
+//             $timeHoje =  time();
+//             $diferenca = $timeHoje - $timeAbert;
+//             $dias = $diferenca/(86400);
+//             $resto = $diferenca % 86400;
+//             $resto = intval($resto/(60*60));
+//             echo '<br><small class="'.$texto.'">Em atendimento há '.intval($dias).' dia';
+//             if($dias > 1){
+//                 echo 's';
+//                 if(isset($resto)){   
+//                     echo ' e '.$resto.' horas';
+//                 }
+//             }
+//             echo '</small>';
             
             
-        }
+//         }
         echo '
                             </div>
                         </div>
