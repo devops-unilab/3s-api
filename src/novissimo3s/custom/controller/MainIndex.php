@@ -9,16 +9,18 @@ class MainIndex{
     
     public function main(){
         $sessao = new Sessao();
-        if (isset($_GET["sair"])) {
-            $sessao->mataSessao();
-            echo '<META HTTP-EQUIV="REFRESH" CONTENT="0; URL=index.php">';
-            
-        }
         if(isset($_GET['ajax'])){
             $mainAjax = new MainAjax();
             $mainAjax->main();
             exit(0);
         }
+        
+        if (isset($_GET["sair"])) {
+            $sessao->mataSessao();
+            echo '<META HTTP-EQUIV="REFRESH" CONTENT="0; URL=index.php">';
+            exit(0);
+        }
+        
         if(isset($_REQUEST['api'])){
             $mainApi = new MainApi();
             $mainApi->main();

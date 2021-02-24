@@ -34,7 +34,7 @@ $(document).ready(function(e){
 	setInterval (function () {
 		$.ajax({
 			type: 'GET',
-			url: '?ajax=painel_kamban',
+			url: 'index.php/?ajax=painel_kamban',
 			success: function (response){
 				$('#quadro-kanban').html(response);
 			}

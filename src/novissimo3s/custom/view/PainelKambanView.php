@@ -21,7 +21,7 @@ class PainelKambanView
     private $matrixStatus; 
     private $dao; 
     
-    public function mostrarQuadro($listaDeChamados, $listaFechados, $matrixStatus = array())
+    public function mostrarQuadro($listaDeChamados, $matrixStatus = array())
     {        
         $this->dao = new UsuarioDAO();
         $this->matrixStatus = $matrixStatus;
@@ -104,7 +104,7 @@ class PainelKambanView
                 <div class="row">';
         
         
-        foreach($listaFechados as $chamado){
+        foreach($listaDeChamados as $chamado){
             if($chamado->getStatus() == StatusOcorrenciaCustomController::STATUS_FECHADO
                 || $chamado->getStatus() == StatusOcorrenciaCustomController::STATUS_FECHADO_CONFIRMADO
                 ){
@@ -213,7 +213,7 @@ class PainelKambanView
         if($chamado->getIdUsuarioAtendente() > 0){
             $usuario = new Usuario();
             $usuario->setId($chamado->getIdUsuarioAtendente());
-            $nomeAtendente = explode(" ", TEste);
+            $nomeAtendente = explode(" ", "TEste");
             if(count($nomeAtendente) > 1){
                 echo '<br><small class="'.$texto.'">Atendente: '.ucfirst(strtolower($nomeAtendente[0])).' '.ucfirst(strtolower($nomeAtendente[1])).'</small>';
             }

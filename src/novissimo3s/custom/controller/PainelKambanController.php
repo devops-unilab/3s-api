@@ -88,21 +88,22 @@ class PainelKambanController extends OcorrenciaCustomController{
             return;
         }
         $ocorrencia = new Ocorrencia();
-        $pendentes = $this->dao->pesquisaAdmin($ocorrencia, $this->arrayStatusPendente());
-        $finalizados = $this->dao->pesquisaAdmin($ocorrencia, $this->arrayStatusFinalizado());
+        
+        $pendentes = $this->dao->pesquisaAdmin($ocorrencia, array_merge($this->arrayStatusPendente(), $this->arrayStatusFinalizado()));
         
         
-        $statusDao = new StatusOcorrenciaCustomDAO($this->dao->getConnection());
+        
+//         $statusDao = new StatusOcorrenciaCustomDAO($this->dao->getConnection());
         $matrixStatus = array();
-        foreach($pendentes as $ocorrencia){
-            $matrixStatus[$ocorrencia->getId()] = $statusDao->pesquisaPorIdOcorrencia($ocorrencia);
-        }
-        foreach($finalizados as $ocorrencia){
-            $matrixStatus[$ocorrencia->getId()] = $statusDao->pesquisaPorIdOcorrencia($ocorrencia);
-        }
+//         foreach($pendentes as $ocorrencia){
+//             $matrixStatus[$ocorrencia->getId()] = $statusDao->pesquisaPorIdOcorrencia($ocorrencia);
+//         }
+//         foreach($finalizados as $ocorrencia){
+//             $matrixStatus[$ocorrencia->getId()] = $statusDao->pesquisaPorIdOcorrencia($ocorrencia);
+//         }
         
         
-        $this->view->mostrarQuadro($pendentes, $finalizados, $matrixStatus);
+        $this->view->mostrarQuadro($pendentes, $matrixStatus);
         
     }
     
