@@ -430,6 +430,7 @@ class OcorrenciaCustomView extends OcorrenciaView {
         return $strStatus;
     }
     
+    
     /**
      *
      * @param Ocorrencia $ocorrencia
@@ -440,30 +441,25 @@ class OcorrenciaCustomView extends OcorrenciaView {
             
             <div class="row">';
         echo '
-                <div class="col-sm-12 col-md-6 col-xl-6">
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
                     ';
         
         echo '
                 <div class="card mb-4">
                     <div class="card-body">';
-        
         echo '
-            
-                        <div class="alert alert-danger" role="alert">
-                            Status: '.$this->getStrStatus($ocorrencia->getStatus()).'
-                        </div>';
-        echo 'Serviço Solicitado: '.$ocorrencia->getServico()->getNome();
-        echo '<p>Abertura: '.date("d/m/Y H:i:s" , strtotime($dataAbertura)).'</p>';
+                    Descricao: '.strip_tags($ocorrencia->getDescricao()).'<br>';
         
         
-        $this->painelSLA($ocorrencia, $listaStatus, $dataAbertura, $dataSolucao);
-        echo '
-                    <br> Descricao: '.strip_tags($ocorrencia->getDescricao()).'<br>';
+        
+        
+
+
         if(trim($ocorrencia->getPatrimonio()) != ""){
-            echo 'Patrimonio: '.$ocorrencia->getPatrimonio().' | ';
+            echo 'Patrimonio: '.$ocorrencia->getPatrimonio().' <br> ';
         }
         if(trim($ocorrencia->getAnexo()) != ""){
-            echo 'Anexo: <a href="uploads/'.$ocorrencia->getAnexo().'"> Clique aqui</a> ';
+            echo 'Anexo: <a href="uploads/'.$ocorrencia->getAnexo().'"> Clique aqui</a> <br>';
         }
         if(trim($ocorrencia->getSolucao()) != ""){
             echo 'Solucao: '.strip_tags($ocorrencia->getSolucao()).'<br>';
@@ -472,28 +468,49 @@ class OcorrenciaCustomView extends OcorrenciaView {
             
             
                     </div>
-                </div>';
-        
+                </div>
+
+
+';
+        echo '
+                <div class="card mb-4">
+                    <div class="card-body">';
+        echo '<p>Abertura: '.date("d/m/Y H:i:s" , strtotime($dataAbertura)).'</p>';
+        $this->painelSLA($ocorrencia, $listaStatus, $dataAbertura, $dataSolucao);
+        echo '
+                    </div>
+                </div>
+
+
+';
         echo '
                 </div>
-                <div class="col-sm-12 col-md-6 col-xl-6">
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
                     ';
+        echo '
+                <div class="card mb-4">
+                    <div class="card-body">
+                        Classificação do Chamado: '.$ocorrencia->getServico()->getNome().'
+                    </div>
+                </div>
+
+';
         echo '
             
             <div class="card mb-4">
                 <div class="card-body">
-                    Cliente: '.$ocorrencia->getUsuarioCliente()->getNome().' |
-                    Campus: '.$ocorrencia->getCampus().' |
-                    Email: '.$ocorrencia->getEmail().' | ';
+                    Cliente: '.$ocorrencia->getUsuarioCliente()->getNome().' <br>
+                    Campus: '.$ocorrencia->getCampus().' <br>
+                    Email: '.$ocorrencia->getEmail().' <br> ';
         
         if(trim($ocorrencia->getLocal()) != ""){
-            echo ' | Local: '.$ocorrencia->getLocal().'<br>';
+            echo ' Local: '.$ocorrencia->getLocal().'<br>';
         }
         if(trim($ocorrencia->getLocalSala()) != ""){
             echo ' Local Sala: '.$ocorrencia->getLocalSala().'<br>';
         }
         if(trim($ocorrencia->getRamal()) != ""){
-            echo ' | Ramal: '.$ocorrencia->getRamal().'<br>';
+            echo ' Ramal: '.$ocorrencia->getRamal().'<br>';
         }
         
         echo '
