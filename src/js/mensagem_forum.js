@@ -78,17 +78,21 @@ function carregarDados(url2) {
     $.ajax({
       url:url2,  
       success: function(data) {
-		if(data.length > 0){
-			carregarDados(urlApiMensagem+idOcorrencia+"/"+data[data.length-1].id);
+		if(data.length > 0)
+		{
+			url1 = urlApiMensagem+idOcorrencia+"/"+data[data.length-1].id;
 			data.forEach(alocaMensagem);	
 		}
-		else{
-			carregarDados(url2);
-		}
+		
       }
    });	 
 }
-carregarDados(url1);
+
+setInterval (function () {
+	carregarDados(url1);		
+}, 1000);
+
+
 
 
 $(document).ready(function(e) 
