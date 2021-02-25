@@ -156,41 +156,41 @@ class OcorrenciaCustomController  extends OcorrenciaController {
             ';
 	        return;
 	    }
-	    
-	    echo '
-            <div class="row">
-                <div class="col-md-8 blog-main">
-                    <h3 class="pb-4 mb-4 font-italic border-bottom">
-                        #'.$this->selecionado->getId().' - '.$this->selecionado->getServico()->getNome().'
-                    </h3>
-                            
-';
-	    
 	    $statusDao = new StatusOcorrenciaCustomDAO($this->dao->getConnection());
 	    $listaStatus = $statusDao->pesquisaPorIdOcorrencia($this->selecionado);
 	    $dataAbertura = null;
-	    
 	    foreach($listaStatus as $statusOcorrencia){
-	        if($statusOcorrencia->getStatus()->getSigla() == StatusOcorrenciaCustomController::STATUS_ABERTO || $statusOcorrencia->getStatus()->getSigla() == StatusOcorrenciaCustomController::STATUS_RESERVADO){
-	            $dataAbertura = $statusOcorrencia->getDataMudanca();
-	            break;
-	        }else{
-	            $dataAbertura = $statusOcorrencia->getDataMudanca();
-	            break;
-	        }
+            $dataAbertura = $statusOcorrencia->getDataMudanca();
+            break;        
 	    }
+
+	    
+	    echo '
+            <div class="row">
+                <div class="col-md-12 blog-main">
+                    <h3 class="pb-4 mb-4 font-italic border-bottom">
+                        Chamado Nº #'.$this->selecionado->getId().'
+                    </h3>
+                </div>
+                <div class="col-md-8">
+                            
+';
+	    
 	    if($dataAbertura == null){
 	        echo  "Data de abertura não localizada<br>";
+	        return;
 	        
 	    }else{
 	        $horaEstimada = $this->calcularHoraSolucao($dataAbertura, $this->selecionado->getServico()->getTempoSla());
 	        $this->view->mostrarSelecionado2($this->selecionado, $listaStatus, $dataAbertura, $horaEstimada);
 	    }
 	    
-	    
-	    
-	    
 
+	    
+	    
+	    $statusController = new StatusOcorrenciaCustomController();
+	    
+	    $statusController->painelStatus($this->selecionado);
 	    
 	    echo '
 	        
@@ -199,9 +199,7 @@ class OcorrenciaCustomController  extends OcorrenciaController {
 
 	    echo '
                 <aside class="col-md-4 blog-sidebar">';
-	    $statusController = new StatusOcorrenciaCustomController();
 	    
-	    $statusController->painelStatus($this->selecionado);
 	    echo '
 
 	        

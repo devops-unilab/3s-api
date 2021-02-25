@@ -438,14 +438,22 @@ class OcorrenciaCustomView extends OcorrenciaView {
     public function mostrarSelecionado2(Ocorrencia $ocorrencia, $listaStatus, $dataAbertura, $dataSolucao){
         echo '
             
-            
+            <div class="row">';
+        echo '
+                <div class="col-sm-12 col-md-6 col-xl-6">
+                    ';
+        
+        echo '
                 <div class="card mb-4">
-                    <div class="card-body">
+                    <div class="card-body">';
+        
+        echo '
             
                         <div class="alert alert-danger" role="alert">
                             Status: '.$this->getStrStatus($ocorrencia->getStatus()).'
-                        </div>
-                            <p>Abertura: '.date("d/m/Y H:i:s" , strtotime($dataAbertura)).'</p>';
+                        </div>';
+        echo 'Serviço Solicitado: '.$ocorrencia->getServico()->getNome();
+        echo '<p>Abertura: '.date("d/m/Y H:i:s" , strtotime($dataAbertura)).'</p>';
         
         
         $this->painelSLA($ocorrencia, $listaStatus, $dataAbertura, $dataSolucao);
@@ -466,6 +474,10 @@ class OcorrenciaCustomView extends OcorrenciaView {
                     </div>
                 </div>';
         
+        echo '
+                </div>
+                <div class="col-sm-12 col-md-6 col-xl-6">
+                    ';
         echo '
             
             <div class="card mb-4">
@@ -490,7 +502,7 @@ class OcorrenciaCustomView extends OcorrenciaView {
         
         
         echo '
-        
+            
         <div class="card mb-4">
             <div class="card-body">';
         echo 'Setor Responsável: '.$ocorrencia->getAreaResponsavel()->getNome().
@@ -521,6 +533,15 @@ class OcorrenciaCustomView extends OcorrenciaView {
             
             
 ';
+        echo '
+                </div>
+';
+        echo '</div>';
+        
+        
+        
+        
+        
     }
     
     public function painelSLA(Ocorrencia $ocorrencia, $listaStatus, $dataAbertura, $dataSolucao){
