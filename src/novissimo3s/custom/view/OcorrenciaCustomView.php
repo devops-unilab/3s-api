@@ -438,6 +438,8 @@ class OcorrenciaCustomView extends OcorrenciaView {
      */
     public function mostrarSelecionado2(Ocorrencia $ocorrencia, $listaStatus, $dataAbertura, $dataSolucao){
         echo '
+
+            
             
             <div class="row">';
         echo '
@@ -448,7 +450,7 @@ class OcorrenciaCustomView extends OcorrenciaView {
                 <div class="card mb-4">
                     <div class="card-body">';
         echo '
-                    Descricao: '.strip_tags($ocorrencia->getDescricao()).'<br>';
+                   <b> Descricao: </b>'.strip_tags($ocorrencia->getDescricao()).'<br>';
         
         
         
@@ -456,14 +458,12 @@ class OcorrenciaCustomView extends OcorrenciaView {
 
 
         if(trim($ocorrencia->getPatrimonio()) != ""){
-            echo 'Patrimonio: '.$ocorrencia->getPatrimonio().' <br> ';
+            echo '<b>Patrimonio: </b>'.$ocorrencia->getPatrimonio().' <br> ';
         }
         if(trim($ocorrencia->getAnexo()) != ""){
-            echo 'Anexo: <a href="uploads/'.$ocorrencia->getAnexo().'"> Clique aqui</a> <br>';
+            echo '<b>Anexo: </b><a href="uploads/'.$ocorrencia->getAnexo().'"> Clique aqui</a> <br>';
         }
-        if(trim($ocorrencia->getSolucao()) != ""){
-            echo 'Solucao: '.strip_tags($ocorrencia->getSolucao()).'<br>';
-        }
+
         echo '
             
             
@@ -472,17 +472,30 @@ class OcorrenciaCustomView extends OcorrenciaView {
 
 
 ';
-        echo '
+        if(trim($ocorrencia->getSolucao()) != ""){
+            echo '
                 <div class="card mb-4">
                     <div class="card-body">';
-        echo '<p>Abertura: '.date("d/m/Y H:i:s" , strtotime($dataAbertura)).'</p>';
-        $this->painelSLA($ocorrencia, $listaStatus, $dataAbertura, $dataSolucao);
-        echo '
+            //         echo '<p><b>Abertura: </b>'.date("d/m/Y H:i:s" , strtotime($dataAbertura)).'</p>';
+            //         $this->painelSLA($ocorrencia, $listaStatus, $dataAbertura, $dataSolucao);
+            echo '<b>Solucao: </b>'.strip_tags($ocorrencia->getSolucao()).'<br>';
+            echo '
                     </div>
                 </div>
-
-
+                
+                
 ';
+            
+        }
+
+//         echo '
+//                 <div class="card mb-4">
+//                     <div class="card-body">';
+//                 echo '<p><b>Abertura: </b>'.date("d/m/Y H:i:s" , strtotime($dataAbertura)).'</p>';
+//                 $this->painelSLA($ocorrencia, $listaStatus, $dataAbertura, $dataSolucao);
+//         echo '
+//                     </div>
+//                 </div>';
         echo '
                 </div>
                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
@@ -490,7 +503,7 @@ class OcorrenciaCustomView extends OcorrenciaView {
         echo '
                 <div class="card mb-4">
                     <div class="card-body">
-                        Classificação do Chamado: '.$ocorrencia->getServico()->getNome().'
+                        <b>Classificação do Chamado: </b>'.$ocorrencia->getServico()->getNome().'
                     </div>
                 </div>
 
@@ -499,18 +512,18 @@ class OcorrenciaCustomView extends OcorrenciaView {
             
             <div class="card mb-4">
                 <div class="card-body">
-                    Cliente: '.$ocorrencia->getUsuarioCliente()->getNome().' <br>
-                    Campus: '.$ocorrencia->getCampus().' <br>
-                    Email: '.$ocorrencia->getEmail().' <br> ';
+                    <b>Cliente: </b>'.$ocorrencia->getUsuarioCliente()->getNome().' <br>
+                    <b>Campus: </b>'.$ocorrencia->getCampus().' <br>
+                    <b>Email: </b>'.$ocorrencia->getEmail().' <br> ';
         
         if(trim($ocorrencia->getLocal()) != ""){
-            echo ' Local: '.$ocorrencia->getLocal().'<br>';
+            echo ' <b>Local:</b> '.$ocorrencia->getLocal().'<br>';
         }
         if(trim($ocorrencia->getLocalSala()) != ""){
-            echo ' Local Sala: '.$ocorrencia->getLocalSala().'<br>';
+            echo ' <b>Local Sala: </b>'.$ocorrencia->getLocalSala().'<br>';
         }
         if(trim($ocorrencia->getRamal()) != ""){
-            echo ' Ramal: '.$ocorrencia->getRamal().'<br>';
+            echo '<b>Ramal: </b>'.$ocorrencia->getRamal().'<br>';
         }
         
         echo '
@@ -522,7 +535,7 @@ class OcorrenciaCustomView extends OcorrenciaView {
             
         <div class="card mb-4">
             <div class="card-body">';
-        echo 'Setor Responsável: '.$ocorrencia->getAreaResponsavel()->getNome().
+        echo '<b>Setor Responsável: </b>'.$ocorrencia->getAreaResponsavel()->getNome().
         ' - '.$ocorrencia->getAreaResponsavel()->getDescricao().'<br>';
         
         $usuarioDao = new UsuarioDAO();
@@ -531,13 +544,13 @@ class OcorrenciaCustomView extends OcorrenciaView {
             $atendente = new Usuario();
             $atendente->setId($ocorrencia->getIdUsuarioAtendente());
             $usuarioDao->fillById($atendente);
-            echo '<br>Atendente: '.$atendente->getNome();
+            echo '<b>Atendente:</b> '.$atendente->getNome().'<br>';
         }
         if($ocorrencia->getIdUsuarioIndicado() != null){
             $indicado = new Usuario();
             $indicado->setId($ocorrencia->getIdUsuarioIndicado());
             $usuarioDao->fillById($indicado);
-            echo '<br>Técnico Indicado: '.$indicado->getNome();
+            echo '<b>Técnico Indicado: </b>'.$indicado->getNome().'<br>';
         }
         
         echo '
@@ -611,8 +624,8 @@ class OcorrenciaCustomView extends OcorrenciaView {
             
             
             
-            echo '<p class="text-danger">Solução Estimada: '.date("d/m/Y H:i:s" , strtotime($dataSolucao)).'';
-            echo '<br>Tempo Total: <span id="tempo-total">'. str_pad($hours, 2 , '0' , STR_PAD_LEFT).':'.str_pad($minutos, 2 , '0' , STR_PAD_LEFT).':'.str_pad($segundos, 2 , '0' , STR_PAD_LEFT).'</span>';
+            echo '<p class="text-danger"><b>Solução Estimada: </b>'.date("d/m/Y H:i:s" , strtotime($dataSolucao)).'<br>';
+            echo '<b>Tempo Total: </b><span id="tempo-total">'. str_pad($hours, 2 , '0' , STR_PAD_LEFT).':'.str_pad($minutos, 2 , '0' , STR_PAD_LEFT).':'.str_pad($segundos, 2 , '0' , STR_PAD_LEFT).'</span>';
             echo '<br>Solução em Atraso.</p>';
             $sessao = new Sessao();
             if($ocorrencia->getUsuarioCliente()->getId() == $sessao->getIdUsuario()){

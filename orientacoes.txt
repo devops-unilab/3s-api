@@ -21,8 +21,9 @@ Alterar icone de expandir;
 Melhorar o chat; 
 Disponibilizar listar/adicionar/editar serviços; 
 Listar chamados em atraso. 
+Adaptar tela do Kamban; 
 
 ------------Pendente----------------------------------
 
 
-Adaptar tela do Kamban; 
+
