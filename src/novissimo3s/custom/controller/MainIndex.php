@@ -177,6 +177,10 @@ echo '
                     echo '
 <script src="js/painel_kamban.js"></script>';
                     break;
+                case 'painel_tabela':
+                    echo '
+<script src="js/painel_tabela.js"></script>';
+                    break;
                 default:
                     break;
             }

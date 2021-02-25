@@ -68,7 +68,7 @@ class NavBarController{
             </a>
             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                 <a class="dropdown-item" href="?page=painel_kamban">Kamban</a>
-                
+                <a class="dropdown-item" href="?page=painel_tabela">Tabela</a>
 <!--              
               <div class="dropdown-divider"></div>
               <a class="dropdown-item" href="#">Something else here</a> -->

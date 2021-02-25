@@ -15,14 +15,6 @@ $('#select-setores').selectize({
 });
 
 
-
-/*
-
-$("#select-tabela").change(function(){
-	$("#hidden-tabela").val($("#select-tabela").val());
-});
-*/
-
 $(document).ready(function(e){
 	
 	$("#btn-expandir-tela").on('click', function(e){
