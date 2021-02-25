@@ -32,25 +32,7 @@ class PainelKambanController extends OcorrenciaCustomController{
         echo '
                 </select>';
         
-        $usuario = new Usuario();
-        $usuario->setNivel(Sessao::NIVEL_TECNICO);
-        $usuarioDao = new UsuarioCustomDAO($this->dao->getConnection());
-        $listaTec = $usuarioDao->fetchByNivel($usuario);
-        $usuario->setNivel(Sessao::NIVEL_ADM);
-        $listaAdm = $usuarioDao->fetchByNivel($usuario);
-        $listaTec = array_merge($listaTec, $listaAdm);
-        
-        
-        echo '
-                    <select id="select-tabela">
-                            <option value="">Filtrar por Técnico</option>';
-        
-        foreach($listaTec as $usuario){
-            echo '                <option value="'.$usuario->getId().'">'.$usuario->getNome().'</option>';
-        }
-        
-        echo '
-                    </select>';
+
     }
     public function main(){
         

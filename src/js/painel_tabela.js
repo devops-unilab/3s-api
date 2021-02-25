@@ -17,19 +17,21 @@ $(document).ready(function(e){
 	$("#btn-expandir-tela").on('click', function(e){
 		$( "main" ).toggleClass("container");
 		$( "#cabecalho" ).toggleClass("escondido");
-		$( "#barra-brasil" ).toggleClass("escondido");
 		$("#tabela-quadro").toggleClass("display-3");	
 	});
 	
-	
-	setInterval (function () {
+
+	function carregarDados(url2){
 		$.ajax({
 			type: 'GET',
-			url: urlSelecionada,
+			url: url2,
 			success: function (response){
 				$('#quadro-tabela').html(response);
 			}
 		});
+	}	
+	setInterval (function () {
+		carregarDados(urlSelecionada);
 	}, 1000); 
 	
 });

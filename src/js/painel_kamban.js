@@ -1,38 +1,42 @@
-/*
-$('#select-setores').selectize({
-    create: false,
-    sortField: 'text'
-});
-*/
-
-$('#select-tabela').selectize({
-    maxItems: 50
-});
 
 
-$('#select-setores').selectize({
-    maxItems: 50
-});
+
 
 
 $(document).ready(function(e){
+
+	var urlTabela = 'index.php/?ajax=painel_kamban';
+	var urlSelecionada = urlTabela;
 	
+	$("#select-setores").change(function(){
+		var dados = $("#select-setores").val();
+		var setores = '&setores=';
+		setores += dados.join(',');
+		urlSelecionada = urlTabela+setores;
+		
+	});
+
+	$('#select-setores').selectize({
+	    maxItems: 50
+	});
+		
 	$("#btn-expandir-tela").on('click', function(e){
 		$( "main" ).toggleClass("container");
 		$( "#cabecalho" ).toggleClass("escondido");
-		$( "#barra-brasil" ).toggleClass("escondido");
 	});
 	
-	setInterval (function () {
+	function carregarDados(url2){
 		$.ajax({
 			type: 'GET',
-			url: 'index.php/?ajax=painel_kamban',
+			url: url2,
 			success: function (response){
-				$('#quadro-kanban').html(response);
+				$('#quadro-kamban').html(response);
 			}
 		});
-	}, 2000);
-	
+	}	
+	setInterval (function () {
+		carregarDados(urlSelecionada);
+	}, 1000); 
 	
 });
 
