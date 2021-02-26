@@ -165,25 +165,43 @@ class OcorrenciaCustomController  extends OcorrenciaController {
 	    }
 
 	    
-	    echo '
-            <div class="row">
-                <div class="col-md-12 blog-main">
-                    <h3 class="pb-4 mb-4 font-italic border-bottom">
-                        Chamado Nº'.$this->selecionado->getId().'
-                    </h3>
-                </div>
-                <div class="col-md-8">
-                            
-';
+
 	    
 	    if($dataAbertura == null){
 	        echo  "Data de abertura não localizada<br>";
 	        return;
 	        
-	    }else{
-	        $horaEstimada = $this->calcularHoraSolucao($dataAbertura, $this->selecionado->getServico()->getTempoSla());
-	        $this->view->mostrarSelecionado2($this->selecionado, $listaStatus, $dataAbertura, $horaEstimada);
 	    }
+	    echo '
+            <div class="row">
+                <div class="col-md-12 blog-main">
+                <div class="row  border-bottom mb-3">
+                    <div class="col-md-6 blog-main">
+                        <h3 class="pb-4 mb-1 font-italic">
+                            Chamado Nº'.$this->selecionado->getId().'
+                        </h3>
+                    </div>
+                    <div class="col-md-6 blog-main">
+
+                    <span class="text-right">';
+	    if($this->selecionado->getServico()->getTempoSla() >= 1){
+	        echo '<b>Prazo de Resolução: </b>'.$this->selecionado->getServico()->getTempoSla().' horas úteis ';
+	    }else{
+	        echo ' Sla Não definido ';
+	    }
+            
+                    echo '<b>Abertura:</b>'.date("d/m/Y G:i:s", strtotime($dataAbertura)).' </span>
+                    </div>   
+                    
+                    </div>
+                </div>
+                <div class="col-md-8">
+                            
+';
+	    
+        $horaEstimada = $this->calcularHoraSolucao($dataAbertura, $this->selecionado->getServico()->getTempoSla());
+        $this->view->mostrarSelecionado2($this->selecionado, $listaStatus, $dataAbertura, $horaEstimada);
+    
 	    
 
 	    

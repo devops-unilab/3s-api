@@ -477,7 +477,7 @@ class OcorrenciaCustomView extends OcorrenciaView {
                 <div class="card mb-4">
                     <div class="card-body">';
             //         echo '<p><b>Abertura: </b>'.date("d/m/Y H:i:s" , strtotime($dataAbertura)).'</p>';
-            //         $this->painelSLA($ocorrencia, $listaStatus, $dataAbertura, $dataSolucao);
+                    $this->painelSLA($ocorrencia, $listaStatus, $dataAbertura, $dataSolucao);
             echo '<b>Solucao: </b>'.strip_tags($ocorrencia->getSolucao()).'<br>';
             echo '
                     </div>

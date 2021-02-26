@@ -26,7 +26,7 @@ $(document).ready(function(e){
 	});
 	
 	function carregarDados(url2){
-		console.log("Chamada:"+url2);
+		
 		$.ajax({
 			type: 'GET',
 			url: url2,
