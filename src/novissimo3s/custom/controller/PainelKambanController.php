@@ -42,12 +42,12 @@ class PainelKambanController extends OcorrenciaCustomController{
         <div class="card-header pb-4 mb-4 font-italic">
                     Painel Kamban';
         
-//         $this->formFiltro();
+        $this->formFiltro();
         
         echo '
                 <button id="btn-expandir-tela" type="button" class="float-right btn ml-3 btn-warning btn-circle btn-lg collapsed"><i class="fa fa-expand icone-maior"></i></button>
             </div>
-            <div class="card-body" id="quadro-kanban">';
+            <div class="card-body" id="quadro-kamban">';
         $this->quadroKamban();
         echo '
 	</div>
@@ -59,6 +59,7 @@ class PainelKambanController extends OcorrenciaCustomController{
 ';
         
     }
+
     public function quadroKamban(){
         $sessao = new Sessao();
         if(
@@ -69,13 +70,23 @@ class PainelKambanController extends OcorrenciaCustomController{
             echo "Acesso Negado";
             return;
         }
+        $filtro = "";
+        if(isset($_GET['setores'])){
+            $arrStrSetores = explode(",", $_GET['setores']);
+            $filtro = 'AND( area_responsavel.id = '.implode(" OR area_responsavel.id = ", $arrStrSetores).' )';
+        }
+        
+       
+        
+        
         $ocorrencia = new Ocorrencia();
-        $pendentes = $this->dao->pesquisaAdmin($ocorrencia, $this->arrayStatusPendente());
-        $finalizados = $this->dao->pesquisaAdmin($ocorrencia, $this->arrayStatusFinalizado());
+        $matrixStatus = array();
+        $pendentes = $this->dao->pesquisaKamban($ocorrencia, $this->arrayStatusPendente(), $matrixStatus, $filtro);
+        $finalizados = $this->dao->pesquisaKamban($ocorrencia, $this->arrayStatusFinalizado(), $matrixStatus, $filtro);
         
         
 //         $statusDao = new StatusOcorrenciaCustomDAO($this->dao->getConnection());
-        $matrixStatus = array();
+        
 //         foreach($pendentes as $ocorrencia){
 //             $matrixStatus[$ocorrencia->getId()] = $statusDao->pesquisaPorIdOcorrencia($ocorrencia);
 //         }

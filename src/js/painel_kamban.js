@@ -26,17 +26,19 @@ $(document).ready(function(e){
 	});
 	
 	function carregarDados(url2){
+		
 		$.ajax({
 			type: 'GET',
 			url: url2,
 			success: function (response){
+				
 				$('#quadro-kamban').html(response);
 			}
 		});
 	}	
 	setInterval (function () {
 		carregarDados(urlSelecionada);
-	}, 1000); 
+	}, 1500); 
 	
 });
 
