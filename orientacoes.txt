@@ -26,4 +26,23 @@ Adaptar tela do Kamban;
 ------------Pendente----------------------------------
 
 
+######## No carde do solicitante ############
 
+-Trocar palavra "Cliente" por "Requisitante"
+-Incluir setor do requisitante
+
+
+
+######## No card do responsavel ############
+
+-alterar palavra "Atendente" por "Técnico Responsável"
+
+
+######## no Título do Chamado ###########
+
+colocar assim >>>>> Chamado Nº123456 , sem o #
+
+
+###### no Menu do 3S #############
+
+-Tirar a borda do botão "Sair"

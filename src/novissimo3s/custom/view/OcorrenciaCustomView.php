@@ -512,15 +512,17 @@ class OcorrenciaCustomView extends OcorrenciaView {
             
             <div class="card mb-4">
                 <div class="card-body">
-                    <b>Cliente: </b>'.$ocorrencia->getUsuarioCliente()->getNome().' <br>
+                    <b>Requisitante: </b>'.$ocorrencia->getUsuarioCliente()->getNome().' <br>';
+        if(trim($ocorrencia->getLocal()) != ""){
+            echo ' <b>Setor do Requisitante:</b> '.$ocorrencia->getLocal().'<br>';
+        }
+        echo '
                     <b>Campus: </b>'.$ocorrencia->getCampus().' <br>
                     <b>Email: </b>'.$ocorrencia->getEmail().' <br> ';
         
-        if(trim($ocorrencia->getLocal()) != ""){
-            echo ' <b>Local:</b> '.$ocorrencia->getLocal().'<br>';
-        }
+        
         if(trim($ocorrencia->getLocalSala()) != ""){
-            echo ' <b>Local Sala: </b>'.$ocorrencia->getLocalSala().'<br>';
+            echo ' <b>Local/Sala: </b>'.$ocorrencia->getLocalSala().'<br>';
         }
         if(trim($ocorrencia->getRamal()) != ""){
             echo '<b>Ramal: </b>'.$ocorrencia->getRamal().'<br>';
@@ -544,7 +546,7 @@ class OcorrenciaCustomView extends OcorrenciaView {
             $atendente = new Usuario();
             $atendente->setId($ocorrencia->getIdUsuarioAtendente());
             $usuarioDao->fillById($atendente);
-            echo '<b>Atendente:</b> '.$atendente->getNome().'<br>';
+            echo '<b>Técnico Responsável:</b> '.$atendente->getNome().'<br>';
         }
         if($ocorrencia->getIdUsuarioIndicado() != null){
             $indicado = new Usuario();

@@ -120,7 +120,7 @@ class NavBarController{
         
         
         echo '
-    <a class="btn btn-outline-success my-2 my-sm-0" href="?sair=1">Sair</a>
+    <a class="btn btn-outline-success my-2 my-sm-0 botao-sair" href="?sair=1">Sair</a>
   </div>
 </nav>
 

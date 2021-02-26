@@ -169,7 +169,7 @@ class OcorrenciaCustomController  extends OcorrenciaController {
             <div class="row">
                 <div class="col-md-12 blog-main">
                     <h3 class="pb-4 mb-4 font-italic border-bottom">
-                        Chamado Nº #'.$this->selecionado->getId().'
+                        Chamado Nº'.$this->selecionado->getId().'
                     </h3>
                 </div>
                 <div class="col-md-8">
@@ -552,7 +552,7 @@ class OcorrenciaCustomController  extends OcorrenciaController {
 	            $ocorrencia->setIdLocal ( 1 );
 	        }
 	        
-	        $ocorrencia->setStatus ( 'a');
+	        $ocorrencia->setStatus (StatusOcorrenciaCustomController::STATUS_ABERTO);
 	        
 	        $ocorrencia->getServico()->setId ( $_POST ['servico'] );
 	        $servicoDao = new ServicoDAO($this->dao->getConnection());

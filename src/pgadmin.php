@@ -26,7 +26,7 @@ spl_autoload_register('autoload');
 $sessao = new Sessao();
 if($sessao->getLoginUsuario() == 'jefponte'){
     
-    $dao = new DAO();
+    $dao = new DAO(null, DB_AUTENTICACAO);
     $conexao = $dao->getConnection();
     AdminPG::main($conexao);
     
