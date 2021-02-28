@@ -184,13 +184,17 @@ class OcorrenciaCustomController  extends OcorrenciaController {
                     <div class="col-md-6 blog-main">
 
                     <span class="text-right">';
+	    
+	    $horaEstimada = $this->calcularHoraSolucao($dataAbertura, $this->selecionado->getServico()->getTempoSla());
+	    
 	    if($this->selecionado->getServico()->getTempoSla() >= 1){
-	        echo '<b>Prazo de Resolução: </b>'.$this->selecionado->getServico()->getTempoSla().' horas úteis ';
+	        $this->view->painelSLA($this->selecionado, $listaStatus, $dataAbertura, $horaEstimada);
 	    }else{
 	        echo ' Sla Não definido ';
 	    }
             
-                    echo '<b>Abertura:</b>'.date("d/m/Y G:i:s", strtotime($dataAbertura)).' </span>
+                    
+                    echo '
                     </div>   
                     
                     </div>
@@ -199,7 +203,7 @@ class OcorrenciaCustomController  extends OcorrenciaController {
                             
 ';
 	    
-        $horaEstimada = $this->calcularHoraSolucao($dataAbertura, $this->selecionado->getServico()->getTempoSla());
+        
         $this->view->mostrarSelecionado2($this->selecionado, $listaStatus, $dataAbertura, $horaEstimada);
     
 	    

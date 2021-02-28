@@ -489,14 +489,6 @@ class OcorrenciaCustomView extends OcorrenciaView {
             
         }
 
-//         echo '
-//                 <div class="card mb-4">
-//                     <div class="card-body">';
-//                 echo '<p><b>Abertura: </b>'.date("d/m/Y H:i:s" , strtotime($dataAbertura)).'</p>';
-//                 $this->painelSLA($ocorrencia, $listaStatus, $dataAbertura, $dataSolucao);
-//         echo '
-//                     </div>
-//                 </div>';
         echo '
                 </div>
                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
@@ -582,12 +574,13 @@ class OcorrenciaCustomView extends OcorrenciaView {
         
         if($ocorrencia->getServico()->getTempoSla() > 1)
         {
-            echo 'Prazo de Resolução: '.$ocorrencia->getServico()->getTempoSla(). ' Horas úteis';
+            echo '<b>Prazo de Resolução: </b>'.$ocorrencia->getServico()->getTempoSla(). ' Horas úteis';
         }else if($ocorrencia->getServico()->getTempoSla() == 1){
-            echo '1 Hora útil';
-            
+            echo '<b>Prazo de Resolução: </b> 1 Hora útil';
+            echo '<b>Abertura:</b>'.date("d/m/Y G:i:s", strtotime($dataAbertura)).' </span>';
         }else{
-            echo ' SLA não definido.';
+            echo ' SLA não definido. ';
+            echo '<b>Abertura:</b>'.date("d/m/Y G:i:s", strtotime($dataAbertura)).' </span>';
             return;
         }
         
@@ -627,7 +620,7 @@ class OcorrenciaCustomView extends OcorrenciaView {
             
             
             
-            echo '<p class="text-danger"><b>Solução Estimada: </b>'.date("d/m/Y H:i:s" , strtotime($dataSolucao)).'<br>';
+            echo '<span><p class="text-danger"><b>Solução Estimada: </b>'.date("d/m/Y H:i:s" , strtotime($dataSolucao)).'<br>';
             echo '<b>Tempo Total: </b><span id="tempo-total">'. str_pad($hours, 2 , '0' , STR_PAD_LEFT).':'.str_pad($minutos, 2 , '0' , STR_PAD_LEFT).':'.str_pad($segundos, 2 , '0' , STR_PAD_LEFT).'</span>';
             echo '<br>Solução em Atraso.</p>';
             $sessao = new Sessao();
