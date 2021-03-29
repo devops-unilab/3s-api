@@ -22,6 +22,7 @@ use novissimo3s\dao\ServicoDAO;
 use novissimo3s\dao\UsuarioDAO;
 use novissimo3s\custom\dao\UsuarioCustomDAO;
 use novissimo3s\util\Mail;
+use novissimo3s\custom\view\StatusCustomView;
 
 class OcorrenciaCustomController  extends OcorrenciaController {
     
@@ -165,8 +166,6 @@ class OcorrenciaCustomController  extends OcorrenciaController {
 	    }
 
 	    
-
-	    
 	    if($dataAbertura == null){
 	        echo  "Data de abertura não localizada<br>";
 	        return;
@@ -179,7 +178,17 @@ class OcorrenciaCustomController  extends OcorrenciaController {
                     <div class="col-md-6 blog-main">
                         <h3 class="pb-4 mb-1 font-italic">
                             Chamado Nº'.$this->selecionado->getId().'
-                        </h3>
+                        </h3>';
+	    
+	    $statusController = new StatusOcorrenciaCustomController();
+	    $statusController->painelStatus($this->selecionado);
+	    
+
+	    
+	    
+	    echo '
+
+
                     </div>
                     <div class="col-md-6 blog-main">
 
@@ -188,7 +197,7 @@ class OcorrenciaCustomController  extends OcorrenciaController {
 	    $horaEstimada = $this->calcularHoraSolucao($dataAbertura, $this->selecionado->getServico()->getTempoSla());
 	    
 	    if($this->selecionado->getServico()->getTempoSla() >= 1){
-	        $this->view->painelSLA($this->selecionado, $listaStatus, $dataAbertura, $horaEstimada);
+	        $this->view->painelTopoSLA($this->selecionado, $listaStatus, $dataAbertura, $horaEstimada);
 	    }else{
 	        echo ' Sla Não definido ';
 	    }
@@ -210,9 +219,7 @@ class OcorrenciaCustomController  extends OcorrenciaController {
 
 	    
 	    
-	    $statusController = new StatusOcorrenciaCustomController();
-	    
-	    $statusController->painelStatus($this->selecionado);
+
 	    
 	    echo '
 	        

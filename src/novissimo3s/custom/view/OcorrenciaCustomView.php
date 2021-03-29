@@ -472,22 +472,44 @@ class OcorrenciaCustomView extends OcorrenciaView {
 
 
 ';
-        if(trim($ocorrencia->getSolucao()) != ""){
+        echo '
+                <div class="card mb-4">
+                    <div class="card-body">';
+        //         echo '<p><b>Abertura: </b>'.date("d/m/Y H:i:s" , strtotime($dataAbertura)).'</p>';
+        $this->painelSLA($ocorrencia, $listaStatus, $dataAbertura, $dataSolucao);
+
+        echo '
+                    </div>
+                </div>
+            
+            
+';
+
             echo '
                 <div class="card mb-4">
                     <div class="card-body">';
-            //         echo '<p><b>Abertura: </b>'.date("d/m/Y H:i:s" , strtotime($dataAbertura)).'</p>';
-                    $this->painelSLA($ocorrencia, $listaStatus, $dataAbertura, $dataSolucao);
-                    echo '<br>';
-            echo '<b>Solucao: </b>'.strip_tags($ocorrencia->getSolucao()).'<br>';
+            
+           echo '<b>Solucao: </b>'.strip_tags($ocorrencia->getSolucao()).'<br>';
+           
+           $statusView = new StatusOcorrenciaCustomView();
+           $controller = new StatusOcorrenciaCustomController();
+           
+
+           if($controller->possoEditarSolucao($ocorrencia)){
+               $statusView->botaoEditarSolucao();
+           }
+           
             echo '
+
+
+
                     </div>
                 </div>
                 
                 
 ';
             
-        }
+
 
         echo '
                 </div>
@@ -496,7 +518,11 @@ class OcorrenciaCustomView extends OcorrenciaView {
         echo '
                 <div class="card mb-4">
                     <div class="card-body">
-                        <b>Classificação do Chamado: </b>'.$ocorrencia->getServico()->getNome().'
+                        <b>Classificação do Chamado: </b>'.$ocorrencia->getServico()->getNome().'';
+        if($controller->possoEditarServico($ocorrencia)){
+            $statusView->botaoEditarServico();
+        }
+        echo '
                     </div>
                 </div>
 
@@ -673,7 +699,29 @@ class OcorrenciaCustomView extends OcorrenciaView {
         
 
     }
-
+    public function painelTopoSLA(Ocorrencia $ocorrencia, $listaStatus, $dataAbertura, $dataSolucao){
+        
+        
+        if($ocorrencia->getServico()->getTempoSla() > 1)
+        {
+            echo '<b>Prazo de Resolução: </b>'.$ocorrencia->getServico()->getTempoSla(). ' Horas úteis ';
+            echo '<br><b>Abertura: </b>'.date("d/m/Y G:i:s", strtotime($dataAbertura)).' </span>';
+        }else if($ocorrencia->getServico()->getTempoSla() == 1){
+            echo '<b>Prazo de Resolução: </b> 1 Hora útil';
+            echo '<br><b>Abertura: </b>'.date("d/m/Y G:i:s", strtotime($dataAbertura)).' </span>';
+        }else{
+            echo ' SLA não definido. ';
+            echo '<br><b>Abertura: </b>'.date("d/m/Y G:i:s", strtotime($dataAbertura)).' </span>';
+            return;
+        }
+        
+        
+        
+        
+        
+        
+        
+    }
     public function modalPedirAjuda(Ocorrencia $ocorrencia){
         echo '
 

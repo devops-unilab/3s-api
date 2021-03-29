@@ -291,12 +291,14 @@ class StatusOcorrenciaCustomController  extends StatusOcorrenciaController {
 	    $this->sessao = new Sessao();
 	    $ocorrenciaView = new OcorrenciaCustomView();
 	    $strStatus = $ocorrenciaView->getStrStatus($ocorrencia->getStatus());
-	    echo '
-<div class="card">
-    <div class="card-body">
-    <div class="alert alert-danger" role="alert">
-      Status '.$strStatus.'
-    </div>';
+
+// 	    echo '
+
+
+
+//     <div class="alert alert-danger" role="alert">
+//       Status '.$strStatus.'
+//     </div>';
 	    
 	    $listaUsuarios = array();
 	    $listaServicos = array();
@@ -305,11 +307,25 @@ class StatusOcorrenciaCustomController  extends StatusOcorrenciaController {
 	    {
 	        $listaUsuarios = $this->getTecnicos();
 	    }
-	    if($this->possoEditarServico()){
-	        $listaServicos = $this->getServicos();
-	    }
+
 	    
 	    $this->view->modalFormStatus($this->ocorrencia, $listaUsuarios, $listaServicos);
+	    
+	    
+
+	    
+	    echo '
+	        
+  <div class="btn-group">
+    <button type="button" class="btn btn-secondary">Ação</button>
+    <button type="button" class="btn btn-secondary dropdown-toggle dropdown-toggle-split" id="dropdownMenuReference" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-reference="parent">
+      <span class="sr-only">Status</span>
+    </button>
+    <div class="dropdown-menu" aria-labelledby="dropdownMenuReference">
+
+      
+';
+	    
 	    
 	    
 	    if($this->possoCancelar()){
@@ -331,14 +347,8 @@ class StatusOcorrenciaCustomController  extends StatusOcorrenciaController {
 	    if($this->possoLiberar()){
 	        $this->view->botaoLiberar();
 	    }
-	    if($this->possoEditarServico()){
-	        $this->view->botaoEditarServico();
-	    }
-	    if($this->possoEditarSolucao()){
-	        $this->view->botaoEditarSolucao();
-	    }
-	    
-	    
+
+	    echo '<div class="dropdown-divider"></div>';
 	    if($this->possoAguardarUsuario()){
 	        $this->view->botaoAguardarUsuario();
 	    }
@@ -347,16 +357,14 @@ class StatusOcorrenciaCustomController  extends StatusOcorrenciaController {
 	    }
 	    
 	    echo '
+    </div>
   </div>
-</div>
-	        
-	        
-	        
-	        
-	        
-';
+<br><br>';
+	    
+
 	}
 	public function possoAguardarUsuario(){
+	    
 	    if($this->sessao->getNivelAcesso() == Sessao::NIVEL_COMUM || $this->sessao->getNivelAcesso() == Sessao::NIVEL_DESLOGADO){
 	        return false;
 	    }
@@ -380,7 +388,9 @@ class StatusOcorrenciaCustomController  extends StatusOcorrenciaController {
 	    }
 	    return true;
 	}
-	public function possoEditarServico(){
+	public function possoEditarServico(Ocorrencia $ocorrencia){
+	    $this->ocorrencia = $ocorrencia;
+	    $this->sessao = new Sessao();
 	    if($this->sessao->getNivelAcesso() == Sessao::NIVEL_COMUM || $this->sessao->getNivelAcesso() == Sessao::NIVEL_DESLOGADO){
 	        return false;
 	    }
@@ -393,7 +403,9 @@ class StatusOcorrenciaCustomController  extends StatusOcorrenciaController {
 	    return true;
 	    
 	}
-	public function possoEditarSolucao(){
+	public function possoEditarSolucao(Ocorrencia $ocorrencia){
+	    $this->ocorrencia = $ocorrencia;
+	    $this->sessao = new Sessao();
 	    if($this->sessao->getNivelAcesso() == Sessao::NIVEL_COMUM || $this->sessao->getNivelAcesso() == Sessao::NIVEL_DESLOGADO){
 	        return false;
 	    }
