@@ -178,6 +178,14 @@ class MensagemForumCustomController  extends MensagemForumController {
         $ultimoId = 0;
         foreach($listaForum as $mensagemForum){
             $ultimoId = $mensagemForum->getId();
+            $nome = $mensagemForum->getUsuario()->getNome();
+            $listaNome = explode(' ', $mensagemForum->getUsuario()->getNome());
+            if(isset($listaNome[0])){
+                $nome = $listaNome[0];
+                
+            }
+            
+            
             echo '
             			<div class="chatbox__body__message chatbox__body__message--left">
             
@@ -192,7 +200,7 @@ class MensagemForumCustomController  extends MensagemForumController {
             				<div class="clearfix"></div>
             				<div class="ul_section_full">
             					<ul class="ul_msg">
-            						<li><strong>'.$mensagemForum->getUsuario()->getNome().'</strong></li>';
+                                    <li><strong>'.$nome.'</strong></li>';
             if($mensagemForum->getTipo() == self::TIPO_ARQUIVO){
                 echo '<li>Anexo: <a href="uploads/'.$mensagemForum->getMensagem().'">Clique aqui</a></li>';
             }else{

@@ -52,7 +52,11 @@ function alocaMensagem(item, index){
 	div += '</div>';
 	div += '<div class="clearfix"></div>';
 	div += '<div class="ul_section_full"><ul class="ul_msg">';
-	div += '<li><strong>'+item.nome_usuario+'</strong></li>';
+	var nome = item.nome_usuario;
+	
+	nome = item.nome_usuario.split(" ");
+	
+	div += '<li><strong>'+nome[0]+'</strong></li>';
 	if(item.tipo == 1){
 		div += '<li>'+item.mensagem+'</li>';
 	}else{
