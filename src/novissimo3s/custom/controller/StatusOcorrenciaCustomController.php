@@ -302,7 +302,9 @@ class StatusOcorrenciaCustomController  extends StatusOcorrenciaController {
 	    
 	    $listaUsuarios = array();
 	    $listaServicos = array();
-	    
+	    if($this->possoEditarServico()){
+	        $listaServicos = $this->getServicos();
+	    }
 	    if($this->possoReservar())
 	    {
 	        $listaUsuarios = $this->getTecnicos();
@@ -315,14 +317,13 @@ class StatusOcorrenciaCustomController  extends StatusOcorrenciaController {
 
 	    
 	    echo '
+<!-- Large button groups (default and split) -->
+<div class="btn-group">
+  <button class="btn btn-light btn-lg dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+   '.$this->ocorrencia->getId().'
+  </button>
+  <div class="dropdown-menu">
 
-
-  <div class="btn-group">
-    <button type="button" class="btn btn-light">'.$this->ocorrencia->getId().'</button>
-    <button type="button" class="btn btn-light dropdown-toggle dropdown-toggle-split" id="dropdownMenuReference" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-reference="parent">
-      <span class="sr-only">Status</span>
-    </button>
-    <div class="dropdown-menu" aria-labelledby="dropdownMenuReference">
 
       
 ';
@@ -358,9 +359,9 @@ class StatusOcorrenciaCustomController  extends StatusOcorrenciaController {
 	    }
 	    
 	    echo '
-    </div>
+
   </div>
-<br><br>';
+</div>';
 	    
 
 	}

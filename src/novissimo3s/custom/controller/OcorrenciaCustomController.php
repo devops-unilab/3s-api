@@ -180,10 +180,10 @@ class OcorrenciaCustomController  extends OcorrenciaController {
                             Chamado 
                         ';
 	    
-	    
+	    echo '</h3>';
 	    $statusController = new StatusOcorrenciaCustomController();
 	    $statusController->painelStatus($this->selecionado);
-	    echo '</h3>';
+
 
 	    
 	    

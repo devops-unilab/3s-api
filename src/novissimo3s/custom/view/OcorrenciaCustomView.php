@@ -464,7 +464,7 @@ class OcorrenciaCustomView extends OcorrenciaView {
             echo '<b>Patrimonio: </b>'.$ocorrencia->getPatrimonio().' <br> ';
         }
         if(trim($ocorrencia->getAnexo()) != ""){
-            echo '<b>Anexo: </b><a href="uploads/'.$ocorrencia->getAnexo().'"> Clique aqui</a> <br>';
+            echo '<b>Anexo: </b><a target="_blank" href="uploads/'.$ocorrencia->getAnexo().'"> Clique aqui</a> <br>';
         }
 
         echo '
