@@ -941,6 +941,9 @@ class StatusOcorrenciaCustomController  extends StatusOcorrenciaController {
 	    if($this->ocorrencia->getStatus() == self::STATUS_FECHADO){
 	        return false;
 	    }
+	    if($this->ocorrencia->getStatus() == self::STATUS_CANCELADO){
+	        return false;
+	    }
 	    if($this->ocorrencia->getStatus() == self::STATUS_FECHADO_CONFIRMADO){
 	        return false;
 	    }
