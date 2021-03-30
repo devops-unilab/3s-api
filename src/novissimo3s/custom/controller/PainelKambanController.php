@@ -5,10 +5,7 @@ use novissimo3s\custom\view\PainelKambanView;
 use novissimo3s\custom\dao\OcorrenciaCustomDAO;
 use novissimo3s\model\Ocorrencia;
 use novissimo3s\custom\dao\AreaResponsavelCustomDAO;
-use novissimo3s\custom\dao\UsuarioCustomDAO;
-use novissimo3s\model\Usuario;
 use novissimo3s\util\Sessao;
-use novissimo3s\custom\dao\StatusOcorrenciaCustomDAO;
 
 
 class PainelKambanController extends OcorrenciaCustomController{

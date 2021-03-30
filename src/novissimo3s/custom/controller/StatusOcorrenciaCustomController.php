@@ -11,7 +11,6 @@ use novissimo3s\custom\dao\StatusOcorrenciaCustomDAO;
 use novissimo3s\custom\view\StatusOcorrenciaCustomView;
 use novissimo3s\model\Ocorrencia;
 use novissimo3s\util\Sessao;
-use novissimo3s\custom\view\OcorrenciaCustomView;
 use novissimo3s\dao\OcorrenciaDAO;
 use novissimo3s\model\StatusOcorrencia;
 use novissimo3s\model\Status;

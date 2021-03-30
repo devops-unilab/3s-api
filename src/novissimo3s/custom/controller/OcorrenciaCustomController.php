@@ -22,7 +22,6 @@ use novissimo3s\dao\ServicoDAO;
 use novissimo3s\dao\UsuarioDAO;
 use novissimo3s\custom\dao\UsuarioCustomDAO;
 use novissimo3s\util\Mail;
-use novissimo3s\custom\view\StatusCustomView;
 
 class OcorrenciaCustomController  extends OcorrenciaController {
     

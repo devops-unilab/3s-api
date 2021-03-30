@@ -6,9 +6,6 @@ namespace novissimo3s\custom\controller;
 use novissimo3s\model\AreaResponsavel;
 use novissimo3s\custom\dao\OcorrenciaCustomDAO;
 use novissimo3s\custom\dao\AreaResponsavelCustomDAO;
-use novissimo3s\model\Usuario;
-use novissimo3s\util\Sessao;
-use novissimo3s\custom\dao\UsuarioCustomDAO;
 
 class PainelTabelaController{
     private $dao;
