@@ -12,7 +12,7 @@ use novissimo3s\model\Ocorrencia;
 use PDO;
 use PDOException;
 use novissimo3s\model\MensagemForum;
-use novissimo3s\custom\controller\StatusOcorrenciaCustomController;
+
 
 class  OcorrenciaCustomDAO extends OcorrenciaDAO {
     

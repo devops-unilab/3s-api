@@ -33,7 +33,12 @@ class UsuarioCustomView extends UsuarioView {
                             </div>
                             <div class="form-group">
                                 <br>
-                                <input type="submit" class="btn btn-info btn-md" name="logar" value="Entrar">
+                                <button class="btn btn-info btn-md" type="submit" form="login-form">
+                                  <span id="spinner-submit" class="escondido spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                  Entrar
+                                </button>
+
+                                <input type="hidden" class="btn btn-info btn-md" name="logar" value="Entrar">
                             </div>
                             <div id="register-link" class="text-right">
                                 <a href="https://dti.unilab.edu.br" class="text-info">Visitar a página da DTI</a>

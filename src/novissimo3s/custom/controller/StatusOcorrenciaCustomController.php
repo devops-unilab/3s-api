@@ -324,8 +324,11 @@ class StatusOcorrenciaCustomController  extends StatusOcorrenciaController {
 	    $possoCancelar = $this->possoCancelar();
 	    $this->view->botaoCancelar($possoCancelar);
 
-	    $possoAtender = $this->possoAtender();
-        $this->view->botaoAtender($possoAtender);
+	    if($this->sessao->getNivelAcesso() == Sessao::NIVEL_ADM ||$this->sessao->getNivelAcesso() == Sessao::NIVEL_TECNICO){
+	        $possoAtender = $this->possoAtender();
+	        $this->view->botaoAtender($possoAtender);
+	    }
+	    
         
         $possoFechar = $this->possoFechar();
         $this->view->botaoFechar($possoFechar);

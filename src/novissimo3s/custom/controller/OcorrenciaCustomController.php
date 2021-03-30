@@ -177,31 +177,15 @@ class OcorrenciaCustomController  extends OcorrenciaController {
                     <div class="col-md-6 blog-main">
                        ';
 	    echo '<div class="row">';
-	    
 	    $statusController = new StatusOcorrenciaCustomController();
 	    $statusController->painelStatus($this->selecionado);
-
         echo '</div>';
-	    
-	    
 	    echo '
-
-
                     </div>
                     <div class="col-md-6 blog-main">
-
                     <span class="text-right">';
-	    
-	    $horaEstimada = $this->calcularHoraSolucao($dataAbertura, $this->selecionado->getServico()->getTempoSla());
-	    
-// 	    if($this->selecionado->getServico()->getTempoSla() >= 1){
-// 	        $this->view->painelTopoSLA($this->selecionado, $listaStatus, $dataAbertura, $horaEstimada);
-// 	    }else{
-// 	        echo ' Sla Não definido ';
-// 	    }
-            
-                    
-                    echo '
+	    $horaEstimada = $this->calcularHoraSolucao($dataAbertura, $this->selecionado->getServico()->getTempoSla());                    
+        echo '
                     </div>   
                     
                     </div>
@@ -356,6 +340,24 @@ class OcorrenciaCustomController  extends OcorrenciaController {
         <div id="'.$id.'" class="panel-collapse collapse in">
             <div class="panel-body">';
 	    $this->view->exibirLista($lista);
+	    
+	    
+	    echo '
+
+
+
+
+<nav aria-label="Page navigation example">
+  <ul class="pagination"  id="pagination-container">
+    <li class="page-item" id="beforePagination"><a class="page-link"  href="#">Previous</a></li>
+    <li class="page-item"><a class="page-link" href="#">1</a></li>
+    <li class="page-item"><a class="page-link" href="#">2</a></li>
+    <li class="page-item"><a class="page-link" href="#">3</a></li>
+    <li class="paginacaoCursor page-item"  id="afterPagination"><a class="page-link" href="#">Next</a></li>
+  </ul>
+</nav>
+';
+	    
 	    echo '
 	        
             </div>
