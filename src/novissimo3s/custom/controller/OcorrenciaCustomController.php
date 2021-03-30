@@ -176,15 +176,13 @@ class OcorrenciaCustomController  extends OcorrenciaController {
                 <div class="col-md-12 blog-main">
                 <div class="row  border-bottom mb-3">
                     <div class="col-md-6 blog-main">
-                        <h3 class="pb-4 mb-1 font-italic">
-                            Chamado 
-                        ';
+                       ';
+	    echo '<div class="row">';
 	    
-	    echo '</h3>';
 	    $statusController = new StatusOcorrenciaCustomController();
 	    $statusController->painelStatus($this->selecionado);
 
-
+        echo '</div>';
 	    
 	    
 	    echo '

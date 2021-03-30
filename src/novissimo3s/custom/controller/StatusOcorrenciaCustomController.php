@@ -292,13 +292,7 @@ class StatusOcorrenciaCustomController  extends StatusOcorrenciaController {
 	    $ocorrenciaView = new OcorrenciaCustomView();
 	    $strStatus = $ocorrenciaView->getStrStatus($ocorrencia->getStatus());
 
-// 	    echo '
 
-
-
-//     <div class="alert alert-danger" role="alert">
-//       Status '.$strStatus.'
-//     </div>';
 	    
 	    $listaUsuarios = array();
 	    $listaServicos = array();
@@ -319,8 +313,8 @@ class StatusOcorrenciaCustomController  extends StatusOcorrenciaController {
 	    echo '
 <!-- Large button groups (default and split) -->
 <div class="btn-group">
-  <button class="btn btn-light btn-lg dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-   '.$this->ocorrencia->getId().'
+  <button class="btn btn-light btn-lg dropdown-toggle mb-3" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+   Chamado '.$this->ocorrencia->getId().'
   </button>
   <div class="dropdown-menu">
 
@@ -329,13 +323,13 @@ class StatusOcorrenciaCustomController  extends StatusOcorrenciaController {
 ';
 	    
 	    
+	    $possoCancelar = $this->possoCancelar();
+	    $this->view->botaoCancelar($possoCancelar);
 	    
-	    if($this->possoCancelar()){
-	        $this->view->botaoCancelar($this->ocorrencia);
-	    }
-	    if($this->possoAtender()){
-	        $this->view->botaoAtender($this->ocorrencia);
-	    }
+	    
+	    $possoAtender = $this->possoAtender();
+        $this->view->botaoAtender($possoAtender);
+	    
 	    if($this->possoAvaliar()){
 	        $this->view->botaoAvaliar();
 	    }
@@ -350,18 +344,29 @@ class StatusOcorrenciaCustomController  extends StatusOcorrenciaController {
 	        $this->view->botaoLiberar();
 	    }
 
-	    echo '<div class="dropdown-divider"></div>';
-	    if($this->possoAguardarUsuario()){
+	    $possoAguardarAtivo = $this->possoAguardarAtivos();
+	    $possoAguardarUsuario = $this->possoAguardarUsuario();
+	    if($possoAguardarAtivo || $possoAguardarUsuario){
+	        echo '<div class="dropdown-divider"></div>';
 	        $this->view->botaoAguardarUsuario();
-	    }
-	    if($this->possoAguardarAtivos()){
 	        $this->view->botaoAguardarAtivos();
 	    }
+	    
+        
+	    
 	    
 	    echo '
 
   </div>
 </div>';
+	    
+	    	    echo '
+	    
+	    
+	    
+	        <div class="alert alert-danger" role="alert">
+	          Status '.$strStatus.'
+	        </div>';
 	    
 
 	}
@@ -817,7 +822,7 @@ class StatusOcorrenciaCustomController  extends StatusOcorrenciaController {
 	}
 	
 	public function ajaxEditarSolucao(){
-	    if(!$this->possoEditarSolucao()){
+	    if(!$this->possoEditarSolucao($this->ocorrencia)){
 	        echo ':falha:Esta solução não pode ser editada.';
 	        return false;
 	    }
@@ -867,10 +872,11 @@ class StatusOcorrenciaCustomController  extends StatusOcorrenciaController {
 	    
 	}
 	public function ajaxEditarServico(){
-	    if(!$this->possoEditarServico()){
+	    if(!$this->possoEditarServico($this->ocorrencia)){
 	        echo ':falha:Este serviço não pode ser editado.';
 	        return false;
 	    }
+	    
 	    if(!isset($_POST['id_servico'])){
 	        echo ':falha:Selecione um serviço.';
 	        return false;
@@ -902,6 +908,8 @@ class StatusOcorrenciaCustomController  extends StatusOcorrenciaController {
 	    
 	    $this->ocorrencia->getAreaResponsavel()->setId($servico->getAreaResponsavel()->getId());
 	    $this->ocorrencia->getServico()->setId($servico->getId());
+	    
+	   
 	    
 	    $ocorrenciaDao->getConnection()->beginTransaction();
 	    
