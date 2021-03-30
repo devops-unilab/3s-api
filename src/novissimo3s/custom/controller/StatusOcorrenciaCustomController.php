@@ -302,7 +302,7 @@ class StatusOcorrenciaCustomController  extends StatusOcorrenciaController {
 	    
 	    $listaUsuarios = array();
 	    $listaServicos = array();
-	    if($this->possoEditarServico()){
+	    if($this->possoEditarServico($this->ocorrencia)){
 	        $listaServicos = $this->getServicos();
 	    }
 	    if($this->possoReservar())
