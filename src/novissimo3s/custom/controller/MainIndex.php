@@ -46,14 +46,7 @@ class MainIndex{
 <link href="plugins/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
 
 <link href="vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
-<style>
 
-/* Cosmetic only */
-
-.easyPaginateNav a {padding:5px;}
-.easyPaginateNav a.current {font-weight:bold;text-decoration:underline;}
-
-</style>
 
 </head>
 <body>
