@@ -177,12 +177,13 @@ class OcorrenciaCustomController  extends OcorrenciaController {
                 <div class="row  border-bottom mb-3">
                     <div class="col-md-6 blog-main">
                         <h3 class="pb-4 mb-1 font-italic">
-                            Chamado Nº'.$this->selecionado->getId().'
-                        </h3>';
+                            Chamado 
+                        ';
+	    
 	    
 	    $statusController = new StatusOcorrenciaCustomController();
 	    $statusController->painelStatus($this->selecionado);
-	    
+	    echo '</h3>';
 
 	    
 	    
@@ -196,11 +197,11 @@ class OcorrenciaCustomController  extends OcorrenciaController {
 	    
 	    $horaEstimada = $this->calcularHoraSolucao($dataAbertura, $this->selecionado->getServico()->getTempoSla());
 	    
-	    if($this->selecionado->getServico()->getTempoSla() >= 1){
-	        $this->view->painelTopoSLA($this->selecionado, $listaStatus, $dataAbertura, $horaEstimada);
-	    }else{
-	        echo ' Sla Não definido ';
-	    }
+// 	    if($this->selecionado->getServico()->getTempoSla() >= 1){
+// 	        $this->view->painelTopoSLA($this->selecionado, $listaStatus, $dataAbertura, $horaEstimada);
+// 	    }else{
+// 	        echo ' Sla Não definido ';
+// 	    }
             
                     
                     echo '

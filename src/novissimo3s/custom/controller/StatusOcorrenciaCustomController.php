@@ -315,10 +315,11 @@ class StatusOcorrenciaCustomController  extends StatusOcorrenciaController {
 
 	    
 	    echo '
-	        
+
+
   <div class="btn-group">
-    <button type="button" class="btn btn-secondary">Ação</button>
-    <button type="button" class="btn btn-secondary dropdown-toggle dropdown-toggle-split" id="dropdownMenuReference" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-reference="parent">
+    <button type="button" class="btn btn-light">'.$this->ocorrencia->getId().'</button>
+    <button type="button" class="btn btn-light dropdown-toggle dropdown-toggle-split" id="dropdownMenuReference" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-reference="parent">
       <span class="sr-only">Status</span>
     </button>
     <div class="dropdown-menu" aria-labelledby="dropdownMenuReference">

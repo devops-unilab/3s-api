@@ -456,6 +456,9 @@ class OcorrenciaCustomView extends OcorrenciaView {
         
         
 
+        if(trim($ocorrencia->getPatrimonio()) != "" || trim($ocorrencia->getAnexo()) != ""){
+            echo '<hr>';
+        }
 
         if(trim($ocorrencia->getPatrimonio()) != ""){
             echo '<b>Patrimonio: </b>'.$ocorrencia->getPatrimonio().' <br> ';
@@ -472,18 +475,18 @@ class OcorrenciaCustomView extends OcorrenciaView {
 
 
 ';
-        echo '
-                <div class="card mb-4">
-                    <div class="card-body">';
-        //         echo '<p><b>Abertura: </b>'.date("d/m/Y H:i:s" , strtotime($dataAbertura)).'</p>';
-        $this->painelSLA($ocorrencia, $listaStatus, $dataAbertura, $dataSolucao);
+//         echo '
+//                 <div class="card mb-4">
+//                     <div class="card-body">';
+//         //         echo '<p><b>Abertura: </b>'.date("d/m/Y H:i:s" , strtotime($dataAbertura)).'</p>';
+        
 
-        echo '
-                    </div>
-                </div>
+//         echo '
+//                     </div>
+//                 </div>
             
             
-';
+// ';
 
             echo '
                 <div class="card mb-4">
@@ -518,10 +521,14 @@ class OcorrenciaCustomView extends OcorrenciaView {
         echo '
                 <div class="card mb-4">
                     <div class="card-body">
-                        <b>Classificação do Chamado: </b>'.$ocorrencia->getServico()->getNome().'';
+                        <b>Classificação do Chamado: </b>'.$ocorrencia->getServico()->getNome().'<br>';
         if($controller->possoEditarServico($ocorrencia)){
             $statusView->botaoEditarServico();
         }
+        echo '<hr>';
+        
+        $this->painelSLA($ocorrencia, $listaStatus, $dataAbertura, $dataSolucao);
+        
         echo '
                     </div>
                 </div>
@@ -597,18 +604,22 @@ class OcorrenciaCustomView extends OcorrenciaView {
     
     public function painelSLA(Ocorrencia $ocorrencia, $listaStatus, $dataAbertura, $dataSolucao){
  
-        
-        if($ocorrencia->getServico()->getTempoSla() > 1)
-        {
-            echo '<b>Prazo de Resolução: </b>'.$ocorrencia->getServico()->getTempoSla(). ' Horas úteis';
-        }else if($ocorrencia->getServico()->getTempoSla() == 1){
-            echo '<b>Prazo de Resolução: </b> 1 Hora útil';
-            echo '<b>Abertura:</b>'.date("d/m/Y G:i:s", strtotime($dataAbertura)).' </span>';
-        }else{
-            echo ' SLA não definido. ';
-            echo '<b>Abertura:</b>'.date("d/m/Y G:i:s", strtotime($dataAbertura)).' </span>';
-            return;
+        echo '<b>Data de Abertura: </b>'.date("d/m/Y G", strtotime($dataAbertura)).'h <br>';
+        $sessao = new Sessao();
+        if($sessao->getNivelAcesso() == Sessao::NIVEL_ADM || $sessao->getNivelAcesso() == Sessao::NIVEL_TECNICO){
+            if($ocorrencia->getServico()->getTempoSla() > 1)
+            {
+                echo '<b>SLA: </b>'.$ocorrencia->getServico()->getTempoSla(). ' Horas úteis<br>';
+            }else if($ocorrencia->getServico()->getTempoSla() == 1){
+                echo '<b>SLA: </b> 1 Hora útil<br>';
+                
+            }else{
+                echo ' SLA não definido. <br>';
+                return;
+            }
         }
+        
+        
         
         if($ocorrencia->getStatus() == StatusOcorrenciaCustomController::STATUS_FECHADO)
         {
@@ -646,13 +657,12 @@ class OcorrenciaCustomView extends OcorrenciaView {
             
             
             
-            echo '<span><p class="text-danger"><b>Solução Estimada: </b>'.date("d/m/Y H:i:s" , strtotime($dataSolucao)).'<br>';
-            echo '<b>Tempo Total: </b><span id="tempo-total">'. str_pad($hours, 2 , '0' , STR_PAD_LEFT).':'.str_pad($minutos, 2 , '0' , STR_PAD_LEFT).':'.str_pad($segundos, 2 , '0' , STR_PAD_LEFT).'</span>';
-            echo '<br>Solução em Atraso.</p>';
+            echo '<span><span class="text-danger"><b>Solução Estimada: </b>'.date("d/m/Y G" , strtotime($dataSolucao)).'h <br>';
+            echo '<span class="escondido" id="tempo-total">'. str_pad($hours, 2 , '0' , STR_PAD_LEFT).':'.str_pad($minutos, 2 , '0' , STR_PAD_LEFT).':'.str_pad($segundos, 2 , '0' , STR_PAD_LEFT).'</span>';
+
             $sessao = new Sessao();
             if($ocorrencia->getUsuarioCliente()->getId() == $sessao->getIdUsuario()){
                 if(!isset($_SESSION['pediu_ajuda'])){
-                    echo '<br>Caso queira pedir ajuda clique no botão abaixo.</p>';
                     $this->modalPedirAjuda($ocorrencia);
                 }else{
                     echo '<br>Você solicitou ajuda, aguarde a resposta.</p>';
@@ -688,7 +698,7 @@ class OcorrenciaCustomView extends OcorrenciaView {
 					<span id="label-progresso" class="sr-only">'.$percentual.'% Completo</span>
 					<span id="label-progresso2" class="progress-type">Progresso '.intval($percentual).'% </span>
 				</div>
-			</div><br>
+			</div>
 					    
 ';
                 
@@ -726,7 +736,7 @@ class OcorrenciaCustomView extends OcorrenciaView {
         echo '
 
 <!-- Button trigger modal -->
-<button type="button" id="botao-pedir-ajuda" class="btn btn-primary m-3" data-toggle="modal" data-target="#modalPedirAjuda">
+<button type="button" id="botao-pedir-ajuda" class="dropdown-item text-right" data-toggle="modal" data-target="#modalPedirAjuda">
   Pedir Ajuda
 </button>
             

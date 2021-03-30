@@ -172,7 +172,7 @@ class StatusOcorrenciaCustomView extends StatusOcorrenciaView {
     public function botaoEditarServico(){
         echo '
     <!-- Button trigger modal -->
-    <button type="button" id="botao-editar-servico" acao="editar_servico"  class="dropdown-item"  data-toggle="modal" data-target="#modalStatus">
+    <button type="button" id="botao-editar-servico" acao="editar_servico"  class="dropdown-item text-right"  data-toggle="modal" data-target="#modalStatus">
       Editar Serviço
     </button>
             
@@ -184,7 +184,7 @@ class StatusOcorrenciaCustomView extends StatusOcorrenciaView {
     public function botaoEditarSolucao(){
         echo '
     <!-- Button trigger modal -->
-    <button id="botao-editar-solucao" type="button" acao="editar_solucao"  class="dropdown-item"  data-toggle="modal" data-target="#modalStatus">
+    <button id="botao-editar-solucao" type="button" acao="editar_solucao"  class="dropdown-item text-right"   data-toggle="modal" data-target="#modalStatus">
       Editar Solução
     </button>
             
