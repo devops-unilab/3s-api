@@ -651,7 +651,7 @@ text/plain, application/pdf, image/*">
             
             
             
-            echo '<span><span class="text-danger"><b>Solução Estimada: </b>'.date("d/m/Y" , strtotime($dataSolucao)).' '.date("H" , strtotime($dataSolucao)).'h'.date("i" , strtotime($dataSolucao)).' min <br>';
+            echo '<span class="text-danger"><b>Solução Estimada: </b>'.date("d/m/Y" , strtotime($dataSolucao)).' '.date("H" , strtotime($dataSolucao)).'h'.date("i" , strtotime($dataSolucao)).' min </span><br>';
             echo '<span class="escondido" id="tempo-total">'. str_pad($hours, 2 , '0' , STR_PAD_LEFT).':'.str_pad($minutos, 2 , '0' , STR_PAD_LEFT).':'.str_pad($segundos, 2 , '0' , STR_PAD_LEFT).'</span>';
 
             $sessao = new Sessao();
@@ -659,7 +659,7 @@ text/plain, application/pdf, image/*">
                 if(!isset($_SESSION['pediu_ajuda'])){
                     $this->modalPedirAjuda($ocorrencia);
                 }else{
-                    echo '<br>Você solicitou ajuda, aguarde a resposta.</p>';
+                    echo '<br>Você solicitou ajuda, aguarde a resposta.';
                 }
             }
             //O form do modal vai chamar o ajax no controller

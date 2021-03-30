@@ -346,6 +346,7 @@ class StatusOcorrenciaCustomController  extends StatusOcorrenciaController {
 
 	    $possoAguardarAtivo = $this->possoAguardarAtivos();
 	    $possoAguardarUsuario = $this->possoAguardarUsuario();
+	    
 	    if($possoAguardarAtivo || $possoAguardarUsuario){
 	        echo '<div class="dropdown-divider"></div>';
 	        $this->view->botaoAguardarUsuario();
