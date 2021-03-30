@@ -132,10 +132,14 @@ class StatusOcorrenciaCustomView extends StatusOcorrenciaView {
         
     }
     
-    public function botaoAvaliar(){
+    public function botaoAvaliar($posso = false){
+        $strDisable = "";
+        if(!$posso){
+            $strDisable = 'disabled';
+        }
         echo '
     <!-- Button trigger modal -->
-    <button type="button" id="botao-avaliar" acao="avaliar"  class="dropdown-item  botao-status"  data-toggle="modal" data-target="#modalStatus">
+    <button type="button" '.$strDisable.'  id="botao-avaliar" acao="avaliar"  class="dropdown-item  botao-status"  data-toggle="modal" data-target="#modalStatus">
       Avaliar Ocorrência
     </button>
             
@@ -155,10 +159,14 @@ class StatusOcorrenciaCustomView extends StatusOcorrenciaView {
         
     }
     
-    public function botaoFechar(){
+    public function botaoFechar($posso = false){
+        $strDisable = "";
+        if(!$posso){
+            $strDisable = 'disabled';
+        }
         echo '
     <!-- Button trigger modal -->
-    <button type="button" acao="fechar"  class="dropdown-item  botao-status"  data-toggle="modal" data-target="#modalStatus">
+    <button type="button" '.$strDisable.'  acao="fechar"  class="dropdown-item  botao-status"  data-toggle="modal" data-target="#modalStatus">
       Fechar Ocorrência
     </button>
             

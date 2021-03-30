@@ -73,7 +73,8 @@ class OcorrenciaCustomView extends OcorrenciaView {
             <div class="row">
                 <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
                     <div class="custom-file">
-                      <input type="file" class="custom-file-input" name="anexo" id="anexo" accept="image/*,.pdf">
+                      <input type="file" class="custom-file-input" name="anexo" id="anexo" accept="application/msword, application/vnd.ms-excel, application/vnd.ms-powerpoint,
+text/plain, application/pdf, image/*">
                       <label class="custom-file-label" for="anexo" data-browse="Anexar">Anexar um Arquivo</label>
                     </div>
             
@@ -475,18 +476,7 @@ class OcorrenciaCustomView extends OcorrenciaView {
 
 
 ';
-//         echo '
-//                 <div class="card mb-4">
-//                     <div class="card-body">';
-//         //         echo '<p><b>Abertura: </b>'.date("d/m/Y H:i:s" , strtotime($dataAbertura)).'</p>';
-        
 
-//         echo '
-//                     </div>
-//                 </div>
-            
-            
-// ';
 
             echo '
                 <div class="card mb-4">
@@ -604,7 +594,8 @@ class OcorrenciaCustomView extends OcorrenciaView {
     
     public function painelSLA(Ocorrencia $ocorrencia, $listaStatus, $dataAbertura, $dataSolucao){
  
-        echo '<b>Data de Abertura: </b>'.date("d/m/Y G", strtotime($dataAbertura)).'h <br>';
+
+        
         $sessao = new Sessao();
         if($sessao->getNivelAcesso() == Sessao::NIVEL_ADM || $sessao->getNivelAcesso() == Sessao::NIVEL_TECNICO){
             if($ocorrencia->getServico()->getTempoSla() > 1)
@@ -619,6 +610,9 @@ class OcorrenciaCustomView extends OcorrenciaView {
             }
         }
         
+        echo '
+            
+            <b>Data de Abertura: </b>'.date("d/m/Y" , strtotime($dataAbertura)).' '.date("H" , strtotime($dataAbertura)).'h'.date("i" , strtotime($dataAbertura)).' min <br>';
         
         
         if($ocorrencia->getStatus() == StatusOcorrenciaCustomController::STATUS_FECHADO)
@@ -657,7 +651,7 @@ class OcorrenciaCustomView extends OcorrenciaView {
             
             
             
-            echo '<span><span class="text-danger"><b>Solução Estimada: </b>'.date("d/m/Y G" , strtotime($dataSolucao)).'h <br>';
+            echo '<span><span class="text-danger"><b>Solução Estimada: </b>'.date("d/m/Y" , strtotime($dataSolucao)).' '.date("H" , strtotime($dataSolucao)).'h'.date("i" , strtotime($dataSolucao)).' min <br>';
             echo '<span class="escondido" id="tempo-total">'. str_pad($hours, 2 , '0' , STR_PAD_LEFT).':'.str_pad($minutos, 2 , '0' , STR_PAD_LEFT).':'.str_pad($segundos, 2 , '0' , STR_PAD_LEFT).'</span>';
 
             $sessao = new Sessao();
@@ -674,7 +668,7 @@ class OcorrenciaCustomView extends OcorrenciaView {
         }else{
             $percentual = ($timeRecorrido *100)/$total;
             echo '
-                    <p class="text-primary">Solução Estimada: '.date("d/m/Y H:i:s" , strtotime($dataSolucao)).'<br>Dentro do prazo.';
+                    <p class="text-primary"><b>Solução Estimada: </b>'.date("d/m/Y" , strtotime($dataSolucao)).' '.date("H" , strtotime($dataSolucao)).'h'.date("i" , strtotime($dataSolucao)).' min <br>Dentro do prazo.';
             echo '<p class="escondido">Tempo Total: <span id="tempo-total">'. str_pad($hours, 2 , '0' , STR_PAD_LEFT).':'.str_pad($minutos, 2 , '0' , STR_PAD_LEFT).':'.str_pad($segundos, 2 , '0' , STR_PAD_LEFT).'</span></p>';
             echo '';
             

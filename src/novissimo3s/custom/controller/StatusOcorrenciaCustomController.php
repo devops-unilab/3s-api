@@ -289,8 +289,7 @@ class StatusOcorrenciaCustomController  extends StatusOcorrenciaController {
 	    
 	    $this->ocorrencia = $ocorrencia;
 	    $this->sessao = new Sessao();
-	    $ocorrenciaView = new OcorrenciaCustomView();
-	    $strStatus = $ocorrenciaView->getStrStatus($ocorrencia->getStatus());
+
 
 
 	    
@@ -325,21 +324,22 @@ class StatusOcorrenciaCustomController  extends StatusOcorrenciaController {
 	    
 	    $possoCancelar = $this->possoCancelar();
 	    $this->view->botaoCancelar($possoCancelar);
-	    
-	    
+
 	    $possoAtender = $this->possoAtender();
         $this->view->botaoAtender($possoAtender);
+        
+        $possoFechar = $this->possoFechar();
+        $this->view->botaoFechar($possoFechar);
+        
+        $possoAvaliar = $this->possoAvaliar();
+        $this->view->botaoAvaliar($possoAvaliar);
 	    
-	    if($this->possoAvaliar()){
-	        $this->view->botaoAvaliar();
-	    }
-	    
+        
+        
 	    if($this->possoReservar()){
 	        $this->view->botaoReservar();
 	    }
-	    if($this->possoFechar()){
-	        $this->view->botaoFechar();
-	    }
+	    
 	    if($this->possoLiberar()){
 	        $this->view->botaoLiberar();
 	    }
@@ -359,14 +359,16 @@ class StatusOcorrenciaCustomController  extends StatusOcorrenciaController {
 
   </div>
 </div>';
+	    // 	    $ocorrenciaView = new OcorrenciaCustomView();
+	    // 	    $strStatus = $ocorrenciaView->getStrStatus($ocorrencia->getStatus());
 	    
-	    	    echo '
+// 	    	    echo '
 	    
 	    
 	    
-	        <div class="alert alert-danger" role="alert">
-	          Status '.$strStatus.'
-	        </div>';
+// 	        <div class="alert alert-danger" role="alert">
+// 	          Status '.$strStatus.'
+// 	        </div>';
 	    
 
 	}
