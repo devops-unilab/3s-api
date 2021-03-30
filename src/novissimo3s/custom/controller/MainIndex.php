@@ -46,6 +46,15 @@ class MainIndex{
 <link href="plugins/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
 
 <link href="vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
+<style>
+
+/* Cosmetic only */
+
+.easyPaginateNav a {padding:5px;}
+.easyPaginateNav a.current {font-weight:bold;text-decoration:underline;}
+
+</style>
+
 </head>
 <body>
     	<!--     Barra do Governo -->
@@ -163,7 +172,10 @@ echo '
                     
                     echo '
 <script src="js/ocorrencia_selectize.js"></script>
+<script src="js/jquery.easyPaginate.js"></script>
 <script src="js/ocorrencia.js?a=1"></script>
+
+
 
 <script src="js/status_ocorrencia.js"></script>';
                     if(isset($_GET['selecionar'])){
@@ -187,7 +199,9 @@ echo '
         }else{
             echo '
 <script src="js/ocorrencia_selectize.js"></script>
+<script src="js/jquery.easyPaginate.js"></script>
 <script src="js/ocorrencia.js?a=1"></script>
+
 <script src="js/status_ocorrencia.js"></script>';
             if(isset($_GET['selecionar'])){
                 echo '

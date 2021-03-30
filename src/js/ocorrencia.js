@@ -1,4 +1,22 @@
+$('#easyPaginatecollapseAtraso').easyPaginate({
+    paginateElement: 'div',
+    elementsPerPage: 10,
+    effect: 'climb'
+});
 
+
+$('#easyPaginatecollapseAberto').easyPaginate({
+    paginateElement: 'div',
+    elementsPerPage: 10,
+    effect: 'climb'
+});
+
+
+$('#easyPaginatecollapseEncerrada').easyPaginate({
+    paginateElement: 'div',
+    elementsPerPage: 10,
+    effect: 'climb'
+});
 
 $(document).ready(function(e) {
 

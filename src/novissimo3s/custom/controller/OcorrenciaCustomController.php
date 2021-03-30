@@ -339,24 +339,9 @@ class OcorrenciaCustomController  extends OcorrenciaController {
         </div>
         <div id="'.$id.'" class="panel-collapse collapse in">
             <div class="panel-body">';
-	    $this->view->exibirLista($lista);
+	    $this->view->exibirListaPaginada($lista, 'easyPaginate'.$id);
 	    
-	    
-	    echo '
 
-
-
-
-<nav aria-label="Page navigation example">
-  <ul class="pagination"  id="pagination-container">
-    <li class="page-item" id="beforePagination"><a class="page-link"  href="#">Previous</a></li>
-    <li class="page-item"><a class="page-link" href="#">1</a></li>
-    <li class="page-item"><a class="page-link" href="#">2</a></li>
-    <li class="page-item"><a class="page-link" href="#">3</a></li>
-    <li class="paginacaoCursor page-item"  id="afterPagination"><a class="page-link" href="#">Next</a></li>
-  </ul>
-</nav>
-';
 	    
 	    echo '
 	        
