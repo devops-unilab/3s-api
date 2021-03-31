@@ -41,7 +41,7 @@ class UsuarioCustomView extends UsuarioView {
                                     <div class="forgot">
                                         <a href="https://sigadmin.unilab.edu.br/admin/public/recuperar_senha.jsf">Esqueceu a senha?</a>
                                     </div>
-                                    <button type="submit" id="botao-login" class="btn-primary btn-lg">
+                                    <button type="submit" id="botao-login" class="btn-primary btn-lg btn-block">
                                         <span id="spinner-submit" class="escondido spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                                         Entrar
                                     </button>
