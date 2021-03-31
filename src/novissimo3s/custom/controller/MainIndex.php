@@ -106,10 +106,8 @@ echo '
 </main><!-- /.container -->
 
 <footer class="blog-footer">
-  <p>Desenvolvido pela Diretoria de Tecnologia da Informação &copy; DTI / Unilab<a href="https://dti.unilab.edu.br/"> dti.unilab.edu.br</a>.</p>
-  <p>
-    <a href="http://unilab.edu.br">unilab.edu.br</a>
-  </p>
+  <p>Desenvolvido pela <a href="https://dti.unilab.edu.br/"> Diretoria de Tecnologia da Informação DTI </a> / <a href="http://unilab.edu.br">Unilab</a></p>
+
 </footer>
             
             

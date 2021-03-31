@@ -16,7 +16,7 @@ class UsuarioCustomView extends UsuarioView {
     public function formLogin(){
         echo '
             
-
+<br><br>
 
 <div class="container forget-password">
     <div class="row justify-content-center">
@@ -26,7 +26,7 @@ class UsuarioCustomView extends UsuarioView {
 
                                 
                                 <div class="panel">
-                                    <h2>Entrar no sistema 3s</h2>
+                                    <h3>Entrar no sistema 3s</h3>
                                     <p>Utilize o login e senha do sistema SIG</p>
                                 </div>
                                 <form id="login-form" class="form" method="post" action=".">
@@ -55,8 +55,7 @@ class UsuarioCustomView extends UsuarioView {
         </div>
     </div>
 </div>
-
-
+<br><br><br><br><br><br><br><br>
 
 ';
         

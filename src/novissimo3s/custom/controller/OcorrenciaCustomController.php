@@ -323,12 +323,12 @@ class OcorrenciaCustomController  extends OcorrenciaController {
 ';
 	    
 	}
-	public function painel($lista, $strTitulo, $id){
+	public function painel($lista, $strTitulo, $id, $strShow = ""){
 	    echo '
     <div class="panel panel-default" id="panel1">
         <div class="panel-heading">
             <h3 class="pb-4 mb-4 font-italic border-bottom" 
-            data-toggle="collapse" data-target="#'.$id.'" href="#'.$id.'">
+            data-toggle="collapse '.$strShow.'" data-target="#'.$id.'" href="#'.$id.'">
                 '.$strTitulo.'
 	        
             <button type="button" class="float-right btn ml-3 
@@ -358,10 +358,13 @@ class OcorrenciaCustomController  extends OcorrenciaController {
 
                     <div class="panel-group" id="accordion">';
 	    if(count($listaAtrasados) > 0){
-	        $this->painel($listaAtrasados, "Ocorrências Em Atraso", 'collapseAtraso');
+	        $nChamados = count($listaAtrasados);
+	        $this->painel($listaAtrasados, "Ocorrências Em Atraso ($nChamados)", 'collapseAtraso', "show");
 	        
 	    }
-	    $this->painel($lista1, "Ocorrências Em Aberto", 'collapseAberto');
+	    $nChamados = count($lista1);
+	    $this->painel($lista1, "Ocorrências Em Aberto($nChamados)", 'collapseAberto');
+	    $nChamados = count($lista2);
 	    $this->painel($lista2, "Ocorrências Encerradas", 'collapseEncerrada');
 	    
         echo '    

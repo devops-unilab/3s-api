@@ -225,7 +225,7 @@ class  OcorrenciaCustomDAO extends OcorrenciaDAO {
             WHERE
             $strWhere  
             ORDER BY ocorrencia.id DESC
-            LIMIT 100
+            LIMIT 1000
 ";
         
         try {

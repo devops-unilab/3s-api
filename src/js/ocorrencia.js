@@ -14,7 +14,7 @@ $('#easyPaginatecollapseAberto').easyPaginate({
 
 $('#easyPaginatecollapseEncerrada').easyPaginate({
     paginateElement: 'div',
-    elementsPerPage: 10,
+    elementsPerPage: 50,
     effect: 'climb'
 });
 
