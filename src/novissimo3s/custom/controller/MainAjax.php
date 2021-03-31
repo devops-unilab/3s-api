@@ -31,6 +31,10 @@ class MainAjax{
                 $controller = new PainelTabelaController();
                 $controller->tabelaChamados();
                 break;
+            case 'login':
+                $controller = new UsuarioCustomController();
+                $controller->ajaxLogin();
+                break;
             default:
                 echo ':falha';
                 break;

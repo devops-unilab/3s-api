@@ -19,7 +19,23 @@ class UsuarioCustomController  extends UsuarioController {
 		$this->dao = new UsuarioCustomDAO();
 		$this->view = new UsuarioCustomView();
 	}
-
+	public function ajaxLogin(){
+	    if (!isset($_POST['logar'])) {
+	        return ":falha";
+	    }
+	    $usuario = new Usuario();
+	    $usuario->setLogin($_POST['usuario']);
+	    $usuario->setSenha(md5($_POST['senha']));
+	    
+	    if ($this->dao->autenticar($usuario)) {
+	        
+	        $sessao = new Sessao();
+	        $sessao->criaSessao($usuario->getId(), $usuario->getNivel(), $usuario->getLogin(), $usuario->getNome(), $usuario->getEmail());
+	        echo ":sucesso";
+	    }else{
+	        echo ":falha";
+	    }
+	}
 	public function fazerLogin(){
 	    if (!isset($_POST['logar'])) {
 	        return;
@@ -51,14 +67,19 @@ class UsuarioCustomController  extends UsuarioController {
 	}
 	public function telaLogin(){
 	    echo '
-	        
-<div class="card mb-4">
-    <div class="card-body">';
+<div class="container">
+    <div class="row">
+        <div class="card mb-4">
+            <div class="card-body">';
 	    $this->fazerLogin();
 	    $this->view->formLogin();
-	    echo '<br><br><br><br><br><br><br><br><br>
+	    echo '
+            </div>
+        </div>
+
     </div>
-</div>';
+</div>
+';
 	}
 
 	        
