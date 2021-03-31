@@ -31,6 +31,16 @@ class UsuarioCustomController  extends UsuarioController {
 	        
 	        $sessao = new Sessao();
 	        $sessao->criaSessao($usuario->getId(), $usuario->getNivel(), $usuario->getLogin(), $usuario->getNome(), $usuario->getEmail());
+	        
+	        $idUnidade = $this->dao->getIdUnidade($usuario);
+	        if(count($idUnidade) > 0){
+	            foreach($idUnidade as $id => $sigla){
+	                $sessao->setIDUnidade($id);
+	                $sessao->setUnidade($sigla );
+	            }
+	        }
+	        
+	        
 	        echo ":sucesso";
 	    }else{
 	        echo ":falha";

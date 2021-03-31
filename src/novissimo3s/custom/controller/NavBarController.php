@@ -2,6 +2,7 @@
 
 namespace novissimo3s\custom\controller;
 use novissimo3s\util\Sessao;
+use novissimo3s\model\Usuario;
 
 class NavBarController{
     
@@ -118,9 +119,28 @@ class NavBarController{
 ';
         }
         
+        $primeiroNome = $sessao->getNome();
+        $arr = explode(" ", $sessao->getNome());
+        if(isset($arr[0])){
+            $primeiroNome = $arr[0];
+        }
         
         echo '
-    <a class="btn btn-outline-success my-2 my-sm-0 botao-sair" href="?sair=1">Sair</a>
+    <div class="btn-group">
+        <button class="btn btn-light btn-lg dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <i class="fa fa-user"></i> Olá, '.$primeiroNome.'
+        </button>
+        <div class="dropdown-menu">
+
+            <button type="button"  disabled  class="dropdown-item">
+                Setor: '.$sessao->getUnidade().'
+            </button>
+            <a href="?sair=1" id="botao-avaliar" acao="avaliar"  class="dropdown-item">
+                Sair
+            </a>
+    </div>
+</div>
+
   </div>
 </nav>
 

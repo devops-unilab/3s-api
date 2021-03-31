@@ -1,20 +1,20 @@
 $('#easyPaginatecollapseAtraso').easyPaginate({
     paginateElement: 'div',
-    elementsPerPage: 10,
+    elementsPerPage: 30,
     effect: 'climb'
 });
 
 
 $('#easyPaginatecollapseAberto').easyPaginate({
     paginateElement: 'div',
-    elementsPerPage: 10,
+    elementsPerPage: 30,
     effect: 'climb'
 });
 
 
 $('#easyPaginatecollapseEncerrada').easyPaginate({
     paginateElement: 'div',
-    elementsPerPage: 50,
+    elementsPerPage: 100,
     effect: 'climb'
 });
 

@@ -73,7 +73,7 @@ class MainIndex{
         <a class="text-muted" href="#"><img src="img/logo-header.png" alt="Logo 3s" /></a>
       </div>
       <div class="col-xl-4 col-lg-12 col-md-12 col-sm-12 d-flex align-items-end  justify-content-center">
-         <p class="blog-header-logo text-white font-weight-bold">'.$sessao->getNome().'</p>
+         <p class="blog-header-logo text-white font-weight-bold"></p>
       </div>
       <div class="col-xl-4 col-lg-12 col-md-12 col-sm-12 d-flex justify-content-center">
         <a class="text-muted" href="#"><img src="img/logo-unilab-branco.png" alt="Logo Unilab" /></a>

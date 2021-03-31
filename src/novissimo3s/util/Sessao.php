@@ -37,6 +37,24 @@ class Sessao{
         }
         
     }
+    public function setUnidade($unidade){
+        $_SESSION['UNIDADE'] = $unidade;
+    }
+    public function getUnidade(){
+        if(!isset($_SESSION['UNIDADE'])){
+            $_SESSION['UNIDADE'] = '';
+        }
+        return $_SESSION['UNIDADE'];
+    }
+    public function setIDUnidade($unidade){
+        $_SESSION['UNIDADE'] = $unidade;
+    }
+    public function getIDUnidade(){
+        if(!isset($_SESSION['ID_UNIDADE'])){
+            $_SESSION['ID_UNIDADE'] = '';
+        }
+        return $_SESSION['ID_UNIDADE'];
+    }
     public function getEmail(){
         
         
