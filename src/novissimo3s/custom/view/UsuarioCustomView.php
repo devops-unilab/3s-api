@@ -45,9 +45,7 @@ class UsuarioCustomView extends UsuarioView {
                                         <span id="spinner-submit" class="escondido spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                                         Entrar
                                     </button>
-                                    <div id="register-link" class="text-right">
-                                        <a href="https://dti.unilab.edu.br" class="text-info">Visitar a página da DTI</a>
-                                    </div>
+                                    
                                     <input type="hidden" class="btn btn-info btn-md" name="logar" value="Entrar">
                                 </form>
 
