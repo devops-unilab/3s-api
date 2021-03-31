@@ -46,6 +46,7 @@ class MainIndex{
 <link href="plugins/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
 
 <link href="vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
+<link href="css/style_form_login.css" rel="stylesheet">
 
 
 </head>
@@ -90,6 +91,9 @@ echo '
 <main role="main" class="container">
 
 ';
+
+
+
 
 
 $principal = new MainContent();

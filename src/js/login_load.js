@@ -1,0 +1,1 @@
+$("#form_pedir_ajuda").on('submit', function(e) {});

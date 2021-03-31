@@ -16,41 +16,39 @@ class UsuarioCustomView extends UsuarioView {
     public function formLogin(){
         echo '
             
- <div id="login">
-        <h3 class="text-center text-info pt-5">Entrar no sistema 3s. </h3>
-        <div class="container">
-            <div id="login-row" class="row justify-content-center align-items-center">
-                <div id="login-column" class="col-md-6">
-                    <div id="login-box" class="col-md-12">
-                        <form id="login-form" class="form" method="post" action=".">
-                            <div class="form-group">
-                                <label for="usuario" class="text-info">Usuario:</label><br>
-                                <input type="text" id="usuario"  class="form-control" size="350" name="usuario" autofocus="autofocus">
-                            </div>
-                            <div class="form-group">
-                                <label for="senha" class="text-info">Senha:</label><br>
-                                <input type="password" name="senha" size="100" id="senha" class="form-control">
-                            </div>
-                            <div class="form-group">
-                                <br>
-                                <button class="btn btn-info btn-md" type="submit" form="login-form">
-                                  <span id="spinner-submit" class="escondido spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                                  Entrar
-                                </button>
 
-                                <input type="hidden" class="btn btn-info btn-md" name="logar" value="Entrar">
-                            </div>
-                            <div id="register-link" class="text-right">
-                                <a href="https://dti.unilab.edu.br" class="text-info">Visitar a página da DTI</a>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
+<div class="login-form">
+    <div class="main-div card">
+        <div class="panel">
+            <h2>Entrar no sistema 3s</h2>
+            <p>Utilize o login e senha do sistema SIG</p>
         </div>
+        <form id="login-form" class="form" method="post" action=".">
+
+            <div class="form-group">
+                <input type="text" size="350" name="usuario" class="form-control" id="usuario" placeholder="Usuario" autofocus="autofocus">
+            </div>
+
+            <div class="form-group">
+                <input type="password" class="form-control" type="password" name="senha" size="100" id="senha" placeholder="Senha">
+            </div>
+            <div class="forgot">
+                <a href="https://sigadmin.unilab.edu.br/admin/public/recuperar_senha.jsf">Esqueceu a senha?</a>
+            </div>
+            <button type="submit" class="btn btn-primary">
+                <span id="spinner-submit" class="escondido spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                Entrar
+            </button>
+            <div id="register-link" class="text-right">
+                <a href="https://dti.unilab.edu.br" class="text-info">Visitar a página da DTI</a>
+            </div>
+            <input type="hidden" class="btn btn-info btn-md" name="logar" value="Entrar">
+        </form>
     </div>
-            
-                ';
+</div>
+';
+        
+        
     }
     
 
