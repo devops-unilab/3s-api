@@ -20,7 +20,7 @@ class UsuarioCustomView extends UsuarioView {
 
 <div class="container forget-password">
     <div class="row justify-content-center">
-            <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12">
+            <div class="col-xl-4 col-lg-4 col-md-7 col-sm-12">
                 <div class="panel-body p-3 m-3">
                     <div class="text-center">
 
