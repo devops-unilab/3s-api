@@ -125,9 +125,11 @@ class NavBarController{
             $primeiroNome = $arr[0];
         }
         
+        $primeiroNome = ucfirst(strtolower($primeiroNome));
+        
         echo '
     <div class="btn-group">
-        <button class="btn btn-light btn-lg dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <button class="btn btn-light dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             <i class="fa fa-user"></i> Olá, '.$primeiroNome.'
         </button>
         <div class="dropdown-menu">

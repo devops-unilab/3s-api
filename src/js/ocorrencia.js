@@ -1,14 +1,12 @@
 $('#easyPaginatecollapseAtraso').easyPaginate({
     paginateElement: 'div',
-    elementsPerPage: 30,
-    effect: 'climb'
+    elementsPerPage: 10
 });
 
 
 $('#easyPaginatecollapseAberto').easyPaginate({
     paginateElement: 'div',
-    elementsPerPage: 30,
-    effect: 'climb'
+    elementsPerPage: 10
 });
 
 

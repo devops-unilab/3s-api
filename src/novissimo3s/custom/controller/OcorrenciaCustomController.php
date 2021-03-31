@@ -411,7 +411,10 @@ class OcorrenciaCustomController  extends OcorrenciaController {
 	    $statusDao = new StatusOcorrenciaCustomDAO($this->dao->getConnection());
 	    $listaStatus = $statusDao->pesquisaPorIdOcorrencia($ocorrencia);
 	    $dataAbertura = null;
-
+	    if(!($ocorrencia->getServico()->getTempoSla() > 0)){
+	        
+	    }
+        
 	    foreach($listaStatus as $statusOcorrencia){
 	        if($statusOcorrencia->getStatus()->getSigla() == StatusOcorrenciaCustomController::STATUS_ABERTO || $statusOcorrencia->getStatus()->getSigla() == StatusOcorrenciaCustomController::STATUS_RESERVADO){
 	            $dataAbertura = $statusOcorrencia->getDataMudanca();
