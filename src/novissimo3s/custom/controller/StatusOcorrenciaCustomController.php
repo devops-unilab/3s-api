@@ -787,7 +787,7 @@ class StatusOcorrenciaCustomController  extends StatusOcorrenciaController {
 	    
 	}
 	public function ajaxAguardandoUsuario(){
-	    if(!$this->possoEditarSolucao()){
+	    if(!$this->possoEditarSolucao($this->ocorrencia)){
 	        echo ':falha:Esta solução não pode ser editada.';
 	        return false;
 	    }
