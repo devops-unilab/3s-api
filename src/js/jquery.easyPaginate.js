@@ -62,17 +62,12 @@ $.fn.easyPaginate = function (options) {
                 htmlNav += '<li class="page-item"><a href="#'+plugin.settings.hashPage+':1" title="First page" rel="1" class="first page-link">'+plugin.settings.firstButtonText+'</a></li>';
             }
             
-            if(plugin.settings.prevButton) {
-                htmlNav += '<li class="page-item"><a href="" title="Previous" rel="" class="prev page-link">'+plugin.settings.prevButtonText+'</a></li>';
-            }
             
             for(i = 1;i <= plugin.settings.pages;i++) {
                 htmlNav += '<li class="page-item"><a href="#'+plugin.settings.hashPage+':'+i+'" title="Page '+i+'" rel="'+i+'" class="page page-link">'+i+'</a></li>';
             };
             
-            if(plugin.settings.nextButton) {
-                htmlNav += '<li class="page-item"><a href="" title="Next" rel="" class="next page-link">'+plugin.settings.nextButtonText+'</a></li>';
-            }
+
             
             if(plugin.settings.lastButton) {
                 htmlNav += '<li class="page-item"><a href="#'+plugin.settings.hashPage+':'+plugin.settings.pages+'" title="Last page" rel="'+plugin.settings.pages+'" class="last page-link">'+plugin.settings.lastButtonText+'</a></li>';

@@ -1,19 +1,22 @@
 $('#easyPaginatecollapseAtraso').easyPaginate({
     paginateElement: 'div',
-    elementsPerPage: 10
+    elementsPerPage: 10,
+    effect: 'slide',
+    slideOffset: 200
 });
 
 
 $('#easyPaginatecollapseAberto').easyPaginate({
     paginateElement: 'div',
-    elementsPerPage: 10
+    elementsPerPage: 10,
+    effect: 'slide'
 });
 
 
 $('#easyPaginatecollapseEncerrada').easyPaginate({
     paginateElement: 'div',
-    elementsPerPage: 100,
-    effect: 'climb'
+    elementsPerPage: 10,
+    effect: 'slide'
 });
 
 $(document).ready(function(e) {

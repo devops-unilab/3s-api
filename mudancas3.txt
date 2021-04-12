@@ -1,0 +1,20 @@
+- Caixa de texto para feedback na avaliação e outras alterações de status. 
+- Adicionar ação de reabrir chamado.
+- Alto contraste
+- Responsividade da barra de paginação. 
+
+-----------------Feito--------------------
+- Primeiro nome do usuário e balão ativado com 
+o mouse sobre, exibindo a unidade e o link para sair. 
+- Expandir caixa de chamados em aberto. 
+- Quantidade de chamados em cada sessão da página inicial. 
+- Uma barra de load e escurecer formulário, inabilitar campos
+ no login. 
+- Delimintar formulário de login em quadrado menor.(gmail) 
+- Paginação (10 por página); 
+- Permitir doc e docx
+- Solução estimada e Data abertura, deixar hora e minuto. 
+- Inativar ao invés de sumir com botões de ação. 
+- Posicionamento do botão de ação ao lado do texto chamado. 
+- Erro no ajax ao alterar solução. 
+- Ausencia da lista de serviços em editar serviços. 
