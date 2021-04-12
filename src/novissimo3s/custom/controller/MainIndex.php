@@ -47,7 +47,7 @@ class MainIndex{
 
 <link href="vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
 <link href="css/style_form_login.css" rel="stylesheet">
-
+<!-- Desenvolvido por Jefferson Uchôa Ponte-->
 
 </head>
 <body>
