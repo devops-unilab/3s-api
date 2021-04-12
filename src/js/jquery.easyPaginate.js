@@ -30,9 +30,9 @@ $.fn.easyPaginate = function (options) {
         effect: 'default',
         slideOffset: 200,
         firstButton: true,
-        firstButtonText: '<<',
+        firstButtonText: '&laquo;',
         lastButton: true,
-        lastButtonText: '>>',        
+        lastButtonText: '&raquo;',        
         prevButton: true,
         prevButtonText: 'Anterior',        
         nextButton: true,
@@ -56,28 +56,25 @@ $.fn.easyPaginate = function (options) {
         };
         
         var displayNav = function() {
-            htmlNav = '<ul class="easyPaginateNav pagination">';
+            htmlNav = '<ul class="easyPaginateNav pagination pagination-lg">';
             
-            if(plugin.settings.firstButton) {
-                htmlNav += '<li class="page-item"><a href="#'+plugin.settings.hashPage+':1" title="First page" rel="1" class="first page-link">'+plugin.settings.firstButtonText+'</a></li>';
-            }
-            
+
             
             for(i = 1;i <= plugin.settings.pages;i++) {
-                htmlNav += '<li class="page-item"><a href="#'+plugin.settings.hashPage+':'+i+'" title="Page '+i+'" rel="'+i+'" class="page page-link">'+i+'</a></li>';
+                var strClass = "";
+                if(i > 6){
+                    strClass = "escondido";
+                }
+                htmlNav += '<li class="page-item '+strClass+'"><a href="#'+plugin.settings.hashPage+':'+i+'" title="Page '+i+'" rel="'+i+'" class="page page-link">'+i+'</a></li>';
             };
             
 
             
-            if(plugin.settings.lastButton) {
-                htmlNav += '<li class="page-item"><a href="#'+plugin.settings.hashPage+':'+plugin.settings.pages+'" title="Last page" rel="'+plugin.settings.pages+'" class="last page-link">'+plugin.settings.lastButtonText+'</a></li>';
-            }
+            
             
             htmlNav += '</ul>';
             plugin.nav = $(htmlNav);
-            plugin.nav.css({
-                'width': plugin.el.width()
-            });
+
             plugin.el.after(plugin.nav);
 
             var elSelector = '#' + plugin.el.get(0).id + ' + ';
@@ -86,6 +83,17 @@ $.fn.easyPaginate = function (options) {
                 + elSelector + ' .easyPaginateNav a.last').on('click', function(e) {
                 e.preventDefault();
                 displayPage($(this).attr('rel'));                
+                //console.log($(this));
+                
+                $(this).parent().siblings().addClass("escondido");
+                $(this).parent().prev().removeClass("escondido");
+                $(this).parent().next().removeClass("escondido");
+                $(this).parent().next().next().removeClass("escondido");
+                $(this).parent().next().next().removeClass("escondido");
+                $(this).parent().next().next().next().next().removeClass("escondido");
+                $(this).parent().next().next().next().next().next().removeClass("escondido");
+                
+                //console.log(plugin.settings.currentPage);
             });
 
             $(elSelector + ' .easyPaginateNav a.prev').on('click', function(e) {
