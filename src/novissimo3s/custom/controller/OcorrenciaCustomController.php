@@ -370,9 +370,30 @@ class OcorrenciaCustomController  extends OcorrenciaController {
         echo '    
                     </div>';//Fecha panel-group
         echo '</div>';//fecha col-md-8
-	    
+
 	    echo '
-                <aside class="col-md-4 blog-sidebar">
+
+                
+
+
+            <aside class="col-md-4 blog-sidebar">
+
+                <div class="p-4 mb-3 bg-light rounded">
+                    <h4 class="font-italic">Buscar Chamado</h4>
+                    <form action="" method="get">
+
+                        <div class="input-group mb-3">
+                            <input type="hidden" name="page" value="ocorrencia">
+                          <input type="text" name="selecionar" class="form-control" placeholder="Número do chamado" aria-label="Número do Chamado" aria-describedby="button-addon2">
+                          <div class="input-group-append">
+                            <button class="btn btn-outline-secondary" type="form" id="button-addon2">
+                                <i class="fa fa-search"></i>
+                            </button>
+                          </div>
+                        </div>
+                    </form>
+                  </div>
+
                   <div class="p-4 mb-3 bg-light rounded">
                     <h4 class="font-italic">Sobre o Novíssimo 3s</h4>
                     <p class="mb-0">

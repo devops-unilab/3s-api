@@ -1,13 +1,7 @@
-$( "#change-to-adm" ).click(function() {
-    alert( "Você está tentando burlar o sistema. Se continuar sua conta será suspensa." );
-});
 
-$( "#change-to-tec" ).click(function() {
-    var dados = { nivel: 't' }; 
-    mudarNivel(dados);
-});
-$( "#change-to-default" ).click(function() {
-    var dados = { nivel: 'c' };
+$( ".change-level" ).click(function() {
+
+    var dados = { nivel:  $(this).attr('nivel') };
     mudarNivel(dados);
 
 });

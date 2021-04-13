@@ -16,6 +16,7 @@ class Sessao{
     }
     public function criaSessao($id, $nivel, $login, $nome, $email){
         $_SESSION['USUARIO_NIVEL'] = $nivel;
+        $_SESSION['USUARIO_NIVEL_ORIGINAL'] = $nivel;
         $_SESSION['USUARIO_ID'] = $id;
         $_SESSION['USUARIO_LOGIN'] = $login;
         $_SESSION['USUARIO_NOME'] = $nome;
@@ -30,6 +31,16 @@ class Sessao{
     public function getNivelAcesso(){
         if(isset($_SESSION['USUARIO_NIVEL'])){
             return $_SESSION['USUARIO_NIVEL'];
+        }
+        else
+        {
+            return self::NIVEL_DESLOGADO;
+        }
+        
+    }
+    public function getNivelOriginal(){
+        if(isset($_SESSION['USUARIO_NIVEL_ORIGINAL'])){
+            return $_SESSION['USUARIO_NIVEL_ORIGINAL'];
         }
         else
         {

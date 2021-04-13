@@ -141,31 +141,52 @@ class NavBarController{
             
             ';
 
-            if($sessao->getNIvelAcesso() == Sessao::NIVEL_ADM)
+            if($sessao->getNIvelOriginal() == Sessao::NIVEL_ADM)
             {
+              $disabled = "";
+              if($sessao->getNivelAcesso() == Sessao::NIVEL_ADM){
+                $disabled = "disabled";
+              }
               echo '
               <hr>
-              <button type="button" id="change-to-adm" disabled class="dropdown-item">
+              <button type="button" nivel="'.Sessao::NIVEL_ADM.'"  '.$disabled.' class="dropdown-item change-level">
                   Perfil Admin
               </button>
-              <button type="button" id="change-to-tec" class="dropdown-item">
+              ';
+              $disabled = "";
+              if($sessao->getNivelAcesso() == Sessao::NIVEL_TECNICO){
+                $disabled = "disabled";
+              }
+              echo '
+              <button type="button" nivel="'.Sessao::NIVEL_TECNICO.'"  id="change-to-tec" '.$disabled.' class="dropdown-item change-level">
                   Perfil Técnico
-              </button>
-              <button type="button" id="change-to-default"  class="dropdown-item">
+              </button>';
+              $disabled = "";
+              if($sessao->getNivelAcesso() == Sessao::NIVEL_COMUM){
+                $disabled = "disabled";
+              }
+              echo '
+              <button type="button" '.$disabled.'  nivel="'.Sessao::NIVEL_COMUM.'"  id="change-to-default"  class="dropdown-item change-level">
                   Perfil Comum
               </button>
               <hr>';
 
-            }else if($sessao->getNIvelAcesso() == Sessao::NIVEL_TECNICO){
+            }else if($sessao->getNIvelOriginal() == Sessao::NIVEL_TECNICO){
+              $disabled = "";
+              if($sessao->getNivelAcesso() == Sessao::NIVEL_TECNICO){
+                $disabled = "disabled";
+              }
               echo '
               <hr>
-              <button type="button" id="change-to-adm" disabled class="dropdown-item">
-                  Perfil Admin
-              </button>
-              <button type="button" id="change-to-tec" disabled class="dropdown-item">
+              <button type="button" id="change-to-tec" nivel="'.Sessao::NIVEL_TECNICO.'" '.$disabled.' class="dropdown-item change-level">
                   Perfil Técnico
-              </button>
-              <button type="button" id="change-to-default"  class="dropdown-item">
+              </button>';
+              $disabled = "";
+              if($sessao->getNivelAcesso() == Sessao::NIVEL_COMUM){
+                $disabled = "disabled";
+              }
+              echo '
+              <button type="button" '.$disabled.' nivel="'.Sessao::NIVEL_COMUM.'" id="change-to-default"  class="dropdown-item change-level">
                   Perfil Comum
               </button>
               <hr>';

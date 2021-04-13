@@ -38,7 +38,7 @@ class MainIndex{
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <!-- Bootstrap CSS -->
 <link rel="stylesheet" href="vendor/bootstrap-4.6.0/css/bootstrap.min.css">
-<link rel="stylesheet" type="text/css" href="css/style.css?a=12" />
+<link rel="stylesheet" type="text/css" href="css/style.css?a=123" />
 <link rel="stylesheet" type="text/css" href="css/style_kamban.css" />
 <link rel="stylesheet" type="text/css" href="css/list.css" />
 <link rel="stylesheet" type="text/css" href="css/chat.css" />
@@ -73,7 +73,7 @@ class MainIndex{
         <a class="text-muted" href="#"><img src="img/logo-header.png" alt="Logo 3s" /></a>
       </div>
       <div class="col-xl-4 col-lg-12 col-md-12 col-sm-12 d-flex align-items-end  justify-content-center">
-         <p class="blog-header-logo text-white font-weight-bold"></p>
+         <p class="blog-header-logo text-white font-weight-bold"><a href="#altocontraste" id="altocontraste" accesskey="3" onclick="window.toggleContrast()" onkeydown="window.toggleContrast()" class=" text-white ">Alto contraste [Alt + 3]</a></p>
       </div>
       <div class="col-xl-4 col-lg-12 col-md-12 col-sm-12 d-flex justify-content-center">
         <a class="text-muted" href="#"><img src="img/logo-unilab-branco.png" alt="Logo Unilab" /></a>
@@ -155,7 +155,8 @@ echo '
 <script src="js/demo/datatables-demo.js"></script>
 <script src="js/selectize.js"></script>
 <script src="js/login_load.js"></script>
-<script src="js/mudar_nivel.js"></script>
+<script src="js/mudar_nivel.js?a=1"></script>
+<script src="js/change-contraste.js?a=1"></script>
 ';
         $this->pageJS();
         

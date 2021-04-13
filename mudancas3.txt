@@ -1,14 +1,11 @@
 - Caixa de texto para feedback na avaliação e outras alterações de status. 
 - Adicionar ação de reabrir chamado.
-- Alto contraste
-
-
-	
-
-
 
 -----------------Feito--------------------
 
+- buscar chamado por número. 
+- Alto contraste
+- reverter nível de acesso;
 - Opção para trocar nível na barra de usuário. 
 - Responsividade da barra de paginação. 
 - Primeiro nome do usuário e balão ativado com 

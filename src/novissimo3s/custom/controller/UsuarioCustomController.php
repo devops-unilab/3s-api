@@ -21,18 +21,20 @@ class UsuarioCustomController  extends UsuarioController {
 	}
 	
 	public function mudarNivel(){
-		print_r($_POST);
+		
 		$sessao = new Sessao();
-		if($sessao->getNivelAcesso() == Sessao::NIVEL_ADM){
+		if($sessao->getNIvelOriginal() == Sessao::NIVEL_ADM){
 			$sessao->setNivelDeAcesso($_POST['nivel']);
 			echo ':sucess:';
 			return;
 		}
-		if($sessao->getNivelAcesso() == Sessao::NIVEL_TECNICO){
-			if(intval($_POST['nivel']) == Sessao::NIVEL_COMUM){
+		if($sessao->getNIvelOriginal() == Sessao::NIVEL_TECNICO){
+			if($_POST['nivel'] != Sessao::NIVEL_ADM){
 				$sessao->setNivelDeAcesso($_POST['nivel']);
+				echo ':sucess:';
+				return;
 			}
-			echo ':sucess:';
+			echo ':falha:';
 			return;
 		}
 		echo ':falha:';
