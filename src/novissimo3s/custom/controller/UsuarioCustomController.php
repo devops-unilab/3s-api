@@ -19,6 +19,24 @@ class UsuarioCustomController  extends UsuarioController {
 		$this->dao = new UsuarioCustomDAO();
 		$this->view = new UsuarioCustomView();
 	}
+	
+	public function mudarNivel(){
+		print_r($_POST);
+		$sessao = new Sessao();
+		if($sessao->getNivelAcesso() == Sessao::NIVEL_ADM){
+			$sessao->setNivelDeAcesso($_POST['nivel']);
+			echo ':sucess:';
+			return;
+		}
+		if($sessao->getNivelAcesso() == Sessao::NIVEL_TECNICO){
+			if(intval($_POST['nivel']) == Sessao::NIVEL_COMUM){
+				$sessao->setNivelDeAcesso($_POST['nivel']);
+			}
+			echo ':sucess:';
+			return;
+		}
+		echo ':falha:';
+	}
 	public function ajaxLogin(){
 	    if (!isset($_POST['logar'])) {
 	        return ":falha";

@@ -35,6 +35,10 @@ class MainAjax{
                 $controller = new UsuarioCustomController();
                 $controller->ajaxLogin();
                 break;
+            case 'mudar_nivel':
+                $controller = new UsuarioCustomController();
+                $controller->mudarNivel();
+                break;
             default:
                 echo ':falha';
                 break;

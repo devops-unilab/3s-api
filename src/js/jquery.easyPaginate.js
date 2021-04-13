@@ -56,7 +56,7 @@ $.fn.easyPaginate = function (options) {
         };
         
         var displayNav = function() {
-            htmlNav = '<ul class="easyPaginateNav pagination pagination-lg">';
+            htmlNav = '<ul class="easyPaginateNav  justify-content-center pagination pagination-lg">';
             
 
             

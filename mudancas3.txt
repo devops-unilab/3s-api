@@ -1,9 +1,16 @@
 - Caixa de texto para feedback na avaliação e outras alterações de status. 
 - Adicionar ação de reabrir chamado.
 - Alto contraste
-- Responsividade da barra de paginação. 
+
+
+	
+
+
 
 -----------------Feito--------------------
+
+- Opção para trocar nível na barra de usuário. 
+- Responsividade da barra de paginação. 
 - Primeiro nome do usuário e balão ativado com 
 o mouse sobre, exibindo a unidade e o link para sair. 
 - Expandir caixa de chamados em aberto. 

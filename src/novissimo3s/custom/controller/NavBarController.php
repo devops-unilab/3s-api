@@ -132,11 +132,50 @@ class NavBarController{
         <button class="btn btn-light dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             <i class="fa fa-user"></i> Olá, '.$primeiroNome.'
         </button>
-        <div class="dropdown-menu">
-
+        <div class="dropdown-menu dropright">
             <button type="button"  disabled  class="dropdown-item">
                 Setor: '.$sessao->getUnidade().'
             </button>
+
+            
+            
+            ';
+
+            if($sessao->getNIvelAcesso() == Sessao::NIVEL_ADM)
+            {
+              echo '
+              <hr>
+              <button type="button" id="change-to-adm" disabled class="dropdown-item">
+                  Perfil Admin
+              </button>
+              <button type="button" id="change-to-tec" class="dropdown-item">
+                  Perfil Técnico
+              </button>
+              <button type="button" id="change-to-default"  class="dropdown-item">
+                  Perfil Comum
+              </button>
+              <hr>';
+
+            }else if($sessao->getNIvelAcesso() == Sessao::NIVEL_TECNICO){
+              echo '
+              <hr>
+              <button type="button" id="change-to-adm" disabled class="dropdown-item">
+                  Perfil Admin
+              </button>
+              <button type="button" id="change-to-tec" disabled class="dropdown-item">
+                  Perfil Técnico
+              </button>
+              <button type="button" id="change-to-default"  class="dropdown-item">
+                  Perfil Comum
+              </button>
+              <hr>';
+            }
+            
+
+            echo '
+            
+            
+
             <a href="?sair=1" id="botao-avaliar" acao="avaliar"  class="dropdown-item">
                 Sair
             </a>
