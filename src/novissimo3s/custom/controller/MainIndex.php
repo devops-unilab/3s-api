@@ -48,7 +48,9 @@ class MainIndex{
 <link href="vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
 <link href="css/style_form_login.css" rel="stylesheet">
 <!-- Desenvolvido por Jefferson Uchôa Ponte-->
+<style>
 
+</style>
 </head>
 <body>
     	<!--     Barra do Governo -->
@@ -169,6 +171,7 @@ echo '
                 case 'ocorrencia':
                     
                     echo '
+<script src="js/status_ocorrencia.js"></script>
 <script src="js/ocorrencia_selectize.js"></script>
 <script src="js/jquery.easyPaginate.js?a=1"></script>
 <script src="js/ocorrencia.js?a=1"></script>
@@ -200,7 +203,7 @@ echo '
 <script src="js/jquery.easyPaginate.js?a=1"></script>
 <script src="js/ocorrencia.js?a=1"></script>
 
-<script src="js/status_ocorrencia.js"></script>';
+';
             if(isset($_GET['selecionar'])){
                 echo '
 <script src="js/contador.js"></script>

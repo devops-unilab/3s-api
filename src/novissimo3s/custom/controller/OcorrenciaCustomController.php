@@ -377,23 +377,15 @@ class OcorrenciaCustomController  extends OcorrenciaController {
 
 
             <aside class="col-md-4 blog-sidebar">
-
+                <!--
                 <div class="p-4 mb-3 bg-light rounded">
-                    <h4 class="font-italic">Buscar Chamado</h4>
-                    <form action="" method="get">
-
-                        <div class="input-group mb-3">
-                            <input type="hidden" name="page" value="ocorrencia">
-                          <input type="text" name="selecionar" class="form-control" placeholder="Número do chamado" aria-label="Número do Chamado" aria-describedby="button-addon2">
-                          <div class="input-group-append">
-                            <button class="btn btn-outline-secondary" type="form" id="button-addon2">
-                                <i class="fa fa-search"></i>
-                            </button>
-                          </div>
-                        </div>
-                    </form>
+                    <h4 class="font-italic">Campus</h4>
+					Palmares (5)<br>
+					Liberdade (10)<br>
+					Auroras (1)<br>
+					Malês (17)
                   </div>
-
+                -->
                   <div class="p-4 mb-3 bg-light rounded">
                     <h4 class="font-italic">Sobre o Novíssimo 3s</h4>
                     <p class="mb-0">

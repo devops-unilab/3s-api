@@ -103,21 +103,8 @@ class NavBarController{
         
         echo '
     </ul>';
-        if($sessao->getNivelAcesso() != Sessao::NIVEL_COMUM){
-            echo '
-                <!--
-    <form class="form-inline my-2 my-lg-0">
-      <select class="form-control mr-sm-2">
-      	<option>Administrador</option>
-      	<option>Técnico</option>
-      	<option selected>Comum</option>
-      </select>
-                
-    </form>
-    -->
 
-';
-        }
+
         
         $primeiroNome = $sessao->getNome();
         $arr = explode(" ", $sessao->getNome());
@@ -128,6 +115,20 @@ class NavBarController{
         $primeiroNome = ucfirst(strtolower($primeiroNome));
         
         echo '
+        
+        <form action="" method="get">
+
+        <div class="input-group">
+            <input type="hidden" name="page" value="ocorrencia">
+          <input type="text" name="selecionar" class="form-control" placeholder="Número do chamado" aria-label="Número do Chamado" aria-describedby="button-addon2">
+          <div class="input-group-append">
+            <button class="btn btn-outline-secondary" type="form" id="button-addon2">
+                <i class="fa fa-search"></i>
+            </button>
+          </div>
+        </div>
+        </form>
+
     <div class="btn-group">
         <button class="btn btn-light dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             <i class="fa fa-user"></i> Olá, '.$primeiroNome.'
