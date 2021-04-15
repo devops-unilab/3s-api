@@ -1001,6 +1001,9 @@ class StatusOcorrenciaCustomController  extends StatusOcorrenciaController {
 	    if($this->sessao->getNivelAcesso() != Sessao::NIVEL_ADM){
 	        return false;
 	    }
+	    if($this->ocorrencia->getStatus() == self::STATUS_REABERTO){
+	        return false;
+	    }
 	    if($this->ocorrencia->getStatus() == self::STATUS_FECHADO){
 	        return false;
 	    }
