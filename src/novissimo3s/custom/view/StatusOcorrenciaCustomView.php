@@ -108,7 +108,7 @@ class StatusOcorrenciaCustomView extends StatusOcorrenciaView {
 
     <!-- Button trigger modal --> 
     <button type="button" acao="cancelar" '.$strDisable.' class="dropdown-item  botao-status"  data-toggle="modal" data-target="#modalStatus">
-      Cancelar Ocorrência
+      Cancelar 
     </button>
                 
 ';
@@ -125,7 +125,7 @@ class StatusOcorrenciaCustomView extends StatusOcorrenciaView {
         echo '
     <!-- Button trigger modal -->
     <button type="button"  '.$strDisable.'  acao="atender" class="dropdown-item  botao-status"  data-toggle="modal" data-target="#modalStatus">
-      Atender Ocorrência
+      Atender 
     </button>
                 
 ';
@@ -140,9 +140,24 @@ class StatusOcorrenciaCustomView extends StatusOcorrenciaView {
         echo '
     <!-- Button trigger modal -->
     <button type="button" '.$strDisable.'  id="avaliar-btn" acao="avaliar"  class="dropdown-item"  data-toggle="modal" data-target="#modalStatus">
-      Avaliar Ocorrência
+      Avaliar 
     </button>
             
+';
+        
+    }
+    
+    public function botaoReabrir($posso = false){
+        $strDisable = "";
+        if(!$posso){
+            $strDisable = 'disabled';
+        }
+        echo '
+    <!-- Button trigger modal -->
+    <button type="button" '.$strDisable.'  acao="reabrir"  class="dropdown-item  botao-status"  data-toggle="modal" data-target="#modalStatus">
+      Reabrir 
+    </button>
+        
 ';
         
     }
@@ -151,7 +166,7 @@ class StatusOcorrenciaCustomView extends StatusOcorrenciaView {
         echo '
     <!-- Button trigger modal -->
     <button type="button" acao="reservar" id="botao-reservar" class="dropdown-item"  data-toggle="modal" data-target="#modalStatus">
-      Reservar Ocorrência
+      Reservar 
     </button>
             
 ';
@@ -167,7 +182,7 @@ class StatusOcorrenciaCustomView extends StatusOcorrenciaView {
         echo '
     <!-- Button trigger modal -->
     <button type="button" '.$strDisable.'  acao="fechar"  class="dropdown-item  botao-status"  data-toggle="modal" data-target="#modalStatus">
-      Fechar Ocorrência
+      Fechar 
     </button>
             
 ';

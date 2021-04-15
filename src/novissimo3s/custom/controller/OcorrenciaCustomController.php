@@ -363,7 +363,7 @@ class OcorrenciaCustomController  extends OcorrenciaController {
 	        
 	    }
 	    $nChamados = count($lista1);
-	    $this->painel($lista1, "Ocorrências Em Aberto($nChamados)", 'collapseAberto');
+	    $this->painel($lista1, "Ocorrências Em Aberto($nChamados)", 'collapseAberto', 'show');
 	    $nChamados = count($lista2);
 	    $this->painel($lista2, "Ocorrências Encerradas", 'collapseEncerrada');
 	    

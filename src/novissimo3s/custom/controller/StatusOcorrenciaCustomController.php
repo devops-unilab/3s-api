@@ -337,6 +337,8 @@ class StatusOcorrenciaCustomController  extends StatusOcorrenciaController {
         $this->view->botaoAvaliar($possoAvaliar);
 	    
         
+        $possoAvaliar = $this->possoReabrir();
+        $this->view->botaoReabrir($possoAvaliar);
         
 	    if($this->possoReservar()){
 	        $this->view->botaoReservar();
@@ -432,6 +434,17 @@ class StatusOcorrenciaCustomController  extends StatusOcorrenciaController {
 	    
 	}
 	public function possoAvaliar(){
+	    //Só permitir isso se o usuário for cliente do chamado
+	    //O chamado deve estar fechado.
+	    if($this->sessao->getIdUsuario() != $this->ocorrencia->getUsuarioCliente()->getId()){
+	        return false;
+	    }
+	    if($this->ocorrencia->getStatus() != self::STATUS_FECHADO){
+	        return false;
+	    }
+	    return true;
+	}
+	public function possoReabrir(){
 	    //Só permitir isso se o usuário for cliente do chamado
 	    //O chamado deve estar fechado.
 	    if($this->sessao->getIdUsuario() != $this->ocorrencia->getUsuarioCliente()->getId()){
@@ -566,6 +579,48 @@ class StatusOcorrenciaCustomController  extends StatusOcorrenciaController {
 	    echo ':sucesso:'.$this->ocorrencia->getId().':Atendimento avaliado com sucesso!';
 	    return true;
 	}
+	public function ajaxReabrir(){
+
+	    if(!$this->possoReabrir()){
+	        return false;
+	    }
+	    
+	    $ocorrenciaDao = new OcorrenciaDAO($this->dao->getConnection());
+	    $this->ocorrencia->setStatus(self::STATUS_REABERTO);
+	    
+	    $status = new Status();
+	    $status->setSigla(self::STATUS_REABERTO);
+	    
+	    $statusDao = new StatusDAO($this->dao->getConnection());
+	    $statusDao->fillBySigla($status);
+	    
+	    $this->statusOcorrencia = new StatusOcorrencia();
+	    $this->statusOcorrencia->setOcorrencia($this->ocorrencia);
+	    $this->statusOcorrencia->setStatus($status);
+	    $this->statusOcorrencia->setDataMudanca(date("Y-m-d G:i:s"));
+	    $this->statusOcorrencia->getUsuario()->setId($this->sessao->getIdUsuario());
+	    $this->statusOcorrencia->setMensagem("Ocorrência Reaberta pelo cliente");
+	    
+	    
+	    $ocorrenciaDao->getConnection()->beginTransaction();
+	    
+	    
+	    
+	    if(!$ocorrenciaDao->update($this->ocorrencia)){
+	        echo ':falha:Falha na alteração do status da ocorrência.';
+	        $ocorrenciaDao->getConnection()->rollBack();
+	        return false;
+	    }
+	    
+	    if(!$this->dao->insert($this->statusOcorrencia)){
+	        echo ':falha:Falha ao tentar inserir histórico.';
+	        return false;
+	    }
+	    $ocorrenciaDao->getConnection()->commit();
+	    
+	    echo ':sucesso:'.$this->ocorrencia->getId().':Atendimento reaberto com sucesso!';
+	    return true;
+	}
 	
 	public function ajaxReservar(){
 	    if(!isset($_POST['tecnico'])){
@@ -668,6 +723,10 @@ class StatusOcorrenciaCustomController  extends StatusOcorrenciaController {
 	        case 'avaliar':
 	            $status = $this->ajaxAvaliar();
 	            $mensagem = '<p>Chamado avaliado</p>';
+	            break;
+	        case 'reabrir':
+	            $status = $this->ajaxReabrir();
+	            $mensagem = '<p>Chamado reaberto</p>';
 	            break;
 	        case 'editar_servico':
 	            $status = $this->ajaxEditarServico();
