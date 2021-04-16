@@ -407,6 +407,7 @@ class OcorrenciaCustomController  extends OcorrenciaController {
 	    $arrStatus[] = StatusOcorrenciaCustomController::STATUS_AGUARDANDO_USUARIO;
 	    $arrStatus[] = StatusOcorrenciaCustomController::STATUS_ATENDIMENTO;
 	    $arrStatus[] = StatusOcorrenciaCustomController::STATUS_REABERTO;
+	    $arrStatus[] = StatusOcorrenciaCustomController::STATUS_RESERVADO;
 	    return $arrStatus;
 	}
 	public function arrayStatusFinalizado(){

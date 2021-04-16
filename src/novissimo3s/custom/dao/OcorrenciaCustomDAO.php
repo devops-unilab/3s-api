@@ -550,7 +550,7 @@ class  OcorrenciaCustomDAO extends OcorrenciaDAO {
             ORDER BY ocorrencia.id DESC
             LIMIT 80
 ";
-        
+
         try {
             
             $stmt = $this->getConnection()->prepare($sql);
