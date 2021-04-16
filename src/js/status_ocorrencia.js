@@ -73,10 +73,12 @@ $('.botao-status').on('click', function(e){
 
 $(".form_status").on('submit', function(e) {
 	e.preventDefault();
-    $('.modal_form_status').modal('hide');
+    
     
 	var dados = jQuery( this ).serialize();
-    
+    $("#spinner-status").removeClass("escondido");
+	$('#botao-status').prop('disabled', true);
+
 	jQuery.ajax({
         type: "POST",
         url: "index.php?ajax=status_ocorrencia",
@@ -90,13 +92,15 @@ $(".form_status").on('submit', function(e) {
         		$("#botao-modal-resposta").click(function(){
         			window.location.href='?page=ocorrencia&selecionar='+data.split(":")[2];
         		});
-        		$("#textoModalResposta").text(data.split(":")[3]);                	
+        		$("#textoModalResposta").text(data.split(":")[3]);
+				$('.modal_form_status').modal('hide');                	
         		$("#modalResposta").modal("show");
         		
         	}
         	else
         	{
             	$("#textoModalResposta").text(data.split(":")[2]);
+				$('.modal_form_status').modal('hide');
         		$("#modalResposta").modal("show");
         	}
 

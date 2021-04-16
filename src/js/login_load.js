@@ -1,7 +1,6 @@
 $("#login-form").on('submit', function(e) {
 	e.preventDefault();
 	var dados = jQuery( this ).serialize();
-	console.log(dados);
 	$("input").prop('disabled', true);
 	$("#botao-login").prop('disabled', true);
 	$("#spinner-submit").removeClass("escondido");
