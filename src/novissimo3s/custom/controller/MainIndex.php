@@ -32,6 +32,7 @@ class MainIndex{
         echo '<!doctype html>
 <html lang="pt-br">
 <head>
+<meta name="Cache-Control" content="no-cache">
 <link rel="icon" type="image/x-icon" href="img/favicon.ico">
 <meta charset="utf-8">
 <title>3s | Sistema de Solicitação de Ocorrências</title>
