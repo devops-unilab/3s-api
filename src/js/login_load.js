@@ -13,7 +13,7 @@ $("#login-form").on('submit', function(e) {
 		data: dados,
 		success: function(data) {
 
-			console.log(data);
+			
 			if (data.split(":")[1] == 'sucesso') {
 				window.location.href = '.';
 			}

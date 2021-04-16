@@ -75,7 +75,7 @@ class Sessao{
         return $_SESSION['USUARIO_EMAIL'];
     }
     public function getNome(){
-        if(!isset($_SESSION['USUARIO_EMAIL'])){
+        if(!isset($_SESSION['USUARIO_NOME'])){
             $_SESSION['USUARIO_NOME'] = '';
         }
         return $_SESSION['USUARIO_NOME'];
