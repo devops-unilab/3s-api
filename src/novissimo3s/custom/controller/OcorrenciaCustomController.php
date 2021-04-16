@@ -255,7 +255,21 @@ class OcorrenciaCustomController  extends OcorrenciaController {
 	            
 	            
                     <div class="notice '.$strCartao.'">
-            	       <strong>'.$status->getStatus()->getNome().'</strong><br>
+            	       <strong>'.$status->getStatus()->getNome().'</strong><br>';
+
+	        if($status->getStatus()->getSigla() == StatusOcorrenciaCustomController::STATUS_FECHADO_CONFIRMADO){
+	            
+	            $avaliacao = intval($this->selecionado->getAvaliacao());
+	            
+	            echo '<br>';
+	            for($i = 0; $i < $avaliacao; $i++){
+	                echo '<img class="m-2 estrela-1" nota="1" src="img/star1.png" alt="1">';
+	            }
+	            
+	        }
+	        echo '<br>
+                        
+
                         '.$status->getMensagem().'<br>
                         <strong>'.$status->getUsuario()->getNome().'<br>'.date('d/m/Y - H:i' ,strtotime($status->getDataMudanca())).'</strong>
             	    </div>
