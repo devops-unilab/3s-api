@@ -51,6 +51,10 @@ class StatusOcorrenciaCustomView extends StatusOcorrenciaView {
                 <label for="solucao">Solução</label>
                 <textarea class="form-control" id="solucao" name="solucao" rows="2">'.strip_tags($ocorrencia->getSolucao()).'</textarea>
             </div>
+            <div id="container-mensagem-status" class="form-group escondido"> 
+                <label for="mensagem-status">Mensagem</label>
+                <textarea class="form-control" id="mensagem-status" name="mensagem-status" rows="2"></textarea>
+            </div>
 
             <div id="container-reservar" class="form-group escondido">
                 
@@ -156,7 +160,7 @@ class StatusOcorrenciaCustomView extends StatusOcorrenciaView {
         }
         echo '
     <!-- Button trigger modal -->
-    <button type="button" '.$strDisable.'  acao="reabrir"  class="dropdown-item  botao-status"  data-toggle="modal" data-target="#modalStatus">
+    <button id="botao-reabrir" type="button" '.$strDisable.'  acao="reabrir"  class="dropdown-item"  data-toggle="modal" data-target="#modalStatus">
       Reabrir 
     </button>
         

@@ -29,6 +29,7 @@ function esconderTodos(){
 	$('#container-reservar').addClass("escondido");
 	$('#container-editar-servico').addClass("escondido");
 	$('#container-editar-solucao').addClass("escondido");
+	$('#container-mensagem-status').addClass("escondido");
 }
 
 $('#avaliar-btn').on('click', function(e){
@@ -62,6 +63,12 @@ $('#botao-reservar').on('click', function(e){
 	var acao = $(this).attr('acao');
 	$('#campo_acao').val(acao);
 	
+});
+$('#botao-reabrir').on('click', function(e){
+	esconderTodos();
+	$('#container-mensagem-status').removeClass("escondido");
+	var acao = $(this).attr('acao');
+	$('#campo_acao').val(acao);
 });
 
 $('.botao-status').on('click', function(e){

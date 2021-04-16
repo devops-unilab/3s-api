@@ -162,15 +162,7 @@ class MensagemForumCustomController  extends MensagemForumController {
 					<!--<button class="chatbox__title__tray">
             <span></span>
         </button>-->
-					<button class="chatbox__title__close">
-						<span> <svg viewBox="0 0 12 12" width="12px" height="12px">
-                    <line stroke="#FFFFFF" x1="11.75" y1="0.25"
-									x2="0.25" y2="11.75"></line>
-                    <line stroke="#FFFFFF" x1="11.75" y1="11.75"
-									x2="0.25" y2="0.25"></line>
-                </svg>
-						</span>
-					</button>
+					
 				</div>
 				<div id="corpo-chat" class="chatbox__body">';
         

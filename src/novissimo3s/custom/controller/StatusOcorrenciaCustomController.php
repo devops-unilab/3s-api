@@ -579,8 +579,8 @@ class StatusOcorrenciaCustomController  extends StatusOcorrenciaController {
 	    echo ':sucesso:'.$this->ocorrencia->getId().':Atendimento avaliado com sucesso!';
 	    return true;
 	}
-	public function ajaxReabrir(){
-
+	public function ajaxReabrir()
+	{
 	    if(!$this->possoReabrir()){
 	        return false;
 	    }
@@ -600,6 +600,9 @@ class StatusOcorrenciaCustomController  extends StatusOcorrenciaController {
 	    $this->statusOcorrencia->setDataMudanca(date("Y-m-d G:i:s"));
 	    $this->statusOcorrencia->getUsuario()->setId($this->sessao->getIdUsuario());
 	    $this->statusOcorrencia->setMensagem("Ocorrência Reaberta pelo cliente");
+	    if(isset($_POST['mensagem-status'])){
+	        $this->statusOcorrencia->setMensagem($_POST['mensagem-status']);
+	    }
 	    
 	    
 	    $ocorrenciaDao->getConnection()->beginTransaction();
