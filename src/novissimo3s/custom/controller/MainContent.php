@@ -103,6 +103,10 @@ class MainContent{
                     $controller = new Importador();
                     $controller->main();
                     break;
+                case 'importador':
+                    $controller = new Importador();
+                    $controller->main();
+                    break;
                 case 'painel_kamban':
                     $controller = new PainelKambanController();
                     $controller->main();
