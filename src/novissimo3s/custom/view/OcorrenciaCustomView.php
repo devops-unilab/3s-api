@@ -733,7 +733,7 @@ text/plain, application/pdf, image/*">
         }else{
             $percentual = ($timeRecorrido *100)/$total;
             echo '
-                    <p class="text-primary"><b>Solução Estimada: </b>'.date("d/m/Y" , strtotime($dataSolucao)).' '.date("H" , strtotime($dataSolucao)).'h'.date("i" , strtotime($dataSolucao)).' min <br>Dentro do prazo.';
+                    <p class="text-primary"><b>Solução Estimada: </b>'.date("d/m/Y" , strtotime($dataSolucao)).' '.date("H" , strtotime($dataSolucao)).'h'.date("i" , strtotime($dataSolucao)).' min.';
             echo '<p class="escondido">Tempo Total: <span id="tempo-total">'. str_pad($hours, 2 , '0' , STR_PAD_LEFT).':'.str_pad($minutos, 2 , '0' , STR_PAD_LEFT).':'.str_pad($segundos, 2 , '0' , STR_PAD_LEFT).'</span></p>';
             echo '';
             
@@ -751,7 +751,7 @@ text/plain, application/pdf, image/*">
 ';
                 
                 echo '
-            <img src="img/bonequinho.gif" height="75">
+            <!-- <img src="img/bonequinho.gif" height="75"> -->
             <div class="progress">
 				<div id="barra-progresso" class="progress-bar" role="progressbar" aria-valuenow="'.$percentual.'" aria-valuemin="0" aria-valuemax="100" style="width: '.$percentual.'%;" data-toggle="tooltip" data-placement="top" title="Solução">
 					<span id="label-progresso" class="sr-only">'.$percentual.'% Completo</span>

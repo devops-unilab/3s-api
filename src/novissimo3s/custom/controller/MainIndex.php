@@ -70,12 +70,19 @@ class MainIndex{
 
  <div id="cabecalho" class="container">
   <header>
+    <div class="row d-flex justify-content-end">
+        <div class="">
+            <button class="btn btn-light m-4" href="#altocontraste" id="altocontraste" accesskey="3" onclick="window.toggleContrast()" onkeydown="window.toggleContrast()" class=" text-white ">
+                <i class="fa fa-adjust"></i>
+            </button>
+        </div>
+    </div>
     <div class="row">
       <div class="col-xl-4 col-lg-12 col-md-12 col-sm-12  d-flex justify-content-center">
         <a class="text-muted" href="#"><img src="img/logo-header.png" alt="Logo 3s" /></a>
       </div>
       <div class="col-xl-4 col-lg-12 col-md-12 col-sm-12 d-flex align-items-end  justify-content-center">
-         <p class="blog-header-logo text-white font-weight-bold"><a href="#altocontraste" id="altocontraste" accesskey="3" onclick="window.toggleContrast()" onkeydown="window.toggleContrast()" class=" text-white ">Alto contraste [Alt + 3]</a></p>
+         <p class="blog-header-logo text-white font-weight-bold"></p>
       </div>
       <div class="col-xl-4 col-lg-12 col-md-12 col-sm-12 d-flex justify-content-center">
         <a class="text-muted" href="#"><img src="img/logo-unilab-branco.png" alt="Logo Unilab" /></a>
