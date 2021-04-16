@@ -34,19 +34,23 @@ DROP TABLE meses;
 DROP TABLE perfil;
 DROP TRIGGER sequencia_ano ON ocorrencias;
     
-    
+
+ALTER TABLE ocorrencias RENAME COLUMN  dt_abertura TO data_abertura;
+ALTER TABLE ocorrencias ALTER column data_abertura drop not null;
+
+ALTER TABLE ocorrencias RENAME COLUMN dt_atendimento TO data_atendimento;
+ALTER TABLE ocorrencias RENAME COLUMN dt_fechamento TO data_fechamento;
+
     
 ALTER TABLE ocorrencias DROP COLUMN sequencia_ano;
 ALTER TABLE ocorrencias DROP COLUMN contato;
 ALTER TABLE ocorrencias DROP COLUMN funcionario;
+
 ALTER TABLE ocorrencias DROP COLUMN id_classific_ocorrencia;
 ALTER TABLE ocorrencias DROP COLUMN id_classific_ocorrencia_usuario;
 ALTER TABLE ocorrencias DROP COLUMN id_item_ocorrencia_usuario;
 ALTER TABLE ocorrencias DROP COLUMN id_subitem_ocorrencia;
-ALTER TABLE ocorrencias DROP COLUMN dt_abertura;
-ALTER TABLE ocorrencias DROP COLUMN dt_atendimento;
-ALTER TABLE ocorrencias DROP COLUMN dt_fechamento;
-ALTER TABLE ocorrencias DROP COLUMN dt_fecha_confirmado;
+
 ALTER TABLE ocorrencias DROP COLUMN dt_cancelamento;
 ALTER TABLE ocorrencias DROP COLUMN dt_liberacao;
 ALTER TABLE ocorrencias DROP COLUMN dt_espera;

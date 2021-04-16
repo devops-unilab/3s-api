@@ -27,16 +27,16 @@ class UsuarioCustomView extends UsuarioView {
                                 
                                 <div class="panel">
                                     <h3>Entrar no sistema 3s</h3>
-                                    <p>Utilize o login e senha do sistema SIG</p>
+                                   
                                 </div>
                                 <form id="login-form" class="form" method="post" action=".">
                         
                                     <div class="form-group">
-                                        <input type="text" size="350" name="usuario" class="form-control" id="usuario" placeholder="Usuario" autofocus="autofocus">
+                                        <input type="text" size="350" name="usuario" class="form-control" id="usuario" placeholder="Usuario do SIG" autofocus="autofocus">
                                     </div>
                         
                                     <div class="form-group">
-                                        <input type="password" class="form-control" name="senha" size="100" id="senha" placeholder="Senha">
+                                        <input type="password" class="form-control" name="senha" size="100" id="senha" placeholder="Senha do SIG">
                                     </div>
                                     <div class="forgot">
                                         <a href="https://sigadmin.unilab.edu.br/admin/public/recuperar_senha.jsf">Esqueceu a senha?</a>
@@ -56,6 +56,10 @@ class UsuarioCustomView extends UsuarioView {
     </div>
 </div>
 <br><br><br><br><br><br><br><br>
+<div class="d-flex justify-content-center text-center">
+Este sistema é melhor visualizado utilizando o navegador Google Chrome
+<i class="fa fa-chrome ml-3"></i>
+</div>
 
 ';
         
