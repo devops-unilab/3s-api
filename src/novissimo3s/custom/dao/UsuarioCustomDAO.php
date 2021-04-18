@@ -58,30 +58,30 @@ class  UsuarioCustomDAO extends UsuarioDAO {
         
         $daoSIGAA = new DAO(null, DB_AUTENTICACAO);
         
-        
-        $sql2 = "SELECT
-                *
-                FROM vw_autenticacao_3s
+        $sql2 = "SELECT * FROM vw_autenticacao_3s
                 WHERE LOWER(login) = LOWER(:login)
                 AND senha = :senha LIMIT 1";
         
+        
         try {
-            $stmt = $daoSIGAA->getConnection()->prepare($sql2);
-            $stmt->bindParam(":login", $login, PDO::PARAM_STR);
-            $stmt->bindParam(":senha", $senha, PDO::PARAM_STR);
-            $stmt->execute();
-            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            foreach ( $result as $linha2 ) {
+            $stmt2 = $daoSIGAA->getConnection()->prepare($sql2);
+            $stmt2->bindParam(":login", $login, PDO::PARAM_STR);
+            $stmt2->bindParam(":senha", $senha, PDO::PARAM_STR);
+            $stmt2->execute();
+            $result2 = $stmt2->fetchAll(PDO::FETCH_ASSOC);
+            foreach ( $result2 as $linha2 ) {
                 $usuario->setId($linha2['id']);
-                if($linha2['id_status_servidor'] != 1){
-                    return false;//Status Inativo
-                }
+//                 if($linha2['id_status_servidor'] != 1){
+//                     return false;//Status Inativo
+//                 }//Verificar se servidor ativo; 
+                
                 if(sizeof($this->fetchById($usuario)) == 0)
                 {
                     $usuario->setNome($linha2['nome']);
                     $usuario->setEmail($linha2['email']);
                     $usuario->setNivel(Sessao::NIVEL_COMUM);
                     $this->insertWithPK($usuario);
+                    
                     return true;
                 }
                 else
@@ -101,6 +101,7 @@ class  UsuarioCustomDAO extends UsuarioDAO {
             return false;
         } catch(PDOException $e) {
             echo $e->getMessage();
+            
             return false;
         }
         
