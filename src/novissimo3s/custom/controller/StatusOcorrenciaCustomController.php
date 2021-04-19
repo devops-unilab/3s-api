@@ -505,7 +505,7 @@ class StatusOcorrenciaCustomController  extends StatusOcorrenciaController {
 	        return false;
 	    }
 	    
-	    $ocorrenciaDao = new OcorrenciaDAO($this->dao->getConnection());
+	    $ocorrenciaDao = new OcorrenciaCustomDAO($this->dao->getConnection());
 	    $this->ocorrencia->setStatus(self::STATUS_FECHADO);
 	    
 	    $status = new Status();
@@ -552,7 +552,7 @@ class StatusOcorrenciaCustomController  extends StatusOcorrenciaController {
 	        return false;
 	    }
 	    
-	    $ocorrenciaDao = new OcorrenciaDAO($this->dao->getConnection());
+	    $ocorrenciaDao = new OcorrenciaCustomDAO($this->dao->getConnection());
 	    $this->ocorrencia->setStatus(self::STATUS_FECHADO_CONFIRMADO);
 	    
 	    $status = new Status();
@@ -596,7 +596,7 @@ class StatusOcorrenciaCustomController  extends StatusOcorrenciaController {
 	        return false;
 	    }
 	    
-	    $ocorrenciaDao = new OcorrenciaDAO($this->dao->getConnection());
+	    $ocorrenciaDao = new OcorrenciaCustomDAO($this->dao->getConnection());
 	    $this->ocorrencia->setStatus(self::STATUS_REABERTO);
 	    
 	    $status = new Status();

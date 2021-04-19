@@ -87,8 +87,8 @@ class  OcorrenciaCustomDAO extends OcorrenciaDAO {
             $stmt->bindParam(":idArea", $idArea, PDO::PARAM_INT);
             $stmt->bindParam(":idServico", $idServico, PDO::PARAM_INT);
             $stmt->bindParam(":dataAtendimento", $dataAtendimento, PDO::PARAM_STR);
-            $stmt->bindParam(":dataAtendimento", $dataFechamento, PDO::PARAM_STR);
-            $stmt->bindParam(":dataAtendimento", $dataFechamentoConfirmado, PDO::PARAM_STR);
+            $stmt->bindParam(":dataFechamento", $dataFechamento, PDO::PARAM_STR);
+            $stmt->bindParam(":dataFechamentoConfirmado", $dataFechamentoConfirmado, PDO::PARAM_STR);
             
             return $stmt->execute();
         } catch (PDOException $e) {
