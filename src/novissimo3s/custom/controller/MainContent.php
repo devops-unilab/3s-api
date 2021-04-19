@@ -2,6 +2,8 @@
 
 namespace novissimo3s\custom\controller;
 use novissimo3s\util\Sessao;
+use SimplesAdminPG\AdminPG;
+use novissimo3s\dao\DAO;
 
 
 class MainContent{
@@ -16,6 +18,18 @@ class MainContent{
             $usuarioController = new UsuarioCustomController();
             $usuarioController->telaLogin();
             return;
+        }
+        if(isset($_GET['pgadmin'])){
+            if($sessao->getLoginUsuario() == 'jefponte'){
+                if($_GET['pgadmin'] == 'autenticacao'){
+                    $dao = new DAO(null, DB_AUTENTICACAO);
+                }else{
+                    $dao = new DAO();
+                }
+                include_once "SimplesAdminPG/AdminPG.php";
+                $conexao = $dao->getConnection();
+                AdminPG::main($conexao);
+            }
         }
         switch ($sessao->getNivelAcesso()){
             case Sessao::NIVEL_TECNICO:

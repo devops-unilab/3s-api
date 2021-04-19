@@ -46,7 +46,11 @@ CREATE TABLE ocorrencia (
     id_usuario_atendente INTEGER ,
     id_usuario_indicado INTEGER ,
     anexo TEXT ,
-    local_sala TEXT 
+    local_sala TEXT ,
+    data_abertura TEXT ,
+    data_atendimento TEXT ,
+    data_fechamento TEXT ,
+    data_fechamento_confirmado TEXT 
 );
 
 CREATE TABLE recesso (

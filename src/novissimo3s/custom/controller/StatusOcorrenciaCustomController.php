@@ -412,6 +412,7 @@ class StatusOcorrenciaCustomController  extends StatusOcorrenciaController {
 	    if($this->ocorrencia->getStatus() != self::STATUS_ATENDIMENTO){
 	        return false;
 	    }
+	    
 	    if($this->sessao->getIdUsuario() != $this->ocorrencia->getIdUsuarioAtendente()){
 	        return false;
 	    }

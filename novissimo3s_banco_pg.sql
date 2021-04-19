@@ -51,7 +51,11 @@ CREATE TABLE ocorrencia (
         id_usuario_atendente integer, 
         id_usuario_indicado integer, 
         anexo character varying(200), 
-        local_sala character varying(400)
+        local_sala character varying(400), 
+        data_abertura timestamp without time zone, 
+        data_atendimento timestamp without time zone, 
+        data_fechamento timestamp without time zone, 
+        data_fechamento_confirmado timestamp without time zone
 );
 
 CREATE TABLE recesso (

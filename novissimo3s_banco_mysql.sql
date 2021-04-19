@@ -51,7 +51,11 @@ CREATE TABLE IF NOT EXISTS ocorrencia (
         id_usuario_atendente INT, 
         id_usuario_indicado INT, 
         anexo VARCHAR(400), 
-        local_sala VARCHAR(400)
+        local_sala VARCHAR(400), 
+        data_abertura  DATETIME, 
+        data_atendimento  DATETIME, 
+        data_fechamento  DATETIME, 
+        data_fechamento_confirmado  DATETIME
 )ENGINE = InnoDB;
 
 CREATE TABLE IF NOT EXISTS recesso (

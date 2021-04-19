@@ -108,6 +108,26 @@ class OcorrenciaView {
                                             <label for="local_sala">Local Sala</label>
                                             <input type="text" class="form-control"  name="local_sala" id="local_sala" placeholder="Local Sala">
                                         </div>
+
+                                        <div class="form-group">
+                                            <label for="data_abertura">Data Abertura</label>
+                                            <input type="datetime-local" class="form-control"  name="data_abertura" id="data_abertura" placeholder="Data Abertura">
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="data_atendimento">Data Atendimento</label>
+                                            <input type="datetime-local" class="form-control"  name="data_atendimento" id="data_atendimento" placeholder="Data Atendimento">
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="data_fechamento">Data Fechamento</label>
+                                            <input type="datetime-local" class="form-control"  name="data_fechamento" id="data_fechamento" placeholder="Data Fechamento">
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="data_fechamento_confirmado">Data Fechamento Confirmado</label>
+                                            <input type="datetime-local" class="form-control"  name="data_fechamento_confirmado" id="data_fechamento_confirmado" placeholder="Data Fechamento Confirmado">
+                                        </div>
                                         <div class="form-group">
                                           <label for="area_responsavel">Area Responsavel</label>
                 						  <select class="form-control" id="area_responsavel" name="area_responsavel">
@@ -314,6 +334,22 @@ class OcorrenciaView {
                                             <input type="text" class="form-control" value="'.$selecionado->getLocalSala().'"  name="local_sala" id="local_sala" placeholder="Local Sala">
                 						</div>
                                         <div class="form-group">
+                                            <label for="data_abertura">Data Abertura</label>
+                                            <input type="datetime-local" class="form-control" value="'.$selecionado->getDataAbertura().'"  name="data_abertura" id="data_abertura" placeholder="Data Abertura">
+                						</div>
+                                        <div class="form-group">
+                                            <label for="data_atendimento">Data Atendimento</label>
+                                            <input type="datetime-local" class="form-control" value="'.$selecionado->getDataAtendimento().'"  name="data_atendimento" id="data_atendimento" placeholder="Data Atendimento">
+                						</div>
+                                        <div class="form-group">
+                                            <label for="data_fechamento">Data Fechamento</label>
+                                            <input type="datetime-local" class="form-control" value="'.$selecionado->getDataFechamento().'"  name="data_fechamento" id="data_fechamento" placeholder="Data Fechamento">
+                						</div>
+                                        <div class="form-group">
+                                            <label for="data_fechamento_confirmado">Data Fechamento Confirmado</label>
+                                            <input type="datetime-local" class="form-control" value="'.$selecionado->getDataFechamentoConfirmado().'"  name="data_fechamento_confirmado" id="data_fechamento_confirmado" placeholder="Data Fechamento Confirmado">
+                						</div>
+                                        <div class="form-group">
                                           <label for="area_responsavel">Area Responsavel</label>
                 						  <select class="form-control" id="area_responsavel" name="area_responsavel">
                                             <option value="">Selecione o Area Responsavel</option>';
@@ -394,6 +430,10 @@ class OcorrenciaView {
                 Id Usuario Indicado: '.$ocorrencia->getIdUsuarioIndicado().'<br>
                 Anexo: '.$ocorrencia->getAnexo().'<br>
                 Local Sala: '.$ocorrencia->getLocalSala().'<br>
+                Data Abertura: '.$ocorrencia->getDataAbertura().'<br>
+                Data Atendimento: '.$ocorrencia->getDataAtendimento().'<br>
+                Data Fechamento: '.$ocorrencia->getDataFechamento().'<br>
+                Data Fechamento Confirmado: '.$ocorrencia->getDataFechamentoConfirmado().'<br>
                 Area Responsavel: '.$ocorrencia->getAreaResponsavel().'<br>
                 Servico: '.$ocorrencia->getServico().'<br>
                 Usuario Cliente: '.$ocorrencia->getUsuarioCliente().'<br>

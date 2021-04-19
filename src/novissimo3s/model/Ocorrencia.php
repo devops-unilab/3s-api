@@ -29,6 +29,10 @@ class Ocorrencia {
 	private $anexo;
 	private $localSala;
 	private $mensagens;
+	private $dataAbertura;
+	private $dataAtendimento;
+	private $dataFechamento;
+	private $dataFechamentoConfirmado;
     public function __construct(){
 
         $this->areaResponsavel = new AreaResponsavel();
@@ -181,8 +185,36 @@ class Ocorrencia {
 	public function getMensagens() {
 		return $this->mensagens;
 	}
+	public function setDataAbertura($dataAbertura) {
+		$this->dataAbertura = $dataAbertura;
+	}
+		    
+	public function getDataAbertura() {
+		return $this->dataAbertura;
+	}
+	public function setDataAtendimento($dataAtendimento) {
+		$this->dataAtendimento = $dataAtendimento;
+	}
+		    
+	public function getDataAtendimento() {
+		return $this->dataAtendimento;
+	}
+	public function setDataFechamento($dataFechamento) {
+		$this->dataFechamento = $dataFechamento;
+	}
+		    
+	public function getDataFechamento() {
+		return $this->dataFechamento;
+	}
+	public function setDataFechamentoConfirmado($dataFechamentoConfirmado) {
+		$this->dataFechamentoConfirmado = $dataFechamentoConfirmado;
+	}
+		    
+	public function getDataFechamentoConfirmado() {
+		return $this->dataFechamentoConfirmado;
+	}
 	public function __toString(){
-	    return $this->id.' - '.$this->areaResponsavel.' - '.$this->servico.' - '.$this->idLocal.' - '.$this->usuarioCliente.' - '.$this->descricao.' - '.$this->campus.' - '.$this->patrimonio.' - '.$this->ramal.' - '.$this->local.' - '.$this->status.' - '.$this->solucao.' - '.$this->prioridade.' - '.$this->avaliacao.' - '.$this->email.' - '.$this->idUsuarioAtendente.' - '.$this->idUsuarioIndicado.' - '.$this->anexo.' - '.$this->localSala.' - '.'Lista: '.implode(", ", $this->mensagens);
+	    return $this->id.' - '.$this->areaResponsavel.' - '.$this->servico.' - '.$this->idLocal.' - '.$this->usuarioCliente.' - '.$this->descricao.' - '.$this->campus.' - '.$this->patrimonio.' - '.$this->ramal.' - '.$this->local.' - '.$this->status.' - '.$this->solucao.' - '.$this->prioridade.' - '.$this->avaliacao.' - '.$this->email.' - '.$this->idUsuarioAtendente.' - '.$this->idUsuarioIndicado.' - '.$this->anexo.' - '.$this->localSala.' - '.'Lista: '.implode(", ", $this->mensagens).' - '.$this->dataAbertura.' - '.$this->dataAtendimento.' - '.$this->dataFechamento.' - '.$this->dataFechamentoConfirmado;
 	}
                 
 

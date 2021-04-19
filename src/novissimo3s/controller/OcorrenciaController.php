@@ -81,7 +81,7 @@ class OcorrenciaController {
             $this->view->showInsertForm($listAreaResponsavel, $listServico, $listUsuario);
 		    return;
 		}
-		if (! ( isset ( $_POST ['id_local'] ) && isset ( $_POST ['descricao'] ) && isset ( $_POST ['campus'] ) && isset ( $_POST ['patrimonio'] ) && isset ( $_POST ['ramal'] ) && isset ( $_POST ['local'] ) && isset ( $_POST ['status'] ) && isset ( $_POST ['solucao'] ) && isset ( $_POST ['prioridade'] ) && isset ( $_POST ['avaliacao'] ) && isset ( $_POST ['email'] ) && isset ( $_POST ['id_usuario_atendente'] ) && isset ( $_POST ['id_usuario_indicado'] ) && isset ( $_FILES ['anexo'] ) && isset ( $_POST ['local_sala'] ) &&  isset($_POST ['area_responsavel']) &&  isset($_POST ['servico']) &&  isset($_POST ['usuario_cliente']))) {
+		if (! ( isset ( $_POST ['id_local'] ) && isset ( $_POST ['descricao'] ) && isset ( $_POST ['campus'] ) && isset ( $_POST ['patrimonio'] ) && isset ( $_POST ['ramal'] ) && isset ( $_POST ['local'] ) && isset ( $_POST ['status'] ) && isset ( $_POST ['solucao'] ) && isset ( $_POST ['prioridade'] ) && isset ( $_POST ['avaliacao'] ) && isset ( $_POST ['email'] ) && isset ( $_POST ['id_usuario_atendente'] ) && isset ( $_POST ['id_usuario_indicado'] ) && isset ( $_FILES ['anexo'] ) && isset ( $_POST ['local_sala'] ) && isset ( $_POST ['data_abertura'] ) && isset ( $_POST ['data_atendimento'] ) && isset ( $_POST ['data_fechamento'] ) && isset ( $_POST ['data_fechamento_confirmado'] ) &&  isset($_POST ['area_responsavel']) &&  isset($_POST ['servico']) &&  isset($_POST ['usuario_cliente']))) {
 			echo '
                 <div class="alert alert-danger" role="alert">
                     Failed to register. Some field must be missing. 
@@ -124,6 +124,10 @@ class OcorrenciaController {
             $ocorrencia->setAnexo ( "uploads/ocorrencia/anexo/".$_FILES ['anexo']['name'] );
         }
 		$ocorrencia->setLocalSala ( $_POST ['local_sala'] );
+		$ocorrencia->setDataAbertura ( $_POST ['data_abertura'] );
+		$ocorrencia->setDataAtendimento ( $_POST ['data_atendimento'] );
+		$ocorrencia->setDataFechamento ( $_POST ['data_fechamento'] );
+		$ocorrencia->setDataFechamentoConfirmado ( $_POST ['data_fechamento_confirmado'] );
 		$ocorrencia->getAreaResponsavel()->setId ( $_POST ['area_responsavel'] );
 		$ocorrencia->getServico()->setId ( $_POST ['servico'] );
 		$ocorrencia->getUsuarioCliente()->setId ( $_POST ['usuario_cliente'] );
@@ -160,7 +164,7 @@ class OcorrenciaController {
         
 		    
 		
-		if (! ( isset ( $_POST ['id_local'] ) && isset ( $_POST ['descricao'] ) && isset ( $_POST ['campus'] ) && isset ( $_POST ['patrimonio'] ) && isset ( $_POST ['ramal'] ) && isset ( $_POST ['local'] ) && isset ( $_POST ['status'] ) && isset ( $_POST ['solucao'] ) && isset ( $_POST ['prioridade'] ) && isset ( $_POST ['avaliacao'] ) && isset ( $_POST ['email'] ) && isset ( $_POST ['id_usuario_atendente'] ) && isset ( $_POST ['id_usuario_indicado'] ) && isset ( $_FILES ['anexo'] ) && isset ( $_POST ['local_sala'] ) &&  isset($_POST ['area_responsavel']) &&  isset($_POST ['servico']) &&  isset($_POST ['usuario_cliente']))) {
+		if (! ( isset ( $_POST ['id_local'] ) && isset ( $_POST ['descricao'] ) && isset ( $_POST ['campus'] ) && isset ( $_POST ['patrimonio'] ) && isset ( $_POST ['ramal'] ) && isset ( $_POST ['local'] ) && isset ( $_POST ['status'] ) && isset ( $_POST ['solucao'] ) && isset ( $_POST ['prioridade'] ) && isset ( $_POST ['avaliacao'] ) && isset ( $_POST ['email'] ) && isset ( $_POST ['id_usuario_atendente'] ) && isset ( $_POST ['id_usuario_indicado'] ) && isset ( $_FILES ['anexo'] ) && isset ( $_POST ['local_sala'] ) && isset ( $_POST ['data_abertura'] ) && isset ( $_POST ['data_atendimento'] ) && isset ( $_POST ['data_fechamento'] ) && isset ( $_POST ['data_fechamento_confirmado'] ) &&  isset($_POST ['area_responsavel']) &&  isset($_POST ['servico']) &&  isset($_POST ['usuario_cliente']))) {
 			echo ':incompleto';
 			return;
 		}
@@ -192,6 +196,10 @@ class OcorrenciaController {
             $ocorrencia->setAnexo ( "uploads/ocorrencia/anexo/".$_FILES ['anexo']['name'] );
         }
 		$ocorrencia->setLocalSala ( $_POST ['local_sala'] );
+		$ocorrencia->setDataAbertura ( $_POST ['data_abertura'] );
+		$ocorrencia->setDataAtendimento ( $_POST ['data_atendimento'] );
+		$ocorrencia->setDataFechamento ( $_POST ['data_fechamento'] );
+		$ocorrencia->setDataFechamentoConfirmado ( $_POST ['data_fechamento_confirmado'] );
 		$ocorrencia->getAreaResponsavel()->setId ( $_POST ['area_responsavel'] );
 		$ocorrencia->getServico()->setId ( $_POST ['servico'] );
 		$ocorrencia->getUsuarioCliente()->setId ( $_POST ['usuario_cliente'] );
@@ -231,7 +239,7 @@ class OcorrenciaController {
             return;
         }
             
-		if (! ( isset ( $_POST ['id_local'] ) && isset ( $_POST ['descricao'] ) && isset ( $_POST ['campus'] ) && isset ( $_POST ['patrimonio'] ) && isset ( $_POST ['ramal'] ) && isset ( $_POST ['local'] ) && isset ( $_POST ['status'] ) && isset ( $_POST ['solucao'] ) && isset ( $_POST ['prioridade'] ) && isset ( $_POST ['avaliacao'] ) && isset ( $_POST ['email'] ) && isset ( $_POST ['id_usuario_atendente'] ) && isset ( $_POST ['id_usuario_indicado'] ) && isset ( $_POST ['anexo'] ) && isset ( $_POST ['local_sala'] ) &&  isset($_POST ['area_responsavel']) &&  isset($_POST ['servico']) &&  isset($_POST ['usuario_cliente']))) {
+		if (! ( isset ( $_POST ['id_local'] ) && isset ( $_POST ['descricao'] ) && isset ( $_POST ['campus'] ) && isset ( $_POST ['patrimonio'] ) && isset ( $_POST ['ramal'] ) && isset ( $_POST ['local'] ) && isset ( $_POST ['status'] ) && isset ( $_POST ['solucao'] ) && isset ( $_POST ['prioridade'] ) && isset ( $_POST ['avaliacao'] ) && isset ( $_POST ['email'] ) && isset ( $_POST ['id_usuario_atendente'] ) && isset ( $_POST ['id_usuario_indicado'] ) && isset ( $_POST ['anexo'] ) && isset ( $_POST ['local_sala'] ) && isset ( $_POST ['data_abertura'] ) && isset ( $_POST ['data_atendimento'] ) && isset ( $_POST ['data_fechamento'] ) && isset ( $_POST ['data_fechamento_confirmado'] ) &&  isset($_POST ['area_responsavel']) &&  isset($_POST ['servico']) &&  isset($_POST ['usuario_cliente']))) {
 			echo "Incompleto";
 			return;
 		}
@@ -251,6 +259,10 @@ class OcorrenciaController {
 		$selected->setIdUsuarioIndicado ( $_POST ['id_usuario_indicado'] );
 		$selected->setAnexo ( $_POST ['anexo'] );
 		$selected->setLocalSala ( $_POST ['local_sala'] );
+		$selected->setDataAbertura ( $_POST ['data_abertura'] );
+		$selected->setDataAtendimento ( $_POST ['data_atendimento'] );
+		$selected->setDataFechamento ( $_POST ['data_fechamento'] );
+		$selected->setDataFechamentoConfirmado ( $_POST ['data_fechamento_confirmado'] );
             
 		if ($this->dao->update ($selected ))
         {

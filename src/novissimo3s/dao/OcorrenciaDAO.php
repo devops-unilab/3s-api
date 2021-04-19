@@ -41,7 +41,11 @@ class OcorrenciaDAO extends DAO {
                 id_usuario_atendente = :idUsuarioAtendente,
                 id_usuario_indicado = :idUsuarioIndicado,
                 anexo = :anexo,
-                local_sala = :localSala
+                local_sala = :localSala,
+                data_abertura = :dataAbertura,
+                data_atendimento = :dataAtendimento,
+                data_fechamento = :dataFechamento,
+                data_fechamento_confirmado = :dataFechamentoConfirmado
                 WHERE ocorrencia.id = :id;";
 			$idLocal = $ocorrencia->getIdLocal();
 			$descricao = $ocorrencia->getDescricao();
@@ -58,6 +62,10 @@ class OcorrenciaDAO extends DAO {
 			$idUsuarioIndicado = $ocorrencia->getIdUsuarioIndicado();
 			$anexo = $ocorrencia->getAnexo();
 			$localSala = $ocorrencia->getLocalSala();
+			$dataAbertura = $ocorrencia->getDataAbertura();
+			$dataAtendimento = $ocorrencia->getDataAtendimento();
+			$dataFechamento = $ocorrencia->getDataFechamento();
+			$dataFechamentoConfirmado = $ocorrencia->getDataFechamentoConfirmado();
             
         try {
             
@@ -78,6 +86,10 @@ class OcorrenciaDAO extends DAO {
 			$stmt->bindParam(":idUsuarioIndicado", $idUsuarioIndicado, PDO::PARAM_INT);
 			$stmt->bindParam(":anexo", $anexo, PDO::PARAM_STR);
 			$stmt->bindParam(":localSala", $localSala, PDO::PARAM_STR);
+			$stmt->bindParam(":dataAbertura", $dataAbertura, PDO::PARAM_STR);
+			$stmt->bindParam(":dataAtendimento", $dataAtendimento, PDO::PARAM_STR);
+			$stmt->bindParam(":dataFechamento", $dataFechamento, PDO::PARAM_STR);
+			$stmt->bindParam(":dataFechamentoConfirmado", $dataFechamentoConfirmado, PDO::PARAM_STR);
             
             return $stmt->execute();
         } catch (PDOException $e) {
@@ -89,7 +101,7 @@ class OcorrenciaDAO extends DAO {
             
 
     public function insert(Ocorrencia $ocorrencia){
-        $sql = "INSERT INTO ocorrencia(id_area_responsavel, id_servico, id_local, id_usuario_cliente, descricao, campus, patrimonio, ramal, local, status, solucao, prioridade, avaliacao, email, id_usuario_atendente, id_usuario_indicado, anexo, local_sala) VALUES (:areaResponsavel, :servico, :idLocal, :usuarioCliente, :descricao, :campus, :patrimonio, :ramal, :local, :status, :solucao, :prioridade, :avaliacao, :email, :idUsuarioAtendente, :idUsuarioIndicado, :anexo, :localSala);";
+        $sql = "INSERT INTO ocorrencia(id_area_responsavel, id_servico, id_local, id_usuario_cliente, descricao, campus, patrimonio, ramal, local, status, solucao, prioridade, avaliacao, email, id_usuario_atendente, id_usuario_indicado, anexo, local_sala, data_abertura, data_atendimento, data_fechamento, data_fechamento_confirmado) VALUES (:areaResponsavel, :servico, :idLocal, :usuarioCliente, :descricao, :campus, :patrimonio, :ramal, :local, :status, :solucao, :prioridade, :avaliacao, :email, :idUsuarioAtendente, :idUsuarioIndicado, :anexo, :localSala, :dataAbertura, :dataAtendimento, :dataFechamento, :dataFechamentoConfirmado);";
 		$areaResponsavel = $ocorrencia->getAreaResponsavel()->getId();
 		$servico = $ocorrencia->getServico()->getId();
 		$idLocal = $ocorrencia->getIdLocal();
@@ -108,6 +120,10 @@ class OcorrenciaDAO extends DAO {
 		$idUsuarioIndicado = $ocorrencia->getIdUsuarioIndicado();
 		$anexo = $ocorrencia->getAnexo();
 		$localSala = $ocorrencia->getLocalSala();
+		$dataAbertura = $ocorrencia->getDataAbertura();
+		$dataAtendimento = $ocorrencia->getDataAtendimento();
+		$dataFechamento = $ocorrencia->getDataFechamento();
+		$dataFechamentoConfirmado = $ocorrencia->getDataFechamentoConfirmado();
 		try {
 			$db = $this->getConnection();
 			$stmt = $db->prepare($sql);
@@ -129,6 +145,10 @@ class OcorrenciaDAO extends DAO {
 			$stmt->bindParam(":idUsuarioIndicado", $idUsuarioIndicado, PDO::PARAM_INT);
 			$stmt->bindParam(":anexo", $anexo, PDO::PARAM_STR);
 			$stmt->bindParam(":localSala", $localSala, PDO::PARAM_STR);
+			$stmt->bindParam(":dataAbertura", $dataAbertura, PDO::PARAM_STR);
+			$stmt->bindParam(":dataAtendimento", $dataAtendimento, PDO::PARAM_STR);
+			$stmt->bindParam(":dataFechamento", $dataFechamento, PDO::PARAM_STR);
+			$stmt->bindParam(":dataFechamentoConfirmado", $dataFechamentoConfirmado, PDO::PARAM_STR);
 			return $stmt->execute();
 		} catch(PDOException $e) {
 			echo '{"error":{"text":'. $e->getMessage() .'}}';
@@ -136,7 +156,7 @@ class OcorrenciaDAO extends DAO {
             
     }
     public function insertWithPK(Ocorrencia $ocorrencia){
-        $sql = "INSERT INTO ocorrencia(id, id_area_responsavel, id_servico, id_local, id_usuario_cliente, descricao, campus, patrimonio, ramal, local, status, solucao, prioridade, avaliacao, email, id_usuario_atendente, id_usuario_indicado, anexo, local_sala) VALUES (:id, :areaResponsavel, :servico, :idLocal, :usuarioCliente, :descricao, :campus, :patrimonio, :ramal, :local, :status, :solucao, :prioridade, :avaliacao, :email, :idUsuarioAtendente, :idUsuarioIndicado, :anexo, :localSala);";
+        $sql = "INSERT INTO ocorrencia(id, id_area_responsavel, id_servico, id_local, id_usuario_cliente, descricao, campus, patrimonio, ramal, local, status, solucao, prioridade, avaliacao, email, id_usuario_atendente, id_usuario_indicado, anexo, local_sala, data_abertura, data_atendimento, data_fechamento, data_fechamento_confirmado) VALUES (:id, :areaResponsavel, :servico, :idLocal, :usuarioCliente, :descricao, :campus, :patrimonio, :ramal, :local, :status, :solucao, :prioridade, :avaliacao, :email, :idUsuarioAtendente, :idUsuarioIndicado, :anexo, :localSala, :dataAbertura, :dataAtendimento, :dataFechamento, :dataFechamentoConfirmado);";
 		$id = $ocorrencia->getId();
 		$areaResponsavel = $ocorrencia->getAreaResponsavel()->getId();
 		$servico = $ocorrencia->getServico()->getId();
@@ -156,6 +176,10 @@ class OcorrenciaDAO extends DAO {
 		$idUsuarioIndicado = $ocorrencia->getIdUsuarioIndicado();
 		$anexo = $ocorrencia->getAnexo();
 		$localSala = $ocorrencia->getLocalSala();
+		$dataAbertura = $ocorrencia->getDataAbertura();
+		$dataAtendimento = $ocorrencia->getDataAtendimento();
+		$dataFechamento = $ocorrencia->getDataFechamento();
+		$dataFechamentoConfirmado = $ocorrencia->getDataFechamentoConfirmado();
 		try {
 			$db = $this->getConnection();
 			$stmt = $db->prepare($sql);
@@ -178,6 +202,10 @@ class OcorrenciaDAO extends DAO {
 			$stmt->bindParam(":idUsuarioIndicado", $idUsuarioIndicado, PDO::PARAM_INT);
 			$stmt->bindParam(":anexo", $anexo, PDO::PARAM_STR);
 			$stmt->bindParam(":localSala", $localSala, PDO::PARAM_STR);
+			$stmt->bindParam(":dataAbertura", $dataAbertura, PDO::PARAM_STR);
+			$stmt->bindParam(":dataAtendimento", $dataAtendimento, PDO::PARAM_STR);
+			$stmt->bindParam(":dataFechamento", $dataFechamento, PDO::PARAM_STR);
+			$stmt->bindParam(":dataFechamentoConfirmado", $dataFechamentoConfirmado, PDO::PARAM_STR);
 			return $stmt->execute();
 		} catch(PDOException $e) {
 			echo '{"error":{"text":'. $e->getMessage() .'}}';
@@ -203,7 +231,7 @@ class OcorrenciaDAO extends DAO {
 
 	public function fetch() {
 		$list = array ();
-		$sql = "SELECT ocorrencia.id, ocorrencia.id_local, ocorrencia.descricao, ocorrencia.campus, ocorrencia.patrimonio, ocorrencia.ramal, ocorrencia.local, ocorrencia.status, ocorrencia.solucao, ocorrencia.prioridade, ocorrencia.avaliacao, ocorrencia.email, ocorrencia.id_usuario_atendente, ocorrencia.id_usuario_indicado, ocorrencia.anexo, ocorrencia.local_sala, area_responsavel.id as id_area_responsavel_area_responsavel, area_responsavel.nome as nome_area_responsavel_area_responsavel, area_responsavel.descricao as descricao_area_responsavel_area_responsavel, area_responsavel.email as email_area_responsavel_area_responsavel, servico.id as id_servico_servico, servico.nome as nome_servico_servico, servico.descricao as descricao_servico_servico, servico.tempo_sla as tempo_sla_servico_servico, servico.visao as visao_servico_servico, usuario_cliente.id as id_usuario_usuario_cliente, usuario_cliente.nome as nome_usuario_usuario_cliente, usuario_cliente.email as email_usuario_usuario_cliente, usuario_cliente.login as login_usuario_usuario_cliente, usuario_cliente.senha as senha_usuario_usuario_cliente, usuario_cliente.nivel as nivel_usuario_usuario_cliente, usuario_cliente.id_setor as id_setor_usuario_usuario_cliente FROM ocorrencia INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico INNER JOIN usuario as usuario_cliente ON usuario_cliente.id = ocorrencia.id_usuario_cliente LIMIT 1000";
+		$sql = "SELECT ocorrencia.id, ocorrencia.id_local, ocorrencia.descricao, ocorrencia.campus, ocorrencia.patrimonio, ocorrencia.ramal, ocorrencia.local, ocorrencia.status, ocorrencia.solucao, ocorrencia.prioridade, ocorrencia.avaliacao, ocorrencia.email, ocorrencia.id_usuario_atendente, ocorrencia.id_usuario_indicado, ocorrencia.anexo, ocorrencia.local_sala, ocorrencia.data_abertura, ocorrencia.data_atendimento, ocorrencia.data_fechamento, ocorrencia.data_fechamento_confirmado, area_responsavel.id as id_area_responsavel_area_responsavel, area_responsavel.nome as nome_area_responsavel_area_responsavel, area_responsavel.descricao as descricao_area_responsavel_area_responsavel, area_responsavel.email as email_area_responsavel_area_responsavel, servico.id as id_servico_servico, servico.nome as nome_servico_servico, servico.descricao as descricao_servico_servico, servico.tempo_sla as tempo_sla_servico_servico, servico.visao as visao_servico_servico, usuario_cliente.id as id_usuario_usuario_cliente, usuario_cliente.nome as nome_usuario_usuario_cliente, usuario_cliente.email as email_usuario_usuario_cliente, usuario_cliente.login as login_usuario_usuario_cliente, usuario_cliente.senha as senha_usuario_usuario_cliente, usuario_cliente.nivel as nivel_usuario_usuario_cliente, usuario_cliente.id_setor as id_setor_usuario_usuario_cliente FROM ocorrencia INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico INNER JOIN usuario as usuario_cliente ON usuario_cliente.id = ocorrencia.id_usuario_cliente LIMIT 1000";
 
         try {
             $stmt = $this->connection->prepare($sql);
@@ -233,6 +261,10 @@ class OcorrenciaDAO extends DAO {
                 $ocorrencia->setIdUsuarioIndicado( $row ['id_usuario_indicado'] );
                 $ocorrencia->setAnexo( $row ['anexo'] );
                 $ocorrencia->setLocalSala( $row ['local_sala'] );
+                $ocorrencia->setDataAbertura( $row ['data_abertura'] );
+                $ocorrencia->setDataAtendimento( $row ['data_atendimento'] );
+                $ocorrencia->setDataFechamento( $row ['data_fechamento'] );
+                $ocorrencia->setDataFechamentoConfirmado( $row ['data_fechamento_confirmado'] );
                 $ocorrencia->getAreaResponsavel()->setId( $row ['id_area_responsavel_area_responsavel'] );
                 $ocorrencia->getAreaResponsavel()->setNome( $row ['nome_area_responsavel_area_responsavel'] );
                 $ocorrencia->getAreaResponsavel()->setDescricao( $row ['descricao_area_responsavel_area_responsavel'] );
@@ -264,7 +296,7 @@ class OcorrenciaDAO extends DAO {
         $lista = array();
 	    $id = $ocorrencia->getId();
                 
-        $sql = "SELECT ocorrencia.id, ocorrencia.id_local, ocorrencia.descricao, ocorrencia.campus, ocorrencia.patrimonio, ocorrencia.ramal, ocorrencia.local, ocorrencia.status, ocorrencia.solucao, ocorrencia.prioridade, ocorrencia.avaliacao, ocorrencia.email, ocorrencia.id_usuario_atendente, ocorrencia.id_usuario_indicado, ocorrencia.anexo, ocorrencia.local_sala, area_responsavel.id as id_area_responsavel_area_responsavel, area_responsavel.nome as nome_area_responsavel_area_responsavel, area_responsavel.descricao as descricao_area_responsavel_area_responsavel, area_responsavel.email as email_area_responsavel_area_responsavel, servico.id as id_servico_servico, servico.nome as nome_servico_servico, servico.descricao as descricao_servico_servico, servico.tempo_sla as tempo_sla_servico_servico, servico.visao as visao_servico_servico, usuario_cliente.id as id_usuario_usuario_cliente, usuario_cliente.nome as nome_usuario_usuario_cliente, usuario_cliente.email as email_usuario_usuario_cliente, usuario_cliente.login as login_usuario_usuario_cliente, usuario_cliente.senha as senha_usuario_usuario_cliente, usuario_cliente.nivel as nivel_usuario_usuario_cliente, usuario_cliente.id_setor as id_setor_usuario_usuario_cliente FROM ocorrencia INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico INNER JOIN usuario as usuario_cliente ON usuario_cliente.id = ocorrencia.id_usuario_cliente
+        $sql = "SELECT ocorrencia.id, ocorrencia.id_local, ocorrencia.descricao, ocorrencia.campus, ocorrencia.patrimonio, ocorrencia.ramal, ocorrencia.local, ocorrencia.status, ocorrencia.solucao, ocorrencia.prioridade, ocorrencia.avaliacao, ocorrencia.email, ocorrencia.id_usuario_atendente, ocorrencia.id_usuario_indicado, ocorrencia.anexo, ocorrencia.local_sala, ocorrencia.data_abertura, ocorrencia.data_atendimento, ocorrencia.data_fechamento, ocorrencia.data_fechamento_confirmado, area_responsavel.id as id_area_responsavel_area_responsavel, area_responsavel.nome as nome_area_responsavel_area_responsavel, area_responsavel.descricao as descricao_area_responsavel_area_responsavel, area_responsavel.email as email_area_responsavel_area_responsavel, servico.id as id_servico_servico, servico.nome as nome_servico_servico, servico.descricao as descricao_servico_servico, servico.tempo_sla as tempo_sla_servico_servico, servico.visao as visao_servico_servico, usuario_cliente.id as id_usuario_usuario_cliente, usuario_cliente.nome as nome_usuario_usuario_cliente, usuario_cliente.email as email_usuario_usuario_cliente, usuario_cliente.login as login_usuario_usuario_cliente, usuario_cliente.senha as senha_usuario_usuario_cliente, usuario_cliente.nivel as nivel_usuario_usuario_cliente, usuario_cliente.id_setor as id_setor_usuario_usuario_cliente FROM ocorrencia INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico INNER JOIN usuario as usuario_cliente ON usuario_cliente.id = ocorrencia.id_usuario_cliente
             WHERE ocorrencia.id = :id";
                 
         try {
@@ -291,6 +323,10 @@ class OcorrenciaDAO extends DAO {
                 $ocorrencia->setIdUsuarioIndicado( $row ['id_usuario_indicado'] );
                 $ocorrencia->setAnexo( $row ['anexo'] );
                 $ocorrencia->setLocalSala( $row ['local_sala'] );
+                $ocorrencia->setDataAbertura( $row ['data_abertura'] );
+                $ocorrencia->setDataAtendimento( $row ['data_atendimento'] );
+                $ocorrencia->setDataFechamento( $row ['data_fechamento'] );
+                $ocorrencia->setDataFechamentoConfirmado( $row ['data_fechamento_confirmado'] );
                 $ocorrencia->getAreaResponsavel()->setId( $row ['id_area_responsavel_area_responsavel'] );
                 $ocorrencia->getAreaResponsavel()->setNome( $row ['nome_area_responsavel_area_responsavel'] );
                 $ocorrencia->getAreaResponsavel()->setDescricao( $row ['descricao_area_responsavel_area_responsavel'] );
@@ -323,7 +359,7 @@ class OcorrenciaDAO extends DAO {
         $lista = array();
 	    $areaResponsavel = $ocorrencia->getAreaResponsavel()->getId();
                 
-        $sql = "SELECT ocorrencia.id, ocorrencia.id_local, ocorrencia.descricao, ocorrencia.campus, ocorrencia.patrimonio, ocorrencia.ramal, ocorrencia.local, ocorrencia.status, ocorrencia.solucao, ocorrencia.prioridade, ocorrencia.avaliacao, ocorrencia.email, ocorrencia.id_usuario_atendente, ocorrencia.id_usuario_indicado, ocorrencia.anexo, ocorrencia.local_sala, area_responsavel.id as id_area_responsavel_area_responsavel, area_responsavel.nome as nome_area_responsavel_area_responsavel, area_responsavel.descricao as descricao_area_responsavel_area_responsavel, area_responsavel.email as email_area_responsavel_area_responsavel, servico.id as id_servico_servico, servico.nome as nome_servico_servico, servico.descricao as descricao_servico_servico, servico.tempo_sla as tempo_sla_servico_servico, servico.visao as visao_servico_servico, usuario_cliente.id as id_usuario_usuario_cliente, usuario_cliente.nome as nome_usuario_usuario_cliente, usuario_cliente.email as email_usuario_usuario_cliente, usuario_cliente.login as login_usuario_usuario_cliente, usuario_cliente.senha as senha_usuario_usuario_cliente, usuario_cliente.nivel as nivel_usuario_usuario_cliente, usuario_cliente.id_setor as id_setor_usuario_usuario_cliente FROM ocorrencia INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico INNER JOIN usuario as usuario_cliente ON usuario_cliente.id = ocorrencia.id_usuario_cliente
+        $sql = "SELECT ocorrencia.id, ocorrencia.id_local, ocorrencia.descricao, ocorrencia.campus, ocorrencia.patrimonio, ocorrencia.ramal, ocorrencia.local, ocorrencia.status, ocorrencia.solucao, ocorrencia.prioridade, ocorrencia.avaliacao, ocorrencia.email, ocorrencia.id_usuario_atendente, ocorrencia.id_usuario_indicado, ocorrencia.anexo, ocorrencia.local_sala, ocorrencia.data_abertura, ocorrencia.data_atendimento, ocorrencia.data_fechamento, ocorrencia.data_fechamento_confirmado, area_responsavel.id as id_area_responsavel_area_responsavel, area_responsavel.nome as nome_area_responsavel_area_responsavel, area_responsavel.descricao as descricao_area_responsavel_area_responsavel, area_responsavel.email as email_area_responsavel_area_responsavel, servico.id as id_servico_servico, servico.nome as nome_servico_servico, servico.descricao as descricao_servico_servico, servico.tempo_sla as tempo_sla_servico_servico, servico.visao as visao_servico_servico, usuario_cliente.id as id_usuario_usuario_cliente, usuario_cliente.nome as nome_usuario_usuario_cliente, usuario_cliente.email as email_usuario_usuario_cliente, usuario_cliente.login as login_usuario_usuario_cliente, usuario_cliente.senha as senha_usuario_usuario_cliente, usuario_cliente.nivel as nivel_usuario_usuario_cliente, usuario_cliente.id_setor as id_setor_usuario_usuario_cliente FROM ocorrencia INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico INNER JOIN usuario as usuario_cliente ON usuario_cliente.id = ocorrencia.id_usuario_cliente
             WHERE ocorrencia.id_area_responsavel = :areaResponsavel";
                 
         try {
@@ -350,6 +386,10 @@ class OcorrenciaDAO extends DAO {
                 $ocorrencia->setIdUsuarioIndicado( $row ['id_usuario_indicado'] );
                 $ocorrencia->setAnexo( $row ['anexo'] );
                 $ocorrencia->setLocalSala( $row ['local_sala'] );
+                $ocorrencia->setDataAbertura( $row ['data_abertura'] );
+                $ocorrencia->setDataAtendimento( $row ['data_atendimento'] );
+                $ocorrencia->setDataFechamento( $row ['data_fechamento'] );
+                $ocorrencia->setDataFechamentoConfirmado( $row ['data_fechamento_confirmado'] );
                 $ocorrencia->getAreaResponsavel()->setId( $row ['id_area_responsavel_area_responsavel'] );
                 $ocorrencia->getAreaResponsavel()->setNome( $row ['nome_area_responsavel_area_responsavel'] );
                 $ocorrencia->getAreaResponsavel()->setDescricao( $row ['descricao_area_responsavel_area_responsavel'] );
@@ -382,7 +422,7 @@ class OcorrenciaDAO extends DAO {
         $lista = array();
 	    $servico = $ocorrencia->getServico()->getId();
                 
-        $sql = "SELECT ocorrencia.id, ocorrencia.id_local, ocorrencia.descricao, ocorrencia.campus, ocorrencia.patrimonio, ocorrencia.ramal, ocorrencia.local, ocorrencia.status, ocorrencia.solucao, ocorrencia.prioridade, ocorrencia.avaliacao, ocorrencia.email, ocorrencia.id_usuario_atendente, ocorrencia.id_usuario_indicado, ocorrencia.anexo, ocorrencia.local_sala, area_responsavel.id as id_area_responsavel_area_responsavel, area_responsavel.nome as nome_area_responsavel_area_responsavel, area_responsavel.descricao as descricao_area_responsavel_area_responsavel, area_responsavel.email as email_area_responsavel_area_responsavel, servico.id as id_servico_servico, servico.nome as nome_servico_servico, servico.descricao as descricao_servico_servico, servico.tempo_sla as tempo_sla_servico_servico, servico.visao as visao_servico_servico, usuario_cliente.id as id_usuario_usuario_cliente, usuario_cliente.nome as nome_usuario_usuario_cliente, usuario_cliente.email as email_usuario_usuario_cliente, usuario_cliente.login as login_usuario_usuario_cliente, usuario_cliente.senha as senha_usuario_usuario_cliente, usuario_cliente.nivel as nivel_usuario_usuario_cliente, usuario_cliente.id_setor as id_setor_usuario_usuario_cliente FROM ocorrencia INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico INNER JOIN usuario as usuario_cliente ON usuario_cliente.id = ocorrencia.id_usuario_cliente
+        $sql = "SELECT ocorrencia.id, ocorrencia.id_local, ocorrencia.descricao, ocorrencia.campus, ocorrencia.patrimonio, ocorrencia.ramal, ocorrencia.local, ocorrencia.status, ocorrencia.solucao, ocorrencia.prioridade, ocorrencia.avaliacao, ocorrencia.email, ocorrencia.id_usuario_atendente, ocorrencia.id_usuario_indicado, ocorrencia.anexo, ocorrencia.local_sala, ocorrencia.data_abertura, ocorrencia.data_atendimento, ocorrencia.data_fechamento, ocorrencia.data_fechamento_confirmado, area_responsavel.id as id_area_responsavel_area_responsavel, area_responsavel.nome as nome_area_responsavel_area_responsavel, area_responsavel.descricao as descricao_area_responsavel_area_responsavel, area_responsavel.email as email_area_responsavel_area_responsavel, servico.id as id_servico_servico, servico.nome as nome_servico_servico, servico.descricao as descricao_servico_servico, servico.tempo_sla as tempo_sla_servico_servico, servico.visao as visao_servico_servico, usuario_cliente.id as id_usuario_usuario_cliente, usuario_cliente.nome as nome_usuario_usuario_cliente, usuario_cliente.email as email_usuario_usuario_cliente, usuario_cliente.login as login_usuario_usuario_cliente, usuario_cliente.senha as senha_usuario_usuario_cliente, usuario_cliente.nivel as nivel_usuario_usuario_cliente, usuario_cliente.id_setor as id_setor_usuario_usuario_cliente FROM ocorrencia INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico INNER JOIN usuario as usuario_cliente ON usuario_cliente.id = ocorrencia.id_usuario_cliente
             WHERE ocorrencia.id_servico = :servico";
                 
         try {
@@ -409,6 +449,10 @@ class OcorrenciaDAO extends DAO {
                 $ocorrencia->setIdUsuarioIndicado( $row ['id_usuario_indicado'] );
                 $ocorrencia->setAnexo( $row ['anexo'] );
                 $ocorrencia->setLocalSala( $row ['local_sala'] );
+                $ocorrencia->setDataAbertura( $row ['data_abertura'] );
+                $ocorrencia->setDataAtendimento( $row ['data_atendimento'] );
+                $ocorrencia->setDataFechamento( $row ['data_fechamento'] );
+                $ocorrencia->setDataFechamentoConfirmado( $row ['data_fechamento_confirmado'] );
                 $ocorrencia->getAreaResponsavel()->setId( $row ['id_area_responsavel_area_responsavel'] );
                 $ocorrencia->getAreaResponsavel()->setNome( $row ['nome_area_responsavel_area_responsavel'] );
                 $ocorrencia->getAreaResponsavel()->setDescricao( $row ['descricao_area_responsavel_area_responsavel'] );
@@ -441,7 +485,7 @@ class OcorrenciaDAO extends DAO {
         $lista = array();
 	    $idLocal = $ocorrencia->getIdLocal();
                 
-        $sql = "SELECT ocorrencia.id, ocorrencia.id_local, ocorrencia.descricao, ocorrencia.campus, ocorrencia.patrimonio, ocorrencia.ramal, ocorrencia.local, ocorrencia.status, ocorrencia.solucao, ocorrencia.prioridade, ocorrencia.avaliacao, ocorrencia.email, ocorrencia.id_usuario_atendente, ocorrencia.id_usuario_indicado, ocorrencia.anexo, ocorrencia.local_sala, area_responsavel.id as id_area_responsavel_area_responsavel, area_responsavel.nome as nome_area_responsavel_area_responsavel, area_responsavel.descricao as descricao_area_responsavel_area_responsavel, area_responsavel.email as email_area_responsavel_area_responsavel, servico.id as id_servico_servico, servico.nome as nome_servico_servico, servico.descricao as descricao_servico_servico, servico.tempo_sla as tempo_sla_servico_servico, servico.visao as visao_servico_servico, usuario_cliente.id as id_usuario_usuario_cliente, usuario_cliente.nome as nome_usuario_usuario_cliente, usuario_cliente.email as email_usuario_usuario_cliente, usuario_cliente.login as login_usuario_usuario_cliente, usuario_cliente.senha as senha_usuario_usuario_cliente, usuario_cliente.nivel as nivel_usuario_usuario_cliente, usuario_cliente.id_setor as id_setor_usuario_usuario_cliente FROM ocorrencia INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico INNER JOIN usuario as usuario_cliente ON usuario_cliente.id = ocorrencia.id_usuario_cliente
+        $sql = "SELECT ocorrencia.id, ocorrencia.id_local, ocorrencia.descricao, ocorrencia.campus, ocorrencia.patrimonio, ocorrencia.ramal, ocorrencia.local, ocorrencia.status, ocorrencia.solucao, ocorrencia.prioridade, ocorrencia.avaliacao, ocorrencia.email, ocorrencia.id_usuario_atendente, ocorrencia.id_usuario_indicado, ocorrencia.anexo, ocorrencia.local_sala, ocorrencia.data_abertura, ocorrencia.data_atendimento, ocorrencia.data_fechamento, ocorrencia.data_fechamento_confirmado, area_responsavel.id as id_area_responsavel_area_responsavel, area_responsavel.nome as nome_area_responsavel_area_responsavel, area_responsavel.descricao as descricao_area_responsavel_area_responsavel, area_responsavel.email as email_area_responsavel_area_responsavel, servico.id as id_servico_servico, servico.nome as nome_servico_servico, servico.descricao as descricao_servico_servico, servico.tempo_sla as tempo_sla_servico_servico, servico.visao as visao_servico_servico, usuario_cliente.id as id_usuario_usuario_cliente, usuario_cliente.nome as nome_usuario_usuario_cliente, usuario_cliente.email as email_usuario_usuario_cliente, usuario_cliente.login as login_usuario_usuario_cliente, usuario_cliente.senha as senha_usuario_usuario_cliente, usuario_cliente.nivel as nivel_usuario_usuario_cliente, usuario_cliente.id_setor as id_setor_usuario_usuario_cliente FROM ocorrencia INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico INNER JOIN usuario as usuario_cliente ON usuario_cliente.id = ocorrencia.id_usuario_cliente
             WHERE ocorrencia.id_local = :idLocal";
                 
         try {
@@ -468,6 +512,10 @@ class OcorrenciaDAO extends DAO {
                 $ocorrencia->setIdUsuarioIndicado( $row ['id_usuario_indicado'] );
                 $ocorrencia->setAnexo( $row ['anexo'] );
                 $ocorrencia->setLocalSala( $row ['local_sala'] );
+                $ocorrencia->setDataAbertura( $row ['data_abertura'] );
+                $ocorrencia->setDataAtendimento( $row ['data_atendimento'] );
+                $ocorrencia->setDataFechamento( $row ['data_fechamento'] );
+                $ocorrencia->setDataFechamentoConfirmado( $row ['data_fechamento_confirmado'] );
                 $ocorrencia->getAreaResponsavel()->setId( $row ['id_area_responsavel_area_responsavel'] );
                 $ocorrencia->getAreaResponsavel()->setNome( $row ['nome_area_responsavel_area_responsavel'] );
                 $ocorrencia->getAreaResponsavel()->setDescricao( $row ['descricao_area_responsavel_area_responsavel'] );
@@ -500,7 +548,7 @@ class OcorrenciaDAO extends DAO {
         $lista = array();
 	    $usuarioCliente = $ocorrencia->getUsuarioCliente()->getId();
                 
-        $sql = "SELECT ocorrencia.id, ocorrencia.id_local, ocorrencia.descricao, ocorrencia.campus, ocorrencia.patrimonio, ocorrencia.ramal, ocorrencia.local, ocorrencia.status, ocorrencia.solucao, ocorrencia.prioridade, ocorrencia.avaliacao, ocorrencia.email, ocorrencia.id_usuario_atendente, ocorrencia.id_usuario_indicado, ocorrencia.anexo, ocorrencia.local_sala, area_responsavel.id as id_area_responsavel_area_responsavel, area_responsavel.nome as nome_area_responsavel_area_responsavel, area_responsavel.descricao as descricao_area_responsavel_area_responsavel, area_responsavel.email as email_area_responsavel_area_responsavel, servico.id as id_servico_servico, servico.nome as nome_servico_servico, servico.descricao as descricao_servico_servico, servico.tempo_sla as tempo_sla_servico_servico, servico.visao as visao_servico_servico, usuario_cliente.id as id_usuario_usuario_cliente, usuario_cliente.nome as nome_usuario_usuario_cliente, usuario_cliente.email as email_usuario_usuario_cliente, usuario_cliente.login as login_usuario_usuario_cliente, usuario_cliente.senha as senha_usuario_usuario_cliente, usuario_cliente.nivel as nivel_usuario_usuario_cliente, usuario_cliente.id_setor as id_setor_usuario_usuario_cliente FROM ocorrencia INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico INNER JOIN usuario as usuario_cliente ON usuario_cliente.id = ocorrencia.id_usuario_cliente
+        $sql = "SELECT ocorrencia.id, ocorrencia.id_local, ocorrencia.descricao, ocorrencia.campus, ocorrencia.patrimonio, ocorrencia.ramal, ocorrencia.local, ocorrencia.status, ocorrencia.solucao, ocorrencia.prioridade, ocorrencia.avaliacao, ocorrencia.email, ocorrencia.id_usuario_atendente, ocorrencia.id_usuario_indicado, ocorrencia.anexo, ocorrencia.local_sala, ocorrencia.data_abertura, ocorrencia.data_atendimento, ocorrencia.data_fechamento, ocorrencia.data_fechamento_confirmado, area_responsavel.id as id_area_responsavel_area_responsavel, area_responsavel.nome as nome_area_responsavel_area_responsavel, area_responsavel.descricao as descricao_area_responsavel_area_responsavel, area_responsavel.email as email_area_responsavel_area_responsavel, servico.id as id_servico_servico, servico.nome as nome_servico_servico, servico.descricao as descricao_servico_servico, servico.tempo_sla as tempo_sla_servico_servico, servico.visao as visao_servico_servico, usuario_cliente.id as id_usuario_usuario_cliente, usuario_cliente.nome as nome_usuario_usuario_cliente, usuario_cliente.email as email_usuario_usuario_cliente, usuario_cliente.login as login_usuario_usuario_cliente, usuario_cliente.senha as senha_usuario_usuario_cliente, usuario_cliente.nivel as nivel_usuario_usuario_cliente, usuario_cliente.id_setor as id_setor_usuario_usuario_cliente FROM ocorrencia INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico INNER JOIN usuario as usuario_cliente ON usuario_cliente.id = ocorrencia.id_usuario_cliente
             WHERE ocorrencia.id_usuario_cliente = :usuarioCliente";
                 
         try {
@@ -527,6 +575,10 @@ class OcorrenciaDAO extends DAO {
                 $ocorrencia->setIdUsuarioIndicado( $row ['id_usuario_indicado'] );
                 $ocorrencia->setAnexo( $row ['anexo'] );
                 $ocorrencia->setLocalSala( $row ['local_sala'] );
+                $ocorrencia->setDataAbertura( $row ['data_abertura'] );
+                $ocorrencia->setDataAtendimento( $row ['data_atendimento'] );
+                $ocorrencia->setDataFechamento( $row ['data_fechamento'] );
+                $ocorrencia->setDataFechamentoConfirmado( $row ['data_fechamento_confirmado'] );
                 $ocorrencia->getAreaResponsavel()->setId( $row ['id_area_responsavel_area_responsavel'] );
                 $ocorrencia->getAreaResponsavel()->setNome( $row ['nome_area_responsavel_area_responsavel'] );
                 $ocorrencia->getAreaResponsavel()->setDescricao( $row ['descricao_area_responsavel_area_responsavel'] );
@@ -559,7 +611,7 @@ class OcorrenciaDAO extends DAO {
         $lista = array();
 	    $descricao = $ocorrencia->getDescricao();
                 
-        $sql = "SELECT ocorrencia.id, ocorrencia.id_local, ocorrencia.descricao, ocorrencia.campus, ocorrencia.patrimonio, ocorrencia.ramal, ocorrencia.local, ocorrencia.status, ocorrencia.solucao, ocorrencia.prioridade, ocorrencia.avaliacao, ocorrencia.email, ocorrencia.id_usuario_atendente, ocorrencia.id_usuario_indicado, ocorrencia.anexo, ocorrencia.local_sala, area_responsavel.id as id_area_responsavel_area_responsavel, area_responsavel.nome as nome_area_responsavel_area_responsavel, area_responsavel.descricao as descricao_area_responsavel_area_responsavel, area_responsavel.email as email_area_responsavel_area_responsavel, servico.id as id_servico_servico, servico.nome as nome_servico_servico, servico.descricao as descricao_servico_servico, servico.tempo_sla as tempo_sla_servico_servico, servico.visao as visao_servico_servico, usuario_cliente.id as id_usuario_usuario_cliente, usuario_cliente.nome as nome_usuario_usuario_cliente, usuario_cliente.email as email_usuario_usuario_cliente, usuario_cliente.login as login_usuario_usuario_cliente, usuario_cliente.senha as senha_usuario_usuario_cliente, usuario_cliente.nivel as nivel_usuario_usuario_cliente, usuario_cliente.id_setor as id_setor_usuario_usuario_cliente FROM ocorrencia INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico INNER JOIN usuario as usuario_cliente ON usuario_cliente.id = ocorrencia.id_usuario_cliente
+        $sql = "SELECT ocorrencia.id, ocorrencia.id_local, ocorrencia.descricao, ocorrencia.campus, ocorrencia.patrimonio, ocorrencia.ramal, ocorrencia.local, ocorrencia.status, ocorrencia.solucao, ocorrencia.prioridade, ocorrencia.avaliacao, ocorrencia.email, ocorrencia.id_usuario_atendente, ocorrencia.id_usuario_indicado, ocorrencia.anexo, ocorrencia.local_sala, ocorrencia.data_abertura, ocorrencia.data_atendimento, ocorrencia.data_fechamento, ocorrencia.data_fechamento_confirmado, area_responsavel.id as id_area_responsavel_area_responsavel, area_responsavel.nome as nome_area_responsavel_area_responsavel, area_responsavel.descricao as descricao_area_responsavel_area_responsavel, area_responsavel.email as email_area_responsavel_area_responsavel, servico.id as id_servico_servico, servico.nome as nome_servico_servico, servico.descricao as descricao_servico_servico, servico.tempo_sla as tempo_sla_servico_servico, servico.visao as visao_servico_servico, usuario_cliente.id as id_usuario_usuario_cliente, usuario_cliente.nome as nome_usuario_usuario_cliente, usuario_cliente.email as email_usuario_usuario_cliente, usuario_cliente.login as login_usuario_usuario_cliente, usuario_cliente.senha as senha_usuario_usuario_cliente, usuario_cliente.nivel as nivel_usuario_usuario_cliente, usuario_cliente.id_setor as id_setor_usuario_usuario_cliente FROM ocorrencia INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico INNER JOIN usuario as usuario_cliente ON usuario_cliente.id = ocorrencia.id_usuario_cliente
             WHERE ocorrencia.descricao like :descricao";
                 
         try {
@@ -586,6 +638,10 @@ class OcorrenciaDAO extends DAO {
                 $ocorrencia->setIdUsuarioIndicado( $row ['id_usuario_indicado'] );
                 $ocorrencia->setAnexo( $row ['anexo'] );
                 $ocorrencia->setLocalSala( $row ['local_sala'] );
+                $ocorrencia->setDataAbertura( $row ['data_abertura'] );
+                $ocorrencia->setDataAtendimento( $row ['data_atendimento'] );
+                $ocorrencia->setDataFechamento( $row ['data_fechamento'] );
+                $ocorrencia->setDataFechamentoConfirmado( $row ['data_fechamento_confirmado'] );
                 $ocorrencia->getAreaResponsavel()->setId( $row ['id_area_responsavel_area_responsavel'] );
                 $ocorrencia->getAreaResponsavel()->setNome( $row ['nome_area_responsavel_area_responsavel'] );
                 $ocorrencia->getAreaResponsavel()->setDescricao( $row ['descricao_area_responsavel_area_responsavel'] );
@@ -618,7 +674,7 @@ class OcorrenciaDAO extends DAO {
         $lista = array();
 	    $campus = $ocorrencia->getCampus();
                 
-        $sql = "SELECT ocorrencia.id, ocorrencia.id_local, ocorrencia.descricao, ocorrencia.campus, ocorrencia.patrimonio, ocorrencia.ramal, ocorrencia.local, ocorrencia.status, ocorrencia.solucao, ocorrencia.prioridade, ocorrencia.avaliacao, ocorrencia.email, ocorrencia.id_usuario_atendente, ocorrencia.id_usuario_indicado, ocorrencia.anexo, ocorrencia.local_sala, area_responsavel.id as id_area_responsavel_area_responsavel, area_responsavel.nome as nome_area_responsavel_area_responsavel, area_responsavel.descricao as descricao_area_responsavel_area_responsavel, area_responsavel.email as email_area_responsavel_area_responsavel, servico.id as id_servico_servico, servico.nome as nome_servico_servico, servico.descricao as descricao_servico_servico, servico.tempo_sla as tempo_sla_servico_servico, servico.visao as visao_servico_servico, usuario_cliente.id as id_usuario_usuario_cliente, usuario_cliente.nome as nome_usuario_usuario_cliente, usuario_cliente.email as email_usuario_usuario_cliente, usuario_cliente.login as login_usuario_usuario_cliente, usuario_cliente.senha as senha_usuario_usuario_cliente, usuario_cliente.nivel as nivel_usuario_usuario_cliente, usuario_cliente.id_setor as id_setor_usuario_usuario_cliente FROM ocorrencia INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico INNER JOIN usuario as usuario_cliente ON usuario_cliente.id = ocorrencia.id_usuario_cliente
+        $sql = "SELECT ocorrencia.id, ocorrencia.id_local, ocorrencia.descricao, ocorrencia.campus, ocorrencia.patrimonio, ocorrencia.ramal, ocorrencia.local, ocorrencia.status, ocorrencia.solucao, ocorrencia.prioridade, ocorrencia.avaliacao, ocorrencia.email, ocorrencia.id_usuario_atendente, ocorrencia.id_usuario_indicado, ocorrencia.anexo, ocorrencia.local_sala, ocorrencia.data_abertura, ocorrencia.data_atendimento, ocorrencia.data_fechamento, ocorrencia.data_fechamento_confirmado, area_responsavel.id as id_area_responsavel_area_responsavel, area_responsavel.nome as nome_area_responsavel_area_responsavel, area_responsavel.descricao as descricao_area_responsavel_area_responsavel, area_responsavel.email as email_area_responsavel_area_responsavel, servico.id as id_servico_servico, servico.nome as nome_servico_servico, servico.descricao as descricao_servico_servico, servico.tempo_sla as tempo_sla_servico_servico, servico.visao as visao_servico_servico, usuario_cliente.id as id_usuario_usuario_cliente, usuario_cliente.nome as nome_usuario_usuario_cliente, usuario_cliente.email as email_usuario_usuario_cliente, usuario_cliente.login as login_usuario_usuario_cliente, usuario_cliente.senha as senha_usuario_usuario_cliente, usuario_cliente.nivel as nivel_usuario_usuario_cliente, usuario_cliente.id_setor as id_setor_usuario_usuario_cliente FROM ocorrencia INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico INNER JOIN usuario as usuario_cliente ON usuario_cliente.id = ocorrencia.id_usuario_cliente
             WHERE ocorrencia.campus like :campus";
                 
         try {
@@ -645,6 +701,10 @@ class OcorrenciaDAO extends DAO {
                 $ocorrencia->setIdUsuarioIndicado( $row ['id_usuario_indicado'] );
                 $ocorrencia->setAnexo( $row ['anexo'] );
                 $ocorrencia->setLocalSala( $row ['local_sala'] );
+                $ocorrencia->setDataAbertura( $row ['data_abertura'] );
+                $ocorrencia->setDataAtendimento( $row ['data_atendimento'] );
+                $ocorrencia->setDataFechamento( $row ['data_fechamento'] );
+                $ocorrencia->setDataFechamentoConfirmado( $row ['data_fechamento_confirmado'] );
                 $ocorrencia->getAreaResponsavel()->setId( $row ['id_area_responsavel_area_responsavel'] );
                 $ocorrencia->getAreaResponsavel()->setNome( $row ['nome_area_responsavel_area_responsavel'] );
                 $ocorrencia->getAreaResponsavel()->setDescricao( $row ['descricao_area_responsavel_area_responsavel'] );
@@ -677,7 +737,7 @@ class OcorrenciaDAO extends DAO {
         $lista = array();
 	    $patrimonio = $ocorrencia->getPatrimonio();
                 
-        $sql = "SELECT ocorrencia.id, ocorrencia.id_local, ocorrencia.descricao, ocorrencia.campus, ocorrencia.patrimonio, ocorrencia.ramal, ocorrencia.local, ocorrencia.status, ocorrencia.solucao, ocorrencia.prioridade, ocorrencia.avaliacao, ocorrencia.email, ocorrencia.id_usuario_atendente, ocorrencia.id_usuario_indicado, ocorrencia.anexo, ocorrencia.local_sala, area_responsavel.id as id_area_responsavel_area_responsavel, area_responsavel.nome as nome_area_responsavel_area_responsavel, area_responsavel.descricao as descricao_area_responsavel_area_responsavel, area_responsavel.email as email_area_responsavel_area_responsavel, servico.id as id_servico_servico, servico.nome as nome_servico_servico, servico.descricao as descricao_servico_servico, servico.tempo_sla as tempo_sla_servico_servico, servico.visao as visao_servico_servico, usuario_cliente.id as id_usuario_usuario_cliente, usuario_cliente.nome as nome_usuario_usuario_cliente, usuario_cliente.email as email_usuario_usuario_cliente, usuario_cliente.login as login_usuario_usuario_cliente, usuario_cliente.senha as senha_usuario_usuario_cliente, usuario_cliente.nivel as nivel_usuario_usuario_cliente, usuario_cliente.id_setor as id_setor_usuario_usuario_cliente FROM ocorrencia INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico INNER JOIN usuario as usuario_cliente ON usuario_cliente.id = ocorrencia.id_usuario_cliente
+        $sql = "SELECT ocorrencia.id, ocorrencia.id_local, ocorrencia.descricao, ocorrencia.campus, ocorrencia.patrimonio, ocorrencia.ramal, ocorrencia.local, ocorrencia.status, ocorrencia.solucao, ocorrencia.prioridade, ocorrencia.avaliacao, ocorrencia.email, ocorrencia.id_usuario_atendente, ocorrencia.id_usuario_indicado, ocorrencia.anexo, ocorrencia.local_sala, ocorrencia.data_abertura, ocorrencia.data_atendimento, ocorrencia.data_fechamento, ocorrencia.data_fechamento_confirmado, area_responsavel.id as id_area_responsavel_area_responsavel, area_responsavel.nome as nome_area_responsavel_area_responsavel, area_responsavel.descricao as descricao_area_responsavel_area_responsavel, area_responsavel.email as email_area_responsavel_area_responsavel, servico.id as id_servico_servico, servico.nome as nome_servico_servico, servico.descricao as descricao_servico_servico, servico.tempo_sla as tempo_sla_servico_servico, servico.visao as visao_servico_servico, usuario_cliente.id as id_usuario_usuario_cliente, usuario_cliente.nome as nome_usuario_usuario_cliente, usuario_cliente.email as email_usuario_usuario_cliente, usuario_cliente.login as login_usuario_usuario_cliente, usuario_cliente.senha as senha_usuario_usuario_cliente, usuario_cliente.nivel as nivel_usuario_usuario_cliente, usuario_cliente.id_setor as id_setor_usuario_usuario_cliente FROM ocorrencia INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico INNER JOIN usuario as usuario_cliente ON usuario_cliente.id = ocorrencia.id_usuario_cliente
             WHERE ocorrencia.patrimonio like :patrimonio";
                 
         try {
@@ -704,6 +764,10 @@ class OcorrenciaDAO extends DAO {
                 $ocorrencia->setIdUsuarioIndicado( $row ['id_usuario_indicado'] );
                 $ocorrencia->setAnexo( $row ['anexo'] );
                 $ocorrencia->setLocalSala( $row ['local_sala'] );
+                $ocorrencia->setDataAbertura( $row ['data_abertura'] );
+                $ocorrencia->setDataAtendimento( $row ['data_atendimento'] );
+                $ocorrencia->setDataFechamento( $row ['data_fechamento'] );
+                $ocorrencia->setDataFechamentoConfirmado( $row ['data_fechamento_confirmado'] );
                 $ocorrencia->getAreaResponsavel()->setId( $row ['id_area_responsavel_area_responsavel'] );
                 $ocorrencia->getAreaResponsavel()->setNome( $row ['nome_area_responsavel_area_responsavel'] );
                 $ocorrencia->getAreaResponsavel()->setDescricao( $row ['descricao_area_responsavel_area_responsavel'] );
@@ -736,7 +800,7 @@ class OcorrenciaDAO extends DAO {
         $lista = array();
 	    $ramal = $ocorrencia->getRamal();
                 
-        $sql = "SELECT ocorrencia.id, ocorrencia.id_local, ocorrencia.descricao, ocorrencia.campus, ocorrencia.patrimonio, ocorrencia.ramal, ocorrencia.local, ocorrencia.status, ocorrencia.solucao, ocorrencia.prioridade, ocorrencia.avaliacao, ocorrencia.email, ocorrencia.id_usuario_atendente, ocorrencia.id_usuario_indicado, ocorrencia.anexo, ocorrencia.local_sala, area_responsavel.id as id_area_responsavel_area_responsavel, area_responsavel.nome as nome_area_responsavel_area_responsavel, area_responsavel.descricao as descricao_area_responsavel_area_responsavel, area_responsavel.email as email_area_responsavel_area_responsavel, servico.id as id_servico_servico, servico.nome as nome_servico_servico, servico.descricao as descricao_servico_servico, servico.tempo_sla as tempo_sla_servico_servico, servico.visao as visao_servico_servico, usuario_cliente.id as id_usuario_usuario_cliente, usuario_cliente.nome as nome_usuario_usuario_cliente, usuario_cliente.email as email_usuario_usuario_cliente, usuario_cliente.login as login_usuario_usuario_cliente, usuario_cliente.senha as senha_usuario_usuario_cliente, usuario_cliente.nivel as nivel_usuario_usuario_cliente, usuario_cliente.id_setor as id_setor_usuario_usuario_cliente FROM ocorrencia INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico INNER JOIN usuario as usuario_cliente ON usuario_cliente.id = ocorrencia.id_usuario_cliente
+        $sql = "SELECT ocorrencia.id, ocorrencia.id_local, ocorrencia.descricao, ocorrencia.campus, ocorrencia.patrimonio, ocorrencia.ramal, ocorrencia.local, ocorrencia.status, ocorrencia.solucao, ocorrencia.prioridade, ocorrencia.avaliacao, ocorrencia.email, ocorrencia.id_usuario_atendente, ocorrencia.id_usuario_indicado, ocorrencia.anexo, ocorrencia.local_sala, ocorrencia.data_abertura, ocorrencia.data_atendimento, ocorrencia.data_fechamento, ocorrencia.data_fechamento_confirmado, area_responsavel.id as id_area_responsavel_area_responsavel, area_responsavel.nome as nome_area_responsavel_area_responsavel, area_responsavel.descricao as descricao_area_responsavel_area_responsavel, area_responsavel.email as email_area_responsavel_area_responsavel, servico.id as id_servico_servico, servico.nome as nome_servico_servico, servico.descricao as descricao_servico_servico, servico.tempo_sla as tempo_sla_servico_servico, servico.visao as visao_servico_servico, usuario_cliente.id as id_usuario_usuario_cliente, usuario_cliente.nome as nome_usuario_usuario_cliente, usuario_cliente.email as email_usuario_usuario_cliente, usuario_cliente.login as login_usuario_usuario_cliente, usuario_cliente.senha as senha_usuario_usuario_cliente, usuario_cliente.nivel as nivel_usuario_usuario_cliente, usuario_cliente.id_setor as id_setor_usuario_usuario_cliente FROM ocorrencia INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico INNER JOIN usuario as usuario_cliente ON usuario_cliente.id = ocorrencia.id_usuario_cliente
             WHERE ocorrencia.ramal like :ramal";
                 
         try {
@@ -763,6 +827,10 @@ class OcorrenciaDAO extends DAO {
                 $ocorrencia->setIdUsuarioIndicado( $row ['id_usuario_indicado'] );
                 $ocorrencia->setAnexo( $row ['anexo'] );
                 $ocorrencia->setLocalSala( $row ['local_sala'] );
+                $ocorrencia->setDataAbertura( $row ['data_abertura'] );
+                $ocorrencia->setDataAtendimento( $row ['data_atendimento'] );
+                $ocorrencia->setDataFechamento( $row ['data_fechamento'] );
+                $ocorrencia->setDataFechamentoConfirmado( $row ['data_fechamento_confirmado'] );
                 $ocorrencia->getAreaResponsavel()->setId( $row ['id_area_responsavel_area_responsavel'] );
                 $ocorrencia->getAreaResponsavel()->setNome( $row ['nome_area_responsavel_area_responsavel'] );
                 $ocorrencia->getAreaResponsavel()->setDescricao( $row ['descricao_area_responsavel_area_responsavel'] );
@@ -795,7 +863,7 @@ class OcorrenciaDAO extends DAO {
         $lista = array();
 	    $local = $ocorrencia->getLocal();
                 
-        $sql = "SELECT ocorrencia.id, ocorrencia.id_local, ocorrencia.descricao, ocorrencia.campus, ocorrencia.patrimonio, ocorrencia.ramal, ocorrencia.local, ocorrencia.status, ocorrencia.solucao, ocorrencia.prioridade, ocorrencia.avaliacao, ocorrencia.email, ocorrencia.id_usuario_atendente, ocorrencia.id_usuario_indicado, ocorrencia.anexo, ocorrencia.local_sala, area_responsavel.id as id_area_responsavel_area_responsavel, area_responsavel.nome as nome_area_responsavel_area_responsavel, area_responsavel.descricao as descricao_area_responsavel_area_responsavel, area_responsavel.email as email_area_responsavel_area_responsavel, servico.id as id_servico_servico, servico.nome as nome_servico_servico, servico.descricao as descricao_servico_servico, servico.tempo_sla as tempo_sla_servico_servico, servico.visao as visao_servico_servico, usuario_cliente.id as id_usuario_usuario_cliente, usuario_cliente.nome as nome_usuario_usuario_cliente, usuario_cliente.email as email_usuario_usuario_cliente, usuario_cliente.login as login_usuario_usuario_cliente, usuario_cliente.senha as senha_usuario_usuario_cliente, usuario_cliente.nivel as nivel_usuario_usuario_cliente, usuario_cliente.id_setor as id_setor_usuario_usuario_cliente FROM ocorrencia INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico INNER JOIN usuario as usuario_cliente ON usuario_cliente.id = ocorrencia.id_usuario_cliente
+        $sql = "SELECT ocorrencia.id, ocorrencia.id_local, ocorrencia.descricao, ocorrencia.campus, ocorrencia.patrimonio, ocorrencia.ramal, ocorrencia.local, ocorrencia.status, ocorrencia.solucao, ocorrencia.prioridade, ocorrencia.avaliacao, ocorrencia.email, ocorrencia.id_usuario_atendente, ocorrencia.id_usuario_indicado, ocorrencia.anexo, ocorrencia.local_sala, ocorrencia.data_abertura, ocorrencia.data_atendimento, ocorrencia.data_fechamento, ocorrencia.data_fechamento_confirmado, area_responsavel.id as id_area_responsavel_area_responsavel, area_responsavel.nome as nome_area_responsavel_area_responsavel, area_responsavel.descricao as descricao_area_responsavel_area_responsavel, area_responsavel.email as email_area_responsavel_area_responsavel, servico.id as id_servico_servico, servico.nome as nome_servico_servico, servico.descricao as descricao_servico_servico, servico.tempo_sla as tempo_sla_servico_servico, servico.visao as visao_servico_servico, usuario_cliente.id as id_usuario_usuario_cliente, usuario_cliente.nome as nome_usuario_usuario_cliente, usuario_cliente.email as email_usuario_usuario_cliente, usuario_cliente.login as login_usuario_usuario_cliente, usuario_cliente.senha as senha_usuario_usuario_cliente, usuario_cliente.nivel as nivel_usuario_usuario_cliente, usuario_cliente.id_setor as id_setor_usuario_usuario_cliente FROM ocorrencia INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico INNER JOIN usuario as usuario_cliente ON usuario_cliente.id = ocorrencia.id_usuario_cliente
             WHERE ocorrencia.local like :local";
                 
         try {
@@ -822,6 +890,10 @@ class OcorrenciaDAO extends DAO {
                 $ocorrencia->setIdUsuarioIndicado( $row ['id_usuario_indicado'] );
                 $ocorrencia->setAnexo( $row ['anexo'] );
                 $ocorrencia->setLocalSala( $row ['local_sala'] );
+                $ocorrencia->setDataAbertura( $row ['data_abertura'] );
+                $ocorrencia->setDataAtendimento( $row ['data_atendimento'] );
+                $ocorrencia->setDataFechamento( $row ['data_fechamento'] );
+                $ocorrencia->setDataFechamentoConfirmado( $row ['data_fechamento_confirmado'] );
                 $ocorrencia->getAreaResponsavel()->setId( $row ['id_area_responsavel_area_responsavel'] );
                 $ocorrencia->getAreaResponsavel()->setNome( $row ['nome_area_responsavel_area_responsavel'] );
                 $ocorrencia->getAreaResponsavel()->setDescricao( $row ['descricao_area_responsavel_area_responsavel'] );
@@ -854,7 +926,7 @@ class OcorrenciaDAO extends DAO {
         $lista = array();
 	    $status = $ocorrencia->getStatus();
                 
-        $sql = "SELECT ocorrencia.id, ocorrencia.id_local, ocorrencia.descricao, ocorrencia.campus, ocorrencia.patrimonio, ocorrencia.ramal, ocorrencia.local, ocorrencia.status, ocorrencia.solucao, ocorrencia.prioridade, ocorrencia.avaliacao, ocorrencia.email, ocorrencia.id_usuario_atendente, ocorrencia.id_usuario_indicado, ocorrencia.anexo, ocorrencia.local_sala, area_responsavel.id as id_area_responsavel_area_responsavel, area_responsavel.nome as nome_area_responsavel_area_responsavel, area_responsavel.descricao as descricao_area_responsavel_area_responsavel, area_responsavel.email as email_area_responsavel_area_responsavel, servico.id as id_servico_servico, servico.nome as nome_servico_servico, servico.descricao as descricao_servico_servico, servico.tempo_sla as tempo_sla_servico_servico, servico.visao as visao_servico_servico, usuario_cliente.id as id_usuario_usuario_cliente, usuario_cliente.nome as nome_usuario_usuario_cliente, usuario_cliente.email as email_usuario_usuario_cliente, usuario_cliente.login as login_usuario_usuario_cliente, usuario_cliente.senha as senha_usuario_usuario_cliente, usuario_cliente.nivel as nivel_usuario_usuario_cliente, usuario_cliente.id_setor as id_setor_usuario_usuario_cliente FROM ocorrencia INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico INNER JOIN usuario as usuario_cliente ON usuario_cliente.id = ocorrencia.id_usuario_cliente
+        $sql = "SELECT ocorrencia.id, ocorrencia.id_local, ocorrencia.descricao, ocorrencia.campus, ocorrencia.patrimonio, ocorrencia.ramal, ocorrencia.local, ocorrencia.status, ocorrencia.solucao, ocorrencia.prioridade, ocorrencia.avaliacao, ocorrencia.email, ocorrencia.id_usuario_atendente, ocorrencia.id_usuario_indicado, ocorrencia.anexo, ocorrencia.local_sala, ocorrencia.data_abertura, ocorrencia.data_atendimento, ocorrencia.data_fechamento, ocorrencia.data_fechamento_confirmado, area_responsavel.id as id_area_responsavel_area_responsavel, area_responsavel.nome as nome_area_responsavel_area_responsavel, area_responsavel.descricao as descricao_area_responsavel_area_responsavel, area_responsavel.email as email_area_responsavel_area_responsavel, servico.id as id_servico_servico, servico.nome as nome_servico_servico, servico.descricao as descricao_servico_servico, servico.tempo_sla as tempo_sla_servico_servico, servico.visao as visao_servico_servico, usuario_cliente.id as id_usuario_usuario_cliente, usuario_cliente.nome as nome_usuario_usuario_cliente, usuario_cliente.email as email_usuario_usuario_cliente, usuario_cliente.login as login_usuario_usuario_cliente, usuario_cliente.senha as senha_usuario_usuario_cliente, usuario_cliente.nivel as nivel_usuario_usuario_cliente, usuario_cliente.id_setor as id_setor_usuario_usuario_cliente FROM ocorrencia INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico INNER JOIN usuario as usuario_cliente ON usuario_cliente.id = ocorrencia.id_usuario_cliente
             WHERE ocorrencia.status like :status";
                 
         try {
@@ -881,6 +953,10 @@ class OcorrenciaDAO extends DAO {
                 $ocorrencia->setIdUsuarioIndicado( $row ['id_usuario_indicado'] );
                 $ocorrencia->setAnexo( $row ['anexo'] );
                 $ocorrencia->setLocalSala( $row ['local_sala'] );
+                $ocorrencia->setDataAbertura( $row ['data_abertura'] );
+                $ocorrencia->setDataAtendimento( $row ['data_atendimento'] );
+                $ocorrencia->setDataFechamento( $row ['data_fechamento'] );
+                $ocorrencia->setDataFechamentoConfirmado( $row ['data_fechamento_confirmado'] );
                 $ocorrencia->getAreaResponsavel()->setId( $row ['id_area_responsavel_area_responsavel'] );
                 $ocorrencia->getAreaResponsavel()->setNome( $row ['nome_area_responsavel_area_responsavel'] );
                 $ocorrencia->getAreaResponsavel()->setDescricao( $row ['descricao_area_responsavel_area_responsavel'] );
@@ -913,7 +989,7 @@ class OcorrenciaDAO extends DAO {
         $lista = array();
 	    $solucao = $ocorrencia->getSolucao();
                 
-        $sql = "SELECT ocorrencia.id, ocorrencia.id_local, ocorrencia.descricao, ocorrencia.campus, ocorrencia.patrimonio, ocorrencia.ramal, ocorrencia.local, ocorrencia.status, ocorrencia.solucao, ocorrencia.prioridade, ocorrencia.avaliacao, ocorrencia.email, ocorrencia.id_usuario_atendente, ocorrencia.id_usuario_indicado, ocorrencia.anexo, ocorrencia.local_sala, area_responsavel.id as id_area_responsavel_area_responsavel, area_responsavel.nome as nome_area_responsavel_area_responsavel, area_responsavel.descricao as descricao_area_responsavel_area_responsavel, area_responsavel.email as email_area_responsavel_area_responsavel, servico.id as id_servico_servico, servico.nome as nome_servico_servico, servico.descricao as descricao_servico_servico, servico.tempo_sla as tempo_sla_servico_servico, servico.visao as visao_servico_servico, usuario_cliente.id as id_usuario_usuario_cliente, usuario_cliente.nome as nome_usuario_usuario_cliente, usuario_cliente.email as email_usuario_usuario_cliente, usuario_cliente.login as login_usuario_usuario_cliente, usuario_cliente.senha as senha_usuario_usuario_cliente, usuario_cliente.nivel as nivel_usuario_usuario_cliente, usuario_cliente.id_setor as id_setor_usuario_usuario_cliente FROM ocorrencia INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico INNER JOIN usuario as usuario_cliente ON usuario_cliente.id = ocorrencia.id_usuario_cliente
+        $sql = "SELECT ocorrencia.id, ocorrencia.id_local, ocorrencia.descricao, ocorrencia.campus, ocorrencia.patrimonio, ocorrencia.ramal, ocorrencia.local, ocorrencia.status, ocorrencia.solucao, ocorrencia.prioridade, ocorrencia.avaliacao, ocorrencia.email, ocorrencia.id_usuario_atendente, ocorrencia.id_usuario_indicado, ocorrencia.anexo, ocorrencia.local_sala, ocorrencia.data_abertura, ocorrencia.data_atendimento, ocorrencia.data_fechamento, ocorrencia.data_fechamento_confirmado, area_responsavel.id as id_area_responsavel_area_responsavel, area_responsavel.nome as nome_area_responsavel_area_responsavel, area_responsavel.descricao as descricao_area_responsavel_area_responsavel, area_responsavel.email as email_area_responsavel_area_responsavel, servico.id as id_servico_servico, servico.nome as nome_servico_servico, servico.descricao as descricao_servico_servico, servico.tempo_sla as tempo_sla_servico_servico, servico.visao as visao_servico_servico, usuario_cliente.id as id_usuario_usuario_cliente, usuario_cliente.nome as nome_usuario_usuario_cliente, usuario_cliente.email as email_usuario_usuario_cliente, usuario_cliente.login as login_usuario_usuario_cliente, usuario_cliente.senha as senha_usuario_usuario_cliente, usuario_cliente.nivel as nivel_usuario_usuario_cliente, usuario_cliente.id_setor as id_setor_usuario_usuario_cliente FROM ocorrencia INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico INNER JOIN usuario as usuario_cliente ON usuario_cliente.id = ocorrencia.id_usuario_cliente
             WHERE ocorrencia.solucao like :solucao";
                 
         try {
@@ -940,6 +1016,10 @@ class OcorrenciaDAO extends DAO {
                 $ocorrencia->setIdUsuarioIndicado( $row ['id_usuario_indicado'] );
                 $ocorrencia->setAnexo( $row ['anexo'] );
                 $ocorrencia->setLocalSala( $row ['local_sala'] );
+                $ocorrencia->setDataAbertura( $row ['data_abertura'] );
+                $ocorrencia->setDataAtendimento( $row ['data_atendimento'] );
+                $ocorrencia->setDataFechamento( $row ['data_fechamento'] );
+                $ocorrencia->setDataFechamentoConfirmado( $row ['data_fechamento_confirmado'] );
                 $ocorrencia->getAreaResponsavel()->setId( $row ['id_area_responsavel_area_responsavel'] );
                 $ocorrencia->getAreaResponsavel()->setNome( $row ['nome_area_responsavel_area_responsavel'] );
                 $ocorrencia->getAreaResponsavel()->setDescricao( $row ['descricao_area_responsavel_area_responsavel'] );
@@ -972,7 +1052,7 @@ class OcorrenciaDAO extends DAO {
         $lista = array();
 	    $prioridade = $ocorrencia->getPrioridade();
                 
-        $sql = "SELECT ocorrencia.id, ocorrencia.id_local, ocorrencia.descricao, ocorrencia.campus, ocorrencia.patrimonio, ocorrencia.ramal, ocorrencia.local, ocorrencia.status, ocorrencia.solucao, ocorrencia.prioridade, ocorrencia.avaliacao, ocorrencia.email, ocorrencia.id_usuario_atendente, ocorrencia.id_usuario_indicado, ocorrencia.anexo, ocorrencia.local_sala, area_responsavel.id as id_area_responsavel_area_responsavel, area_responsavel.nome as nome_area_responsavel_area_responsavel, area_responsavel.descricao as descricao_area_responsavel_area_responsavel, area_responsavel.email as email_area_responsavel_area_responsavel, servico.id as id_servico_servico, servico.nome as nome_servico_servico, servico.descricao as descricao_servico_servico, servico.tempo_sla as tempo_sla_servico_servico, servico.visao as visao_servico_servico, usuario_cliente.id as id_usuario_usuario_cliente, usuario_cliente.nome as nome_usuario_usuario_cliente, usuario_cliente.email as email_usuario_usuario_cliente, usuario_cliente.login as login_usuario_usuario_cliente, usuario_cliente.senha as senha_usuario_usuario_cliente, usuario_cliente.nivel as nivel_usuario_usuario_cliente, usuario_cliente.id_setor as id_setor_usuario_usuario_cliente FROM ocorrencia INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico INNER JOIN usuario as usuario_cliente ON usuario_cliente.id = ocorrencia.id_usuario_cliente
+        $sql = "SELECT ocorrencia.id, ocorrencia.id_local, ocorrencia.descricao, ocorrencia.campus, ocorrencia.patrimonio, ocorrencia.ramal, ocorrencia.local, ocorrencia.status, ocorrencia.solucao, ocorrencia.prioridade, ocorrencia.avaliacao, ocorrencia.email, ocorrencia.id_usuario_atendente, ocorrencia.id_usuario_indicado, ocorrencia.anexo, ocorrencia.local_sala, ocorrencia.data_abertura, ocorrencia.data_atendimento, ocorrencia.data_fechamento, ocorrencia.data_fechamento_confirmado, area_responsavel.id as id_area_responsavel_area_responsavel, area_responsavel.nome as nome_area_responsavel_area_responsavel, area_responsavel.descricao as descricao_area_responsavel_area_responsavel, area_responsavel.email as email_area_responsavel_area_responsavel, servico.id as id_servico_servico, servico.nome as nome_servico_servico, servico.descricao as descricao_servico_servico, servico.tempo_sla as tempo_sla_servico_servico, servico.visao as visao_servico_servico, usuario_cliente.id as id_usuario_usuario_cliente, usuario_cliente.nome as nome_usuario_usuario_cliente, usuario_cliente.email as email_usuario_usuario_cliente, usuario_cliente.login as login_usuario_usuario_cliente, usuario_cliente.senha as senha_usuario_usuario_cliente, usuario_cliente.nivel as nivel_usuario_usuario_cliente, usuario_cliente.id_setor as id_setor_usuario_usuario_cliente FROM ocorrencia INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico INNER JOIN usuario as usuario_cliente ON usuario_cliente.id = ocorrencia.id_usuario_cliente
             WHERE ocorrencia.prioridade like :prioridade";
                 
         try {
@@ -999,6 +1079,10 @@ class OcorrenciaDAO extends DAO {
                 $ocorrencia->setIdUsuarioIndicado( $row ['id_usuario_indicado'] );
                 $ocorrencia->setAnexo( $row ['anexo'] );
                 $ocorrencia->setLocalSala( $row ['local_sala'] );
+                $ocorrencia->setDataAbertura( $row ['data_abertura'] );
+                $ocorrencia->setDataAtendimento( $row ['data_atendimento'] );
+                $ocorrencia->setDataFechamento( $row ['data_fechamento'] );
+                $ocorrencia->setDataFechamentoConfirmado( $row ['data_fechamento_confirmado'] );
                 $ocorrencia->getAreaResponsavel()->setId( $row ['id_area_responsavel_area_responsavel'] );
                 $ocorrencia->getAreaResponsavel()->setNome( $row ['nome_area_responsavel_area_responsavel'] );
                 $ocorrencia->getAreaResponsavel()->setDescricao( $row ['descricao_area_responsavel_area_responsavel'] );
@@ -1031,7 +1115,7 @@ class OcorrenciaDAO extends DAO {
         $lista = array();
 	    $avaliacao = $ocorrencia->getAvaliacao();
                 
-        $sql = "SELECT ocorrencia.id, ocorrencia.id_local, ocorrencia.descricao, ocorrencia.campus, ocorrencia.patrimonio, ocorrencia.ramal, ocorrencia.local, ocorrencia.status, ocorrencia.solucao, ocorrencia.prioridade, ocorrencia.avaliacao, ocorrencia.email, ocorrencia.id_usuario_atendente, ocorrencia.id_usuario_indicado, ocorrencia.anexo, ocorrencia.local_sala, area_responsavel.id as id_area_responsavel_area_responsavel, area_responsavel.nome as nome_area_responsavel_area_responsavel, area_responsavel.descricao as descricao_area_responsavel_area_responsavel, area_responsavel.email as email_area_responsavel_area_responsavel, servico.id as id_servico_servico, servico.nome as nome_servico_servico, servico.descricao as descricao_servico_servico, servico.tempo_sla as tempo_sla_servico_servico, servico.visao as visao_servico_servico, usuario_cliente.id as id_usuario_usuario_cliente, usuario_cliente.nome as nome_usuario_usuario_cliente, usuario_cliente.email as email_usuario_usuario_cliente, usuario_cliente.login as login_usuario_usuario_cliente, usuario_cliente.senha as senha_usuario_usuario_cliente, usuario_cliente.nivel as nivel_usuario_usuario_cliente, usuario_cliente.id_setor as id_setor_usuario_usuario_cliente FROM ocorrencia INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico INNER JOIN usuario as usuario_cliente ON usuario_cliente.id = ocorrencia.id_usuario_cliente
+        $sql = "SELECT ocorrencia.id, ocorrencia.id_local, ocorrencia.descricao, ocorrencia.campus, ocorrencia.patrimonio, ocorrencia.ramal, ocorrencia.local, ocorrencia.status, ocorrencia.solucao, ocorrencia.prioridade, ocorrencia.avaliacao, ocorrencia.email, ocorrencia.id_usuario_atendente, ocorrencia.id_usuario_indicado, ocorrencia.anexo, ocorrencia.local_sala, ocorrencia.data_abertura, ocorrencia.data_atendimento, ocorrencia.data_fechamento, ocorrencia.data_fechamento_confirmado, area_responsavel.id as id_area_responsavel_area_responsavel, area_responsavel.nome as nome_area_responsavel_area_responsavel, area_responsavel.descricao as descricao_area_responsavel_area_responsavel, area_responsavel.email as email_area_responsavel_area_responsavel, servico.id as id_servico_servico, servico.nome as nome_servico_servico, servico.descricao as descricao_servico_servico, servico.tempo_sla as tempo_sla_servico_servico, servico.visao as visao_servico_servico, usuario_cliente.id as id_usuario_usuario_cliente, usuario_cliente.nome as nome_usuario_usuario_cliente, usuario_cliente.email as email_usuario_usuario_cliente, usuario_cliente.login as login_usuario_usuario_cliente, usuario_cliente.senha as senha_usuario_usuario_cliente, usuario_cliente.nivel as nivel_usuario_usuario_cliente, usuario_cliente.id_setor as id_setor_usuario_usuario_cliente FROM ocorrencia INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico INNER JOIN usuario as usuario_cliente ON usuario_cliente.id = ocorrencia.id_usuario_cliente
             WHERE ocorrencia.avaliacao like :avaliacao";
                 
         try {
@@ -1058,6 +1142,10 @@ class OcorrenciaDAO extends DAO {
                 $ocorrencia->setIdUsuarioIndicado( $row ['id_usuario_indicado'] );
                 $ocorrencia->setAnexo( $row ['anexo'] );
                 $ocorrencia->setLocalSala( $row ['local_sala'] );
+                $ocorrencia->setDataAbertura( $row ['data_abertura'] );
+                $ocorrencia->setDataAtendimento( $row ['data_atendimento'] );
+                $ocorrencia->setDataFechamento( $row ['data_fechamento'] );
+                $ocorrencia->setDataFechamentoConfirmado( $row ['data_fechamento_confirmado'] );
                 $ocorrencia->getAreaResponsavel()->setId( $row ['id_area_responsavel_area_responsavel'] );
                 $ocorrencia->getAreaResponsavel()->setNome( $row ['nome_area_responsavel_area_responsavel'] );
                 $ocorrencia->getAreaResponsavel()->setDescricao( $row ['descricao_area_responsavel_area_responsavel'] );
@@ -1090,7 +1178,7 @@ class OcorrenciaDAO extends DAO {
         $lista = array();
 	    $email = $ocorrencia->getEmail();
                 
-        $sql = "SELECT ocorrencia.id, ocorrencia.id_local, ocorrencia.descricao, ocorrencia.campus, ocorrencia.patrimonio, ocorrencia.ramal, ocorrencia.local, ocorrencia.status, ocorrencia.solucao, ocorrencia.prioridade, ocorrencia.avaliacao, ocorrencia.email, ocorrencia.id_usuario_atendente, ocorrencia.id_usuario_indicado, ocorrencia.anexo, ocorrencia.local_sala, area_responsavel.id as id_area_responsavel_area_responsavel, area_responsavel.nome as nome_area_responsavel_area_responsavel, area_responsavel.descricao as descricao_area_responsavel_area_responsavel, area_responsavel.email as email_area_responsavel_area_responsavel, servico.id as id_servico_servico, servico.nome as nome_servico_servico, servico.descricao as descricao_servico_servico, servico.tempo_sla as tempo_sla_servico_servico, servico.visao as visao_servico_servico, usuario_cliente.id as id_usuario_usuario_cliente, usuario_cliente.nome as nome_usuario_usuario_cliente, usuario_cliente.email as email_usuario_usuario_cliente, usuario_cliente.login as login_usuario_usuario_cliente, usuario_cliente.senha as senha_usuario_usuario_cliente, usuario_cliente.nivel as nivel_usuario_usuario_cliente, usuario_cliente.id_setor as id_setor_usuario_usuario_cliente FROM ocorrencia INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico INNER JOIN usuario as usuario_cliente ON usuario_cliente.id = ocorrencia.id_usuario_cliente
+        $sql = "SELECT ocorrencia.id, ocorrencia.id_local, ocorrencia.descricao, ocorrencia.campus, ocorrencia.patrimonio, ocorrencia.ramal, ocorrencia.local, ocorrencia.status, ocorrencia.solucao, ocorrencia.prioridade, ocorrencia.avaliacao, ocorrencia.email, ocorrencia.id_usuario_atendente, ocorrencia.id_usuario_indicado, ocorrencia.anexo, ocorrencia.local_sala, ocorrencia.data_abertura, ocorrencia.data_atendimento, ocorrencia.data_fechamento, ocorrencia.data_fechamento_confirmado, area_responsavel.id as id_area_responsavel_area_responsavel, area_responsavel.nome as nome_area_responsavel_area_responsavel, area_responsavel.descricao as descricao_area_responsavel_area_responsavel, area_responsavel.email as email_area_responsavel_area_responsavel, servico.id as id_servico_servico, servico.nome as nome_servico_servico, servico.descricao as descricao_servico_servico, servico.tempo_sla as tempo_sla_servico_servico, servico.visao as visao_servico_servico, usuario_cliente.id as id_usuario_usuario_cliente, usuario_cliente.nome as nome_usuario_usuario_cliente, usuario_cliente.email as email_usuario_usuario_cliente, usuario_cliente.login as login_usuario_usuario_cliente, usuario_cliente.senha as senha_usuario_usuario_cliente, usuario_cliente.nivel as nivel_usuario_usuario_cliente, usuario_cliente.id_setor as id_setor_usuario_usuario_cliente FROM ocorrencia INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico INNER JOIN usuario as usuario_cliente ON usuario_cliente.id = ocorrencia.id_usuario_cliente
             WHERE ocorrencia.email like :email";
                 
         try {
@@ -1117,6 +1205,10 @@ class OcorrenciaDAO extends DAO {
                 $ocorrencia->setIdUsuarioIndicado( $row ['id_usuario_indicado'] );
                 $ocorrencia->setAnexo( $row ['anexo'] );
                 $ocorrencia->setLocalSala( $row ['local_sala'] );
+                $ocorrencia->setDataAbertura( $row ['data_abertura'] );
+                $ocorrencia->setDataAtendimento( $row ['data_atendimento'] );
+                $ocorrencia->setDataFechamento( $row ['data_fechamento'] );
+                $ocorrencia->setDataFechamentoConfirmado( $row ['data_fechamento_confirmado'] );
                 $ocorrencia->getAreaResponsavel()->setId( $row ['id_area_responsavel_area_responsavel'] );
                 $ocorrencia->getAreaResponsavel()->setNome( $row ['nome_area_responsavel_area_responsavel'] );
                 $ocorrencia->getAreaResponsavel()->setDescricao( $row ['descricao_area_responsavel_area_responsavel'] );
@@ -1149,7 +1241,7 @@ class OcorrenciaDAO extends DAO {
         $lista = array();
 	    $idUsuarioAtendente = $ocorrencia->getIdUsuarioAtendente();
                 
-        $sql = "SELECT ocorrencia.id, ocorrencia.id_local, ocorrencia.descricao, ocorrencia.campus, ocorrencia.patrimonio, ocorrencia.ramal, ocorrencia.local, ocorrencia.status, ocorrencia.solucao, ocorrencia.prioridade, ocorrencia.avaliacao, ocorrencia.email, ocorrencia.id_usuario_atendente, ocorrencia.id_usuario_indicado, ocorrencia.anexo, ocorrencia.local_sala, area_responsavel.id as id_area_responsavel_area_responsavel, area_responsavel.nome as nome_area_responsavel_area_responsavel, area_responsavel.descricao as descricao_area_responsavel_area_responsavel, area_responsavel.email as email_area_responsavel_area_responsavel, servico.id as id_servico_servico, servico.nome as nome_servico_servico, servico.descricao as descricao_servico_servico, servico.tempo_sla as tempo_sla_servico_servico, servico.visao as visao_servico_servico, usuario_cliente.id as id_usuario_usuario_cliente, usuario_cliente.nome as nome_usuario_usuario_cliente, usuario_cliente.email as email_usuario_usuario_cliente, usuario_cliente.login as login_usuario_usuario_cliente, usuario_cliente.senha as senha_usuario_usuario_cliente, usuario_cliente.nivel as nivel_usuario_usuario_cliente, usuario_cliente.id_setor as id_setor_usuario_usuario_cliente FROM ocorrencia INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico INNER JOIN usuario as usuario_cliente ON usuario_cliente.id = ocorrencia.id_usuario_cliente
+        $sql = "SELECT ocorrencia.id, ocorrencia.id_local, ocorrencia.descricao, ocorrencia.campus, ocorrencia.patrimonio, ocorrencia.ramal, ocorrencia.local, ocorrencia.status, ocorrencia.solucao, ocorrencia.prioridade, ocorrencia.avaliacao, ocorrencia.email, ocorrencia.id_usuario_atendente, ocorrencia.id_usuario_indicado, ocorrencia.anexo, ocorrencia.local_sala, ocorrencia.data_abertura, ocorrencia.data_atendimento, ocorrencia.data_fechamento, ocorrencia.data_fechamento_confirmado, area_responsavel.id as id_area_responsavel_area_responsavel, area_responsavel.nome as nome_area_responsavel_area_responsavel, area_responsavel.descricao as descricao_area_responsavel_area_responsavel, area_responsavel.email as email_area_responsavel_area_responsavel, servico.id as id_servico_servico, servico.nome as nome_servico_servico, servico.descricao as descricao_servico_servico, servico.tempo_sla as tempo_sla_servico_servico, servico.visao as visao_servico_servico, usuario_cliente.id as id_usuario_usuario_cliente, usuario_cliente.nome as nome_usuario_usuario_cliente, usuario_cliente.email as email_usuario_usuario_cliente, usuario_cliente.login as login_usuario_usuario_cliente, usuario_cliente.senha as senha_usuario_usuario_cliente, usuario_cliente.nivel as nivel_usuario_usuario_cliente, usuario_cliente.id_setor as id_setor_usuario_usuario_cliente FROM ocorrencia INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico INNER JOIN usuario as usuario_cliente ON usuario_cliente.id = ocorrencia.id_usuario_cliente
             WHERE ocorrencia.id_usuario_atendente = :idUsuarioAtendente";
                 
         try {
@@ -1176,6 +1268,10 @@ class OcorrenciaDAO extends DAO {
                 $ocorrencia->setIdUsuarioIndicado( $row ['id_usuario_indicado'] );
                 $ocorrencia->setAnexo( $row ['anexo'] );
                 $ocorrencia->setLocalSala( $row ['local_sala'] );
+                $ocorrencia->setDataAbertura( $row ['data_abertura'] );
+                $ocorrencia->setDataAtendimento( $row ['data_atendimento'] );
+                $ocorrencia->setDataFechamento( $row ['data_fechamento'] );
+                $ocorrencia->setDataFechamentoConfirmado( $row ['data_fechamento_confirmado'] );
                 $ocorrencia->getAreaResponsavel()->setId( $row ['id_area_responsavel_area_responsavel'] );
                 $ocorrencia->getAreaResponsavel()->setNome( $row ['nome_area_responsavel_area_responsavel'] );
                 $ocorrencia->getAreaResponsavel()->setDescricao( $row ['descricao_area_responsavel_area_responsavel'] );
@@ -1208,7 +1304,7 @@ class OcorrenciaDAO extends DAO {
         $lista = array();
 	    $idUsuarioIndicado = $ocorrencia->getIdUsuarioIndicado();
                 
-        $sql = "SELECT ocorrencia.id, ocorrencia.id_local, ocorrencia.descricao, ocorrencia.campus, ocorrencia.patrimonio, ocorrencia.ramal, ocorrencia.local, ocorrencia.status, ocorrencia.solucao, ocorrencia.prioridade, ocorrencia.avaliacao, ocorrencia.email, ocorrencia.id_usuario_atendente, ocorrencia.id_usuario_indicado, ocorrencia.anexo, ocorrencia.local_sala, area_responsavel.id as id_area_responsavel_area_responsavel, area_responsavel.nome as nome_area_responsavel_area_responsavel, area_responsavel.descricao as descricao_area_responsavel_area_responsavel, area_responsavel.email as email_area_responsavel_area_responsavel, servico.id as id_servico_servico, servico.nome as nome_servico_servico, servico.descricao as descricao_servico_servico, servico.tempo_sla as tempo_sla_servico_servico, servico.visao as visao_servico_servico, usuario_cliente.id as id_usuario_usuario_cliente, usuario_cliente.nome as nome_usuario_usuario_cliente, usuario_cliente.email as email_usuario_usuario_cliente, usuario_cliente.login as login_usuario_usuario_cliente, usuario_cliente.senha as senha_usuario_usuario_cliente, usuario_cliente.nivel as nivel_usuario_usuario_cliente, usuario_cliente.id_setor as id_setor_usuario_usuario_cliente FROM ocorrencia INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico INNER JOIN usuario as usuario_cliente ON usuario_cliente.id = ocorrencia.id_usuario_cliente
+        $sql = "SELECT ocorrencia.id, ocorrencia.id_local, ocorrencia.descricao, ocorrencia.campus, ocorrencia.patrimonio, ocorrencia.ramal, ocorrencia.local, ocorrencia.status, ocorrencia.solucao, ocorrencia.prioridade, ocorrencia.avaliacao, ocorrencia.email, ocorrencia.id_usuario_atendente, ocorrencia.id_usuario_indicado, ocorrencia.anexo, ocorrencia.local_sala, ocorrencia.data_abertura, ocorrencia.data_atendimento, ocorrencia.data_fechamento, ocorrencia.data_fechamento_confirmado, area_responsavel.id as id_area_responsavel_area_responsavel, area_responsavel.nome as nome_area_responsavel_area_responsavel, area_responsavel.descricao as descricao_area_responsavel_area_responsavel, area_responsavel.email as email_area_responsavel_area_responsavel, servico.id as id_servico_servico, servico.nome as nome_servico_servico, servico.descricao as descricao_servico_servico, servico.tempo_sla as tempo_sla_servico_servico, servico.visao as visao_servico_servico, usuario_cliente.id as id_usuario_usuario_cliente, usuario_cliente.nome as nome_usuario_usuario_cliente, usuario_cliente.email as email_usuario_usuario_cliente, usuario_cliente.login as login_usuario_usuario_cliente, usuario_cliente.senha as senha_usuario_usuario_cliente, usuario_cliente.nivel as nivel_usuario_usuario_cliente, usuario_cliente.id_setor as id_setor_usuario_usuario_cliente FROM ocorrencia INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico INNER JOIN usuario as usuario_cliente ON usuario_cliente.id = ocorrencia.id_usuario_cliente
             WHERE ocorrencia.id_usuario_indicado = :idUsuarioIndicado";
                 
         try {
@@ -1235,6 +1331,10 @@ class OcorrenciaDAO extends DAO {
                 $ocorrencia->setIdUsuarioIndicado( $row ['id_usuario_indicado'] );
                 $ocorrencia->setAnexo( $row ['anexo'] );
                 $ocorrencia->setLocalSala( $row ['local_sala'] );
+                $ocorrencia->setDataAbertura( $row ['data_abertura'] );
+                $ocorrencia->setDataAtendimento( $row ['data_atendimento'] );
+                $ocorrencia->setDataFechamento( $row ['data_fechamento'] );
+                $ocorrencia->setDataFechamentoConfirmado( $row ['data_fechamento_confirmado'] );
                 $ocorrencia->getAreaResponsavel()->setId( $row ['id_area_responsavel_area_responsavel'] );
                 $ocorrencia->getAreaResponsavel()->setNome( $row ['nome_area_responsavel_area_responsavel'] );
                 $ocorrencia->getAreaResponsavel()->setDescricao( $row ['descricao_area_responsavel_area_responsavel'] );
@@ -1267,7 +1367,7 @@ class OcorrenciaDAO extends DAO {
         $lista = array();
 	    $anexo = $ocorrencia->getAnexo();
                 
-        $sql = "SELECT ocorrencia.id, ocorrencia.id_local, ocorrencia.descricao, ocorrencia.campus, ocorrencia.patrimonio, ocorrencia.ramal, ocorrencia.local, ocorrencia.status, ocorrencia.solucao, ocorrencia.prioridade, ocorrencia.avaliacao, ocorrencia.email, ocorrencia.id_usuario_atendente, ocorrencia.id_usuario_indicado, ocorrencia.anexo, ocorrencia.local_sala, area_responsavel.id as id_area_responsavel_area_responsavel, area_responsavel.nome as nome_area_responsavel_area_responsavel, area_responsavel.descricao as descricao_area_responsavel_area_responsavel, area_responsavel.email as email_area_responsavel_area_responsavel, servico.id as id_servico_servico, servico.nome as nome_servico_servico, servico.descricao as descricao_servico_servico, servico.tempo_sla as tempo_sla_servico_servico, servico.visao as visao_servico_servico, usuario_cliente.id as id_usuario_usuario_cliente, usuario_cliente.nome as nome_usuario_usuario_cliente, usuario_cliente.email as email_usuario_usuario_cliente, usuario_cliente.login as login_usuario_usuario_cliente, usuario_cliente.senha as senha_usuario_usuario_cliente, usuario_cliente.nivel as nivel_usuario_usuario_cliente, usuario_cliente.id_setor as id_setor_usuario_usuario_cliente FROM ocorrencia INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico INNER JOIN usuario as usuario_cliente ON usuario_cliente.id = ocorrencia.id_usuario_cliente
+        $sql = "SELECT ocorrencia.id, ocorrencia.id_local, ocorrencia.descricao, ocorrencia.campus, ocorrencia.patrimonio, ocorrencia.ramal, ocorrencia.local, ocorrencia.status, ocorrencia.solucao, ocorrencia.prioridade, ocorrencia.avaliacao, ocorrencia.email, ocorrencia.id_usuario_atendente, ocorrencia.id_usuario_indicado, ocorrencia.anexo, ocorrencia.local_sala, ocorrencia.data_abertura, ocorrencia.data_atendimento, ocorrencia.data_fechamento, ocorrencia.data_fechamento_confirmado, area_responsavel.id as id_area_responsavel_area_responsavel, area_responsavel.nome as nome_area_responsavel_area_responsavel, area_responsavel.descricao as descricao_area_responsavel_area_responsavel, area_responsavel.email as email_area_responsavel_area_responsavel, servico.id as id_servico_servico, servico.nome as nome_servico_servico, servico.descricao as descricao_servico_servico, servico.tempo_sla as tempo_sla_servico_servico, servico.visao as visao_servico_servico, usuario_cliente.id as id_usuario_usuario_cliente, usuario_cliente.nome as nome_usuario_usuario_cliente, usuario_cliente.email as email_usuario_usuario_cliente, usuario_cliente.login as login_usuario_usuario_cliente, usuario_cliente.senha as senha_usuario_usuario_cliente, usuario_cliente.nivel as nivel_usuario_usuario_cliente, usuario_cliente.id_setor as id_setor_usuario_usuario_cliente FROM ocorrencia INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico INNER JOIN usuario as usuario_cliente ON usuario_cliente.id = ocorrencia.id_usuario_cliente
             WHERE ocorrencia.anexo like :anexo";
                 
         try {
@@ -1294,6 +1394,10 @@ class OcorrenciaDAO extends DAO {
                 $ocorrencia->setIdUsuarioIndicado( $row ['id_usuario_indicado'] );
                 $ocorrencia->setAnexo( $row ['anexo'] );
                 $ocorrencia->setLocalSala( $row ['local_sala'] );
+                $ocorrencia->setDataAbertura( $row ['data_abertura'] );
+                $ocorrencia->setDataAtendimento( $row ['data_atendimento'] );
+                $ocorrencia->setDataFechamento( $row ['data_fechamento'] );
+                $ocorrencia->setDataFechamentoConfirmado( $row ['data_fechamento_confirmado'] );
                 $ocorrencia->getAreaResponsavel()->setId( $row ['id_area_responsavel_area_responsavel'] );
                 $ocorrencia->getAreaResponsavel()->setNome( $row ['nome_area_responsavel_area_responsavel'] );
                 $ocorrencia->getAreaResponsavel()->setDescricao( $row ['descricao_area_responsavel_area_responsavel'] );
@@ -1326,7 +1430,7 @@ class OcorrenciaDAO extends DAO {
         $lista = array();
 	    $localSala = $ocorrencia->getLocalSala();
                 
-        $sql = "SELECT ocorrencia.id, ocorrencia.id_local, ocorrencia.descricao, ocorrencia.campus, ocorrencia.patrimonio, ocorrencia.ramal, ocorrencia.local, ocorrencia.status, ocorrencia.solucao, ocorrencia.prioridade, ocorrencia.avaliacao, ocorrencia.email, ocorrencia.id_usuario_atendente, ocorrencia.id_usuario_indicado, ocorrencia.anexo, ocorrencia.local_sala, area_responsavel.id as id_area_responsavel_area_responsavel, area_responsavel.nome as nome_area_responsavel_area_responsavel, area_responsavel.descricao as descricao_area_responsavel_area_responsavel, area_responsavel.email as email_area_responsavel_area_responsavel, servico.id as id_servico_servico, servico.nome as nome_servico_servico, servico.descricao as descricao_servico_servico, servico.tempo_sla as tempo_sla_servico_servico, servico.visao as visao_servico_servico, usuario_cliente.id as id_usuario_usuario_cliente, usuario_cliente.nome as nome_usuario_usuario_cliente, usuario_cliente.email as email_usuario_usuario_cliente, usuario_cliente.login as login_usuario_usuario_cliente, usuario_cliente.senha as senha_usuario_usuario_cliente, usuario_cliente.nivel as nivel_usuario_usuario_cliente, usuario_cliente.id_setor as id_setor_usuario_usuario_cliente FROM ocorrencia INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico INNER JOIN usuario as usuario_cliente ON usuario_cliente.id = ocorrencia.id_usuario_cliente
+        $sql = "SELECT ocorrencia.id, ocorrencia.id_local, ocorrencia.descricao, ocorrencia.campus, ocorrencia.patrimonio, ocorrencia.ramal, ocorrencia.local, ocorrencia.status, ocorrencia.solucao, ocorrencia.prioridade, ocorrencia.avaliacao, ocorrencia.email, ocorrencia.id_usuario_atendente, ocorrencia.id_usuario_indicado, ocorrencia.anexo, ocorrencia.local_sala, ocorrencia.data_abertura, ocorrencia.data_atendimento, ocorrencia.data_fechamento, ocorrencia.data_fechamento_confirmado, area_responsavel.id as id_area_responsavel_area_responsavel, area_responsavel.nome as nome_area_responsavel_area_responsavel, area_responsavel.descricao as descricao_area_responsavel_area_responsavel, area_responsavel.email as email_area_responsavel_area_responsavel, servico.id as id_servico_servico, servico.nome as nome_servico_servico, servico.descricao as descricao_servico_servico, servico.tempo_sla as tempo_sla_servico_servico, servico.visao as visao_servico_servico, usuario_cliente.id as id_usuario_usuario_cliente, usuario_cliente.nome as nome_usuario_usuario_cliente, usuario_cliente.email as email_usuario_usuario_cliente, usuario_cliente.login as login_usuario_usuario_cliente, usuario_cliente.senha as senha_usuario_usuario_cliente, usuario_cliente.nivel as nivel_usuario_usuario_cliente, usuario_cliente.id_setor as id_setor_usuario_usuario_cliente FROM ocorrencia INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico INNER JOIN usuario as usuario_cliente ON usuario_cliente.id = ocorrencia.id_usuario_cliente
             WHERE ocorrencia.local_sala like :localSala";
                 
         try {
@@ -1353,6 +1457,262 @@ class OcorrenciaDAO extends DAO {
                 $ocorrencia->setIdUsuarioIndicado( $row ['id_usuario_indicado'] );
                 $ocorrencia->setAnexo( $row ['anexo'] );
                 $ocorrencia->setLocalSala( $row ['local_sala'] );
+                $ocorrencia->setDataAbertura( $row ['data_abertura'] );
+                $ocorrencia->setDataAtendimento( $row ['data_atendimento'] );
+                $ocorrencia->setDataFechamento( $row ['data_fechamento'] );
+                $ocorrencia->setDataFechamentoConfirmado( $row ['data_fechamento_confirmado'] );
+                $ocorrencia->getAreaResponsavel()->setId( $row ['id_area_responsavel_area_responsavel'] );
+                $ocorrencia->getAreaResponsavel()->setNome( $row ['nome_area_responsavel_area_responsavel'] );
+                $ocorrencia->getAreaResponsavel()->setDescricao( $row ['descricao_area_responsavel_area_responsavel'] );
+                $ocorrencia->getAreaResponsavel()->setEmail( $row ['email_area_responsavel_area_responsavel'] );
+                $ocorrencia->getServico()->setId( $row ['id_servico_servico'] );
+                $ocorrencia->getServico()->setNome( $row ['nome_servico_servico'] );
+                $ocorrencia->getServico()->setDescricao( $row ['descricao_servico_servico'] );
+                $ocorrencia->getServico()->setTempoSla( $row ['tempo_sla_servico_servico'] );
+                $ocorrencia->getServico()->setVisao( $row ['visao_servico_servico'] );
+                $ocorrencia->getUsuarioCliente()->setId( $row ['id_usuario_usuario_cliente'] );
+                $ocorrencia->getUsuarioCliente()->setNome( $row ['nome_usuario_usuario_cliente'] );
+                $ocorrencia->getUsuarioCliente()->setEmail( $row ['email_usuario_usuario_cliente'] );
+                $ocorrencia->getUsuarioCliente()->setLogin( $row ['login_usuario_usuario_cliente'] );
+                $ocorrencia->getUsuarioCliente()->setSenha( $row ['senha_usuario_usuario_cliente'] );
+                $ocorrencia->getUsuarioCliente()->setNivel( $row ['nivel_usuario_usuario_cliente'] );
+                $ocorrencia->getUsuarioCliente()->setIdSetor( $row ['id_setor_usuario_usuario_cliente'] );
+                $lista [] = $ocorrencia;
+
+	
+		    }
+    			    
+        } catch(PDOException $e) {
+            echo $e->getMessage();
+    			    
+        }
+		return $lista;
+    }
+                
+    public function fetchByDataAbertura(Ocorrencia $ocorrencia) {
+        $lista = array();
+	    $dataAbertura = $ocorrencia->getDataAbertura();
+                
+        $sql = "SELECT ocorrencia.id, ocorrencia.id_local, ocorrencia.descricao, ocorrencia.campus, ocorrencia.patrimonio, ocorrencia.ramal, ocorrencia.local, ocorrencia.status, ocorrencia.solucao, ocorrencia.prioridade, ocorrencia.avaliacao, ocorrencia.email, ocorrencia.id_usuario_atendente, ocorrencia.id_usuario_indicado, ocorrencia.anexo, ocorrencia.local_sala, ocorrencia.data_abertura, ocorrencia.data_atendimento, ocorrencia.data_fechamento, ocorrencia.data_fechamento_confirmado, area_responsavel.id as id_area_responsavel_area_responsavel, area_responsavel.nome as nome_area_responsavel_area_responsavel, area_responsavel.descricao as descricao_area_responsavel_area_responsavel, area_responsavel.email as email_area_responsavel_area_responsavel, servico.id as id_servico_servico, servico.nome as nome_servico_servico, servico.descricao as descricao_servico_servico, servico.tempo_sla as tempo_sla_servico_servico, servico.visao as visao_servico_servico, usuario_cliente.id as id_usuario_usuario_cliente, usuario_cliente.nome as nome_usuario_usuario_cliente, usuario_cliente.email as email_usuario_usuario_cliente, usuario_cliente.login as login_usuario_usuario_cliente, usuario_cliente.senha as senha_usuario_usuario_cliente, usuario_cliente.nivel as nivel_usuario_usuario_cliente, usuario_cliente.id_setor as id_setor_usuario_usuario_cliente FROM ocorrencia INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico INNER JOIN usuario as usuario_cliente ON usuario_cliente.id = ocorrencia.id_usuario_cliente
+            WHERE ocorrencia.data_abertura like :dataAbertura";
+                
+        try {
+                
+            $stmt = $this->connection->prepare($sql);
+            $stmt->bindParam(":dataAbertura", $dataAbertura, PDO::PARAM_STR);
+            $stmt->execute();
+            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            foreach ( $result as $row ){
+		        $ocorrencia = new Ocorrencia();
+                $ocorrencia->setId( $row ['id'] );
+                $ocorrencia->setIdLocal( $row ['id_local'] );
+                $ocorrencia->setDescricao( $row ['descricao'] );
+                $ocorrencia->setCampus( $row ['campus'] );
+                $ocorrencia->setPatrimonio( $row ['patrimonio'] );
+                $ocorrencia->setRamal( $row ['ramal'] );
+                $ocorrencia->setLocal( $row ['local'] );
+                $ocorrencia->setStatus( $row ['status'] );
+                $ocorrencia->setSolucao( $row ['solucao'] );
+                $ocorrencia->setPrioridade( $row ['prioridade'] );
+                $ocorrencia->setAvaliacao( $row ['avaliacao'] );
+                $ocorrencia->setEmail( $row ['email'] );
+                $ocorrencia->setIdUsuarioAtendente( $row ['id_usuario_atendente'] );
+                $ocorrencia->setIdUsuarioIndicado( $row ['id_usuario_indicado'] );
+                $ocorrencia->setAnexo( $row ['anexo'] );
+                $ocorrencia->setLocalSala( $row ['local_sala'] );
+                $ocorrencia->setDataAbertura( $row ['data_abertura'] );
+                $ocorrencia->setDataAtendimento( $row ['data_atendimento'] );
+                $ocorrencia->setDataFechamento( $row ['data_fechamento'] );
+                $ocorrencia->setDataFechamentoConfirmado( $row ['data_fechamento_confirmado'] );
+                $ocorrencia->getAreaResponsavel()->setId( $row ['id_area_responsavel_area_responsavel'] );
+                $ocorrencia->getAreaResponsavel()->setNome( $row ['nome_area_responsavel_area_responsavel'] );
+                $ocorrencia->getAreaResponsavel()->setDescricao( $row ['descricao_area_responsavel_area_responsavel'] );
+                $ocorrencia->getAreaResponsavel()->setEmail( $row ['email_area_responsavel_area_responsavel'] );
+                $ocorrencia->getServico()->setId( $row ['id_servico_servico'] );
+                $ocorrencia->getServico()->setNome( $row ['nome_servico_servico'] );
+                $ocorrencia->getServico()->setDescricao( $row ['descricao_servico_servico'] );
+                $ocorrencia->getServico()->setTempoSla( $row ['tempo_sla_servico_servico'] );
+                $ocorrencia->getServico()->setVisao( $row ['visao_servico_servico'] );
+                $ocorrencia->getUsuarioCliente()->setId( $row ['id_usuario_usuario_cliente'] );
+                $ocorrencia->getUsuarioCliente()->setNome( $row ['nome_usuario_usuario_cliente'] );
+                $ocorrencia->getUsuarioCliente()->setEmail( $row ['email_usuario_usuario_cliente'] );
+                $ocorrencia->getUsuarioCliente()->setLogin( $row ['login_usuario_usuario_cliente'] );
+                $ocorrencia->getUsuarioCliente()->setSenha( $row ['senha_usuario_usuario_cliente'] );
+                $ocorrencia->getUsuarioCliente()->setNivel( $row ['nivel_usuario_usuario_cliente'] );
+                $ocorrencia->getUsuarioCliente()->setIdSetor( $row ['id_setor_usuario_usuario_cliente'] );
+                $lista [] = $ocorrencia;
+
+	
+		    }
+    			    
+        } catch(PDOException $e) {
+            echo $e->getMessage();
+    			    
+        }
+		return $lista;
+    }
+                
+    public function fetchByDataAtendimento(Ocorrencia $ocorrencia) {
+        $lista = array();
+	    $dataAtendimento = $ocorrencia->getDataAtendimento();
+                
+        $sql = "SELECT ocorrencia.id, ocorrencia.id_local, ocorrencia.descricao, ocorrencia.campus, ocorrencia.patrimonio, ocorrencia.ramal, ocorrencia.local, ocorrencia.status, ocorrencia.solucao, ocorrencia.prioridade, ocorrencia.avaliacao, ocorrencia.email, ocorrencia.id_usuario_atendente, ocorrencia.id_usuario_indicado, ocorrencia.anexo, ocorrencia.local_sala, ocorrencia.data_abertura, ocorrencia.data_atendimento, ocorrencia.data_fechamento, ocorrencia.data_fechamento_confirmado, area_responsavel.id as id_area_responsavel_area_responsavel, area_responsavel.nome as nome_area_responsavel_area_responsavel, area_responsavel.descricao as descricao_area_responsavel_area_responsavel, area_responsavel.email as email_area_responsavel_area_responsavel, servico.id as id_servico_servico, servico.nome as nome_servico_servico, servico.descricao as descricao_servico_servico, servico.tempo_sla as tempo_sla_servico_servico, servico.visao as visao_servico_servico, usuario_cliente.id as id_usuario_usuario_cliente, usuario_cliente.nome as nome_usuario_usuario_cliente, usuario_cliente.email as email_usuario_usuario_cliente, usuario_cliente.login as login_usuario_usuario_cliente, usuario_cliente.senha as senha_usuario_usuario_cliente, usuario_cliente.nivel as nivel_usuario_usuario_cliente, usuario_cliente.id_setor as id_setor_usuario_usuario_cliente FROM ocorrencia INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico INNER JOIN usuario as usuario_cliente ON usuario_cliente.id = ocorrencia.id_usuario_cliente
+            WHERE ocorrencia.data_atendimento like :dataAtendimento";
+                
+        try {
+                
+            $stmt = $this->connection->prepare($sql);
+            $stmt->bindParam(":dataAtendimento", $dataAtendimento, PDO::PARAM_STR);
+            $stmt->execute();
+            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            foreach ( $result as $row ){
+		        $ocorrencia = new Ocorrencia();
+                $ocorrencia->setId( $row ['id'] );
+                $ocorrencia->setIdLocal( $row ['id_local'] );
+                $ocorrencia->setDescricao( $row ['descricao'] );
+                $ocorrencia->setCampus( $row ['campus'] );
+                $ocorrencia->setPatrimonio( $row ['patrimonio'] );
+                $ocorrencia->setRamal( $row ['ramal'] );
+                $ocorrencia->setLocal( $row ['local'] );
+                $ocorrencia->setStatus( $row ['status'] );
+                $ocorrencia->setSolucao( $row ['solucao'] );
+                $ocorrencia->setPrioridade( $row ['prioridade'] );
+                $ocorrencia->setAvaliacao( $row ['avaliacao'] );
+                $ocorrencia->setEmail( $row ['email'] );
+                $ocorrencia->setIdUsuarioAtendente( $row ['id_usuario_atendente'] );
+                $ocorrencia->setIdUsuarioIndicado( $row ['id_usuario_indicado'] );
+                $ocorrencia->setAnexo( $row ['anexo'] );
+                $ocorrencia->setLocalSala( $row ['local_sala'] );
+                $ocorrencia->setDataAbertura( $row ['data_abertura'] );
+                $ocorrencia->setDataAtendimento( $row ['data_atendimento'] );
+                $ocorrencia->setDataFechamento( $row ['data_fechamento'] );
+                $ocorrencia->setDataFechamentoConfirmado( $row ['data_fechamento_confirmado'] );
+                $ocorrencia->getAreaResponsavel()->setId( $row ['id_area_responsavel_area_responsavel'] );
+                $ocorrencia->getAreaResponsavel()->setNome( $row ['nome_area_responsavel_area_responsavel'] );
+                $ocorrencia->getAreaResponsavel()->setDescricao( $row ['descricao_area_responsavel_area_responsavel'] );
+                $ocorrencia->getAreaResponsavel()->setEmail( $row ['email_area_responsavel_area_responsavel'] );
+                $ocorrencia->getServico()->setId( $row ['id_servico_servico'] );
+                $ocorrencia->getServico()->setNome( $row ['nome_servico_servico'] );
+                $ocorrencia->getServico()->setDescricao( $row ['descricao_servico_servico'] );
+                $ocorrencia->getServico()->setTempoSla( $row ['tempo_sla_servico_servico'] );
+                $ocorrencia->getServico()->setVisao( $row ['visao_servico_servico'] );
+                $ocorrencia->getUsuarioCliente()->setId( $row ['id_usuario_usuario_cliente'] );
+                $ocorrencia->getUsuarioCliente()->setNome( $row ['nome_usuario_usuario_cliente'] );
+                $ocorrencia->getUsuarioCliente()->setEmail( $row ['email_usuario_usuario_cliente'] );
+                $ocorrencia->getUsuarioCliente()->setLogin( $row ['login_usuario_usuario_cliente'] );
+                $ocorrencia->getUsuarioCliente()->setSenha( $row ['senha_usuario_usuario_cliente'] );
+                $ocorrencia->getUsuarioCliente()->setNivel( $row ['nivel_usuario_usuario_cliente'] );
+                $ocorrencia->getUsuarioCliente()->setIdSetor( $row ['id_setor_usuario_usuario_cliente'] );
+                $lista [] = $ocorrencia;
+
+	
+		    }
+    			    
+        } catch(PDOException $e) {
+            echo $e->getMessage();
+    			    
+        }
+		return $lista;
+    }
+                
+    public function fetchByDataFechamento(Ocorrencia $ocorrencia) {
+        $lista = array();
+	    $dataFechamento = $ocorrencia->getDataFechamento();
+                
+        $sql = "SELECT ocorrencia.id, ocorrencia.id_local, ocorrencia.descricao, ocorrencia.campus, ocorrencia.patrimonio, ocorrencia.ramal, ocorrencia.local, ocorrencia.status, ocorrencia.solucao, ocorrencia.prioridade, ocorrencia.avaliacao, ocorrencia.email, ocorrencia.id_usuario_atendente, ocorrencia.id_usuario_indicado, ocorrencia.anexo, ocorrencia.local_sala, ocorrencia.data_abertura, ocorrencia.data_atendimento, ocorrencia.data_fechamento, ocorrencia.data_fechamento_confirmado, area_responsavel.id as id_area_responsavel_area_responsavel, area_responsavel.nome as nome_area_responsavel_area_responsavel, area_responsavel.descricao as descricao_area_responsavel_area_responsavel, area_responsavel.email as email_area_responsavel_area_responsavel, servico.id as id_servico_servico, servico.nome as nome_servico_servico, servico.descricao as descricao_servico_servico, servico.tempo_sla as tempo_sla_servico_servico, servico.visao as visao_servico_servico, usuario_cliente.id as id_usuario_usuario_cliente, usuario_cliente.nome as nome_usuario_usuario_cliente, usuario_cliente.email as email_usuario_usuario_cliente, usuario_cliente.login as login_usuario_usuario_cliente, usuario_cliente.senha as senha_usuario_usuario_cliente, usuario_cliente.nivel as nivel_usuario_usuario_cliente, usuario_cliente.id_setor as id_setor_usuario_usuario_cliente FROM ocorrencia INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico INNER JOIN usuario as usuario_cliente ON usuario_cliente.id = ocorrencia.id_usuario_cliente
+            WHERE ocorrencia.data_fechamento like :dataFechamento";
+                
+        try {
+                
+            $stmt = $this->connection->prepare($sql);
+            $stmt->bindParam(":dataFechamento", $dataFechamento, PDO::PARAM_STR);
+            $stmt->execute();
+            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            foreach ( $result as $row ){
+		        $ocorrencia = new Ocorrencia();
+                $ocorrencia->setId( $row ['id'] );
+                $ocorrencia->setIdLocal( $row ['id_local'] );
+                $ocorrencia->setDescricao( $row ['descricao'] );
+                $ocorrencia->setCampus( $row ['campus'] );
+                $ocorrencia->setPatrimonio( $row ['patrimonio'] );
+                $ocorrencia->setRamal( $row ['ramal'] );
+                $ocorrencia->setLocal( $row ['local'] );
+                $ocorrencia->setStatus( $row ['status'] );
+                $ocorrencia->setSolucao( $row ['solucao'] );
+                $ocorrencia->setPrioridade( $row ['prioridade'] );
+                $ocorrencia->setAvaliacao( $row ['avaliacao'] );
+                $ocorrencia->setEmail( $row ['email'] );
+                $ocorrencia->setIdUsuarioAtendente( $row ['id_usuario_atendente'] );
+                $ocorrencia->setIdUsuarioIndicado( $row ['id_usuario_indicado'] );
+                $ocorrencia->setAnexo( $row ['anexo'] );
+                $ocorrencia->setLocalSala( $row ['local_sala'] );
+                $ocorrencia->setDataAbertura( $row ['data_abertura'] );
+                $ocorrencia->setDataAtendimento( $row ['data_atendimento'] );
+                $ocorrencia->setDataFechamento( $row ['data_fechamento'] );
+                $ocorrencia->setDataFechamentoConfirmado( $row ['data_fechamento_confirmado'] );
+                $ocorrencia->getAreaResponsavel()->setId( $row ['id_area_responsavel_area_responsavel'] );
+                $ocorrencia->getAreaResponsavel()->setNome( $row ['nome_area_responsavel_area_responsavel'] );
+                $ocorrencia->getAreaResponsavel()->setDescricao( $row ['descricao_area_responsavel_area_responsavel'] );
+                $ocorrencia->getAreaResponsavel()->setEmail( $row ['email_area_responsavel_area_responsavel'] );
+                $ocorrencia->getServico()->setId( $row ['id_servico_servico'] );
+                $ocorrencia->getServico()->setNome( $row ['nome_servico_servico'] );
+                $ocorrencia->getServico()->setDescricao( $row ['descricao_servico_servico'] );
+                $ocorrencia->getServico()->setTempoSla( $row ['tempo_sla_servico_servico'] );
+                $ocorrencia->getServico()->setVisao( $row ['visao_servico_servico'] );
+                $ocorrencia->getUsuarioCliente()->setId( $row ['id_usuario_usuario_cliente'] );
+                $ocorrencia->getUsuarioCliente()->setNome( $row ['nome_usuario_usuario_cliente'] );
+                $ocorrencia->getUsuarioCliente()->setEmail( $row ['email_usuario_usuario_cliente'] );
+                $ocorrencia->getUsuarioCliente()->setLogin( $row ['login_usuario_usuario_cliente'] );
+                $ocorrencia->getUsuarioCliente()->setSenha( $row ['senha_usuario_usuario_cliente'] );
+                $ocorrencia->getUsuarioCliente()->setNivel( $row ['nivel_usuario_usuario_cliente'] );
+                $ocorrencia->getUsuarioCliente()->setIdSetor( $row ['id_setor_usuario_usuario_cliente'] );
+                $lista [] = $ocorrencia;
+
+	
+		    }
+    			    
+        } catch(PDOException $e) {
+            echo $e->getMessage();
+    			    
+        }
+		return $lista;
+    }
+                
+    public function fetchByDataFechamentoConfirmado(Ocorrencia $ocorrencia) {
+        $lista = array();
+	    $dataFechamentoConfirmado = $ocorrencia->getDataFechamentoConfirmado();
+                
+        $sql = "SELECT ocorrencia.id, ocorrencia.id_local, ocorrencia.descricao, ocorrencia.campus, ocorrencia.patrimonio, ocorrencia.ramal, ocorrencia.local, ocorrencia.status, ocorrencia.solucao, ocorrencia.prioridade, ocorrencia.avaliacao, ocorrencia.email, ocorrencia.id_usuario_atendente, ocorrencia.id_usuario_indicado, ocorrencia.anexo, ocorrencia.local_sala, ocorrencia.data_abertura, ocorrencia.data_atendimento, ocorrencia.data_fechamento, ocorrencia.data_fechamento_confirmado, area_responsavel.id as id_area_responsavel_area_responsavel, area_responsavel.nome as nome_area_responsavel_area_responsavel, area_responsavel.descricao as descricao_area_responsavel_area_responsavel, area_responsavel.email as email_area_responsavel_area_responsavel, servico.id as id_servico_servico, servico.nome as nome_servico_servico, servico.descricao as descricao_servico_servico, servico.tempo_sla as tempo_sla_servico_servico, servico.visao as visao_servico_servico, usuario_cliente.id as id_usuario_usuario_cliente, usuario_cliente.nome as nome_usuario_usuario_cliente, usuario_cliente.email as email_usuario_usuario_cliente, usuario_cliente.login as login_usuario_usuario_cliente, usuario_cliente.senha as senha_usuario_usuario_cliente, usuario_cliente.nivel as nivel_usuario_usuario_cliente, usuario_cliente.id_setor as id_setor_usuario_usuario_cliente FROM ocorrencia INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico INNER JOIN usuario as usuario_cliente ON usuario_cliente.id = ocorrencia.id_usuario_cliente
+            WHERE ocorrencia.data_fechamento_confirmado like :dataFechamentoConfirmado";
+                
+        try {
+                
+            $stmt = $this->connection->prepare($sql);
+            $stmt->bindParam(":dataFechamentoConfirmado", $dataFechamentoConfirmado, PDO::PARAM_STR);
+            $stmt->execute();
+            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            foreach ( $result as $row ){
+		        $ocorrencia = new Ocorrencia();
+                $ocorrencia->setId( $row ['id'] );
+                $ocorrencia->setIdLocal( $row ['id_local'] );
+                $ocorrencia->setDescricao( $row ['descricao'] );
+                $ocorrencia->setCampus( $row ['campus'] );
+                $ocorrencia->setPatrimonio( $row ['patrimonio'] );
+                $ocorrencia->setRamal( $row ['ramal'] );
+                $ocorrencia->setLocal( $row ['local'] );
+                $ocorrencia->setStatus( $row ['status'] );
+                $ocorrencia->setSolucao( $row ['solucao'] );
+                $ocorrencia->setPrioridade( $row ['prioridade'] );
+                $ocorrencia->setAvaliacao( $row ['avaliacao'] );
+                $ocorrencia->setEmail( $row ['email'] );
+                $ocorrencia->setIdUsuarioAtendente( $row ['id_usuario_atendente'] );
+                $ocorrencia->setIdUsuarioIndicado( $row ['id_usuario_indicado'] );
+                $ocorrencia->setAnexo( $row ['anexo'] );
+                $ocorrencia->setLocalSala( $row ['local_sala'] );
+                $ocorrencia->setDataAbertura( $row ['data_abertura'] );
+                $ocorrencia->setDataAtendimento( $row ['data_atendimento'] );
+                $ocorrencia->setDataFechamento( $row ['data_fechamento'] );
+                $ocorrencia->setDataFechamentoConfirmado( $row ['data_fechamento_confirmado'] );
                 $ocorrencia->getAreaResponsavel()->setId( $row ['id_area_responsavel_area_responsavel'] );
                 $ocorrencia->getAreaResponsavel()->setNome( $row ['nome_area_responsavel_area_responsavel'] );
                 $ocorrencia->getAreaResponsavel()->setDescricao( $row ['descricao_area_responsavel_area_responsavel'] );
@@ -1384,7 +1744,7 @@ class OcorrenciaDAO extends DAO {
     public function fillById(Ocorrencia $ocorrencia) {
         
 	    $id = $ocorrencia->getId();
-	    $sql = "SELECT ocorrencia.id, ocorrencia.id_local, ocorrencia.descricao, ocorrencia.campus, ocorrencia.patrimonio, ocorrencia.ramal, ocorrencia.local, ocorrencia.status, ocorrencia.solucao, ocorrencia.prioridade, ocorrencia.avaliacao, ocorrencia.email, ocorrencia.id_usuario_atendente, ocorrencia.id_usuario_indicado, ocorrencia.anexo, ocorrencia.local_sala, area_responsavel.id as id_area_responsavel_area_responsavel, area_responsavel.nome as nome_area_responsavel_area_responsavel, area_responsavel.descricao as descricao_area_responsavel_area_responsavel, area_responsavel.email as email_area_responsavel_area_responsavel, servico.id as id_servico_servico, servico.nome as nome_servico_servico, servico.descricao as descricao_servico_servico, servico.tempo_sla as tempo_sla_servico_servico, servico.visao as visao_servico_servico, usuario_cliente.id as id_usuario_usuario_cliente, usuario_cliente.nome as nome_usuario_usuario_cliente, usuario_cliente.email as email_usuario_usuario_cliente, usuario_cliente.login as login_usuario_usuario_cliente, usuario_cliente.senha as senha_usuario_usuario_cliente, usuario_cliente.nivel as nivel_usuario_usuario_cliente, usuario_cliente.id_setor as id_setor_usuario_usuario_cliente FROM ocorrencia INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico INNER JOIN usuario as usuario_cliente ON usuario_cliente.id = ocorrencia.id_usuario_cliente
+	    $sql = "SELECT ocorrencia.id, ocorrencia.id_local, ocorrencia.descricao, ocorrencia.campus, ocorrencia.patrimonio, ocorrencia.ramal, ocorrencia.local, ocorrencia.status, ocorrencia.solucao, ocorrencia.prioridade, ocorrencia.avaliacao, ocorrencia.email, ocorrencia.id_usuario_atendente, ocorrencia.id_usuario_indicado, ocorrencia.anexo, ocorrencia.local_sala, ocorrencia.data_abertura, ocorrencia.data_atendimento, ocorrencia.data_fechamento, ocorrencia.data_fechamento_confirmado, area_responsavel.id as id_area_responsavel_area_responsavel, area_responsavel.nome as nome_area_responsavel_area_responsavel, area_responsavel.descricao as descricao_area_responsavel_area_responsavel, area_responsavel.email as email_area_responsavel_area_responsavel, servico.id as id_servico_servico, servico.nome as nome_servico_servico, servico.descricao as descricao_servico_servico, servico.tempo_sla as tempo_sla_servico_servico, servico.visao as visao_servico_servico, usuario_cliente.id as id_usuario_usuario_cliente, usuario_cliente.nome as nome_usuario_usuario_cliente, usuario_cliente.email as email_usuario_usuario_cliente, usuario_cliente.login as login_usuario_usuario_cliente, usuario_cliente.senha as senha_usuario_usuario_cliente, usuario_cliente.nivel as nivel_usuario_usuario_cliente, usuario_cliente.id_setor as id_setor_usuario_usuario_cliente FROM ocorrencia INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico INNER JOIN usuario as usuario_cliente ON usuario_cliente.id = ocorrencia.id_usuario_cliente
                 WHERE ocorrencia.id = :id
                  LIMIT 1000";
                 
@@ -1415,6 +1775,10 @@ class OcorrenciaDAO extends DAO {
                 $ocorrencia->setIdUsuarioIndicado( $row ['id_usuario_indicado'] );
                 $ocorrencia->setAnexo( $row ['anexo'] );
                 $ocorrencia->setLocalSala( $row ['local_sala'] );
+                $ocorrencia->setDataAbertura( $row ['data_abertura'] );
+                $ocorrencia->setDataAtendimento( $row ['data_atendimento'] );
+                $ocorrencia->setDataFechamento( $row ['data_fechamento'] );
+                $ocorrencia->setDataFechamentoConfirmado( $row ['data_fechamento_confirmado'] );
                 $ocorrencia->getAreaResponsavel()->setId( $row ['id_area_responsavel_area_responsavel'] );
                 $ocorrencia->getAreaResponsavel()->setNome( $row ['nome_area_responsavel_area_responsavel'] );
                 $ocorrencia->getAreaResponsavel()->setDescricao( $row ['descricao_area_responsavel_area_responsavel'] );
@@ -1443,7 +1807,7 @@ class OcorrenciaDAO extends DAO {
     public function fillByIdLocal(Ocorrencia $ocorrencia) {
         
 	    $idLocal = $ocorrencia->getIdLocal();
-	    $sql = "SELECT ocorrencia.id, ocorrencia.id_local, ocorrencia.descricao, ocorrencia.campus, ocorrencia.patrimonio, ocorrencia.ramal, ocorrencia.local, ocorrencia.status, ocorrencia.solucao, ocorrencia.prioridade, ocorrencia.avaliacao, ocorrencia.email, ocorrencia.id_usuario_atendente, ocorrencia.id_usuario_indicado, ocorrencia.anexo, ocorrencia.local_sala, area_responsavel.id as id_area_responsavel_area_responsavel, area_responsavel.nome as nome_area_responsavel_area_responsavel, area_responsavel.descricao as descricao_area_responsavel_area_responsavel, area_responsavel.email as email_area_responsavel_area_responsavel, servico.id as id_servico_servico, servico.nome as nome_servico_servico, servico.descricao as descricao_servico_servico, servico.tempo_sla as tempo_sla_servico_servico, servico.visao as visao_servico_servico, usuario_cliente.id as id_usuario_usuario_cliente, usuario_cliente.nome as nome_usuario_usuario_cliente, usuario_cliente.email as email_usuario_usuario_cliente, usuario_cliente.login as login_usuario_usuario_cliente, usuario_cliente.senha as senha_usuario_usuario_cliente, usuario_cliente.nivel as nivel_usuario_usuario_cliente, usuario_cliente.id_setor as id_setor_usuario_usuario_cliente FROM ocorrencia INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico INNER JOIN usuario as usuario_cliente ON usuario_cliente.id = ocorrencia.id_usuario_cliente
+	    $sql = "SELECT ocorrencia.id, ocorrencia.id_local, ocorrencia.descricao, ocorrencia.campus, ocorrencia.patrimonio, ocorrencia.ramal, ocorrencia.local, ocorrencia.status, ocorrencia.solucao, ocorrencia.prioridade, ocorrencia.avaliacao, ocorrencia.email, ocorrencia.id_usuario_atendente, ocorrencia.id_usuario_indicado, ocorrencia.anexo, ocorrencia.local_sala, ocorrencia.data_abertura, ocorrencia.data_atendimento, ocorrencia.data_fechamento, ocorrencia.data_fechamento_confirmado, area_responsavel.id as id_area_responsavel_area_responsavel, area_responsavel.nome as nome_area_responsavel_area_responsavel, area_responsavel.descricao as descricao_area_responsavel_area_responsavel, area_responsavel.email as email_area_responsavel_area_responsavel, servico.id as id_servico_servico, servico.nome as nome_servico_servico, servico.descricao as descricao_servico_servico, servico.tempo_sla as tempo_sla_servico_servico, servico.visao as visao_servico_servico, usuario_cliente.id as id_usuario_usuario_cliente, usuario_cliente.nome as nome_usuario_usuario_cliente, usuario_cliente.email as email_usuario_usuario_cliente, usuario_cliente.login as login_usuario_usuario_cliente, usuario_cliente.senha as senha_usuario_usuario_cliente, usuario_cliente.nivel as nivel_usuario_usuario_cliente, usuario_cliente.id_setor as id_setor_usuario_usuario_cliente FROM ocorrencia INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico INNER JOIN usuario as usuario_cliente ON usuario_cliente.id = ocorrencia.id_usuario_cliente
                 WHERE ocorrencia.id_local = :idLocal
                  LIMIT 1000";
                 
@@ -1474,6 +1838,10 @@ class OcorrenciaDAO extends DAO {
                 $ocorrencia->setIdUsuarioIndicado( $row ['id_usuario_indicado'] );
                 $ocorrencia->setAnexo( $row ['anexo'] );
                 $ocorrencia->setLocalSala( $row ['local_sala'] );
+                $ocorrencia->setDataAbertura( $row ['data_abertura'] );
+                $ocorrencia->setDataAtendimento( $row ['data_atendimento'] );
+                $ocorrencia->setDataFechamento( $row ['data_fechamento'] );
+                $ocorrencia->setDataFechamentoConfirmado( $row ['data_fechamento_confirmado'] );
                 $ocorrencia->getAreaResponsavel()->setId( $row ['id_area_responsavel_area_responsavel'] );
                 $ocorrencia->getAreaResponsavel()->setNome( $row ['nome_area_responsavel_area_responsavel'] );
                 $ocorrencia->getAreaResponsavel()->setDescricao( $row ['descricao_area_responsavel_area_responsavel'] );
@@ -1502,7 +1870,7 @@ class OcorrenciaDAO extends DAO {
     public function fillByDescricao(Ocorrencia $ocorrencia) {
         
 	    $descricao = $ocorrencia->getDescricao();
-	    $sql = "SELECT ocorrencia.id, ocorrencia.id_local, ocorrencia.descricao, ocorrencia.campus, ocorrencia.patrimonio, ocorrencia.ramal, ocorrencia.local, ocorrencia.status, ocorrencia.solucao, ocorrencia.prioridade, ocorrencia.avaliacao, ocorrencia.email, ocorrencia.id_usuario_atendente, ocorrencia.id_usuario_indicado, ocorrencia.anexo, ocorrencia.local_sala, area_responsavel.id as id_area_responsavel_area_responsavel, area_responsavel.nome as nome_area_responsavel_area_responsavel, area_responsavel.descricao as descricao_area_responsavel_area_responsavel, area_responsavel.email as email_area_responsavel_area_responsavel, servico.id as id_servico_servico, servico.nome as nome_servico_servico, servico.descricao as descricao_servico_servico, servico.tempo_sla as tempo_sla_servico_servico, servico.visao as visao_servico_servico, usuario_cliente.id as id_usuario_usuario_cliente, usuario_cliente.nome as nome_usuario_usuario_cliente, usuario_cliente.email as email_usuario_usuario_cliente, usuario_cliente.login as login_usuario_usuario_cliente, usuario_cliente.senha as senha_usuario_usuario_cliente, usuario_cliente.nivel as nivel_usuario_usuario_cliente, usuario_cliente.id_setor as id_setor_usuario_usuario_cliente FROM ocorrencia INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico INNER JOIN usuario as usuario_cliente ON usuario_cliente.id = ocorrencia.id_usuario_cliente
+	    $sql = "SELECT ocorrencia.id, ocorrencia.id_local, ocorrencia.descricao, ocorrencia.campus, ocorrencia.patrimonio, ocorrencia.ramal, ocorrencia.local, ocorrencia.status, ocorrencia.solucao, ocorrencia.prioridade, ocorrencia.avaliacao, ocorrencia.email, ocorrencia.id_usuario_atendente, ocorrencia.id_usuario_indicado, ocorrencia.anexo, ocorrencia.local_sala, ocorrencia.data_abertura, ocorrencia.data_atendimento, ocorrencia.data_fechamento, ocorrencia.data_fechamento_confirmado, area_responsavel.id as id_area_responsavel_area_responsavel, area_responsavel.nome as nome_area_responsavel_area_responsavel, area_responsavel.descricao as descricao_area_responsavel_area_responsavel, area_responsavel.email as email_area_responsavel_area_responsavel, servico.id as id_servico_servico, servico.nome as nome_servico_servico, servico.descricao as descricao_servico_servico, servico.tempo_sla as tempo_sla_servico_servico, servico.visao as visao_servico_servico, usuario_cliente.id as id_usuario_usuario_cliente, usuario_cliente.nome as nome_usuario_usuario_cliente, usuario_cliente.email as email_usuario_usuario_cliente, usuario_cliente.login as login_usuario_usuario_cliente, usuario_cliente.senha as senha_usuario_usuario_cliente, usuario_cliente.nivel as nivel_usuario_usuario_cliente, usuario_cliente.id_setor as id_setor_usuario_usuario_cliente FROM ocorrencia INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico INNER JOIN usuario as usuario_cliente ON usuario_cliente.id = ocorrencia.id_usuario_cliente
                 WHERE ocorrencia.descricao = :descricao
                  LIMIT 1000";
                 
@@ -1533,6 +1901,10 @@ class OcorrenciaDAO extends DAO {
                 $ocorrencia->setIdUsuarioIndicado( $row ['id_usuario_indicado'] );
                 $ocorrencia->setAnexo( $row ['anexo'] );
                 $ocorrencia->setLocalSala( $row ['local_sala'] );
+                $ocorrencia->setDataAbertura( $row ['data_abertura'] );
+                $ocorrencia->setDataAtendimento( $row ['data_atendimento'] );
+                $ocorrencia->setDataFechamento( $row ['data_fechamento'] );
+                $ocorrencia->setDataFechamentoConfirmado( $row ['data_fechamento_confirmado'] );
                 $ocorrencia->getAreaResponsavel()->setId( $row ['id_area_responsavel_area_responsavel'] );
                 $ocorrencia->getAreaResponsavel()->setNome( $row ['nome_area_responsavel_area_responsavel'] );
                 $ocorrencia->getAreaResponsavel()->setDescricao( $row ['descricao_area_responsavel_area_responsavel'] );
@@ -1561,7 +1933,7 @@ class OcorrenciaDAO extends DAO {
     public function fillByCampus(Ocorrencia $ocorrencia) {
         
 	    $campus = $ocorrencia->getCampus();
-	    $sql = "SELECT ocorrencia.id, ocorrencia.id_local, ocorrencia.descricao, ocorrencia.campus, ocorrencia.patrimonio, ocorrencia.ramal, ocorrencia.local, ocorrencia.status, ocorrencia.solucao, ocorrencia.prioridade, ocorrencia.avaliacao, ocorrencia.email, ocorrencia.id_usuario_atendente, ocorrencia.id_usuario_indicado, ocorrencia.anexo, ocorrencia.local_sala, area_responsavel.id as id_area_responsavel_area_responsavel, area_responsavel.nome as nome_area_responsavel_area_responsavel, area_responsavel.descricao as descricao_area_responsavel_area_responsavel, area_responsavel.email as email_area_responsavel_area_responsavel, servico.id as id_servico_servico, servico.nome as nome_servico_servico, servico.descricao as descricao_servico_servico, servico.tempo_sla as tempo_sla_servico_servico, servico.visao as visao_servico_servico, usuario_cliente.id as id_usuario_usuario_cliente, usuario_cliente.nome as nome_usuario_usuario_cliente, usuario_cliente.email as email_usuario_usuario_cliente, usuario_cliente.login as login_usuario_usuario_cliente, usuario_cliente.senha as senha_usuario_usuario_cliente, usuario_cliente.nivel as nivel_usuario_usuario_cliente, usuario_cliente.id_setor as id_setor_usuario_usuario_cliente FROM ocorrencia INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico INNER JOIN usuario as usuario_cliente ON usuario_cliente.id = ocorrencia.id_usuario_cliente
+	    $sql = "SELECT ocorrencia.id, ocorrencia.id_local, ocorrencia.descricao, ocorrencia.campus, ocorrencia.patrimonio, ocorrencia.ramal, ocorrencia.local, ocorrencia.status, ocorrencia.solucao, ocorrencia.prioridade, ocorrencia.avaliacao, ocorrencia.email, ocorrencia.id_usuario_atendente, ocorrencia.id_usuario_indicado, ocorrencia.anexo, ocorrencia.local_sala, ocorrencia.data_abertura, ocorrencia.data_atendimento, ocorrencia.data_fechamento, ocorrencia.data_fechamento_confirmado, area_responsavel.id as id_area_responsavel_area_responsavel, area_responsavel.nome as nome_area_responsavel_area_responsavel, area_responsavel.descricao as descricao_area_responsavel_area_responsavel, area_responsavel.email as email_area_responsavel_area_responsavel, servico.id as id_servico_servico, servico.nome as nome_servico_servico, servico.descricao as descricao_servico_servico, servico.tempo_sla as tempo_sla_servico_servico, servico.visao as visao_servico_servico, usuario_cliente.id as id_usuario_usuario_cliente, usuario_cliente.nome as nome_usuario_usuario_cliente, usuario_cliente.email as email_usuario_usuario_cliente, usuario_cliente.login as login_usuario_usuario_cliente, usuario_cliente.senha as senha_usuario_usuario_cliente, usuario_cliente.nivel as nivel_usuario_usuario_cliente, usuario_cliente.id_setor as id_setor_usuario_usuario_cliente FROM ocorrencia INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico INNER JOIN usuario as usuario_cliente ON usuario_cliente.id = ocorrencia.id_usuario_cliente
                 WHERE ocorrencia.campus = :campus
                  LIMIT 1000";
                 
@@ -1592,6 +1964,10 @@ class OcorrenciaDAO extends DAO {
                 $ocorrencia->setIdUsuarioIndicado( $row ['id_usuario_indicado'] );
                 $ocorrencia->setAnexo( $row ['anexo'] );
                 $ocorrencia->setLocalSala( $row ['local_sala'] );
+                $ocorrencia->setDataAbertura( $row ['data_abertura'] );
+                $ocorrencia->setDataAtendimento( $row ['data_atendimento'] );
+                $ocorrencia->setDataFechamento( $row ['data_fechamento'] );
+                $ocorrencia->setDataFechamentoConfirmado( $row ['data_fechamento_confirmado'] );
                 $ocorrencia->getAreaResponsavel()->setId( $row ['id_area_responsavel_area_responsavel'] );
                 $ocorrencia->getAreaResponsavel()->setNome( $row ['nome_area_responsavel_area_responsavel'] );
                 $ocorrencia->getAreaResponsavel()->setDescricao( $row ['descricao_area_responsavel_area_responsavel'] );
@@ -1620,7 +1996,7 @@ class OcorrenciaDAO extends DAO {
     public function fillByPatrimonio(Ocorrencia $ocorrencia) {
         
 	    $patrimonio = $ocorrencia->getPatrimonio();
-	    $sql = "SELECT ocorrencia.id, ocorrencia.id_local, ocorrencia.descricao, ocorrencia.campus, ocorrencia.patrimonio, ocorrencia.ramal, ocorrencia.local, ocorrencia.status, ocorrencia.solucao, ocorrencia.prioridade, ocorrencia.avaliacao, ocorrencia.email, ocorrencia.id_usuario_atendente, ocorrencia.id_usuario_indicado, ocorrencia.anexo, ocorrencia.local_sala, area_responsavel.id as id_area_responsavel_area_responsavel, area_responsavel.nome as nome_area_responsavel_area_responsavel, area_responsavel.descricao as descricao_area_responsavel_area_responsavel, area_responsavel.email as email_area_responsavel_area_responsavel, servico.id as id_servico_servico, servico.nome as nome_servico_servico, servico.descricao as descricao_servico_servico, servico.tempo_sla as tempo_sla_servico_servico, servico.visao as visao_servico_servico, usuario_cliente.id as id_usuario_usuario_cliente, usuario_cliente.nome as nome_usuario_usuario_cliente, usuario_cliente.email as email_usuario_usuario_cliente, usuario_cliente.login as login_usuario_usuario_cliente, usuario_cliente.senha as senha_usuario_usuario_cliente, usuario_cliente.nivel as nivel_usuario_usuario_cliente, usuario_cliente.id_setor as id_setor_usuario_usuario_cliente FROM ocorrencia INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico INNER JOIN usuario as usuario_cliente ON usuario_cliente.id = ocorrencia.id_usuario_cliente
+	    $sql = "SELECT ocorrencia.id, ocorrencia.id_local, ocorrencia.descricao, ocorrencia.campus, ocorrencia.patrimonio, ocorrencia.ramal, ocorrencia.local, ocorrencia.status, ocorrencia.solucao, ocorrencia.prioridade, ocorrencia.avaliacao, ocorrencia.email, ocorrencia.id_usuario_atendente, ocorrencia.id_usuario_indicado, ocorrencia.anexo, ocorrencia.local_sala, ocorrencia.data_abertura, ocorrencia.data_atendimento, ocorrencia.data_fechamento, ocorrencia.data_fechamento_confirmado, area_responsavel.id as id_area_responsavel_area_responsavel, area_responsavel.nome as nome_area_responsavel_area_responsavel, area_responsavel.descricao as descricao_area_responsavel_area_responsavel, area_responsavel.email as email_area_responsavel_area_responsavel, servico.id as id_servico_servico, servico.nome as nome_servico_servico, servico.descricao as descricao_servico_servico, servico.tempo_sla as tempo_sla_servico_servico, servico.visao as visao_servico_servico, usuario_cliente.id as id_usuario_usuario_cliente, usuario_cliente.nome as nome_usuario_usuario_cliente, usuario_cliente.email as email_usuario_usuario_cliente, usuario_cliente.login as login_usuario_usuario_cliente, usuario_cliente.senha as senha_usuario_usuario_cliente, usuario_cliente.nivel as nivel_usuario_usuario_cliente, usuario_cliente.id_setor as id_setor_usuario_usuario_cliente FROM ocorrencia INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico INNER JOIN usuario as usuario_cliente ON usuario_cliente.id = ocorrencia.id_usuario_cliente
                 WHERE ocorrencia.patrimonio = :patrimonio
                  LIMIT 1000";
                 
@@ -1651,6 +2027,10 @@ class OcorrenciaDAO extends DAO {
                 $ocorrencia->setIdUsuarioIndicado( $row ['id_usuario_indicado'] );
                 $ocorrencia->setAnexo( $row ['anexo'] );
                 $ocorrencia->setLocalSala( $row ['local_sala'] );
+                $ocorrencia->setDataAbertura( $row ['data_abertura'] );
+                $ocorrencia->setDataAtendimento( $row ['data_atendimento'] );
+                $ocorrencia->setDataFechamento( $row ['data_fechamento'] );
+                $ocorrencia->setDataFechamentoConfirmado( $row ['data_fechamento_confirmado'] );
                 $ocorrencia->getAreaResponsavel()->setId( $row ['id_area_responsavel_area_responsavel'] );
                 $ocorrencia->getAreaResponsavel()->setNome( $row ['nome_area_responsavel_area_responsavel'] );
                 $ocorrencia->getAreaResponsavel()->setDescricao( $row ['descricao_area_responsavel_area_responsavel'] );
@@ -1679,7 +2059,7 @@ class OcorrenciaDAO extends DAO {
     public function fillByRamal(Ocorrencia $ocorrencia) {
         
 	    $ramal = $ocorrencia->getRamal();
-	    $sql = "SELECT ocorrencia.id, ocorrencia.id_local, ocorrencia.descricao, ocorrencia.campus, ocorrencia.patrimonio, ocorrencia.ramal, ocorrencia.local, ocorrencia.status, ocorrencia.solucao, ocorrencia.prioridade, ocorrencia.avaliacao, ocorrencia.email, ocorrencia.id_usuario_atendente, ocorrencia.id_usuario_indicado, ocorrencia.anexo, ocorrencia.local_sala, area_responsavel.id as id_area_responsavel_area_responsavel, area_responsavel.nome as nome_area_responsavel_area_responsavel, area_responsavel.descricao as descricao_area_responsavel_area_responsavel, area_responsavel.email as email_area_responsavel_area_responsavel, servico.id as id_servico_servico, servico.nome as nome_servico_servico, servico.descricao as descricao_servico_servico, servico.tempo_sla as tempo_sla_servico_servico, servico.visao as visao_servico_servico, usuario_cliente.id as id_usuario_usuario_cliente, usuario_cliente.nome as nome_usuario_usuario_cliente, usuario_cliente.email as email_usuario_usuario_cliente, usuario_cliente.login as login_usuario_usuario_cliente, usuario_cliente.senha as senha_usuario_usuario_cliente, usuario_cliente.nivel as nivel_usuario_usuario_cliente, usuario_cliente.id_setor as id_setor_usuario_usuario_cliente FROM ocorrencia INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico INNER JOIN usuario as usuario_cliente ON usuario_cliente.id = ocorrencia.id_usuario_cliente
+	    $sql = "SELECT ocorrencia.id, ocorrencia.id_local, ocorrencia.descricao, ocorrencia.campus, ocorrencia.patrimonio, ocorrencia.ramal, ocorrencia.local, ocorrencia.status, ocorrencia.solucao, ocorrencia.prioridade, ocorrencia.avaliacao, ocorrencia.email, ocorrencia.id_usuario_atendente, ocorrencia.id_usuario_indicado, ocorrencia.anexo, ocorrencia.local_sala, ocorrencia.data_abertura, ocorrencia.data_atendimento, ocorrencia.data_fechamento, ocorrencia.data_fechamento_confirmado, area_responsavel.id as id_area_responsavel_area_responsavel, area_responsavel.nome as nome_area_responsavel_area_responsavel, area_responsavel.descricao as descricao_area_responsavel_area_responsavel, area_responsavel.email as email_area_responsavel_area_responsavel, servico.id as id_servico_servico, servico.nome as nome_servico_servico, servico.descricao as descricao_servico_servico, servico.tempo_sla as tempo_sla_servico_servico, servico.visao as visao_servico_servico, usuario_cliente.id as id_usuario_usuario_cliente, usuario_cliente.nome as nome_usuario_usuario_cliente, usuario_cliente.email as email_usuario_usuario_cliente, usuario_cliente.login as login_usuario_usuario_cliente, usuario_cliente.senha as senha_usuario_usuario_cliente, usuario_cliente.nivel as nivel_usuario_usuario_cliente, usuario_cliente.id_setor as id_setor_usuario_usuario_cliente FROM ocorrencia INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico INNER JOIN usuario as usuario_cliente ON usuario_cliente.id = ocorrencia.id_usuario_cliente
                 WHERE ocorrencia.ramal = :ramal
                  LIMIT 1000";
                 
@@ -1710,6 +2090,10 @@ class OcorrenciaDAO extends DAO {
                 $ocorrencia->setIdUsuarioIndicado( $row ['id_usuario_indicado'] );
                 $ocorrencia->setAnexo( $row ['anexo'] );
                 $ocorrencia->setLocalSala( $row ['local_sala'] );
+                $ocorrencia->setDataAbertura( $row ['data_abertura'] );
+                $ocorrencia->setDataAtendimento( $row ['data_atendimento'] );
+                $ocorrencia->setDataFechamento( $row ['data_fechamento'] );
+                $ocorrencia->setDataFechamentoConfirmado( $row ['data_fechamento_confirmado'] );
                 $ocorrencia->getAreaResponsavel()->setId( $row ['id_area_responsavel_area_responsavel'] );
                 $ocorrencia->getAreaResponsavel()->setNome( $row ['nome_area_responsavel_area_responsavel'] );
                 $ocorrencia->getAreaResponsavel()->setDescricao( $row ['descricao_area_responsavel_area_responsavel'] );
@@ -1738,7 +2122,7 @@ class OcorrenciaDAO extends DAO {
     public function fillByLocal(Ocorrencia $ocorrencia) {
         
 	    $local = $ocorrencia->getLocal();
-	    $sql = "SELECT ocorrencia.id, ocorrencia.id_local, ocorrencia.descricao, ocorrencia.campus, ocorrencia.patrimonio, ocorrencia.ramal, ocorrencia.local, ocorrencia.status, ocorrencia.solucao, ocorrencia.prioridade, ocorrencia.avaliacao, ocorrencia.email, ocorrencia.id_usuario_atendente, ocorrencia.id_usuario_indicado, ocorrencia.anexo, ocorrencia.local_sala, area_responsavel.id as id_area_responsavel_area_responsavel, area_responsavel.nome as nome_area_responsavel_area_responsavel, area_responsavel.descricao as descricao_area_responsavel_area_responsavel, area_responsavel.email as email_area_responsavel_area_responsavel, servico.id as id_servico_servico, servico.nome as nome_servico_servico, servico.descricao as descricao_servico_servico, servico.tempo_sla as tempo_sla_servico_servico, servico.visao as visao_servico_servico, usuario_cliente.id as id_usuario_usuario_cliente, usuario_cliente.nome as nome_usuario_usuario_cliente, usuario_cliente.email as email_usuario_usuario_cliente, usuario_cliente.login as login_usuario_usuario_cliente, usuario_cliente.senha as senha_usuario_usuario_cliente, usuario_cliente.nivel as nivel_usuario_usuario_cliente, usuario_cliente.id_setor as id_setor_usuario_usuario_cliente FROM ocorrencia INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico INNER JOIN usuario as usuario_cliente ON usuario_cliente.id = ocorrencia.id_usuario_cliente
+	    $sql = "SELECT ocorrencia.id, ocorrencia.id_local, ocorrencia.descricao, ocorrencia.campus, ocorrencia.patrimonio, ocorrencia.ramal, ocorrencia.local, ocorrencia.status, ocorrencia.solucao, ocorrencia.prioridade, ocorrencia.avaliacao, ocorrencia.email, ocorrencia.id_usuario_atendente, ocorrencia.id_usuario_indicado, ocorrencia.anexo, ocorrencia.local_sala, ocorrencia.data_abertura, ocorrencia.data_atendimento, ocorrencia.data_fechamento, ocorrencia.data_fechamento_confirmado, area_responsavel.id as id_area_responsavel_area_responsavel, area_responsavel.nome as nome_area_responsavel_area_responsavel, area_responsavel.descricao as descricao_area_responsavel_area_responsavel, area_responsavel.email as email_area_responsavel_area_responsavel, servico.id as id_servico_servico, servico.nome as nome_servico_servico, servico.descricao as descricao_servico_servico, servico.tempo_sla as tempo_sla_servico_servico, servico.visao as visao_servico_servico, usuario_cliente.id as id_usuario_usuario_cliente, usuario_cliente.nome as nome_usuario_usuario_cliente, usuario_cliente.email as email_usuario_usuario_cliente, usuario_cliente.login as login_usuario_usuario_cliente, usuario_cliente.senha as senha_usuario_usuario_cliente, usuario_cliente.nivel as nivel_usuario_usuario_cliente, usuario_cliente.id_setor as id_setor_usuario_usuario_cliente FROM ocorrencia INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico INNER JOIN usuario as usuario_cliente ON usuario_cliente.id = ocorrencia.id_usuario_cliente
                 WHERE ocorrencia.local = :local
                  LIMIT 1000";
                 
@@ -1769,6 +2153,10 @@ class OcorrenciaDAO extends DAO {
                 $ocorrencia->setIdUsuarioIndicado( $row ['id_usuario_indicado'] );
                 $ocorrencia->setAnexo( $row ['anexo'] );
                 $ocorrencia->setLocalSala( $row ['local_sala'] );
+                $ocorrencia->setDataAbertura( $row ['data_abertura'] );
+                $ocorrencia->setDataAtendimento( $row ['data_atendimento'] );
+                $ocorrencia->setDataFechamento( $row ['data_fechamento'] );
+                $ocorrencia->setDataFechamentoConfirmado( $row ['data_fechamento_confirmado'] );
                 $ocorrencia->getAreaResponsavel()->setId( $row ['id_area_responsavel_area_responsavel'] );
                 $ocorrencia->getAreaResponsavel()->setNome( $row ['nome_area_responsavel_area_responsavel'] );
                 $ocorrencia->getAreaResponsavel()->setDescricao( $row ['descricao_area_responsavel_area_responsavel'] );
@@ -1797,7 +2185,7 @@ class OcorrenciaDAO extends DAO {
     public function fillByStatus(Ocorrencia $ocorrencia) {
         
 	    $status = $ocorrencia->getStatus();
-	    $sql = "SELECT ocorrencia.id, ocorrencia.id_local, ocorrencia.descricao, ocorrencia.campus, ocorrencia.patrimonio, ocorrencia.ramal, ocorrencia.local, ocorrencia.status, ocorrencia.solucao, ocorrencia.prioridade, ocorrencia.avaliacao, ocorrencia.email, ocorrencia.id_usuario_atendente, ocorrencia.id_usuario_indicado, ocorrencia.anexo, ocorrencia.local_sala, area_responsavel.id as id_area_responsavel_area_responsavel, area_responsavel.nome as nome_area_responsavel_area_responsavel, area_responsavel.descricao as descricao_area_responsavel_area_responsavel, area_responsavel.email as email_area_responsavel_area_responsavel, servico.id as id_servico_servico, servico.nome as nome_servico_servico, servico.descricao as descricao_servico_servico, servico.tempo_sla as tempo_sla_servico_servico, servico.visao as visao_servico_servico, usuario_cliente.id as id_usuario_usuario_cliente, usuario_cliente.nome as nome_usuario_usuario_cliente, usuario_cliente.email as email_usuario_usuario_cliente, usuario_cliente.login as login_usuario_usuario_cliente, usuario_cliente.senha as senha_usuario_usuario_cliente, usuario_cliente.nivel as nivel_usuario_usuario_cliente, usuario_cliente.id_setor as id_setor_usuario_usuario_cliente FROM ocorrencia INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico INNER JOIN usuario as usuario_cliente ON usuario_cliente.id = ocorrencia.id_usuario_cliente
+	    $sql = "SELECT ocorrencia.id, ocorrencia.id_local, ocorrencia.descricao, ocorrencia.campus, ocorrencia.patrimonio, ocorrencia.ramal, ocorrencia.local, ocorrencia.status, ocorrencia.solucao, ocorrencia.prioridade, ocorrencia.avaliacao, ocorrencia.email, ocorrencia.id_usuario_atendente, ocorrencia.id_usuario_indicado, ocorrencia.anexo, ocorrencia.local_sala, ocorrencia.data_abertura, ocorrencia.data_atendimento, ocorrencia.data_fechamento, ocorrencia.data_fechamento_confirmado, area_responsavel.id as id_area_responsavel_area_responsavel, area_responsavel.nome as nome_area_responsavel_area_responsavel, area_responsavel.descricao as descricao_area_responsavel_area_responsavel, area_responsavel.email as email_area_responsavel_area_responsavel, servico.id as id_servico_servico, servico.nome as nome_servico_servico, servico.descricao as descricao_servico_servico, servico.tempo_sla as tempo_sla_servico_servico, servico.visao as visao_servico_servico, usuario_cliente.id as id_usuario_usuario_cliente, usuario_cliente.nome as nome_usuario_usuario_cliente, usuario_cliente.email as email_usuario_usuario_cliente, usuario_cliente.login as login_usuario_usuario_cliente, usuario_cliente.senha as senha_usuario_usuario_cliente, usuario_cliente.nivel as nivel_usuario_usuario_cliente, usuario_cliente.id_setor as id_setor_usuario_usuario_cliente FROM ocorrencia INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico INNER JOIN usuario as usuario_cliente ON usuario_cliente.id = ocorrencia.id_usuario_cliente
                 WHERE ocorrencia.status = :status
                  LIMIT 1000";
                 
@@ -1828,6 +2216,10 @@ class OcorrenciaDAO extends DAO {
                 $ocorrencia->setIdUsuarioIndicado( $row ['id_usuario_indicado'] );
                 $ocorrencia->setAnexo( $row ['anexo'] );
                 $ocorrencia->setLocalSala( $row ['local_sala'] );
+                $ocorrencia->setDataAbertura( $row ['data_abertura'] );
+                $ocorrencia->setDataAtendimento( $row ['data_atendimento'] );
+                $ocorrencia->setDataFechamento( $row ['data_fechamento'] );
+                $ocorrencia->setDataFechamentoConfirmado( $row ['data_fechamento_confirmado'] );
                 $ocorrencia->getAreaResponsavel()->setId( $row ['id_area_responsavel_area_responsavel'] );
                 $ocorrencia->getAreaResponsavel()->setNome( $row ['nome_area_responsavel_area_responsavel'] );
                 $ocorrencia->getAreaResponsavel()->setDescricao( $row ['descricao_area_responsavel_area_responsavel'] );
@@ -1856,7 +2248,7 @@ class OcorrenciaDAO extends DAO {
     public function fillBySolucao(Ocorrencia $ocorrencia) {
         
 	    $solucao = $ocorrencia->getSolucao();
-	    $sql = "SELECT ocorrencia.id, ocorrencia.id_local, ocorrencia.descricao, ocorrencia.campus, ocorrencia.patrimonio, ocorrencia.ramal, ocorrencia.local, ocorrencia.status, ocorrencia.solucao, ocorrencia.prioridade, ocorrencia.avaliacao, ocorrencia.email, ocorrencia.id_usuario_atendente, ocorrencia.id_usuario_indicado, ocorrencia.anexo, ocorrencia.local_sala, area_responsavel.id as id_area_responsavel_area_responsavel, area_responsavel.nome as nome_area_responsavel_area_responsavel, area_responsavel.descricao as descricao_area_responsavel_area_responsavel, area_responsavel.email as email_area_responsavel_area_responsavel, servico.id as id_servico_servico, servico.nome as nome_servico_servico, servico.descricao as descricao_servico_servico, servico.tempo_sla as tempo_sla_servico_servico, servico.visao as visao_servico_servico, usuario_cliente.id as id_usuario_usuario_cliente, usuario_cliente.nome as nome_usuario_usuario_cliente, usuario_cliente.email as email_usuario_usuario_cliente, usuario_cliente.login as login_usuario_usuario_cliente, usuario_cliente.senha as senha_usuario_usuario_cliente, usuario_cliente.nivel as nivel_usuario_usuario_cliente, usuario_cliente.id_setor as id_setor_usuario_usuario_cliente FROM ocorrencia INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico INNER JOIN usuario as usuario_cliente ON usuario_cliente.id = ocorrencia.id_usuario_cliente
+	    $sql = "SELECT ocorrencia.id, ocorrencia.id_local, ocorrencia.descricao, ocorrencia.campus, ocorrencia.patrimonio, ocorrencia.ramal, ocorrencia.local, ocorrencia.status, ocorrencia.solucao, ocorrencia.prioridade, ocorrencia.avaliacao, ocorrencia.email, ocorrencia.id_usuario_atendente, ocorrencia.id_usuario_indicado, ocorrencia.anexo, ocorrencia.local_sala, ocorrencia.data_abertura, ocorrencia.data_atendimento, ocorrencia.data_fechamento, ocorrencia.data_fechamento_confirmado, area_responsavel.id as id_area_responsavel_area_responsavel, area_responsavel.nome as nome_area_responsavel_area_responsavel, area_responsavel.descricao as descricao_area_responsavel_area_responsavel, area_responsavel.email as email_area_responsavel_area_responsavel, servico.id as id_servico_servico, servico.nome as nome_servico_servico, servico.descricao as descricao_servico_servico, servico.tempo_sla as tempo_sla_servico_servico, servico.visao as visao_servico_servico, usuario_cliente.id as id_usuario_usuario_cliente, usuario_cliente.nome as nome_usuario_usuario_cliente, usuario_cliente.email as email_usuario_usuario_cliente, usuario_cliente.login as login_usuario_usuario_cliente, usuario_cliente.senha as senha_usuario_usuario_cliente, usuario_cliente.nivel as nivel_usuario_usuario_cliente, usuario_cliente.id_setor as id_setor_usuario_usuario_cliente FROM ocorrencia INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico INNER JOIN usuario as usuario_cliente ON usuario_cliente.id = ocorrencia.id_usuario_cliente
                 WHERE ocorrencia.solucao = :solucao
                  LIMIT 1000";
                 
@@ -1887,6 +2279,10 @@ class OcorrenciaDAO extends DAO {
                 $ocorrencia->setIdUsuarioIndicado( $row ['id_usuario_indicado'] );
                 $ocorrencia->setAnexo( $row ['anexo'] );
                 $ocorrencia->setLocalSala( $row ['local_sala'] );
+                $ocorrencia->setDataAbertura( $row ['data_abertura'] );
+                $ocorrencia->setDataAtendimento( $row ['data_atendimento'] );
+                $ocorrencia->setDataFechamento( $row ['data_fechamento'] );
+                $ocorrencia->setDataFechamentoConfirmado( $row ['data_fechamento_confirmado'] );
                 $ocorrencia->getAreaResponsavel()->setId( $row ['id_area_responsavel_area_responsavel'] );
                 $ocorrencia->getAreaResponsavel()->setNome( $row ['nome_area_responsavel_area_responsavel'] );
                 $ocorrencia->getAreaResponsavel()->setDescricao( $row ['descricao_area_responsavel_area_responsavel'] );
@@ -1915,7 +2311,7 @@ class OcorrenciaDAO extends DAO {
     public function fillByPrioridade(Ocorrencia $ocorrencia) {
         
 	    $prioridade = $ocorrencia->getPrioridade();
-	    $sql = "SELECT ocorrencia.id, ocorrencia.id_local, ocorrencia.descricao, ocorrencia.campus, ocorrencia.patrimonio, ocorrencia.ramal, ocorrencia.local, ocorrencia.status, ocorrencia.solucao, ocorrencia.prioridade, ocorrencia.avaliacao, ocorrencia.email, ocorrencia.id_usuario_atendente, ocorrencia.id_usuario_indicado, ocorrencia.anexo, ocorrencia.local_sala, area_responsavel.id as id_area_responsavel_area_responsavel, area_responsavel.nome as nome_area_responsavel_area_responsavel, area_responsavel.descricao as descricao_area_responsavel_area_responsavel, area_responsavel.email as email_area_responsavel_area_responsavel, servico.id as id_servico_servico, servico.nome as nome_servico_servico, servico.descricao as descricao_servico_servico, servico.tempo_sla as tempo_sla_servico_servico, servico.visao as visao_servico_servico, usuario_cliente.id as id_usuario_usuario_cliente, usuario_cliente.nome as nome_usuario_usuario_cliente, usuario_cliente.email as email_usuario_usuario_cliente, usuario_cliente.login as login_usuario_usuario_cliente, usuario_cliente.senha as senha_usuario_usuario_cliente, usuario_cliente.nivel as nivel_usuario_usuario_cliente, usuario_cliente.id_setor as id_setor_usuario_usuario_cliente FROM ocorrencia INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico INNER JOIN usuario as usuario_cliente ON usuario_cliente.id = ocorrencia.id_usuario_cliente
+	    $sql = "SELECT ocorrencia.id, ocorrencia.id_local, ocorrencia.descricao, ocorrencia.campus, ocorrencia.patrimonio, ocorrencia.ramal, ocorrencia.local, ocorrencia.status, ocorrencia.solucao, ocorrencia.prioridade, ocorrencia.avaliacao, ocorrencia.email, ocorrencia.id_usuario_atendente, ocorrencia.id_usuario_indicado, ocorrencia.anexo, ocorrencia.local_sala, ocorrencia.data_abertura, ocorrencia.data_atendimento, ocorrencia.data_fechamento, ocorrencia.data_fechamento_confirmado, area_responsavel.id as id_area_responsavel_area_responsavel, area_responsavel.nome as nome_area_responsavel_area_responsavel, area_responsavel.descricao as descricao_area_responsavel_area_responsavel, area_responsavel.email as email_area_responsavel_area_responsavel, servico.id as id_servico_servico, servico.nome as nome_servico_servico, servico.descricao as descricao_servico_servico, servico.tempo_sla as tempo_sla_servico_servico, servico.visao as visao_servico_servico, usuario_cliente.id as id_usuario_usuario_cliente, usuario_cliente.nome as nome_usuario_usuario_cliente, usuario_cliente.email as email_usuario_usuario_cliente, usuario_cliente.login as login_usuario_usuario_cliente, usuario_cliente.senha as senha_usuario_usuario_cliente, usuario_cliente.nivel as nivel_usuario_usuario_cliente, usuario_cliente.id_setor as id_setor_usuario_usuario_cliente FROM ocorrencia INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico INNER JOIN usuario as usuario_cliente ON usuario_cliente.id = ocorrencia.id_usuario_cliente
                 WHERE ocorrencia.prioridade = :prioridade
                  LIMIT 1000";
                 
@@ -1946,6 +2342,10 @@ class OcorrenciaDAO extends DAO {
                 $ocorrencia->setIdUsuarioIndicado( $row ['id_usuario_indicado'] );
                 $ocorrencia->setAnexo( $row ['anexo'] );
                 $ocorrencia->setLocalSala( $row ['local_sala'] );
+                $ocorrencia->setDataAbertura( $row ['data_abertura'] );
+                $ocorrencia->setDataAtendimento( $row ['data_atendimento'] );
+                $ocorrencia->setDataFechamento( $row ['data_fechamento'] );
+                $ocorrencia->setDataFechamentoConfirmado( $row ['data_fechamento_confirmado'] );
                 $ocorrencia->getAreaResponsavel()->setId( $row ['id_area_responsavel_area_responsavel'] );
                 $ocorrencia->getAreaResponsavel()->setNome( $row ['nome_area_responsavel_area_responsavel'] );
                 $ocorrencia->getAreaResponsavel()->setDescricao( $row ['descricao_area_responsavel_area_responsavel'] );
@@ -1974,7 +2374,7 @@ class OcorrenciaDAO extends DAO {
     public function fillByAvaliacao(Ocorrencia $ocorrencia) {
         
 	    $avaliacao = $ocorrencia->getAvaliacao();
-	    $sql = "SELECT ocorrencia.id, ocorrencia.id_local, ocorrencia.descricao, ocorrencia.campus, ocorrencia.patrimonio, ocorrencia.ramal, ocorrencia.local, ocorrencia.status, ocorrencia.solucao, ocorrencia.prioridade, ocorrencia.avaliacao, ocorrencia.email, ocorrencia.id_usuario_atendente, ocorrencia.id_usuario_indicado, ocorrencia.anexo, ocorrencia.local_sala, area_responsavel.id as id_area_responsavel_area_responsavel, area_responsavel.nome as nome_area_responsavel_area_responsavel, area_responsavel.descricao as descricao_area_responsavel_area_responsavel, area_responsavel.email as email_area_responsavel_area_responsavel, servico.id as id_servico_servico, servico.nome as nome_servico_servico, servico.descricao as descricao_servico_servico, servico.tempo_sla as tempo_sla_servico_servico, servico.visao as visao_servico_servico, usuario_cliente.id as id_usuario_usuario_cliente, usuario_cliente.nome as nome_usuario_usuario_cliente, usuario_cliente.email as email_usuario_usuario_cliente, usuario_cliente.login as login_usuario_usuario_cliente, usuario_cliente.senha as senha_usuario_usuario_cliente, usuario_cliente.nivel as nivel_usuario_usuario_cliente, usuario_cliente.id_setor as id_setor_usuario_usuario_cliente FROM ocorrencia INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico INNER JOIN usuario as usuario_cliente ON usuario_cliente.id = ocorrencia.id_usuario_cliente
+	    $sql = "SELECT ocorrencia.id, ocorrencia.id_local, ocorrencia.descricao, ocorrencia.campus, ocorrencia.patrimonio, ocorrencia.ramal, ocorrencia.local, ocorrencia.status, ocorrencia.solucao, ocorrencia.prioridade, ocorrencia.avaliacao, ocorrencia.email, ocorrencia.id_usuario_atendente, ocorrencia.id_usuario_indicado, ocorrencia.anexo, ocorrencia.local_sala, ocorrencia.data_abertura, ocorrencia.data_atendimento, ocorrencia.data_fechamento, ocorrencia.data_fechamento_confirmado, area_responsavel.id as id_area_responsavel_area_responsavel, area_responsavel.nome as nome_area_responsavel_area_responsavel, area_responsavel.descricao as descricao_area_responsavel_area_responsavel, area_responsavel.email as email_area_responsavel_area_responsavel, servico.id as id_servico_servico, servico.nome as nome_servico_servico, servico.descricao as descricao_servico_servico, servico.tempo_sla as tempo_sla_servico_servico, servico.visao as visao_servico_servico, usuario_cliente.id as id_usuario_usuario_cliente, usuario_cliente.nome as nome_usuario_usuario_cliente, usuario_cliente.email as email_usuario_usuario_cliente, usuario_cliente.login as login_usuario_usuario_cliente, usuario_cliente.senha as senha_usuario_usuario_cliente, usuario_cliente.nivel as nivel_usuario_usuario_cliente, usuario_cliente.id_setor as id_setor_usuario_usuario_cliente FROM ocorrencia INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico INNER JOIN usuario as usuario_cliente ON usuario_cliente.id = ocorrencia.id_usuario_cliente
                 WHERE ocorrencia.avaliacao = :avaliacao
                  LIMIT 1000";
                 
@@ -2005,6 +2405,10 @@ class OcorrenciaDAO extends DAO {
                 $ocorrencia->setIdUsuarioIndicado( $row ['id_usuario_indicado'] );
                 $ocorrencia->setAnexo( $row ['anexo'] );
                 $ocorrencia->setLocalSala( $row ['local_sala'] );
+                $ocorrencia->setDataAbertura( $row ['data_abertura'] );
+                $ocorrencia->setDataAtendimento( $row ['data_atendimento'] );
+                $ocorrencia->setDataFechamento( $row ['data_fechamento'] );
+                $ocorrencia->setDataFechamentoConfirmado( $row ['data_fechamento_confirmado'] );
                 $ocorrencia->getAreaResponsavel()->setId( $row ['id_area_responsavel_area_responsavel'] );
                 $ocorrencia->getAreaResponsavel()->setNome( $row ['nome_area_responsavel_area_responsavel'] );
                 $ocorrencia->getAreaResponsavel()->setDescricao( $row ['descricao_area_responsavel_area_responsavel'] );
@@ -2033,7 +2437,7 @@ class OcorrenciaDAO extends DAO {
     public function fillByEmail(Ocorrencia $ocorrencia) {
         
 	    $email = $ocorrencia->getEmail();
-	    $sql = "SELECT ocorrencia.id, ocorrencia.id_local, ocorrencia.descricao, ocorrencia.campus, ocorrencia.patrimonio, ocorrencia.ramal, ocorrencia.local, ocorrencia.status, ocorrencia.solucao, ocorrencia.prioridade, ocorrencia.avaliacao, ocorrencia.email, ocorrencia.id_usuario_atendente, ocorrencia.id_usuario_indicado, ocorrencia.anexo, ocorrencia.local_sala, area_responsavel.id as id_area_responsavel_area_responsavel, area_responsavel.nome as nome_area_responsavel_area_responsavel, area_responsavel.descricao as descricao_area_responsavel_area_responsavel, area_responsavel.email as email_area_responsavel_area_responsavel, servico.id as id_servico_servico, servico.nome as nome_servico_servico, servico.descricao as descricao_servico_servico, servico.tempo_sla as tempo_sla_servico_servico, servico.visao as visao_servico_servico, usuario_cliente.id as id_usuario_usuario_cliente, usuario_cliente.nome as nome_usuario_usuario_cliente, usuario_cliente.email as email_usuario_usuario_cliente, usuario_cliente.login as login_usuario_usuario_cliente, usuario_cliente.senha as senha_usuario_usuario_cliente, usuario_cliente.nivel as nivel_usuario_usuario_cliente, usuario_cliente.id_setor as id_setor_usuario_usuario_cliente FROM ocorrencia INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico INNER JOIN usuario as usuario_cliente ON usuario_cliente.id = ocorrencia.id_usuario_cliente
+	    $sql = "SELECT ocorrencia.id, ocorrencia.id_local, ocorrencia.descricao, ocorrencia.campus, ocorrencia.patrimonio, ocorrencia.ramal, ocorrencia.local, ocorrencia.status, ocorrencia.solucao, ocorrencia.prioridade, ocorrencia.avaliacao, ocorrencia.email, ocorrencia.id_usuario_atendente, ocorrencia.id_usuario_indicado, ocorrencia.anexo, ocorrencia.local_sala, ocorrencia.data_abertura, ocorrencia.data_atendimento, ocorrencia.data_fechamento, ocorrencia.data_fechamento_confirmado, area_responsavel.id as id_area_responsavel_area_responsavel, area_responsavel.nome as nome_area_responsavel_area_responsavel, area_responsavel.descricao as descricao_area_responsavel_area_responsavel, area_responsavel.email as email_area_responsavel_area_responsavel, servico.id as id_servico_servico, servico.nome as nome_servico_servico, servico.descricao as descricao_servico_servico, servico.tempo_sla as tempo_sla_servico_servico, servico.visao as visao_servico_servico, usuario_cliente.id as id_usuario_usuario_cliente, usuario_cliente.nome as nome_usuario_usuario_cliente, usuario_cliente.email as email_usuario_usuario_cliente, usuario_cliente.login as login_usuario_usuario_cliente, usuario_cliente.senha as senha_usuario_usuario_cliente, usuario_cliente.nivel as nivel_usuario_usuario_cliente, usuario_cliente.id_setor as id_setor_usuario_usuario_cliente FROM ocorrencia INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico INNER JOIN usuario as usuario_cliente ON usuario_cliente.id = ocorrencia.id_usuario_cliente
                 WHERE ocorrencia.email = :email
                  LIMIT 1000";
                 
@@ -2064,6 +2468,10 @@ class OcorrenciaDAO extends DAO {
                 $ocorrencia->setIdUsuarioIndicado( $row ['id_usuario_indicado'] );
                 $ocorrencia->setAnexo( $row ['anexo'] );
                 $ocorrencia->setLocalSala( $row ['local_sala'] );
+                $ocorrencia->setDataAbertura( $row ['data_abertura'] );
+                $ocorrencia->setDataAtendimento( $row ['data_atendimento'] );
+                $ocorrencia->setDataFechamento( $row ['data_fechamento'] );
+                $ocorrencia->setDataFechamentoConfirmado( $row ['data_fechamento_confirmado'] );
                 $ocorrencia->getAreaResponsavel()->setId( $row ['id_area_responsavel_area_responsavel'] );
                 $ocorrencia->getAreaResponsavel()->setNome( $row ['nome_area_responsavel_area_responsavel'] );
                 $ocorrencia->getAreaResponsavel()->setDescricao( $row ['descricao_area_responsavel_area_responsavel'] );
@@ -2092,7 +2500,7 @@ class OcorrenciaDAO extends DAO {
     public function fillByIdUsuarioAtendente(Ocorrencia $ocorrencia) {
         
 	    $idUsuarioAtendente = $ocorrencia->getIdUsuarioAtendente();
-	    $sql = "SELECT ocorrencia.id, ocorrencia.id_local, ocorrencia.descricao, ocorrencia.campus, ocorrencia.patrimonio, ocorrencia.ramal, ocorrencia.local, ocorrencia.status, ocorrencia.solucao, ocorrencia.prioridade, ocorrencia.avaliacao, ocorrencia.email, ocorrencia.id_usuario_atendente, ocorrencia.id_usuario_indicado, ocorrencia.anexo, ocorrencia.local_sala, area_responsavel.id as id_area_responsavel_area_responsavel, area_responsavel.nome as nome_area_responsavel_area_responsavel, area_responsavel.descricao as descricao_area_responsavel_area_responsavel, area_responsavel.email as email_area_responsavel_area_responsavel, servico.id as id_servico_servico, servico.nome as nome_servico_servico, servico.descricao as descricao_servico_servico, servico.tempo_sla as tempo_sla_servico_servico, servico.visao as visao_servico_servico, usuario_cliente.id as id_usuario_usuario_cliente, usuario_cliente.nome as nome_usuario_usuario_cliente, usuario_cliente.email as email_usuario_usuario_cliente, usuario_cliente.login as login_usuario_usuario_cliente, usuario_cliente.senha as senha_usuario_usuario_cliente, usuario_cliente.nivel as nivel_usuario_usuario_cliente, usuario_cliente.id_setor as id_setor_usuario_usuario_cliente FROM ocorrencia INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico INNER JOIN usuario as usuario_cliente ON usuario_cliente.id = ocorrencia.id_usuario_cliente
+	    $sql = "SELECT ocorrencia.id, ocorrencia.id_local, ocorrencia.descricao, ocorrencia.campus, ocorrencia.patrimonio, ocorrencia.ramal, ocorrencia.local, ocorrencia.status, ocorrencia.solucao, ocorrencia.prioridade, ocorrencia.avaliacao, ocorrencia.email, ocorrencia.id_usuario_atendente, ocorrencia.id_usuario_indicado, ocorrencia.anexo, ocorrencia.local_sala, ocorrencia.data_abertura, ocorrencia.data_atendimento, ocorrencia.data_fechamento, ocorrencia.data_fechamento_confirmado, area_responsavel.id as id_area_responsavel_area_responsavel, area_responsavel.nome as nome_area_responsavel_area_responsavel, area_responsavel.descricao as descricao_area_responsavel_area_responsavel, area_responsavel.email as email_area_responsavel_area_responsavel, servico.id as id_servico_servico, servico.nome as nome_servico_servico, servico.descricao as descricao_servico_servico, servico.tempo_sla as tempo_sla_servico_servico, servico.visao as visao_servico_servico, usuario_cliente.id as id_usuario_usuario_cliente, usuario_cliente.nome as nome_usuario_usuario_cliente, usuario_cliente.email as email_usuario_usuario_cliente, usuario_cliente.login as login_usuario_usuario_cliente, usuario_cliente.senha as senha_usuario_usuario_cliente, usuario_cliente.nivel as nivel_usuario_usuario_cliente, usuario_cliente.id_setor as id_setor_usuario_usuario_cliente FROM ocorrencia INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico INNER JOIN usuario as usuario_cliente ON usuario_cliente.id = ocorrencia.id_usuario_cliente
                 WHERE ocorrencia.id_usuario_atendente = :idUsuarioAtendente
                  LIMIT 1000";
                 
@@ -2123,6 +2531,10 @@ class OcorrenciaDAO extends DAO {
                 $ocorrencia->setIdUsuarioIndicado( $row ['id_usuario_indicado'] );
                 $ocorrencia->setAnexo( $row ['anexo'] );
                 $ocorrencia->setLocalSala( $row ['local_sala'] );
+                $ocorrencia->setDataAbertura( $row ['data_abertura'] );
+                $ocorrencia->setDataAtendimento( $row ['data_atendimento'] );
+                $ocorrencia->setDataFechamento( $row ['data_fechamento'] );
+                $ocorrencia->setDataFechamentoConfirmado( $row ['data_fechamento_confirmado'] );
                 $ocorrencia->getAreaResponsavel()->setId( $row ['id_area_responsavel_area_responsavel'] );
                 $ocorrencia->getAreaResponsavel()->setNome( $row ['nome_area_responsavel_area_responsavel'] );
                 $ocorrencia->getAreaResponsavel()->setDescricao( $row ['descricao_area_responsavel_area_responsavel'] );
@@ -2151,7 +2563,7 @@ class OcorrenciaDAO extends DAO {
     public function fillByIdUsuarioIndicado(Ocorrencia $ocorrencia) {
         
 	    $idUsuarioIndicado = $ocorrencia->getIdUsuarioIndicado();
-	    $sql = "SELECT ocorrencia.id, ocorrencia.id_local, ocorrencia.descricao, ocorrencia.campus, ocorrencia.patrimonio, ocorrencia.ramal, ocorrencia.local, ocorrencia.status, ocorrencia.solucao, ocorrencia.prioridade, ocorrencia.avaliacao, ocorrencia.email, ocorrencia.id_usuario_atendente, ocorrencia.id_usuario_indicado, ocorrencia.anexo, ocorrencia.local_sala, area_responsavel.id as id_area_responsavel_area_responsavel, area_responsavel.nome as nome_area_responsavel_area_responsavel, area_responsavel.descricao as descricao_area_responsavel_area_responsavel, area_responsavel.email as email_area_responsavel_area_responsavel, servico.id as id_servico_servico, servico.nome as nome_servico_servico, servico.descricao as descricao_servico_servico, servico.tempo_sla as tempo_sla_servico_servico, servico.visao as visao_servico_servico, usuario_cliente.id as id_usuario_usuario_cliente, usuario_cliente.nome as nome_usuario_usuario_cliente, usuario_cliente.email as email_usuario_usuario_cliente, usuario_cliente.login as login_usuario_usuario_cliente, usuario_cliente.senha as senha_usuario_usuario_cliente, usuario_cliente.nivel as nivel_usuario_usuario_cliente, usuario_cliente.id_setor as id_setor_usuario_usuario_cliente FROM ocorrencia INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico INNER JOIN usuario as usuario_cliente ON usuario_cliente.id = ocorrencia.id_usuario_cliente
+	    $sql = "SELECT ocorrencia.id, ocorrencia.id_local, ocorrencia.descricao, ocorrencia.campus, ocorrencia.patrimonio, ocorrencia.ramal, ocorrencia.local, ocorrencia.status, ocorrencia.solucao, ocorrencia.prioridade, ocorrencia.avaliacao, ocorrencia.email, ocorrencia.id_usuario_atendente, ocorrencia.id_usuario_indicado, ocorrencia.anexo, ocorrencia.local_sala, ocorrencia.data_abertura, ocorrencia.data_atendimento, ocorrencia.data_fechamento, ocorrencia.data_fechamento_confirmado, area_responsavel.id as id_area_responsavel_area_responsavel, area_responsavel.nome as nome_area_responsavel_area_responsavel, area_responsavel.descricao as descricao_area_responsavel_area_responsavel, area_responsavel.email as email_area_responsavel_area_responsavel, servico.id as id_servico_servico, servico.nome as nome_servico_servico, servico.descricao as descricao_servico_servico, servico.tempo_sla as tempo_sla_servico_servico, servico.visao as visao_servico_servico, usuario_cliente.id as id_usuario_usuario_cliente, usuario_cliente.nome as nome_usuario_usuario_cliente, usuario_cliente.email as email_usuario_usuario_cliente, usuario_cliente.login as login_usuario_usuario_cliente, usuario_cliente.senha as senha_usuario_usuario_cliente, usuario_cliente.nivel as nivel_usuario_usuario_cliente, usuario_cliente.id_setor as id_setor_usuario_usuario_cliente FROM ocorrencia INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico INNER JOIN usuario as usuario_cliente ON usuario_cliente.id = ocorrencia.id_usuario_cliente
                 WHERE ocorrencia.id_usuario_indicado = :idUsuarioIndicado
                  LIMIT 1000";
                 
@@ -2182,6 +2594,10 @@ class OcorrenciaDAO extends DAO {
                 $ocorrencia->setIdUsuarioIndicado( $row ['id_usuario_indicado'] );
                 $ocorrencia->setAnexo( $row ['anexo'] );
                 $ocorrencia->setLocalSala( $row ['local_sala'] );
+                $ocorrencia->setDataAbertura( $row ['data_abertura'] );
+                $ocorrencia->setDataAtendimento( $row ['data_atendimento'] );
+                $ocorrencia->setDataFechamento( $row ['data_fechamento'] );
+                $ocorrencia->setDataFechamentoConfirmado( $row ['data_fechamento_confirmado'] );
                 $ocorrencia->getAreaResponsavel()->setId( $row ['id_area_responsavel_area_responsavel'] );
                 $ocorrencia->getAreaResponsavel()->setNome( $row ['nome_area_responsavel_area_responsavel'] );
                 $ocorrencia->getAreaResponsavel()->setDescricao( $row ['descricao_area_responsavel_area_responsavel'] );
@@ -2210,7 +2626,7 @@ class OcorrenciaDAO extends DAO {
     public function fillByAnexo(Ocorrencia $ocorrencia) {
         
 	    $anexo = $ocorrencia->getAnexo();
-	    $sql = "SELECT ocorrencia.id, ocorrencia.id_local, ocorrencia.descricao, ocorrencia.campus, ocorrencia.patrimonio, ocorrencia.ramal, ocorrencia.local, ocorrencia.status, ocorrencia.solucao, ocorrencia.prioridade, ocorrencia.avaliacao, ocorrencia.email, ocorrencia.id_usuario_atendente, ocorrencia.id_usuario_indicado, ocorrencia.anexo, ocorrencia.local_sala, area_responsavel.id as id_area_responsavel_area_responsavel, area_responsavel.nome as nome_area_responsavel_area_responsavel, area_responsavel.descricao as descricao_area_responsavel_area_responsavel, area_responsavel.email as email_area_responsavel_area_responsavel, servico.id as id_servico_servico, servico.nome as nome_servico_servico, servico.descricao as descricao_servico_servico, servico.tempo_sla as tempo_sla_servico_servico, servico.visao as visao_servico_servico, usuario_cliente.id as id_usuario_usuario_cliente, usuario_cliente.nome as nome_usuario_usuario_cliente, usuario_cliente.email as email_usuario_usuario_cliente, usuario_cliente.login as login_usuario_usuario_cliente, usuario_cliente.senha as senha_usuario_usuario_cliente, usuario_cliente.nivel as nivel_usuario_usuario_cliente, usuario_cliente.id_setor as id_setor_usuario_usuario_cliente FROM ocorrencia INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico INNER JOIN usuario as usuario_cliente ON usuario_cliente.id = ocorrencia.id_usuario_cliente
+	    $sql = "SELECT ocorrencia.id, ocorrencia.id_local, ocorrencia.descricao, ocorrencia.campus, ocorrencia.patrimonio, ocorrencia.ramal, ocorrencia.local, ocorrencia.status, ocorrencia.solucao, ocorrencia.prioridade, ocorrencia.avaliacao, ocorrencia.email, ocorrencia.id_usuario_atendente, ocorrencia.id_usuario_indicado, ocorrencia.anexo, ocorrencia.local_sala, ocorrencia.data_abertura, ocorrencia.data_atendimento, ocorrencia.data_fechamento, ocorrencia.data_fechamento_confirmado, area_responsavel.id as id_area_responsavel_area_responsavel, area_responsavel.nome as nome_area_responsavel_area_responsavel, area_responsavel.descricao as descricao_area_responsavel_area_responsavel, area_responsavel.email as email_area_responsavel_area_responsavel, servico.id as id_servico_servico, servico.nome as nome_servico_servico, servico.descricao as descricao_servico_servico, servico.tempo_sla as tempo_sla_servico_servico, servico.visao as visao_servico_servico, usuario_cliente.id as id_usuario_usuario_cliente, usuario_cliente.nome as nome_usuario_usuario_cliente, usuario_cliente.email as email_usuario_usuario_cliente, usuario_cliente.login as login_usuario_usuario_cliente, usuario_cliente.senha as senha_usuario_usuario_cliente, usuario_cliente.nivel as nivel_usuario_usuario_cliente, usuario_cliente.id_setor as id_setor_usuario_usuario_cliente FROM ocorrencia INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico INNER JOIN usuario as usuario_cliente ON usuario_cliente.id = ocorrencia.id_usuario_cliente
                 WHERE ocorrencia.anexo = :anexo
                  LIMIT 1000";
                 
@@ -2241,6 +2657,10 @@ class OcorrenciaDAO extends DAO {
                 $ocorrencia->setIdUsuarioIndicado( $row ['id_usuario_indicado'] );
                 $ocorrencia->setAnexo( $row ['anexo'] );
                 $ocorrencia->setLocalSala( $row ['local_sala'] );
+                $ocorrencia->setDataAbertura( $row ['data_abertura'] );
+                $ocorrencia->setDataAtendimento( $row ['data_atendimento'] );
+                $ocorrencia->setDataFechamento( $row ['data_fechamento'] );
+                $ocorrencia->setDataFechamentoConfirmado( $row ['data_fechamento_confirmado'] );
                 $ocorrencia->getAreaResponsavel()->setId( $row ['id_area_responsavel_area_responsavel'] );
                 $ocorrencia->getAreaResponsavel()->setNome( $row ['nome_area_responsavel_area_responsavel'] );
                 $ocorrencia->getAreaResponsavel()->setDescricao( $row ['descricao_area_responsavel_area_responsavel'] );
@@ -2269,7 +2689,7 @@ class OcorrenciaDAO extends DAO {
     public function fillByLocalSala(Ocorrencia $ocorrencia) {
         
 	    $localSala = $ocorrencia->getLocalSala();
-	    $sql = "SELECT ocorrencia.id, ocorrencia.id_local, ocorrencia.descricao, ocorrencia.campus, ocorrencia.patrimonio, ocorrencia.ramal, ocorrencia.local, ocorrencia.status, ocorrencia.solucao, ocorrencia.prioridade, ocorrencia.avaliacao, ocorrencia.email, ocorrencia.id_usuario_atendente, ocorrencia.id_usuario_indicado, ocorrencia.anexo, ocorrencia.local_sala, area_responsavel.id as id_area_responsavel_area_responsavel, area_responsavel.nome as nome_area_responsavel_area_responsavel, area_responsavel.descricao as descricao_area_responsavel_area_responsavel, area_responsavel.email as email_area_responsavel_area_responsavel, servico.id as id_servico_servico, servico.nome as nome_servico_servico, servico.descricao as descricao_servico_servico, servico.tempo_sla as tempo_sla_servico_servico, servico.visao as visao_servico_servico, usuario_cliente.id as id_usuario_usuario_cliente, usuario_cliente.nome as nome_usuario_usuario_cliente, usuario_cliente.email as email_usuario_usuario_cliente, usuario_cliente.login as login_usuario_usuario_cliente, usuario_cliente.senha as senha_usuario_usuario_cliente, usuario_cliente.nivel as nivel_usuario_usuario_cliente, usuario_cliente.id_setor as id_setor_usuario_usuario_cliente FROM ocorrencia INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico INNER JOIN usuario as usuario_cliente ON usuario_cliente.id = ocorrencia.id_usuario_cliente
+	    $sql = "SELECT ocorrencia.id, ocorrencia.id_local, ocorrencia.descricao, ocorrencia.campus, ocorrencia.patrimonio, ocorrencia.ramal, ocorrencia.local, ocorrencia.status, ocorrencia.solucao, ocorrencia.prioridade, ocorrencia.avaliacao, ocorrencia.email, ocorrencia.id_usuario_atendente, ocorrencia.id_usuario_indicado, ocorrencia.anexo, ocorrencia.local_sala, ocorrencia.data_abertura, ocorrencia.data_atendimento, ocorrencia.data_fechamento, ocorrencia.data_fechamento_confirmado, area_responsavel.id as id_area_responsavel_area_responsavel, area_responsavel.nome as nome_area_responsavel_area_responsavel, area_responsavel.descricao as descricao_area_responsavel_area_responsavel, area_responsavel.email as email_area_responsavel_area_responsavel, servico.id as id_servico_servico, servico.nome as nome_servico_servico, servico.descricao as descricao_servico_servico, servico.tempo_sla as tempo_sla_servico_servico, servico.visao as visao_servico_servico, usuario_cliente.id as id_usuario_usuario_cliente, usuario_cliente.nome as nome_usuario_usuario_cliente, usuario_cliente.email as email_usuario_usuario_cliente, usuario_cliente.login as login_usuario_usuario_cliente, usuario_cliente.senha as senha_usuario_usuario_cliente, usuario_cliente.nivel as nivel_usuario_usuario_cliente, usuario_cliente.id_setor as id_setor_usuario_usuario_cliente FROM ocorrencia INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico INNER JOIN usuario as usuario_cliente ON usuario_cliente.id = ocorrencia.id_usuario_cliente
                 WHERE ocorrencia.local_sala = :localSala
                  LIMIT 1000";
                 
@@ -2300,6 +2720,262 @@ class OcorrenciaDAO extends DAO {
                 $ocorrencia->setIdUsuarioIndicado( $row ['id_usuario_indicado'] );
                 $ocorrencia->setAnexo( $row ['anexo'] );
                 $ocorrencia->setLocalSala( $row ['local_sala'] );
+                $ocorrencia->setDataAbertura( $row ['data_abertura'] );
+                $ocorrencia->setDataAtendimento( $row ['data_atendimento'] );
+                $ocorrencia->setDataFechamento( $row ['data_fechamento'] );
+                $ocorrencia->setDataFechamentoConfirmado( $row ['data_fechamento_confirmado'] );
+                $ocorrencia->getAreaResponsavel()->setId( $row ['id_area_responsavel_area_responsavel'] );
+                $ocorrencia->getAreaResponsavel()->setNome( $row ['nome_area_responsavel_area_responsavel'] );
+                $ocorrencia->getAreaResponsavel()->setDescricao( $row ['descricao_area_responsavel_area_responsavel'] );
+                $ocorrencia->getAreaResponsavel()->setEmail( $row ['email_area_responsavel_area_responsavel'] );
+                $ocorrencia->getServico()->setId( $row ['id_servico_servico'] );
+                $ocorrencia->getServico()->setNome( $row ['nome_servico_servico'] );
+                $ocorrencia->getServico()->setDescricao( $row ['descricao_servico_servico'] );
+                $ocorrencia->getServico()->setTempoSla( $row ['tempo_sla_servico_servico'] );
+                $ocorrencia->getServico()->setVisao( $row ['visao_servico_servico'] );
+                $ocorrencia->getUsuarioCliente()->setId( $row ['id_usuario_usuario_cliente'] );
+                $ocorrencia->getUsuarioCliente()->setNome( $row ['nome_usuario_usuario_cliente'] );
+                $ocorrencia->getUsuarioCliente()->setEmail( $row ['email_usuario_usuario_cliente'] );
+                $ocorrencia->getUsuarioCliente()->setLogin( $row ['login_usuario_usuario_cliente'] );
+                $ocorrencia->getUsuarioCliente()->setSenha( $row ['senha_usuario_usuario_cliente'] );
+                $ocorrencia->getUsuarioCliente()->setNivel( $row ['nivel_usuario_usuario_cliente'] );
+                $ocorrencia->getUsuarioCliente()->setIdSetor( $row ['id_setor_usuario_usuario_cliente'] );
+                
+                
+		    }
+		} catch(PDOException $e) {
+		    echo $e->getMessage();
+ 		}
+		return $ocorrencia;
+    }
+                
+    public function fillByDataAbertura(Ocorrencia $ocorrencia) {
+        
+	    $dataAbertura = $ocorrencia->getDataAbertura();
+	    $sql = "SELECT ocorrencia.id, ocorrencia.id_local, ocorrencia.descricao, ocorrencia.campus, ocorrencia.patrimonio, ocorrencia.ramal, ocorrencia.local, ocorrencia.status, ocorrencia.solucao, ocorrencia.prioridade, ocorrencia.avaliacao, ocorrencia.email, ocorrencia.id_usuario_atendente, ocorrencia.id_usuario_indicado, ocorrencia.anexo, ocorrencia.local_sala, ocorrencia.data_abertura, ocorrencia.data_atendimento, ocorrencia.data_fechamento, ocorrencia.data_fechamento_confirmado, area_responsavel.id as id_area_responsavel_area_responsavel, area_responsavel.nome as nome_area_responsavel_area_responsavel, area_responsavel.descricao as descricao_area_responsavel_area_responsavel, area_responsavel.email as email_area_responsavel_area_responsavel, servico.id as id_servico_servico, servico.nome as nome_servico_servico, servico.descricao as descricao_servico_servico, servico.tempo_sla as tempo_sla_servico_servico, servico.visao as visao_servico_servico, usuario_cliente.id as id_usuario_usuario_cliente, usuario_cliente.nome as nome_usuario_usuario_cliente, usuario_cliente.email as email_usuario_usuario_cliente, usuario_cliente.login as login_usuario_usuario_cliente, usuario_cliente.senha as senha_usuario_usuario_cliente, usuario_cliente.nivel as nivel_usuario_usuario_cliente, usuario_cliente.id_setor as id_setor_usuario_usuario_cliente FROM ocorrencia INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico INNER JOIN usuario as usuario_cliente ON usuario_cliente.id = ocorrencia.id_usuario_cliente
+                WHERE ocorrencia.data_abertura = :dataAbertura
+                 LIMIT 1000";
+                
+        try {
+            $stmt = $this->connection->prepare($sql);
+                
+		    if(!$stmt){
+                echo "<br>Mensagem de erro retornada: ".$this->connection->errorInfo()[2]."<br>";
+		    }
+            $stmt->bindParam(":dataAbertura", $dataAbertura, PDO::PARAM_STR);
+            $stmt->execute();
+		    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+		    foreach ( $result as $row )
+            {
+                $ocorrencia->setId( $row ['id'] );
+                $ocorrencia->setIdLocal( $row ['id_local'] );
+                $ocorrencia->setDescricao( $row ['descricao'] );
+                $ocorrencia->setCampus( $row ['campus'] );
+                $ocorrencia->setPatrimonio( $row ['patrimonio'] );
+                $ocorrencia->setRamal( $row ['ramal'] );
+                $ocorrencia->setLocal( $row ['local'] );
+                $ocorrencia->setStatus( $row ['status'] );
+                $ocorrencia->setSolucao( $row ['solucao'] );
+                $ocorrencia->setPrioridade( $row ['prioridade'] );
+                $ocorrencia->setAvaliacao( $row ['avaliacao'] );
+                $ocorrencia->setEmail( $row ['email'] );
+                $ocorrencia->setIdUsuarioAtendente( $row ['id_usuario_atendente'] );
+                $ocorrencia->setIdUsuarioIndicado( $row ['id_usuario_indicado'] );
+                $ocorrencia->setAnexo( $row ['anexo'] );
+                $ocorrencia->setLocalSala( $row ['local_sala'] );
+                $ocorrencia->setDataAbertura( $row ['data_abertura'] );
+                $ocorrencia->setDataAtendimento( $row ['data_atendimento'] );
+                $ocorrencia->setDataFechamento( $row ['data_fechamento'] );
+                $ocorrencia->setDataFechamentoConfirmado( $row ['data_fechamento_confirmado'] );
+                $ocorrencia->getAreaResponsavel()->setId( $row ['id_area_responsavel_area_responsavel'] );
+                $ocorrencia->getAreaResponsavel()->setNome( $row ['nome_area_responsavel_area_responsavel'] );
+                $ocorrencia->getAreaResponsavel()->setDescricao( $row ['descricao_area_responsavel_area_responsavel'] );
+                $ocorrencia->getAreaResponsavel()->setEmail( $row ['email_area_responsavel_area_responsavel'] );
+                $ocorrencia->getServico()->setId( $row ['id_servico_servico'] );
+                $ocorrencia->getServico()->setNome( $row ['nome_servico_servico'] );
+                $ocorrencia->getServico()->setDescricao( $row ['descricao_servico_servico'] );
+                $ocorrencia->getServico()->setTempoSla( $row ['tempo_sla_servico_servico'] );
+                $ocorrencia->getServico()->setVisao( $row ['visao_servico_servico'] );
+                $ocorrencia->getUsuarioCliente()->setId( $row ['id_usuario_usuario_cliente'] );
+                $ocorrencia->getUsuarioCliente()->setNome( $row ['nome_usuario_usuario_cliente'] );
+                $ocorrencia->getUsuarioCliente()->setEmail( $row ['email_usuario_usuario_cliente'] );
+                $ocorrencia->getUsuarioCliente()->setLogin( $row ['login_usuario_usuario_cliente'] );
+                $ocorrencia->getUsuarioCliente()->setSenha( $row ['senha_usuario_usuario_cliente'] );
+                $ocorrencia->getUsuarioCliente()->setNivel( $row ['nivel_usuario_usuario_cliente'] );
+                $ocorrencia->getUsuarioCliente()->setIdSetor( $row ['id_setor_usuario_usuario_cliente'] );
+                
+                
+		    }
+		} catch(PDOException $e) {
+		    echo $e->getMessage();
+ 		}
+		return $ocorrencia;
+    }
+                
+    public function fillByDataAtendimento(Ocorrencia $ocorrencia) {
+        
+	    $dataAtendimento = $ocorrencia->getDataAtendimento();
+	    $sql = "SELECT ocorrencia.id, ocorrencia.id_local, ocorrencia.descricao, ocorrencia.campus, ocorrencia.patrimonio, ocorrencia.ramal, ocorrencia.local, ocorrencia.status, ocorrencia.solucao, ocorrencia.prioridade, ocorrencia.avaliacao, ocorrencia.email, ocorrencia.id_usuario_atendente, ocorrencia.id_usuario_indicado, ocorrencia.anexo, ocorrencia.local_sala, ocorrencia.data_abertura, ocorrencia.data_atendimento, ocorrencia.data_fechamento, ocorrencia.data_fechamento_confirmado, area_responsavel.id as id_area_responsavel_area_responsavel, area_responsavel.nome as nome_area_responsavel_area_responsavel, area_responsavel.descricao as descricao_area_responsavel_area_responsavel, area_responsavel.email as email_area_responsavel_area_responsavel, servico.id as id_servico_servico, servico.nome as nome_servico_servico, servico.descricao as descricao_servico_servico, servico.tempo_sla as tempo_sla_servico_servico, servico.visao as visao_servico_servico, usuario_cliente.id as id_usuario_usuario_cliente, usuario_cliente.nome as nome_usuario_usuario_cliente, usuario_cliente.email as email_usuario_usuario_cliente, usuario_cliente.login as login_usuario_usuario_cliente, usuario_cliente.senha as senha_usuario_usuario_cliente, usuario_cliente.nivel as nivel_usuario_usuario_cliente, usuario_cliente.id_setor as id_setor_usuario_usuario_cliente FROM ocorrencia INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico INNER JOIN usuario as usuario_cliente ON usuario_cliente.id = ocorrencia.id_usuario_cliente
+                WHERE ocorrencia.data_atendimento = :dataAtendimento
+                 LIMIT 1000";
+                
+        try {
+            $stmt = $this->connection->prepare($sql);
+                
+		    if(!$stmt){
+                echo "<br>Mensagem de erro retornada: ".$this->connection->errorInfo()[2]."<br>";
+		    }
+            $stmt->bindParam(":dataAtendimento", $dataAtendimento, PDO::PARAM_STR);
+            $stmt->execute();
+		    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+		    foreach ( $result as $row )
+            {
+                $ocorrencia->setId( $row ['id'] );
+                $ocorrencia->setIdLocal( $row ['id_local'] );
+                $ocorrencia->setDescricao( $row ['descricao'] );
+                $ocorrencia->setCampus( $row ['campus'] );
+                $ocorrencia->setPatrimonio( $row ['patrimonio'] );
+                $ocorrencia->setRamal( $row ['ramal'] );
+                $ocorrencia->setLocal( $row ['local'] );
+                $ocorrencia->setStatus( $row ['status'] );
+                $ocorrencia->setSolucao( $row ['solucao'] );
+                $ocorrencia->setPrioridade( $row ['prioridade'] );
+                $ocorrencia->setAvaliacao( $row ['avaliacao'] );
+                $ocorrencia->setEmail( $row ['email'] );
+                $ocorrencia->setIdUsuarioAtendente( $row ['id_usuario_atendente'] );
+                $ocorrencia->setIdUsuarioIndicado( $row ['id_usuario_indicado'] );
+                $ocorrencia->setAnexo( $row ['anexo'] );
+                $ocorrencia->setLocalSala( $row ['local_sala'] );
+                $ocorrencia->setDataAbertura( $row ['data_abertura'] );
+                $ocorrencia->setDataAtendimento( $row ['data_atendimento'] );
+                $ocorrencia->setDataFechamento( $row ['data_fechamento'] );
+                $ocorrencia->setDataFechamentoConfirmado( $row ['data_fechamento_confirmado'] );
+                $ocorrencia->getAreaResponsavel()->setId( $row ['id_area_responsavel_area_responsavel'] );
+                $ocorrencia->getAreaResponsavel()->setNome( $row ['nome_area_responsavel_area_responsavel'] );
+                $ocorrencia->getAreaResponsavel()->setDescricao( $row ['descricao_area_responsavel_area_responsavel'] );
+                $ocorrencia->getAreaResponsavel()->setEmail( $row ['email_area_responsavel_area_responsavel'] );
+                $ocorrencia->getServico()->setId( $row ['id_servico_servico'] );
+                $ocorrencia->getServico()->setNome( $row ['nome_servico_servico'] );
+                $ocorrencia->getServico()->setDescricao( $row ['descricao_servico_servico'] );
+                $ocorrencia->getServico()->setTempoSla( $row ['tempo_sla_servico_servico'] );
+                $ocorrencia->getServico()->setVisao( $row ['visao_servico_servico'] );
+                $ocorrencia->getUsuarioCliente()->setId( $row ['id_usuario_usuario_cliente'] );
+                $ocorrencia->getUsuarioCliente()->setNome( $row ['nome_usuario_usuario_cliente'] );
+                $ocorrencia->getUsuarioCliente()->setEmail( $row ['email_usuario_usuario_cliente'] );
+                $ocorrencia->getUsuarioCliente()->setLogin( $row ['login_usuario_usuario_cliente'] );
+                $ocorrencia->getUsuarioCliente()->setSenha( $row ['senha_usuario_usuario_cliente'] );
+                $ocorrencia->getUsuarioCliente()->setNivel( $row ['nivel_usuario_usuario_cliente'] );
+                $ocorrencia->getUsuarioCliente()->setIdSetor( $row ['id_setor_usuario_usuario_cliente'] );
+                
+                
+		    }
+		} catch(PDOException $e) {
+		    echo $e->getMessage();
+ 		}
+		return $ocorrencia;
+    }
+                
+    public function fillByDataFechamento(Ocorrencia $ocorrencia) {
+        
+	    $dataFechamento = $ocorrencia->getDataFechamento();
+	    $sql = "SELECT ocorrencia.id, ocorrencia.id_local, ocorrencia.descricao, ocorrencia.campus, ocorrencia.patrimonio, ocorrencia.ramal, ocorrencia.local, ocorrencia.status, ocorrencia.solucao, ocorrencia.prioridade, ocorrencia.avaliacao, ocorrencia.email, ocorrencia.id_usuario_atendente, ocorrencia.id_usuario_indicado, ocorrencia.anexo, ocorrencia.local_sala, ocorrencia.data_abertura, ocorrencia.data_atendimento, ocorrencia.data_fechamento, ocorrencia.data_fechamento_confirmado, area_responsavel.id as id_area_responsavel_area_responsavel, area_responsavel.nome as nome_area_responsavel_area_responsavel, area_responsavel.descricao as descricao_area_responsavel_area_responsavel, area_responsavel.email as email_area_responsavel_area_responsavel, servico.id as id_servico_servico, servico.nome as nome_servico_servico, servico.descricao as descricao_servico_servico, servico.tempo_sla as tempo_sla_servico_servico, servico.visao as visao_servico_servico, usuario_cliente.id as id_usuario_usuario_cliente, usuario_cliente.nome as nome_usuario_usuario_cliente, usuario_cliente.email as email_usuario_usuario_cliente, usuario_cliente.login as login_usuario_usuario_cliente, usuario_cliente.senha as senha_usuario_usuario_cliente, usuario_cliente.nivel as nivel_usuario_usuario_cliente, usuario_cliente.id_setor as id_setor_usuario_usuario_cliente FROM ocorrencia INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico INNER JOIN usuario as usuario_cliente ON usuario_cliente.id = ocorrencia.id_usuario_cliente
+                WHERE ocorrencia.data_fechamento = :dataFechamento
+                 LIMIT 1000";
+                
+        try {
+            $stmt = $this->connection->prepare($sql);
+                
+		    if(!$stmt){
+                echo "<br>Mensagem de erro retornada: ".$this->connection->errorInfo()[2]."<br>";
+		    }
+            $stmt->bindParam(":dataFechamento", $dataFechamento, PDO::PARAM_STR);
+            $stmt->execute();
+		    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+		    foreach ( $result as $row )
+            {
+                $ocorrencia->setId( $row ['id'] );
+                $ocorrencia->setIdLocal( $row ['id_local'] );
+                $ocorrencia->setDescricao( $row ['descricao'] );
+                $ocorrencia->setCampus( $row ['campus'] );
+                $ocorrencia->setPatrimonio( $row ['patrimonio'] );
+                $ocorrencia->setRamal( $row ['ramal'] );
+                $ocorrencia->setLocal( $row ['local'] );
+                $ocorrencia->setStatus( $row ['status'] );
+                $ocorrencia->setSolucao( $row ['solucao'] );
+                $ocorrencia->setPrioridade( $row ['prioridade'] );
+                $ocorrencia->setAvaliacao( $row ['avaliacao'] );
+                $ocorrencia->setEmail( $row ['email'] );
+                $ocorrencia->setIdUsuarioAtendente( $row ['id_usuario_atendente'] );
+                $ocorrencia->setIdUsuarioIndicado( $row ['id_usuario_indicado'] );
+                $ocorrencia->setAnexo( $row ['anexo'] );
+                $ocorrencia->setLocalSala( $row ['local_sala'] );
+                $ocorrencia->setDataAbertura( $row ['data_abertura'] );
+                $ocorrencia->setDataAtendimento( $row ['data_atendimento'] );
+                $ocorrencia->setDataFechamento( $row ['data_fechamento'] );
+                $ocorrencia->setDataFechamentoConfirmado( $row ['data_fechamento_confirmado'] );
+                $ocorrencia->getAreaResponsavel()->setId( $row ['id_area_responsavel_area_responsavel'] );
+                $ocorrencia->getAreaResponsavel()->setNome( $row ['nome_area_responsavel_area_responsavel'] );
+                $ocorrencia->getAreaResponsavel()->setDescricao( $row ['descricao_area_responsavel_area_responsavel'] );
+                $ocorrencia->getAreaResponsavel()->setEmail( $row ['email_area_responsavel_area_responsavel'] );
+                $ocorrencia->getServico()->setId( $row ['id_servico_servico'] );
+                $ocorrencia->getServico()->setNome( $row ['nome_servico_servico'] );
+                $ocorrencia->getServico()->setDescricao( $row ['descricao_servico_servico'] );
+                $ocorrencia->getServico()->setTempoSla( $row ['tempo_sla_servico_servico'] );
+                $ocorrencia->getServico()->setVisao( $row ['visao_servico_servico'] );
+                $ocorrencia->getUsuarioCliente()->setId( $row ['id_usuario_usuario_cliente'] );
+                $ocorrencia->getUsuarioCliente()->setNome( $row ['nome_usuario_usuario_cliente'] );
+                $ocorrencia->getUsuarioCliente()->setEmail( $row ['email_usuario_usuario_cliente'] );
+                $ocorrencia->getUsuarioCliente()->setLogin( $row ['login_usuario_usuario_cliente'] );
+                $ocorrencia->getUsuarioCliente()->setSenha( $row ['senha_usuario_usuario_cliente'] );
+                $ocorrencia->getUsuarioCliente()->setNivel( $row ['nivel_usuario_usuario_cliente'] );
+                $ocorrencia->getUsuarioCliente()->setIdSetor( $row ['id_setor_usuario_usuario_cliente'] );
+                
+                
+		    }
+		} catch(PDOException $e) {
+		    echo $e->getMessage();
+ 		}
+		return $ocorrencia;
+    }
+                
+    public function fillByDataFechamentoConfirmado(Ocorrencia $ocorrencia) {
+        
+	    $dataFechamentoConfirmado = $ocorrencia->getDataFechamentoConfirmado();
+	    $sql = "SELECT ocorrencia.id, ocorrencia.id_local, ocorrencia.descricao, ocorrencia.campus, ocorrencia.patrimonio, ocorrencia.ramal, ocorrencia.local, ocorrencia.status, ocorrencia.solucao, ocorrencia.prioridade, ocorrencia.avaliacao, ocorrencia.email, ocorrencia.id_usuario_atendente, ocorrencia.id_usuario_indicado, ocorrencia.anexo, ocorrencia.local_sala, ocorrencia.data_abertura, ocorrencia.data_atendimento, ocorrencia.data_fechamento, ocorrencia.data_fechamento_confirmado, area_responsavel.id as id_area_responsavel_area_responsavel, area_responsavel.nome as nome_area_responsavel_area_responsavel, area_responsavel.descricao as descricao_area_responsavel_area_responsavel, area_responsavel.email as email_area_responsavel_area_responsavel, servico.id as id_servico_servico, servico.nome as nome_servico_servico, servico.descricao as descricao_servico_servico, servico.tempo_sla as tempo_sla_servico_servico, servico.visao as visao_servico_servico, usuario_cliente.id as id_usuario_usuario_cliente, usuario_cliente.nome as nome_usuario_usuario_cliente, usuario_cliente.email as email_usuario_usuario_cliente, usuario_cliente.login as login_usuario_usuario_cliente, usuario_cliente.senha as senha_usuario_usuario_cliente, usuario_cliente.nivel as nivel_usuario_usuario_cliente, usuario_cliente.id_setor as id_setor_usuario_usuario_cliente FROM ocorrencia INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico INNER JOIN usuario as usuario_cliente ON usuario_cliente.id = ocorrencia.id_usuario_cliente
+                WHERE ocorrencia.data_fechamento_confirmado = :dataFechamentoConfirmado
+                 LIMIT 1000";
+                
+        try {
+            $stmt = $this->connection->prepare($sql);
+                
+		    if(!$stmt){
+                echo "<br>Mensagem de erro retornada: ".$this->connection->errorInfo()[2]."<br>";
+		    }
+            $stmt->bindParam(":dataFechamentoConfirmado", $dataFechamentoConfirmado, PDO::PARAM_STR);
+            $stmt->execute();
+		    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+		    foreach ( $result as $row )
+            {
+                $ocorrencia->setId( $row ['id'] );
+                $ocorrencia->setIdLocal( $row ['id_local'] );
+                $ocorrencia->setDescricao( $row ['descricao'] );
+                $ocorrencia->setCampus( $row ['campus'] );
+                $ocorrencia->setPatrimonio( $row ['patrimonio'] );
+                $ocorrencia->setRamal( $row ['ramal'] );
+                $ocorrencia->setLocal( $row ['local'] );
+                $ocorrencia->setStatus( $row ['status'] );
+                $ocorrencia->setSolucao( $row ['solucao'] );
+                $ocorrencia->setPrioridade( $row ['prioridade'] );
+                $ocorrencia->setAvaliacao( $row ['avaliacao'] );
+                $ocorrencia->setEmail( $row ['email'] );
+                $ocorrencia->setIdUsuarioAtendente( $row ['id_usuario_atendente'] );
+                $ocorrencia->setIdUsuarioIndicado( $row ['id_usuario_indicado'] );
+                $ocorrencia->setAnexo( $row ['anexo'] );
+                $ocorrencia->setLocalSala( $row ['local_sala'] );
+                $ocorrencia->setDataAbertura( $row ['data_abertura'] );
+                $ocorrencia->setDataAtendimento( $row ['data_atendimento'] );
+                $ocorrencia->setDataFechamento( $row ['data_fechamento'] );
+                $ocorrencia->setDataFechamentoConfirmado( $row ['data_fechamento_confirmado'] );
                 $ocorrencia->getAreaResponsavel()->setId( $row ['id_area_responsavel_area_responsavel'] );
                 $ocorrencia->getAreaResponsavel()->setNome( $row ['nome_area_responsavel_area_responsavel'] );
                 $ocorrencia->getAreaResponsavel()->setDescricao( $row ['descricao_area_responsavel_area_responsavel'] );
