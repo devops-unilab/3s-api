@@ -40,6 +40,8 @@ class  OcorrenciaCustomDAO extends OcorrenciaDAO {
                 local_sala = :localSala, 
                 id_area_responsavel = :idArea,
                 data_atendimento = :dataAtendimento, 
+                data_fechamento = :dataFechamento,
+                data_fechamento_confirmado = :dataFechamentoConfirmado, 
                 id_servico = :idServico
                 WHERE ocorrencia.id = :id;";
         $idLocal = $ocorrencia->getIdLocal();
@@ -60,6 +62,8 @@ class  OcorrenciaCustomDAO extends OcorrenciaDAO {
         $idArea = $ocorrencia->getAreaResponsavel()->getId();
         $idServico = $ocorrencia->getServico()->getId();
         $dataAtendimento = $ocorrencia->getDataAtendimento();
+        $dataFechamento = $ocorrencia->getDataFechamento();
+        $dataFechamentoConfirmado = $ocorrencia->getDataFechamentoConfirmado();
         
         try {
             
@@ -82,7 +86,9 @@ class  OcorrenciaCustomDAO extends OcorrenciaDAO {
             $stmt->bindParam(":localSala", $localSala, PDO::PARAM_STR);
             $stmt->bindParam(":idArea", $idArea, PDO::PARAM_INT);
             $stmt->bindParam(":idServico", $idServico, PDO::PARAM_INT);
-            $stmt->bindParam(":dataAtendimento", $dataAtendimento, PDO::PARAM_INT);
+            $stmt->bindParam(":dataAtendimento", $dataAtendimento, PDO::PARAM_STR);
+            $stmt->bindParam(":dataAtendimento", $dataFechamento, PDO::PARAM_STR);
+            $stmt->bindParam(":dataAtendimento", $dataFechamentoConfirmado, PDO::PARAM_STR);
             
             return $stmt->execute();
         } catch (PDOException $e) {
