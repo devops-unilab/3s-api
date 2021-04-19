@@ -522,6 +522,9 @@ class StatusOcorrenciaCustomController  extends StatusOcorrenciaController {
 	    $this->statusOcorrencia->setMensagem("Ocorrência fechada pelo atendente");
 	    
 	    
+        $this->ocorrencia->setDataFechamento(date("Y-m-d H:i:s"));
+	    
+	    
 	    $ocorrenciaDao->getConnection()->beginTransaction();
 	    
 	    if(!$ocorrenciaDao->update($this->ocorrencia)){
@@ -565,9 +568,11 @@ class StatusOcorrenciaCustomController  extends StatusOcorrenciaController {
 	    $this->statusOcorrencia->getUsuario()->setId($this->sessao->getIdUsuario());
 	    $this->statusOcorrencia->setMensagem("Atendimento avaliado pelo cliente");
 	    
+	    $this->ocorrencia->setDataFechamentoConfirmado(date("Y-m-d H:i:s"));
+	    $this->ocorrencia->setAvaliacao($_POST['avaliacao']);
 	    
 	    $ocorrenciaDao->getConnection()->beginTransaction();
-	    $this->ocorrencia->setAvaliacao($_POST['avaliacao']);
+	    
 	    
 	    
 	    if(!$ocorrenciaDao->update($this->ocorrencia)){
