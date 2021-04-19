@@ -38,7 +38,8 @@ class  OcorrenciaCustomDAO extends OcorrenciaDAO {
                 id_usuario_indicado = :idUsuarioIndicado,
                 anexo = :anexo,
                 local_sala = :localSala, 
-                id_area_responsavel = :idArea, 
+                id_area_responsavel = :idArea,
+                data_atendimento = :dataAtendimento, 
                 id_servico = :idServico
                 WHERE ocorrencia.id = :id;";
         $idLocal = $ocorrencia->getIdLocal();
@@ -58,6 +59,7 @@ class  OcorrenciaCustomDAO extends OcorrenciaDAO {
         $localSala = $ocorrencia->getLocalSala();
         $idArea = $ocorrencia->getAreaResponsavel()->getId();
         $idServico = $ocorrencia->getServico()->getId();
+        $dataAtendimento = $ocorrencia->getDataAtendimento();
         
         try {
             
@@ -80,6 +82,7 @@ class  OcorrenciaCustomDAO extends OcorrenciaDAO {
             $stmt->bindParam(":localSala", $localSala, PDO::PARAM_STR);
             $stmt->bindParam(":idArea", $idArea, PDO::PARAM_INT);
             $stmt->bindParam(":idServico", $idServico, PDO::PARAM_INT);
+            $stmt->bindParam(":dataAtendimento", $dataAtendimento, PDO::PARAM_INT);
             
             return $stmt->execute();
         } catch (PDOException $e) {

@@ -612,7 +612,7 @@ class OcorrenciaCustomController  extends OcorrenciaController {
 	        $ocorrencia->setPatrimonio ( $_POST ['patrimonio'] );
 	        $ocorrencia->setRamal ( $_POST ['ramal'] );
 	        $ocorrencia->setEmail ( $_POST ['email'] );
-	        
+	        $ocorrencia->setDataAbertura(date("Y-m-d H:i:s"));
 	        if(!file_exists('uploads/ocorrencia/anexo/')) {
 	            mkdir('uploads/ocorrencia/anexo/', 0777, true);
 	        }

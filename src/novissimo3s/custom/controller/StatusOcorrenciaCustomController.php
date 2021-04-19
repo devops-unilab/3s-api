@@ -184,6 +184,11 @@ class StatusOcorrenciaCustomController  extends StatusOcorrenciaController {
 	    
 	    $this->ocorrencia->getAreaResponsavel()->setId($usuario->getIdSetor());
 	    
+	    if($this->ocorrencia->getDataAtendimento() == null){
+	        $this->ocorrencia->setDataAtendimento(date("Y-m-d H:i:s"));
+	    }
+        
+	    
 	    
 	    $ocorrenciaDao->getConnection()->beginTransaction();
 	    
