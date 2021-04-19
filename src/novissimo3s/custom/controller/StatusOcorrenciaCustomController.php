@@ -709,7 +709,7 @@ class StatusOcorrenciaCustomController  extends StatusOcorrenciaController {
 	    $this->sessao = new Sessao();
 	    $this->ocorrencia = new Ocorrencia();
 	    $this->ocorrencia->setId($_POST['id_ocorrencia']);
-	    $ocorrenciaDao = new OcorrenciaDAO($this->dao->getConnection());
+	    $ocorrenciaDao = new OcorrenciaCustomDAO($this->dao->getConnection());
 	    $ocorrenciaDao->fillById($this->ocorrencia);
 	    $status = false;
 	    $mensagem = "";
