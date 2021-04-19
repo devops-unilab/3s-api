@@ -751,8 +751,8 @@ text/plain, application/pdf, image/*">
 ';
                 
                 echo '
-            <!-- <img src="img/bonequinho.gif" height="75"> -->
-            <div class="progress">
+            <img src="img/bonequinho.gif" height="75" class="escondido"> 
+            <div class="progress escondido">
 				<div id="barra-progresso" class="progress-bar" role="progressbar" aria-valuenow="'.$percentual.'" aria-valuemin="0" aria-valuemax="100" style="width: '.$percentual.'%;" data-toggle="tooltip" data-placement="top" title="Solução">
 					<span id="label-progresso" class="sr-only">'.$percentual.'% Completo</span>
 					<span id="label-progresso2" class="progress-type">Progresso '.intval($percentual).'% </span>
