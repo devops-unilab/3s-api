@@ -181,7 +181,7 @@ class PainelKambanView
                             <div class="card-body p-2">
                                 <div class="card-title">
 
-                                    <a href="?pagina=ocorrencia&selecionar='.$chamado->getId().'" class="'.$link.'">
+                                    <a href="?page=ocorrencia&selecionar='.$chamado->getId().'" class="'.$link.'">
                                        #'.$chamado->getId().'
                                     </a>';
         

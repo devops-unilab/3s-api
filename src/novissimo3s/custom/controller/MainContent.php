@@ -29,6 +29,7 @@ class MainContent{
                 include_once "SimplesAdminPG/AdminPG.php";
                 $conexao = $dao->getConnection();
                 AdminPG::main($conexao);
+                return;
             }
         }
         switch ($sessao->getNivelAcesso()){
@@ -111,14 +112,6 @@ class MainContent{
             {
                 case 'ocorrencia':
                     $controller = new OcorrenciaCustomController();
-                    $controller->main();
-                    break;
-                case 'importador':
-                    $controller = new Importador();
-                    $controller->main();
-                    break;
-                case 'importador':
-                    $controller = new Importador();
                     $controller->main();
                     break;
                 case 'painel_kamban':

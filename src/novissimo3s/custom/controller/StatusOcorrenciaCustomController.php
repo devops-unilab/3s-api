@@ -879,7 +879,7 @@ class StatusOcorrenciaCustomController  extends StatusOcorrenciaController {
 	    $this->statusOcorrencia->setStatus($status);
 	    $this->statusOcorrencia->setDataMudanca(date("Y-m-d G:i:s"));
 	    $this->statusOcorrencia->getUsuario()->setId($this->sessao->getIdUsuario());
-	    $this->statusOcorrencia->setMensagem("Aguardando ativo de TI");
+	    $this->statusOcorrencia->setMensagem("Aguardando Usuário");
 	    
 	    
 	    $ocorrenciaDao->getConnection()->beginTransaction();

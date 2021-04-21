@@ -15,7 +15,17 @@ class AdminPG
     public static function main(PDO $conexao)
     {
         $adminPG = new AdminPG();
+        echo '
+            
+<div class="card mb-4">
+        <div class="card-body">';
+        
         $adminPG->aplicacao($conexao);
+        echo '      
+	</div>
+</div>    
+';
+        
     }
 
     public function comandos()
@@ -111,7 +121,9 @@ class AdminPG
             return;
         }
         
-        echo '<table border=1>';
+        
+        echo '<div class="table-responsive">
+  <table class="table table-bordered">';
         foreach ($result as $linha) {
             if ($i == 0) {
                 echo '<tr>';
@@ -131,7 +143,8 @@ class AdminPG
             }
             echo '</tr>';
         }
-        echo '</table>';
+        echo '</table></div>';
+        
         echo '<hr>';
     }
 
@@ -207,7 +220,10 @@ class AdminPG
             $sqlPrimeirosDados = "SELECT * FROM $nomeDaTabela LIMIT $n";
             $resultPrimeirosDados = $conexao->query($sqlPrimeirosDados);
             $i = 0;
-            echo '<table border=1>';
+
+            
+            echo '<div class="table-responsive">
+  <table class="table table-bordered">';
             foreach ($resultPrimeirosDados as $linhaPrimeirosDados) {
 
                 if (! $i) {
@@ -226,7 +242,7 @@ class AdminPG
                 }
                 echo '</tr>';
             }
-            echo '</table>';
+            echo '</table></div>';
 
             echo '<hr>';
         }
