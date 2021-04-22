@@ -21,7 +21,7 @@ class MainIndex{
         }
         if (isset($_GET["sair"])) {
             $sessao->mataSessao();
-            echo '<META HTTP-EQUIV="REFRESH" CONTENT="0; URL=index.php">';
+            echo '<META HTTP-EQUIV="REFRESH" CONTENT="0; URL=.">';
         }
         
         $this->pagina();
@@ -32,7 +32,13 @@ class MainIndex{
         echo '<!doctype html>
 <html lang="pt-br">
 <head>
-<meta name="Cache-Control" content="no-cache">
+
+<meta http-equiv="cache-control" content="max-age=0" />
+<meta http-equiv="cache-control" content="no-cache" />
+<meta http-equiv="expires" content="0" />
+<meta http-equiv="expires" content="Tue, 01 Jan 1980 1:00:00 GMT" />
+<meta http-equiv="pragma" content="no-cache" />
+
 <link rel="icon" type="image/x-icon" href="img/favicon.ico">
 <meta charset="utf-8">
 <title>3s | Sistema de Solicitação de Ocorrências</title>

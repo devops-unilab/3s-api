@@ -1,8 +1,21 @@
 - Caixa de texto para feedback na avaliação e outras alterações de status. 
-- Adicionar ação de reabrir chamado.
+
+
+- Administrador pode editar tudo Setor responsável;
+
+
+
+
+- Criar filtro para o perfin Técnico (permite ele alternar entre os chamados que ele atender e todos os chamados do setor)
+
 
 -----------------Feito--------------------
 
+- Administrador pode editar o serviço;
+
+
+- Adicionar ação de reabrir chamado.
+- Verificar o link do painel Kanban
 - buscar chamado por número. 
 - Alto contraste
 - reverter nível de acesso;

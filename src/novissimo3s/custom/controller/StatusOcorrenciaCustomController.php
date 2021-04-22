@@ -414,6 +414,18 @@ class StatusOcorrenciaCustomController  extends StatusOcorrenciaController {
 	    if($this->sessao->getNivelAcesso() == Sessao::NIVEL_COMUM || $this->sessao->getNivelAcesso() == Sessao::NIVEL_DESLOGADO){
 	        return false;
 	    }
+	    if($this->ocorrencia->getStatus() == StatusOcorrenciaCustomController::STATUS_FECHADO){
+	       return false;    
+	    }
+	    if($this->ocorrencia->getStatus() == StatusOcorrenciaCustomController::STATUS_FECHADO_CONFIRMADO){
+	        return false;
+	    }
+	    if($this->ocorrencia->getStatus() == StatusOcorrenciaCustomController::STATUS_CANCELADO){
+	        return false;
+	    }
+	    if($this->sessao->getNivelAcesso() == Sessao::NIVEL_ADM){
+            return true;
+	    }
 	    if($this->ocorrencia->getStatus() != self::STATUS_ATENDIMENTO){
 	        return false;
 	    }
