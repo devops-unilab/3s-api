@@ -49,9 +49,7 @@ class MainIndex{
 <link href="vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
 <link href="css/style_form_login.css" rel="stylesheet">
 <!-- Desenvolvido por Jefferson Uchôa Ponte-->
-<style>
-
-</style>
+<meta http-equiv="Cache-control" content="no-cache">
 </head>
 <body>
     	<!--     Barra do Governo -->
