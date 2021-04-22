@@ -184,7 +184,7 @@ echo '
                 case 'ocorrencia':
                     
                     echo '
-<script src="js/status_ocorrencia.js"></script>
+<script src="js/status_ocorrencia.js?a=1"></script>
 <script src="js/ocorrencia_selectize.js"></script>
 <script src="js/jquery.easyPaginate.js?a=1"></script>
 <script src="js/ocorrencia.js?a=1"></script>';

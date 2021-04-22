@@ -1,6 +1,6 @@
 - Caixa de texto para feedback na avaliação e outras alterações de status. 
 - Permitir editar patrimonio; 
-- Permitir editar setor responsável; (Adm)
+
 - Corrigir bug do cash no firefox; 
 
 - Criar filtro para o perfin Técnico 
@@ -8,10 +8,8 @@
 	- todos os chamados do setor;
 
 -----------------Feito--------------------
-
+- Permitir editar setor responsável; (Adm)
 - Administrador pode editar o serviço;
-
-
 - Adicionar ação de reabrir chamado.
 - Verificar o link do painel Kanban
 - buscar chamado por número. 
