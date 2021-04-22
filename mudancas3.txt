@@ -1,11 +1,13 @@
-- Caixa de texto para feedback na avaliação e outras alterações de status. 
-- Permitir editar patrimonio; 
-
-- Corrigir bug do cash no firefox; 
-
 - Criar filtro para o perfin Técnico 
 	- ele atender e 
 	- todos os chamados do setor;
+
+- Corrigir bug do cash no firefox; 
+- Erro de load ao receber mensagem falsa na mudnaça de status; 
+- Caixa de texto para feedback na avaliação e outras alterações de status. 
+- Permitir editar patrimonio; 
+- Status na tela de ocorrencia; 
+- Técnico Responsável no painel kanban;
 
 -----------------Feito--------------------
 - Permitir editar setor responsável; (Adm)

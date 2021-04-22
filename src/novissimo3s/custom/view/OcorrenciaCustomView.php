@@ -623,18 +623,25 @@ text/plain, application/pdf, image/*">
         
         $usuarioDao = new UsuarioDAO();
         
-        if($ocorrencia->getIdUsuarioAtendente() != null){
-            $atendente = new Usuario();
-            $atendente->setId($ocorrencia->getIdUsuarioAtendente());
-            $usuarioDao->fillById($atendente);
-            echo '<b>Técnico Responsável:</b> '.$atendente->getNome().'<br>';
+
+        
+        if($ocorrencia->getStatus() == StatusOcorrenciaCustomController::STATUS_RESERVADO){
+            if($ocorrencia->getIdUsuarioIndicado() != null){
+                $indicado = new Usuario();
+                $indicado->setId($ocorrencia->getIdUsuarioIndicado());
+                $usuarioDao->fillById($indicado);
+                echo '<b>Técnico Responsável: </b>'.$indicado->getNome().'<br>';
+            }
+        }else{
+            if($ocorrencia->getIdUsuarioAtendente() != null){
+                
+                $atendente = new Usuario();
+                $atendente->setId($ocorrencia->getIdUsuarioAtendente());
+                $usuarioDao->fillById($atendente);
+                echo '<b>Técnico Responsável:</b> '.$atendente->getNome().'<br>';
+            }
         }
-        if($ocorrencia->getIdUsuarioIndicado() != null){
-            $indicado = new Usuario();
-            $indicado->setId($ocorrencia->getIdUsuarioIndicado());
-            $usuarioDao->fillById($indicado);
-            echo '<b>Técnico Indicado: </b>'.$indicado->getNome().'<br>';
-        }
+        
         if($controller->possoEditarAreaResponsavel($ocorrencia)){
             $statusView->botaoEditarAreaResponsavel();
         }
