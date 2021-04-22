@@ -1,13 +1,11 @@
 - Caixa de texto para feedback na avaliação e outras alterações de status. 
+- Permitir editar patrimonio; 
+- Permitir editar setor responsável; (Adm)
+- Corrigir bug do cash no firefox; 
 
-
-- Administrador pode editar tudo Setor responsável;
-
-
-
-
-- Criar filtro para o perfin Técnico (permite ele alternar entre os chamados que ele atender e todos os chamados do setor)
-
+- Criar filtro para o perfin Técnico 
+	- ele atender e 
+	- todos os chamados do setor;
 
 -----------------Feito--------------------
 

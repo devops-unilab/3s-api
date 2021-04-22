@@ -15,7 +15,7 @@ class StatusOcorrenciaCustomView extends StatusOcorrenciaView {
 
     ////////Digite seu código customizado aqui.
 
-    public function modalFormStatus(Ocorrencia $ocorrencia, $listaTecnicos = array(), $listaServicos = array()){
+    public function modalFormStatus(Ocorrencia $ocorrencia, $listaTecnicos = array(), $listaServicos = array(), $listaAreas = array()){
         echo '<!-- Modal -->
 <div class="modal fade modal_form_status" id="modalStatus" tabindex="-1" aria-labelledby="labelModalCancelar" aria-hidden="true">
   <div class="modal-dialog">
@@ -69,6 +69,23 @@ class StatusOcorrenciaCustomView extends StatusOcorrenciaView {
         echo '
                 </select>
             </div>
+
+
+
+            <div id="container-editar-area" class="form-group escondido">
+                
+                <label for="select-area">Selecione um Setor</label>
+                <select name="area_responsavel" id="select-area">
+                    <option value="" selected>Selecione um Setor</option>';
+        foreach($listaAreas as $area){
+            echo '
+                    <option value="'.$area->getId().'">'.$area->getNome().' - '.$area->getDescricao().'</option>';
+        }
+        
+        echo '
+                </select>
+            </div>
+
             <div id="container-avaliacao" class="form-group escondido">
                 Faça sua avaliação:<br> 
 
@@ -229,7 +246,16 @@ class StatusOcorrenciaCustomView extends StatusOcorrenciaView {
         
     }
     
-    
+    public function botaoEditarAreaResponsavel(){
+        echo '
+    <!-- Button trigger modal -->
+    <button id="botao-editar-area" type="button" acao="editar_area"  class="dropdown-item text-right"   data-toggle="modal" data-target="#modalStatus">
+      Editar Setor Responsável
+    </button>
+            
+';
+        
+    }
     public function botaoAguardarUsuario(){
         echo '
     <!-- Button trigger modal -->

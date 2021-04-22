@@ -1,5 +1,10 @@
 
 
+$('#select-area').selectize({
+    create: false,
+    sortField: 'text'
+});
+
 $('#select-tecnico').selectize({
     create: false,
     sortField: 'text'
@@ -30,6 +35,7 @@ function esconderTodos(){
 	$('#container-editar-servico').addClass("escondido");
 	$('#container-editar-solucao').addClass("escondido");
 	$('#container-mensagem-status').addClass("escondido");
+	$('#container-editar-area').addClass("escondido");
 }
 
 $('#avaliar-btn').on('click', function(e){
@@ -54,6 +60,13 @@ $('#botao-editar-solucao').on('click', function(e){
 	var acao = $(this).attr('acao');
 	$('#campo_acao').val(acao);
 	
+});
+	
+$('#botao-editar-area').on('click', function(e){
+	esconderTodos();
+	$('#container-editar-area').removeClass("escondido");
+	var acao = $(this).attr('acao');
+	$('#campo_acao').val(acao);
 });
 	
 $('#botao-reservar').on('click', function(e){

@@ -23,6 +23,8 @@ use novissimo3s\dao\ServicoDAO;
 use novissimo3s\custom\dao\ServicoCustomDAO;
 use novissimo3s\model\Servico;
 use novissimo3s\util\Mail;
+use novissimo3s\custom\dao\AreaResponsavelCustomDAO;
+use novissimo3s\model\AreaResponsavel;
 
 class StatusOcorrenciaCustomController  extends StatusOcorrenciaController {
     
@@ -289,6 +291,7 @@ class StatusOcorrenciaCustomController  extends StatusOcorrenciaController {
 	    
 	    return $listaServicos;
 	}
+	
 	public function painelStatus(Ocorrencia $ocorrencia){
 	    
 	    $this->ocorrencia = $ocorrencia;
@@ -299,6 +302,7 @@ class StatusOcorrenciaCustomController  extends StatusOcorrenciaController {
 	    
 	    $listaUsuarios = array();
 	    $listaServicos = array();
+	    $listaAreas = array();
 	    if($this->possoEditarServico($this->ocorrencia)){
 	        $listaServicos = $this->getServicos();
 	    }
@@ -306,9 +310,16 @@ class StatusOcorrenciaCustomController  extends StatusOcorrenciaController {
 	    {
 	        $listaUsuarios = $this->getTecnicos();
 	    }
-
 	    
-	    $this->view->modalFormStatus($this->ocorrencia, $listaUsuarios, $listaServicos);
+	    if($this->possoEditarAreaResponsavel($this->ocorrencia))
+	    {
+	        $areaDao = new AreaResponsavelCustomDAO($this->dao->getConnection());
+	        $listaAreas = $areaDao->fetch();
+	        
+	    }
+	    
+	    
+	    $this->view->modalFormStatus($this->ocorrencia, $listaUsuarios, $listaServicos, $listaAreas);
 	    
 	    
 
@@ -436,6 +447,22 @@ class StatusOcorrenciaCustomController  extends StatusOcorrenciaController {
 	    return true;
 	    
 	}
+	public function possoEditarAreaResponsavel(Ocorrencia $ocorrencia){
+	    $this->ocorrencia = $ocorrencia;
+	    $this->sessao = new Sessao();
+	    if($this->sessao->getNivelAcesso() != Sessao::NIVEL_ADM){
+            return false;
+	    }
+	    if($this->ocorrencia->getStatus() == StatusOcorrenciaCustomController::STATUS_ABERTO){
+	        return true;
+	    }
+	    if($this->ocorrencia->getStatus() == StatusOcorrenciaCustomController::STATUS_REABERTO){
+	        return true;
+	    }
+	    return false;
+	}
+	
+	
 	public function possoEditarSolucao(Ocorrencia $ocorrencia){
 	    $this->ocorrencia = $ocorrencia;
 	    $this->sessao = new Sessao();
@@ -762,6 +789,10 @@ class StatusOcorrenciaCustomController  extends StatusOcorrenciaController {
 	            $status = $this->ajaxEditarSolucao();
 	            $mensagem = '<p>Solução editada</p>';
 	            break;
+	        case 'editar_area':
+	            $status = $this->ajaxEditarArea();
+	            $mensagem = '<p>Área Editada Com Sucesso</p>';
+	            break;
 	        case 'aguardar_ativos':
 	            $status = $this->ajaxAguardandoAtivo();
 	            $mensagem = '<p>Aguardando ativo de TI</p>';
@@ -772,6 +803,7 @@ class StatusOcorrenciaCustomController  extends StatusOcorrenciaController {
 	            break;
 	        default:
 	            echo ':falha:Ação não encontrada';
+	            
 	            break;
 	    }
 	    if($status){
@@ -779,6 +811,7 @@ class StatusOcorrenciaCustomController  extends StatusOcorrenciaController {
 	    }
 	    
 	}
+
 	public function enviarEmail($mensagem = ""){
 	    $mail = new Mail();
 	    $assunto = "[3S] - Chamado Nº ".$this->statusOcorrencia->getOcorrencia()->getId();
@@ -959,6 +992,56 @@ class StatusOcorrenciaCustomController  extends StatusOcorrenciaController {
 	    $ocorrenciaDao->getConnection()->commit();
 	    
 	    echo ':sucesso:'.$this->ocorrencia->getId().':Solução editada com sucesso!';
+	    return true;
+	    
+	}
+	public function ajaxEditarArea(){
+	    if(!$this->possoEditarAreaResponsavel($this->ocorrencia)){
+	        echo ':falha:Você não pode editar a área responsável.';
+	        return false;
+	    }
+	    
+	    if(!isset($_POST['area_responsavel'])){
+	        echo ':falha:Selecione um serviço.';
+	        return false;
+	    }
+	    $areaResponsavel = new AreaResponsavel();
+	    $areaResponsavel->setId($_POST['area_responsavel']);
+	    $areaResponsavelDao = new AreaResponsavelCustomDAO($this->dao->getConnection());
+	    $areaResponsavelDao->fillById($areaResponsavel);
+	    
+	    $this->ocorrencia->setAreaResponsavel($areaResponsavel);
+	    
+	    $ocorrenciaDao = new OcorrenciaCustomDAO($this->dao->getConnection());
+	    
+	    $status = new Status();
+	    $status->setSigla($this->ocorrencia->getStatus());
+	    
+	    $statusDao = new StatusDAO($this->dao->getConnection());
+	    $statusDao->fillBySigla($status);
+	    
+	    $this->statusOcorrencia = new StatusOcorrencia();
+	    $this->statusOcorrencia->setOcorrencia($this->ocorrencia);
+	    $this->statusOcorrencia->setStatus($status);
+	    $this->statusOcorrencia->setDataMudanca(date("Y-m-d G:i:s"));
+	    $this->statusOcorrencia->getUsuario()->setId($this->sessao->getIdUsuario());
+	    $this->statusOcorrencia->setMensagem('Administrador Editou a Área Responsável');
+	    
+	    $ocorrenciaDao->getConnection()->beginTransaction();
+	    
+	    if(!$ocorrenciaDao->update($this->ocorrencia)){
+	        echo ':falha:Falha na alteração do status da ocorrência.';
+	        $ocorrenciaDao->getConnection()->rollBack();
+	        return false;
+	    }
+	    
+	    if(!$this->dao->insert($this->statusOcorrencia)){
+	        echo ':falha:Falha ao tentar inserir histórico.';
+	        return false;
+	    }
+	    $ocorrenciaDao->getConnection()->commit();
+	    
+	    echo ':sucesso:'.$this->ocorrencia->getId().':Área Responsável Editada Com Sucesso!';
 	    return true;
 	    
 	}

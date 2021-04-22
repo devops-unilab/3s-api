@@ -635,6 +635,9 @@ text/plain, application/pdf, image/*">
             $usuarioDao->fillById($indicado);
             echo '<b>Técnico Indicado: </b>'.$indicado->getNome().'<br>';
         }
+        if($controller->possoEditarAreaResponsavel($ocorrencia)){
+            $statusView->botaoEditarAreaResponsavel();
+        }
         
         echo '
             

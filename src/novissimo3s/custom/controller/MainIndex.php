@@ -28,7 +28,7 @@ class MainIndex{
     }
 
     public function pagina(){
-        $sessao = new Sessao();
+        
         echo '<!doctype html>
 <html lang="pt-br">
 <head>
