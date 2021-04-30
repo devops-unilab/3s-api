@@ -22,6 +22,8 @@ use novissimo3s\dao\ServicoDAO;
 use novissimo3s\dao\UsuarioDAO;
 use novissimo3s\custom\dao\UsuarioCustomDAO;
 use novissimo3s\util\Mail;
+use novissimo3s\model\AreaResponsavel;
+use novissimo3s\custom\dao\AreaResponsavelCustomDAO;
 
 class OcorrenciaCustomController  extends OcorrenciaController {
     
@@ -365,12 +367,7 @@ class OcorrenciaCustomController  extends OcorrenciaController {
 	}
 	
 	public function exibirListagem($lista1, $lista2, $listaAtrasados = array()){
-	    echo '
-            <div class="row">
-                <div class="col-md-8 blog-main">';
-	    echo '
 
-                    <div class="panel-group" id="accordion">';
 	    if(count($listaAtrasados) > 0){
 	        $nChamados = count($listaAtrasados);
 	        $this->painel($listaAtrasados, "Ocorrências Em Atraso ($nChamados)", 'collapseAtraso', "show");
@@ -381,36 +378,7 @@ class OcorrenciaCustomController  extends OcorrenciaController {
 	    $nChamados = count($lista2);
 	    $this->painel($lista2, "Ocorrências Encerradas", 'collapseEncerrada');
 	    
-        echo '    
-                    </div>';//Fecha panel-group
-        echo '</div>';//fecha col-md-8
-
-	    echo '
-
-                
-
-
-            <aside class="col-md-4 blog-sidebar">
-                <!--
-                <div class="p-4 mb-3 bg-light rounded">
-                    <h4 class="font-italic">Campus</h4>
-					Palmares (5)<br>
-					Liberdade (10)<br>
-					Auroras (1)<br>
-					Malês (17)
-                  </div>
-                -->
-                  <div class="p-4 mb-3 bg-light rounded">
-                    <h4 class="font-italic">Sobre o Novíssimo 3s</h4>
-                    <p class="mb-0">
-                        Esta é uma aplicação completamente nova desenvolvida pela DTI do zero. 
-                        Tudo foi refeito, desde o design até a estrutura de banco de dados.
-                        Os chamados antigos foram preservados em uma nova estrutura de banco de dados.
-                        
-                    </p>
-                  </div>
-                </aside><!-- /.blog-sidebar -->
-            </div>';//Fecha row
+       
 	    
 	    
 	}
@@ -471,17 +439,33 @@ class OcorrenciaCustomController  extends OcorrenciaController {
 	}
 	public function listar(){
 	    
+	    $sessao = new Sessao();
+	    $usuario = new Usuario();
+	    $usuario->setId($sessao->getIdUsuario());
+	    $usuarioDao = new UsuarioCustomDAO();
+	    $usuarioDao->fillById($usuario);
+	    
+	    $setor = new AreaResponsavel();
+	    $setor->setId($usuario->getIdSetor());
+	    $areaResponsavelDao = new AreaResponsavelCustomDAO();
+	    $areaResponsavelDao->fillById($setor);
+	    
 	    
 	    $ocorrencia = new Ocorrencia();
 	    $this->sessao = new Sessao();
+	    $listaAtrasados = array();
+	    $nomeSetor = $setor->getNome();
+	    $lista = array();
+	    
+	    
 	    
 	    if($this->sessao->getNivelAcesso() == Sessao::NIVEL_COMUM)
 	    {
-	       $ocorrencia->getUsuarioCliente()->setId($this->sessao->getIdUsuario());
-	       $lista = $this->dao->pesquisaPorCliente($ocorrencia, $this->arrayStatusPendente());
-	       $lista2 = $this->dao->pesquisaPorCliente($ocorrencia, $this->arrayStatusFinalizado());
-	       $this->exibirListagem($lista, $lista2);
-	       
+	        $ocorrencia->getUsuarioCliente()->setId($this->sessao->getIdUsuario());
+	        $lista = $this->dao->pesquisaPorCliente($ocorrencia, $this->arrayStatusPendente());
+	        $lista2 = $this->dao->pesquisaPorCliente($ocorrencia, $this->arrayStatusFinalizado());
+	        
+	        
 	    }else if($this->sessao->getNivelAcesso() == Sessao::NIVEL_TECNICO){
 	        
 	        
@@ -494,31 +478,128 @@ class OcorrenciaCustomController  extends OcorrenciaController {
 	        $usuarioDao = new UsuarioDAO($this->dao->getConnection());
 	        $usuarioDao->fillById($usuario);
 	        $ocorrencia->getAreaResponsavel()->setId($usuario->getIdSetor());
-
+	        
 	        $lista = $this->dao->pesquisaParaTec($ocorrencia, $this->arrayStatusPendente());
 	        $lista2 = $this->dao->pesquisaParaTec($ocorrencia, $this->arrayStatusFinalizado());
 	        
-	        $this->exibirListagem($lista, $lista2);
+	        
 	        
 	    }else if($this->sessao->getNivelAcesso() == Sessao::NIVEL_ADM)
 	    {
 	        
 	        $listaPendentes = $this->dao->pesquisaAdmin($ocorrencia, $this->arrayStatusPendente());
 	        $lista2 = $this->dao->pesquisaAdmin($ocorrencia, $this->arrayStatusFinalizado());
-	        $listaAtrasados = array();
-	        $listaNaoAtrasados = array();
+	        
+	        
 	        foreach($listaPendentes as $ocorrencia){
 	            if($this->atrasado($ocorrencia))
 	            {
 	                $listaAtrasados[] = $ocorrencia;
 	            }else{
-	                $listaNaoAtrasados[] = $ocorrencia;
+	                $lista[] = $ocorrencia;
 	            }
 	        }
-	        $this->exibirListagem($listaNaoAtrasados, $lista2, $listaAtrasados);
 	        
 	    }
 	    
+	    
+	    
+	    
+	    echo '
+            <div class="row">
+                <div class="col-md-8 blog-main">';
+	    echo '
+                    <div class="panel-group" id="accordion">';
+	    
+	    
+	    
+	    $this->exibirListagem($lista, $lista2, $listaAtrasados);
+	    
+	    
+	    
+	    echo '
+                    </div>';//Fecha panel-group
+	    echo '</div>';//fecha col-md-8
+	    
+	    echo '
+	        
+	        
+	        
+	        
+            <aside class="col-md-4 blog-sidebar">
+	        <!--
+                <div class="p-4 mb-3 bg-light rounded">
+                    <h4 class="font-italic">Filtros</h4>
+                        <div class="form-check">
+                          <input class="form-check-input" type="checkbox" value="" id="filtro-meu-setor">
+                          <label class="form-check-label" for="filtro-meu-setor">
+                            '.$nomeSetor.' (10)
+                          </label>
+                        </div>
+
+                        <div class="form-check">
+                          <input class="form-check-input" type="checkbox" value="" id="filtro-minhas-demandas">
+                          <label class="form-check-label" for="filtro-minhas-demandas">
+                            Demandas (10)
+                          </label>
+                        </div>
+
+                        <div class="form-check">
+                          <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                          <label class="form-check-label" for="flexCheckDefault">
+                            Solicitações (10)
+                          </label>
+                        </div>
+
+                        <hr>
+                        <div class="form-check">
+                          <input class="form-check-input" type="checkbox" value="" id="filtro-campus-liberdade">
+                          <label class="form-check-label" for="filtro-campus-liberdade">
+                            Liberdade(3)
+                          </label>
+                        </div>
+
+                        <div class="form-check">
+                          <input class="form-check-input" type="checkbox" value="" id="filtro-campus-palmares">
+                          <label class="form-check-label" for="filtro-campus-palmares">
+                            Palmares(3)
+                          </label>
+                        </div>
+
+                        <div class="form-check">
+                          <input class="form-check-input" type="checkbox" value="" id="filtro-campus-auroras">
+                          <label class="form-check-label" for="filtro-campus-auroras">
+                            Auroras(3)
+                          </label>
+                        </div>
+
+
+                        <div class="form-check">
+                          <input class="form-check-input" type="checkbox" value="" id="filtro-campus-males">
+                          <label class="form-check-label" for="filtro-campus-males">
+                            Malês(3)
+                          </label>
+                        </div>
+
+
+
+                  </div>
+	        -->
+	        
+                  <div class="p-4 mb-3 bg-light rounded">
+                    <h4 class="font-italic">Sobre o Novíssimo 3s</h4>
+                    <p class="mb-0">
+                        Esta é uma aplicação completamente nova desenvolvida pela DTI do zero.
+                        Tudo foi refeito, desde o design até a estrutura de banco de dados.
+                        Os chamados antigos foram preservados em uma nova estrutura de banco de dados.
+	        
+                    </p>
+                  </div>
+                </aside><!-- /.blog-sidebar -->
+            </div>';//Fecha row
+	    
+	    
+
 	    
 	    
 	    

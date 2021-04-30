@@ -61,16 +61,18 @@ class MensagemForumCustomController  extends MensagemForumController {
                     $extensaoArr = explode('.', $novoNome);
                     $extensao = strtolower(end($extensaoArr));
                     
-                    $extensoes_permitidas = array('jpg', 'gif', 'png', 'pdf', 'jpeg');
+                    $extensoes_permitidas = array('xls', 'xlsx', 'jpg', 'gif', 'png', 'pdf', 'jpeg');
+                    
                     if(!(in_array($extensao, $extensoes_permitidas))){
-                        echo $extensao;
-                        echo ':falha:Extensão não permitida';
+                        echo ':falha:Extensão não permitida. Lista de extensões permitidas: ';
+                        echo '('.implode(", ", $extensoes_permitidas).') <br>';
+                        echo 'Para incluir novas extensões solicite via 3s';
                         return;
                     }
                     
                     if(!move_uploaded_file($_FILES['anexo']['tmp_name'], 'uploads/'. $novoNome))
                     {
-                        echo ':falha';
+                        echo ':falha:Falha na tentativa de enviar arquivo';
                         return;
                     }
                     $mensagemForum->setMensagem ( $novoNome );
