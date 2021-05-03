@@ -28,7 +28,7 @@ class MensagemForumCustomView extends MensagemForumView {
                           <label class="custom-control-label" for="muda-tipo">Enviar Arquivo</label>
                         </div>
                         <div class="custom-file mb-3 escondido" id="campo-anexo">
-                              <input type="file" class="custom-file-input" name="anexo" id="anexo" accept="application/msword, application/vnd.ms-excel, application/vnd.ms-powerpoint, text/plain, application/pdf, image/*">
+                              <input type="file" class="custom-file-input" name="anexo" id="anexo" accept="application/msword, application/vnd.ms-excel, application/vnd.ms-powerpoint, text/plain, application/pdf, image/*, application/zip,application/rar, .ovpn">
                               <label class="custom-file-label" for="anexo" data-browse="Anexar">Anexar um Arquivo</label>
                         </div>
     					<div class="input-group">

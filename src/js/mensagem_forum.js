@@ -129,10 +129,10 @@ $(document).ready(function(e)
             		
             	}
             	else
-            	{
+            	{ 
             		
-                	$("#textoModalResposta").text("Falha ao inserir Mensagem Forum, fale com o suporte. ");                	
-            		$("#modalResposta").modal("show");
+                	$("#textoModalResposta").text("Falha ao inserir mensagem. Mensagem de erro: "+data.split(":")[2]);              	
+					$("#modalResposta").modal("show");
             	}
 
             },

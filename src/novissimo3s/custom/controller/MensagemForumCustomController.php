@@ -61,12 +61,14 @@ class MensagemForumCustomController  extends MensagemForumController {
                     $extensaoArr = explode('.', $novoNome);
                     $extensao = strtolower(end($extensaoArr));
                     
-                    $extensoes_permitidas = array('xls', 'xlsx', 'jpg', 'gif', 'png', 'pdf', 'jpeg');
+                    $extensoes_permitidas = array(
+                        'xlsx','xlsm','xlsb','xltx','xltm','xls','xlt','xls','xml','xml','xlam','xla','xlw','xlr', 
+                        'doc', 'docm', 'docx', 'docx', 'dot', 'dotm', 'dotx', 'odt', 'pdf', 'rtf', 'txt', 'wps', 'xml', 'zip', 'rar', 'ovpn',
+                        'xml', 'xps','jpg', 'gif', 'png', 'pdf', 'jpeg');
                     
                     if(!(in_array($extensao, $extensoes_permitidas))){
-                        echo ':falha:Extensão não permitida. Lista de extensões permitidas: ';
-                        echo '('.implode(", ", $extensoes_permitidas).') <br>';
-                        echo 'Para incluir novas extensões solicite via 3s';
+                        echo ':falha:Extensão não permitida. Lista de extensões permitidas a seguir. ';
+                        echo '('.implode(", ", $extensoes_permitidas).')';
                         return;
                     }
                     
