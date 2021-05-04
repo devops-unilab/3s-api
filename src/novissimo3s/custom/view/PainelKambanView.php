@@ -10,8 +10,6 @@ namespace novissimo3s\custom\view;
 
 use novissimo3s\model\Ocorrencia;
 use novissimo3s\custom\controller\StatusOcorrenciaCustomController;
-use novissimo3s\model\Usuario;
-use novissimo3s\custom\dao\StatusOcorrenciaCustomDAO;
 use novissimo3s\dao\UsuarioDAO;
 
 

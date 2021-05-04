@@ -2,7 +2,6 @@
 
 namespace novissimo3s\custom\controller;
 use novissimo3s\util\Sessao;
-use novissimo3s\model\Usuario;
 
 class NavBarController{
     
