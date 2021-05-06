@@ -44,10 +44,34 @@ $("#muda-tipo").on('change', function(e){
 
 function alocaMensagem(item, index){
 	
+	let data = new Date(item.data_envio);
+	
+	
+	var mes = data.getMonth()+ 1;
+	var ano = data.getFullYear();            
+	var dia = data.getDate();
+	var horas = data.getHours();
+	var minutos = data.getMinutes();
+	
+	if(dia <= 9){
+		dia = "0"+dia;
+	}
+	if(mes <= 9){
+		mes = "0"+mes;
+	}
+	if(horas <= 9){
+		horas = "0"+horas;
+	}
+	if(minutos <= 9){
+		minutos = "0"+minutos;
+	}
+	
+	var dataFormatada = dia+"/"+mes+"/"+ano;  
+	
 	var div = '<div class="chatbox__body__message chatbox__body__message--left">';
 	div += '<div class="chatbox_timing">';
-	div += '<ul><li><a href="#"><i class="fa fa-calendar"></i> 12/02/2021</a></li>';
-	div += '<li><a href="#"><i class="fa fa-clock-o"></i> 15:45</a></li>';
+	div += '<ul><li><a href="#"><i class="fa fa-calendar"></i> '+dataFormatada+'</a></li>';
+	div += '<li><a href="#"><i class="fa fa-clock-o"></i> '+horas+':'+minutos+'</a></li>';
 	div += '</ul>';
 	div += '</div>';
 	div += '<div class="clearfix"></div>';

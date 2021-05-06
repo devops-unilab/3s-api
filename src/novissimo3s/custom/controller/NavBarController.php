@@ -26,7 +26,7 @@ class NavBarController{
         <a class="nav-link" href=".">Início<span class="sr-only">(current)</span></a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="?page=ocorrencia&cadastrar=1">Adicionar</a>
+        <a class="nav-link" href="?page=ocorrencia&cadastrar=1">Abrir Chamado</a>
       </li>
 ';
         if($sessao->getNivelAcesso() == Sessao::NIVEL_ADM || $sessao->getNivelAcesso() == Sessao::NIVEL_TECNICO){
