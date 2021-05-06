@@ -191,7 +191,7 @@ echo '
                     if(isset($_GET['selecionar'])){
                         echo '
 <script src="js/contador.js"></script>
-<script src="js/mensagem_forum.js?a=16"></script>';
+<script src="js/mensagem_forum.js?a=17"></script>';
                     }
                     
                     break;
@@ -216,7 +216,7 @@ echo '
             if(isset($_GET['selecionar'])){
                 echo '
 <script src="js/contador.js"></script>
-<script src="js/mensagem_forum.js?a=14"></script>';
+<script src="js/mensagem_forum.js?a=15"></script>';
             }
             
         }
