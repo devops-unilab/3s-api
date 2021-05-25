@@ -425,14 +425,19 @@ class OcorrenciaCustomView extends OcorrenciaView {
                 $strClass = 'alert-danger';
             }
             
+            $descricao = "";
+            $descricao = htmlspecialchars($elemento->getDescricao());
+            if(strlen($descricao) > 200){
+                $descricao = substr($descricao, 0, 200).'...';
+            }
             echo '
                 
             <div class="alert '.$strClass.' alert-dismissable">
                 <a href="?page=ocorrencia&selecionar='.$elemento->getId().'" class="close"><i class="fa fa-search icone-maior"></i></a>
                     
-                <strong>#'.$elemento->getId().'</strong>
-                 '.substr($elemento->getDescricao(), 0, 200).'...
-            </div>
+                <strong>#'.$elemento->getId().'</strong>';
+            echo $descricao;
+            echo '</div>
                   ';
             
         }

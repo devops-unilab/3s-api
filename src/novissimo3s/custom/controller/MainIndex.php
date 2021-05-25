@@ -187,7 +187,7 @@ echo '
 <script src="js/status_ocorrencia.js?a=1"></script>
 <script src="js/ocorrencia_selectize.js"></script>
 <script src="js/jquery.easyPaginate.js?a=1"></script>
-<script src="js/ocorrencia.js?a=12"></script>';
+<script src="js/ocorrencia.js?a=14"></script>';
                     if(isset($_GET['selecionar'])){
                         echo '
 <script src="js/contador.js"></script>
@@ -210,7 +210,7 @@ echo '
             echo '
 <script src="js/ocorrencia_selectize.js"></script>
 <script src="js/jquery.easyPaginate.js?a=1"></script>
-<script src="js/ocorrencia.js?a=12"></script>
+<script src="js/ocorrencia.js?a=14"></script>
 
 ';
             if(isset($_GET['selecionar'])){

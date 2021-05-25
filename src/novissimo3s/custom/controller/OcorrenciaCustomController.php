@@ -477,7 +477,7 @@ class OcorrenciaCustomController  extends OcorrenciaController {
                             <div class="form-check">
                               <input class="form-check-input" type="checkbox" id="filtro-minhas-demandas" '.$checkedDemanda.'>
                               <label class="form-check-label" for="filtro-minhas-demandas">
-                                Minhas Demandas 
+                                Meus Atendimentos
                               </label>
                             </div>
     
