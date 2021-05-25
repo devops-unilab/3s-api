@@ -12,6 +12,7 @@ use novissimo3s\model\Ocorrencia;
 use PDO;
 use PDOException;
 use novissimo3s\model\MensagemForum;
+use novissimo3s\util\Sessao;
 
 
 class  OcorrenciaCustomDAO extends OcorrenciaDAO {
@@ -192,7 +193,9 @@ class  OcorrenciaCustomDAO extends OcorrenciaDAO {
         return $lista;
     }
     public function filtroStatus($arrStatus = array('a')){
-        
+        if(count($arrStatus) == 0){
+            return "";
+        }
         $arrPices = array();
         $strWhere = "(";
         foreach($arrStatus as $status){
@@ -205,7 +208,7 @@ class  OcorrenciaCustomDAO extends OcorrenciaDAO {
         return $strWhere;
         
     }
-    public function pesquisaAdmin(Ocorrencia $ocorrencia, $arrStatus = array('a')) 
+    public function pesquisaAdmin(Ocorrencia $ocorrencia, $arrStatus = array('a'), $arrayFiltros = array()) 
     {
         $lista = array();
         
@@ -401,7 +404,7 @@ class  OcorrenciaCustomDAO extends OcorrenciaDAO {
             (ocorrencia.id_usuario_cliente  = :idUsuarioIndicado)
             AND $strWhere
             ORDER BY ocorrencia.id DESC
-            LIMIT 10
+            LIMIT 1000
 ";
         
         try {
@@ -520,15 +523,50 @@ class  OcorrenciaCustomDAO extends OcorrenciaDAO {
         }
         return $ocorrencia;
     }
-    
-    public function pesquisaParaTec(Ocorrencia $ocorrencia,  $arrStatus = array('a')) {
-        $lista = array();
-        $idUsuarioCliente = $ocorrencia->getUsuarioCliente()->getId();
-        $idUsuarioIndicado = $ocorrencia->getIdUsuarioIndicado();
-        $idUsuarioAtendente = $ocorrencia->getIdUsuarioAtendente();
-        $idAreaResponsavel = $ocorrencia->getAreaResponsavel()->getId();
+    public function outroFiltro($arrayFiltros = array()){
+        if(count($arrayFiltros) == 0){
+            return "";
+        }
+        $filtro = "";
+        $arrPedacos = array();
+        if(isset($arrayFiltros['setor'])){
+            $idSetor = $arrayFiltros['setor'];
+            $arrPedacos[] = " ocorrencia.id_area_responsavel = $idSetor ";
+        }
         
-        $strWhere = $this->filtroStatus($arrStatus);
+        $sessao = new Sessao();
+        $idUsuario = $sessao->getIdUsuario();
+        
+        if(isset($arrayFiltros['demanda'])){
+
+            $arrPedacos[] = "
+            (ocorrencia.id_usuario_indicado  = $idUsuario OR ocorrencia.id_usuario_atendente  = $idUsuario)";
+        }
+        if(isset($arrayFiltros['solicitacao'])){
+            $arrPedacos[] = "
+            ocorrencia.id_usuario_cliente  = $idUsuario ";
+        }
+
+        $filtro = implode(" AND ", $arrPedacos);
+        return $filtro;
+        
+        
+    }
+    public function pesquisaParaTec(Ocorrencia $ocorrencia,  $arrStatus = array('a'), $arrayFiltros = array()) {
+        $lista = array();
+        $filtroStatus = $this->filtroStatus($arrStatus);
+        $outroFiltro = $this->outroFiltro($arrayFiltros);
+        $strWhere = "";
+        
+        if($filtroStatus != "" && $outroFiltro != ""){
+            $strWhere = " WHERE ($filtroStatus) AND ($outroFiltro)";   
+        }
+        else if($filtroStatus == "" && $outroFiltro != ""){
+            $strWhere = " WHERE $outroFiltro ";
+        }else if($filtroStatus != "" && $outroFiltro == ""){
+            $strWhere = " WHERE $filtroStatus ";
+        }
+    
 
         $sql = "SELECT ocorrencia.id, ocorrencia.id_local,
             ocorrencia.descricao, ocorrencia.campus, ocorrencia.patrimonio,
@@ -551,26 +589,16 @@ class  OcorrenciaCustomDAO extends OcorrenciaDAO {
             INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico
             LEFT JOIN usuario as usuario_cliente
             ON usuario_cliente.id = ocorrencia.id_usuario_cliente
-            WHERE
-            (ocorrencia.id_usuario_cliente  = :idUsuarioCliente
-            OR 
-            ocorrencia.id_usuario_indicado  = :idUsuarioIndicado
-            OR 
-            ocorrencia.id_usuario_atendente  = :idUsuarioAtendente
-            OR 
-            ocorrencia.id_area_responsavel = :idAreaResponsavel
-            ) AND $strWhere
+            $strWhere
             ORDER BY ocorrencia.id DESC
-            LIMIT 80
+            LIMIT 1000
 ";
+
 
         try {
             
             $stmt = $this->getConnection()->prepare($sql);
-            $stmt->bindParam(":idUsuarioCliente", $idUsuarioCliente, PDO::PARAM_INT);
-            $stmt->bindParam(":idUsuarioIndicado", $idUsuarioIndicado, PDO::PARAM_INT);
-            $stmt->bindParam(":idUsuarioAtendente", $idUsuarioAtendente, PDO::PARAM_INT);
-            $stmt->bindParam(":idAreaResponsavel", $idAreaResponsavel, PDO::PARAM_INT);
+
             $stmt->execute();
             $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
             foreach ( $result as $linha ){

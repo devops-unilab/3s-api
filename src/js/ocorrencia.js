@@ -1,3 +1,64 @@
+function filtroBasico(){
+
+	var query = location.search.slice(1);
+	
+	var partes = query.split('&');
+	var data = {};
+	if(partes.length > 1){
+		
+		partes.forEach(function (parte) {
+		    var chaveValor = parte.split('=');
+		    var chave = chaveValor[0];
+		    var valor = chaveValor[1];
+		    data[chave] = valor;
+		});	
+	}
+	
+
+
+	if($("#filtro-meu-setor").is(':checked')){
+		
+		data['setor'] = $("#meu-setor").val();
+	}else{
+		delete data['setor']; 
+	}
+	if($("#filtro-minhas-demandas").is(':checked')){
+		data['demanda'] = '1';
+	}else{
+		delete data['demanda']; 
+	}
+	if($("#filtro-minhas-solicitacoes").is(':checked')){
+		data['solicitacao'] = '1';
+	}else{
+		delete data['solicitacao'];
+	}
+	
+	var novaUrl = '';
+	var i = 0;
+	
+	Object.keys(data).forEach(function (key) {
+		
+		console.log(key);
+		if(i != 0){
+			novaUrl += '&';
+		}
+		novaUrl += key+'='+data[key];
+		i++;
+	});
+	console.log(novaUrl);
+	if(novaUrl == ""){
+		window.location.href = ".";
+		
+	}else{
+		window.location.href = "?"+novaUrl;	
+	}
+}
+$(document).ready(
+	function(){
+		$('#form-filtro-basico').change(filtroBasico);
+	}
+);
+
 $('#easyPaginatecollapseAtraso').easyPaginate({
     paginateElement: 'div',
     elementsPerPage: 10,

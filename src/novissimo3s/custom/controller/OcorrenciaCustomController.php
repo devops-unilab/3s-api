@@ -437,24 +437,120 @@ class OcorrenciaCustomController  extends OcorrenciaController {
             return false;
 	    }
 	}
-	public function listar(){
-	    
+	public function cardFiltro(){
 	    $sessao = new Sessao();
+	    
 	    $usuario = new Usuario();
 	    $usuario->setId($sessao->getIdUsuario());
 	    $usuarioDao = new UsuarioCustomDAO();
 	    $usuarioDao->fillById($usuario);
 	    
-	    $setor = new AreaResponsavel();
-	    $setor->setId($usuario->getIdSetor());
-	    $areaResponsavelDao = new AreaResponsavelCustomDAO();
-	    $areaResponsavelDao->fillById($setor);
+        $setor = new AreaResponsavel();
+        $setor->setId($usuario->getIdSetor());
+        $areaResponsavelDao = new AreaResponsavelCustomDAO();
+        $areaResponsavelDao->fillById($setor);
+        
+        $checkedSetor = "";
+        if(isset($_GET['setor'])){
+            $checkedSetor = 'checked';
+        }
+        $checkedDemanda = "";
+        if(isset($_GET['demanda'])){
+            $checkedDemanda = 'checked';
+        }
+        $checkedSolicitacao = "";
+        if(isset($_GET['solicitacao'])){
+            $checkedSolicitacao = 'checked';
+        }
+	    echo '
+                <div class="p-4 mb-3 bg-light rounded">
+                    <h4 class="font-italic">Filtros Básicos</h4>
+                        <form id="form-filtro-basico">
+                            <div class="form-check">
+                                <input type="hidden" value="'.$setor->getId().'" id="meu-setor" name="meu-setor">
+                                <input class="form-check-input" type="checkbox" id="filtro-meu-setor" '.$checkedSetor.'>
+                              <label class="form-check-label" for="filtro-meu-setor">
+                                Demandas ('.$setor->getNome().') 
+                              </label>
+                            </div>
+    
+                            <div class="form-check">
+                              <input class="form-check-input" type="checkbox" id="filtro-minhas-demandas" '.$checkedDemanda.'>
+                              <label class="form-check-label" for="filtro-minhas-demandas">
+                                Minhas Demandas 
+                              </label>
+                            </div>
+    
+                            <div class="form-check">
+                              <input class="form-check-input" type="checkbox" id="filtro-minhas-solicitacoes" '.$checkedSolicitacao.'>
+                              <label class="form-check-label" for="filtro-minhas-solicitacoes">
+                                Minhas Solicitações 
+                              </label>
+                            </div>
+                        </form>';
+	    /*
+	    echo '
+                        <hr>
+                        <div class="form-check">
+                          <input class="form-check-input" type="checkbox" value="" id="filtro-campus-liberdade">
+                          <label class="form-check-label" for="filtro-campus-liberdade">
+                            Liberdade
+                          </label>
+                        </div>
+
+                        <div class="form-check">
+                          <input class="form-check-input" type="checkbox" value="" id="filtro-campus-palmares">
+                          <label class="form-check-label" for="filtro-campus-palmares">
+                            Palmares
+                          </label>
+                        </div>
+
+                        <div class="form-check">
+                          <input class="form-check-input" type="checkbox" value="" id="filtro-campus-auroras">
+                          <label class="form-check-label" for="filtro-campus-auroras">
+                            Auroras
+                          </label>
+                        </div>
+
+
+                        <div class="form-check">
+                          <input class="form-check-input" type="checkbox" value="" id="filtro-campus-males">
+                          <label class="form-check-label" for="filtro-campus-males">
+                            Malês
+                          </label>
+                        </div>';
+                        */
+	    echo '
+
+
+    
+                  </div>
+
+';
+	}
+	public function getArrayFiltros(){
+	    $arrayFiltros = array();
+	    if(isset($_GET['setor'])){
+	        $arrayFiltros['setor'] = intval($_GET['setor']);
+	    }
 	    
+	    if(isset($_GET['demanda'])){
+	        $arrayFiltros['demanda'] = 1;
+	    }
+	    if(isset($_GET['solicitacao'])){
+	        $arrayFiltros['solicitacao'] = 1;
+	    }
+	    return $arrayFiltros;
+	    
+	}
+	public function listar(){
+	    
+	    $sessao = new Sessao();
 	    
 	    $ocorrencia = new Ocorrencia();
 	    $this->sessao = new Sessao();
 	    $listaAtrasados = array();
-	    $nomeSetor = $setor->getNome();
+	    
 	    $lista = array();
 	    
 	    
@@ -479,16 +575,22 @@ class OcorrenciaCustomController  extends OcorrenciaController {
 	        $usuarioDao->fillById($usuario);
 	        $ocorrencia->getAreaResponsavel()->setId($usuario->getIdSetor());
 	        
-	        $lista = $this->dao->pesquisaParaTec($ocorrencia, $this->arrayStatusPendente());
-	        $lista2 = $this->dao->pesquisaParaTec($ocorrencia, $this->arrayStatusFinalizado());
+	        $arrayFiltros = array();
+	        $arrayFiltros = $this->getArrayFiltros();
+	        
+	        $lista = $this->dao->pesquisaParaTec($ocorrencia, $this->arrayStatusPendente(), $arrayFiltros);
+	        $lista2 = $this->dao->pesquisaParaTec($ocorrencia, $this->arrayStatusFinalizado(), $arrayFiltros);
 	        
 	        
 	        
 	    }else if($this->sessao->getNivelAcesso() == Sessao::NIVEL_ADM)
 	    {
 	        
-	        $listaPendentes = $this->dao->pesquisaAdmin($ocorrencia, $this->arrayStatusPendente());
-	        $lista2 = $this->dao->pesquisaAdmin($ocorrencia, $this->arrayStatusFinalizado());
+	        $arrayFiltros = array();
+	        $arrayFiltros = $this->getArrayFiltros();
+	        
+	        $listaPendentes = $this->dao->pesquisaParaTec($ocorrencia, $this->arrayStatusPendente(), $arrayFiltros);
+	        $lista2 = $this->dao->pesquisaParaTec($ocorrencia, $this->arrayStatusFinalizado(), $arrayFiltros);
 	        
 	        
 	        foreach($listaPendentes as $ocorrencia){
@@ -526,65 +628,15 @@ class OcorrenciaCustomController  extends OcorrenciaController {
 	        
 	        
 	        
-            <aside class="col-md-4 blog-sidebar">
-	        <!--
-                <div class="p-4 mb-3 bg-light rounded">
-                    <h4 class="font-italic">Filtros</h4>
-                        <div class="form-check">
-                          <input class="form-check-input" type="checkbox" value="" id="filtro-meu-setor">
-                          <label class="form-check-label" for="filtro-meu-setor">
-                            '.$nomeSetor.' (10)
-                          </label>
-                        </div>
+            <aside class="col-md-4 blog-sidebar">';
+	    if($sessao->getNivelAcesso() == Sessao::NIVEL_ADM || $sessao->getNivelAcesso() == Sessao::NIVEL_TECNICO){
+	       $this->cardFiltro();    
+	    }
+	    
+	    echo '
 
-                        <div class="form-check">
-                          <input class="form-check-input" type="checkbox" value="" id="filtro-minhas-demandas">
-                          <label class="form-check-label" for="filtro-minhas-demandas">
-                            Demandas (10)
-                          </label>
-                        </div>
+               
 
-                        <div class="form-check">
-                          <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                          <label class="form-check-label" for="flexCheckDefault">
-                            Solicitações (10)
-                          </label>
-                        </div>
-
-                        <hr>
-                        <div class="form-check">
-                          <input class="form-check-input" type="checkbox" value="" id="filtro-campus-liberdade">
-                          <label class="form-check-label" for="filtro-campus-liberdade">
-                            Liberdade(3)
-                          </label>
-                        </div>
-
-                        <div class="form-check">
-                          <input class="form-check-input" type="checkbox" value="" id="filtro-campus-palmares">
-                          <label class="form-check-label" for="filtro-campus-palmares">
-                            Palmares(3)
-                          </label>
-                        </div>
-
-                        <div class="form-check">
-                          <input class="form-check-input" type="checkbox" value="" id="filtro-campus-auroras">
-                          <label class="form-check-label" for="filtro-campus-auroras">
-                            Auroras(3)
-                          </label>
-                        </div>
-
-
-                        <div class="form-check">
-                          <input class="form-check-input" type="checkbox" value="" id="filtro-campus-males">
-                          <label class="form-check-label" for="filtro-campus-males">
-                            Malês(3)
-                          </label>
-                        </div>
-
-
-
-                  </div>
-	        -->
 	        
                   <div class="p-4 mb-3 bg-light rounded">
                     <h4 class="font-italic">Sobre o Novíssimo 3s</h4>
