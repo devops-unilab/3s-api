@@ -14,7 +14,11 @@ $("#login-form").on('submit', function(e) {
 
 			
 			if (data.split(":")[1] == 'sucesso') {
-				window.location.href = '.';
+				if(data.split(":")[2] == 't'){
+					window.location.href = './?demanda=1';
+				}else{
+					window.location.href = '.';	
+				}				
 			}
 			else {
 				

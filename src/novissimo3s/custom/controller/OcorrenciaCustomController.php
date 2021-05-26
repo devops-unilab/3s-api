@@ -466,27 +466,26 @@ class OcorrenciaCustomController  extends OcorrenciaController {
                 <div class="p-4 mb-3 bg-light rounded">
                     <h4 class="font-italic">Filtros Básicos</h4>
                         <form id="form-filtro-basico">
-                            <div class="form-check">
-                                <input type="hidden" value="'.$setor->getId().'" id="meu-setor" name="meu-setor">
-                                <input class="form-check-input" type="checkbox" id="filtro-meu-setor" '.$checkedSetor.'>
-                              <label class="form-check-label" for="filtro-meu-setor">
-                                Demandas ('.$setor->getNome().') 
-                              </label>
+
+                            <input type="hidden" value="'.$setor->getId().'" id="meu-setor" name="meu-setor">
+                            <div class="custom-control custom-switch">
+                              <input type="checkbox" class="custom-control-input" id="filtro-meu-setor" '.$checkedSetor.'>
+                              <label class="custom-control-label" for="filtro-meu-setor">Demandas ('.$setor->getNome().') </label>
                             </div>
+
+
+                            <div class="custom-control custom-switch">
+                              <input type="checkbox" class="custom-control-input" id="filtro-minhas-demandas" '.$checkedDemanda.'>
+                              <label class="custom-control-label" for="filtro-minhas-demandas">Meus Atendimentos</label>
+                            </div>
+
     
-                            <div class="form-check">
-                              <input class="form-check-input" type="checkbox" id="filtro-minhas-demandas" '.$checkedDemanda.'>
-                              <label class="form-check-label" for="filtro-minhas-demandas">
-                                Meus Atendimentos
-                              </label>
+
+                            <div class="custom-control custom-switch">
+                              <input type="checkbox" class="custom-control-input" id="filtro-minhas-solicitacoes" '.$checkedSolicitacao.'>
+                              <label class="custom-control-label" for="filtro-minhas-solicitacoes">Minhas Solicitações</label>
                             </div>
-    
-                            <div class="form-check">
-                              <input class="form-check-input" type="checkbox" id="filtro-minhas-solicitacoes" '.$checkedSolicitacao.'>
-                              <label class="form-check-label" for="filtro-minhas-solicitacoes">
-                                Minhas Solicitações 
-                              </label>
-                            </div>
+
                         </form>';
 	    /*
 	    echo '

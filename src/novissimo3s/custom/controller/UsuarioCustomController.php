@@ -61,7 +61,7 @@ class UsuarioCustomController  extends UsuarioController {
 	        }
 	        
 	        
-	        echo ":sucesso";
+	        echo ":sucesso:".$sessao->getNivelAcesso();
 	    }else{
 	        echo ":falha";
 	    }
