@@ -407,8 +407,8 @@ class OcorrenciaCustomController  extends OcorrenciaController {
 	    $statusDao = new StatusOcorrenciaCustomDAO($this->dao->getConnection());
 	    $listaStatus = $statusDao->pesquisaPorIdOcorrencia($ocorrencia);
 	    $dataAbertura = null;
-	    if(!($ocorrencia->getServico()->getTempoSla() > 0)){
-	        
+	    if($ocorrencia->getServico()->getTempoSla() < 1){
+	        return false;
 	    }
         
 	    foreach($listaStatus as $statusOcorrencia){

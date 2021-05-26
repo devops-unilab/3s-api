@@ -25,13 +25,13 @@ class UsuarioCustomController  extends UsuarioController {
 		$sessao = new Sessao();
 		if($sessao->getNIvelOriginal() == Sessao::NIVEL_ADM){
 			$sessao->setNivelDeAcesso($_POST['nivel']);
-			echo ':sucess:';
+			echo ':sucess:'.$sessao->getNivelAcesso();
 			return;
 		}
 		if($sessao->getNIvelOriginal() == Sessao::NIVEL_TECNICO){
 			if($_POST['nivel'] != Sessao::NIVEL_ADM){
 				$sessao->setNivelDeAcesso($_POST['nivel']);
-				echo ':sucess:';
+				echo ':sucess:'.$sessao->getNivelAcesso();
 				return;
 			}
 			echo ':falha:';

@@ -20,7 +20,11 @@ function mudarNivel(dados){
             if(data.split(":")[1] == 'sucess'){
                 
                 $("#botao-modal-resposta").click(function(){
-                    window.location.href='.';
+    				if(data.split(":")[2] == 't'){
+						window.location.href = './?demanda=1';
+					}else{
+						window.location.href = '.';	
+					}	
                 });
                 $("#textoModalResposta").text("Nível Alterado Com Sucesso! ");                	
                 $("#modalResposta").modal("show");
