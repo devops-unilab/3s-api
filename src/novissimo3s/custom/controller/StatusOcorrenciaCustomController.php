@@ -471,14 +471,7 @@ class StatusOcorrenciaCustomController  extends StatusOcorrenciaController {
 	    }
 	    if($this->ocorrencia->getStatus() == StatusOcorrenciaCustomController::STATUS_REABERTO){
 	        return true;
-	    }
-	    if($this->ocorrencia->getStatus() == StatusOcorrenciaCustomController::STATUS_ATENDIMENTO){
-	        return true;
-	    }
-	    if($this->ocorrencia->getStatus() == StatusOcorrenciaCustomController::STATUS_RESERVADO){
-	        return true;
-	    }
-	    
+	    }	    
 	    return false;
 	}
 	
