@@ -161,7 +161,16 @@ class StatusOcorrenciaCustomController  extends StatusOcorrenciaController {
 	    $ocorrenciaDao = new OcorrenciaCustomDAO($this->dao->getConnection());
 	    $ocorrenciaDao->fillById($this->ocorrencia);
 	    
+	    
+	    $usuario = new Usuario();
+	    $usuario->setId($this->sessao->getIdUsuario());
+	    
+	    $usuarioDao = new UsuarioDAO($this->dao->getConnection());
+	    $usuarioDao->fillById($usuario);
+	    $this->ocorrencia->getAreaResponsavel()->setId($usuario->getIdSetor());
+	    
 	    $this->ocorrencia->setIdUsuarioAtendente($this->sessao->getIdUsuario());
+
 	    
 	    $this->ocorrencia->setStatus(self::STATUS_ATENDIMENTO);
 	    
@@ -448,17 +457,28 @@ class StatusOcorrenciaCustomController  extends StatusOcorrenciaController {
 	    
 	}
 	public function possoEditarAreaResponsavel(Ocorrencia $ocorrencia){
+	    
+
+	    
 	    $this->ocorrencia = $ocorrencia;
 	    $this->sessao = new Sessao();
 	    if($this->sessao->getNivelAcesso() != Sessao::NIVEL_ADM){
             return false;
 	    }
+	    
 	    if($this->ocorrencia->getStatus() == StatusOcorrenciaCustomController::STATUS_ABERTO){
 	        return true;
 	    }
 	    if($this->ocorrencia->getStatus() == StatusOcorrenciaCustomController::STATUS_REABERTO){
 	        return true;
 	    }
+	    if($this->ocorrencia->getStatus() == StatusOcorrenciaCustomController::STATUS_ATENDIMENTO){
+	        return true;
+	    }
+	    if($this->ocorrencia->getStatus() == StatusOcorrenciaCustomController::STATUS_RESERVADO){
+	        return true;
+	    }
+	    
 	    return false;
 	}
 	
@@ -543,6 +563,14 @@ class StatusOcorrenciaCustomController  extends StatusOcorrenciaController {
 	        echo ':falha:Não é possível fechar este chamado.';
 	        return false;
 	    }
+	    
+	    $usuario = new Usuario();
+	    $usuario->setId($this->sessao->getIdUsuario());
+	    
+	    $usuarioDao = new UsuarioDAO($this->dao->getConnection());
+	    $usuarioDao->fillById($usuario);
+	    $this->ocorrencia->getAreaResponsavel()->setId($usuario->getIdSetor());
+	    
 	    
 	    $ocorrenciaDao = new OcorrenciaCustomDAO($this->dao->getConnection());
 	    $this->ocorrencia->setStatus(self::STATUS_FECHADO);
@@ -694,8 +722,7 @@ class StatusOcorrenciaCustomController  extends StatusOcorrenciaController {
 	    $usuarioDao = new UsuarioDAO($this->dao->getConnection());
 	    $usuarioDao->fillById($usuario);
 	    
-	    
-	    
+	    $this->ocorrencia->getAreaResponsavel()->setId($usuario->getIdSetor());
 	    $this->ocorrencia->setStatus(self::STATUS_RESERVADO);
 	    
 	    $status = new Status();
@@ -1015,7 +1042,7 @@ class StatusOcorrenciaCustomController  extends StatusOcorrenciaController {
 	    $ocorrenciaDao = new OcorrenciaCustomDAO($this->dao->getConnection());
 	    
 	    $status = new Status();
-	    $status->setSigla($this->ocorrencia->getStatus());
+	    $status->setSigla(StatusOcorrenciaCustomController::STATUS_ABERTO);
 	    
 	    $statusDao = new StatusDAO($this->dao->getConnection());
 	    $statusDao->fillBySigla($status);
