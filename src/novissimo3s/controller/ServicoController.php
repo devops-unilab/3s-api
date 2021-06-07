@@ -190,6 +190,7 @@ class ServicoController {
 		$selected->setTempoSla ( $_POST ['tempo_sla'] );
 		$selected->setVisao ( $_POST ['visao'] );
             
+		
 		if ($this->dao->update ($selected ))
         {
 			echo '
