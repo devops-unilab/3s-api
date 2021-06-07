@@ -15,6 +15,7 @@ use novissimo3s\dao\AreaResponsavelDAO;
 use novissimo3s\custom\dao\TipoAtividadeCustomDAO;
 use novissimo3s\custom\dao\AreaResponsavelCustomDAO;
 use novissimo3s\custom\dao\GrupoServicoCustomDAO;
+use novissimo3s\util\Sessao;
 
 class ServicoCustomController  extends ServicoController {
     
@@ -26,6 +27,10 @@ class ServicoCustomController  extends ServicoController {
 
 	
 	public function main(){
+	    $sessao = new Sessao();
+	    if($sessao->getNivelAcesso() != Sessao::NIVEL_ADM){
+	        return;
+	    }
 	    echo '
 	        
         <div class="card mb-4">

@@ -304,7 +304,7 @@ class ServicoCustomView extends ServicoView
             
         </div>
         <div class="modal-footer">
-            <button form="edit_form_servico" type="submit" class="btn btn-primary">Cadastrar</button>
+            <button form="edit_form_servico" type="submit" class="btn btn-primary">Alterar</button>
         </div>
     </div>
 </div>
@@ -315,6 +315,40 @@ class ServicoCustomView extends ServicoView
 						              ';
     }
     
+    
+    
+    public function confirmDelete(Servico $servico) {
+        echo '
+            
+            
+            
+				<div class="card o-hidden border-0 shadow-lg">
+					<div class="card-body p-0">
+						<!-- Nested Row within Card Body -->
+						<div class="row">
+            
+							<div class="col-lg-12">
+								<div class="p-5">
+									<div class="text-center">
+										<h1 class="h4 text-gray-900 mb-4"> Apagar Serviço</h1>
+									</div>
+						              <form class="user" method="post">Tem certeza que deseja apagar este serviço?
+            
+                                        <input type="submit" class="btn btn-primary btn-user btn-block" value="Delete" name="delete_servico">
+                                        <hr>
+            
+						              </form>
+            
+								</div>
+							</div>
+						</div>
+					</div>
+            
+            
+            
+            
+	</div>';
+    }
     
     
 }

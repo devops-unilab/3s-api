@@ -311,9 +311,9 @@ class ServicoView {
 							<div class="col-lg-12">
 								<div class="p-5">
 									<div class="text-center">
-										<h1 class="h4 text-gray-900 mb-4"> Delete Servico</h1>
+										<h1 class="h4 text-gray-900 mb-4"> Apagar Serviço</h1>
 									</div>
-						              <form class="user" method="post">                    Are you sure you want to delete this object?
+						              <form class="user" method="post">Tem certeza que deseja apagar este serviço? 
 
                                         <input type="submit" class="btn btn-primary btn-user btn-block" value="Delete" name="delete_servico">
                                         <hr>
