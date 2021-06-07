@@ -1,6 +1,4 @@
-- Criar filtro para o perfin Técnico 
-	- ele atender e 
-	- todos os chamados do setor;
+
 
 - Corrigir bug do cash no firefox; 
 - Erro de load ao receber mensagem falsa na mudnaça de status; 
@@ -11,9 +9,11 @@
 - Bug da data no chat; 
 - Permitir editar patrimonio; 
 - Permitir editar setor responsável; (Adm)
-- Corrigir bug do cash no firefox; 
+- Aviso para quando um chat for cadastrado; 
 - Filtros para administrador; 
 -----------------Feito--------------------
+
+- Criar filtro para o perfin Técnico 
 - Permitir editar setor responsável; (Adm)
 - Administrador pode editar o serviço;
 - Adicionar ação de reabrir chamado.
