@@ -234,7 +234,7 @@ class ServicoCustomView extends ServicoView
 
                                         <div class="form-group">
                                           <label for="visao">Visão</label>
-                						  <select class="form-control" id="tipo_atividade" name="visao" id="visao">
+                						  <select class="form-control" name="visao" id="visao">
                                             <option value="">Selecione uma visão</option>';
         
         foreach( $visoes as $element){
