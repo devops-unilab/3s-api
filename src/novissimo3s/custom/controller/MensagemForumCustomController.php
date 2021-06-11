@@ -180,7 +180,15 @@ class MensagemForumCustomController  extends MensagemForumController {
                 $nome = ucfirst(strtolower($listaNome[0]));
             }
             if(isset($listaNome[1])){
-                $nome .= ' '.ucfirst(strtolower($listaNome[1]));
+                if(strlen($listaNome[1]) <= 2){
+                    $nome .= ' '.strtolower($listaNome[1]);
+                    if(isset($listaNome[2])){
+                        $nome .= ' '.ucfirst(strtolower($listaNome[2]));
+                    }
+                }else{
+                    $nome .= ' '.ucfirst(strtolower($listaNome[1]));
+                }
+                
             }
             
             
