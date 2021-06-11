@@ -1,18 +1,20 @@
-
+- Técnico Responsável no painel kanban;
+- Erro de load ao receber mensagem falsa na mudnaça de status; 
+- Permitir editar patrimonio; 
 
 - Corrigir bug do cash no firefox; 
-- Erro de load ao receber mensagem falsa na mudnaça de status; 
+
+- Dois nomes; 
+
 - Caixa de texto para feedback na avaliação e outras alterações de status. 
-- Permitir editar patrimonio; 
+
 - Status na tela de ocorrencia; 
-- Técnico Responsável no painel kanban;
-- Bug da data no chat; 
-- Permitir editar patrimonio; 
-- Permitir editar setor responsável; (Adm)
+
 - Aviso para quando um chat for cadastrado; 
 - Filtros para administrador; 
 -----------------Feito--------------------
-
+- Permitir editar setor responsável; (Adm)
+- Bug da data no chat; 
 - Criar filtro para o perfin Técnico 
 - Permitir editar setor responsável; (Adm)
 - Administrador pode editar o serviço;

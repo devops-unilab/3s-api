@@ -316,6 +316,12 @@ class  OcorrenciaCustomDAO extends OcorrenciaDAO {
             INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico
             LEFT JOIN usuario as usuario_cliente
             ON usuario_cliente.id = ocorrencia.id_usuario_cliente
+
+            LEFT JOIN usuario as usuario_indicado 
+            ON usuario_indicado.id = ocorrencia.id_usuario_indicado
+
+
+
             WHERE
             $strWhere $filtro
             ORDER BY ocorrencia.id DESC

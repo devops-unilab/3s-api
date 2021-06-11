@@ -80,7 +80,7 @@ function alocaMensagem(item, index){
 	
 	nome = item.nome_usuario.split(" ");
 	
-	div += '<li><strong>'+nome[0]+'</strong></li>';
+	div += '<li><strong>'+nome[0]+' '+nome[1]+'</strong></li>';
 	if(item.tipo == 1){
 		div += '<li>'+item.mensagem+'</li>';
 	}else{

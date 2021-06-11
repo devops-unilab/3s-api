@@ -177,8 +177,10 @@ class MensagemForumCustomController  extends MensagemForumController {
             $nome = $mensagemForum->getUsuario()->getNome();
             $listaNome = explode(' ', $mensagemForum->getUsuario()->getNome());
             if(isset($listaNome[0])){
-                $nome = $listaNome[0];
-                
+                $nome = ucfirst(strtolower($listaNome[0]));
+            }
+            if(isset($listaNome[1])){
+                $nome .= ' '.ucfirst(strtolower($listaNome[1]));
             }
             
             
