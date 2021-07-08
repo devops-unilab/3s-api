@@ -1,18 +1,41 @@
-- Técnico Responsável no painel kanban;
-- Erro de load ao receber mensagem falsa na mudnaça de status; 
-- Permitir editar patrimonio; 
+- Exibir status atual na tela de ocorrencia; 
 
-- Corrigir bug do cash no firefox; 
+- Aprimorar os filtros; 
+	- Pesquisar por atendente; 
+	- Pesquisar pelo intervalo de data de (Abertura)
+	- Pesquisar chamandos pela area responsável;
 
-- Dois nomes; 
-
+- Enviar e-mail para o e-mail do setor em editar area responsavel da ocorrencia; 
 - Caixa de texto para feedback na avaliação e outras alterações de status. 
 
-- Status na tela de ocorrencia; 
+- Painel Kamban{
+	- Técnico Responsável no painel kanban;
+	- Data de abertura no kamban; 
+	- Tela expandida no kamban; 
+}
 
-- Aviso para quando um chat for cadastrado; 
-- Filtros para administrador; 
+- Permitir editar patrimonio; 
+
+- React {
+
+	- Aviso para nova mensagem em ocorrencia em atendimento por ele; 
+	- Nova ocorrência reservada;
+	- Chat; 
+	- Captcha;
+}
+
+- Erro de load ao receber mensagem falsa na mudnaça de status; 
+
+- Utilização do LDAP; 
+	- Listar os dados necessários da base para autenticação; 
+	- Usa captcha; 
+	- Chave JWT;
+
+- Corrigir bug do cash no firefox;
+
+
 -----------------Feito--------------------
+- Filtros para administrador; 
 - Permitir editar setor responsável; (Adm)
 - Bug da data no chat; 
 - Criar filtro para o perfin Técnico 
