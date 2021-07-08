@@ -24,6 +24,8 @@ use novissimo3s\custom\dao\UsuarioCustomDAO;
 use novissimo3s\util\Mail;
 use novissimo3s\model\AreaResponsavel;
 use novissimo3s\custom\dao\AreaResponsavelCustomDAO;
+use novissimo3s\custom\dao\StatusCustomDAO;
+use novissimo3s\model\Status;
 
 class OcorrenciaCustomController  extends OcorrenciaController {
     
@@ -138,6 +140,40 @@ class OcorrenciaCustomController  extends OcorrenciaController {
 	        return false;
 	    }
 	}
+	public function getColorStatus($siglaStatus){
+		$strCartao = ' alert-warning ';
+		if($siglaStatus == 'a'){
+			$strCartao = '  notice-warning';
+		}else if($siglaStatus == 'e'){
+			$strCartao = '  notice-info ';
+		}
+		else if($siglaStatus == 'f'){
+			$strCartao = 'notice-success ';
+		}
+		else if($siglaStatus == 'g'){
+			$strCartao = 'notice-success ';
+		}
+		else if($siglaStatus == 'h'){
+			$strCartao = ' notice-warning ';
+		}
+		else if($siglaStatus == 'r'){
+			$strCartao = '  notice-warning ';
+		}
+		else if($siglaStatus == 'b'){
+			$strCartao = '  notice-warning ';
+		}
+		else if($siglaStatus == 'c'){
+			$strCartao = '   notice-warning ';
+		}
+		else if($siglaStatus == 'd'){
+			$strCartao = '  notice-warning ';
+		}
+		else if($siglaStatus == 'i'){
+			$strCartao = ' notice-warning';
+		}
+		return $strCartao;
+
+	}
 	public function selecionar(){
 	    
 	    if(!isset($_GET['selecionar'])){
@@ -181,6 +217,23 @@ class OcorrenciaCustomController  extends OcorrenciaController {
 	    echo '<div class="row">';
 	    $statusController = new StatusOcorrenciaCustomController();
 	    $statusController->painelStatus($this->selecionado);
+
+		
+		$statusDao = new StatusCustomDAO($this->dao->getConnection());
+		$status = new Status();
+		$status->setSigla($this->selecionado->getStatus());
+		$statusDao->fillBySigla($status);
+		$colorStatus = $this->getColorStatus($status->getSigla());
+		echo '
+	    
+		<div class="alert '.$colorStatus. '" role="alert">
+		  Status:  '.$status->getNome().'
+		</div>';
+		
+
+ 	   
+
+
         echo '</div>';
 	    echo '
                     </div>
@@ -221,36 +274,7 @@ class OcorrenciaCustomController  extends OcorrenciaController {
                     <div class="container">';
 	    
 	    foreach($listaStatus as $status){
-	        $strCartao = ' alert-warning ';
-	        if($status->getStatus()->getSigla() == 'a'){
-	            $strCartao = '  notice-warning';
-	        }else if($status->getStatus()->getSigla() == 'e'){
-	            $strCartao = '  notice-info ';
-	        }
-	        else if($status->getStatus()->getSigla() == 'f'){
-	            $strCartao = 'notice-success ';
-	        }
-	        else if($status->getStatus()->getSigla() == 'g'){
-	            $strCartao = 'notice-success ';
-	        }
-	        else if($status->getStatus()->getSigla() == 'h'){
-	            $strCartao = ' notice-warning ';
-	        }
-	        else if($status->getStatus()->getSigla() == 'r'){
-	            $strCartao = '  notice-warning ';
-	        }
-	        else if($status->getStatus()->getSigla() == 'b'){
-	            $strCartao = '  notice-warning ';
-	        }
-	        else if($status->getStatus()->getSigla() == 'c'){
-	            $strCartao = '   notice-warning ';
-	        }
-	        else if($status->getStatus()->getSigla() == 'd'){
-	            $strCartao = '  notice-warning ';
-	        }
-	        else if($status->getStatus()->getSigla() == 'i'){
-	            $strCartao = ' notice-warning';
-	        }
+	        $strCartao = $this->getColorStatus($status->getStatus()->getSigla());
 	        
 	        
 	        echo '

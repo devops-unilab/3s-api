@@ -24,6 +24,7 @@ use novissimo3s\custom\dao\ServicoCustomDAO;
 use novissimo3s\model\Servico;
 use novissimo3s\util\Mail;
 use novissimo3s\custom\dao\AreaResponsavelCustomDAO;
+use novissimo3s\custom\view\OcorrenciaCustomView;
 use novissimo3s\model\AreaResponsavel;
 
 class StatusOcorrenciaCustomController  extends StatusOcorrenciaController {
@@ -389,17 +390,6 @@ class StatusOcorrenciaCustomController  extends StatusOcorrenciaController {
 
   </div>
 </div>';
-	    // 	    $ocorrenciaView = new OcorrenciaCustomView();
-	    // 	    $strStatus = $ocorrenciaView->getStrStatus($ocorrencia->getStatus());
-	    
-// 	    	    echo '
-	    
-	    
-	    
-	    
-// 	        <div class="alert alert-danger" role="alert">
-// 	          Status '.$strStatus.'
-// 	        </div>';
 	    
 
 	}
