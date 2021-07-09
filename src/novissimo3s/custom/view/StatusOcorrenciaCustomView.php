@@ -51,6 +51,10 @@ class StatusOcorrenciaCustomView extends StatusOcorrenciaView {
                 <label for="solucao">Solução</label>
                 <textarea class="form-control" id="solucao" name="solucao" rows="2">'.strip_tags($ocorrencia->getSolucao()).'</textarea>
             </div>
+            <div id="container-editar-patrimonio" class="form-group escondido"> 
+                <label for="solucao">Patrimônio</label>
+                <input class="form-control" id="patrimonio" name="patrimonio" value="'.strip_tags($ocorrencia->getSolucao()).'"/>
+            </div>
             <div id="container-mensagem-status" class="form-group escondido"> 
                 <label for="mensagem-status">Mensagem</label>
                 <textarea class="form-control" id="mensagem-status" name="mensagem-status" rows="2"></textarea>
@@ -239,6 +243,17 @@ class StatusOcorrenciaCustomView extends StatusOcorrenciaView {
         echo '
     <!-- Button trigger modal -->
     <button id="botao-editar-solucao" type="button" acao="editar_solucao"  class="dropdown-item text-right"   data-toggle="modal" data-target="#modalStatus">
+      Editar Solução
+    </button>
+            
+';
+        
+    }
+    
+    public function botaoEditarPatrimonio(){
+        echo '
+    <!-- Button trigger modal -->
+    <button id="botao-editar-patrimonio" type="button" acao="editar_patrimonio"  class="dropdown-item text-right"   data-toggle="modal" data-target="#modalStatus">
       Editar Solução
     </button>
             

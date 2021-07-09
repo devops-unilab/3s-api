@@ -1,13 +1,13 @@
+- Enviar e-mail para o e-mail do setor em editar area responsavel da ocorrencia; 
+- Caixa de texto para feedback na avaliação e outras alterações de status. 
+- Erro de load ao receber mensagem falsa na mudnaça de status e ao errar senha;
 
-- Permitir editar patrimonio; 
 
-- Aprimorar os filtros; 
+- Aprimorar os filtros{ 
 	- Pesquisar por atendente; 
 	- Pesquisar pelo intervalo de data de (Abertura)
 	- Pesquisar chamandos pela area responsável;
-
-- Enviar e-mail para o e-mail do setor em editar area responsavel da ocorrencia; 
-- Caixa de texto para feedback na avaliação e outras alterações de status. 
+}
 
 - Painel Kamban{
 	- Técnico Responsável no painel kanban;
@@ -25,7 +25,7 @@
 	- Captcha;
 }
 
-- Erro de load ao receber mensagem falsa na mudnaça de status; 
+
 
 - Utilização do LDAP; 
 	- Listar os dados necessários da base para autenticação; 
@@ -37,6 +37,8 @@
 
 -----------------Feito--------------------
 - Exibir status atual na tela de ocorrencia selecionada; 
+- Permitir editar patrimonio; 
+
 
 - Filtros para administrador; 
 - Permitir editar setor responsável; (Adm)

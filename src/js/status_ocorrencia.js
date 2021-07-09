@@ -84,6 +84,14 @@ $('#botao-reabrir').on('click', function(e){
 	$('#campo_acao').val(acao);
 });
 
+$('#botao-editar-patrimonio').on('click', function(e){
+	esconderTodos();
+	$('#container-editar-patrimonio').removeClass("escondido");
+	
+	var acao = $(this).attr('acao');
+	$('#campo_acao').val(acao);
+	
+});
 $('.botao-status').on('click', function(e){
 	esconderTodos();
 	var acao = $(this).attr('acao');

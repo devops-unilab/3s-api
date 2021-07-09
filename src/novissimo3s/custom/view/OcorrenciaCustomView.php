@@ -507,6 +507,9 @@ class OcorrenciaCustomView extends OcorrenciaView {
      * @param array:StatusOcorrencia $listaStatus
      */
     public function mostrarSelecionado2(Ocorrencia $ocorrencia, $listaStatus, $dataAbertura, $dataSolucao){
+        $statusView = new StatusOcorrenciaCustomView();
+        $controller = new StatusOcorrenciaCustomController();
+        
         echo '
 
             
@@ -526,13 +529,9 @@ class OcorrenciaCustomView extends OcorrenciaView {
         
         
 
-        if(trim($ocorrencia->getPatrimonio()) != "" || trim($ocorrencia->getAnexo()) != ""){
-            echo '<hr>';
-        }
+      
 
-        if(trim($ocorrencia->getPatrimonio()) != ""){
-            echo '<b>Patrimonio: </b>'.$ocorrencia->getPatrimonio().' <br> ';
-        }
+        
         if(trim($ocorrencia->getAnexo()) != ""){
             echo '<b>Anexo: </b><a target="_blank" href="uploads/'.$ocorrencia->getAnexo().'"> Clique aqui</a> <br>';
         }
@@ -545,6 +544,27 @@ class OcorrenciaCustomView extends OcorrenciaView {
 
 
 ';
+        
+        echo '
+                <div class="card mb-4">
+                    <div class="card-body">';
+        
+        echo '<b>Patrimônio: </b>'.strip_tags($ocorrencia->getPatrimonio()).'<br>';
+        
+        
+        
+        
+        if($controller->possoEditarPatrimonio($ocorrencia)){
+            $statusView->botaoEditarPatrimonio();
+        }
+        
+        echo '
+            
+                    </div>
+                </div>
+            
+            
+';
 
 
             echo '
@@ -553,8 +573,7 @@ class OcorrenciaCustomView extends OcorrenciaView {
             
            echo '<b>Solucao: </b>'.strip_tags($ocorrencia->getSolucao()).'<br>';
            
-           $statusView = new StatusOcorrenciaCustomView();
-           $controller = new StatusOcorrenciaCustomController();
+
            
 
            if($controller->possoEditarSolucao($ocorrencia)){

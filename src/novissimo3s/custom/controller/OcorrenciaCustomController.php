@@ -140,6 +140,40 @@ class OcorrenciaCustomController  extends OcorrenciaController {
 	        return false;
 	    }
 	}
+	public function getColorStatusAlert($siglaStatus){
+		$strCartao = ' alert-warning ';
+		if($siglaStatus == 'a'){
+			$strCartao = '  notice-warning';
+		}else if($siglaStatus == 'e'){
+			$strCartao = '   alert-primary ';
+		}
+		else if($siglaStatus == 'f'){
+			$strCartao = ' alert-success ';
+		}
+		else if($siglaStatus == 'g'){
+			$strCartao = ' alert-success ';
+		}
+		else if($siglaStatus == 'h'){
+			$strCartao = ' alert-warning ';
+		}
+		else if($siglaStatus == 'r'){
+			$strCartao = '  alert-warning ';
+		}
+		else if($siglaStatus == 'b'){
+			$strCartao = '  alert-warning ';
+		}
+		else if($siglaStatus == 'c'){
+			$strCartao = '  alert-warning';
+		}
+		else if($siglaStatus == 'd'){
+			$strCartao = '  alert-warning ';
+		}
+		else if($siglaStatus == 'i'){
+			$strCartao = ' alert-warning';
+		}
+		return $strCartao;
+
+	}
 	public function getColorStatus($siglaStatus){
 		$strCartao = ' alert-warning ';
 		if($siglaStatus == 'a'){
@@ -179,6 +213,7 @@ class OcorrenciaCustomController  extends OcorrenciaController {
 	    if(!isset($_GET['selecionar'])){
 	        return;
 	    }
+		
 	    $this->sessao = new Sessao();
 	    $this->selecionado = new Ocorrencia();
 	    $this->selecionado->setId($_GET['selecionar']);
@@ -194,6 +229,7 @@ class OcorrenciaCustomController  extends OcorrenciaController {
             ';
 	        return;
 	    }
+		
 	    $statusDao = new StatusOcorrenciaCustomDAO($this->dao->getConnection());
 	    $listaStatus = $statusDao->pesquisaPorIdOcorrencia($this->selecionado);
 	    $dataAbertura = null;
@@ -208,33 +244,34 @@ class OcorrenciaCustomController  extends OcorrenciaController {
 	        return;
 	        
 	    }
-	    echo '
-            <div class="row">
-                <div class="col-md-12 blog-main">
-                <div class="row  border-bottom mb-3">
-                    <div class="col-md-6 blog-main">
-                       ';
-	    echo '<div class="row">';
-	    $statusController = new StatusOcorrenciaCustomController();
-	    $statusController->painelStatus($this->selecionado);
-
-		
+		$statusController = new StatusOcorrenciaCustomController();
 		$statusDao = new StatusCustomDAO($this->dao->getConnection());
 		$status = new Status();
 		$status->setSigla($this->selecionado->getStatus());
 		$statusDao->fillBySigla($status);
-		$colorStatus = $this->getColorStatus($status->getSigla());
-		echo '
-	    
-		<div class="alert '.$colorStatus. '" role="alert">
-		  Status:  '.$status->getNome().'
-		</div>';
 		
 
- 	   
+	    echo '
+            <div class="row">
+                <div class="col-md-12 blog-main">';
+				echo '<div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">';
+				$statusController->painelStatus($this->selecionado, $status);
+				echo '
+    
+                </div>
 
+';
 
-        echo '</div>';
+				
+				
+				echo '</div>';
+
+				echo '
+                <div class="row  border-bottom mb-3">
+                    <div class="col-md-6 blog-main">
+                       ';
+	   
 	    echo '
                     </div>
                     <div class="col-md-6 blog-main">

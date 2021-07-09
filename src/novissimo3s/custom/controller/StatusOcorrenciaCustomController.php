@@ -302,7 +302,7 @@ class StatusOcorrenciaCustomController  extends StatusOcorrenciaController {
 	    return $listaServicos;
 	}
 	
-	public function painelStatus(Ocorrencia $ocorrencia){
+	public function painelStatus(Ocorrencia $ocorrencia, Status $status){
 	    
 	    $this->ocorrencia = $ocorrencia;
 	    $this->sessao = new Sessao();
@@ -335,9 +335,16 @@ class StatusOcorrenciaCustomController  extends StatusOcorrenciaController {
 
 	    
 	    echo '
-<!-- Large button groups (default and split) -->
+				<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+	        
+    				<div class="alert  bg-light d-flex justify-content-between align-items-center" role="alert">
+    				  
+
+                ';
+	    
+	    echo '
 <div class="btn-group">
-  <button class="btn btn-light btn-lg dropdown-toggle mb-3" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+  <button class="btn btn-light btn-lg dropdown-toggle p-2" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
    Chamado '.$this->ocorrencia->getId().'
   </button>
   <div class="dropdown-menu">
@@ -389,7 +396,14 @@ class StatusOcorrenciaCustomController  extends StatusOcorrenciaController {
 	    echo '
 
   </div>
-</div>';
+</div>
+
+
+<h3 class="alert-heading">Status:  '.$status->getNome().'</h4>
+
+</div>
+</div>
+';
 	    
 
 	}
@@ -479,6 +493,30 @@ class StatusOcorrenciaCustomController  extends StatusOcorrenciaController {
 	        return false;
 	    }
 	    return true;
+	    
+	}
+	
+	public function possoEditarPatrimonio(Ocorrencia $ocorrencia){
+	    $this->ocorrencia = $ocorrencia;
+	    $this->sessao = new Sessao();
+	    
+	    if($this->ocorrencia->getStatus() == self::STATUS_FECHADO){
+	        return false;
+	    }
+	    if($this->ocorrencia->getStatus() == self::STATUS_CANCELADO){
+	        return false;
+	    }
+	    if($this->ocorrencia->getStatus() == self::STATUS_FECHADO_CONFIRMADO){
+	        return false;
+	    }
+	    if($this->sessao->getIdUsuario() == $this->ocorrencia->getUsuarioCliente()->getId()){
+	        return true;
+	    }
+        if($this->sessao->getIdUsuario() == $this->ocorrencia->getIdUsuarioAtendente()){
+            return true;
+        }   
+	    
+	    
 	    
 	}
 	public function possoAvaliar(){
@@ -811,6 +849,10 @@ class StatusOcorrenciaCustomController  extends StatusOcorrenciaController {
 	            $status = $this->ajaxAguardandoUsuario();
 	            $mensagem = '<p>Aguardando resposta do cliente</p>';
 	            break;
+	        case 'editar_patrimonio':
+	            $status = $this->ajaxEditarPatrimonio();
+	            $mensagem = '<p>Patrimônio editado.</p>';
+	            break;
 	        default:
 	            echo ':falha:Ação não encontrada';
 	            
@@ -820,6 +862,55 @@ class StatusOcorrenciaCustomController  extends StatusOcorrenciaController {
 	        $this->enviarEmail($mensagem);
 	    }
 	    
+	}
+	public function ajaxEditarPatrimonio(){
+	    if(!$this->possoEditarPatrimonio($this->ocorrencia)){
+	        echo ':falha:Este patrimônio não pode ser editado.';
+	        return false;
+	    }
+	    if(!isset($_POST['patrimonio'])){
+	        echo ':falha:Digite um patrimônio.';
+	        return false;
+	    }
+	    if(trim($_POST['patrimonio']) == ""){
+	        echo ':falha:Digite um patrimônio.';
+	        return false;
+	    }
+	    
+	    
+	    
+	    $ocorrenciaDao = new OcorrenciaCustomDAO($this->dao->getConnection());
+	    $status = new Status();
+	    $status->setSigla($this->ocorrencia->getStatus());
+	    
+	    $statusDao = new StatusDAO($this->dao->getConnection());
+	    $statusDao->fillBySigla($status);
+	    
+	    $this->statusOcorrencia = new StatusOcorrencia();
+	    $this->statusOcorrencia->setOcorrencia($this->ocorrencia);
+	    $this->statusOcorrencia->setStatus($status);
+	    $this->statusOcorrencia->setDataMudanca(date("Y-m-d G:i:s"));
+	    $this->statusOcorrencia->getUsuario()->setId($this->sessao->getIdUsuario());
+	    $this->statusOcorrencia->setMensagem('Técnico editou o Patrimônio para: '.$_POST['patrimonio'].'.');
+	    
+	    $this->ocorrencia->setPatrimonio(strip_tags($_POST['patrimonio']));
+	    $ocorrenciaDao->getConnection()->beginTransaction();
+	    
+	    
+	    if(!$ocorrenciaDao->update($this->ocorrencia)){
+	        echo ':falha:Falha na alteração do patrimonio da ocorrência.';
+	        $ocorrenciaDao->getConnection()->rollBack();
+	        return false;
+	    }
+	    
+	    if(!$this->dao->insert($this->statusOcorrencia)){
+	        echo ':falha:Falha ao tentar inserir histórico.';
+	        return false;
+	    }
+	    $ocorrenciaDao->getConnection()->commit();
+	    
+	    echo ':sucesso:'.$this->ocorrencia->getId().':Patrimonio editado com sucesso!';
+	    return true;
 	}
 
 	public function enviarEmail($mensagem = ""){
