@@ -1,7 +1,5 @@
-
 - Caixa de texto para feedback na avaliação e outras alterações de status. 
-- Erro de load ao receber mensagem falsa na mudnaça de status e ao errar senha;
-
+- Bloqueio de envio de chamados para quem possuir chamado fechado e não avaliado.
 
 - Aprimorar os filtros{ 
 	- Pesquisar por atendente; 
@@ -14,8 +12,6 @@
 	- Data de abertura no kamban; 
 	- Tela expandida no kamban; 
 }
-
-
 
 - React {
 
@@ -32,6 +28,7 @@
 	- Usa captcha; 
 	- Chave JWT;
 
+
 - Corrigir bug do cash no firefox;
 
 
@@ -39,8 +36,9 @@
 - Exibir status atual na tela de ocorrencia selecionada; 
 - Permitir editar patrimonio; 
 - Enviar e-mail para o e-mail do setor em editar area responsavel da ocorrencia; 
+- Erro de load ao receber mensagem falsa na mudnaça de status e ao errar senha;
 
-- Filtros para administrador; 
+- Filtros; 
 - Permitir editar setor responsável; (Adm)
 - Bug da data no chat; 
 - Criar filtro para o perfin Técnico 

@@ -24,11 +24,16 @@ $("#login-form").on('submit', function(e) {
 				
 				$("#textoModalResposta").text("Falha na tentativa de login.");
 				$("#modalResposta").modal("show");
+				
+				$("input").prop('disabled', false);
+				$("#botao-login").prop('disabled', false);
+				$("#spinner-submit").addClass("escondido");
 
 				$("#botao-modal-resposta").click(function() {
 					window.location.href = '.';
 				});
 				
+
 				
 			}
 

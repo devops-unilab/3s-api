@@ -127,6 +127,10 @@ $(".form_status").on('submit', function(e) {
         	}
         	else
         	{
+
+				$("#spinner-status").addClass("escondido");
+				$('#botao-status').prop('disabled', false);
+
             	$("#textoModalResposta").text(data.split(":")[2]);
 				$('.modal_form_status').modal('hide');
         		$("#modalResposta").modal("show");
