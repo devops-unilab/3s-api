@@ -1,4 +1,4 @@
-- Enviar e-mail para o e-mail do setor em editar area responsavel da ocorrencia; 
+
 - Caixa de texto para feedback na avaliação e outras alterações de status. 
 - Erro de load ao receber mensagem falsa na mudnaça de status e ao errar senha;
 
@@ -38,7 +38,7 @@
 -----------------Feito--------------------
 - Exibir status atual na tela de ocorrencia selecionada; 
 - Permitir editar patrimonio; 
-
+- Enviar e-mail para o e-mail do setor em editar area responsavel da ocorrencia; 
 
 - Filtros para administrador; 
 - Permitir editar setor responsável; (Adm)

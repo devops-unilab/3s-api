@@ -938,6 +938,12 @@ class StatusOcorrenciaCustomController  extends StatusOcorrenciaController {
 	    
 	    $usuarioDao = new UsuarioDAO($this->dao->getConnection());
 	    
+		
+		$destinatario = $this->statusOcorrencia->getOcorrencia()->getAreaResponsavel()->getEmail();
+		$nome = $this->statusOcorrencia->getOcorrencia()->getAreaResponsavel()->getNome();
+		$mail->enviarEmail($destinatario, $nome, $assunto, $saldacao.$corpo);
+		
+
 	    if($this->statusOcorrencia->getOcorrencia()->getIdUsuarioAtendente() != null){
 	        
 	        $atendente = new Usuario();
@@ -1126,7 +1132,7 @@ class StatusOcorrenciaCustomController  extends StatusOcorrenciaController {
 	    $this->statusOcorrencia->setStatus($status);
 	    $this->statusOcorrencia->setDataMudanca(date("Y-m-d G:i:s"));
 	    $this->statusOcorrencia->getUsuario()->setId($this->sessao->getIdUsuario());
-	    $this->statusOcorrencia->setMensagem('Administrador Editou a Área Responsável');
+	    $this->statusOcorrencia->setMensagem('Chamado encaminhado para setor: '.$areaResponsavel->getNome());
 	    
 	    $ocorrenciaDao->getConnection()->beginTransaction();
 	    
