@@ -718,13 +718,17 @@ class OcorrenciaCustomController  extends OcorrenciaController {
 	}
 	
 	public function telaCadastro() {
-	    
+	    $this->sessao = new Sessao();
+
+		$ocorrencia = new Ocorrencia();
+		$ocorrencia->getUsuarioCliente()->setId($this->sessao->getIdUsuario());
+		$listaNaoAvaliados = $this->dao->fetchByUsuarioClienteNaoAvaliados($ocorrencia);		
+		
+
 	    echo '
             <div class="row">
                 <div class="col-md-12 blog-main">
-                    <h3 class="pb-4 mb-4 font-italic border-bottom">
-                        Cadastrar Ocorrência
-                    </h3>
+                    
 	        
 ';
 	    $servicoDao = new ServicoCustomDAO($this->dao->getConnection());
@@ -732,16 +736,30 @@ class OcorrenciaCustomController  extends OcorrenciaController {
 	    $servico->setVisao(1);
 	    
 	    $listaServico = $servicoDao->fetchByVisao($servico);
-	    $this->sessao = new Sessao();
+	    
 	    if($this->sessao->getNivelAcesso() == Sessao::NIVEL_ADM || $this->sessao->getNivelAcesso() == Sessao::NIVEL_TECNICO){
 	        $servico->setVisao(2);
 	        $lista2 = $servicoDao->fetchByVisao($servico);
 	        $listaServico = array_merge($listaServico, $lista2);
 	    }
+	    if(count($listaNaoAvaliados) == 0){
+			echo '
+			<h3 class="pb-4 mb-4 font-italic border-bottom">
+                        Cadastrar Ocorrência
+                    </h3>
+			';
+			$this->view->mostraFormInserir2($listaServico);
+		}else{
+			echo '
+			<h3 class="pb-4 mb-4 font-italic border-bottom" data-toggle="collapse" data-target="#collapseAberto" href="#collapseAberto" aria-expanded="true">
+				Para continuar avalie os chamados fechados. 
+            </h3>';//public function exibirLista($lista)
+			$this->view->exibirLista($listaNaoAvaliados);
+			
+		}
 	    
 	    
-	    //Javascript envia esses dados pelo $.ajax
-	    $this->view->mostraFormInserir2($listaServico);
+	    
 	    
 	    echo '
                 </div>

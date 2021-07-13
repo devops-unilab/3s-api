@@ -606,7 +606,7 @@ class OcorrenciaDAO extends DAO {
         }
 		return $lista;
     }
-                
+             
     public function fetchByDescricao(Ocorrencia $ocorrencia) {
         $lista = array();
 	    $descricao = $ocorrencia->getDescricao();

@@ -7,6 +7,8 @@
 
 
 namespace novissimo3s\custom\dao;
+
+use novissimo3s\custom\controller\StatusOcorrenciaCustomController;
 use novissimo3s\dao\OcorrenciaDAO;
 use novissimo3s\model\Ocorrencia;
 use PDO;
@@ -97,6 +99,76 @@ class  OcorrenciaCustomDAO extends OcorrenciaDAO {
         }
         
     }
+
+    
+    public function fetchByUsuarioClienteNaoAvaliados(Ocorrencia $ocorrencia) {
+        $lista = array();
+	    $usuarioCliente = $ocorrencia->getUsuarioCliente()->getId();
+            
+        $status = StatusOcorrenciaCustomController::STATUS_FECHADO;
+        
+        $sql = "SELECT ocorrencia.id, ocorrencia.id_local, ocorrencia.descricao, ocorrencia.campus, ocorrencia.patrimonio, ocorrencia.ramal, ocorrencia.local, ocorrencia.status, ocorrencia.solucao, ocorrencia.prioridade, ocorrencia.avaliacao, ocorrencia.email, ocorrencia.id_usuario_atendente, ocorrencia.id_usuario_indicado, ocorrencia.anexo, ocorrencia.local_sala, ocorrencia.data_abertura, ocorrencia.data_atendimento, ocorrencia.data_fechamento, ocorrencia.data_fechamento_confirmado, area_responsavel.id as id_area_responsavel_area_responsavel, area_responsavel.nome as nome_area_responsavel_area_responsavel, area_responsavel.descricao as descricao_area_responsavel_area_responsavel, area_responsavel.email as email_area_responsavel_area_responsavel, servico.id as id_servico_servico, servico.nome as nome_servico_servico, servico.descricao as descricao_servico_servico, servico.tempo_sla as tempo_sla_servico_servico, servico.visao as visao_servico_servico, usuario_cliente.id as id_usuario_usuario_cliente, usuario_cliente.nome as nome_usuario_usuario_cliente, usuario_cliente.email as email_usuario_usuario_cliente, usuario_cliente.login as login_usuario_usuario_cliente, usuario_cliente.senha as senha_usuario_usuario_cliente, usuario_cliente.nivel as nivel_usuario_usuario_cliente, usuario_cliente.id_setor as id_setor_usuario_usuario_cliente FROM ocorrencia INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico INNER JOIN usuario as usuario_cliente ON usuario_cliente.id = ocorrencia.id_usuario_cliente
+            WHERE 
+                ocorrencia.status = '$status' 
+            AND
+                ocorrencia.id_usuario_cliente = :usuarioCliente";
+                
+        try {
+                
+            $stmt = $this->connection->prepare($sql);
+            $stmt->bindParam(":usuarioCliente", $usuarioCliente, PDO::PARAM_INT);
+            $stmt->execute();
+            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            foreach ( $result as $row ){
+		        $ocorrencia = new Ocorrencia();
+                $ocorrencia->setId( $row ['id'] );
+                $ocorrencia->setIdLocal( $row ['id_local'] );
+                $ocorrencia->setDescricao( $row ['descricao'] );
+                $ocorrencia->setCampus( $row ['campus'] );
+                $ocorrencia->setPatrimonio( $row ['patrimonio'] );
+                $ocorrencia->setRamal( $row ['ramal'] );
+                $ocorrencia->setLocal( $row ['local'] );
+                $ocorrencia->setStatus( $row ['status'] );
+                $ocorrencia->setSolucao( $row ['solucao'] );
+                $ocorrencia->setPrioridade( $row ['prioridade'] );
+                $ocorrencia->setAvaliacao( $row ['avaliacao'] );
+                $ocorrencia->setEmail( $row ['email'] );
+                $ocorrencia->setIdUsuarioAtendente( $row ['id_usuario_atendente'] );
+                $ocorrencia->setIdUsuarioIndicado( $row ['id_usuario_indicado'] );
+                $ocorrencia->setAnexo( $row ['anexo'] );
+                $ocorrencia->setLocalSala( $row ['local_sala'] );
+                $ocorrencia->setDataAbertura( $row ['data_abertura'] );
+                $ocorrencia->setDataAtendimento( $row ['data_atendimento'] );
+                $ocorrencia->setDataFechamento( $row ['data_fechamento'] );
+                $ocorrencia->setDataFechamentoConfirmado( $row ['data_fechamento_confirmado'] );
+                $ocorrencia->getAreaResponsavel()->setId( $row ['id_area_responsavel_area_responsavel'] );
+                $ocorrencia->getAreaResponsavel()->setNome( $row ['nome_area_responsavel_area_responsavel'] );
+                $ocorrencia->getAreaResponsavel()->setDescricao( $row ['descricao_area_responsavel_area_responsavel'] );
+                $ocorrencia->getAreaResponsavel()->setEmail( $row ['email_area_responsavel_area_responsavel'] );
+                $ocorrencia->getServico()->setId( $row ['id_servico_servico'] );
+                $ocorrencia->getServico()->setNome( $row ['nome_servico_servico'] );
+                $ocorrencia->getServico()->setDescricao( $row ['descricao_servico_servico'] );
+                $ocorrencia->getServico()->setTempoSla( $row ['tempo_sla_servico_servico'] );
+                $ocorrencia->getServico()->setVisao( $row ['visao_servico_servico'] );
+                $ocorrencia->getUsuarioCliente()->setId( $row ['id_usuario_usuario_cliente'] );
+                $ocorrencia->getUsuarioCliente()->setNome( $row ['nome_usuario_usuario_cliente'] );
+                $ocorrencia->getUsuarioCliente()->setEmail( $row ['email_usuario_usuario_cliente'] );
+                $ocorrencia->getUsuarioCliente()->setLogin( $row ['login_usuario_usuario_cliente'] );
+                $ocorrencia->getUsuarioCliente()->setSenha( $row ['senha_usuario_usuario_cliente'] );
+                $ocorrencia->getUsuarioCliente()->setNivel( $row ['nivel_usuario_usuario_cliente'] );
+                $ocorrencia->getUsuarioCliente()->setIdSetor( $row ['id_setor_usuario_usuario_cliente'] );
+                $lista [] = $ocorrencia;
+
+	
+		    }
+    			    
+        } catch(PDOException $e) {
+            echo $e->getMessage();
+    			    
+        }
+		return $lista;
+    }
+       
     public function retornaListaPorStatus($status) {
         $lista = array ();
         $sql = "
