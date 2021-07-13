@@ -752,7 +752,7 @@ class OcorrenciaCustomController  extends OcorrenciaController {
 		}else{
 			echo '
 			<h3 class="pb-4 mb-4 font-italic border-bottom" data-toggle="collapse" data-target="#collapseAberto" href="#collapseAberto" aria-expanded="true">
-				Para continuar avalie os chamados fechados. 
+				Para continuar confirme os chamados fechados. 
             </h3>';//public function exibirLista($lista)
 			$this->view->exibirLista($listaNaoAvaliados);
 			

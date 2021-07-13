@@ -167,7 +167,7 @@ class StatusOcorrenciaCustomView extends StatusOcorrenciaView {
         echo '
     <!-- Button trigger modal -->
     <button type="button" '.$strDisable.'  id="avaliar-btn" acao="avaliar"  class="dropdown-item"  data-toggle="modal" data-target="#modalStatus">
-      Avaliar 
+      Confirmar 
     </button>
             
 ';

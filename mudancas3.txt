@@ -1,5 +1,5 @@
 - Caixa de texto para feedback na avaliação e outras alterações de status. 
-- Bloqueio de envio de chamados para quem possuir chamado fechado e não avaliado.
+
 
 - Aprimorar os filtros{ 
 	- Pesquisar por atendente; 
@@ -37,6 +37,8 @@
 - Permitir editar patrimonio; 
 - Enviar e-mail para o e-mail do setor em editar area responsavel da ocorrencia; 
 - Erro de load ao receber mensagem falsa na mudnaça de status e ao errar senha;
+- Bloqueio de envio de chamados para quem possuir chamado fechado e não avaliado.
+
 
 - Filtros; 
 - Permitir editar setor responsável; (Adm)
