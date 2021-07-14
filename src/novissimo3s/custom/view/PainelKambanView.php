@@ -142,7 +142,7 @@ class PainelKambanView extends OcorrenciaCustomView
 
     public function exibirCartao(Ocorrencia $chamado, $class = 6, $atendentes = array())
     {
-        echo '<div class="col-sm-12 col-md-12 col-xl-'.$class.'">';
+        echo '<div class="col-sm-12 col-md-6 col-xl-6">';
         $bgCard = "";
         $link = "text-light font-weight-bold p-3";
         $texto = "text-black-50";
