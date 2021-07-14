@@ -1,16 +1,14 @@
 - Caixa de texto para feedback na avaliação e outras alterações de status. 
 
+- Painel Kamban{
+
+	- Tela expandida no kamban; 
+}
 
 - Aprimorar os filtros{ 
 	- Pesquisar por atendente; 
 	- Pesquisar pelo intervalo de data de (Abertura)
 	- Pesquisar chamandos pela area responsável;
-}
-
-- Painel Kamban{
-	- Técnico Responsável no painel kanban;
-	- Data de abertura no kamban; 
-	- Tela expandida no kamban; 
 }
 
 - React {
@@ -38,7 +36,12 @@
 - Enviar e-mail para o e-mail do setor em editar area responsavel da ocorrencia; 
 - Erro de load ao receber mensagem falsa na mudnaça de status e ao errar senha;
 - Bloqueio de envio de chamados para quem possuir chamado fechado e não avaliado.
-
+- Painel Kamban{
+	- Técnico Responsável no painel kanban;
+    - Data de abertura;
+    - Data de atendimento;
+    - Data de fechamento;
+}
 
 - Filtros; 
 - Permitir editar setor responsável; (Adm)

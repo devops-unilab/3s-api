@@ -13,16 +13,31 @@ use novissimo3s\custom\controller\StatusOcorrenciaCustomController;
 use novissimo3s\dao\UsuarioDAO;
 
 
-class PainelKambanView
+class PainelKambanView extends OcorrenciaCustomView
 {
 
     private $matrixStatus; 
     private $dao; 
     
-    public function mostrarQuadro($listaDeChamados, $matrixStatus = array())
+    public function formFiltro($listaAreas){
+        
+        
+        echo '
+                <select name="setor" id="select-setores">
+                    <option value="">Filtrar por Setor</option>';
+        foreach($listaAreas as $areaResponsavel){
+            echo '<option value="'.$areaResponsavel->getId().'">'.$areaResponsavel->getNome().'</option>';
+        }
+        echo '
+                </select>';
+        
+        
+    }
+    
+    public function mostrarQuadro($listaDeChamados, $atendentes = array())
     {        
         $this->dao = new UsuarioDAO();
-        $this->matrixStatus = $matrixStatus;
+        $this->matrixStatus = array();
         
         echo '
 
@@ -46,7 +61,7 @@ class PainelKambanView
                 || $chamado->getStatus() == StatusOcorrenciaCustomController::STATUS_REABERTO 
                 || $chamado->getStatus() == StatusOcorrenciaCustomController::STATUS_RESERVADO)
             {
-                $this->exibirCartao($chamado);
+                $this->exibirCartao($chamado, null, $atendentes);
             }
         }
         
@@ -76,7 +91,7 @@ class PainelKambanView
                 ||  $chamado->getStatus() == StatusOcorrenciaCustomController::STATUS_AGUARDANDO_ATIVO
                 ||  $chamado->getStatus() == StatusOcorrenciaCustomController::STATUS_AGUARDANDO_USUARIO)
             {
-                $this->exibirCartao($chamado);
+                $this->exibirCartao($chamado, null, $atendentes);
             }
         }
 
@@ -106,7 +121,7 @@ class PainelKambanView
             if($chamado->getStatus() == StatusOcorrenciaCustomController::STATUS_FECHADO
                 || $chamado->getStatus() == StatusOcorrenciaCustomController::STATUS_FECHADO_CONFIRMADO
                 ){
-                $this->exibirCartao($chamado);
+                $this->exibirCartao($chamado, null,  $atendentes);
             }
         }
         
@@ -125,7 +140,7 @@ class PainelKambanView
     }
 
 
-    public function exibirCartao(Ocorrencia $chamado, $class = 6)
+    public function exibirCartao(Ocorrencia $chamado, $class = 6, $atendentes = array())
     {
         echo '<div class="col-sm-12 col-md-12 col-xl-'.$class.'">';
         $bgCard = "";
@@ -175,7 +190,7 @@ class PainelKambanView
         
         
         echo '
-                        <div class="card draggable shadow-sm '.$bgCard.'"  style="height: 250px;">
+                        <div class="card draggable shadow-sm '.$bgCard.'"  style="height: 260px;">
                             <div class="card-body p-2">
                                 <div class="card-title">
 
@@ -206,80 +221,35 @@ class PainelKambanView
         $ocorrenciaView = new OcorrenciaCustomView();
         echo '<small  class="'.$texto.'">'.$ocorrenciaView->getStrStatus($chamado->getStatus()).'</small>';
         
-        
-        
-//         if($chamado->getIdUsuarioAtendente() > 0){
-//             $usuario = new Usuario();
-//             $usuario->setId($chamado->getIdUsuarioAtendente());
-//             $nomeAtendente = explode(" ", "TEste");
-//             if(count($nomeAtendente) > 1){
-//                 echo '<br><small class="'.$texto.'">Atendente: '.ucfirst(strtolower($nomeAtendente[0])).' '.ucfirst(strtolower($nomeAtendente[1])).'</small>';
-//             }
-//         }
-        $abertura = "";
-        $dataAtendimento = "";
-        
-        if(isset($this->matrixStatus[$chamado->getId()])){
-            foreach($this->matrixStatus[$chamado->getId()] as $elemento){
-                if($abertura == ""){
-                    $abertura = $elemento->getDataMudanca();
-                }
-                if($dataAtendimento == ""){
-                    if($elemento->getStatus()->getSigla() == StatusOcorrenciaCustomController::STATUS_ATENDIMENTO){
-                        $dataAtendimento = $elemento->getDataMudanca();
-                    }
-                }
+       
+
+        if($chamado->getStatus() == StatusOcorrenciaCustomController::STATUS_RESERVADO){
+            if($chamado->getIdUsuarioIndicado() != null){
+                $nome = $atendentes[$chamado->getIdUsuarioIndicado()]->getNome();
+                $nome = explode(" ", $nome);
             }
+            echo '<br><small class="'.$texto.'">Indicado: '.ucfirst(strtolower("Jefferson")).' '.ucfirst(strtolower("Ponte")).'</small>';
+        } else if($chamado->getStatus() != StatusOcorrenciaCustomController::STATUS_ABERTO){
+            if($chamado->getIdUsuarioAtendente() != null){
+                $nome = $atendentes[$chamado->getIdUsuarioAtendente()]->getNome();
+                $nome = explode(" ", $nome);
+            }
+            echo '<br><small class="'.$texto.'">Atendente: '.ucfirst(strtolower("Jefferson")).' '.ucfirst(strtolower("Ponte")).'</small>';
+        }
+
+        
+                
+        echo '<br><small class="'.$texto.'">Aberto em '.date("d/m/Y G:i:s",strtotime($chamado->getDataAbertura())).' </small>';
+        
+        if($chamado->getDataAtendimento() != null){
+            echo '<br><small class="'.$texto.'">Atendido em '.date("d/m/Y G:i:s",strtotime( $chamado->getDataAtendimento())).' </small>';
+        }
+        if($chamado->getDataFechamento() != null){
+            echo '<br><small class="'.$texto.'">Fechado em '.date("d/m/Y G:i:s",strtotime( $chamado->getDataFechamento())).' </small>';
         }
         
         
-//         if($chamado->getStatus() == StatusOcorrenciaCustomController::STATUS_ABERTO 
-//             || $chamado->getStatus() == StatusOcorrenciaCustomController::STATUS_REABERTO 
-//             || $chamado->getStatus() == StatusOcorrenciaCustomController::STATUS_FECHADO_CONFIRMADO){
-                
-            
-//                 $timeAbert = strtotime($abertura);
-//                 $timeHoje =  time();
-//                 $diferenca = $timeHoje - $timeAbert;
-//                 $dias = $diferenca/(86400);
-//                 $resto = $diferenca % 86400;
-//                 $resto = intval($resto/(60*60));
-//                 echo '<br><small class="'.$texto.'">Aberto há '.intval($dias).' dia';
-//                 if($dias > 1){
-//                     echo 's';
-//                     if(isset($resto)){
-                        
-//                         echo ' e '.$resto.' horas';
-//                     }
-//                 }else if($dias < 1){
-//                     echo ' e '.$resto.' horas';
-//                 }
-//                 echo '</small>';
-            
-            
-//         }
-//         if($chamado->getStatus() == StatusOcorrenciaCustomController::STATUS_ATENDIMENTO 
-//             || $chamado->getStatus() == StatusOcorrenciaCustomController::STATUS_EM_ESPERA 
-//             || $chamado->getStatus() == StatusOcorrenciaCustomController::STATUS_AGUARDANDO_ATIVO
-//             || $chamado->getStatus() == StatusOcorrenciaCustomController::STATUS_AGUARDANDO_USUARIO){
-            
-//             $timeAbert = strtotime($dataAtendimento);
-//             $timeHoje =  time();
-//             $diferenca = $timeHoje - $timeAbert;
-//             $dias = $diferenca/(86400);
-//             $resto = $diferenca % 86400;
-//             $resto = intval($resto/(60*60));
-//             echo '<br><small class="'.$texto.'">Em atendimento há '.intval($dias).' dia';
-//             if($dias > 1){
-//                 echo 's';
-//                 if(isset($resto)){   
-//                     echo ' e '.$resto.' horas';
-//                 }
-//             }
-//             echo '</small>';
-            
-            
-//         }
+                    
         echo '
                             </div>
                         </div>
