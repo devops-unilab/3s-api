@@ -228,22 +228,20 @@ class PainelKambanView extends OcorrenciaCustomView
                 $nome = $atendentes[$chamado->getIdUsuarioIndicado()]->getNome();
                 $nome = explode(" ", $nome);
             }
-            echo '<br><small class="'.$texto.'">Indicado: '.ucfirst(strtolower("Jefferson")).' '.ucfirst(strtolower("Ponte")).'</small>';
+            echo '<br><small class="'.$texto.'">Responsável: '.ucfirst(strtolower("Jefferson")).' '.ucfirst(strtolower("Ponte")).'</small>';
         } else if($chamado->getStatus() != StatusOcorrenciaCustomController::STATUS_ABERTO){
             if($chamado->getIdUsuarioAtendente() != null){
                 $nome = $atendentes[$chamado->getIdUsuarioAtendente()]->getNome();
                 $nome = explode(" ", $nome);
             }
-            echo '<br><small class="'.$texto.'">Atendente: '.ucfirst(strtolower("Jefferson")).' '.ucfirst(strtolower("Ponte")).'</small>';
+            echo '<br><small class="'.$texto.'">Responsável: '.ucfirst(strtolower("Jefferson")).' '.ucfirst(strtolower("Ponte")).'</small>';
         }
 
         
                 
         echo '<br><small class="'.$texto.'">Aberto em '.date("d/m/Y G:i:s",strtotime($chamado->getDataAbertura())).' </small>';
         
-        if($chamado->getDataAtendimento() != null){
-            echo '<br><small class="'.$texto.'">Atendido em '.date("d/m/Y G:i:s",strtotime( $chamado->getDataAtendimento())).' </small>';
-        }
+        
         if($chamado->getDataFechamento() != null){
             echo '<br><small class="'.$texto.'">Fechado em '.date("d/m/Y G:i:s",strtotime( $chamado->getDataFechamento())).' </small>';
         }

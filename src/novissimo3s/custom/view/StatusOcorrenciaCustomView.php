@@ -101,7 +101,7 @@ class StatusOcorrenciaCustomView extends StatusOcorrenciaView {
             }
             
             echo '
-            <input type="hidden" value="5" name="avaliacao" id="campo-avaliacao">
+            <input type="hidden" value="0" name="avaliacao" id="campo-avaliacao">
             
           </div>
           <div class="form-group">
@@ -254,7 +254,7 @@ class StatusOcorrenciaCustomView extends StatusOcorrenciaView {
         echo '
     <!-- Button trigger modal -->
     <button id="botao-editar-patrimonio" type="button" acao="editar_patrimonio"  class="dropdown-item text-right"   data-toggle="modal" data-target="#modalStatus">
-      Editar Solução
+      Editar Patrimônio
     </button>
             
 ';
