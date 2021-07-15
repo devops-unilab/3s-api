@@ -10,8 +10,6 @@ use novissimo3s\controller\ServicoController;
 use novissimo3s\custom\dao\ServicoCustomDAO;
 use novissimo3s\custom\view\ServicoCustomView;
 use novissimo3s\model\Servico;
-use novissimo3s\dao\TipoAtividadeDAO;
-use novissimo3s\dao\AreaResponsavelDAO;
 use novissimo3s\custom\dao\TipoAtividadeCustomDAO;
 use novissimo3s\custom\dao\AreaResponsavelCustomDAO;
 use novissimo3s\custom\dao\GrupoServicoCustomDAO;

@@ -4,7 +4,9 @@
 
 
 $(document).ready(function(e){
-
+	
+	modificarTela();
+	
 	var urlTabela = 'index.php/?ajax=painel_kamban';
 	var urlSelecionada = urlTabela;
 	
@@ -21,9 +23,12 @@ $(document).ready(function(e){
 	});
 		
 	$("#btn-expandir-tela").on('click', function(e){
+		modificarTela();
+	});
+	function modificarTela(){
 		$( "main" ).toggleClass("container");
 		$( "#cabecalho" ).toggleClass("escondido");
-	});
+	}
 	
 	function carregarDados(url2){
 		

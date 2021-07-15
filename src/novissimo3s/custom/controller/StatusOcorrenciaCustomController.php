@@ -24,7 +24,6 @@ use novissimo3s\custom\dao\ServicoCustomDAO;
 use novissimo3s\model\Servico;
 use novissimo3s\util\Mail;
 use novissimo3s\custom\dao\AreaResponsavelCustomDAO;
-use novissimo3s\custom\view\OcorrenciaCustomView;
 use novissimo3s\model\AreaResponsavel;
 
 class StatusOcorrenciaCustomController  extends StatusOcorrenciaController {

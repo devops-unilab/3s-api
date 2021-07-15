@@ -197,7 +197,7 @@ echo '
                     break;
                 case 'painel_kamban':
                     echo '
-<script src="js/painel_kamban.js"></script>';
+<script src="js/painel_kamban.js?123=a"></script>';
                     break;
                 case 'painel_tabela':
                     echo '
