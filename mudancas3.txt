@@ -1,8 +1,5 @@
-- Caixa de texto para feedback na avaliação e outras alterações de status. 
-
-- Painel Kamban{
-
-	- Tela expandida no kamban; 
+- Caixa de texto para feedback em alterações de status. {
+	- Avaliação;
 }
 
 - Aprimorar os filtros{ 
@@ -18,7 +15,6 @@
 	- Chat; 
 	- Captcha;
 }
-
 
 
 - Utilização do LDAP; 
@@ -41,7 +37,14 @@
     - Data de abertura;
     - Data de atendimento;
     - Data de fechamento;
+	- Tela expandida no kamban; 
 }
+
+- Aprimorar os filtros{ 
+
+
+}
+
 
 - Filtros; 
 - Permitir editar setor responsável; (Adm)
