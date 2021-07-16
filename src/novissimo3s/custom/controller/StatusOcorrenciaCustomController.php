@@ -933,6 +933,7 @@ class StatusOcorrenciaCustomController  extends StatusOcorrenciaController {
 	    
 	    $destinatario = $this->statusOcorrencia->getOcorrencia()->getEmail();
 	    $nome = $this->statusOcorrencia->getOcorrencia()->getUsuarioCliente()->getNome();
+        //Cliente do chamado
 	    $mail->enviarEmail($destinatario, $nome, $assunto, $saldacao.$corpo);
 	    
 	    $usuarioDao = new UsuarioDAO($this->dao->getConnection());
@@ -940,7 +941,7 @@ class StatusOcorrenciaCustomController  extends StatusOcorrenciaController {
 		
 		$destinatario = $this->statusOcorrencia->getOcorrencia()->getAreaResponsavel()->getEmail();
 		$nome = $this->statusOcorrencia->getOcorrencia()->getAreaResponsavel()->getNome();
-		$mail->enviarEmail($destinatario, $nome, $assunto, $saldacao.$corpo);
+		$mail->enviarEmail($destinatario, $nome, $assunto, $saldacao.$corpo);//Email para area responsavel
 		
 
 	    if($this->statusOcorrencia->getOcorrencia()->getIdUsuarioAtendente() != null){

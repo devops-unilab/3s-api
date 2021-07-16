@@ -227,14 +227,16 @@ class PainelKambanView extends OcorrenciaCustomView
             if($chamado->getIdUsuarioIndicado() != null){
                 $nome = $atendentes[$chamado->getIdUsuarioIndicado()]->getNome();
                 $nome = explode(" ", $nome);
+                echo '<br><small class="'.$texto.'">Responsável: '.ucfirst(strtolower($nome[0])).' '.ucfirst(strtolower($nome[1])).'</small>';
             }
-            echo '<br><small class="'.$texto.'">Responsável: '.ucfirst(strtolower("Jefferson")).' '.ucfirst(strtolower("Ponte")).'</small>';
+            
         } else if($chamado->getStatus() != StatusOcorrenciaCustomController::STATUS_ABERTO){
             if($chamado->getIdUsuarioAtendente() != null){
                 $nome = $atendentes[$chamado->getIdUsuarioAtendente()]->getNome();
                 $nome = explode(" ", $nome);
+                echo '<br><small class="'.$texto.'">Responsável: '.ucfirst(strtolower($nome[0])).' '.ucfirst(strtolower($nome[1])).'</small>';
             }
-            echo '<br><small class="'.$texto.'">Responsável: '.ucfirst(strtolower("Jefferson")).' '.ucfirst(strtolower("Ponte")).'</small>';
+            
         }
 
         
