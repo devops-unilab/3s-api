@@ -1,6 +1,8 @@
-- Caixa de texto para feedback em alterações de status. {
-	- Avaliação;
-}
+
+
+- Deixar o Campo patrimonio preenchido com o valor atual antes de editar; 
+
+- Deixar fonte do status igual a do botão de alterar status. 
 
 - Aprimorar os filtros{ 
 	- Pesquisar por atendente; 
@@ -8,21 +10,22 @@
 	- Pesquisar chamandos pela area responsável;
 }
 
-- React {
+- Caixa de texto para feedback em alterações de status. {
+	- Avaliação;
+}
 
+
+
+- React {
 	- Aviso para nova mensagem em ocorrencia em atendimento por ele; 
 	- Nova ocorrência reservada;
 	- Chat; 
 	- Captcha;
 }
-
-
 - Utilização do LDAP; 
 	- Listar os dados necessários da base para autenticação; 
 	- Usa captcha; 
 	- Chave JWT;
-
-
 - Corrigir bug do cash no firefox;
 
 
@@ -33,15 +36,20 @@
 - Erro de load ao receber mensagem falsa na mudnaça de status e ao errar senha;
 - Bloqueio de envio de chamados para quem possuir chamado fechado e não avaliado.
 - Painel Kamban{
+    - Tela expandida no kamban; 
 	- Técnico Responsável no painel kanban;
     - Data de abertura;
-    - Data de atendimento;
     - Data de fechamento;
-	- Tela expandida no kamban; 
+	
 }
+- Ver bug que surgiu no kamban, classe não encontrada; 
+
+
+- Bug da estrela(
+    O usuário não clicando está avaliando em 5, o que era pra ser zero
+); 
 
 - Aprimorar os filtros{ 
-
 
 }
 
