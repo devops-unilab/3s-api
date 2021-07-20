@@ -398,7 +398,12 @@ class StatusOcorrenciaCustomController  extends StatusOcorrenciaController {
 </div>
 
 
-<h3 class="alert-heading">Status:  '.$status->getNome().'</h4>
+<button class="btn btn-light btn-lg p-2" type="button" disabled>
+    Status:  '.$status->getNome().'
+</button>
+
+
+
 
 </div>
 </div>
