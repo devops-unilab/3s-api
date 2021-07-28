@@ -1,7 +1,6 @@
 function filtroBasico(){
 
 	var query = location.search.slice(1);
-	
 	var partes = query.split('&');
 	var data = {};
 	if(partes.length > 1){
@@ -17,7 +16,6 @@ function filtroBasico(){
 
 
 	if($("#filtro-meu-setor").is(':checked')){
-		
 		data['setor'] = $("#meu-setor").val();
 	}else{
 		delete data['setor']; 
@@ -30,32 +28,85 @@ function filtroBasico(){
 	if($("#filtro-minhas-solicitacoes").is(':checked')){
 		data['solicitacao'] = '1';
 	}else{
-		delete data['solicitacao'];
+		delete data['solicitacao']; 
 	}
+	
+	if($("#select-tecnico").val() != ""){
+		data['tecnico'] = $("#select-tecnico").val();
+	}else{
+		delete data['tecnico']; 
+	}
+	
+	/*
+	if($('#select-setores-filtro').val() != ""){
+		data['setores_requisitantes'] = $('#select-setores-filtro').val();
+	}else{
+		delete data['setores_requisitantes']; 
+	}
+	*/
+	
+	if($('#select-setores-filtro2').val() != ""){
+		data['setores_responsaveis'] = $('#select-setores-filtro2').val();
+	}else{
+		delete data['setores_responsaveis'];
+	}
+	if($('#filtro-data-1').val() != ""){
+		data['data_abertura1'] = $('#filtro-data-1').val();
+	}else{
+		delete data['data_abertura1'];
+	}
+	if($('#filtro-data-2').val() != ""){
+		data['data_abertura2'] = $('#filtro-data-2').val();
+	}else{
+		delete data['data_abertura2'];
+	}
+	
+	data['campus'] = [];
+	if($('#filtro-campus-males').is(':checked')){
+		data['campus'].push('males');
+	}
+	if($('#filtro-campus-auroras').is(':checked')){
+		data['campus'].push('auroras');
+	}
+	if($('#filtro-campus-palmares').is(':checked')){
+		data['campus'].push('palmares');
+	}
+	if($('#filtro-campus-liberdade').is(':checked')){
+		data['campus'].push('liberdade');
+	}
+
 	
 	var novaUrl = '';
 	var i = 0;
 	
 	Object.keys(data).forEach(function (key) {
 		
-		console.log(key);
-		if(i != 0){
-			novaUrl += '&';
+		if(data[key] != ""){
+			
+		
+			if(i != 0){
+				novaUrl += '&';
+			}
+			novaUrl += key+'='+data[key];
+			i++;
 		}
-		novaUrl += key+'='+data[key];
-		i++;
 	});
-	console.log(novaUrl);
+	
 	if(novaUrl == ""){
 		window.location.href = ".";
 		
 	}else{
 		window.location.href = "?"+novaUrl;	
 	}
+	
 }
 $(document).ready(
 	function(){
 		$('#form-filtro-basico').change(filtroBasico);
+		$('#form-filtro-avancado').focusout(filtroBasico);
+		$('#form-filtro-campus').change(filtroBasico);
+		
+		
 	}
 );
 

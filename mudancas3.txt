@@ -1,12 +1,19 @@
 - Aprimorar os filtros{ 
-	- Pesquisar por atendente; 
-	- Pesquisar pelo intervalo de data de (Abertura)
-	- Pesquisar chamandos pela area responsável;
+	    - Pesquisar por atendente; 
+	    - Pesquisar pelo intervalo de data de (Abertura)
+	    - Pesquisar chamandos pela area responsável;
 }
 
 - Caixa de texto para feedback em alterações de status. {
 	- Avaliação;
 }
+
+
+
+
+
+
+
 
 
 

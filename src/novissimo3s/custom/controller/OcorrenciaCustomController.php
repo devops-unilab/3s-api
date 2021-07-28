@@ -511,6 +511,17 @@ class OcorrenciaCustomController  extends OcorrenciaController {
         $areaResponsavelDao = new AreaResponsavelCustomDAO();
         $areaResponsavelDao->fillById($setor);
         
+        
+        $usuario = new Usuario();
+        $usuario->setNivel(Sessao::NIVEL_TECNICO);
+        $listaTecnicos = $usuarioDao->fetchByNivel($usuario);
+        $usuario->setNivel(Sessao::NIVEL_ADM);
+        $listaTecnicos2 = $usuarioDao->fetchByNivel($usuario);
+        $listaTecnicos = array_merge($listaTecnicos, $listaTecnicos2);
+        
+        
+        $listaAreas = $areaResponsavelDao->fetch();
+        
         $checkedSetor = "";
         if(isset($_GET['setor'])){
             $checkedSetor = 'checked';
@@ -523,9 +534,44 @@ class OcorrenciaCustomController  extends OcorrenciaController {
         if(isset($_GET['solicitacao'])){
             $checkedSolicitacao = 'checked';
         }
+        
+        
+        $checkedLiberdade = "";
+        $checkedAuroras = "";
+        $checkedPalmares = "";
+        $checkedMales = "";
+        if(isset($_GET['campus'])){
+            $listaCampus = explode(",", $_GET['campus']);
+            foreach($listaCampus as $campus){
+                switch($campus){
+                    case 'liberdade':
+                        $checkedLiberdade = "checked";
+                        break;
+                    case 'auroras':
+                        $checkedAuroras = "checked";
+                        break;
+                    case 'palmares':
+                        $checkedPalmares = "checked";
+                        break;
+                    case 'males':
+                        $checkedMales = "checked";
+                        break;
+                }
+            }
+        }
+        $dataAbertura1 = "";
+        $dataAbertura2 = "";
+        
+        if(isset($_GET['data_abertura1'])){
+            $dataAbertura1 = $_GET['data_abertura1'];
+        }
+        if(isset($_GET['data_abertura2'])){
+            $dataAbertura2 = $_GET['data_abertura2'];
+        }
+        
 	    echo '
                 <div class="p-4 mb-3 bg-light rounded">
-                    <h4 class="font-italic">Filtros Básicos</h4>
+                    <h4 class="font-italic">Filtros</h4>
                         <form id="form-filtro-basico">
 
                             <input type="hidden" value="'.$setor->getId().'" id="meu-setor" name="meu-setor">
@@ -542,31 +588,97 @@ class OcorrenciaCustomController  extends OcorrenciaController {
 
     
 
-                            <div class="custom-control custom-switch">
+                            <div class="custom-control custom-switch mb-3">
                               <input type="checkbox" class="custom-control-input" id="filtro-minhas-solicitacoes" '.$checkedSolicitacao.'>
                               <label class="custom-control-label" for="filtro-minhas-solicitacoes">Minhas Solicitações</label>
                             </div>
-
-                        </form>';
-	    /*
+                        
+                        
+                            <div class="form-group">
+                                <label for="select-tecnico">Técnico Responsável</label>
+                                <select id="select-tecnico">
+                                  <option value="">Selecione um atendente</option>';
+	    foreach($listaTecnicos as $tecnico){
+	        $selectedAtt = '';
+	        if(isset($_GET['tecnico'])){
+	            if($tecnico->getId() == $_GET['tecnico']){
+	                $selectedAtt = 'selected';
+	            }
+	        }
+	        echo '
+                                  <option value="'.$tecnico->getId().'" '.$selectedAtt.'>'.$tecnico->getNome().'</option>';
+	    }
+	    
 	    echo '
-                        <hr>
+                                </select>
+                              </div>
+                        </form>
+                        <form id="form-filtro-avancado"> 
+                        <hr/>
+<!--
+                            <div class="form-group">
+                                <label for="filtro-data-1">Setor Requisitante</label>
+                                <select id="select-setores-filtro">
+                                  <option value="">Selecione o Setor</option>';
+	    foreach($listaAreas as $area){
+	        
+	        echo '
+                                    <option value="'.$area->getId().'">'.$area->getNome().'</option>';
+	    }
+	    echo '
+                                  
+                                </select>
+                              </div>
+-->
+
+                            <div class="form-group">
+                                <label for="filtro-data-1">Setor Responsável</label>
+                                <select id="select-setores-filtro2">
+                                  <option value="">Selecione o Solicitante</option>';
+	    foreach($listaAreas as $area){
+	        echo '
+                                    <option value="'.$area->getId().'">'.$area->getNome().'</option>';
+	    }
+	    echo '
+                                  
+                                </select>
+                              </div>
+
+<hr>
+                            <label for="filtro-data-1">Data de Abertura</label>
+                            <div class="form-row">
+                                <div class="col-md-6 mb-3">
+                                  <label for="filtro-data-1">Data Inicial</label>
+                                  <input type="date" class="form-control" id="filtro-data-1" name="filtro-data-1" value="'.$dataAbertura1.'">
+
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                  <label for="filtro-data-2">Data Final</label>
+                                  <input type="date" class="form-control" id="filtro-data-2" name="filtro-data-2" value="'.$dataAbertura2.'">
+
+                                </div>
+                              </div>
+
+                            </form>
+                            <form id="form-filtro-campus">
+                         <hr>
+                        <label for="filtro-data-1">Campus</label>
                         <div class="form-check">
-                          <input class="form-check-input" type="checkbox" value="" id="filtro-campus-liberdade">
+                          <input class="form-check-input" type="checkbox" value="" id="filtro-campus-liberdade" '.$checkedLiberdade.'>
                           <label class="form-check-label" for="filtro-campus-liberdade">
                             Liberdade
                           </label>
                         </div>
 
                         <div class="form-check">
-                          <input class="form-check-input" type="checkbox" value="" id="filtro-campus-palmares">
+                          <input class="form-check-input" type="checkbox" value="" id="filtro-campus-palmares" '.$checkedPalmares.'>
                           <label class="form-check-label" for="filtro-campus-palmares">
                             Palmares
                           </label>
                         </div>
 
                         <div class="form-check">
-                          <input class="form-check-input" type="checkbox" value="" id="filtro-campus-auroras">
+                          <input class="form-check-input" type="checkbox" value="" id="filtro-campus-auroras" '.$checkedAuroras.'>
                           <label class="form-check-label" for="filtro-campus-auroras">
                             Auroras
                           </label>
@@ -574,13 +686,14 @@ class OcorrenciaCustomController  extends OcorrenciaController {
 
 
                         <div class="form-check">
-                          <input class="form-check-input" type="checkbox" value="" id="filtro-campus-males">
-                          <label class="form-check-label" for="filtro-campus-males">
+                          <input class="form-check-input" type="checkbox" value="" id="filtro-campus-males" '.$checkedMales.'>
+                          <label class=""font-weight-normal" for="filtro-campus-males">
                             Malês
                           </label>
-                        </div>';
-                        */
-	    echo '
+                        </div>
+
+
+                        </form>
 
 
     
