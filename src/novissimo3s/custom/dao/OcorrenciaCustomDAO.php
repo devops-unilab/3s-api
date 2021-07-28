@@ -529,15 +529,79 @@ class  OcorrenciaCustomDAO extends OcorrenciaDAO {
         $idUsuario = $sessao->getIdUsuario();
         
         if(isset($arrayFiltros['demanda'])){
-
+            
             $arrPedacos[] = "
             (ocorrencia.id_usuario_indicado  = $idUsuario OR ocorrencia.id_usuario_atendente  = $idUsuario)";
+            
+        }else if(isset($arrayFiltros['tecnico'])){
+            
+            $idUsuario = $arrayFiltros['tecnico'];
+            $arrPedacos[] = "
+            (ocorrencia.id_usuario_indicado  = $idUsuario OR ocorrencia.id_usuario_atendente  = $idUsuario)";
+            
         }
         if(isset($arrayFiltros['solicitacao'])){
             $arrPedacos[] = "
             ocorrencia.id_usuario_cliente  = $idUsuario ";
         }
-
+        
+       
+        if(isset($arrayFiltros['data_abertura1']) && isset($arrayFiltros['data_abertura2'])){
+            $data1 = $arrayFiltros['data_abertura1'];
+            $data2 = $arrayFiltros['data_abertura2'];
+            $arrPedacos[] = "
+            (ocorrencia.data_abertura BETWEEN  '$data1' AND '$data2') ";
+            
+        }else{
+            if(isset($arrayFiltros['data_abertura1'])){
+                $data1 = $arrayFiltros['data_abertura1'];
+                $arrPedacos[] = "
+            (ocorrencia.data_abertura >= '$data1') ";
+            }
+            if(isset($arrayFiltros['data_abertura2'])){
+                $data2 = $arrayFiltros['data_abertura2'];
+                $arrPedacos[] = "
+            (ocorrencia.data_abertura <= '$data2') ";
+            }
+        }
+        
+        if(isset($arrayFiltros['campus'])){
+            $campusArr = explode(",", $arrayFiltros['campus']);
+            $strWhereCampus = array();
+            foreach($campusArr as $campusStr){
+                switch($campusStr){
+                    case 'liberdade':
+                        $strWhereCampus[] = " (ocorrencia.campus = 'liberdade') ";
+                        break;
+                    case 'palmares':
+                        $strWhereCampus[] = " (ocorrencia.campus = 'palmares') ";
+                        break;
+                    case 'auroras':
+                        $strWhereCampus[] = " (ocorrencia.campus = 'auroras') ";
+                        break;
+                    case 'males':
+                        $strWhereCampus[] = " (ocorrencia.campus = 'males') ";
+                        break;
+                }
+            }
+            $arrPedacos[] = '('.implode(" OR ", $strWhereCampus).')';
+            
+        }
+        if(isset($arrayFiltros['setores_responsaveis'])){
+            $areas = explode(",", $arrayFiltros['setores_responsaveis']);
+            $strWhereAreas = array();
+            foreach($areas as $idArea){
+                $idArea = intval($idArea);
+                $strWhereAreas[] = " (area_responsavel.id = $idArea) ";
+                
+            }
+            $arrPedacos[] = '('.implode(" OR ", $strWhereAreas).')';
+            
+        }
+        
+        
+        
+        
         $filtro = implode(" AND ", $arrPedacos);
         return $filtro;
         
@@ -565,12 +629,12 @@ class  OcorrenciaCustomDAO extends OcorrenciaDAO {
             ocorrencia.solucao,
             ocorrencia.prioridade, ocorrencia.avaliacao, ocorrencia.email,
             ocorrencia.id_usuario_atendente, ocorrencia.id_usuario_indicado,
-            ocorrencia.anexo, ocorrencia.local_sala,
+            ocorrencia.anexo, ocorrencia.local_sala, ocorrencia.data_abertura,
             area_responsavel.id as id_area_responsavel_area_responsavel,
             area_responsavel.nome as nome_area_responsavel_area_responsavel,
             area_responsavel.descricao as descricao_area_responsavel_area_responsavel, area_responsavel.email as email_area_responsavel_area_responsavel, servico.id as id_servico_servico, servico.nome as nome_servico_servico, servico.descricao as descricao_servico_servico, servico.tempo_sla as tempo_sla_servico_servico, servico.visao as visao_servico_servico,
             usuario_cliente.id as id_usuario_usuario_cliente,
-             usuario_cliente.nome as nome_usuario_usuario_cliente, usuario_cliente.email as email_usuario_usuario_cliente,
+            usuario_cliente.nome as nome_usuario_usuario_cliente, usuario_cliente.email as email_usuario_usuario_cliente,
             usuario_cliente.login as login_usuario_usuario_cliente, usuario_cliente.senha as senha_usuario_usuario_cliente,
             usuario_cliente.nivel as nivel_usuario_usuario_cliente,
             usuario_cliente.id_setor as id_setor_usuario_usuario_cliente
@@ -584,7 +648,6 @@ class  OcorrenciaCustomDAO extends OcorrenciaDAO {
             ORDER BY ocorrencia.id DESC
             LIMIT 1000
 ";
-
 
         try {
             

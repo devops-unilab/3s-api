@@ -498,6 +498,69 @@ class OcorrenciaCustomController  extends OcorrenciaController {
             return false;
 	    }
 	}
+	public function filtroAvancado($listaAreas){
+
+	    $dataAbertura1 = "";
+	    $dataAbertura2 = "";
+	    
+	    if(isset($_GET['data_abertura1'])){
+	        $dataAbertura1 = $_GET['data_abertura1'];
+	    }
+	    if(isset($_GET['data_abertura2'])){
+	        $dataAbertura2 = $_GET['data_abertura2'];
+	    }
+	    echo '
+                        <hr/>
+                        <form id="form-filtro-avancado">';
+
+//         echo '
+//                             <div class="form-group">
+//                                 <label for="filtro-data-1">Setor Requisitante</label>
+//                                 <select id="select-setores-filtro">
+//                                   <option value="">Selecione o Setor</option>';
+// 	    foreach($listaAreas as $area){
+	        
+// 	        echo '
+//                                     <option value="'.$area->getId().'">'.$area->getNome().'</option>';
+// 	    }
+// 	    echo '
+	        
+//                                 </select>
+//                               </div>';
+	    echo '
+
+	        
+                            <div class="form-group">
+                                <label for="filtro-data-1">Setor Responsável</label>
+                                <select id="select-setores-filtro2">
+                                  <option value="">Selecione o Solicitante</option>';
+	    foreach($listaAreas as $area){
+	        echo '
+                                    <option value="'.$area->getId().'">'.$area->getNome().'</option>';
+	    }
+	    echo '
+	        
+                                </select>
+                              </div>
+	        
+<hr>
+                            <label for="filtro-data-1">Data de Abertura</label>
+                            <div class="form-row">
+                                <div class="col-md-6 mb-3">
+                                  <label for="filtro-data-1">Data Inicial</label>
+                                  <input type="date" class="form-control" id="filtro-data-1" name="filtro-data-1" value="'.$dataAbertura1.'">
+                                      
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                  <label for="filtro-data-2">Data Final</label>
+                                  <input type="date" class="form-control" id="filtro-data-2" name="filtro-data-2" value="'.$dataAbertura2.'">
+                                      
+                                </div>
+                              </div>
+                                      
+                            </form>';
+	}
+
 	public function cardFiltro(){
 	    $sessao = new Sessao();
 	    
@@ -559,15 +622,7 @@ class OcorrenciaCustomController  extends OcorrenciaController {
                 }
             }
         }
-        $dataAbertura1 = "";
-        $dataAbertura2 = "";
         
-        if(isset($_GET['data_abertura1'])){
-            $dataAbertura1 = $_GET['data_abertura1'];
-        }
-        if(isset($_GET['data_abertura2'])){
-            $dataAbertura2 = $_GET['data_abertura2'];
-        }
         
 	    echo '
                 <div class="p-4 mb-3 bg-light rounded">
@@ -612,54 +667,9 @@ class OcorrenciaCustomController  extends OcorrenciaController {
 	    echo '
                                 </select>
                               </div>
-                        </form>
-                        <form id="form-filtro-avancado"> 
-                        <hr/>
-<!--
-                            <div class="form-group">
-                                <label for="filtro-data-1">Setor Requisitante</label>
-                                <select id="select-setores-filtro">
-                                  <option value="">Selecione o Setor</option>';
-	    foreach($listaAreas as $area){
-	        
-	        echo '
-                                    <option value="'.$area->getId().'">'.$area->getNome().'</option>';
-	    }
-	    echo '
-                                  
-                                </select>
-                              </div>
--->
-
-                            <div class="form-group">
-                                <label for="filtro-data-1">Setor Responsável</label>
-                                <select id="select-setores-filtro2">
-                                  <option value="">Selecione o Solicitante</option>';
-	    foreach($listaAreas as $area){
-	        echo '
-                                    <option value="'.$area->getId().'">'.$area->getNome().'</option>';
-	    }
-	    echo '
-                                  
-                                </select>
-                              </div>
-
-<hr>
-                            <label for="filtro-data-1">Data de Abertura</label>
-                            <div class="form-row">
-                                <div class="col-md-6 mb-3">
-                                  <label for="filtro-data-1">Data Inicial</label>
-                                  <input type="date" class="form-control" id="filtro-data-1" name="filtro-data-1" value="'.$dataAbertura1.'">
-
-                                </div>
-                                <div class="col-md-6 mb-3">
-                                  <label for="filtro-data-2">Data Final</label>
-                                  <input type="date" class="form-control" id="filtro-data-2" name="filtro-data-2" value="'.$dataAbertura2.'">
-
-                                </div>
-                              </div>
-
-                            </form>
+                        </form>';
+	    $this->filtroAvancado($listaAreas);
+        echo '
                             <form id="form-filtro-campus">
                          <hr>
                         <label for="filtro-data-1">Campus</label>
@@ -713,6 +723,22 @@ class OcorrenciaCustomController  extends OcorrenciaController {
 	    if(isset($_GET['solicitacao'])){
 	        $arrayFiltros['solicitacao'] = 1;
 	    }
+	    if(isset($_GET['tecnico'])){
+	        $arrayFiltros['tecnico'] = intval($_GET['tecnico']);
+	    }
+	    if(isset($_GET['data_abertura1'])){
+	        $arrayFiltros['data_abertura1'] = date("Y-m-d 01:01:01", strtotime($_GET['data_abertura1']));
+	    }
+	    if(isset($_GET['data_abertura2'])){
+	        $arrayFiltros['data_abertura2'] = date("Y-m-d 23:59:59", strtotime($_GET['data_abertura2']));
+	    }
+	    if(isset($_GET['campus'])){
+	        $arrayFiltros['campus'] = $_GET['campus'];
+	    }
+	    if(isset($_GET['setores_responsaveis'])){
+	        $arrayFiltros['setores_responsaveis'] = $_GET['setores_responsaveis'];
+	    }
+	    
 	    return $arrayFiltros;
 	    
 	}

@@ -37,13 +37,13 @@ function filtroBasico(){
 		delete data['tecnico']; 
 	}
 	
-	/*
-	if($('#select-setores-filtro').val() != ""){
+	
+	if($('#select-setores-filtro').val()){
 		data['setores_requisitantes'] = $('#select-setores-filtro').val();
 	}else{
 		delete data['setores_requisitantes']; 
 	}
-	*/
+	
 	
 	if($('#select-setores-filtro2').val() != ""){
 		data['setores_responsaveis'] = $('#select-setores-filtro2').val();
