@@ -541,6 +541,7 @@ class  OcorrenciaCustomDAO extends OcorrenciaDAO {
             
         }
         if(isset($arrayFiltros['solicitacao'])){
+            $idUsuario = $sessao->getIdUsuario();
             $arrPedacos[] = "
             ocorrencia.id_usuario_cliente  = $idUsuario ";
         }
