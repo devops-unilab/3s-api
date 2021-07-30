@@ -600,7 +600,17 @@ class  OcorrenciaCustomDAO extends OcorrenciaDAO {
             
         }
         
-        
+        if(isset($arrayFiltros['setores_requisitantes'])){
+            $areas = explode(",", $arrayFiltros['setores_requisitantes']);
+            $strWhereAreas = array();
+            foreach($areas as $idArea){
+                $idArea = intval($idArea);
+                $strWhereAreas[] = " (ocorrencia.id_local = $idArea) ";
+                
+            }
+            $arrPedacos[] = '('.implode(" OR ", $strWhereAreas).')';
+            
+        }
         
         
         $filtro = implode(" AND ", $arrPedacos);

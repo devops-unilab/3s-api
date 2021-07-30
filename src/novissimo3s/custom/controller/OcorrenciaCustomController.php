@@ -498,7 +498,7 @@ class OcorrenciaCustomController  extends OcorrenciaController {
             return false;
 	    }
 	}
-	public function filtroAvancado($listaAreas){
+	public function filtroAvancado($listaAreas, $listaRequisitantes){
 
 	    $dataAbertura1 = "";
 	    $dataAbertura2 = "";
@@ -513,20 +513,20 @@ class OcorrenciaCustomController  extends OcorrenciaController {
                         <hr/>
                         <form id="form-filtro-avancado">';
 
-//         echo '
-//                             <div class="form-group">
-//                                 <label for="filtro-data-1">Setor Requisitante</label>
-//                                 <select id="select-setores-filtro">
-//                                   <option value="">Selecione o Setor</option>';
-// 	    foreach($listaAreas as $area){
+        echo '
+                            <div class="form-group">
+                                <label for="filtro-data-1">Setor Requisitante</label>
+                                <select id="select-setores-filtro">
+                                  <option value="">Selecione o Setor</option>';
+        foreach($listaRequisitantes as $chave => $area){
 	        
-// 	        echo '
-//                                     <option value="'.$area->getId().'">'.$area->getNome().'</option>';
-// 	    }
-// 	    echo '
+	        echo '
+                                    <option value="'.$chave.'">'.$area.'</option>';
+	    }
+	    echo '
 	        
-//                                 </select>
-//                               </div>';
+                                </select>
+                              </div>';
 	    echo '
 
 	        
@@ -536,7 +536,7 @@ class OcorrenciaCustomController  extends OcorrenciaController {
                                   <option value="">Selecione o Solicitante</option>';
 	    foreach($listaAreas as $area){
 	        echo '
-                                    <option value="'.$area->getId().'">'.$area->getNome().'</option>';
+                                    <option value="'.trim($area->getId()).'">'.trim($area->getNome()).'</option>';
 	    }
 	    echo '
 	        
@@ -561,7 +561,7 @@ class OcorrenciaCustomController  extends OcorrenciaController {
                             </form>';
 	}
 
-	public function cardFiltro(){
+	public function cardFiltro($requisitantes){
 	    $sessao = new Sessao();
 	    
 	    $usuario = new Usuario();
@@ -668,7 +668,7 @@ class OcorrenciaCustomController  extends OcorrenciaController {
                                 </select>
                               </div>
                         </form>';
-	    $this->filtroAvancado($listaAreas);
+	    $this->filtroAvancado($listaAreas, $requisitantes);
         echo '
                             <form id="form-filtro-campus">
                          <hr>
@@ -737,6 +737,9 @@ class OcorrenciaCustomController  extends OcorrenciaController {
 	    }
 	    if(isset($_GET['setores_responsaveis'])){
 	        $arrayFiltros['setores_responsaveis'] = $_GET['setores_responsaveis'];
+	    }
+	    if(isset($_GET['setores_requisitantes'])){
+	        $arrayFiltros['setores_requisitantes'] = $_GET['setores_requisitantes'];
 	    }
 	    
 	    return $arrayFiltros;
@@ -813,9 +816,24 @@ class OcorrenciaCustomController  extends OcorrenciaController {
                     <div class="panel-group" id="accordion">';
 	    
 	    
-	    
 	    $this->exibirListagem($lista, $lista2, $listaAtrasados);
+	    $requisitantes = array();
+	    foreach($lista as $ocorrencia){
+	        $requisitantes[$ocorrencia->getIdLocal()] = $ocorrencia->getLocal();
+	    }
 	    
+	    foreach($lista2 as $ocorrencia){
+	        $requisitantes[$ocorrencia->getIdLocal()] = $ocorrencia->getLocal();
+	    }
+	    
+	    $requisitantes = array();
+	    foreach($lista as $ocorrencia){
+	        $requisitantes[$ocorrencia->getIdLocal()] = $ocorrencia->getLocal();
+	    }
+	    foreach($listaAtrasados as $ocorrencia){
+	        $requisitantes[$ocorrencia->getIdLocal()] = $ocorrencia->getLocal();
+	    }
+
 	    
 	    
 	    echo '
@@ -829,7 +847,7 @@ class OcorrenciaCustomController  extends OcorrenciaController {
 	        
             <aside class="col-md-4 blog-sidebar">';
 	    if($sessao->getNivelAcesso() == Sessao::NIVEL_ADM || $sessao->getNivelAcesso() == Sessao::NIVEL_TECNICO){
-	       $this->cardFiltro();    
+	       $this->cardFiltro($requisitantes);    
 	    }
 	    
 	    echo '
