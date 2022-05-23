@@ -56,10 +56,7 @@ class UsuarioCustomView extends UsuarioView {
     </div>
 </div>
 <br><br><br><br><br><br><br><br>
-<div class="d-flex justify-content-center text-center">
-Este sistema é melhor visualizado utilizando o navegador Google Chrome
-<i class="fa fa-chrome ml-3"></i>
-</div>
+
 
 ';
         
