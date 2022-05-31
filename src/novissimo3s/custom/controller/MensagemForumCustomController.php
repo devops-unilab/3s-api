@@ -110,7 +110,7 @@ class MensagemForumCustomController  extends MensagemForumController {
         
         
         $saldacao =  '<p>Prezado(a) ' . $ocorrencia->getUsuarioCliente()->getNome().' ,</p>';
-        $corpo = '<p>Avisamos que houve uma mensagem nova na solicitação Nº'.$ocorrencia->getId().'</p>';
+        $corpo = '<p>Avisamos que houve uma mensagem nova na solicitação <a href="https://3s.unilab.edu.br/?page=ocorrencia&selecionar='.$ocorrencia->getId().'">Nº'.$ocorrencia->getId().'</a></p>';
         
         $corpo .= '<ul>
 

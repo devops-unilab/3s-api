@@ -925,7 +925,7 @@ class StatusOcorrenciaCustomController  extends StatusOcorrenciaController {
 	    
 	    $saldacao =  '<p>Prezado(a) ' . $this->statusOcorrencia->getUsuario()->getNome().' ,</p>';
 	    
-	    $corpo = '<p>Avisamos que houve uma mudança no status da solicitação Nº'.$this->statusOcorrencia->getOcorrencia()->getId().'</p>';
+	    $corpo = '<p>Avisamos que houve uma mudança no status da solicitação <a href="https://3s.unilab.edu.br/?page=ocorrencia&selecionar='.$this->statusOcorrencia->getOcorrencia()->getId().'">Nº'.$this->statusOcorrencia->getOcorrencia()->getId().'</a></p>';
 	    $corpo .= $mensagem;
 	    $corpo .= '<ul>
                         <li>Serviço Solicitado: '. $this->statusOcorrencia->getOcorrencia()->getServico()->getNome().'</li>
