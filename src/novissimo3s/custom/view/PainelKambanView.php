@@ -177,7 +177,7 @@ class PainelKambanView extends OcorrenciaCustomView
                 $texto = "text-light";
                 break;
             case StatusOcorrenciaCustomController::STATUS_AGUARDANDO_USUARIO:
-                $bgCard = 'bg-danger';
+                $bgCard = 'bg-secondary';
                 $texto = "text-light";
                 break;
             case StatusOcorrenciaCustomController::STATUS_AGUARDANDO_ATIVO:
