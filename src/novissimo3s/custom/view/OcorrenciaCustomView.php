@@ -420,7 +420,7 @@ class OcorrenciaCustomView extends OcorrenciaView {
             }else if($elemento->getStatus() == 'c'){//em espera
                 $strClass = 'alert-info';
             }else if($elemento->getStatus() == 'd'){//Aguardando usuario
-                $strClass = 'alert-danger';
+                $strClass = ' alert-secondary';
             }else if($elemento->getStatus() == 'i'){//Aguardando ativo
                 $strClass = 'alert-danger';
             }
