@@ -158,14 +158,14 @@ class MensagemForumCustomController  extends MensagemForumController {
     }
     public function mainOcorrencia(Ocorrencia $ocorrencia){
         $sessao = new Sessao();
-
+        
         if(isset($_POST['chatDelete'])){
             $idChat = intval($_POST['chatDelete']);
             $mensagemForum = new MensagemForum();
             $mensagemForum->setId($idChat);
             $mensagemForumDao = new MensagemForumDAO();
             $mensagemForumDao->fillById($mensagemForum);
-            if($sessao->getIdUsuario() === $mensagemForum->getUsuario()->getId()) {
+            if($sessao->getIdUsuario() === $mensagemForum->getUsuario()->getId() && $ocorrencia->getStatus() === StatusOcorrenciaCustomController::STATUS_ATENDIMENTO) {
                 $mensagemForumDao->delete($mensagemForum);
                 echo '<meta http-equiv = "refresh" content = "0 ; url =?page=ocorrencia&selecionar='.$_GET['selecionar'].'"/>';
             }
@@ -243,8 +243,13 @@ class MensagemForumCustomController  extends MensagemForumController {
             				<div class="chatbox_timing">
             					<ul>
             						<li><a href="#"><i class="fa fa-calendar"></i> '.date("d/m/Y",strtotime($mensagemForum->getDataEnvio())).'</a></li>
-            						<li><a href="#"><i class="fa fa-clock-o"></i> '.date("H:i",strtotime($mensagemForum->getDataEnvio())).'</a></a></li>
-                                    <li><button data-toggle="modal" onclick="changeField('.$mensagemForum->getId().')" data-target="#modalDeleteChat"><i class="fa fa-trash-o"></i> Apagar </a></button></li>
+            						<li><a href="#"><i class="fa fa-clock-o"></i> '.date("H:i",strtotime($mensagemForum->getDataEnvio())).'</a></a></li>';
+                                    if($mensagemForum->getUsuario()->getId() == $sessao->getIdUsuario() && $ocorrencia->getStatus() === StatusOcorrenciaCustomController::STATUS_ATENDIMENTO){
+                                        echo '
+                                        <li><button data-toggle="modal" onclick="changeField('.$mensagemForum->getId().')" data-target="#modalDeleteChat"><i class="fa fa-trash-o"></i> Apagar </a></button></li>';
+                                    }
+                                    
+                                    echo '
 
             					</ul>
             				</div>
