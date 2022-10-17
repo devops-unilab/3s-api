@@ -9,6 +9,7 @@ namespace novissimo3s\custom\controller;
 use novissimo3s\controller\MensagemForumController;
 use novissimo3s\custom\dao\MensagemForumCustomDAO;
 use novissimo3s\custom\view\MensagemForumCustomView;
+use novissimo3s\dao\MensagemForumDAO;
 use novissimo3s\model\Ocorrencia;
 use novissimo3s\model\MensagemForum;
 use novissimo3s\util\Sessao;
@@ -156,8 +157,49 @@ class MensagemForumCustomController  extends MensagemForumController {
         
     }
     public function mainOcorrencia(Ocorrencia $ocorrencia){
-        
+        $sessao = new Sessao();
+
+        if(isset($_POST['chatDelete'])){
+            $idChat = intval($_POST['chatDelete']);
+            $mensagemForum = new MensagemForum();
+            $mensagemForum->setId($idChat);
+            $mensagemForumDao = new MensagemForumDAO();
+            $mensagemForumDao->fillById($mensagemForum);
+            if($sessao->getIdUsuario() === $mensagemForum->getUsuario()->getId()) {
+                $mensagemForumDao->delete($mensagemForum);
+                echo '<meta http-equiv = "refresh" content = "0 ; url =?page=ocorrencia&selecionar='.$_GET['selecionar'].'"/>';
+            }
+            
+        }
         echo '
+
+
+        <!-- Modal -->
+        <div class="modal fade" id="modalDeleteChat" tabindex="-1" aria-labelledby="modalDeleteChatLabel" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="modalDeleteChatLabel">Apagar Mensagem</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                Tem certeza que deseja apagar esta mensagem? 
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                <form action="" method="post">
+                    <input type="hidden" id="chatDelete" name="chatDelete" value=""/>
+                    <button type="submit" class="btn btn-primary">Confirmar</button>
+                </form>
+                
+              </div>
+            </div>
+          </div>
+        </div>
+
+
 <div class="container">
 		<div class="row">
 			<div class="chatbox chatbox22">
@@ -193,12 +235,17 @@ class MensagemForumCustomController  extends MensagemForumController {
             
             
             echo '
+
+
+
             			<div class="chatbox__body__message chatbox__body__message--left">
             
             				<div class="chatbox_timing">
             					<ul>
             						<li><a href="#"><i class="fa fa-calendar"></i> '.date("d/m/Y",strtotime($mensagemForum->getDataEnvio())).'</a></li>
             						<li><a href="#"><i class="fa fa-clock-o"></i> '.date("H:i",strtotime($mensagemForum->getDataEnvio())).'</a></a></li>
+                                    <li><button data-toggle="modal" onclick="changeField('.$mensagemForum->getId().')" data-target="#modalDeleteChat"><i class="fa fa-trash-o"></i> Apagar </a></button></li>
+
             					</ul>
             				</div>
             				<!-- <img src="https://www.gstatic.com/webp/gallery/2.jpg" 
@@ -240,7 +287,11 @@ class MensagemForumCustomController  extends MensagemForumController {
 			</div>
 		</div>
 	</div>
-
+    <script>
+    function changeField(id) {
+        document.getElementById(\'chatDelete\').value = id;
+    }
+    </script>
 
 ';
         
