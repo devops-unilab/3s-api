@@ -90,9 +90,10 @@ class NavBarController{
             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                 <a class="dropdown-item" href="?page=servico">Serviços</a>
                 
-<!--              
+  
               <div class="dropdown-divider"></div>
-              <a class="dropdown-item" href="#">Something else here</a> -->
+              <a class="dropdown-item" href="?page=area_responsavel">Unidades</a>
+              <a class="dropdown-item" href="?page=usuario">Usuários</a>
             </div>
         </li>
 

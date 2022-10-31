@@ -172,6 +172,7 @@ echo '
 <script src="js/login_load.js?a=12"></script>
 <script src="js/mudar_nivel.js?a=12"></script>
 <script src="js/change-contraste.js?a=1"></script>
+<script src="js/ocorrencia_selectize.js?a=1"></script>
 ';
         $this->pageJS();
         
@@ -185,7 +186,6 @@ echo '
                     
                     echo '
 <script src="js/status_ocorrencia.js?a=1"></script>
-<script src="js/ocorrencia_selectize.js"></script>
 <script src="js/jquery.easyPaginate.js?a=1"></script>
 <script src="js/ocorrencia.js?a=14"></script>';
                     if(isset($_GET['selecionar'])){
@@ -209,7 +209,6 @@ echo '
         }else{
             echo '
 <script src="js/status_ocorrencia.js?a=1"></script>
-<script src="js/ocorrencia_selectize.js"></script>
 <script src="js/jquery.easyPaginate.js?a=1"></script>
 <script src="js/ocorrencia.js?a=14"></script>';
             

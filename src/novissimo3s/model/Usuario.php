@@ -68,6 +68,24 @@ class Usuario {
 	public function getIdSetor() {
 		return $this->idSetor;
 	}
+	public function getStrNivel() {
+		$strNivel = 'Desconhecido';
+		switch($this->nivel) {
+			case 'a':
+				$strNivel = 'Administrador';
+				break;
+			case 't':
+				$strNivel = 'Técnico';
+				break;
+			case 'c':
+				$strNivel = 'Comum';
+				break;
+			default: 
+				$strNivel = 'Desconhecido';
+			break;
+		}
+		return $strNivel;
+	}
 	public function __toString(){
 	    return $this->id.' - '.$this->nome.' - '.$this->email.' - '.$this->login.' - '.$this->senha.' - '.$this->nivel.' - '.$this->idSetor;
 	}

@@ -7,6 +7,8 @@
  */
 
 namespace novissimo3s\controller;
+
+use novissimo3s\dao\AreaResponsavelDAO;
 use novissimo3s\dao\UsuarioDAO;
 use novissimo3s\model\Usuario;
 use novissimo3s\view\UsuarioView;
@@ -21,40 +23,6 @@ class UsuarioController {
 		$this->dao = new UsuarioDAO();
 		$this->view = new UsuarioView();
 	}
-
-
-    public function delete(){
-	    if(!isset($_GET['delete'])){
-	        return;
-	    }
-        $selected = new Usuario();
-	    $selected->setId($_GET['delete']);
-        if(!isset($_POST['delete_usuario'])){
-            $this->view->confirmDelete($selected);
-            return;
-        }
-        if($this->dao->delete($selected))
-        {
-			echo '
-
-<div class="alert alert-success" role="alert">
-  Sucesso ao excluir Usuario
-</div>
-
-';
-		} else {
-			echo '
-
-<div class="alert alert-danger" role="alert">
-  Falha ao tentar excluir Usuario
-</div>
-
-';
-		}
-    	echo '<META HTTP-EQUIV="REFRESH" CONTENT="2; URL=index.php?page=usuario">';
-    }
-
-
 
 	public function fetch() 
     {
@@ -149,23 +117,27 @@ class UsuarioController {
 	        return;
 	    }
         $selected = new Usuario();
-	    $selected->setId($_GET['edit']);
+	    $selected->setId(intval($_GET['edit']));
 	    $this->dao->fillById($selected);
-	        
+	    $areaDao = new AreaResponsavelDAO($this->dao->getConnection());
+		$setores = $areaDao->fetch();
+		
         if(!isset($_POST['edit_usuario'])){
-            $this->view->showEditForm($selected);
+            $this->view->showEditForm($selected, $setores);
             return;
         }
-            
-		if (! ( isset ( $_POST ['nome'] ) && isset ( $_POST ['email'] ) && isset ( $_POST ['login'] ) && isset ( $_POST ['senha'] ) && isset ( $_POST ['nivel'] ) && isset ( $_POST ['id_setor'] ))) {
-			echo "Incompleto";
+
+		if (! ( isset ( $_POST ['nivel'] ) && isset ( $_POST ['id_setor'] ))) {
+			echo '
+
+			<div class="alert alert-danger" role="alert">
+			  Formulário incompleto
+			</div>
+			
+			';
 			return;
 		}
 
-		$selected->setNome ( $_POST ['nome'] );
-		$selected->setEmail ( $_POST ['email'] );
-		$selected->setLogin ( $_POST ['login'] );
-		$selected->setSenha ( $_POST ['senha'] );
 		$selected->setNivel ( $_POST ['nivel'] );
 		$selected->setIdSetor ( $_POST ['id_setor'] );
             
@@ -174,7 +146,7 @@ class UsuarioController {
 			echo '
 
 <div class="alert alert-success" role="alert">
-  Sucesso 
+  Sucesso ao alterar usuário.
 </div>
 
 ';
@@ -182,7 +154,7 @@ class UsuarioController {
 			echo '
 
 <div class="alert alert-danger" role="alert">
-  Falha 
+  Falha ao tentar alterar usuário
 </div>
 
 ';
@@ -194,26 +166,24 @@ class UsuarioController {
 
     public function main(){
         
-        if (isset($_GET['select'])){
-            echo '<div class="row">';
-                $this->select();
-            echo '</div>';
-            return;
-        }
+		echo '
+	        
+        <div class="card mb-4">
+            <div class="card-body">
+
+';
         echo '
 		<div class="row">';
         echo '<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">';
         
         if(isset($_GET['edit'])){
             $this->edit();
-        }else if(isset($_GET['delete'])){
-            $this->delete();
-	    }else{
-            $this->add();
         }
         $this->fetch();
         
         echo '</div>';
+        echo '</div>';
+		echo '</div>';
         echo '</div>';
             
     }

@@ -113,9 +113,8 @@ class AreaResponsavelView {
                 echo '<td>'.$element->getDescricao().'</td>';
                 echo '<td>'.$element->getEmail().'</td>';
                 echo '<td>
-                        <a href="?page=area_responsavel&select='.$element->getId().'" class="btn btn-info text-white">Select</a>
-                        <a href="?page=area_responsavel&edit='.$element->getId().'" class="btn btn-success text-white">Edit</a>
-                        <a href="?page=area_responsavel&delete='.$element->getId().'" class="btn btn-danger text-white">Delete</a>
+                        <a href="?page=area_responsavel&edit='.$element->getId().'" class="btn btn-success text-white">Editar</a>
+                        <a href="?page=area_responsavel&delete='.$element->getId().'" class="btn btn-danger text-white">Apagar</a>
                       </td>';
                 echo '</tr>';
             }
@@ -144,7 +143,7 @@ class AreaResponsavelView {
 <div class="card o-hidden border-0 shadow-lg mb-4">
     <div class="card">
         <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-            <h6 class="m-0 font-weight-bold text-primary">Edit Area Responsavel</h6>
+            <h6 class="m-0 font-weight-bold text-primary">Editar Área Responsavel</h6>
         </div>
         <div class="card-body">
             <form class="user" method="post" id="edit_form_area_responsavel">
@@ -209,17 +208,17 @@ class AreaResponsavelView {
         
         
         
-				<div class="card o-hidden border-0 shadow-lg">
+				<div class="card o-hidden border-0 ">
 					<div class="card-body p-0">
 						<!-- Nested Row within Card Body -->
-						<div class="row">
+						<div class="row d-flex justify-content-center">
         
-							<div class="col-lg-12">
+							<div class="col-md-6">
 								<div class="p-5">
 									<div class="text-center">
 										<h1 class="h4 text-gray-900 mb-4"> Delete Area Responsavel</h1>
 									</div>
-						              <form class="user" method="post">                    Are you sure you want to delete this object?
+						              <form class="user" method="post">                    Tem certeza que deseja apagar esta área responsável? 
 
                                         <input type="submit" class="btn btn-primary btn-user btn-block" value="Delete" name="delete_area_responsavel">
                                         <hr>

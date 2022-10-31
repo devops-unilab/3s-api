@@ -86,6 +86,14 @@ class MainContent{
                     $controller = new ServicoCustomController();
                     $controller->main();
                     break;
+                case 'area_responsavel':
+                    $controller = new AreaResponsavelCustomController();
+                    $controller->main();
+                    break;
+                case 'usuario':
+                    $controller = new UsuarioCustomController();
+                    $controller->main();
+                    break;
                 case 'painel_kamban':
                     $controller = new PainelKambanController();
                     $controller->main();

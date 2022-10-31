@@ -191,7 +191,14 @@ class AreaResponsavelController {
             echo '</div>';
             return;
         }
-        echo '
+		echo '
+	        
+        <div class="card mb-4">
+            <div class="card-body">
+
+';
+		echo '
+		
 		<div class="row">';
         echo '<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">';
         
@@ -205,6 +212,9 @@ class AreaResponsavelController {
         $this->fetch();
         
         echo '</div>';
+        echo '</div>';
+            
+		echo '</div>';
         echo '</div>';
             
     }
