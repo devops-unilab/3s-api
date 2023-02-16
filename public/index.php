@@ -1,55 +1,39 @@
 <?php
+ini_set('display_errors',1);
+ini_set('display_startup_erros',1);
+error_reporting(E_ALL);
 
-use Illuminate\Contracts\Http\Kernel;
-use Illuminate\Http\Request;
+date_default_timezone_set('America/Fortaleza');
+setlocale(LC_ALL, 'pt_BR');
+define("DB_INI", "../../../3s/3s_bd.ini");
+define("DB_AUTENTICACAO", "../../../3s/3s_autenticacao_bd.ini");
+define("EMAIL_CONFIG", "../../../3s/3s_email.ini");
 
-define('LARAVEL_START', microtime(true));
-
-/*
-|--------------------------------------------------------------------------
-| Check If The Application Is Under Maintenance
-|--------------------------------------------------------------------------
-|
-| If the application is in maintenance / demo mode via the "down" command
-| we will load this file so that any pre-rendered content can be shown
-| instead of starting the framework, which could cause an exception.
-|
-*/
-
-if (file_exists($maintenance = __DIR__.'/../storage/framework/maintenance.php')) {
-    require $maintenance;
+function autoload($classe) {
+    
+    
+    if($classe == "PHPMailer"){
+        include_once "PHPMailer/PHPMailer.class.php";
+        return;   
+    }
+    $prefix = 'novissimo3s';
+    $base_dir = 'novissimo3s';
+    $len = strlen($prefix);
+    if (strncmp($prefix, $classe, $len) !== 0) {
+        return;
+    }
+    $relative_class = substr($classe, $len);
+    $file = $base_dir . str_replace('\\', '/', $relative_class) . '.php';
+    if (file_exists($file)) {
+        require $file;
+    }
 }
 
-/*
-|--------------------------------------------------------------------------
-| Register The Auto Loader
-|--------------------------------------------------------------------------
-|
-| Composer provides a convenient, automatically generated class loader for
-| this application. We just need to utilize it! We'll simply require it
-| into the script here so we don't need to manually load our classes.
-|
-*/
+spl_autoload_register('autoload');
 
-require __DIR__.'/../vendor/autoload.php';
+use novissimo3s\custom\controller\MainIndex;
 
-/*
-|--------------------------------------------------------------------------
-| Run The Application
-|--------------------------------------------------------------------------
-|
-| Once we have the application, we can handle the incoming request using
-| the application's HTTP kernel. Then, we will send the response back
-| to this client's browser, allowing them to enjoy our application.
-|
-*/
+$main = new MainIndex();
+$main->main();
 
-$app = require_once __DIR__.'/../bootstrap/app.php';
-
-$kernel = $app->make(Kernel::class);
-
-$response = $kernel->handle(
-    $request = Request::capture()
-)->send();
-
-$kernel->terminate($request, $response);
+?>
