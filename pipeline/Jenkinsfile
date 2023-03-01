@@ -62,12 +62,12 @@ pipeline {
       
         milestone(ordinal: null, label: "Milestone: Checkout")
         checkout([$class: 'GitSCM', branches: [[name: '*/main']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[credentialsId: 'gitlab-user-jenkins', url: 'http://dti-gitlab.unilab.edu.br/disir/3s_cicd.git']]])
-       
+        
         // properties([gitLabConnection('your-gitlab-connection-name')]) 
         // node {
         //   checkout scm // Jenkins will clone the appropriate git branch, no env vars needed
         //   // Further build steps happen here
-        // } 
+      } 
     }
     stage('Build Application') {
       steps {
@@ -129,8 +129,8 @@ pipeline {
         /*
         sh "sed -i 's/<IMAGE_TAG_TWO>/dti-registro.unilab.edu.br\\/unilab\\/image:${env.DOCKER_TAG}/' ./kubernetes/k8s.yaml"
         sh "sed -i 's/<IMAGE_TAG_THREE>/dti-registro.unilab.edu.br\\/unilab\\/image:${env.DOCKER_TAG}/' ./kubernetes/k8s.yaml"
-		    */
-		
+        */
+
         sh 'cat ./kubernetes/k8s.yaml'
 
         // Oficial docs https://kubernetes.io/docs/tasks/tools/install-kubectl-linux/
