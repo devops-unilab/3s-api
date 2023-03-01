@@ -154,7 +154,7 @@ WORKDIR /var/www/html/3s/public
 
 VOLUME ["/var/www/html/3s/public/uploads"]
 
-EXPOSE 37389
+EXPOSE 80 37389
 
 USER 3s
 
