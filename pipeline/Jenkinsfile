@@ -59,9 +59,15 @@ pipeline {
     // geralmente não é necessário ao obter o Jenkinsfile do Git SCM no Pipeline / Multibranch Pipeline, isso está implícito
     stage ('Checkout GitLab') {
       steps {
+      
         milestone(ordinal: null, label: "Milestone: Checkout")
-        checkout([$class: 'GitSCM', branches: [[name: '*/main']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[credentialsId: '', url: 'http://dti-gitlab.unilab.edu.br/disir/3s_cicd.git']]])
-      }
+        checkout([$class: 'GitSCM', branches: [[name: '*/main']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[credentialsId: 'gitlab-user-jenkins', url: 'http://dti-gitlab.unilab.edu.br/disir/3s_cicd.git']]])
+       
+        // properties([gitLabConnection('your-gitlab-connection-name')]) 
+        // node {
+        //   checkout scm // Jenkins will clone the appropriate git branch, no env vars needed
+        //   // Further build steps happen here
+        // } 
     }
     stage('Build Application') {
       steps {
