@@ -28,7 +28,9 @@ spec:
         imagePullPolicy: Always
         ports:
         - containerPort: 80
-          name: angular
+          name: http
+        - containerPort: 37389
+          name: ssh
         volumeMounts:
         - name: tz-america
           mountPath: /etc/localtime
@@ -48,7 +50,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: <APP_NAME>
+  name: <APP_NAME>-svc
   namespace: <APP_NAMESPACE>
   labels:
     app: <APP_NAME>
@@ -90,7 +92,7 @@ spec:
             pathType: Prefix
             backend:
                service:
-                  name: <APP_NAME>
+                  name: <APP_NAME>-svc
                   port:
                      number: 80
                      
