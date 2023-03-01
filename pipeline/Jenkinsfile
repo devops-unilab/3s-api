@@ -85,7 +85,7 @@ pipeline {
         }
       }
     }
-    stage('Push Image Container (Harbor Registro)') {
+    stage('Push Image Container (Harbor)') {
       steps {
         container('docker') { 
           /*
@@ -107,7 +107,7 @@ pipeline {
         }
       }
     }
-    stage('Deploy Application (Kubernetes Cluster C1)') {
+    stage('Deploy Application (Kubernetes C1)') {
       steps {
         sh "sed -i 's/<APP_NAMESPACE>/${env.APP_NAMESPACE}/' ./kubernetes/deployment-3s.yaml"
         
@@ -136,8 +136,7 @@ pipeline {
           */
           script {
             sh "kubectl apply -f ./kubernetes/deployment-3s.yaml --record"
-            sh "kubectl patch deployment ${env.APP_NAME} -n ${env.APP_NAMESPACE} --subresource=scale --type=merge -p {'spec':{'replicas':2}}"
-            sh "echo $(kubectl patch deployment ${env.APP_NAME} -n ${env.APP_NAMESPACE} --subresource='scale' --type='merge' -p '{"spec":{"replicas":2}}')"
+            sh "kubectl patch deployment ${env.APP_NAME} -n ${env.APP_NAMESPACE} --subresource='scale' --type='merge' -p '{"spec":{"replicas":2}}')"
             sh "kubectl get all,ing -n ${env.APP_NAMESPACE}"
           }
 
