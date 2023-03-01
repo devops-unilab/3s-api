@@ -172,4 +172,4 @@ LABEL \
     org.opencontainers.image.maintainer="DTI/Unilab"
 
 # Start Apache server
- CMD ["apache2-foreground"]
+ CMD ["apache2-foreground"]++

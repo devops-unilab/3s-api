@@ -13,7 +13,7 @@ metadata:
   name: <APP_NAME>
   namespace: <APP_NAMESPACE>
 spec:
-  replicas: 1
+  replicas: 2
   template:
     metadata:
       labels:
@@ -37,13 +37,13 @@ spec:
         - name: tz-america-one
           mountPath: /etc/localtime
         - name: 3s-uplodas
-          mountPath: dados/sites/pub/ocorrencias/uploads
+          mountPath: /var/www/html/3s/public/uploads
       volumes:
         - name: tz-america-one
           hostPath:
             path: /usr/share/zoneinfo/America/Fortaleza
             type: File
-        - name: 3s-uplodas
+        - name: 3s-uploads
           emptyDir: {}
   selector:
     matchLabels:
@@ -52,7 +52,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: <APP_NAME>-svc
+  name: <APP_NAME>
   namespace: <APP_NAMESPACE>
   labels:
     app: <APP_NAME>
@@ -94,7 +94,7 @@ spec:
             pathType: Prefix
             backend:
                service:
-                  name: <APP_NAME>-svc
+                  name: <APP_NAME>
                   port:
                      number: 80
                      
