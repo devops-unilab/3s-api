@@ -1,7 +1,3 @@
-# kubectl logs <POD-NAME> -c 3s -n <NAME-SPACE>
-# kubectl logs <POD-NAME> -c postgres -n <NAME-SPACE>
-# kubectl logs <POD-NAME> --all-containers -n <NAME-SPACE>
-
 apiVersion: v1
 kind: Namespace
 metadata:
@@ -24,8 +20,8 @@ spec:
         image: <IMAGE_TAG>
         resources:
           requests:
-            cpu: '0.5'
-            memory: 128Mi
+            cpu: 200m
+            memory: 256Mi
           limits:
             cpu: 1
             memory: 1Gi
@@ -34,12 +30,12 @@ spec:
         - containerPort: 80
           name: angular
         volumeMounts:
-        - name: tz-america-one
+        - name: tz-america
           mountPath: /etc/localtime
-        - name: 3s-uplodas
+        - name: 3s-uploads
           mountPath: /var/www/html/3s/public/uploads
       volumes:
-        - name: tz-america-one
+        - name: tz-america
           hostPath:
             path: /usr/share/zoneinfo/America/Fortaleza
             type: File
