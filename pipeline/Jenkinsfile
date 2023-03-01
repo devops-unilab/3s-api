@@ -43,7 +43,7 @@ pipeline {
     SONAR_HOST_URL = "https://dti-sonar.unilab.edu.br"
   }
   stages {
-    stage('CI/CD Initialize Setup') {
+    stage('CI/CD Initialize') {
       steps {  // nenhuma diretiva de conteiner é necessária para o container maven, porque ele é padrão.
         milestone(ordinal: null, label: "Milestone: Setup")
         script {
@@ -85,7 +85,7 @@ pipeline {
         }
       }
     }
-    stage('Push Image Container\nHarbor Registro') {
+    stage('Push Image Container (Harbor Registro)') {
       steps {
         container('docker') { 
           /*
@@ -107,7 +107,7 @@ pipeline {
         }
       }
     }
-    stage('Deploy Application\nKubernetes Cluster C1') {
+    stage('Deploy Application (Kubernetes Cluster C1)') {
       steps {
         sh "sed -i 's/<APP_NAMESPACE>/${env.APP_NAMESPACE}/' ./kubernetes/deployment-3s.yaml"
         
@@ -136,9 +136,10 @@ pipeline {
           */
           script {
             sh 'kubectl apply -f ./kubernetes/deployment-3s.yaml --record'
-            sh "kubectl patch deployment $APP_NAME -n $APP_NAMESPACE --subresource='scale' --type='merge' -p '{"spec":{"replicas":2}}'"
-            sh 'kubectl get all,ing -n $APP_NAMESPACE'
+            sh "kubectl patch deployment ${env.APP_NAME} -n ${env.APP_NAMESPACE} --subresource='scale' --type='merge' -p '{"spec":{"replicas":2}}'"
+            sh "kubectl get all,ing -n ${env.APP_NAMESPACE}"
           }
+
         }
       }
     }
