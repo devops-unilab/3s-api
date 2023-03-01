@@ -135,7 +135,7 @@ pipeline {
           Nota: Quando --record não é sinalizador, na tabela, CHANGE-CAUSE estará apenas <none>
           */
           sh 'kubectl apply -f ./kubernetes/deployment-3s.yaml --record'
-          sh "kubectl patch deployment $APP_NAME --subresource='scale' --type='merge' -p '{"spec":{"replicas":2}}'"
+          sh "kubectl patch deployment $APP_NAME -n $APP_NAMESPACE --subresource='scale' --type='merge' -p '{"spec":{"replicas":2}}'"
           sh 'kubectl get all,ing -n $APP_NAMESPACE'
         }
       }
