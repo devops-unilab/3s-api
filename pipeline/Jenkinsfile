@@ -57,7 +57,7 @@ pipeline {
       }
     }
     // geralmente não é necessário ao obter o Jenkinsfile do Git SCM no Pipeline / Multibranch Pipeline, isso está implícito
-    stage ('Checkout GitLab') {
+    stage ('Git Checkout\nGitLab') {
       steps {
       
         milestone(ordinal: null, label: "Milestone: Checkout")
@@ -81,7 +81,7 @@ pipeline {
         sh 'ls -la .'
       }
     }
-    stage('Build Docker Image') {
+    stage('Build Image Container') {
       steps {
         container('docker') {  
           milestone(ordinal: null, label: "Milestone: Docker Build")
@@ -92,7 +92,7 @@ pipeline {
         }
       }
     }
-    stage('Docker Push Image') {
+    stage('Push Image Container\nHarbor Registro') {
       steps {
         container('docker') { 
           /*
@@ -114,24 +114,24 @@ pipeline {
         }
       }
     }
-    stage('Deploy') {
+    stage('Deploy Application\nKubernetes Cluster C1') {
       steps {
-        sh "sed -i 's/<APP_NAMESPACE>/${env.APP_NAMESPACE}/' ./kubernetes/k8s.yaml"
-        sh "sed -i 's/<APP_NAME>/${env.APP_NAME}/' ./kubernetes/k8s.yaml"
+        sh "sed -i 's/<APP_NAMESPACE>/${env.APP_NAMESPACE}/' ./kubernetes/deployment-3s.yaml"
+        sh "sed -i 's/<APP_NAME>/${env.APP_NAME}/' ./kubernetes/deployment-3s.yaml"
         
-        sh "sed -i 's/<CONTAINER_NAME_ONE>/${env.APP_NAME}/' ./kubernetes/k8s.yaml"
+        sh "sed -i 's/<CONTAINER_NAME>/${env.APP_NAME}/' ./kubernetes/deployment-3s.yaml"
         /*
-        sh "sed -i 's/<CONTAINER_NAME_TWO>/name/' ./kubernetes/k8s.yaml"
-        sh "sed -i 's/<CONTAINER_NAME_THREE>/name/' ./kubernetes/k8s.yaml"
+        sh "sed -i 's/<CONTAINER_NAME_TWO>/name/' ./kubernetes/deployment-3s.yaml"
+        sh "sed -i 's/<CONTAINER_NAME_THREE>/name/' ./kubernetes/deployment-3s.yaml"
         */
         
-        sh "sed -i 's/<IMAGE_TAG_ONE>/dti-registro.unilab.edu.br\\/unilab\\/image:${env.DOCKER_TAG}/' ./kubernetes/k8s.yaml"
+        sh "sed -i 's/<IMAGE_TAG_ONE>/dti-registro.unilab.edu.br\\/unilab\\/${env.APP_NAME}:${env.DOCKER_TAG}/' ./kubernetes/deployment-3s.yaml"
         /*
-        sh "sed -i 's/<IMAGE_TAG_TWO>/dti-registro.unilab.edu.br\\/unilab\\/image:${env.DOCKER_TAG}/' ./kubernetes/k8s.yaml"
-        sh "sed -i 's/<IMAGE_TAG_THREE>/dti-registro.unilab.edu.br\\/unilab\\/image:${env.DOCKER_TAG}/' ./kubernetes/k8s.yaml"
+        sh "sed -i 's/<IMAGE_TAG_TWO>/dti-registro.unilab.edu.br\\/unilab\\/image:${env.DOCKER_TAG}/' ./kubernetes/deployment-3s.yaml"
+        sh "sed -i 's/<IMAGE_TAG_THREE>/dti-registro.unilab.edu.br\\/unilab\\/image:${env.DOCKER_TAG}/' ./kubernetes/deployment-3s.yaml"
         */
 
-        sh 'cat ./kubernetes/k8s.yaml'
+        sh 'cat ./kubernetes/deployment-3s.yaml'
 
         // Oficial docs https://kubernetes.io/docs/tasks/tools/install-kubectl-linux/
         sh 'curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"'
@@ -151,10 +151,10 @@ pipeline {
           script {
               try {
                   sh 'kubectl get namespace $APP_NAMESPACE'
-                  sh 'kubectl delete -f ./kubernetes/k8s.yaml'
-                  sh 'kubectl apply -f ./kubernetes/k8s.yaml --record'
+                  sh 'kubectl delete -f ./kubernetes/deployment-3s.yaml'
+                  sh 'kubectl apply -f ./kubernetes/deployment-3s.yaml --record'
               } catch (err) {
-                  sh 'kubectl apply -f ./kubernetes/k8s.yaml --record'
+                  sh 'kubectl apply -f ./kubernetes/deployment-3s.yaml --record'
               } finally {
                   sh 'kubectl get all,ing -n $APP_NAMESPACE'
               }
