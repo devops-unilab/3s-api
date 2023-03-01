@@ -134,17 +134,9 @@ pipeline {
           Exemplo de uso: kubectl rollout history -n docker deployment.apps/docker
           Nota: Quando --record não é sinalizador, na tabela, CHANGE-CAUSE estará apenas <none>
           */
-          script {
-              try {
-                  sh 'kubectl get namespace $APP_NAMESPACE'
-                  sh 'kubectl delete -f ./kubernetes/deployment-3s.yaml'
-                  sh 'kubectl apply -f ./kubernetes/deployment-3s.yaml --record'
-              } catch (err) {
-                  sh 'kubectl apply -f ./kubernetes/deployment-3s.yaml --record'
-              } finally {
-                  sh 'kubectl get all,ing -n $APP_NAMESPACE'
-              }
-          }
+          sh 'kubectl apply -f ./kubernetes/deployment-3s.yaml --record'
+          sh "kubectl patch deployment $APP_NAME --subresource='scale' --type='merge' -p '{"spec":{"replicas":2}}'"
+          sh 'kubectl get all,ing -n $APP_NAMESPACE'
         }
       }
     }
