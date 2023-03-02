@@ -3,6 +3,19 @@ apiVersion: v1
 kind: Namespace
 metadata:
   name: <APP_NAMESPACE>
+
+---
+# kubectl create secret docker-registry registro-regcred --docker-server=https://dti-registro.unilab.edu.br --docker-username=desenvolvedor --docker-password=Desenvolvedor2023 --docker-email=dti-registro@noreply.unilab.edu.br --output yaml
+# kubectl get secret registro-regcred --output=yaml
+apiVersion: v1
+data:
+  .dockerconfigjson: eyJhdXRocyI6eyJodHRwczovL2R0aS1yZWdpc3Ryby51bmlsYWIuZWR1LmJyIjp7InVzZXJuYW1lIjoiYWRtaW4iLCJwYXNzd29yZCI6IkR0aUB1bmlsYWIyMDIzIiwiZW1haWwiOiJkaXNpckB1bmlsYWIuZWR1LmJyIiwiYXV0aCI6IllXUnRhVzQ2UkhScFFIVnVhV3hoWWpJd01qTT0ifX19
+kind: Secret
+metadata:
+  name: registro-regcred
+  namespace: jenkins
+type: kubernetes.io/dockerconfigjson
+
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -44,6 +57,8 @@ spec:
             type: File
         - name: 3s-uploads
           emptyDir: {}
+      imagePullSecrets:
+      - name: registro-regcred
   selector:
     matchLabels:
         app: <APP_NAME>
