@@ -86,7 +86,7 @@ pipeline {
         }
       }
     }
-    stage('Push Image Container (Harbor)') {
+    stage('Push Image Container') {
       steps {
         container('docker') { 
           /*
@@ -108,7 +108,7 @@ pipeline {
         }
       }
     }
-    stage('Deploy Application (Kubernetes C1)') {
+    stage('Deploy no Kubernetes') {
       steps {
         sh "sed -i 's/<APP_NAMESPACE>/${env.APP_NAMESPACE}/' ./kubernetes/deployment-3s.yaml"
         

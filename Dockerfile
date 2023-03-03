@@ -156,7 +156,7 @@ VOLUME ["/var/www/html/3s/public/uploads"]
 
 EXPOSE 80 37389
 
-USER 3s
+#USER 3s
 
 LABEL \
     org.opencontainers.image.vendor="UNILAB" \
