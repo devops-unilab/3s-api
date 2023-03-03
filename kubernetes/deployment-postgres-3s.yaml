@@ -1,0 +1,200 @@
+
+# DATABASE POSTGRESQL
+# ------------------------------------------------------------------------------------
+# -- CONFIGURA USUARIO E SENHA | 3s
+# ------------------------------------------------------------------------------------
+# create USER "3s" WITH 
+#     SUPERUSER
+#     LOGIN 
+#     CREATEDB
+#     CREATEROLE
+#     REPLICATION
+#     INHERIT
+#     CONNECTION LIMIT -1
+#     PASSWORD '<PASSWD>';
+# COMMENT ON ROLE "3s" IS 'Usuário padrão 3s-ocorrencias.';
+
+# ------------------------------------------------------------------------------------
+# -- CRIA DATABASE | 3s-ocorrencias
+# ------------------------------------------------------------------------------------
+# CREATE DATABASE 3s-ocorrencias
+#     WITH
+#     OWNER = "3s"
+#     ENCODING = 'UTF8'
+#     CONNECTION LIMIT = -1
+#     TEMPLATE template0;
+# COMMENT ON DATABASE 3s-ocorrencias IS 'Dadabase para 3S';
+
+
+# apt install -y iputils-ping curl
+# apt install -y postgresql-client
+# psql -h app-3s-pgsl.app-3s.svc.cluster.local -p 5432 -U devops -d 3s-ocorrencias
+# kubectl delete pv $(kubectl get pv | tail -n+2 | awk '$5 == "Released" {print $1}')
+
+# ---
+# apiVersion: v1
+# kind: Namespace
+# metadata:
+#   name: app-3s
+
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: app-3s-pgsl-secret
+  namespace: app-3s
+type: Opaque
+# stringData:
+data:
+  PG_PRIMARY_PASSWORD: M3MhQCMkMjAyMw==
+  PG_PASSWORD: M3MhQCMkMjAyMw==
+  PG_ROOT_PASSWORD: M3MhQCMkMjAyMw==
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: app-3s-pgsl-config
+  namespace: app-3s
+  labels:
+    app: app-3s-pgsl
+data:
+  PG_PRIMARY_USER: primaryuser
+  PGHOST: /tmp
+  # primary, replica, set
+  PG_MODE: primary
+  PG_USER: 3s
+  PG_DATABASE: 3s-ocorrencias
+  PG_PRIMARY_HOST: postgres-primary
+  PG_PRIMARY_PORT: "5432"
+  MODE: postgres
+  CRUNCHY_DEBUG: "TRUE"
+  
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pvc-app-3s-pgsl
+  namespace: app-3s
+  labels:
+    app: app-3s-pgsl
+spec:
+  storageClassName: nfs-storage-k8s
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 5Gi
+
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: app-3s-pgsl-sa
+  namespace: app-3s
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: app-3s-pgsl
+  namespace: app-3s
+  labels:
+    app: app-3s-pgsl
+  annotations:
+    metallb.universe.tf/address-pool: int-pool
+spec:
+  # clusterIP: None
+  # type: NodePort
+  type: LoadBalancer
+  loadBalancerIP: 10.130.0.154
+  externalTrafficPolicy: Local
+  ports:
+    - protocol: TCP
+      port: 5432
+      nodePort: 30100
+      name: pgsql
+  selector:
+    app: app-3s-pgsl
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: app-3s-pgsl-primary
+  namespace: app-3s
+  labels:
+    name: app-3s-pgsl
+spec:
+  ports:
+    - protocol: TCP
+      port: 5432
+      nodePort: 0
+  selector:
+    name: app-3s-pgsl
+  type: ClusterIP
+  sessionAffinity: None
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: app-3s-pgsl-replica
+  namespace: app-3s
+  labels:
+    name: app-3s-pgsl
+spec:
+  ports:
+    - protocol: TCP
+      port: 5432
+      nodePort: 0
+  selector:
+    name: app-3s-pgsl
+  type: ClusterIP
+  sessionAffinity: None
+
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: app-3s-pgsl
+  namespace: app-3s
+spec:
+  selector:
+    matchLabels:
+      app: app-3s-pgsl
+  serviceName: app-3s-pgsl
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: app-3s-pgsl
+        name: app-3s-pgsl-replica
+    spec:
+      serviceAccount: app-3s-pgsl-sa
+      securityContext:
+        fsGroup: 26
+      containers:
+        - name: app-3s-postgres
+          image: crunchydata/crunchy-postgres:centos8-13.6-4.7.5
+          imagePullPolicy: Always
+          resources:
+            requests:
+              cpu: 50m
+              memory: 256Mi
+            limits:
+              cpu: 990m
+              memory: 1024Mi
+          ports:
+            - containerPort: 5432
+          envFrom:
+            - secretRef:
+                name: app-3s-pgsl-secret
+            - configMapRef:
+                name: app-3s-pgsl-config
+          volumeMounts:
+            - name: pgdata
+              mountPath: /pgdata
+              readOnly: false
+      volumes:
+        - name: pgdata
+          persistentVolumeClaim:
+            claimName: pvc-app-3s-pgsl
