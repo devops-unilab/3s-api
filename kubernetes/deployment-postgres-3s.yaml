@@ -195,6 +195,7 @@ spec:
               mountPath: /pgdata
               readOnly: false
       volumes:
+      
         - name: pgdata
           persistentVolumeClaim:
             claimName: pvc-app-3s-pgsl
