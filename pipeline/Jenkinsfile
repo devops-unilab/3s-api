@@ -143,7 +143,7 @@ pipeline {
             kubectl delete deployment $APP_NAME -n $APP_NAMESPACE || echo 'DEPLOYMENT INEXISTENTE!'"
             // aplica novo deploy
             sh "kubectl apply -f ./kubernetes/deployment-3s.yaml --record"
-            sh "kubectl get all,ing -n $APP_NAMESPACE-o wide"
+            sh "kubectl get all,ing -n $APP_NAMESPACE -o wide"
           }
         }
       }
