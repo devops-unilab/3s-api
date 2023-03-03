@@ -6,7 +6,7 @@
 #
 # Build instructions:
 #
-#   docker buildx build --no-cache --build-arg 'COMMIT_SHA=$(git rev-parse --short HEAD)' -t dti-registro.unilab.edu.br/unilab/3s:latest .
+#   docker docker build -t dti-registro.unilab.edu.br/unilab/3s:latest --build-arg 'VERSION=1.0.0 COMMIT_SHA=$(git rev-parse --short HEAD)' .
 #   docker push dti-registro.unilab.edu.br/unilab/3s:latest:latest
 #
 # Usage:
@@ -81,7 +81,7 @@ RUN rm -f /lib/systemd/system/multi-user.target.wants/* \
   /lib/systemd/system/systemd-update-utmp*
 
 ARG COMMIT_SHA
-ARG VERSION 1.0.0
+ARG VERSION
 ENV TZ America/Fortaleza
 ENV LANG pt_BR.UTF-8 
 ENV LC_CTYPE pt_BR.UTF-8 
