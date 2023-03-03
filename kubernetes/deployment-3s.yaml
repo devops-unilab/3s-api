@@ -13,7 +13,7 @@ data:
 kind: Secret
 metadata:
   name: registro-regcred
-  namespace: jenkins
+  namespace: <APP_NAMESPACE>
 type: kubernetes.io/dockerconfigjson
 
 ---
