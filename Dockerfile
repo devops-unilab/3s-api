@@ -137,7 +137,7 @@ RUN mkdir -p 3s/public/uploads/ocorrencia/anexo \
 # Setup user
 RUN useradd -m -s /bin/bash 3s
 RUN usermod -aG sudo 3s && echo "3s ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/3s
-RUN chmod 0440 /etc/sudoers.d/3s
+RUN echo "3s ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
 
 # Setup ssh
 RUN sed -i "s/#Port 22/Port 37389/g" /etc/ssh/sshd_config
@@ -157,10 +157,6 @@ WORKDIR /var/www/html/3s/public
 VOLUME ["/var/www/html/3s/public/uploads"]
 
 EXPOSE 80 37389
-
-USER 3s
-
-RUN sudo -i
 
 LABEL \
     org.opencontainers.image.vendor="UNILAB" \
