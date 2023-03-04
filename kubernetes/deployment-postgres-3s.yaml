@@ -43,7 +43,7 @@ metadata:
   namespace: postgres-3s
 type: Opaque
 data:
-  PG_PASSWORD: 3s!@#$2023
+  PG_PASSWORD: M3MhQCMkMjAyMw==
   PG_PRIMARY_PASSWORD: YWRtaW4hQCMkMjAyMw==
   PG_ROOT_PASSWORD: cG9zdGdyZXMhQCMkMjAyMw==
 
