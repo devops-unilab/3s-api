@@ -26,33 +26,33 @@
 # COMMENT ON DATABASE 3s-ocorrencias IS 'Dadabase para 3S';
 #
 # apt install -y iputils-ping telnet curl postgresql-client
-# psql -h postgres.3s-postgres.svc.cluster.local -p 5432 -U 3s -d 3s-ocorrencias
+# psql -h postgres.postgres-3s.svc.cluster.local -p 5432 -U 3s -d 3s-ocorrencias
 # kubectl delete pv $(kubectl get pv | tail -n+2 | awk '$5 == "Released" {print $1}')
 
 ---
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: 3s-postgres
+  name: postgres-3s
 
 ---
 apiVersion: v1
 kind: Secret
 metadata:
-  name: 3s-postgres-secret
-  namespace: 3s-postgres
+  name: postgres-3s-secret
+  namespace: postgres-3s
 type: Opaque
 data:
   PG_PASSWORD: 3s!@#$2023
-  PG_PRIMARY_PASSWORD: admin!@#$2023
-  PG_ROOT_PASSWORD: postgres!@#$2023
+  PG_PRIMARY_PASSWORD: YWRtaW4hQCMkMjAyMw==
+  PG_ROOT_PASSWORD: cG9zdGdyZXMhQCMkMjAyMw==
 
 ---
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: 3s-postgres-config
-  namespace: 3s-postgres
+  name: postgres-3s-config
+  namespace: postgres-3s
   labels:
     app: postgres
 data:
@@ -61,7 +61,7 @@ data:
   PGHOST: /tmp
   PG_MODE: primary # primary, replica, set
   PG_DATABASE: 3s-ocorrencias
-  PG_PRIMARY_HOST: postgres.3s-postgres.svc.cluster.local
+  PG_PRIMARY_HOST: postgres.postgres-3s.svc.cluster.local
   PG_PRIMARY_PORT: "5432"
   MODE: postgres
   CRUNCHY_DEBUG: "TRUE"
@@ -70,8 +70,8 @@ data:
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: pvc-3s-postgres
-  namespace: 3s-postgres
+  name: pvc-postgres-3s
+  namespace: postgres-3s
   labels:
     app: postgres
 spec:
@@ -86,14 +86,14 @@ spec:
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  name: 3s-postgres-sa
-  namespace: 3s-postgres
+  name: postgres-3s-sa
+  namespace: postgres-3s
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: postgres
-  namespace: 3s-postgres
+  namespace: postgres-3s
   labels:
     app: postgres
   annotations:
@@ -116,34 +116,34 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: 3s-postgres-primary
-  namespace: 3s-postgres
+  name: postgres-3s-primary
+  namespace: postgres-3s
   labels:
-    name: 3s-postgres-primary
+    name: postgres-3s-primary
 spec:
   ports:
     - protocol: TCP
       port: 5432
       nodePort: 0
   selector:
-    name: 3s-postgres-primary
+    name: postgres-3s-primary
   type: ClusterIP
   sessionAffinity: None
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: 3s-postgres-replica
-  namespace: 3s-postgres
+  name: postgres-3s-replica
+  namespace: postgres-3s
   labels:
-    name: 3s-postgres-replica
+    name: postgres-3s-replica
 spec:
   ports:
     - protocol: TCP
       port: 5432
       nodePort: 0
   selector:
-    name: 3s-postgres-replica
+    name: postgres-3s-replica
   type: ClusterIP
   sessionAffinity: None
 
@@ -152,7 +152,7 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: postgres
-  namespace: 3s-postgres
+  namespace: postgres-3s
 spec:
   selector:
     matchLabels:
@@ -163,9 +163,9 @@ spec:
     metadata:
       labels:
         app: postgres
-        name: 3s-postgres-replica
+        name: postgres-3s-replica
     spec:
-      serviceAccount: 3s-postgres-sa
+      serviceAccount: postgres-3s-sa
       securityContext:
         fsGroup: 26
       containers:
@@ -183,9 +183,9 @@ spec:
             - containerPort: 5432
           envFrom:
             - secretRef:
-                name: postgres-secret
+                name: postgres-3s-secret
             - configMapRef:
-                name: postgres-config
+                name: postgres-3s-config
           volumeMounts:
             - name: pgdata
               mountPath: /pgdata
@@ -193,4 +193,4 @@ spec:
       volumes:
         - name: pgdata
           persistentVolumeClaim:
-            claimName: pvc-3s-postgres
+            claimName: pvc-postgres-3s
