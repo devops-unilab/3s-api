@@ -24,48 +24,44 @@
 #     CONNECTION LIMIT = -1
 #     TEMPLATE template0;
 # COMMENT ON DATABASE 3s-ocorrencias IS 'Dadabase para 3S';
-
-
-# apt install -y iputils-ping curl
-# apt install -y postgresql-client
-# psql -h app-3s-pgsl.app-3s.svc.cluster.local -p 5432 -U devops -d 3s-ocorrencias
+#
+# apt install -y iputils-ping telnet curl postgresql-client
+# psql -h postgres.3s-postgres.svc.cluster.local -p 5432 -U 3s -d 3s-ocorrencias
 # kubectl delete pv $(kubectl get pv | tail -n+2 | awk '$5 == "Released" {print $1}')
 
-# ---
-# apiVersion: v1
-# kind: Namespace
-# metadata:
-#   name: app-3s
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: 3s-postgres
 
 ---
 apiVersion: v1
 kind: Secret
 metadata:
-  name: app-3s-pgsl-secret
-  namespace: app-3s
+  name: 3s-postgres-secret
+  namespace: 3s-postgres
 type: Opaque
-# stringData:
 data:
-  PG_PRIMARY_PASSWORD: M3MhQCMkMjAyMw==
-  PG_PASSWORD: M3MhQCMkMjAyMw==
-  PG_ROOT_PASSWORD: M3MhQCMkMjAyMw==
+  PG_PASSWORD: 3s!@#$2023
+  PG_PRIMARY_PASSWORD: admin!@#$2023
+  PG_ROOT_PASSWORD: postgres!@#$2023
 
 ---
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: app-3s-pgsl-config
-  namespace: app-3s
+  name: 3s-postgres-config
+  namespace: 3s-postgres
   labels:
-    app: app-3s-pgsl
+    app: postgres
 data:
-  PG_PRIMARY_USER: primaryuser
-  PGHOST: /tmp
-  # primary, replica, set
-  PG_MODE: primary
   PG_USER: 3s
+  PG_PRIMARY_USER: admin
+  PGHOST: /tmp
+  PG_MODE: primary # primary, replica, set
   PG_DATABASE: 3s-ocorrencias
-  PG_PRIMARY_HOST: postgres-primary
+  PG_PRIMARY_HOST: postgres.3s-postgres.svc.cluster.local
   PG_PRIMARY_PORT: "5432"
   MODE: postgres
   CRUNCHY_DEBUG: "TRUE"
@@ -74,10 +70,10 @@ data:
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: pvc-app-3s-pgsl
-  namespace: app-3s
+  name: pvc-3s-postgres
+  namespace: 3s-postgres
   labels:
-    app: app-3s-pgsl
+    app: postgres
 spec:
   storageClassName: nfs-storage-k8s
   accessModes:
@@ -90,16 +86,16 @@ spec:
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  name: app-3s-pgsl-sa
-  namespace: app-3s
+  name: 3s-postgres-sa
+  namespace: 3s-postgres
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: app-3s-pgsl
-  namespace: app-3s
+  name: postgres
+  namespace: 3s-postgres
   labels:
-    app: app-3s-pgsl
+    app: postgres
   annotations:
     metallb.universe.tf/address-pool: int-pool
 spec:
@@ -114,40 +110,40 @@ spec:
       nodePort: 30100
       name: pgsql
   selector:
-    app: app-3s-pgsl
+    app: postgres
 
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: app-3s-pgsl-primary
-  namespace: app-3s
+  name: 3s-postgres-primary
+  namespace: 3s-postgres
   labels:
-    name: app-3s-pgsl
+    name: 3s-postgres-primary
 spec:
   ports:
     - protocol: TCP
       port: 5432
       nodePort: 0
   selector:
-    name: app-3s-pgsl
+    name: 3s-postgres-primary
   type: ClusterIP
   sessionAffinity: None
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: app-3s-pgsl-replica
-  namespace: app-3s
+  name: 3s-postgres-replica
+  namespace: 3s-postgres
   labels:
-    name: app-3s-pgsl
+    name: 3s-postgres-replica
 spec:
   ports:
     - protocol: TCP
       port: 5432
       nodePort: 0
   selector:
-    name: app-3s-pgsl
+    name: 3s-postgres-replica
   type: ClusterIP
   sessionAffinity: None
 
@@ -155,25 +151,25 @@ spec:
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: app-3s-pgsl
-  namespace: app-3s
+  name: postgres
+  namespace: 3s-postgres
 spec:
   selector:
     matchLabels:
-      app: app-3s-pgsl
-  serviceName: app-3s-pgsl
+      app: postgres
+  serviceName: postgres
   replicas: 1
   template:
     metadata:
       labels:
-        app: app-3s-pgsl
-        name: app-3s-pgsl-replica
+        app: postgres
+        name: 3s-postgres-replica
     spec:
-      serviceAccount: app-3s-pgsl-sa
+      serviceAccount: 3s-postgres-sa
       securityContext:
         fsGroup: 26
       containers:
-        - name: app-3s-postgres
+        - name: postgres
           image: crunchydata/crunchy-postgres:centos8-13.6-4.7.5
           imagePullPolicy: Always
           resources:
@@ -187,15 +183,14 @@ spec:
             - containerPort: 5432
           envFrom:
             - secretRef:
-                name: app-3s-pgsl-secret
+                name: postgres-secret
             - configMapRef:
-                name: app-3s-pgsl-config
+                name: postgres-config
           volumeMounts:
             - name: pgdata
               mountPath: /pgdata
               readOnly: false
       volumes:
-      
         - name: pgdata
           persistentVolumeClaim:
-            claimName: pvc-app-3s-pgsl
+            claimName: pvc-3s-postgres

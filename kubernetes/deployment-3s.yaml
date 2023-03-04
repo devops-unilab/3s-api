@@ -17,6 +17,22 @@ metadata:
 type: kubernetes.io/dockerconfigjson
 
 ---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pvc-<APP_NAME>
+  namespace: <APP_NAMESPACE>
+  labels:
+    app: <APP_NAME>
+spec:
+  storageClassName: nfs-storage-k8s
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 50Gi
+
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -55,8 +71,11 @@ spec:
           hostPath:
             path: /usr/share/zoneinfo/America/Fortaleza
             type: File
+        # - name: 3s-uploads
+        #   emptyDir: {}
         - name: 3s-uploads
-          emptyDir: {}
+          persistentVolumeClaim:
+            claimName: pvc-<APP_NAME>
       imagePullSecrets:
       - name: registro-regcred
   selector:
