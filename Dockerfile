@@ -46,6 +46,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     nfs-common \
     tini \
     apt-utils \
+    nano \
     curl \
     gnupg \
     sudo \
@@ -156,7 +157,7 @@ VOLUME ["/var/www/html/3s/public/uploads"]
 
 EXPOSE 80 37389
 
-#USER 3s
+USER 3s
 
 LABEL \
     org.opencontainers.image.vendor="UNILAB" \
