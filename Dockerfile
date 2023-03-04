@@ -6,7 +6,7 @@
 #
 # Build instructions:
 #
-#   docker docker build -t dti-registro.unilab.edu.br/unilab/3s:latest --build-arg 'VERSION=1.0.0 COMMIT_SHA=$(git rev-parse --short HEAD)' .
+#   docker build -t dti-registro.unilab.edu.br/unilab/3s:latest --build-arg 'VERSION=1.0.0 COMMIT_SHA=$(git rev-parse --short HEAD)' .
 #   docker push dti-registro.unilab.edu.br/unilab/3s:latest:latest
 #
 # Usage:
@@ -149,6 +149,7 @@ RUN /etc/init.d/ssh start
 RUN cp apache2/httpd-vhosts.conf /etc/apache2/
 RUN cp -Rf apache2/000-default.conf /etc/apache2/sites-available/
 RUN ln -s /etc/apache2/sites-available/000-default.conf /etc/apache2/sites-enabled/default.conf
+RUN apachectl configtest
 RUN rm -r apache2
 
 WORKDIR /var/www/html/3s/public
@@ -158,6 +159,8 @@ VOLUME ["/var/www/html/3s/public/uploads"]
 EXPOSE 80 37389
 
 USER 3s
+
+RUN sudo -i
 
 LABEL \
     org.opencontainers.image.vendor="UNILAB" \
