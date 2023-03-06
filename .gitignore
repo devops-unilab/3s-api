@@ -478,11 +478,11 @@ composer.lock
 *.sqlite3
 *.db
 
-!dados/3s
-!dados/sites/pub/ocorrencias
+!source/dados/3s
+!source/dados/sites/pub/ocorrencias
 **/backup_solicitado
 **/backups
 **/bd
 **/pgrestore
 **/uploads
-postgres
+source/postgres
