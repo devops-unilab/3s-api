@@ -1,26 +1,29 @@
-<p align="center">
-  <a href="" rel="noopener">
- <img width=200px height=200px src="https://i.imgur.com/6wj0hh6.jpg" alt="DevOps CI/CD"></a>
+<p style="text-align: center; display: block;">
+
+![3S Ocorrências](https://3s.unilab.edu.br/img/logo-header.png)
+
 </p>
 
-<h3 align="center">3S</h3>
-
-<div align="center">
+<p style="text-align: center;">
 
 [![Status](https://img.shields.io/badge/status-active-success.svg)]()
-[![GitHub Issues](https://img.shields.io/github/issues/kylelobo/The-Documentation-Compendium.svg)](https://github.com/kylelobo/The-Documentation-Compendium/issues)
-[![GitHub Pull Requests](https://img.shields.io/github/issues-pr/kylelobo/The-Documentation-Compendium.svg)](https://github.com/kylelobo/The-Documentation-Compendium/pulls)
-[![License](https://img.shields.io/badge/license-MIT-blue.svg)](/LICENSE)
+[![GitLab Issues](https://img.shields.io/github/issues/kylelobo/The-Documentation-Compendium.svg)](https://dti-gitlab.unilab.edu.br/disir/3s_cicd/-/issues)
+[![GitLab Pull Requests](https://img.shields.io/github/issues-pr/kylelobo/The-Documentation-Compendium.svg)](https://dti-gitlab.unilab.edu.br/disir/3s_cicd/-/merge_requests)
+[![License](https://img.shields.io/badge/reuse-compliant-green)](/LICENSE)
 
-</div>
+</p>
 
 ---
 
-# Fluxo de Pipeline CI/CD - 3S
+## Fluxo de Pipeline CI/CD
 
 ![DevOps CI/CD](http://d1.awsstatic.com/product-marketing/DevOps/continuous_integration.4f4cddb8556e2b1a0ca0872ace4d5fe2f68bbc58.png)
 
-## Começando
+# Topologia CI/CD - DTI/Unilab
+
+![DevOps CI/CD](./pipeline/fluxo-topologia-pipeline-ci-cd.png)
+
+## Iniciando
 
 Para tornar mais fácil para você começar a usar o GitLab, aqui está uma lista das próximas etapas recomendadas.
 
