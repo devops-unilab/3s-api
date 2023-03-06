@@ -1,18 +1,15 @@
-<p style="text-align: center; display: block;">
-
-![3S Ocorrências](https://3s.unilab.edu.br/img/logo-header.png)
-
-</p>
-
 <p style="text-align: center;">
 
+[![3S Ocorrências](https://img.shields.io/badge/3S-yellow?style=for-the-badge)](https://3s.unilab.edu.br/)
+
+
 [![Status](https://img.shields.io/badge/status-active-success.svg)]()
-[![GitLab Issues](https://img.shields.io/github/issues/kylelobo/The-Documentation-Compendium.svg)](https://dti-gitlab.unilab.edu.br/disir/3s_cicd/-/issues)
-[![GitLab Pull Requests](https://img.shields.io/github/issues-pr/kylelobo/The-Documentation-Compendium.svg)](https://dti-gitlab.unilab.edu.br/disir/3s_cicd/-/merge_requests)
+[![GitLab Commits](https://img.shields.io/badge/commits/dti-gitlab.unilab.edu.br/disir/3s_cicd/-/commits/main?ref_type=heads)](https://dti-gitlab.unilab.edu.br/disir/3s_cicd/-/commits/main?ref_type=heads)
+[![GitLab Pull Requests](https://img.shields.io/badge/requests/dti-gitlab.unilab.edu.br/disir/3s_cicd/-/merge_requests)](https://dti-gitlab.unilab.edu.br/disir/3s_cicd/-/merge_requests)
+[![GitLab Issues](https://img.shields.io/badge/issues/dti-gitlab.unilab.edu.br/disir/3s_cicd/-/issues)](https://dti-gitlab.unilab.edu.br/disir/3s_cicd/-/issues)
 [![License](https://img.shields.io/badge/reuse-compliant-green)](/LICENSE)
 
 </p>
-
 ---
 
 ## Fluxo de Pipeline CI/CD
