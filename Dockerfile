@@ -122,7 +122,7 @@ ENV MAIL_FROM_NAME "3S/DTI/UNILAB"
 # 3s env -------------------
 
 # get workspace legado da vm 3s
-COPY . .
+COPY source/ .
 
 # Uncompress arquivo zip protected
 RUN 7z x dados/3s/inifiles.zip -p$(echo Y3RpQHVuaWxhYjIwMTI= | base64 -d) -odados/3s \
