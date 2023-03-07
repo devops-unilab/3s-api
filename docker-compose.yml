@@ -1,0 +1,51 @@
+# docker-compose.yml up -d
+
+version: '3.9'
+services:
+  ###################################
+  # PostgreSQL
+  ###################################
+  postgresql:
+    image: postgresql:latest
+    container_name: postgres
+    restart: always
+    ports:
+      - 5432:5432
+    env_file:
+      - .env
+    volumes:
+      - ./postgresql_data:/custom/mount:/var/lib/postgresql/data
+      - ./postgresql_data:/opt/bitnami/postgresql/conf/postgresql.conf
+      - ./postgresql_data:/opt/bitnami/postgresql/conf/pg_hba.conf
+    networks:
+      - unilab
+
+  ###################################
+  # PgAdmin4 - Tool para PostgreSQL
+  ###################################
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: pgadmin4
+    restart: always
+    ports:
+      - 8080:80
+    env_file:
+      - .env
+    volumes:
+      - ./pgadmin_data:/var/lib/pgadmin
+      - ./pgadmin_data:/pgadmin4/servers.json
+    depends_on:
+      - postgresql
+    networks:
+      - unilab
+
+volumes:
+  postgresql_data:
+    driver: local
+  pgadmin_data:
+    driver: local
+
+networks:
+ unilab:
+   name: unilab
+   driver: bridge

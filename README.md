@@ -10,6 +10,7 @@
 [![License](https://img.shields.io/badge/reuse-compliant-green)](/LICENSE)
 
 </p>
+
 ---
 
 ## Fluxo de Pipeline CI/CD
