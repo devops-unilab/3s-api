@@ -1,4 +1,4 @@
-# docker-compose up -d
+# docker-compose up --build -d
 # docker-compose logs -f
 # docker exec -it postgres /bin/bash
 # docker cp postgres:/var/lib/postgresql/data/pgdata/pg_hba.conf ./postgres-conf/
@@ -6,6 +6,23 @@
 
 version: '3.9'
 services:
+  ###################################
+  # Application
+  ###################################
+  app:
+    build: .
+    image: 3s:latest
+    container_name: 3s
+    restart: always
+    ports:
+      - 8080:80
+      - 37389:37389
+    env_file:
+      - .env
+    volumes:
+      - /tmp:/var/www/html/3s/public/uploads:rw
+    networks:
+      - dev
   ###################################
   # PostgreSQL
   ###################################
@@ -19,10 +36,10 @@ services:
       - .env
     volumes:
       - postgresql_data:/var/lib/postgresql/data/pgdata
-      - ./postgres-conf/postgresql.conf:/var/lib/postgresql/data/pgdata/postgresql.conf:rw
-      - ./postgres-conf/pg_hba.conf:/var/lib/postgresql/data/pgdata/pg_hba.conf:rw
+      - ./source/postgres/postgresql.conf:/var/lib/postgresql/data/pgdata/postgresql.conf:rw
+      - ./source/postgres/pg_hba.conf:/var/lib/postgresql/data/pgdata/pg_hba.conf:rw
     networks:
-      - unilab
+      - dev
 
   ###################################
   # PgAdmin4 - Tool para PostgreSQL
@@ -32,16 +49,16 @@ services:
     container_name: pgadmin
     restart: always
     ports:
-      - 8080:80
+      - 8090:80
     env_file:
       - .env
     volumes:
       - pgadmin_data:/var/lib/pgadmin
-      - pgadmin_data:/pgadmin4/servers.json
+      - ./source/postgres/servers.json:/pgadmin4/servers.json:rw
     depends_on:
       - postgresql
     networks:
-      - unilab
+      - dev
 
 volumes:
   postgresql_data:
@@ -50,6 +67,6 @@ volumes:
     driver: local
 
 networks:
- unilab:
-   name: unilab
+ dev:
+   name: dev
    driver: bridge
