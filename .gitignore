@@ -487,3 +487,4 @@ composer.lock
 **/uploads
 source/postgres
 .env
+/postgres-conf

@@ -9,3 +9,4 @@ source/postgres
 README.md
 .git
 .gitignore
+/postgres-conf
