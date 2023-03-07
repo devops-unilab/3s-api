@@ -486,3 +486,4 @@ composer.lock
 **/pgrestore
 **/uploads
 source/postgres
+.env
