@@ -29,7 +29,7 @@
 #
 # Version: 1.0
 
-FROM php:7.4-apache-bullseye
+FROM bitnami/laravel:8-debian-10
 
 ENV DEBIAN_FRONTEND noninteractive
 
@@ -62,10 +62,11 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     locales \
     rsync \
     stress \
+    apache2 \
   && rm -rf /var/lib/apt/lists/*
 
 # Install extensoes especificas for PHP
-RUN docker-php-ext-install pdo pdo_pgsql 
+# RUN docker-php-ext-install pdo pdo_pgsql 
 
 RUN apt-get dist-upgrade -y && \
   apt-get upgrade -y && \
@@ -124,14 +125,18 @@ ENV MAIL_FROM_NAME "3S/DTI/UNILAB"
 # get workspace legado da vm 3s
 COPY source/ .
 
+RUN composer install --no-dev
+RUN sudo chmod -R 775 storage
+RUN sudo chmod -R 775 bootstrap/cache
+RUN php artisan migrate
+RUN php artisan key:generate
+
 # Uncompress arquivo zip protected
-RUN 7z x dados/3s/inifiles.zip -p$(echo Y3RpQHVuaWxhYjIwMTI= | base64 -d) -odados/3s \
-  && rm dados/3s/*.zip
+# RUN 7z x dados/3s/inifiles.zip -p$(echo Y3RpQHVuaWxhYjIwMTI= | base64 -d) -odados/3s \
+#   && rm dados/3s/*.zip
 
 RUN mkdir -p 3s/public/uploads/ocorrencia/anexo \
-  && mv -f dados/sites/pub/ocorrencias/* 3s/public/ \
-  && mv -f dados/3s 3s \
-  && rm -r dados \
+  && mv -f * 3s \
   && chown -Rf www-data:www-data 3s/public/uploads
 
 # Setup user
@@ -153,6 +158,8 @@ RUN apachectl configtest
 RUN rm -r apache2
 
 WORKDIR /var/www/html/3s/public
+
+
 
 VOLUME ["/var/www/html/3s/public/uploads"]
 
