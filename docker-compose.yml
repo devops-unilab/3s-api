@@ -1,4 +1,8 @@
-# docker-compose.yml up -d
+# docker-compose up -d
+# docker-compose logs -f
+# docker exec -it postgres /bin/bash
+# docker cp postgres:/var/lib/postgresql/data/pgdata/pg_hba.conf ./postgres-conf/
+# docker cp postgres:/var/lib/postgresql/data/pgdata/postgresql.conf ./postgres-conf/
 
 version: '3.9'
 services:
@@ -6,7 +10,7 @@ services:
   # PostgreSQL
   ###################################
   postgresql:
-    image: postgresql:latest
+    image: postgres:latest
     container_name: postgres
     restart: always
     ports:
@@ -14,9 +18,9 @@ services:
     env_file:
       - .env
     volumes:
-      - ./postgresql_data:/custom/mount:/var/lib/postgresql/data
-      - ./postgresql_data:/opt/bitnami/postgresql/conf/postgresql.conf
-      - ./postgresql_data:/opt/bitnami/postgresql/conf/pg_hba.conf
+      - postgresql_data:/var/lib/postgresql/data/pgdata
+      - ./postgres-conf/postgresql.conf:/var/lib/postgresql/data/pgdata/postgresql.conf:rw
+      - ./postgres-conf/pg_hba.conf:/var/lib/postgresql/data/pgdata/pg_hba.conf:rw
     networks:
       - unilab
 
@@ -25,15 +29,15 @@ services:
   ###################################
   pgadmin:
     image: dpage/pgadmin4:latest
-    container_name: pgadmin4
+    container_name: pgadmin
     restart: always
     ports:
       - 8080:80
     env_file:
       - .env
     volumes:
-      - ./pgadmin_data:/var/lib/pgadmin
-      - ./pgadmin_data:/pgadmin4/servers.json
+      - pgadmin_data:/var/lib/pgadmin
+      - pgadmin_data:/pgadmin4/servers.json
     depends_on:
       - postgresql
     networks:
