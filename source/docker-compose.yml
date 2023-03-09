@@ -1,0 +1,94 @@
+## Como usar:
+# cd source/
+# docker-compose up --build -d
+# docker-compose logs -f
+# docker exec -it postgres /bin/bash
+# docker cp postgres:/var/lib/postgresql/data/postgresql.conf ./docker/postgres/
+# docker cp postgres:/var/lib/postgresql/data/pg_hba.conf ./docker/postgres/
+
+## full clean
+# docker stop $(docker ps -qa)
+# docker rm -f $(docker ps -qa)
+# docker rmi -f $(docker images -qa)
+# docker volume rm -f $(docker volume ls -q)
+# docker network rm $(docker network ls -q)
+
+#Admin Laravel
+#Email: teste@user.com
+#Password: testpass
+
+version: '3.9'
+services:
+  ###################################
+  # Application
+  ################################### 
+  app:
+    build:
+      context: ./
+      target: dev # production
+    image: app-3s:latest
+    container_name: 3s
+    restart: always
+    volumes:
+      - ./public/uploads:/var/www/html/public/uploads:rw
+      - .env.dev:/var/www/html/.env
+    ports:
+      - "8080:80"
+      - "37389:37389"
+    environment:
+      - APP_ENV=local
+      - APP_DEBUG=true
+    networks:
+      - developer
+    depends_on:
+      - postgresql
+
+  ###################################
+  # PostgreSQL
+  ###################################
+  postgresql:
+    image: postgres:15-bullseye
+    container_name: postgres
+    restart: always
+    ports:
+      - 5432:5432
+    env_file:
+      - .env.dev
+    volumes:
+      - postgresql_data:/var/lib/postgresql/data
+      # - ./docker/postgres/postgresql.conf:/var/lib/postgresql/data/postgresql.conf:rw
+      # - ./docker/postgres/pg_hba.conf:/var/lib/postgresql/data/pg_hba.conf:rw
+      - ./db/init.sql:/docker-entrypoint-initdb.d/01init.sql
+    networks:
+      - developer
+
+  ###################################
+  # PgAdmin4 - Tool para PostgreSQL
+  ###################################
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: pgadmin
+    restart: always
+    ports:
+      - 8090:80
+    env_file:
+      - .env.dev
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+      - ./docker/pgadmin/servers.json:/pgadmin4/servers.json:rw
+    networks:
+      - developer
+    depends_on:
+      - postgresql
+
+volumes:
+  postgresql_data:
+    driver: local
+  pgadmin_data:
+    driver: local
+
+networks:
+ developer:
+   name: developer
+   driver: bridge
+   

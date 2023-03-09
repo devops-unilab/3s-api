@@ -1,7 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use novissimo3s\controller\MainIndex;
+use Illuminate\Support\Facades\Artisan;
+use app3s\controller\MainIndex;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,12 +15,45 @@ use novissimo3s\controller\MainIndex;
 |
 */
 
+Route::get('/welcome', function () {
+    return view('welcome');
+});
+
 Route::get('/', function () {
     $main = new MainIndex();
     $main->main();
 })->name('root');
+
 Route::post('/', function () {
-    
     $main = new MainIndex();
     $main->main();
 })->name('root-post');
+
+/*
+//rota de migração
+Route::get('migrate',function(){
+   Artisan::call('migrate');
+//    return \Artisan::output();
+});
+
+//rota de rollback
+Route::get('rollback',function(){
+   Artisan::call('migrate:rollback');
+});
+
+//rota de visualizacao e limpeza
+Route::get('vr-clear',function(){
+   Artisan::call('route:clear');
+   Artisan::call('view:clear');
+});
+
+//rota de reinicializacao e limpeza de cache
+Route::get('reboot',function(){
+  Artisan::call('view:clear');
+  Artisan::call('route:clear');
+  Artisan::call('config:clear');
+  Artisan::call('cache:clear');
+  Artisan::call('key:generate');
+});
+*/
+

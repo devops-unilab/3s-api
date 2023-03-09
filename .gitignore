@@ -477,12 +477,5 @@ composer.lock
 *.ini
 *.sqlite3
 *.db
-
-!source/dados/3s
-!source/dados/sites/pub/ocorrencias
-**/backup_solicitado
-**/backups
-**/bd
-**/pgrestore
-**/uploads
-/postgres-conf
+/source/public/uploads
+!/source/.env.example

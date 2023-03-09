@@ -1,0 +1,13 @@
+{
+   "Servers":{
+       "1":{
+          "Name":"Database PostgresSQL Local",
+          "Group":"Servers",
+          "Port":5432,
+          "Host":"postgresql",
+          "SSLMode":"prefer",
+          "Username":"postgres",
+          "MaintenanceDB":"laravel"
+      }
+   }
+}
