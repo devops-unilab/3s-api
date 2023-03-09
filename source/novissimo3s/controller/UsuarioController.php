@@ -52,8 +52,9 @@ class UsuarioController {
 	    }
 	    $usuario = new Usuario();
 	    $usuario->setLogin($_POST['usuario']);
-	    $usuario->setSenha(md5($_POST['senha']));
-	    
+	    $usuario->setSenha($_POST['senha']);
+	    $this->dao->autenticar($usuario);
+
 	    if ($this->dao->autenticar($usuario)) {
 	        
 	        $sessao = new Sessao();
