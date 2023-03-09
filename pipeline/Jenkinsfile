@@ -136,8 +136,6 @@ pipeline {
           Exemplo de uso: kubectl rollout history -n docker deployment.apps/docker
           Nota: Quando --record não é sinalizador, na tabela, CHANGE-CAUSE estará apenas <none>
           */
-          
-          /*
           script {
             // verifica deploy ativo e exclui
             sh "kubectl get deployment $APP_NAME -n $APP_NAMESPACE >/dev/null 2>&1 && \
@@ -146,11 +144,18 @@ pipeline {
             kubectl delete deployment $APP_NAME -n $APP_NAMESPACE || echo 'DEPLOYMENT INEXISTENTE!'"
             // aplica novo deploy
             sh "kubectl apply -f ./kubernetes/deployment-3s.yaml --record"
+
+            // verifica deploy ativo e exclui
+            sh "kubectl get deployment postgres -n postgres-3s >/dev/null 2>&1 && \
+            (kubectl get pods -l postgres -n postgres-3s --no-headers | wc -l) > 0 && \
+            kubectl delete pods -l app=postgres -n postgres-3s --force --grace-period=0; \
+            kubectl delete deployment postgres -n postgres-3s || echo 'DEPLOYMENT INEXISTENTE!'"
+            // aplica novo deploy
             sh "kubectl apply -f ./kubernetes/deployment-postgres-3s.yaml --record"
-            sh "kubectl get all,ing -n $APP_NAMESPACE -o wide"
           }
-          */
-          sh "kubectl get nodes"
+          //sh "kubectl get nodes"
+          sh "kubectl get all,ing -n $APP_NAMESPACE -o wide"
+          sh "kubectl get all,ing -n postgres-3s -o wide"
         }
       }
     }
