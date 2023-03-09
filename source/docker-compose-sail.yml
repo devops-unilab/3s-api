@@ -1,0 +1,62 @@
+# O Laravel Sail é uma interface de linha de comando leve para interagir 
+# com o ambiente de desenvolvimento Docker padrão do Laravel. 
+# O Sail fornece um excelente ponto de partida para criar um aplicativo 
+# Laravel usando PHP, MySQL e Redis sem exigir experiência anterior com o Docker.
+
+# Em sua essência, Sail é o docker-compose.ymlarquivo e o sailscript armazenados 
+# na raiz do seu projeto. O sailscript fornece uma CLI com métodos convenientes 
+# para interagir com os contêineres do Docker definidos pelo docker-compose.ymlarquivo.
+
+# O Laravel Sail é compatível com macOS, Linux e Windows (via WSL2 ).
+
+# For more information: https://laravel.com/docs/sail
+
+version: '3'
+services:
+    laravel.test:
+        build:
+            context: ./vendor/laravel/sail/runtimes/8.1
+            dockerfile: Dockerfile
+            args:
+                WWWGROUP: '${WWWGROUP}'
+        image: sail-8.1/app
+        extra_hosts:
+            - 'host.docker.internal:host-gateway'
+        ports:
+            - '${APP_PORT:-80}:80'
+            - '${VITE_PORT:-5173}:${VITE_PORT:-5173}'
+        environment:
+            WWWUSER: '${WWWUSER}'
+            LARAVEL_SAIL: 1
+            XDEBUG_MODE: '${SAIL_XDEBUG_MODE:-off}'
+            XDEBUG_CONFIG: '${SAIL_XDEBUG_CONFIG:-client_host=host.docker.internal}'
+        volumes:
+            - '.:/var/www/html'
+        networks:
+            - sail
+        depends_on:
+            - postgresql           
+    postgresql:
+        image: 'postgres:latest'
+        ports:
+            - '${FORWARD_DB_PORT:-5432}:5432'
+        environment:
+            POSTGRES_DB: '${POSTGRES_DB}'
+            POSTGRES_USER: '${POSTGRES_USER}'
+            POSTGRES_PASSWORD: '${POSTGRES_PASSWORD}'
+            PGDATA: '${PGDATA}'
+        volumes:
+            - 'sail-pgsql:/var/lib/postgresql/data/pgdata'
+            - './vendor/laravel/sail/database/mysql/create-testing-database.sh:/docker-entrypoint-initdb.d/10-create-testing-database.sh'
+        networks:
+            - sail
+        healthcheck:
+            test: ["CMD", "psql", "ping", "-p${POSTGRES_PASSWORD}"]
+            retries: 3
+            timeout: 5s
+networks:
+    sail:
+        driver: bridge
+volumes:
+    sail-pgsql:
+        driver: local   

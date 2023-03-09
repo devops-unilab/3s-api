@@ -1,8 +1,51 @@
----
 apiVersion: v1
 kind: Namespace
 metadata:
   name: <APP_NAMESPACE>
+  
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: <APP_NAME>-secret
+  namespace: <APP_NAMESPACE>
+type: Opaque
+data:
+  DB_PASSWORD: M3MhQCMkMjAyMw==
+  DB_PASSWORD_SIGAA: KytFbjNyR2lA
+  MAIL_PASSWORD: ''
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: <APP_NAME>-config
+  namespace: <APP_NAMESPACE>
+  labels:
+    app: <APP_NAME>
+data:
+  # defaults
+  TZ: 'America/Fortaleza'
+  # 3s
+  DB_CONNECTION: 'pgsql'
+  DB_HOST: 'postgres.postgres-3s.svc.cluster.local'
+  DB_PORT: '5432'
+  DB_DATABASE: '3s-ocorrencias'
+  DB_USERNAME: '3s'
+  # sigaa
+  DB_CONNECTION_SIGAA: 'pgsql'
+  DB_HOST_SIGAA: '10.129.19.31'
+  DB_PORT_SIGAA: '5432'
+  DB_DATABASE_SIGAA: 'sistemas_comum'
+  DB_USERNAME_SIGAA: '3s'
+  # smtp
+  MAIL_MAILER: 'smtp'
+  MAIL_HOST: 'smtp.noreply.unilab.edu.br'
+  MAIL_PORT: '25'
+  MAIL_USERNAME: ''
+  MAIL_ENCRYPTION: ''
+  MAIL_FROM_ADDRESS: '3s@noreply.unilab.edu.br'
+  MAIL_FROM_NAME: '3S - Sistema de Solicitação de Ocorrências'
 
 ---
 # kubectl create secret docker-registry registro-regcred --docker-server=https://dti-registro.unilab.edu.br --docker-username=desenvolvedor --docker-password=Desenvolvedor2023 --docker-email=dti-registro@noreply.unilab.edu.br --output yaml
