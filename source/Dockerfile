@@ -171,7 +171,9 @@ RUN php artisan config:cache && \
     php artisan config:clear && \
     php artisan cache:clear && \
     # php artisan view:clear && \
-    #php artisan optimize && \
+    # php artisan optimize && \
+    # php artisan db:seed --class=CustomSeeder --no-interaction && \
+    php artisan db:seed --class=CustomSeeder --force && \
     php artisan key:generate && \
     chmod 777 -R /var/www/html/storage/ && \
     chown -R www-data:www-data /var/www/ && \
