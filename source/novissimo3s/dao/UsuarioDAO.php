@@ -7,6 +7,8 @@
  */
      
 namespace novissimo3s\dao;
+
+use Illuminate\Support\Facades\DB;
 use PDO;
 use PDOException;
 use novissimo3s\model\Usuario;
@@ -81,90 +83,71 @@ class UsuarioDAO extends DAO {
     public function autenticar(Usuario $usuario)
     {
         
+        
         $login = $usuario->getLogin();
         $senha = $usuario->getSenha() ;
         
-        $sql = "SELECT * FROM
-                usuario WHERE
-                LOWER(login) =  LOWER(:login) AND senha = :senha LIMIT 1";
+		$url = "https://api.unilab.edu.br/api/authenticate";
+		$data = ['login' =>  $login, 'senha' => $senha];	    
+		
+		$curl = curl_init($url);
+        curl_setopt($curl, CURLOPT_POST, true);
+        curl_setopt($curl, CURLOPT_POSTFIELDS, http_build_query($data));
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+        $response = curl_exec($curl);
+        curl_close($curl);
+        $responseJ = json_decode($response);
         
-        try {
-            
-            $stmt = $this->getConnection()->prepare($sql);
-            $stmt->bindParam(":login", $login, PDO::PARAM_STR);
-            $stmt->bindParam(":senha", $senha, PDO::PARAM_STR);
-            $stmt->execute();
-            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            foreach ( $result as $linha ) {
-                $usuario->setId( $linha ['id'] );
-                $usuario->setNome($linha['nome']);
-                $usuario->setEmail( $linha ['email'] );
-                $usuario->setNivel($linha['nivel']);
-                
-                return true;
-//                 if($this->usuarioAtivo($usuario)){
-                    
-//                     return true;
-//                 }else{
-//                     return false;
-//                 }
-                
-            }
-            
-        } catch(PDOException $e) {
-            echo $e->getMessage();
+		
+		$idUsuario  = 0;
+
+		if(isset($responseJ->id)) {
+			$idUsuario = intval($responseJ->id);
+		}
+		if($idUsuario === 0) {
+			return false;
+		}
+		$curl = curl_init();
+		curl_setopt_array($curl, [
+		CURLOPT_URL => "https://api.unilab.edu.br/api/user",
+		CURLOPT_RETURNTRANSFER => true,
+		CURLOPT_ENCODING => "",
+		CURLOPT_MAXREDIRS => 10,
+		CURLOPT_TIMEOUT => 30,
+		CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+		CURLOPT_CUSTOMREQUEST => "GET",
+		CURLOPT_POSTFIELDS => "",
+		CURLOPT_HTTPHEADER => [
+			"Authorization: Bearer $responseJ->access_token"
+		],
+		]);
+
+		$response = curl_exec($curl);
+		$err = curl_error($curl);
+
+		curl_close($curl);
+
+		$responseJ2 = json_decode($response);
+		// // echo $responseJ->access_token;
+		if($responseJ2->id_status_servidor != 1){
             return false;
         }
         
-        $daoSIGAA = new DAO(null, "SIG");
-        
-        $sql2 = "SELECT * FROM vw_autenticacao_3s
-                WHERE LOWER(login) = LOWER(:login)
-                AND senha = :senha LIMIT 1";
-        
-        
-        try {
-            $stmt2 = $daoSIGAA->getConnection()->prepare($sql2);
-            $stmt2->bindParam(":login", $login, PDO::PARAM_STR);
-            $stmt2->bindParam(":senha", $senha, PDO::PARAM_STR);
-            $stmt2->execute();
-            $result2 = $stmt2->fetchAll(PDO::FETCH_ASSOC);
-            foreach ( $result2 as $linha2 ) {
-                $usuario->setId($linha2['id']);
-//                 if($linha2['id_status_servidor'] != 1){
-//                     return false;//Status Inativo
-//                 }//Verificar se servidor ativo; 
-                
-                if(sizeof($this->fetchById($usuario)) == 0)
-                {
-                    $usuario->setNome($linha2['nome']);
-                    $usuario->setEmail($linha2['email']);
-                    $usuario->setNivel(Sessao::NIVEL_COMUM);
-                    $this->insertWithPK($usuario);
-                    
-                    return true;
-                }
-                else
-                {
-                    
-                    $this->fillById($usuario);
-                    $usuario->setNome($linha2['nome']);
-                    $usuario->setEmail($linha2['email']);
-                    $usuario->setLogin($linha2['login']);
-                    $usuario->setSenha($linha2['senha']);
-                    $this->update($usuario);
-                    return true;
-                }
-                
-            }
-            
-            return false;
-        } catch(PDOException $e) {
-            echo $e->getMessage();
-            
-            return false;
+        $data = DB::table('usuario')->where("id", $idUsuario)->first();
+        if($data === null) {
+            DB::table('usuario')->insert(
+                [   'id' => $idUsuario,
+                    'nome' => $responseJ2->nome , 
+                    'email' => $responseJ2->email , 
+                    'login' => $responseJ2->login , 
+                    'nivel' => 'c']
+            );
         }
-        
+        $usuario->setId( $idUsuario );
+        $usuario->setNome($data->nome);
+        $usuario->setEmail( $data->email );
+        $usuario->setNivel($data->nivel);
+        return true;
     }
     
 
