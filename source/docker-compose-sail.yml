@@ -47,7 +47,7 @@ services:
             PGDATA: '${PGDATA}'
         volumes:
             - 'sail-pgsql:/var/lib/postgresql/data/pgdata'
-            - './vendor/laravel/sail/database/mysql/create-testing-database.sh:/docker-entrypoint-initdb.d/10-create-testing-database.sh'
+            - './vendor/laravel/sail/postgres/mysql/create-testing-database.sh:/docker-entrypoint-initdb.d/10-create-testing-database.sh'
         networks:
             - sail
         healthcheck:
