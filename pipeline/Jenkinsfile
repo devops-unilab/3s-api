@@ -72,7 +72,8 @@ pipeline {
         sh 'mvn org.apache.maven.plugins:maven-dependency-plugin:3.5.0:tree -Xdebug -f spring-boot/'
         sh 'mvn package install -Dmaven.test.skip=true -Dmy.variable=${APP_NAME} -Dmy.variable=${APP_VERSION} -f spring-boot/'
         */
-        sh 'ls -la .'
+        sh 'ls -la ./source'
+        sh 'cp ./source/.env.example ./source/.env.dev && cp ./source/.env.example ./source/.env.prod'
       }
     }
     stage('Build Image Container') {
