@@ -18,3 +18,4 @@ yarn-error.log
 .env.dev
 .env.prod
 !.env.example
+!/docker/php/conf.d/opcache.ini
