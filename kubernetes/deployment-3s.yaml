@@ -104,18 +104,21 @@ spec:
           name: http
         - containerPort: 37389
           name: ssh
+        envFrom:
+          - secretRef:
+              name: <APP_NAME>-secret
+          - configMapRef:
+              name: <APP_NAME>-config
         volumeMounts:
         - name: tz-america
           mountPath: /etc/localtime
         - name: 3s-uploads
-          mountPath: /var/www/html/3s/public/uploads
+          mountPath: /var/www/html/public/uploads
       volumes:
         - name: tz-america
           hostPath:
             path: /usr/share/zoneinfo/America/Fortaleza
             type: File
-        # - name: 3s-uploads
-        #   emptyDir: {}
         - name: 3s-uploads
           persistentVolumeClaim:
             claimName: pvc-<APP_NAME>
