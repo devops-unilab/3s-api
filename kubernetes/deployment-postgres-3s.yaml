@@ -194,3 +194,4 @@ spec:
         - name: pgdata
           persistentVolumeClaim:
             claimName: pvc-postgres-3s
+            
