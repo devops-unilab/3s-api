@@ -141,7 +141,7 @@ $(document).ready(function(e) {
         
 		jQuery.ajax({
             type: "POST",
-            url: "?ajax=pedir_ajuda",
+            url: "index.php?ajax=pedir_ajuda",
             data: dados,
             success: function( data )
             {
@@ -180,7 +180,7 @@ $(document).ready(function(e) {
 
 		jQuery.ajax({
             type: "POST",
-            url: "?ajax=ocorrencia",
+            url: "index.php?ajax=ocorrencia",
             data: dados,
             success: function( data )
             {

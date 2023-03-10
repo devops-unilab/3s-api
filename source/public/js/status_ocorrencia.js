@@ -109,7 +109,7 @@ $(".form_status").on('submit', function(e) {
 
 	jQuery.ajax({
         type: "POST",
-        url: "?ajax=status_ocorrencia",
+        url: "index.php?ajax=status_ocorrencia",
         data: dados,
         success: function( data )
         {
