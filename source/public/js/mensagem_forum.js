@@ -137,7 +137,7 @@ $(document).ready(function(e)
 		
 		jQuery.ajax({
             type: "POST",
-            url: "?ajax=mensagem_forum",
+            url: "index.php?ajax=mensagem_forum",
             data: dados,
             success: function( data )
             {
