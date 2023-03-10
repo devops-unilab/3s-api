@@ -1,6 +1,6 @@
 $(document).ready(function(e){
 	
-	var urlTabela = '?ajax=painel_tabela';
+	var urlTabela = 'index.php/?ajax=painel_tabela';
 	var urlSelecionada = urlTabela;
 	$("#select-setores").change(function(){
 		//$("#hidden-tabela").val($("#select-tabela").val());

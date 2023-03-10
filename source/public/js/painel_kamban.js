@@ -7,7 +7,7 @@ $(document).ready(function(e){
 	
 	modificarTela();
 	
-	var urlTabela = '?ajax=painel_kamban';
+	var urlTabela = 'index.php/?ajax=painel_kamban';
 	var urlSelecionada = urlTabela;
 	
 	$("#select-setores").change(function(){
