@@ -9,7 +9,7 @@ $(document).ready(function(e) {
         
 		jQuery.ajax({
             type: "POST",
-            url: "index.php?ajax=area_responsavel",
+            url: "?ajax=area_responsavel",
             data: dados,
             success: function( data )
             {

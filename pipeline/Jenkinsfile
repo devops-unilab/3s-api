@@ -73,7 +73,7 @@ pipeline {
         sh 'mvn package install -Dmaven.test.skip=true -Dmy.variable=${APP_NAME} -Dmy.variable=${APP_VERSION} -f spring-boot/'
         */
         sh 'ls -la ./source'
-        sh 'cp ./source/.env.example ./source/.env.dev && cp ./source/.env.example ./source/.env.prod'
+        //sh 'cp ./source/.env.example ./source/.env.dev && cp ./source/.env.example ./source/.env.prod'
       }
     }
     stage('Build Image Container') {
@@ -82,7 +82,7 @@ pipeline {
           milestone(ordinal: null, label: "Milestone: Docker Build")
           timeout(time: 60, unit: 'MINUTES') {
             //sh "docker build -f ./Dockerfile -t '$DOCKER_IMAGE':'$DOCKER_TAG' --build-arg='NAME=$APP_NAME' --build-arg='VERSION=$APP_VERSION' --build-arg='COMMIT_SHA=$GIT_COMMIT' --build-arg='BUILDKIT_INLINE_CACHE=1' --cache-from '$DOCKER_IMAGE':'$DOCKER_TAG' ./"
-            sh "cd ./source && docker build -f ./Dockerfile -t '$DOCKER_IMAGE:$DOCKER_TAG' --build-arg 'VERSION=$APP_VERSION COMMIT_SHA=$GIT_COMMIT BUILDKIT_INLINE_CACHE=1' --cache-from '$DOCKER_IMAGE:$DOCKER_TAG' ."
+            sh "cd ./source && docker build --target production -f ./Dockerfile -t '$DOCKER_IMAGE:$DOCKER_TAG' --build-arg 'VERSION=$APP_VERSION COMMIT_SHA=$GIT_COMMIT BUILDKIT_INLINE_CACHE=1' --cache-from '$DOCKER_IMAGE:$DOCKER_TAG' ."
           }
         }
       }
