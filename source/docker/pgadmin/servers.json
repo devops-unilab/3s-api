@@ -1,13 +1,58 @@
 {
-   "Servers":{
-       "1":{
-          "Name":"Database PostgresSQL Local",
-          "Group":"Servers",
-          "Port":5432,
-          "Host":"postgresql",
-          "SSLMode":"prefer",
-          "Username":"postgres",
-          "MaintenanceDB":"laravel"
-      }
-   }
+    "Servers": {
+        "1": {
+            "Name": "Database PostgresSQL (Local)",
+            "Group": "Servers",
+            "Host": "postgresql",
+            "Port": 5432,
+            "MaintenanceDB": "laravel",
+            "Username": "postgres",
+            "UseSSHTunnel": 0,
+            "TunnelPort": "22",
+            "TunnelAuthentication": 0,
+            "KerberosAuthentication": false,
+            "ConnectionParameters": {
+                "sslmode": "prefer",
+                "connect_timeout": 10,
+                "sslcert": "",
+                "sslkey": ""
+            }
+        },
+        "2": {
+            "Name": "PostgreSQL 3S (K8S C2)",
+            "Group": "Servers",
+            "Host": "10.130.0.154",
+            "Port": 5432,
+            "MaintenanceDB": "3s-ocorrencias",
+            "Username": "3s",
+            "UseSSHTunnel": 0,
+            "TunnelPort": "22",
+            "TunnelAuthentication": 0,
+            "KerberosAuthentication": false,
+            "ConnectionParameters": {
+                "sslmode": "prefer",
+                "connect_timeout": 10,
+                "sslcert": "",
+                "sslkey": ""
+            }
+        },
+        "3": {
+            "Name": "PostgreSQL 3S (VM Monol\u00edtico)",
+            "Group": "Servers",
+            "Host": "3s.unilab.edu.br",
+            "Port": 5432,
+            "MaintenanceDB": "ocorrencias",
+            "Username": "ocorrencias_user",
+            "UseSSHTunnel": 0,
+            "TunnelPort": "22",
+            "TunnelAuthentication": 0,
+            "KerberosAuthentication": true,
+            "ConnectionParameters": {
+                "sslmode": "prefer",
+                "connect_timeout": 10,
+                "sslcert": "",
+                "sslkey": ""
+            }
+        }
+    }
 }

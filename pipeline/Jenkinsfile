@@ -73,7 +73,7 @@ pipeline {
         sh 'mvn package install -Dmaven.test.skip=true -Dmy.variable=${APP_NAME} -Dmy.variable=${APP_VERSION} -f spring-boot/'
         */
         sh 'ls -la ./source'
-        //sh 'cp ./source/.env.example ./source/.env.dev && cp ./source/.env.example ./source/.env.prod'
+        sh 'cp ./source/.env.example ./source/.env.dev && cp ./source/.env.example ./source/.env.prod'
       }
     }
     stage('Build Image Container') {
@@ -136,6 +136,8 @@ pipeline {
           Exemplo de uso: kubectl rollout history -n docker deployment.apps/docker
           Nota: Quando --record não é sinalizador, na tabela, CHANGE-CAUSE estará apenas <none>
           */
+
+          /*
           script {
             // verifica deploy ativo e exclui
             sh "kubectl get deployment $APP_NAME -n $APP_NAMESPACE >/dev/null 2>&1 && \
@@ -155,6 +157,7 @@ pipeline {
           }
           //sh "kubectl get nodes"
           sh "kubectl get all,ing -n $APP_NAMESPACE -o wide"
+          */
           sh "kubectl get all,ing -n postgres-3s -o wide"
         }
       }

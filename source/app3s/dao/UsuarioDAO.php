@@ -13,6 +13,21 @@ use app3s\model\Usuario;
 use app3s\util\Sessao;
 
 class UsuarioDAO extends DAO {
+
+	/**
+	 * Undocumented function
+	 *
+	 * @param PDO|null $connection
+	 * @param string $type
+	 */
+	public function __construct(PDO $connection = null, $type = "default") {
+	    $this->type = $type;
+		if ($connection  != null) {
+			$this->connection = $connection;
+		} else {
+			$this->connect();
+		}
+	}
     
     public function getIdUnidade(Usuario $usuario){
         $idUnidade = array();

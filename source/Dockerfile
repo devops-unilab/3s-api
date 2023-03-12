@@ -82,6 +82,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   libzip-dev \
   libonig-dev \
   libpq-dev \
+  postgresql-client \
   && rm -rf /var/lib/apt/lists/*
 
 RUN apt-get dist-upgrade -y && \
@@ -135,6 +136,8 @@ COPY docker/apache/000-default.conf /etc/apache2/sites-available/000-default.con
 RUN usermod -u 33 -g 33 www-data 
 RUN ln -s /var/www/html /var/www/3S
 
+COPY .env.example /var/www/html/.env
+
 WORKDIR /var/www/html
 
 RUN php artisan config:cache && \
@@ -155,7 +158,7 @@ COPY --from=build /app /var/www/html
 RUN ln -s /etc/apache2/sites-available/000-default.conf /etc/apache2/sites-enabled/default.conf
 RUN apachectl configtest
 
-RUN unlink 3S && rm /var/www/html/.env
+RUN cd /var/www/ && unlink 3S
 
 RUN php artisan config:cache && \
   php artisan route:cache && \
