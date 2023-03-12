@@ -4,16 +4,15 @@ $("#login-form").on('submit', function(e) {
 	$("input").prop('disabled', true);
 	$("#botao-login").prop('disabled', true);
 	$("#spinner-submit").removeClass("escondido");
-	console.log("Tentar logar");
 	
+	console.log("Vamos testar");
 	jQuery.ajax({
 		type: "POST",
 		url: "?ajax=login",
 		data: dados,
 		success: function(data) {
-
-			console.log("Entrei na function");
-			console.log(data);
+			console.log("Nao entrou aqui");
+			
 			if (data.split(":")[1] == 'sucesso') {
 				if(data.split(":")[2] == 't'){
 					window.location.href = './?demanda=1';

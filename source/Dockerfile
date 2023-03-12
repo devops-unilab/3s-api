@@ -29,11 +29,12 @@
 #
 # Version: 1.0
 
+# Stage 1 - image compose 
 FROM composer:2.4 as build
 COPY . /app/
-RUN composer install --prefer-dist --no-dev --optimize-autoloader --no-interaction
+RUN composer install --prefer-dist --optimize-autoloader --no-interaction #--no-dev 
 
-# FROM php:8.1-apache-buster as dev
+# Stage 2 - image desenvolvimento
 FROM php:8.1-apache-bullseye as dev
 
 ENV APP_ENV=dev
@@ -43,48 +44,44 @@ ENV COMPOSER_ALLOW_SUPERUSER=1
 ENV DEBIAN_FRONTEND noninteractive
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    ca-certificates \
-    apt-transport-https \
-    software-properties-common \
-    libfreetype6 \
-    procps \
-    p7zip-full \
-    libpq-dev \
-    libldap-common \
-    postgresql-client \
-    openssh-client \
-    openssh-server \
-    git \
-    nfs-common \
-    tini \
-    apt-utils \
-    nano \
-    curl \
-    gnupg \
-    sudo \
-    gpg \
-    wget \
-    coreutils \
-    make \
-    telnet \
-    iproute2 \
-    net-tools \
-    iputils-ping \
-    lsb-release \
-    locales \
-    rsync \
-    stress \
-    build-essential \
-    libpng-dev \
-    libjpeg62-turbo-dev \
-    jpegoptim \
-    optipng \
-    pngquant \
-    gifsicle \
-    zip \
-    libzip-dev \
-    unzip \
-    libonig-dev \
+  ca-certificates \
+  apt-transport-https \
+  software-properties-common \
+  libfreetype6 \
+  procps \
+  zip \
+  unzip \
+  p7zip-full \
+  libpq-dev \
+  libldap-common \
+  openssh-client \
+  openssh-server \
+  git \
+  tini \
+  apt-utils \
+  nano \
+  curl \
+  gnupg \
+  sudo \
+  wget \
+  coreutils \
+  telnet \
+  iproute2 \
+  net-tools \
+  iputils-ping \
+  lsb-release \
+  locales \
+  rsync \
+  build-essential \
+  libpng-dev \
+  libjpeg62-turbo-dev \
+  jpegoptim \
+  optipng \
+  pngquant \
+  gifsicle \
+  libzip-dev \
+  libonig-dev \
+  libpq-dev \
   && rm -rf /var/lib/apt/lists/*
 
 RUN apt-get dist-upgrade -y && \
@@ -113,87 +110,74 @@ RUN dpkg-reconfigure locales tzdata -f noninteractive
 
 ENV APACHE_RUN_USER www-data
 ENV APACHE_RUN_GROUP www-data
-# ENV APACHE_LOG_DIR /var/log/apache2
-# ENV APACHE_RUN_DIR /var/www
 
-# Setup user
-RUN useradd -m -s /bin/bash 3s
-RUN usermod -aG sudo 3s && echo "3s ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/3s
-RUN echo "3s ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
-
-# Setup ssh
-RUN sed -i "s/#Port 22/Port 37389/g" /etc/ssh/sshd_config
+# Setup user and ssh
+RUN adduser --no-create-home --disabled-password --shell /bin/bash --gecos "" --force-badname 3s \
+  && echo "3s ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
+RUN sed -i "s/#Port 22/Port 22/g" /etc/ssh/sshd_config
+RUN sed -i "s/#PermitRootLogin prohibit-password/PermitRootLogin no/g" /etc/ssh/sshd_config
 RUN sed -i "s/#PasswordAuthentication yes/PasswordAuthentication no/g" /etc/ssh/sshd_config
-RUN [ -f ~/.ssh/id_rsa ] || ssh-keygen -t rsa -b 4096 -C "3s@noreply.unilab.edu.br" -f ~/.ssh/id_rsa -q -N "" && chmod -R 600 ~/.ssh
-RUN /etc/init.d/ssh start
+RUN [ -f ~/.ssh/id_rsa ] || ssh-keygen -t rsa -b 4096 -C "3s@3s.unilab.edu.br" -f ~/.ssh/id_rsa -q -N "" && chmod -R 600 ~/.ssh
+RUN update-rc.d ssh enable
 
-RUN mkdir -p /var/www/html/public/uploads/ocorrencia/anexo
-
-RUN apt-get update && apt-get install -y zip libpq-dev
-
-RUN docker-php-ext-configure pgsql -with-pgsql=/usr/local/pgsql \
-    && docker-php-ext-install pdo pdo_pgsql pgsql
+RUN docker-php-ext-configure pgsql -with-pgsql=/usr/local/pgsql
+RUN docker-php-ext-configure opcache --enable-opcache \
+  && docker-php-ext-install pdo pdo_pgsql pgsql
 
 COPY . /var/www/html/
+RUN mkdir -p /var/www/html/public/uploads/ocorrencia/anexo
+
 COPY --from=build /usr/bin/composer /usr/bin/composer
 RUN composer install --prefer-dist --no-interaction
 
 COPY docker/apache/000-default.conf /etc/apache2/sites-available/000-default.conf
-COPY .env.dev /var/www/html/.env
+
+RUN usermod -u 33 -g 33 www-data 
+RUN ln -s /var/www/html /var/www/3S
+
+WORKDIR /var/www/html
 
 RUN php artisan config:cache && \
-    php artisan route:cache && \
-    chmod 777 -R /var/www/html/storage/ && \
-    chown -R www-data:www-data /var/www/ && \
-    a2enmod rewrite
+  php artisan route:cache && \
+  chmod 777 -R /var/www/html/storage/ && \
+  chown -Rf www-data:www-data /var/www/ && \
+  a2enmod rewrite
 
-# FROM php:8.1-apache-bullseye as production
+# Stage 3 - image producao
 FROM dev as production
 
 ENV APP_ENV=production
 ENV APP_DEBUG=false
 
-RUN apt-get update && apt-get install -y libpq-dev
-RUN docker-php-ext-configure pgsql -with-pgsql=/usr/local/pgsql
-RUN docker-php-ext-configure opcache --enable-opcache && \
-    docker-php-ext-install pdo pdo_pgsql
-
 COPY docker/php/conf.d/opcache.ini /usr/local/etc/php/conf.d/opcache.ini
 
 COPY --from=build /app /var/www/html
-COPY docker/apache/000-default.conf /etc/apache2/sites-available/000-default.conf
 RUN ln -s /etc/apache2/sites-available/000-default.conf /etc/apache2/sites-enabled/default.conf
 RUN apachectl configtest
-COPY .env.prod /var/www/html/.env
+
+RUN unlink 3S && rm /var/www/html/.env
 
 RUN php artisan config:cache && \
-    php artisan route:cache && \
-    php artisan config:clear && \
-    php artisan cache:clear && \
-    # php artisan view:clear && \
-    # php artisan optimize && \
-    # php artisan db:seed --class=CustomSeeder --no-interaction && \
-    # php artisan db:seed --class=CustomSeeder --force && \
-    php artisan key:generate && \
-    chmod 777 -R /var/www/html/storage/ && \
-    chown -R www-data:www-data /var/www/ && \
-    a2enmod rewrite
-
-# WORKDIR /var/www/html
+  php artisan route:cache && \
+  php artisan db:seed --class=DatabaseSeeder --force && \
+  php artisan key:generate && \
+  chmod 777 -R /var/www/html/storage/ && \
+  chown -Rf www-data:www-data /var/www/ && \
+  a2enmod rewrite
 
 VOLUME ["/var/www/html/public/uploads"]
 
-EXPOSE 80 37389
+EXPOSE 80 22
 
 LABEL \
-    org.opencontainers.image.vendor="UNILAB" \
-    org.opencontainers.image.title="Official 3S Docker image" \
-    org.opencontainers.image.description="3S (Sistema de Solicitação de Servicos) " \
-    org.opencontainers.image.version="${VERSION}" \
-    org.opencontainers.image.url="https://3s.unilab.edu.br/" \
-    org.opencontainers.image.source="http://dti-gitlab.unilab.edu.br/disir/piloto-ci-cd-stack-devops-disir-dti.git" \
-    org.opencontainers.image.revision="${COMMIT_SHA}" \
-    org.opencontainers.image.licenses="N/D" \
-    org.opencontainers.image.author="Jeff Ponte" \
-    org.opencontainers.image.company="Universidade da Integracao Internacional da Lusofonia Afro-Brasileira (UNILAB)" \
-    org.opencontainers.image.maintainer="DTI/Unilab"
+  org.opencontainers.image.vendor="UNILAB" \
+  org.opencontainers.image.title="Official 3S Docker image" \
+  org.opencontainers.image.description="3S (Sistema de Solicitação de Servicos) " \
+  org.opencontainers.image.version="${VERSION}" \
+  org.opencontainers.image.url="https://3s.unilab.edu.br/" \
+  org.opencontainers.image.source="http://dti-gitlab.unilab.edu.br/disir/piloto-ci-cd-stack-devops-disir-dti.git" \
+  org.opencontainers.image.revision="${COMMIT_SHA}" \
+  org.opencontainers.image.licenses="N/D" \
+  org.opencontainers.image.author="Jeff Ponte" \
+  org.opencontainers.image.company="Universidade da Integracao Internacional da Lusofonia Afro-Brasileira (UNILAB)" \
+  org.opencontainers.image.maintainer="DTI/Unilab"

@@ -9,7 +9,7 @@ $(document).ready(function(e) {
         
 		jQuery.ajax({
             type: "POST",
-            url: "index.php?ajax=servico",
+            url: "?ajax=servico",
             data: dados,
             success: function( data )
             {

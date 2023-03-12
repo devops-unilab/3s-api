@@ -10,7 +10,7 @@ function mudarNivel(dados){
 
     jQuery.ajax({
         type: "POST",
-        url: "index.php?ajax=mudar_nivel",
+        url: "?ajax=mudar_nivel",
         data: dados,
         success: function( data )
         {
