@@ -129,7 +129,7 @@ COPY . /var/www/html/
 RUN mkdir -p /var/www/html/public/uploads/ocorrencia/anexo
 
 COPY --from=build /usr/bin/composer /usr/bin/composer
-RUN composer install --prefer-dist --no-interaction --no-dev
+RUN composer install --prefer-dist --no-interaction
 
 COPY docker/apache/000-default.conf /etc/apache2/sites-available/000-default.conf
 
@@ -155,6 +155,7 @@ ENV APP_DEBUG=false
 COPY docker/php/conf.d/opcache.ini /usr/local/etc/php/conf.d/opcache.ini
 
 COPY --from=build /app /var/www/html
+RUN composer install --prefer-dist --no-interaction --no-dev
 RUN ln -s /etc/apache2/sites-available/000-default.conf /etc/apache2/sites-enabled/default.conf
 RUN apachectl configtest
 
