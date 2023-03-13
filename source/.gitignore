@@ -16,6 +16,5 @@ yarn-error.log
 /.vscode
 .env.dev
 .env.prod
-!/vendor
 !.env.example
 !/docker/php/conf.d/opcache.ini
