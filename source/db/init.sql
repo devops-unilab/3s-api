@@ -1,3 +1,95 @@
+-- ########################## 3S ##########################
+
+-- Role: ocorrencias_user
+-- DROP ROLE IF EXISTS ocorrencias_user;
+
+CREATE ROLE ocorrencias_user WITH
+  LOGIN
+  NOSUPERUSER
+  INHERIT
+  NOCREATEDB
+  NOCREATEROLE
+  NOREPLICATION;
+
+-- Role: admindti
+-- DROP ROLE IF EXISTS admindti;
+
+CREATE ROLE admindti WITH
+  LOGIN
+  SUPERUSER
+  INHERIT
+  NOCREATEDB
+  NOCREATEROLE
+  NOREPLICATION;
+
+-- Role: cicero_robson
+-- DROP ROLE IF EXISTS cicero_robson;
+
+CREATE ROLE cicero_robson WITH
+  LOGIN
+  SUPERUSER
+  INHERIT
+  CREATEDB
+  CREATEROLE
+  NOREPLICATION;
+
+-- Role: luansidney
+-- DROP ROLE IF EXISTS luansidney;
+
+CREATE ROLE luansidney WITH
+  LOGIN
+  SUPERUSER
+  INHERIT
+  CREATEDB
+  NOCREATEROLE
+  NOREPLICATION;
+
+-- Role: manoeljr
+-- DROP ROLE IF EXISTS manoeljr;
+
+CREATE ROLE manoeljr WITH
+  LOGIN
+  SUPERUSER
+  INHERIT
+  CREATEDB
+  CREATEROLE
+  NOREPLICATION;
+
+-- Role: rafael
+-- DROP ROLE IF EXISTS rafael;
+
+CREATE ROLE rafael WITH
+  LOGIN
+  SUPERUSER
+  INHERIT
+  CREATEDB
+  NOCREATEROLE
+  NOREPLICATION;
+
+-- Role: tiago17
+-- DROP ROLE IF EXISTS tiago17;
+
+CREATE ROLE tiago17 WITH
+  LOGIN
+  SUPERUSER
+  NOINHERIT
+  CREATEDB
+  CREATEROLE
+  NOREPLICATION;
+
+/*
+-- Role: "3s"
+ALTER ROLE "3s" WITH
+  LOGIN
+  -- SUPERUSER
+  INHERIT
+  CREATEDB
+  CREATEROLE
+  REPLICATION
+  CONNECTION LIMIT -1
+  ENCRYPTED PASSWORD 'SCRAM-SHA-256\$4096:WsWlAj4V8q5F5Vgntw/aKA==\$eO8bF24UBuDU32dLmC3dk3Xzpl/Ap3MXfvxMsiZcGIY=:vMU0MUrLmICBvzCJcs1/8LX0YaPvVlEc4QyWR+hYx+g=';
+*/
+
 -- ########################## LARAVEL ##########################
 
 CREATE TABLE IF NOT EXISTS failed_jobs (
@@ -10,21 +102,18 @@ CREATE TABLE IF NOT EXISTS failed_jobs (
     failed_at  timestamp default CURRENT_TIMESTAMP not null,
     constraint failed_jobs_uuid_unique unique(uuid)
 );
--- collate = utf8mb4_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS migrations (
     id         bigserial   not null,
     migration varchar(255) not null,
     batch     int          not null
 );
--- collate = utf8mb4_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS password_resets (
     email      varchar(255) not null,
     token      varchar(255) not null,
     created_at timestamp    null
 );
--- collate = utf8mb4_unicode_ci;
 
 create index password_resets_email_index on password_resets (email);
 
@@ -41,7 +130,6 @@ CREATE TABLE IF NOT EXISTS personal_access_tokens (
     updated_at     timestamp       null,
     constraint personal_access_tokens_token_unique unique (token)
 );
--- collate = utf8mb4_unicode_ci;
 
 create index personal_access_tokens_tokenable_type_tokenable_id_index
     on personal_access_tokens (tokenable_type, tokenable_id);
@@ -57,7 +145,6 @@ CREATE TABLE IF NOT EXISTS users (
     updated_at        timestamp    null,
     constraint users_email_unique unique (email)
 );
--- collate = utf8mb4_unicode_ci;
 
 INSERT INTO migrations (migration, batch) (
     SELECT '2014_10_12_000000_create_users_table',1 WHERE NOT EXISTS (
@@ -80,96 +167,3 @@ INSERT INTO users (name, email, email_verified_at, password, remember_token, cre
 	SELECT 'teste user', 'teste@user.com', null, '$2y$10$bXcKxcdPExJR/29r1rZJk.7S8KKwr8Ri.uuN9TirPvB2TLeWQrliq', null, '2023-03-09 20:34:28', '2023-03-09 20:34:28' WHERE NOT EXISTS (
 		SELECT 1 FROM users WHERE email='teste@user.com')
 );
-
--- ########################## 3S ##########################
-    -- Role: "3s"
-    /*
-    DROP ROLE IF EXISTS "3s";
-    CREATE ROLE "3s" WITH
-      LOGIN
-    --   SUPERUSER
-      INHERIT
-      CREATEDB
-      CREATEROLE
-      REPLICATION
-      CONNECTION LIMIT -1
-      ENCRYPTED PASSWORD 'SCRAM-SHA-256$4096:3Jqsy2/uZq6sOWbF0ff0Pg==$cPHoXFvpbnUG1sesgk56le9jTGpBcMemuzkh3sXEA/8=:+D7jh16yPQr/kAw/dccT0Rz52Mgi4JgwD1m0hJKp2Qo=';
-    COMMENT ON ROLE "3s" IS 'Usuário padrão do database 3s-ocorrencias.';
-    */
-    
-    -- Role: ocorrencias_user
-    -- DROP ROLE IF EXISTS ocorrencias_user;
-
-    CREATE ROLE ocorrencias_user WITH
-      LOGIN
-      NOSUPERUSER
-      INHERIT
-      NOCREATEDB
-      NOCREATEROLE
-      NOREPLICATION;
-
-    -- Role: admindti
-    -- DROP ROLE IF EXISTS admindti;
-
-    CREATE ROLE admindti WITH
-      LOGIN
-      SUPERUSER
-      INHERIT
-      NOCREATEDB
-      NOCREATEROLE
-      NOREPLICATION;
-
-    -- Role: cicero_robson
-    -- DROP ROLE IF EXISTS cicero_robson;
-
-    CREATE ROLE cicero_robson WITH
-      LOGIN
-      SUPERUSER
-      INHERIT
-      CREATEDB
-      CREATEROLE
-      NOREPLICATION;
-
-    -- Role: luansidney
-    -- DROP ROLE IF EXISTS luansidney;
-
-    CREATE ROLE luansidney WITH
-      LOGIN
-      SUPERUSER
-      INHERIT
-      CREATEDB
-      NOCREATEROLE
-      NOREPLICATION;
-
-    -- Role: manoeljr
-    -- DROP ROLE IF EXISTS manoeljr;
-
-    CREATE ROLE manoeljr WITH
-      LOGIN
-      SUPERUSER
-      INHERIT
-      CREATEDB
-      CREATEROLE
-      NOREPLICATION;
-
-    -- Role: rafael
-    -- DROP ROLE IF EXISTS rafael;
-
-    CREATE ROLE rafael WITH
-      LOGIN
-      SUPERUSER
-      INHERIT
-      CREATEDB
-      NOCREATEROLE
-      NOREPLICATION;
-
-    -- Role: tiago17
-    -- DROP ROLE IF EXISTS tiago17;
-
-    CREATE ROLE tiago17 WITH
-      LOGIN
-      SUPERUSER
-      NOINHERIT
-      CREATEDB
-      CREATEROLE
-      NOREPLICATION;
