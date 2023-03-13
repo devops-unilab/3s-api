@@ -59,8 +59,7 @@ class UsuarioController {
 	        $sessao = new Sessao();
 	        $sessao->criaSessao($usuario->getId(), $usuario->getNivel(), $usuario->getLogin(), $usuario->getNome(), $usuario->getEmail());
 	        
-	        // $idUnidade = $this->dao->getIdUnidade($usuario);
-			$idUnidade = array('1'=>'dti');
+	        $idUnidade = $this->dao->getIdUnidade($usuario);
 	        if(count($idUnidade) > 0){
 	            foreach($idUnidade as $id => $sigla){
 	                $sessao->setIDUnidade($id);

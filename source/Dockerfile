@@ -32,7 +32,7 @@
 # Stage 1 - image compose 
 FROM composer:2.4 as build
 COPY . /app/
-RUN composer install --prefer-dist --optimize-autoloader --no-interaction #--no-dev 
+RUN composer install --prefer-dist --optimize-autoloader --no-interaction
 
 # Stage 2 - image desenvolvimento
 FROM php:8.1-apache-bullseye as dev
@@ -129,7 +129,7 @@ COPY . /var/www/html/
 RUN mkdir -p /var/www/html/public/uploads/ocorrencia/anexo
 
 COPY --from=build /usr/bin/composer /usr/bin/composer
-RUN composer install --prefer-dist --no-interaction
+RUN composer install --prefer-dist --no-interaction --no-dev
 
 COPY docker/apache/000-default.conf /etc/apache2/sites-available/000-default.conf
 

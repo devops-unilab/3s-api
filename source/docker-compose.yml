@@ -78,7 +78,10 @@ services:
   postgresql:
     image: postgres:15-bullseye
     container_name: postgres
-    # command: ["/wait-for-postgres.sh", "localhost"]
+    # command: >
+    #   bash -cp "
+    #   psql -U postgres -d localhost -c 'CREATE TABLE IF NOT EXISTS mytable (id SERIAL PRIMARY KEY, name VARCHAR(100));'
+    #   "
     restart: always
     ports:
       - 5432:5432
@@ -88,10 +91,8 @@ services:
       - postgresql_data:/var/lib/postgresql/data
       # - ./docker/postgres/postgresql.conf:/var/lib/postgresql/data/postgresql.conf:rw
       # - ./docker/postgres/pg_hba.conf:/var/lib/postgresql/data/pg_hba.conf:rw
-      - ./db/wait-for-postgres.sh:/wait-for-postgres.sh
       - ./db/init.sql:/mnt/01init.sql
-      - ./db/create-postgres-db.sh:/postgres-db.sh
-      # - ./db/create-postgres-db.sh:/docker-entrypoint-initdb.d/postgres-db.sh
+      - ./db/create-postgres-db.sh:/docker-entrypoint-initdb.d/postgres-db.sh
     networks:
       - developer
 
