@@ -25,8 +25,8 @@ services:
   # dev
   app-dev:
     build:
-      context: ./ 
-      dockerfile: ./Dockerfile
+      context: ./source
+      dockerfile: $PWD/Dockerfile
       target: dev # dev | production
       cache_from:
         - dti-registro.unilab.edu.br/unilab/app-3s:dev
@@ -35,10 +35,9 @@ services:
     restart: always
     user: "root:www-data"
     env_file:
-      - .env.dev
+      - ./source/.env
     volumes:
-      - .:/var/www/3S
-      # - .env.dev:/var/www/3S/.env
+      - ./source:/var/www/html
     ports:
       - "8082:80"
       - "22:22"
@@ -47,52 +46,21 @@ services:
     depends_on:
       - postgresql
 
-  # prod
-  app-prod:
-    build:
-      context: ./ 
-      dockerfile: ./Dockerfile
-      target: production # dev | production
-      cache_from:
-        - dti-registro.unilab.edu.br/unilab/app-3s:latest
-    image: dti-registro.unilab.edu.br/unilab/app-3s:latest
-    container_name: 3s-prod
-    restart: always
-    user: "root:www-data"
-    env_file:
-      - .env.prod
-    volumes:
-      - .:/var/www/3S
-      # - .env.dev:/var/www/3S/.env
-    ports:
-      - "8083:80"
-      - "37389:22"
-    networks:
-      - developer
-    depends_on:
-      - app-dev
-
   ###################################
   # PostgreSQL
   ###################################
   postgresql:
     image: postgres:15-bullseye
     container_name: postgres
-    # command: >
-    #   bash -cp "
-    #   psql -U postgres -d localhost -c 'CREATE TABLE IF NOT EXISTS mytable (id SERIAL PRIMARY KEY, name VARCHAR(100));'
-    #   "
     restart: always
     ports:
       - 5432:5432
     env_file:
-      - .env.dev
+      - ./source/.env
     volumes:
       - postgresql_data:/var/lib/postgresql/data
-      # - ./docker/postgres/postgresql.conf:/var/lib/postgresql/data/postgresql.conf:rw
-      # - ./docker/postgres/pg_hba.conf:/var/lib/postgresql/data/pg_hba.conf:rw
-      - ./db/init.sql:/mnt/01init.sql
-      - ./db/create-postgres-db.sh:/docker-entrypoint-initdb.d/postgres-db.sh
+      - ./source/docker/database/init.sql:/mnt/01init.sql
+      - ./source/docker/database/create-postgres-db.sh:/docker-entrypoint-initdb.d/postgres-db.sh
     networks:
       - developer
 
@@ -106,10 +74,10 @@ services:
     ports:
       - 8090:80
     env_file:
-      - .env.dev
+      - ./source/docker/pgadmin/.env.pgadmin
     volumes:
       - pgadmin_data:/var/lib/pgadmin
-      - ./docker/pgadmin/servers.json:/pgadmin4/servers.json:rw
+      - ./source/docker/pgadmin/servers.json:/pgadmin4/servers.json:rw
     networks:
       - developer
     depends_on:
@@ -125,4 +93,3 @@ networks:
  developer:
    name: developer
    driver: bridge
-   

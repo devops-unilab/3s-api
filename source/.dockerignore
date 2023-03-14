@@ -1,6 +1,0 @@
-.git
-/vendor
-Dockerfile
-docker-compose.yml
-docker-compose-sail.yml
-README.md

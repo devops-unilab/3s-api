@@ -1,12 +1,5 @@
-!source/dados/3s
-!source/dados/sites/pub/ocorrencias
-**/backup_solicitado
-**/backups
-**/bd
-**/pgrestore
-**/uploads
-#source/postgres
-README.md
 .git
-.gitignore
-/postgres-conf
+Dockerfile
+docker-compose.yml
+README.md
+/**/vendor
