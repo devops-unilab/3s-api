@@ -479,3 +479,4 @@ composer.lock
 *.db
 /source/public/uploads
 !/source/.env.example
+/source/vendor

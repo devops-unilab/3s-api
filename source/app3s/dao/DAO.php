@@ -37,18 +37,23 @@ class DAO {
 			$user = env('DB_USERNAME');
 			$password = env('DB_PASSWORD');
 		}else if($this->type === "SIG"){
-			$sgdb = env('DB_CONNECTION_SIG');
-			$dbName = env('DB_DATABASE_SIG');
-			$host = env('DB_HOST_SIG');
-			$port = env('DB_PORT_SIG');
-			$user = env('DB_USERNAME_SIG');
-			$password = env('DB_PASSWORD_SIG');
+			echo "Passei aqui";
+			$sgdb = env('DB_CONNECTION_SIGAA');
+			$dbName = env('DB_DATABASE_SIGAA');
+			$host = env('DB_HOST_SIGAA');
+			$port = env('DB_PORT_SIGAA');
+			$user = env('DB_USERNAME_SIGAA');
+			$password = env('DB_PASSWORD_SIGAA');
 		}
 
 	    $this->sgdb = $sgdb;
 
 		if ($sgdb == "pgsql") {
+			if($this->type === "SIG"){
+				echo "Fix conexao no sig";
+			}
 			$this->connection = new PDO ( 'pgsql:host=' . $host. ' port='.$port.' dbname=' . $dbName . ' user=' . $user . ' password=' . $password);
+			
 		} else if ($sgdb == "mssql") {
 			$this->connection = new PDO ( 'dblib:host=' . $host . ';dbname=' . $dbName, $user, $password);
 		}else if($sgdb == "mysql"){
