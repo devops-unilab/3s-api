@@ -1,10 +1,14 @@
 ## Como usar:
-# cd source/
 # docker-compose up --build -d
 # docker-compose logs -f
-# docker exec -it 3s /bin/bash
-# docker cp postgres:/var/lib/postgresql/data/postgresql.conf ./docker/postgres/
-# docker cp postgres:/var/lib/postgresql/data/pg_hba.conf ./docker/postgres/
+# docker exec -it 3s-dev /bin/bash
+
+## Copias entre container/local
+# docker cp 3s-dev:/var/www/html/.env .
+# docker cp .env 3s-dev:/var/www/html/
+
+## Obter vendor/autoload
+# docker exec -it 3s-dev composer update
 
 ## full clean
 # docker stop $(docker ps -qa)
@@ -12,10 +16,6 @@
 # docker rmi -f $(docker images -qa)
 # docker volume rm -f $(docker volume ls -q)
 # docker network rm $(docker network ls -q)
-
-#Admin Laravel
-#Email: teste@user.com
-#Password: testpass
 
 version: '3.9'
 services:

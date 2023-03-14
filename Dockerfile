@@ -79,28 +79,25 @@ RUN dpkg-reconfigure locales tzdata -f noninteractive
 ENV APACHE_RUN_USER www-data
 ENV APACHE_RUN_GROUP www-data
 
+ARG WORKDIR=${WORKDIR}
+
 RUN cd /opt \
   && curl -sS https://getcomposer.org/installer -o composer-setup.php \
   && php composer-setup.php --install-dir=/usr/local/bin --filename=composer \
   && composer 
 
-# # Get vendor
+# New Project in Docker example
 # RUN cd /opt && composer create-project laravel/laravel --prefer-dist proj-laravel
-# RUN rsync --progress --recursive -arvPo /opt/roj-laravel/vendor /var/www/html/vendor
+# RUN rsync --progress --recursive -arvPo /opt/roj-laravel/ ${WORKDIR}/
 # RUN rm -r /opt/roj-laravel
 
-# Proj NOVO
-# RUN cd /opt && composer create-project laravel/laravel --prefer-dist proj-laravel
-# RUN rsync --progress --recursive -arvPo /opt/roj-laravel/ /var/www/html/
-# RUN rm -r /opt/roj-laravel
+COPY . ${WORKDIR}
+RUN mkdir -p ${WORKDIR}/public/uploads/ocorrencia/anexo
 
-# Proj EXISTENTE
-COPY . /var/www/html
-RUN mkdir -p /var/www/html/public/uploads/ocorrencia/anexo
- 
-RUN cd /var/www/html \
-  # && rm composer.lock \
-  # && composer update \
+WORKDIR ${WORKDIR}
+
+RUN cd ${WORKDIR} \
+  && [ -f "composer.lock" ] && rm composer.lock \
   && composer install --ignore-platform-reqs --no-interaction --no-progress --no-scripts --optimize-autoloader \
   && php artisan -V
 
@@ -121,7 +118,7 @@ RUN update-rc.d ssh enable
 RUN php artisan config:clear && \
   php artisan config:cache && \
   php artisan route:cache && \
-  chmod 777 -R /var/www/html/storage/ && \
+  chmod 777 -R ${WORKDIR}/storage/ && \
   chown -Rf www-data:www-data /var/www/ && \
   a2enmod rewrite
 
@@ -131,22 +128,20 @@ FROM dev as production
 ENV APP_ENV=production
 ENV APP_DEBUG=false
 
-# COPY docker/php/conf.d/opcache.ini /usr/local/etc/php/conf.d/opcache.ini
 RUN cp docker/php/conf.d/opcache.ini /usr/local/etc/php/conf.d/opcache.ini \
   && ln -s /etc/apache2/sites-available/000-default.conf /etc/apache2/sites-enabled/default.conf
 
-COPY --from=dev /var/www/html /var/www/html
+COPY --from=dev ${WORKDIR} ${WORKDIR}
 RUN composer install --prefer-dist --no-interaction --no-dev
 
 RUN php artisan config:cache && \
   php artisan route:cache && \
-  # php artisan db:seed --class=DatabaseSeeder --force && \
   php artisan key:generate && \
-  chmod 777 -R /var/www/html/storage/ && \
+  chmod 777 -R ${WORKDIR}/storage/ && \
   chown -Rf www-data:www-data /var/www/ && \
   a2enmod rewrite
 
-VOLUME ["/var/www/html/public/uploads"]
+VOLUME ["${WORKDIR}/public/uploads"]
 
 EXPOSE 80 22
 
