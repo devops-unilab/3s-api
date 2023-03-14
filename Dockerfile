@@ -29,12 +29,7 @@
 #
 # Version: 1.0
 
-# Stage 1 - image compose 
-FROM composer:2.4 as build
-COPY . /app/
-RUN composer install --prefer-dist --optimize-autoloader --no-interaction
-
-# Stage 2 - image desenvolvimento
+# Stage 1 - Dev
 FROM php:8.1-apache-bullseye as dev
 
 ENV APP_ENV=dev
@@ -44,43 +39,12 @@ ENV COMPOSER_ALLOW_SUPERUSER=1
 ENV DEBIAN_FRONTEND noninteractive
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
-  ca-certificates \
-  apt-transport-https \
-  software-properties-common \
-  libfreetype6 \
-  procps \
-  zip \
-  unzip \
-  p7zip-full \
-  libpq-dev \
-  libldap-common \
-  openssh-client \
   openssh-server \
-  git \
-  tini \
-  apt-utils \
-  nano \
-  curl \
-  gnupg \
-  sudo \
-  wget \
-  coreutils \
-  telnet \
-  iproute2 \
-  net-tools \
-  iputils-ping \
-  lsb-release \
   locales \
   rsync \
-  build-essential \
-  libpng-dev \
-  libjpeg62-turbo-dev \
-  jpegoptim \
-  optipng \
-  pngquant \
-  gifsicle \
-  libzip-dev \
-  libonig-dev \
+  nano \
+  git \
+  unzip \
   libpq-dev \
   postgresql-client \
   && rm -rf /var/lib/apt/lists/*
@@ -99,6 +63,9 @@ RUN rm -f /lib/systemd/system/multi-user.target.wants/* \
   /lib/systemd/system/sysinit.target.wants/systemd-tmpfiles-setup* \
   /lib/systemd/system/systemd-update-utmp*
 
+RUN docker-php-ext-install pdo pdo_pgsql pgsql 
+RUN docker-php-ext-configure opcache --enable-opcache
+
 ARG COMMIT_SHA
 ARG VERSION
 ENV TZ America/Fortaleza
@@ -112,6 +79,36 @@ RUN dpkg-reconfigure locales tzdata -f noninteractive
 ENV APACHE_RUN_USER www-data
 ENV APACHE_RUN_GROUP www-data
 
+RUN cd /opt \
+  && curl -sS https://getcomposer.org/installer -o composer-setup.php \
+  && php composer-setup.php --install-dir=/usr/local/bin --filename=composer \
+  && composer 
+
+# # Get vendor
+# RUN cd /opt && composer create-project laravel/laravel --prefer-dist proj-laravel
+# RUN rsync --progress --recursive -arvPo /opt/roj-laravel/vendor /var/www/html/vendor
+# RUN rm -r /opt/roj-laravel
+
+# Proj NOVO
+# RUN cd /opt && composer create-project laravel/laravel --prefer-dist proj-laravel
+# RUN rsync --progress --recursive -arvPo /opt/roj-laravel/ /var/www/html/
+# RUN rm -r /opt/roj-laravel
+
+# Proj EXISTENTE
+COPY . /var/www/html
+RUN mkdir -p /var/www/html/public/uploads/ocorrencia/anexo
+ 
+RUN cd /var/www/html \
+  # && rm composer.lock \
+  # && composer update \
+  && composer install --ignore-platform-reqs --no-interaction --no-progress --no-scripts --optimize-autoloader \
+  && php artisan -V
+
+RUN sed -i "s/'default' => env('DB_CONNECTION', 'mysql'),/'default' => env('DB_CONNECTION', 'pgsql'),/g" config/database.php
+RUN sed -i "s/        \/\//        '*',/g" app/Http/Middleware/VerifyCsrfToken.php
+RUN cp docker/apache/000-default.conf /etc/apache2/sites-available/000-default.conf \
+  && apachectl configtest
+
 # Setup user and ssh
 RUN adduser --no-create-home --disabled-password --shell /bin/bash --gecos "" --force-badname 3s \
   && echo "3s ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
@@ -121,49 +118,29 @@ RUN sed -i "s/#PasswordAuthentication yes/PasswordAuthentication no/g" /etc/ssh/
 RUN [ -f ~/.ssh/id_rsa ] || ssh-keygen -t rsa -b 4096 -C "3s@3s.unilab.edu.br" -f ~/.ssh/id_rsa -q -N "" && chmod -R 600 ~/.ssh
 RUN update-rc.d ssh enable
 
-RUN docker-php-ext-configure pgsql -with-pgsql=/usr/local/pgsql
-RUN docker-php-ext-configure opcache --enable-opcache \
-  && docker-php-ext-install pdo pdo_pgsql pgsql
-
-COPY . /var/www/html/
-RUN mkdir -p /var/www/html/public/uploads/ocorrencia/anexo
-
-COPY --from=build /usr/bin/composer /usr/bin/composer
-RUN composer install --prefer-dist --no-interaction
-
-COPY docker/apache/000-default.conf /etc/apache2/sites-available/000-default.conf
-
-RUN usermod -u 33 -g 33 www-data 
-RUN ln -s /var/www/html /var/www/3S
-
-COPY .env.example /var/www/html/.env
-
-WORKDIR /var/www/html
-
-RUN php artisan config:cache && \
+RUN php artisan config:clear && \
+  php artisan config:cache && \
   php artisan route:cache && \
   chmod 777 -R /var/www/html/storage/ && \
   chown -Rf www-data:www-data /var/www/ && \
   a2enmod rewrite
 
-# Stage 3 - image producao
+# Stage 2 - Prod
 FROM dev as production
 
 ENV APP_ENV=production
 ENV APP_DEBUG=false
 
-COPY docker/php/conf.d/opcache.ini /usr/local/etc/php/conf.d/opcache.ini
+# COPY docker/php/conf.d/opcache.ini /usr/local/etc/php/conf.d/opcache.ini
+RUN cp docker/php/conf.d/opcache.ini /usr/local/etc/php/conf.d/opcache.ini \
+  && ln -s /etc/apache2/sites-available/000-default.conf /etc/apache2/sites-enabled/default.conf
 
-COPY --from=build /app /var/www/html
+COPY --from=dev /var/www/html /var/www/html
 RUN composer install --prefer-dist --no-interaction --no-dev
-RUN ln -s /etc/apache2/sites-available/000-default.conf /etc/apache2/sites-enabled/default.conf
-RUN apachectl configtest
-
-RUN cd /var/www/ && unlink 3S
 
 RUN php artisan config:cache && \
   php artisan route:cache && \
-  php artisan db:seed --class=DatabaseSeeder --force && \
+  # php artisan db:seed --class=DatabaseSeeder --force && \
   php artisan key:generate && \
   chmod 777 -R /var/www/html/storage/ && \
   chown -Rf www-data:www-data /var/www/ && \
