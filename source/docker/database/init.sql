@@ -91,7 +91,7 @@ ALTER ROLE "3s" WITH
 */
 
 -- ########################## LARAVEL ##########################
-
+/*
 CREATE TABLE IF NOT EXISTS failed_jobs (
     id         bigserial                           not null,
     uuid       varchar(255)                        not null,
@@ -167,3 +167,4 @@ INSERT INTO users (name, email, email_verified_at, password, remember_token, cre
 	SELECT 'teste user', 'teste@user.com', null, '$2y$10$bXcKxcdPExJR/29r1rZJk.7S8KKwr8Ri.uuN9TirPvB2TLeWQrliq', null, '2023-03-09 20:34:28', '2023-03-09 20:34:28' WHERE NOT EXISTS (
 		SELECT 1 FROM users WHERE email='teste@user.com')
 );
+*/

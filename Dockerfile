@@ -96,9 +96,7 @@ RUN mkdir -p ${WORKDIR}/public/uploads/ocorrencia/anexo
 
 WORKDIR ${WORKDIR}
 
-RUN cd ${WORKDIR} \
-  && [ -f "composer.lock" ] && rm composer.lock \
-  && composer install --ignore-platform-reqs --no-interaction --no-progress --no-scripts --optimize-autoloader \
+RUN composer install --ignore-platform-reqs --no-interaction --no-progress --no-scripts --optimize-autoloader \
   && php artisan -V
 
 RUN sed -i "s/'default' => env('DB_CONNECTION', 'mysql'),/'default' => env('DB_CONNECTION', 'pgsql'),/g" config/database.php
@@ -118,7 +116,7 @@ RUN update-rc.d ssh enable
 RUN php artisan config:clear && \
   php artisan config:cache && \
   php artisan route:cache && \
-  chmod 777 -R ${WORKDIR}/storage/ && \
+  chmod 777 -R storage/ && \
   chown -Rf www-data:www-data /var/www/ && \
   a2enmod rewrite
 
@@ -137,7 +135,7 @@ RUN composer install --prefer-dist --no-interaction --no-dev
 RUN php artisan config:cache && \
   php artisan route:cache && \
   php artisan key:generate && \
-  chmod 777 -R ${WORKDIR}/storage/ && \
+  chmod 777 -R storage/ && \
   chown -Rf www-data:www-data /var/www/ && \
   a2enmod rewrite
 
