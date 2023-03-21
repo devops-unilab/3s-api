@@ -13,7 +13,7 @@ use app3s\dao\UsuarioDAO;
 use app3s\model\Usuario;
 use app3s\util\Sessao;
 use app3s\view\UsuarioView;
-
+use Illuminate\Support\Facades\DB;
 
 class UsuarioController {
 
@@ -26,6 +26,71 @@ class UsuarioController {
 	}
 
 	
+	public function autenticar(Usuario $usuario)
+	{
+
+		$login = $usuario->getLogin();
+		$senha = $usuario->getSenha();
+		$url = env('UNILAB_APP_API_ORIGIN');
+		$data = ['login' =>  $login, 'senha' => $senha];
+
+		$curl = curl_init($url);
+		curl_setopt($curl, CURLOPT_POST, true);
+		curl_setopt($curl, CURLOPT_POSTFIELDS, http_build_query($data));
+		curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+		$response = curl_exec($curl);
+		curl_close($curl);
+		$responseJ = json_decode($response);
+
+
+		$idUsuario  = 0;
+
+		if (isset($responseJ->id)) {
+			$idUsuario = intval($responseJ->id);
+		}
+		if ($idUsuario === 0) {
+			return false;
+		}
+		$curl = curl_init();
+		curl_setopt_array($curl, [
+			CURLOPT_URL => "https://api.unilab.edu.br/api/user",
+			CURLOPT_RETURNTRANSFER => true,
+			CURLOPT_ENCODING => "",
+			CURLOPT_MAXREDIRS => 10,
+			CURLOPT_TIMEOUT => 30,
+			CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+			CURLOPT_CUSTOMREQUEST => "GET",
+			CURLOPT_POSTFIELDS => "",
+			CURLOPT_HTTPHEADER => [
+				"Authorization: Bearer $responseJ->access_token"
+			],
+		]);
+
+		$response = curl_exec($curl);
+		curl_close($curl);
+		$responseJ2 = json_decode($response);
+		if ($responseJ2->id_status_servidor != 1) {
+			return false;
+		}
+
+		$data = DB::table('usuario')->where("id", $idUsuario)->first();
+		if ($data === null) {
+			DB::table('usuario')->insert(
+				[
+					'id' => $idUsuario,
+					'nome' => $responseJ2->nome,
+					'email' => $responseJ2->email,
+					'login' => $responseJ2->login,
+					'nivel' => 'c'
+				]
+			);
+		}
+		$usuario->setId($idUsuario);
+		$usuario->setNome($data->nome);
+		$usuario->setEmail($data->email);
+		$usuario->setNivel($data->nivel);
+		return true;
+	}
 	public function mudarNivel(){
 		
 		$sessao = new Sessao();
@@ -52,9 +117,9 @@ class UsuarioController {
 	    }
 	    $usuario = new Usuario();
 	    $usuario->setLogin($_POST['usuario']);
-	    $usuario->setSenha(md5($_POST['senha']));
+	    $usuario->setSenha($_POST['senha']);
 	    
-	    if ($this->dao->autenticar($usuario)) {
+	    if ($this->autenticar($usuario)) {
 	        
 	        $sessao = new Sessao();
 	        $sessao->criaSessao($usuario->getId(), $usuario->getNivel(), $usuario->getLogin(), $usuario->getNome(), $usuario->getEmail());
@@ -74,35 +139,6 @@ class UsuarioController {
 	    }
 	}
 	
-	public function fazerLogin(){
-	    if (!isset($_POST['logar'])) {
-	        return;
-	    }
-	    
-	    $usuario = new Usuario();
-	    $usuario->setLogin($_POST['usuario']);
-	    $usuario->setSenha(md5($_POST['senha']));
-	    
-	    if ($this->dao->autenticar($usuario)) {
-	        
-	        $sessao = new Sessao();
-	        $sessao->criaSessao($usuario->getId(), $usuario->getNivel(), $usuario->getLogin(), $usuario->getNome(), $usuario->getEmail());
-	        
-	        echo '
-<div class="alert alert-success" role="alert">
-  Login realizado com Sucesso
-</div>
-';
-	        echo '<META HTTP-EQUIV="REFRESH" CONTENT="3; URL=./">';
-	    } else {
-	        echo '
-<div class="alert alert-danger" role="alert">
-  Você errou a senha! Tente novamente!
-</div>
-	            
-';
-	    }
-	}
 	
 	public function telaLogin(){
 	    echo '
@@ -110,7 +146,6 @@ class UsuarioController {
     <div class="row">
         <div class="card mb-4">
             <div class="card-body">';
-	    $this->fazerLogin();
 	    $this->view->formLogin();
 	    echo '
             </div>
