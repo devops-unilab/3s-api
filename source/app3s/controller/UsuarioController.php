@@ -31,7 +31,7 @@ class UsuarioController {
 
 		$login = $usuario->getLogin();
 		$senha = $usuario->getSenha();
-		$url = env('UNILAB_APP_API_ORIGIN');
+		$url = env('UNILAB_API_ORIGIN');
 		$data = ['login' =>  $login, 'senha' => $senha];
 
 		$curl = curl_init($url);
