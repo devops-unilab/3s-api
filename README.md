@@ -34,7 +34,7 @@ Já é um profissional? Basta editar este README.md e torná-lo seu. Quer facili
 
 ```
 cd existing_repo
-git remote add origin http://dti-gitlab.unilab.edu.br/disir/3s_cicd.git
+git remote add origin http://dti-gitlab.unilab.edu.br/disir/infra/3s_cicd.git
 git branch -M main
 git push -uf origin main
 ```
