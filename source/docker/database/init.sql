@@ -1,5 +1,16 @@
 -- ########################## 3S ##########################
 
+ALTER USER "3s" WITH 
+    SUPERUSER
+    LOGIN 
+    CREATEDB
+    CREATEROLE
+    REPLICATION
+    INHERIT
+    CONNECTION LIMIT -1;
+COMMENT ON ROLE pgd IS 'Usuario padrao do banco de dados';
+
+
 -- Role: ocorrencias_user
 -- DROP ROLE IF EXISTS ocorrencias_user;
 

@@ -14,6 +14,17 @@
 #     PASSWORD '<PASSWD>';
 # COMMENT ON ROLE "3s" IS 'Usuário padrão 3s-ocorrencias.';
 
+# create USER "vault" WITH 
+#     SUPERUSER
+#     LOGIN 
+#     CREATEDB
+#     CREATEROLE
+#     REPLICATION
+#     INHERIT
+#     CONNECTION LIMIT -1
+#     PASSWORD '<PASSWD>';
+# COMMENT ON ROLE "vault" IS 'Usuário do Agent Vault HashiCorp para Injecting Secrets.';
+
 # ------------------------------------------------------------------------------------
 # -- CRIA DATABASE | 3s-ocorrencias
 # ------------------------------------------------------------------------------------
@@ -25,6 +36,20 @@
 #     TEMPLATE template0;
 # COMMENT ON DATABASE 3s-ocorrencias IS 'Dadabase para 3S';
 #
+# CREATE DATABASE "3s-homologacao"
+#     WITH
+#     OWNER = "3s"
+#     TEMPLATE = "3s-ocorrencias"
+#     ENCODING = 'UTF8'
+#     CONNECTION LIMIT = -1
+#     IS_TEMPLATE = False;
+
+# COMMENT ON DATABASE "3s-homologacao"
+#     IS 'Banco de dados temporário para homologação (Staging)';
+
+# GRANT ALL PRIVILEGES ON DATABASE "3s-ocorrencias" TO "vault";
+# GRANT ALL PRIVILEGES ON DATABASE "3s-homologacao" TO "vault";
+
 # apt install -y iputils-ping telnet curl postgresql-client
 # psql -h postgres.postgres-3s.svc.cluster.local -p 5432 -U 3s -d 3s-ocorrencias
 # kubectl delete pv $(kubectl get pv | tail -n+2 | awk '$5 == "Released" {print $1}')
@@ -46,6 +71,7 @@ data:
   PG_PASSWORD: M3MhQCMkMjAyMw==
   PG_PRIMARY_PASSWORD: YWRtaW4hQCMkMjAyMw==
   PG_ROOT_PASSWORD: cG9zdGdyZXMhQCMkMjAyMw==
+  DB_PASSWORD_DUMP: ''
 
 ---
 apiVersion: v1
@@ -65,6 +91,8 @@ data:
   PG_PRIMARY_PORT: "5432"
   MODE: postgres
   CRUNCHY_DEBUG: "TRUE"
+  POSTGRES_MULTIPLE_DATABASES_PASSWORD: postgres
+  POSTGRES_MULTIPLE_DATABASES: 3s-homologacao
 
   init.sql: |
 
@@ -177,82 +205,6 @@ data:
       CREATEDB
       CREATEROLE
       NOREPLICATION;
-
-    CREATE TABLE IF NOT EXISTS failed_jobs (
-        id         bigserial                           not null,
-        uuid       varchar(255)                        not null,
-        connection text                                not null,
-        queue      text                                not null,
-        payload    varchar(255)                        not null,
-        exception  varchar(255)                        not null,
-        failed_at  timestamp default CURRENT_TIMESTAMP not null,
-        constraint failed_jobs_uuid_unique unique(uuid)
-    );
-
-    CREATE TABLE IF NOT EXISTS migrations (
-        id         bigserial   not null,
-        migration varchar(255) not null,
-        batch     int          not null
-    );
-
-    CREATE TABLE IF NOT EXISTS password_resets (
-        email      varchar(255) not null,
-        token      varchar(255) not null,
-        created_at timestamp    null
-    );
-
-    create index password_resets_email_index on password_resets (email);
-
-    CREATE TABLE IF NOT EXISTS personal_access_tokens (
-        id             bigserial       not null,
-        tokenable_type varchar(255)    not null,
-        tokenable_id   oid             not null,
-        name           varchar(255)    not null,
-        token          varchar(64)     not null,
-        abilities      text            null,
-        last_used_at   timestamp       null,
-        expires_at     timestamp       null,
-        created_at     timestamp       null,
-        updated_at     timestamp       null,
-        constraint personal_access_tokens_token_unique unique (token)
-    );
-
-    create index personal_access_tokens_tokenable_type_tokenable_id_index
-        on personal_access_tokens (tokenable_type, tokenable_id);
-
-    CREATE TABLE IF NOT EXISTS users (
-        id                bigserial    not null,
-        name              varchar(255) not null,
-        email             varchar(255) not null,
-        email_verified_at timestamp    null,
-        password          varchar(255) not null,
-        remember_token    varchar(100) null,
-        created_at        timestamp    null,
-        updated_at        timestamp    null,
-        constraint users_email_unique unique (email)
-    );
-
-    INSERT INTO migrations (migration, batch) (
-        SELECT '2014_10_12_000000_create_users_table',1 WHERE NOT EXISTS (
-        SELECT 1 FROM migrations WHERE migration='2014_10_12_000000_create_users_table' AND batch=1)
-    );
-    INSERT INTO migrations (migration, batch) (
-        SELECT '2014_10_12_100000_create_password_resets_table',1 WHERE NOT EXISTS (
-        SELECT 1 FROM migrations WHERE migration='2014_10_12_100000_create_password_resets_table' AND batch=1)
-    );
-    INSERT INTO migrations (migration, batch) (
-        SELECT '2019_08_19_000000_create_failed_jobs_table',1 WHERE NOT EXISTS (
-        SELECT 1 FROM migrations WHERE migration='2019_08_19_000000_create_failed_jobs_table' AND batch=1)
-    );
-    INSERT INTO migrations (migration, batch) (
-        SELECT '2019_12_14_000001_create_personal_access_tokens_table','1' WHERE NOT EXISTS (
-        SELECT 1 FROM migrations WHERE migration='2019_12_14_000001_create_personal_access_tokens_table' AND batch=1)
-    );
-
-    INSERT INTO users (name, email, email_verified_at, password, remember_token, created_at, updated_at) (
-      SELECT 'teste user', 'teste@user.com', null, '$2y$10$bXcKxcdPExJR/29r1rZJk.7S8KKwr8Ri.uuN9TirPvB2TLeWQrliq', null, '2023-03-09 20:34:28', '2023-03-09 20:34:28' WHERE NOT EXISTS (
-        SELECT 1 FROM users WHERE email='teste@user.com')
-    );
 
 ---
 apiVersion: v1

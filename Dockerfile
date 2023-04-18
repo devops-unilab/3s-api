@@ -45,6 +45,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   nano \
   git \
   unzip \
+  jq \
   libpq-dev \
   postgresql-client \
   && rm -rf /var/lib/apt/lists/*
@@ -116,7 +117,7 @@ RUN update-rc.d ssh enable
 RUN php artisan config:clear && \
   php artisan config:cache && \
   php artisan route:cache && \
-  chmod 777 -R storage/ && \
+  chmod 777 -R ./storage && \
   chown -Rf www-data:www-data /var/www/ && \
   a2enmod rewrite
 
@@ -132,10 +133,12 @@ RUN cp docker/php/conf.d/opcache.ini /usr/local/etc/php/conf.d/opcache.ini \
 COPY --from=dev ${WORKDIR} ${WORKDIR}
 RUN composer install --prefer-dist --no-interaction --no-dev
 
+WORKDIR ${WORKDIR}
+
 RUN php artisan config:cache && \
   php artisan route:cache && \
   php artisan key:generate && \
-  chmod 777 -R storage/ && \
+  chmod 777 -R ./storage && \
   chown -Rf www-data:www-data /var/www/ && \
   a2enmod rewrite
 

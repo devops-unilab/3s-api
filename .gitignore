@@ -502,3 +502,4 @@ composer.phar
 !/source/docker/pgadmin/.env.pgadmin.example
 /source/public/uploads
 /source/vendor
+/vault
