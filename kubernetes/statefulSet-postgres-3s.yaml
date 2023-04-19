@@ -1,59 +1,6 @@
-
-# DATABASE POSTGRESQL
-# ------------------------------------------------------------------------------------
-# -- CONFIGURA USUARIO E SENHA | 3s
-# ------------------------------------------------------------------------------------
-# create USER "3s" WITH 
-#     SUPERUSER
-#     LOGIN 
-#     CREATEDB
-#     CREATEROLE
-#     REPLICATION
-#     INHERIT
-#     CONNECTION LIMIT -1
-#     PASSWORD '<PASSWD>';
-# COMMENT ON ROLE "3s" IS 'Usuário padrão 3s-ocorrencias.';
-
-# create USER "vault" WITH 
-#     SUPERUSER
-#     LOGIN 
-#     CREATEDB
-#     CREATEROLE
-#     REPLICATION
-#     INHERIT
-#     CONNECTION LIMIT -1
-#     PASSWORD '<PASSWD>';
-# COMMENT ON ROLE "vault" IS 'Usuário do Agent Vault HashiCorp para Injecting Secrets.';
-
-# ------------------------------------------------------------------------------------
-# -- CRIA DATABASE | 3s-ocorrencias
-# ------------------------------------------------------------------------------------
-# CREATE DATABASE 3s-ocorrencias
-#     WITH
-#     OWNER = "3s"
-#     ENCODING = 'UTF8'
-#     CONNECTION LIMIT = -1
-#     TEMPLATE template0;
-# COMMENT ON DATABASE 3s-ocorrencias IS 'Dadabase para 3S';
-#
-# CREATE DATABASE "3s-homologacao"
-#     WITH
-#     OWNER = "3s"
-#     TEMPLATE = "3s-ocorrencias"
-#     ENCODING = 'UTF8'
-#     CONNECTION LIMIT = -1
-#     IS_TEMPLATE = False;
-
-# COMMENT ON DATABASE "3s-homologacao"
-#     IS 'Banco de dados temporário para homologação (Staging)';
-
-# GRANT ALL PRIVILEGES ON DATABASE "3s-ocorrencias" TO "vault";
-# GRANT ALL PRIVILEGES ON DATABASE "3s-homologacao" TO "vault";
-
 # apt install -y iputils-ping telnet curl postgresql-client
 # psql -h postgres.postgres-3s.svc.cluster.local -p 5432 -U 3s -d 3s-ocorrencias
 # kubectl delete pv $(kubectl get pv | tail -n+2 | awk '$5 == "Released" {print $1}')
-
 ---
 apiVersion: v1
 kind: Namespace
@@ -68,10 +15,11 @@ metadata:
   namespace: postgres-3s
 type: Opaque
 data:
-  PG_PASSWORD: M3MhQCMkMjAyMw==
-  PG_PRIMARY_PASSWORD: YWRtaW4hQCMkMjAyMw==
-  PG_ROOT_PASSWORD: cG9zdGdyZXMhQCMkMjAyMw==
-  DB_PASSWORD_DUMP: ''
+  PG_PASSWORD: PFBBU1NXT1JEX0JZX1ZBVUxUPg==
+  PG_PRIMARY_PASSWORD: PFBBU1NXT1JEX0JZX1ZBVUxUPg==
+  PG_ROOT_PASSWORD: PFBBU1NXT1JEX0JZX1ZBVUxUPg==
+  DB_PASSWORD_DUMP: PFBBU1NXT1JEX0JZX1ZBVUxUPg==
+  POSTGRES_MULTIPLE_DATABASES_PASSWORD: PFBBU1NXT1JEX0JZX1ZBVUxUPg==
 
 ---
 apiVersion: v1
@@ -91,7 +39,6 @@ data:
   PG_PRIMARY_PORT: "5432"
   MODE: postgres
   CRUNCHY_DEBUG: "TRUE"
-  POSTGRES_MULTIPLE_DATABASES_PASSWORD: postgres
   POSTGRES_MULTIPLE_DATABASES: 3s-homologacao
 
   init.sql: |
@@ -224,12 +171,6 @@ spec:
 
 ---
 apiVersion: v1
-kind: ServiceAccount
-metadata:
-  name: postgres-3s-sa
-  namespace: postgres-3s
----
-apiVersion: v1
 kind: Service
 metadata:
   name: postgres
@@ -288,6 +229,26 @@ spec:
   sessionAffinity: None
 
 ---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: postgres-3s-sa
+  namespace: postgres-3s
+automountServiceAccountToken: true
+imagePullSecrets:
+  - name: app-3s-regcred
+
+---
+apiVersion: v1
+kind: Secret
+metadata:
+ name: postgres
+ namespace: postgres-3s
+ annotations:
+   kubernetes.io/service-account.name: postgres
+type: kubernetes.io/service-account-token
+
+---
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
@@ -304,6 +265,21 @@ spec:
       labels:
         app: postgres
         name: postgres-3s-replica
+      annotations:
+        vault.hashicorp.com/agent-inject: "true"
+        vault.hashicorp.com/agent-inject-status: 'update'
+        vault.hashicorp.com/tls-skip-verify: "true"
+        vault.hashicorp.com/agent-inject-secret-config: 'secret/data/app-3s-postgres/config'
+        vault.hashicorp.com/agent-inject-template-config: |
+          {{ with secret "secret/data/app-3s-postgres/config" -}}
+            export PG_PASSWORD='{{ .Data.data.pg_password }}'
+            export PG_PRIMARY_PASSWORD='{{ .Data.data.pg_primary_password }}'
+            export PG_ROOT_PASSWORD='{{ .Data.data.pg_root_password }}'
+            export DB_PASSWORD_DUMP='{{ .Data.data.db_password_dump }}'
+            export POSTGRES_MULTIPLE_DATABASES_PASSWORD='{{ .Data.data.postgres_multiple_databases_password }}'
+          {{- end }}        
+        vault.hashicorp.com/role: "app-3s-postgres-role"
+        vault.hashicorp.com/auth-path: auth/kubernetes/c1
     spec:
       serviceAccount: postgres-3s-sa
       securityContext:
@@ -311,6 +287,7 @@ spec:
       containers:
         - name: postgres
           image: crunchydata/crunchy-postgres:centos8-13.6-4.7.5
+          command: ["/bin/sh", "-c", "source /vault/secrets/config; rm -fv /vault/secrets/config; /opt/crunchy/bin/start.sh"]
           imagePullPolicy: Always
           resources:
             requests:

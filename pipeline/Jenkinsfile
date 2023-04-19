@@ -17,59 +17,39 @@ pipeline {
     buildDiscarder(logRotator(numToKeepStr: '100'))
     ansiColor('xterm')
   }
-  triggers {
-    // https://crontab.guru/examples.html
-    // pollSCM('H/60 * * * *')  // execute a cada 60 minutos, em um tempo de deslocamento consistente dentro desse intervalo de 60 minutos
-    // cron('H 10 * * 1-5')  // executar às 10: XX:XX da manhã todos os dias da semana, ou seja. algum horário fixo de trabalho entre 10-11am
-    cron('0 0 1 1 *') // Todo ano as 00:00 do dia 1º do mês de janeiro.
+  triggers { // crontab.guru
+    // Pipeline com gatilho semanal ativo.
+    cron('0 0 * * MON') 
   }
+  
   environment {
     APP_NAME = "app-3s"
     APP_VERSION = "1.0.0"
     APP_NAMESPACE = "app-3s"
-    DOCKER_TAG = "${env.GIT_BRANCH.split('/')[-1]}" //retire a 'origin/' inicial de 'origin/branch'
+    DOCKER_TAG = "${env.GIT_BRANCH.split('/')[-1]}"
     DOCKER_IMAGE = "dti-registro.unilab.edu.br/unilab/${APP_NAME}"
     BUILD_NUMBER = "${env.BUILD_NUMBER}"
-    /*
-    se criar imagens docker em agentes, isso habilita o BuildKit, que cria automaticamente camadas de imagens em paralelo sempre que possível 
-    (especialmente útil para compilações de vários estágios) adicionar também '--build-arg BUILDKIT_INLINE_CACHE=1' ao comando docker build
-    */
     DOCKER_BUILDKIT = 1
     TF_IN_AUTOMATION = 1
     THREAD_COUNT = 6
     SEMGREP_TIMEOUT = "300"
     SONAR_HOST_URL = "https://dti-sonar.unilab.edu.br"
+    recipientEmails = "erivandoramos@unilab.edu.br"
   }
   stages {
     stage('CI/CD Initialize') {
-      steps {  // nenhuma diretiva de conteiner é necessária para o container maven, porque ele é padrão.
+      steps {
         milestone(ordinal: null, label: "Milestone: Setup")
         script {
-          // reescreve o nome da compilação para incluir o ID do commit
           currentBuild.displayName = "$BUILD_DISPLAY_NAME (${GIT_COMMIT.take(8)})"
-          // salvar o caminho da área de trabalho para usar nos testes
           workspace = "$env.WORKSPACE"
         }
         // executar alguns comandos shell para configurar outros detalhes
         sh 'printenv'
       }
     }
-    // geralmente não é necessário ao obter o Jenkinsfile do Git SCM no Pipeline / Multibranch Pipeline, isso está implícito
-    stage ('Git Checkout\nGitLab') {
-      steps {
-        milestone(ordinal: null, label: "Milestone: Checkout")
-        checkout([$class: 'GitSCM', branches: [[name: '*/main']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[credentialsId: 'gitlab-user-jenkins', url: 'http://dti-gitlab.unilab.edu.br/disir/3s_cicd.git']]])
-      } 
-    }
     stage('Build Application') {
       steps {
-        /*
-        sh "mvn clean package"
-        sh "mvn clean verify"
-        sh 'mvn clean -f spring-boot/'
-        sh 'mvn org.apache.maven.plugins:maven-dependency-plugin:3.5.0:tree -Xdebug -f spring-boot/'
-        sh 'mvn package install -Dmaven.test.skip=true -Dmy.variable=${APP_NAME} -Dmy.variable=${APP_VERSION} -f spring-boot/'
-        */
         sh 'ls -la ./source'
         sh 'cp ./source/.env.example ./source/.env.dev && cp ./source/.env.example ./source/.env.prod'
       }
@@ -79,8 +59,7 @@ pipeline {
         container('docker') {  
           milestone(ordinal: null, label: "Milestone: Docker Build")
           timeout(time: 60, unit: 'MINUTES') {
-            //sh "docker build -f ./Dockerfile -t '$DOCKER_IMAGE':'$DOCKER_TAG' --build-arg='NAME=$APP_NAME' --build-arg='VERSION=$APP_VERSION' --build-arg='COMMIT_SHA=$GIT_COMMIT' --build-arg='BUILDKIT_INLINE_CACHE=1' --cache-from '$DOCKER_IMAGE':'$DOCKER_TAG' ./"
-            sh "cd ./source && docker build --target production -f ./Dockerfile -t '$DOCKER_IMAGE:$DOCKER_TAG' --build-arg 'VERSION=$APP_VERSION COMMIT_SHA=$GIT_COMMIT BUILDKIT_INLINE_CACHE=1' --cache-from '$DOCKER_IMAGE:$DOCKER_TAG' ."
+            sh "cd ./source && docker build -f ./Dockerfile --target production -t '$DOCKER_IMAGE:$DOCKER_TAG' --build-arg 'VERSION=$APP_VERSION COMMIT_SHA=$GIT_COMMIT BUILDKIT_INLINE_CACHE=1' --cache-from '$DOCKER_IMAGE:$DOCKER_TAG' ."
           }
         }
       }
@@ -88,17 +67,8 @@ pipeline {
     stage('Push Image Container') {
       steps {
         container('docker') { 
-          /*
-          withCredentials([usernamePassword(credentialsId: 'dockerhub', passwordVariable: 'dockerHubPassword', usernameVariable: 'dockerHubUser')]) {
-            sh "docker login -u ${dockerHubUser} -p ${dockerHubPassword}"
-            milestone(ordinal: null, label: "Milestone: Docker Push")
-            timeout(time: 15, unit: 'MINUTES') {
-              sh "docker push '$DOCKER_IMAGE:$DOCKER_TAG'"
-            }
-          }
-          */
-          withCredentials([usernamePassword(credentialsId: 'harbor-registro', passwordVariable: 'dockerHubPassword', usernameVariable: 'dockerHubUser')]) {
-            sh "docker login https://dti-registro.unilab.edu.br -u ${dockerHubUser} -p ${dockerHubPassword}"
+          withCredentials([usernamePassword(credentialsId: 'harbor-registry', passwordVariable: 'HubImagePassword', usernameVariable: 'HubImageUser')]) {
+            sh "docker login https://dti-registro.unilab.edu.br -u ${HubImageUser} -p ${HubImagePassword}"
             milestone(ordinal: null, label: "Milestone: Docker Push")
             timeout(time: 15, unit: 'MINUTES') {
               sh "docker push '$DOCKER_IMAGE:$DOCKER_TAG'"
@@ -127,7 +97,8 @@ pipeline {
         sh "install -o root -g root -m 0755 kubectl /usr/bin/kubectl"
         sh "kubectl version --client -ojson" // apenas para testar a conexão client
 
-        withKubeConfig([credentialsId: 'K8s-c1-config', serverUrl: 'https://10.130.0.45:6443']) {
+        withKubeConfig([credentialsId: 'kubeconfig-c1', serverUrl: 'http://dti-k8s-c1.unilab.edu.br:6443']) {
+
           /*
           Teoricamente --record não é obrigatório, porém, tecnicamente torna-se obrigatório para garantir que as 
           alterações deixem um rastro de auditoria rudimentar e cumpram o processo SRE e a cultura DevOps.
@@ -135,30 +106,60 @@ pipeline {
           Nota: Quando --record não é sinalizador, na tabela, CHANGE-CAUSE estará apenas <none>
           */
 
-          /*
           script {
-            // verifica deploy ativo e exclui
-            sh "kubectl get deployment $APP_NAME -n $APP_NAMESPACE >/dev/null 2>&1 && \
-            (kubectl get pods -l $APP_NAME -n $APP_NAMESPACE --no-headers | wc -l) > 0 && \
-            kubectl delete pods -l app=$APP_NAME -n $APP_NAMESPACE --force --grace-period=0; \
-            kubectl delete deployment $APP_NAME -n $APP_NAMESPACE || echo 'DEPLOYMENT INEXISTENTE!'"
-            // aplica novo deploy
-            sh "kubectl apply -f ./kubernetes/deployment-3s.yaml --record"
+            sh '''
+              set -x
+              echo "Verifica deploy ativo e exclui."
+              kubectl get deployment $APP_NAME -n $APP_NAMESPACE >/dev/null 2>&1 && \
+              (kubectl get pods -l $APP_NAME -n $APP_NAMESPACE --no-headers | wc -l) > 0 && \
+              kubectl delete pods -l app=$APP_NAME -n $APP_NAMESPACE --force --grace-period=0; \
+              kubectl delete deployment $APP_NAME -n $APP_NAMESPACE || echo 'DEPLOYMENT INEXISTENTE!'
+              
+              echo "Aplica deploy."
+              kubectl apply -f ./kubernetes/deployment-3s.yaml --record
 
-            // verifica deploy ativo e exclui
-            sh "kubectl get deployment postgres -n postgres-3s >/dev/null 2>&1 && \
-            (kubectl get pods -l postgres -n postgres-3s --no-headers | wc -l) > 0 && \
-            kubectl delete pods -l app=postgres -n postgres-3s --force --grace-period=0; \
-            kubectl delete deployment postgres -n postgres-3s || echo 'DEPLOYMENT INEXISTENTE!'"
-            // aplica novo deploy
-            sh "kubectl apply -f ./kubernetes/deployment-postgres-3s.yaml --record"
+              echo "Verifica deploy ativo e exclui."
+              kubectl get deployment postgres -n postgres-3s >/dev/null 2>&1 && \
+              (kubectl get pods -l postgres -n postgres-3s --no-headers | wc -l) > 0 && \
+              kubectl delete pods -l app=postgres -n postgres-3s --force --grace-period=0; \
+              kubectl delete deployment postgres -n postgres-3s || echo 'DEPLOYMENT INEXISTENTE!'
+
+              echo "Aplica deploy."
+              kubectl apply -f ./kubernetes/statefulSet-postgres-3s.yaml --record
+
+              echo "Lista de recursos."
+              kubectl get all,ing -n $APP_NAMESPACE -o wide
+              kubectl get all,ing -n postgres-3s -o wide
+            '''
+            env.APP_URI = sh "kubectl get ingress $APP_NAME -n $APP_NAME -o jsonpath='{.spec.rules[0].host}' | sed 's/^/http:\/\//'"
+            withEnv(["APP_URI=${env.APP_URI}"]) {
+                sh 'echo Endpoint: $APP_URI'
+            }
           }
-          //sh "kubectl get nodes"
-          sh "kubectl get all,ing -n $APP_NAMESPACE -o wide"
-          */
-          sh "kubectl get all,ing -n postgres-3s -o wide"
         }
       }
+    }
+  }
+  post{
+    always {
+      echo 'Processo de pipeline finalizado.'
+    }
+    success {
+      echo 'Processo de pipeline BEM-SUCEDIDO.'
+      mail to: "${recipientEmails}",
+      subject: "Pipeline #${env.BUILD_NUMBER} - ${env.JOB_NAME}",
+      body: "Pipeline completada com: ${currentBuild.currentResult}\n" +
+            "Mais detalhes em: ${env.BUILD_URL}\n" +
+            "Endpoint do serviço: ${env.APP_URI}\n\n${env.EMAIL_ASSINATURA}\n\n\n${env.EMAIL_RODAPE}"
+    }
+    failure {
+      echo 'Processo de pipeline executado com falha.'
+    }
+    unstable {
+      echo 'Processo de pipeline possui estabilidade.'
+    }
+    changed {
+      echo 'SUCESSO no processo de pipeline anteriormente falhado.'
     }
   }
 }
