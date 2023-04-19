@@ -18,8 +18,8 @@ pipeline {
     ansiColor('xterm')
   }
   triggers { // crontab.guru
-    // Pipeline com gatilho semanal ativo e via GitLab.
-    cron('0 0 * * MON') 
+    // Pipeline com gatilho semanal ativo e via GitLab Pushs.
+    cron('0 0 * * 1') 
   }
   
   environment {
@@ -37,7 +37,7 @@ pipeline {
     recipientEmails = "erivandoramos@unilab.edu.br"
   }
   stages {
-    stage('CI/CD Initialize') {
+    stage('Iniciando CI/CD') {
       steps {
         milestone(ordinal: null, label: "Milestone: Setup")
         script {
@@ -48,7 +48,7 @@ pipeline {
         sh 'printenv'
       }
     }
-    stage('Build Application') {
+    stage('Build App') {
       steps {
         sh 'ls -la ./source'
         sh 'cp ./source/.env.example ./source/.env.dev && cp ./source/.env.example ./source/.env.prod'
