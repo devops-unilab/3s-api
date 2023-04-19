@@ -20,24 +20,6 @@ pipeline {
   triggers { // crontab.guru
     // Pipeline com gatilho semanal ativo e via GitLab.
     cron('0 0 * * MON') 
-    gitlab(
-      triggerOnPush: true,
-      triggerOnMergeRequest: true, triggerOpenMergeRequestOnPush: "never",
-      triggerOnNoteRequest: true,
-      noteRegex: "Jenkins, tente novamente um build",
-      skipWorkInProgressMergeRequest: true,
-      ciSkip: false,
-      setBuildDescription: true,
-      addNoteOnMergeRequest: true,
-      addCiMessage: true,
-      addVoteOnMergeRequest: true,
-      acceptMergeRequestOnSuccess: false,
-      branchFilterType: "NameBasedFilter",
-      includeBranchesSpec: "release/qat",
-      excludeBranchesSpec: "",
-      pendingBuildName: "Jenkins",
-      cancelPendingBuildsOnUpdate: false,
-      secretToken: "abcdefghijklmnopqrstuvwxyz0123456789ABCDEF")
   }
   
   environment {
@@ -149,7 +131,7 @@ pipeline {
               kubectl get all,ing -n $APP_NAMESPACE -o wide
               kubectl get all,ing -n postgres-3s -o wide
             '''
-            env.APP_URI = sh "kubectl get ingress $APP_NAME -n $APP_NAME -o jsonpath='{.spec.rules[0].host}' | sed 's/^/http:\/\//'"
+            env.APP_URI = sh "kubectl get ingress $APP_NAME -n $APP_NAME -o jsonpath='{.spec.rules[0].host}' | sed 's/^/http:\\/\\//'"
             withEnv(["APP_URI=${env.APP_URI}"]) {
                 sh 'echo Endpoint: $APP_URI'
             }
