@@ -67,7 +67,6 @@ pipeline {
             && composer
           '''
           }
-        }
         sh 'composer create-project laravel/laravel --prefer-dist ./source/'
         sh 'cp ./source/.env.example ./source/.env'
         sh 'php artisan key:generate'
