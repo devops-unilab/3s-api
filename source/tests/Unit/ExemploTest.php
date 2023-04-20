@@ -1,10 +1,10 @@
 <?php
 // Arquivo Exemplo: ExemploTest.php
 
-namespace tests\Unit;
+namespace app3s\tests\Unit;
 
 use PHPUnit\Framework\TestCase;
-use tests\Calculadora;
+use app3s\tests\Calculadora;
 
 class ExemploTest extends TestCase
 {
