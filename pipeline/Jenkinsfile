@@ -86,8 +86,8 @@ pipeline {
     }
     stage('Testes') {
       steps {
-          sh 'cd source/ && php artisan make:test tests/BasicTest && su www-data -s /bin/bash -c "composer dump-autoload"'
-          sh 'cd .. && source/vendor/bin/phpunit --no-configuration --no-extensions'
+          sh 'cd source/ && php artisan make:test tests/BasicTest && composer dump-autoload'
+          sh './vendor/bin/phpunit && cd ..'
       }
     }
     stage('Build Image Container') {
