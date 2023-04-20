@@ -1,7 +1,7 @@
 <?php
 // Arquivo Exemplo: ExemploTest.php
 
-namespace Tests;
+namespace tests\Unit;
 
 use PHPUnit\Framework\TestCase;
 use tests\Calculadora;
