@@ -69,8 +69,9 @@ class UsuarioController {
 		$response = curl_exec($curl);
 		curl_close($curl);
 		$responseJ2 = json_decode($response);
+		$nivel = 'c';
 		if ($responseJ2->id_status_servidor != 1) {
-			return false;
+			$nivel = 'd';
 		}
 
 		$data = DB::table('usuario')->where("id", $idUsuario)->first();
@@ -81,14 +82,17 @@ class UsuarioController {
 					'nome' => $responseJ2->nome,
 					'email' => $responseJ2->email,
 					'login' => $responseJ2->login,
-					'nivel' => 'c'
+					'nivel' => $nivel
 				]
 			);
+			
+		} else {
+			$nivel = $data->nivel; 
 		}
 		$usuario->setId($idUsuario);
-		$usuario->setNome($data->nome);
-		$usuario->setEmail($data->email);
-		$usuario->setNivel($data->nivel);
+		$usuario->setNome($responseJ2->nome);
+		$usuario->setEmail($responseJ2->email);
+		$usuario->setNivel($nivel);
 		return true;
 	}
 	public function mudarNivel(){
@@ -124,15 +128,8 @@ class UsuarioController {
 	        $sessao = new Sessao();
 	        $sessao->criaSessao($usuario->getId(), $usuario->getNivel(), $usuario->getLogin(), $usuario->getNome(), $usuario->getEmail());
 	        
-	        $idUnidade = $this->dao->getIdUnidade($usuario);
-	        if(count($idUnidade) > 0){
-	            foreach($idUnidade as $id => $sigla){
-	                $sessao->setIDUnidade($id);
-	                $sessao->setUnidade($sigla );
-	            }
-	        }
-	        
-	        
+	        $siglaUnidade = $this->dao->getSiglaUnidade($usuario);
+			$sessao->setUnidade($siglaUnidade);
 	        echo ":sucesso:".$sessao->getNivelAcesso();
 	    }else{
 	        echo ":falha";

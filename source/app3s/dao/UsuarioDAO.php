@@ -14,12 +14,12 @@ use app3s\util\Sessao;
 
 class UsuarioDAO extends DAO {
     
-    public function getIdUnidade(Usuario $usuario){
+    public function getSiglaUnidade(Usuario $usuario){
         $idUnidade = array();
         $id = $usuario->getId();
         $daoSIGAA = new DAO(null, "SIG");
         $sql2 = "SELECT
-                *
+                sigla_unidade
                 FROM vw_autenticacao_3s
                 WHERE id = :id LIMIT 1";
         try {
@@ -28,18 +28,13 @@ class UsuarioDAO extends DAO {
             $stmt->execute();
             $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
             foreach ( $result as $linha2 ) {
-                
-                if($linha2['id_status_servidor'] == 1)
-                {
-                    $idUnidade[$linha2['id_unidade']] = $linha2['sigla_unidade'];
-                    return $idUnidade;//Status Inativo
-                }
+                return $linha2['sigla_unidade'];
             }
         } catch(PDOException $e) {
             echo $e->getMessage();
-            return $idUnidade;
+            return "Não Informada";
         }
-        return $idUnidade;
+        return "Não Informada";
         
     }
 
