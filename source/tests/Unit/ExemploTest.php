@@ -4,7 +4,7 @@
 namespace Tests;
 
 use PHPUnit\Framework\TestCase;
-use App\Exemplo\Calculadora;
+use tests\Calculadora;
 
 class ExemploTest extends TestCase
 {
