@@ -97,6 +97,14 @@ pipeline {
             }
           }
           */
+          withCredentials([usernamePassword(credentialsId: 'harbor-registro', passwordVariable: 'harborPassword', usernameVariable: 'harborUser')]) {
+            sh 'docker login https://dti-registro.unilab.edu.br -u ${harborPassword} -p ${harborUser}'
+            milestone(ordinal: null, label: "Milestone: Docker Push")
+            timeout(time: 15, unit: 'MINUTES') {
+              sh "docker push '$DOCKER_IMAGE:$DOCKER_TAG'"
+            }
+          }
+
           withCredentials([usernamePassword(credentialsId: 'harbor-registro', passwordVariable: 'dockerHubPassword', usernameVariable: 'dockerHubUser')]) {
             sh "docker login https://dti-registro.unilab.edu.br -u ${dockerHubUser} -p ${dockerHubPassword}"
             milestone(ordinal: null, label: "Milestone: Docker Push")
@@ -104,6 +112,8 @@ pipeline {
               sh "docker push '$DOCKER_IMAGE:$DOCKER_TAG'"
             }
           }
+
+
         }
       }
     }
