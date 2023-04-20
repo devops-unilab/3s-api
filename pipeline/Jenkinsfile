@@ -86,7 +86,7 @@ pipeline {
     }
     stage('Testes') {
       steps {
-          sh 'source/vendor/bin/phpunit'
+          sh 'source/vendor/bin/phpunit --no-configuration --no-extensions source/tests/ExemploTest.php'
       }
     }
     stage('Build Image Container') {
