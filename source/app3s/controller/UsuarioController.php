@@ -86,6 +86,8 @@ class UsuarioController {
 				]
 			);
 			
+		} else {
+			$nivel = $data->nivel; 
 		}
 		$usuario->setId($idUsuario);
 		$usuario->setNome($responseJ2->nome);
@@ -126,15 +128,8 @@ class UsuarioController {
 	        $sessao = new Sessao();
 	        $sessao->criaSessao($usuario->getId(), $usuario->getNivel(), $usuario->getLogin(), $usuario->getNome(), $usuario->getEmail());
 	        
-	        $idUnidade = $this->dao->getIdUnidade($usuario);
-	        if(count($idUnidade) > 0){
-	            foreach($idUnidade as $id => $sigla){
-	                $sessao->setIDUnidade($id);
-	                $sessao->setUnidade($sigla );
-	            }
-	        }
-	        
-	        
+	        $siglaUnidade = $this->dao->getSiglaUnidade($usuario);
+			$sessao->setUnidade($siglaUnidade);
 	        echo ":sucesso:".$sessao->getNivelAcesso();
 	    }else{
 	        echo ":falha";
