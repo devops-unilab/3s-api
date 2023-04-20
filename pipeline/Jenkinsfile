@@ -66,6 +66,7 @@ pipeline {
               curl \
               git \
               unzip \
+              rsync \
               && rm -rf /var/lib/apt/lists/*
           '''
           sh '''
@@ -77,8 +78,8 @@ pipeline {
           //sh 'cd source && su www-data -s /bin/bash -c "composer install --ignore-platform-reqs --no-interaction --no-progress --no-scripts --optimize-autoloader"'
           sh 'composer create-project laravel/laravel --prefer-dist /tmp/proj-laravel'
           sh 'ls -la /tmp/proj-laravel'
-          sh 'cp -Rf source/ /tmp/proj-laravel/'
-          sh 'mv /tmp/proj-laravel/ source/ && ls -la source/'
+          sh 'cp -ra source/ /tmp/proj-laravel/'
+          sh 'rsync --progress --recursive -arvPo /tmp/proj-laravel/ source/'
           sh 'mv source/.env.example source/.env'
           sh 'ls -la source/'
       }
