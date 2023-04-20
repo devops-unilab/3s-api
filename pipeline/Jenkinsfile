@@ -76,7 +76,7 @@ pipeline {
           '''
           }
           //sh 'cd source && su www-data -s /bin/bash -c "composer install --ignore-platform-reqs --no-interaction --no-progress --no-scripts --optimize-autoloader"'
-          sh 'su www-data -s /bin/bash -c "composer create-project laravel/laravel --prefer-dist /tmp/proj-laravel"'
+          sh 'composer create-project laravel/laravel --prefer-dist /tmp/proj-laravel'
           sh 'ls -la /tmp/proj-laravel'
           sh 'cp -ra source/ /tmp/proj-laravel/'
           sh 'rsync --progress --recursive -arvPo /tmp/proj-laravel/ source/'
