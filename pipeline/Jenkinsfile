@@ -75,16 +75,16 @@ pipeline {
             && su www-data -s /bin/bash -c "composer"
           '''
           }
-          sh 'su www-data -s /bin/bash -c "composer create-project laravel/laravel --prefer-dist /tmp/proj-laravel"'
-          sh 'cp -R /tmp/proj-laravel/ ./source/ && ls -la /tmp/proj-laravel'
-          sh 'cp ./source/.env.example ./source/.env'
-          sh 'cd ./source && su www-data -s /bin/bash -c "composer install --ignore-platform-reqs --no-interaction --no-progress --no-scripts --optimize-autoloader"'
-          sh 'ls -la ./source'
+          sh 'composer create-project laravel/laravel --prefer-dist /tmp/proj-laravel'
+          sh 'cp -R /tmp/proj-laravel/ source/ && ls -la /tmp/proj-laravel'
+          sh 'cp source/.env.example source/.env'
+          sh 'cd source && su www-data -s /bin/bash -c "composer install --ignore-platform-reqs --no-interaction --no-progress --no-scripts --optimize-autoloader"'
+          sh 'cd .. && ls -la source/'
       }
     }
     stage('Testes') {
       steps {
-          sh './vendor/bin/phpunit'
+          sh 'source/vendor/bin/phpunit'
       }
     }
     stage('Build Image Container') {
