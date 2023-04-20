@@ -76,18 +76,18 @@ pipeline {
           '''
           }
           //sh 'cd source && su www-data -s /bin/bash -c "composer install --ignore-platform-reqs --no-interaction --no-progress --no-scripts --optimize-autoloader"'
-          sh 'composer create-project laravel/laravel --prefer-dist /tmp/proj-laravel'
+          sh 'su www-data -s /bin/bash -c "composer create-project laravel/laravel --prefer-dist /tmp/proj-laravel"'
           sh 'ls -la /tmp/proj-laravel'
           sh 'cp -ra source/ /tmp/proj-laravel/'
           sh 'rsync --progress --recursive -arvPo /tmp/proj-laravel/ source/'
           sh 'mv source/.env.example source/.env'
           sh 'ls -la source/'
-          sh 'cd source/ && composer dump-autoload'
       }
     }
     stage('Testes') {
       steps {
-          sh 'source/vendor/bin/phpunit --no-configuration --no-extensions source/app3s/tests/'
+          sh 'cd source/ && php artisan make:test tests/BasicTest && su www-data -s /bin/bash -c "composer dump-autoload"'
+          sh 'cd .. && source/vendor/bin/phpunit --no-configuration --no-extensions'
       }
     }
     stage('Build Image Container') {
