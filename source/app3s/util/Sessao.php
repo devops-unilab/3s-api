@@ -103,6 +103,6 @@ class Sessao{
     const NIVEL_COMUM = 'c';
     const NIVEL_TECNICO = 't';
     const NIVEL_ADM = 'a';
-    
+    const NIVEL_DISABLED = 'd';
     
 }
