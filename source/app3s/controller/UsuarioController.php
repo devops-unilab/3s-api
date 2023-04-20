@@ -85,11 +85,12 @@ class UsuarioController {
 					'nivel' => $nivel
 				]
 			);
+			
 		}
 		$usuario->setId($idUsuario);
-		$usuario->setNome($data->nome);
-		$usuario->setEmail($data->email);
-		$usuario->setNivel($data->nivel);
+		$usuario->setNome($responseJ2->nome);
+		$usuario->setEmail($responseJ2->email);
+		$usuario->setNivel($nivel);
 		return true;
 	}
 	public function mudarNivel(){
