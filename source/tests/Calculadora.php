@@ -1,7 +1,7 @@
 <?php
 // Arquivo Exemplo: Calculadora.php
 
-namespace App\Calculadora;
+namespace App\Exemplo;
 
 class Calculadora
 {
