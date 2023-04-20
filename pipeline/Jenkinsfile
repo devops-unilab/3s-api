@@ -72,7 +72,7 @@ pipeline {
             curl -sS https://getcomposer.org/installer -o composer-setup.php \
             && php composer-setup.php --install-dir=/usr/local/bin --filename=composer \
             && chown -R www-data:www-data /usr/local/bin/composer \
-            && composer
+            && su www-data -s /bin/bash -c "composer"
           '''
           }
           sh 'composer create-project laravel/laravel --prefer-dist ./source/'
