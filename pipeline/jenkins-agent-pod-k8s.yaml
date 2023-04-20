@@ -78,8 +78,8 @@ spec:
   containers:  # lista de contêineres que deseja apresentar para o build, pode-se definir um contêiner padrão no Jenkinsfile
     # ==================================================
     # https://hub.docker.com/_/php/tags
-    - name: php7
-      image: php:7.4-apache-bullseye # imagem customizada
+    - name: php8
+      image: php:8.1-apache-bullseye # imagem customizada
       command: ["tail", "-f", "/dev/null"]  # este ou qualquer comando que seja basicamente um noop é necessário, isso é para que não substitua o ponto de entrada do contêiner base
       imagePullPolicy: Always # use o cache ou puxe a imagem para o agente
       resources:  # limites e recursos que o build contém

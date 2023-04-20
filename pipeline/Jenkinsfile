@@ -4,9 +4,9 @@ pipeline {
   agent {
     kubernetes {
       yamlFile './pipeline/jenkins-agent-pod-k8s.yaml'
-      inheritFrom 'jnlp'
+      inheritFrom 'inbound'
       idleMinutes 5
-      defaultContainer 'php7'
+      defaultContainer 'php8'
     }
   }
   options {
@@ -45,7 +45,17 @@ pipeline {
           workspace = "$env.WORKSPACE"
         }
         // executar alguns comandos shell para configurar outros detalhes
+
+        // Instalar kubectl - Oficial docs https://kubernetes.io/docs/tasks/tools/install-kubectl-linux/
+        sh 'curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"'
+        sh 'curl -LO "https://dl.k8s.io/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl.sha256"'
+        sh 'echo "$(cat kubectl.sha256)  kubectl" | sha256sum --check'
+        sh "chmod u+x ./kubectl"
+        sh "install -o root -g root -m 0755 kubectl /usr/bin/kubectl"
+        sh "kubectl version --client -ojson" // apenas para testar a conexão client
+
         sh 'printenv'
+        ls -la .
       }
     }
     stage('Build App') {
@@ -88,14 +98,6 @@ pipeline {
         sh "sed -i 's/:main/:${env.DOCKER_TAG}/' ./kubernetes/deployment-3s.yaml"
 
         sh 'cat ./kubernetes/deployment-3s.yaml'
-
-        // Oficial docs https://kubernetes.io/docs/tasks/tools/install-kubectl-linux/
-        sh 'curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"'
-        sh 'curl -LO "https://dl.k8s.io/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl.sha256"'
-        sh 'echo "$(cat kubectl.sha256)  kubectl" | sha256sum --check'
-        sh "chmod u+x ./kubectl"
-        sh "install -o root -g root -m 0755 kubectl /usr/bin/kubectl"
-        sh "kubectl version --client -ojson" // apenas para testar a conexão client
 
         withKubeConfig([credentialsId: 'kubeconfig-c1', serverUrl: 'http://dti-k8s-c1.unilab.edu.br:6443']) {
 
