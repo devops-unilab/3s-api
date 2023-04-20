@@ -55,7 +55,7 @@ pipeline {
         sh "kubectl version --client -ojson" // apenas para testar a conexão client
 
         sh 'printenv'
-        ls -la .
+        sh 'ls -la .'
       }
     }
     stage('Build App') {
