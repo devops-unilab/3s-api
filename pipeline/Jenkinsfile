@@ -66,7 +66,9 @@ pipeline {
               curl \
               git \
               unzip \
-              && rm -rf /var/lib/apt/lists/* \
+              && rm -rf /var/lib/apt/lists/*
+          '''
+          sh '''
             curl -sS https://getcomposer.org/installer -o composer-setup.php \
             && php composer-setup.php --install-dir=/usr/local/bin --filename=composer \
             && chown -R www-data:www-data /usr/local/bin/composer \
