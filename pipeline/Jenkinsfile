@@ -58,10 +58,25 @@ pipeline {
         sh 'ls -la .'
       }
     }
-    stage('Build App') {
+    stage('Build') {
       steps {
+        script {
+          sh '''
+            curl -sS https://getcomposer.org/installer -o composer-setup.php \
+            && php composer-setup.php --install-dir=/usr/local/bin --filename=composer \
+            && composer
+          '''
+          }
+        }
+        sh 'composer create-project laravel/laravel --prefer-dist ./source/'
+        sh 'cp ./source/.env.example ./source/.env'
+        sh 'php artisan key:generate'
         sh 'ls -la ./source'
-        sh 'cp ./source/.env.example ./source/.env.dev && cp ./source/.env.example ./source/.env.prod'
+      }
+    }
+    stage('Testes') {
+      steps {
+          sh './vendor/bin/phpunit'
       }
     }
     stage('Build Image Container') {
@@ -69,7 +84,7 @@ pipeline {
         container('docker') {  
           milestone(ordinal: null, label: "Milestone: Docker Build")
           timeout(time: 60, unit: 'MINUTES') {
-            sh "docker build -f ./Dockerfile --target production -t '$DOCKER_IMAGE:$DOCKER_TAG' --build-arg 'VERSION=$APP_VERSION COMMIT_SHA=$GIT_COMMIT BUILDKIT_INLINE_CACHE=1' --cache-from '$DOCKER_IMAGE:$DOCKER_TAG' ."
+            sh "docker build -f ./Dockerfile --target production -t '$DOCKER_IMAGE:$DOCKER_TAG' --build-arg 'VERSION=$APP_VERSION COMMIT_SHA=$GIT_COMMIT BUILDKIT_INLINE_CACHE=1' --no-cache ."
           }
         }
       }
