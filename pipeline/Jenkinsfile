@@ -75,7 +75,8 @@ pipeline {
             && su www-data -s /bin/bash -c "composer"
           '''
           }
-          sh 'composer create-project laravel/laravel --prefer-dist source/'
+          sh 'composer create-project laravel/laravel --prefer-dist proj-laravel'
+          sh 'cp proj-laravel/ source/'
           sh 'cp ./source/.env.example ./source/.env'
           sh 'php artisan key:generate'
           sh 'ls -la ./source'
