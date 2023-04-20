@@ -62,15 +62,21 @@ pipeline {
       steps {
         script {
           sh '''
+            apt-get update && apt-get install -y --no-install-recommends \
+              curl \
+              git \
+              unzip \
+              && rm -rf /var/lib/apt/lists/* \
             curl -sS https://getcomposer.org/installer -o composer-setup.php \
             && php composer-setup.php --install-dir=/usr/local/bin --filename=composer \
+            && chown -R www-data:www-data /usr/local/bin/composer \
             && composer
           '''
           }
-        sh 'composer create-project laravel/laravel --prefer-dist ./source/'
-        sh 'cp ./source/.env.example ./source/.env'
-        sh 'php artisan key:generate'
-        sh 'ls -la ./source'
+          sh 'composer create-project laravel/laravel --prefer-dist ./source/'
+          sh 'cp ./source/.env.example ./source/.env'
+          sh 'php artisan key:generate'
+          sh 'ls -la ./source'
       }
     }
     stage('Testes') {
