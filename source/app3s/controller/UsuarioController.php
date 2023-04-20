@@ -69,8 +69,9 @@ class UsuarioController {
 		$response = curl_exec($curl);
 		curl_close($curl);
 		$responseJ2 = json_decode($response);
+		$nivel = 'c';
 		if ($responseJ2->id_status_servidor != 1) {
-			return false;
+			$nivel = 'd';
 		}
 
 		$data = DB::table('usuario')->where("id", $idUsuario)->first();
@@ -81,7 +82,7 @@ class UsuarioController {
 					'nome' => $responseJ2->nome,
 					'email' => $responseJ2->email,
 					'login' => $responseJ2->login,
-					'nivel' => 'c'
+					'nivel' => $nivel
 				]
 			);
 		}
