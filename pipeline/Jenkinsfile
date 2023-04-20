@@ -78,6 +78,7 @@ pipeline {
           sh 'composer create-project laravel/laravel --prefer-dist /tmp/proj-laravel'
           sh 'cp -R /tmp/proj-laravel ./source/ && rm -r /tmp/proj-laravel'
           sh 'cp ./source/.env.example ./source/.env'
+          sh 'su www-data -s /bin/bash -c "composer install --ignore-platform-reqs --no-interaction --no-progress --no-scripts --optimize-autoloader"'
           sh 'ls -la ./source'
       }
     }
