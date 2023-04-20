@@ -76,7 +76,7 @@ pipeline {
           '''
           }
           sh 'composer create-project laravel/laravel --prefer-dist /tmp/proj-laravel'
-          sh 'cp /tmp/proj-laravel ./source/'
+          sh 'cp -Rfv /tmp/proj-laravel ./source/'
           sh 'rm -Rf /tmp/proj-laravel'
           sh 'cp ./source/.env.example ./source/.env'
           sh 'php artisan key:generate'
