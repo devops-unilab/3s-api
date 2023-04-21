@@ -75,7 +75,6 @@ pipeline {
             && chown -R www-data:www-data /usr/local/bin/composer 
           '''
           }
-          //sh 'cd source && su www-data -s /bin/bash -c "composer install --ignore-platform-reqs --no-interaction --no-progress --no-scripts --optimize-autoloader"'
           sh 'composer create-project laravel/laravel --prefer-dist /tmp/proj-laravel'
           sh 'ls -la /tmp/proj-laravel'
           sh 'cp -ra source/ /tmp/proj-laravel/'
@@ -86,8 +85,8 @@ pipeline {
     }
     stage('Testes') {
       steps {
-          sh 'cd source/ && php artisan make:test tests/BasicTest && composer dump-autoload'
-          sh 'source/vendor/bin/phpunit source/tests/'
+          sh 'cd source/ && php artisan make:test tests/BasicTest && php artisan key:generate && composer dump-autoload'
+          sh 'source/vendor/bin/phpunit --no-configuration --no-extensions source/tests/'
       }
     }
     stage('Build Image Container') {
