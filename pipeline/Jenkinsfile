@@ -45,36 +45,37 @@ pipeline {
           workspace = "$env.WORKSPACE"
         }
         // executar alguns comandos shell para configurar outros detalhes
+        sh '''
+          # Instala pacotes
+          apt-get update && apt-get install -y --no-install-recommends \
+            curl \
+            git \
+            unzip \
+            rsync \
+            && rm -rf /var/lib/apt/lists/*
 
-        // Instalar kubectl - Oficial docs https://kubernetes.io/docs/tasks/tools/install-kubectl-linux/
-        sh 'curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"'
-        sh 'curl -LO "https://dl.k8s.io/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl.sha256"'
-        sh 'echo "$(cat kubectl.sha256)  kubectl" | sha256sum --check'
-        sh "chmod u+x ./kubectl"
-        sh "install -o root -g root -m 0755 kubectl /usr/bin/kubectl"
-        sh "kubectl version --client -ojson" // apenas para testar a conexão client
+          # Instala kubectl
+          curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl" 
+          curl -LO "https://dl.k8s.io/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl.sha256"
+          echo "$(cat kubectl.sha256)  kubectl" | sha256sum --check
+          chmod u+x ./kubectl
+          install -o root -g root -m 0755 kubectl /usr/bin/kubectl
+          kubectl version --client -ojson
 
-        sh 'printenv'
-        sh 'ls -la .'
+          # Instala Vault
+          apt update && apt install -y unzip
+          curl -o vault.zip -k https://releases.hashicorp.com/vault/1.12.1/vault_1.12.1_linux_amd64.zip; yes | unzip vault.zip
+
+          # Instala compose
+          curl -sS https://getcomposer.org/installer -o composer-setup.php 
+          php composer-setup.php --install-dir=/usr/local/bin --filename=composer 
+          chown -R www-data:www-data /usr/local/bin/composer 
+        '''
       }
     }
     stage('Build') {
       steps {
         script {
-          sh '''
-            apt-get update && apt-get install -y --no-install-recommends \
-              curl \
-              git \
-              unzip \
-              rsync \
-              && rm -rf /var/lib/apt/lists/*
-          '''
-          sh '''
-            curl -sS https://getcomposer.org/installer -o composer-setup.php \
-            && php composer-setup.php --install-dir=/usr/local/bin --filename=composer \
-            && chown -R www-data:www-data /usr/local/bin/composer 
-          '''
-          }
           sh 'composer create-project laravel/laravel --prefer-dist /tmp/proj-laravel'
           sh 'ls -la /tmp/proj-laravel'
           sh 'cp -ra source/ /tmp/proj-laravel/'
@@ -85,8 +86,8 @@ pipeline {
     }
     stage('Testes') {
       steps {
-          sh 'cd source/ && php artisan make:test tests/BasicTest && php artisan key:generate && composer dump-autoload'
-          sh 'source/vendor/bin/phpunit --no-configuration --no-extensions source/tests/'
+        sh 'cd source/ && php artisan key:generate && php artisan make:test tests/BasicTest && composer dump-autoload'
+        sh 'source/vendor/bin/phpunit --no-configuration --no-extensions source/tests/'
       }
     }
     stage('Build Image Container') {
