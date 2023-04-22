@@ -101,15 +101,36 @@ pipeline {
         }
       }
     }
+    stage('Obter segredos do Vault') {
+      steps {
+        container('docker') {
+          withCredentials([string(credentialsId: 'role-harbor', variable: 'ROLE_ID'),string(credentialsId: 'token-admin', variable: 'VAULT_TOKEN')]) {
+            script {
+              sh '''
+              export VAULT_ADDR=https://dti-vault.unilab.edu.br
+              export SECRET_ID=$(./vault write -tls-skip-verify -field=secret_id -f auth/approle/role/harbor-role/secret-id)
+              export VAULT_TOKEN=$(./vault write -tls-skip-verify -field=token auth/approle/login role_id=${ROLE_ID} secret_id=${SECRET_ID})
+              export HARBOR_USERNAME=$(./vault kv get -tls-skip-verify -field=usuario secret/harbor/config)
+              export HARBOR_PASSWORD=$(./vault kv get -tls-skip-verify -field=senha secret/harbor/config)
+              '''
+              env.HARBOR_USERNAME = sh(script: 'echo $HARBOR_USERNAME', returnStdout: true).trim()
+              env.HARBOR_PASSWORD = sh(script: 'echo $HARBOR_PASSWORD', returnStdout: true).trim()
+            }
+          }
+        }
+      }
+    }
     stage('Push Image Container') {
       steps {
         container('docker') { 
-          withCredentials([usernamePassword(credentialsId: 'harbor-registry', passwordVariable: 'HubImagePassword', usernameVariable: 'HubImageUser')]) {
-            sh "docker login https://dti-registro.unilab.edu.br -u ${HubImageUser} -p ${HubImagePassword}"
-            milestone(ordinal: null, label: "Milestone: Docker Push")
-            timeout(time: 15, unit: 'MINUTES') {
-              sh "docker push '$DOCKER_IMAGE:$DOCKER_TAG'"
-            }
+          sh '''
+          docker login https://dti-registro.unilab.edu.br -u "${HARBOR_USERNAME}" -p "${HARBOR_PASSWORD}"
+          unset HARBOR_USERNAME
+          unset HARBOR_PASSWORD
+          '''
+          milestone(ordinal: null, label: "Milestone: Docker Push")
+          timeout(time: 15, unit: 'MINUTES') {
+            sh "docker push '$DOCKER_IMAGE:$DOCKER_TAG'"
           }
         }
       }
