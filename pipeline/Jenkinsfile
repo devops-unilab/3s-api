@@ -82,6 +82,7 @@ pipeline {
           sh 'rsync --progress --recursive -arvPo /tmp/proj-laravel/ source/'
           sh 'mv source/.env.example source/.env'
           sh 'ls -la source/'
+        }
       }
     }
     stage('Testes') {
