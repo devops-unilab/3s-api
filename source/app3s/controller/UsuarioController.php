@@ -127,9 +127,12 @@ class UsuarioController {
 	        
 	        $sessao = new Sessao();
 	        $sessao->criaSessao($usuario->getId(), $usuario->getNivel(), $usuario->getLogin(), $usuario->getNome(), $usuario->getEmail());
-	        
-	        $siglaUnidade = $this->dao->getSiglaUnidade($usuario);
-			$sessao->setUnidade($siglaUnidade);
+			$dataSIG = DB::connection('sigaa')->table('vw_autenticacao_3s')
+			->where("id", $usuario->getId())->first();
+			
+
+			$sessao->setIDUnidade($dataSIG->id_unidade);
+			$sessao->setUnidade($dataSIG->sigla_unidade);
 	        echo ":sucesso:".$sessao->getNivelAcesso();
 	    }else{
 	        echo ":falha";

@@ -58,7 +58,7 @@ class Sessao{
         return $_SESSION['UNIDADE'];
     }
     public function setIDUnidade($unidade){
-        $_SESSION['UNIDADE'] = $unidade;
+        $_SESSION['ID_UNIDADE'] = $unidade;
     }
     public function getIDUnidade(){
         if(!isset($_SESSION['ID_UNIDADE'])){
