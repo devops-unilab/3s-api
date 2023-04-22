@@ -933,15 +933,10 @@ class OcorrenciaController {
 	        $usuarioDao = new UsuarioDAO($this->dao->getConnection());
 	        
 	        $usuarioDao->fillById($usuario);
-	        
-	        $idUnidade = $usuarioDao->getIdUnidade($usuario);
-	        
-	        if(count($idUnidade) > 0){
-	            foreach($idUnidade as $id => $sigla){
-	                $ocorrencia->setIdLocal ( $id );
-	                $ocorrencia->setLocal ( $sigla );
-	            }
-	        }
+	        $sessao = new Sessao();
+			$ocorrencia->setIdLocal ( $sessao->getIdUnidade() );
+			$ocorrencia->setLocal ( $sessao->getUnidade());
+
 	        if(trim($ocorrencia->getLocal()) == ""){
 	            $ocorrencia->setLocal ( 'teste' );
 	        }
