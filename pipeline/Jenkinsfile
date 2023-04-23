@@ -152,15 +152,13 @@ pipeline {
         container('docker') { 
           milestone(ordinal: null, label: "Milestone: Docker Push")
           timeout(time: 15, unit: 'MINUTES') {
-            withCredentials([string(credentialsId: 'harbor-creds', variable: 'HARBOR_PASSWORD')]) {
-              sh """
-                echo \${HARBOR_USERNAME}
-                echo \${HARBOR_PASSWORD}
-                echo \${HARBOR_PASSWORD} | docker login --username \${HARBOR_USERNAME} --password-stdin https://dti-registro.unilab.edu.br
-                unset HARBOR_PASSWORD
-                docker push \${DOCKER_IMAGE}:\${DOCKER_TAG}
-              """
-            }
+            sh """
+              echo \${HARBOR_USERNAME}
+              echo \${HARBOR_PASSWORD}
+              echo \${HARBOR_PASSWORD} | docker login --username \${HARBOR_USERNAME} --password-stdin https://dti-registro.unilab.edu.br
+              unset HARBOR_PASSWORD
+              docker push \${DOCKER_IMAGE}:\${DOCKER_TAG}
+            """
           }
         }
       }
