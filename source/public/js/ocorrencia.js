@@ -37,6 +37,12 @@ function filtroBasico(){
 		delete data['tecnico']; 
 	}
 	
+	if($("#select-requisitante").val() != ""){
+		data['requisitante'] = $("#select-requisitante").val();
+	}else{
+		delete data['requisitante']; 
+	}
+	
 	
 	if($('#select-setores-filtro').val()){
 		data['setores_requisitantes'] = $('#select-setores-filtro').val();

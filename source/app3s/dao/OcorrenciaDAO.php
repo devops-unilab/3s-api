@@ -2105,6 +2105,7 @@ class OcorrenciaDAO extends DAO {
     
     
     public function pesquisaParaTec(Ocorrencia $ocorrencia,  $arrStatus = array('a'), $arrayFiltros = array()) {
+        print_r($arrayFiltros);
         $lista = array();
         $filtroStatus = $this->filtroStatus($arrStatus);
         $outroFiltro = $this->outroFiltro($arrayFiltros);
@@ -2317,6 +2318,13 @@ class OcorrenciaDAO extends DAO {
             $idUsuario = $arrayFiltros['tecnico'];
             $arrPedacos[] = "
             (ocorrencia.id_usuario_indicado  = $idUsuario OR ocorrencia.id_usuario_atendente  = $idUsuario)";
+            
+        }
+        if(isset($arrayFiltros['requisitante'])){
+            
+            $idUsuario = $arrayFiltros['requisitante'];
+            $arrPedacos[] = "
+            (ocorrencia.id_usuario_cliente  = $idUsuario)";
             
         }
         if(isset($arrayFiltros['solicitacao'])){
