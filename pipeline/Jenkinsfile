@@ -102,19 +102,49 @@ pipeline {
         }
       }
     }
+    // stage('Obter segredos do Vault') {
+    //   steps {
+    //     withCredentials([string(credentialsId: 'role-harbor', variable: 'ROLE_ID'),string(credentialsId: 'token-admin', variable: 'VAULT_TOKEN')]) {
+    //       script {
+    //         sh '''
+    //         export VAULT_ADDR=https://dti-vault.unilab.edu.br
+    //         export SECRET_ID=$(./vault write -tls-skip-verify -field=secret_id -f auth/approle/role/harbor-role/secret-id)
+    //         export VAULT_TOKEN=$(./vault write -tls-skip-verify -field=token auth/approle/login role_id=${ROLE_ID} secret_id=${SECRET_ID})
+    //         export HARBOR_USERNAME=$(./vault kv get -tls-skip-verify -field=usuario secret/harbor/config)
+    //         export HARBOR_PASSWORD=$(./vault kv get -tls-skip-verify -field=senha secret/harbor/config)
+    //         '''
+    //         env.HARBOR_USERNAME = sh(script: 'echo $HARBOR_USERNAME', returnStdout: true).trim()
+    //         env.HARBOR_PASSWORD = sh(script: 'echo $HARBOR_PASSWORD', returnStdout: true).trim()
+    //       }
+    //     }
+    //   }
+    // }
+    // stage('Push Image Container') {
+    //   steps {
+    //     container('docker') { 
+    //       milestone(ordinal: null, label: "Milestone: Docker Push")
+    //       timeout(time: 15, unit: 'MINUTES') {
+    //         sh '''
+    //           echo "${HARBOR_PASSWORD}" | docker login --username "${HARBOR_USERNAME}" --password-stdin https://dti-registro.unilab.edu.br
+    //           unset HARBOR_PASSWORD
+    //           docker push "$DOCKER_IMAGE:$DOCKER_TAG"
+    //         '''
+    //       }
+    //     }
+    //   }
+    // }
     stage('Obter segredos do Vault') {
       steps {
-        withCredentials([string(credentialsId: 'role-harbor', variable: 'ROLE_ID'),string(credentialsId: 'token-admin', variable: 'VAULT_TOKEN')]) {
+        withCredentials([
+          string(credentialsId: 'role-harbor', variable: 'ROLE_ID'),
+          string(credentialsId: 'token-admin', variable: 'VAULT_TOKEN')
+        ]) {
           script {
-            sh '''
-            export VAULT_ADDR=https://dti-vault.unilab.edu.br
-            export SECRET_ID=$(./vault write -tls-skip-verify -field=secret_id -f auth/approle/role/harbor-role/secret-id)
-            export VAULT_TOKEN=$(./vault write -tls-skip-verify -field=token auth/approle/login role_id=${ROLE_ID} secret_id=${SECRET_ID})
-            export HARBOR_USERNAME=$(./vault kv get -tls-skip-verify -field=usuario secret/harbor/config)
-            export HARBOR_PASSWORD=$(./vault kv get -tls-skip-verify -field=senha secret/harbor/config)
-            '''
-            env.HARBOR_USERNAME = sh(script: 'echo $HARBOR_USERNAME', returnStdout: true).trim()
-            env.HARBOR_PASSWORD = sh(script: 'echo $HARBOR_PASSWORD', returnStdout: true).trim()
+            env.VAULT_ADDR = "https://dti-vault.unilab.edu.br"
+            env.SECRET_ID = sh(script: './vault write -tls-skip-verify -field=secret_id -f auth/approle/role/harbor-role/secret-id', returnStdout: true).trim()
+            env.VAULT_TOKEN = sh(script: './vault write -tls-skip-verify -field=token auth/approle/login role_id=${ROLE_ID} secret_id=${SECRET_ID}', returnStdout: true).trim()
+            env.HARBOR_USERNAME = sh(script: './vault kv get -tls-skip-verify -field=usuario secret/harbor/config', returnStdout: true).trim()
+            env.HARBOR_PASSWORD = sh(script: './vault kv get -tls-skip-verify -field=senha secret/harbor/config', returnStdout: true).trim()
           }
         }
       }
@@ -124,11 +154,13 @@ pipeline {
         container('docker') { 
           milestone(ordinal: null, label: "Milestone: Docker Push")
           timeout(time: 15, unit: 'MINUTES') {
-            sh '''
-              echo "${HARBOR_PASSWORD}" | docker login --username "${HARBOR_USERNAME}" --password-stdin https://dti-registro.unilab.edu.br
-              unset HARBOR_PASSWORD
-              docker push "$DOCKER_IMAGE:$DOCKER_TAG"
-            '''
+            withCredentials([string(credentialsId: 'harbor-creds', variable: 'HARBOR_PASSWORD')]) {
+              sh """
+                echo \${HARBOR_PASSWORD} | docker login --username \${HARBOR_USERNAME} --password-stdin https://dti-registro.unilab.edu.br
+                unset HARBOR_PASSWORD
+                docker push \${DOCKER_IMAGE}:\${DOCKER_TAG}
+              """
+            }
           }
         }
       }
