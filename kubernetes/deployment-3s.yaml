@@ -168,7 +168,7 @@ spec:
       serviceAccountName: "app-3s"
       containers:
       - name: app-3s
-        image: dti-registro.unilab.edu.br/unilab/app-3s:main
+        image: dti-registro.unilab.edu.br/unilab/app-3s:latest
         command: ["/bin/bash", "-c", "sudo -s; source /vault/secrets/config; apache2-foreground"]
         resources:
           requests:
