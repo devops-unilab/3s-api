@@ -19,7 +19,7 @@
 
 # Topologia CI/CD - DTI/Unilab
 
-![DevOps CI/CD](./pipeline/fluxo-topologia-pipeline-ci-cd.png)
+![DevOps CI/CD](./kubernetes/agent/fluxo-topologia-pipeline-ci-cd.png)
 
 # Gitflow seguido
 Sugestão de Gitflow para o fluxo de GitLab a ser adotado pelo time dev compátivel com o GitOps aplicado nas stacks de CI/CD.

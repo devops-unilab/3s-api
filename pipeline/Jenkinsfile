@@ -3,7 +3,7 @@
 pipeline {
   agent {
     kubernetes {
-      yamlFile './pipeline/jenkins-agent-pod-k8s.yaml'
+      yamlFile './kubernetes/agent/jenkins-agent-pod-k8s.yaml'
       inheritFrom 'inbound'
       idleMinutes 5
       defaultContainer 'php8'
