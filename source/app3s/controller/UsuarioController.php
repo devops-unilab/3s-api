@@ -14,6 +14,7 @@ use app3s\model\Usuario;
 use app3s\util\Sessao;
 use app3s\view\UsuarioView;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Http;
 
 class UsuarioController {
 
@@ -31,17 +32,9 @@ class UsuarioController {
 
 		$login = $usuario->getLogin();
 		$senha = $usuario->getSenha();
-		$url = env('UNILAB_API_ORIGIN');
 		$data = ['login' =>  $login, 'senha' => $senha];
-
-		$curl = curl_init($url);
-		curl_setopt($curl, CURLOPT_POST, true);
-		curl_setopt($curl, CURLOPT_POSTFIELDS, http_build_query($data));
-		curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-		$response = curl_exec($curl);
-		curl_close($curl);
-		$responseJ = json_decode($response);
-
+		$response = Http::post(env('UNILAB_API_ORIGIN').'/authenticate', $data);
+		$responseJ = json_decode($response->body());
 
 		$idUsuario  = 0;
 
@@ -51,24 +44,12 @@ class UsuarioController {
 		if ($idUsuario === 0) {
 			return false;
 		}
-		$curl = curl_init();
-		curl_setopt_array($curl, [
-			CURLOPT_URL => "https://api.unilab.edu.br/api/user",
-			CURLOPT_RETURNTRANSFER => true,
-			CURLOPT_ENCODING => "",
-			CURLOPT_MAXREDIRS => 10,
-			CURLOPT_TIMEOUT => 30,
-			CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-			CURLOPT_CUSTOMREQUEST => "GET",
-			CURLOPT_POSTFIELDS => "",
-			CURLOPT_HTTPHEADER => [
-				"Authorization: Bearer $responseJ->access_token"
-			],
-		]);
-
-		$response = curl_exec($curl);
-		curl_close($curl);
-		$responseJ2 = json_decode($response);
+		$headers = [
+			'Authorization' => 'Bearer ' .$responseJ->access_token,
+		];
+		$response = Http::withHeaders($headers)->get(env('UNILAB_API_ORIGIN').'/user', $headers);
+		$responseJ2 = json_decode($response->body());
+		
 		$nivel = 'c';
 		if ($responseJ2->id_status_servidor != 1) {
 			$nivel = 'd';
