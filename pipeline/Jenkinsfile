@@ -182,10 +182,7 @@ pipeline {
               kubectl get all,ing -n postgres-3s -o wide
             '''
             */
-            env.APP_URI = sh 'kubectl get ingress app-3s -n app-3s -o jsonpath="{.spec.rules[0].host}" | sed "s/^/http:\\/\\//"'
-            withEnv(["APP_URI=${env.APP_URI}"]) {
-                sh 'echo Endpoint: $APP_URI'
-            }
+            env.APP_URI = sh(script: 'kubectl get ingress app-3s -n app-3s -o jsonpath="{.spec.rules[0].host}" | sed "s/^/http:\\/\\//"', returnStdout: true).trim()
           }
         }
       }
