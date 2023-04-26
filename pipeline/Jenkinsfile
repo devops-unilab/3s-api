@@ -44,7 +44,7 @@ pipeline {
           currentBuild.displayName = "$BUILD_DISPLAY_NAME (${GIT_COMMIT.take(8)})"
           workspace = "$env.WORKSPACE"
         }
-        // executar alguns comandos shell para configurar outros detalhes
+        // executar alguns comandos shell para configurar outros detalhes.
         sh '''
           set -x
           # Instala pacotes
@@ -70,19 +70,28 @@ pipeline {
           php composer-setup.php --install-dir=/usr/local/bin --filename=composer 
           chown -R www-data:www-data /usr/local/bin/composer 
         '''
+        sh '''
+          # Obtem o vendor
+          composer create-project laravel/laravel --prefer-dist /tmp/proj-laravel
+          ls -la /tmp/proj-laravel
+          cp -ra source/ /tmp/proj-laravel/
+          rsync --progress --recursive -arvPo /tmp/proj-laravel/ source/
+          mv source/.env.example source/.env
+          ls -la source/
+        '''
       }
     }
-    stage('Build') {
-      steps {
-        script {
-          sh 'composer create-project laravel/laravel --prefer-dist /tmp/proj-laravel'
-          sh 'ls -la /tmp/proj-laravel'
-          sh 'cp -ra source/ /tmp/proj-laravel/'
-          sh 'rsync --progress --recursive -arvPo /tmp/proj-laravel/ source/'
-          sh 'mv source/.env.example source/.env'
-          sh 'ls -la source/'
+    stage('Check-up SonarQube') {
+        steps {
+            withSonarQubeEnv('SonarQube') {
+                sh "./gradlew sonarqube"
+            }
         }
-      }
+    }
+    stage("Quality Gate") {
+        steps {
+            waitForQualityGate abortPipeline: true
+        }
     }
     stage('Testes') {
       steps {
@@ -132,25 +141,15 @@ pipeline {
     }
     stage('Deploy no Kubernetes') {
       steps {
-        //sh "sed -i 's/<APP_NAMESPACE>/${env.APP_NAMESPACE}/' ./kubernetes/deployment-3s.yaml"
-        
-        //sh "sed -i 's/<APP_NAME>/${env.APP_NAME}/' ./kubernetes/deployment-3s.yaml"
-        
-        //sh "sed -i 's/<CONTAINER_NAME>/${env.APP_NAME}/' ./kubernetes/deployment-3s.yaml"
-  
         sh "sed -i 's/:latest/:${env.DOCKER_TAG}/' ./kubernetes/deployment-3s.yaml"
-
         sh 'cat ./kubernetes/deployment-3s.yaml'
-
         withKubeConfig([credentialsId: 'kubeconfig-c1', serverUrl: 'https://dti-k8s-c1.unilab.edu.br:6443']) {
-
           /*
           Teoricamente --record não é obrigatório, porém, tecnicamente torna-se obrigatório para garantir que as 
           alterações deixem um rastro de auditoria rudimentar e cumpram o processo SRE e a cultura DevOps.
           Exemplo de uso: kubectl rollout history -n docker deployment.apps/docker
           Nota: Quando --record não é sinalizador, na tabela, CHANGE-CAUSE estará apenas <none>
           */
-
           script {
             sh '''
               set -x
