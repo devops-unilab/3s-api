@@ -34,7 +34,6 @@ pipeline {
     SEMGREP_TIMEOUT = "300"
     SONAR_HOST_URL = "https://dti-sonar.unilab.edu.br"
     recipientEmails = "erivandoramos@unilab.edu.br"
-    JAVA_HOME = "/opt/java/openjdk"
   }
   stages {
     stage('Iniciando CI/CD') {
