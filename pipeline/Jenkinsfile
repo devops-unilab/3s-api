@@ -75,6 +75,7 @@ pipeline {
           cp -ra source/ /tmp/proj-laravel/
           rsync --progress --recursive -arvPo /tmp/proj-laravel/ source/
           mv source/.env.example source/.env
+          wget https://github.com/tkgregory/sonarqube-jacoco-code-coverage/raw/master/build.gradle
           ls -la source/
           printenv
         '''
@@ -90,14 +91,16 @@ pipeline {
     stage('Check-up SonarQube') {
       steps {
           withSonarQubeEnv(installationName:'SonarQube') {
-            //sh "./gradlew sonar"
-            sh './mvnw clean org.sonarsource.scanner.maven:sonar-maven-plugin:3.9.1.2184:sonar'
+            sh "./gradlew sonar"
+            //sh './mvnw clean org.sonarsource.scanner.maven:sonar-maven-plugin:3.9.1.2184:sonar'
           }
       }
     }
     stage("Quality Gate") {
       steps {
-        waitForQualityGate abortPipeline: true
+        timeout(time: 2, unit: 'MINUTES') {
+          waitForQualityGate abortPipeline: true
+        }
       }
     }
     stage('Testes') {
