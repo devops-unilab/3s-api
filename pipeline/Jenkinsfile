@@ -77,12 +77,6 @@ pipeline {
           cp -ra source/ /tmp/proj-laravel/
           rsync --progress --recursive -arvPo /tmp/proj-laravel/ source/
           mv source/.env.example source/.env
-          touch sonar-project.properties && echo "sonar.projectKey=app-3s" > source/sonar-project.properties
-          echo "sonar.sources=source/app3s" >> source/sonar-project.properties
-          echo "sonar.language=php" >> source/sonar-project.properties
-          echo "sonar.sourceEncoding=UTF-8" >> source/sonar-project.properties
-          echo "sonar.exclusions=vendor/**" >> source/sonar-project.properties
-          cat source/sonar-project.properties
           ls -la source/
           printenv
         '''
@@ -93,10 +87,7 @@ pipeline {
         container('maven') {
           script {
             def scannerHome = tool 'SonarScanner'
-            // withSonarQubeEnv(installationName:'SonarQube') {
             withSonarQubeEnv('SonarQube') {
-              sh 'cd ./source'
-              // sh "/home/jenkins/agent/tools/hudson.plugins.sonar.SonarRunnerInstallation/SonarScanner/bin/sonar-scanner -Dsonar.projectKey=app-3s -Dsonar.sources=app3s -Dsonar.exclusions=vendor/**"
               sh "${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=app-3s -Dsonar.sources=source/app3s -Dsonar.exclusions=vendor/** -Dsonar.language=php -Dsonar.sourceEncoding=UTF-8"
             }
           }
@@ -105,7 +96,7 @@ pipeline {
     }
     stage("Quality Gate") {
       steps {
-        timeout(time: 2, unit: 'MINUTES') {
+        timeout(time: 10, unit: 'MINUTES') {
           waitForQualityGate abortPipeline: true
         }
       }
@@ -213,7 +204,8 @@ pipeline {
       mail to: "${recipientEmails}",
       subject: "Pipeline #${env.BUILD_NUMBER} - ${env.JOB_NAME}",
       body: "Pipeline completada com: ${currentBuild.currentResult}\n" +
-            "Mais detalhes em: ${env.BUILD_URL}\n" +
+            "Detalhes da execução da pipeline em: ${env.BUILD_URL}\n" +
+            "Detalhes do teste de qualidade em: http://dti-sonar.unilab.edu.br/dashboard?id=${env.APP_NAME}\n" +
             "Endpoint do serviço: ${env.APP_URI}\n\n${env.EMAIL_ASSINATURA}\n\n\n${env.EMAIL_RODAPE}"
     }
     failure {
