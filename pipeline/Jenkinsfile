@@ -33,6 +33,8 @@ pipeline {
     THREAD_COUNT = 6
     SEMGREP_TIMEOUT = "300"
     recipientEmails = "erivandoramos@unilab.edu.br"
+    SONAR_HOST_URL = "http://sonarqube.sonarqube.svc.cluster.local"
+    SONAR_LOGIN = "sqa_ac207357219721190b7fba450ced000077550ec5"
   }
   stages {
     stage('Iniciando CI/CD') {
