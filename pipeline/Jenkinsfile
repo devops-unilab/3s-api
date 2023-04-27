@@ -76,29 +76,32 @@ pipeline {
           cp -ra source/ /tmp/proj-laravel/
           rsync --progress --recursive -arvPo /tmp/proj-laravel/ source/
           mv source/.env.example source/.env
-          wget --no-check-certificate -P ./source https://github.com/tkgregory/sonarqube-jacoco-code-coverage/raw/master/gradlew
-          chmod +x ./source/gradlew
-          wget --no-check-certificate -P ./source https://github.com/tkgregory/sonarqube-jacoco-code-coverage/raw/master/settings.gradle
+          touch sonar-project.properties && echo "sonar.projectKey=$APP_NAME" >> ./source/sonar-project.properties
           ls -la source/
           printenv
         '''
       }
     }
-    // stage('Clone sources') {
-    //     steps {
-    //       container('docker') { 
-    //         git url: 'https://github.com/tkgregory/sonarqube-jacoco-code-coverage.git'
-    //       }
+    // node {
+    //   stage('SCM') {
+    //     checkout scm
+    //   }
+    //   stage('SonarQube Analysis') {
+    //     def scannerHome = tool 'SonarScanner';
+    //     withSonarQubeEnv() {
+    //       sh "${scannerHome}/bin/sonar-scanner"
     //     }
+    //   }
     // }
-    stage('Check-up SonarQube') {
+    stage('SonarQube Analysis') {
+      def scannerHome = tool 'SonarScanner';
       steps {
         container('maven') {  
           withSonarQubeEnv(installationName:'SonarQube') {
             //sh "./gradlew sonar"
             //sh "./source/gradlew sonar"
             sh 'cd ./source'
-            sh 'mvn clean org.sonarsource.scanner.maven:sonar-maven-plugin:3.9.1.2184:sonar'
+            sh "${scannerHome}/bin/sonar-scanner"
           }
         }
       }
