@@ -33,8 +33,6 @@ pipeline {
     THREAD_COUNT = 6
     SEMGREP_TIMEOUT = "300"
     recipientEmails = "erivandoramos@unilab.edu.br"
-    SONAR_HOST_URL = "http://sonarqube.sonarqube.svc.cluster.local"
-    SONAR_LOGIN = "sqa_ac207357219721190b7fba450ced000077550ec5"
   }
   stages {
     stage('Iniciando CI/CD') {
@@ -82,20 +80,19 @@ pipeline {
         '''
       }
     }
-    stage('Clone sources') {
-        steps {
-          container('docker') { 
-            git url: 'https://github.com/tkgregory/sonarqube-jacoco-code-coverage.git'
-          }
-        }
-    }
+    // stage('Clone sources') {
+    //     steps {
+    //       container('docker') { 
+    //         git url: 'https://github.com/tkgregory/sonarqube-jacoco-code-coverage.git'
+    //       }
+    //     }
+    // }
     stage('Check-up SonarQube') {
       steps {
-        container('maven') { 
-          withSonarQubeEnv('SonarQube') {
-            sh "./gradlew sonar"
+          withSonarQubeEnv(installationName:'SonarQube') {
+            //sh "./gradlew sonar"
+            sh './mvnw clean org.sonarsource.scanner.maven:sonar-maven-plugin:3.9.1.2184'
           }
-        }
       }
     }
     stage("Quality Gate") {
