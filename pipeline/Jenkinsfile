@@ -93,10 +93,12 @@ pipeline {
     // }
     stage('Check-up SonarQube') {
       steps {
+        container('maven') {  
           withSonarQubeEnv(installationName:'SonarQube') {
             sh "./source/gradlew sonar"
             //sh './mvnw clean org.sonarsource.scanner.maven:sonar-maven-plugin:3.9.1.2184:sonar'
           }
+        }
       }
     }
     stage("Quality Gate") {
