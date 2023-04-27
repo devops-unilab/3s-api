@@ -76,8 +76,9 @@ pipeline {
           cp -ra source/ /tmp/proj-laravel/
           rsync --progress --recursive -arvPo /tmp/proj-laravel/ source/
           mv source/.env.example source/.env
-          wget --no-check-certificate https://github.com/tkgregory/sonarqube-jacoco-code-coverage/raw/master/gradlew
-          wget --no-check-certificate https://github.com/tkgregory/sonarqube-jacoco-code-coverage/raw/master/settings.gradle
+          wget --no-check-certificate -P ./source https://github.com/tkgregory/sonarqube-jacoco-code-coverage/raw/master/gradlew
+          chmod +x ./source/gradlew
+          wget --no-check-certificate -P ./source https://github.com/tkgregory/sonarqube-jacoco-code-coverage/raw/master/settings.gradle
           ls -la source/
           printenv
         '''
@@ -93,7 +94,7 @@ pipeline {
     stage('Check-up SonarQube') {
       steps {
           withSonarQubeEnv(installationName:'SonarQube') {
-            sh "./gradlew sonar"
+            sh "./source/gradlew sonar"
             //sh './mvnw clean org.sonarsource.scanner.maven:sonar-maven-plugin:3.9.1.2184:sonar'
           }
       }
