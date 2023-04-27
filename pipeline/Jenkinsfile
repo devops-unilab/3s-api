@@ -97,20 +97,19 @@ pipeline {
     stage("Quality Gate") {
       steps {
         script {
-           STAGE_NAME = "SonarQube Gatekeeper"
-
-           if ("${BRANCH_NAME}" == "main") {
-              echo "Ignore na  branch 'develop'."
-           }
-           else {
-              def qualitygate = waitForQualityGate()
-                timeout(time: 5, unit: 'MINUTES') {
-                if (qualitygate.status != "OK") {
-                  error "Pipeline abortada devido a falha em Quality Gate: ${qualitygate.status}"
-                  waitForQualityGate abortPipeline: true
-                } 
-              }
-           }
+          def branchName = env.BRANCH_NAME
+          def qualitygate = waitForQualityGate()
+          if (branchName == "main") {
+            echo "Ignore na  branch 'develop'."
+          }
+          else {
+          timeout(time: 5, unit: 'MINUTES') {
+            if (qualitygate.status != "OK") {
+              error "Pipeline abortada devido a falha em Quality Gate: ${qualitygate.status}"
+              waitForQualityGate abortPipeline: true
+            } 
+          }
+        }
         }
         // timeout(time: 10, unit: 'MINUTES') {
         //   waitForQualityGate abortPipeline: true
