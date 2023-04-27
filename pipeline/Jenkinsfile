@@ -84,18 +84,19 @@ pipeline {
         '''
       }
     }
-    // stage('Clone sources') {
-    //     steps {
-    //       container('docker') { 
-    //         git url: 'https://github.com/tkgregory/sonarqube-jacoco-code-coverage.git'
-    //       }
-    //     }
-    // }
+    stage('Clone sources') {
+        steps {
+          container('docker') { 
+            git url: 'https://github.com/tkgregory/sonarqube-jacoco-code-coverage.git'
+          }
+        }
+    }
     stage('Check-up SonarQube') {
       steps {
         container('maven') {  
           withSonarQubeEnv(installationName:'SonarQube') {
-            sh "./source/gradlew sonar"
+            sh "./gradlew sonar"
+            //sh "./source/gradlew sonar"
             //sh './mvnw clean org.sonarsource.scanner.maven:sonar-maven-plugin:3.9.1.2184:sonar'
           }
         }
