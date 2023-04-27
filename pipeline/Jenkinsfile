@@ -92,7 +92,7 @@ pipeline {
       steps {
         container('maven') { 
           withSonarQubeEnv('SonarQube') {
-            sh "./gradlew sonarqube"
+            sh "./gradlew sonar"
           }
         }
       }
