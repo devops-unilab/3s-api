@@ -91,7 +91,7 @@ pipeline {
       steps {
           withSonarQubeEnv(installationName:'SonarQube') {
             //sh "./gradlew sonar"
-            sh './mvnw clean org.sonarsource.scanner.maven:sonar-maven-plugin:3.9.1.2184'
+            sh './mvnw clean org.sonarsource.scanner.maven:sonar-maven-plugin:3.9.1.2184:sonar'
           }
       }
     }
