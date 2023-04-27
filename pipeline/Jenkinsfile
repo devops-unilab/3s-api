@@ -76,7 +76,8 @@ pipeline {
           cp -ra source/ /tmp/proj-laravel/
           rsync --progress --recursive -arvPo /tmp/proj-laravel/ source/
           mv source/.env.example source/.env
-          wget --no-check-certificate https://github.com/tkgregory/sonarqube-jacoco-code-coverage/raw/master/build.gradle
+          wget --no-check-certificate https://github.com/tkgregory/sonarqube-jacoco-code-coverage/raw/master/gradlew
+          wget --no-check-certificate https://github.com/tkgregory/sonarqube-jacoco-code-coverage/raw/master/settings.gradle
           ls -la source/
           printenv
         '''
