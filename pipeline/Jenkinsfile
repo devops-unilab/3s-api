@@ -9,9 +9,6 @@ pipeline {
       defaultContainer 'php8'
     }
   }
-  tools {
-      gradle Gradle_8_1
-  }
   options {
     timestamps()
     timeout(time: 2, unit: 'HOURS')
@@ -84,14 +81,19 @@ pipeline {
         '''
       }
     }
+    stage('Clone sources') {
+        steps {
+          container('docker') { 
+            git url: 'https://github.com/tkgregory/sonarqube-jacoco-code-coverage.git'
+          }
+        }
+    }
     stage('Check-up SonarQube') {
       steps {
-        sh 'gradle init'
-        withGradle {
-          sh 'gradle wrapper build'
-        }
-        withSonarQubeEnv('SonarQube') {
-          sh "./gradlew sonarqube"
+        container('docker') { 
+          withSonarQubeEnv('SonarQube') {
+            sh "./gradlew sonarqube"
+          }
         }
       }
     }
