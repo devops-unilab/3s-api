@@ -96,7 +96,8 @@ pipeline {
             // withSonarQubeEnv(installationName:'SonarQube') {
             withSonarQubeEnv('SonarQube') {
               sh 'cd ./source'
-              sh "${scannerHome}/bin/sonar-scanner"
+              // sh "/home/jenkins/agent/tools/hudson.plugins.sonar.SonarRunnerInstallation/SonarScanner/bin/sonar-scanner -Dsonar.projectKey=app-3s -Dsonar.sources=app3s -Dsonar.exclusions=vendor/**"
+              sh "${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=app-3s -Dsonar.sources=app3s -Dsonar.exclusions=vendor/** -Dsonar.language=php -Dsonar.sourceEncoding=UTF-8"
             }
           }
         }
