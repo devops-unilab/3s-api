@@ -78,7 +78,7 @@ pipeline {
           rsync --progress --recursive -arvPo /tmp/proj-laravel/ source/
           mv source/.env.example source/.env
           touch sonar-project.properties && echo "sonar.projectKey=app-3s" > source/sonar-project.properties
-          echo "sonar.sources=app3s" >> source/sonar-project.properties
+          echo "sonar.sources=source/app3s" >> source/sonar-project.properties
           echo "sonar.language=php" >> source/sonar-project.properties
           echo "sonar.sourceEncoding=UTF-8" >> source/sonar-project.properties
           echo "sonar.exclusions=vendor/**" >> source/sonar-project.properties
@@ -97,7 +97,7 @@ pipeline {
             withSonarQubeEnv('SonarQube') {
               sh 'cd ./source'
               // sh "/home/jenkins/agent/tools/hudson.plugins.sonar.SonarRunnerInstallation/SonarScanner/bin/sonar-scanner -Dsonar.projectKey=app-3s -Dsonar.sources=app3s -Dsonar.exclusions=vendor/**"
-              sh "${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=app-3s -Dsonar.sources=app3s -Dsonar.exclusions=vendor/** -Dsonar.language=php -Dsonar.sourceEncoding=UTF-8"
+              sh "${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=app-3s -Dsonar.sources=source/app3s -Dsonar.exclusions=vendor/** -Dsonar.language=php -Dsonar.sourceEncoding=UTF-8"
             }
           }
         }
