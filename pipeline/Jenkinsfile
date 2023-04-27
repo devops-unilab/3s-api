@@ -90,10 +90,8 @@ pipeline {
     }
     stage('Check-up SonarQube') {
       steps {
-        container('docker') { 
-          withSonarQubeEnv('SonarQube') {
-            sh "./gradlew sonarqube"
-          }
+        withSonarQubeEnv('SonarQube') {
+          sh "./gradlew sonarqube"
         }
       }
     }
