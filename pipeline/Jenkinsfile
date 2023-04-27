@@ -99,7 +99,7 @@ pipeline {
         script {
            STAGE_NAME = "SonarQube Gatekeeper"
 
-           if (${BRANCH_NAME} == "main") {
+           if ("${BRANCH_NAME}" == "main") {
               echo "Ignore na  branch 'develop'."
            }
            else {
