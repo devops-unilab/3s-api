@@ -85,12 +85,14 @@ pipeline {
     }
     stage('SonarQube Analysis') {
       steps {
-        script {
-          def scannerHome = tool 'SonarScanner'
-          // withSonarQubeEnv(installationName:'SonarQube') {
-          withSonarQubeEnv('SonarQube') {
-            sh 'cd ./source'
-            sh "${scannerHome}/bin/sonar-scanner"
+        container('maven') {
+          script {
+            def scannerHome = tool 'SonarScanner'
+            // withSonarQubeEnv(installationName:'SonarQube') {
+            withSonarQubeEnv('SonarQube') {
+              sh 'cd ./source'
+              sh "${scannerHome}/bin/sonar-scanner"
+            }
           }
         }
       }
@@ -110,7 +112,7 @@ pipeline {
     }
     stage('Build Image Container') {
       steps {
-        container('docker') {  
+        container('docker') {
           milestone(ordinal: null, label: "Milestone: Docker Build")
           timeout(time: 60, unit: 'MINUTES') {
             sh "docker build -f ./Dockerfile --target production -t '$DOCKER_IMAGE:$DOCKER_TAG' --build-arg 'VERSION=$APP_VERSION COMMIT_SHA=$GIT_COMMIT BUILDKIT_INLINE_CACHE=1' --no-cache ."
