@@ -32,7 +32,6 @@ pipeline {
     TF_IN_AUTOMATION = 1
     THREAD_COUNT = 6
     SEMGREP_TIMEOUT = "300"
-    SONAR_HOST_URL = "https://dti-sonar.unilab.edu.br"
     recipientEmails = "erivandoramos@unilab.edu.br"
   }
   stages {
