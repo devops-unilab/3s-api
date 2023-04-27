@@ -33,6 +33,7 @@ pipeline {
     THREAD_COUNT = 6
     SEMGREP_TIMEOUT = "300"
     recipientEmails = "erivandoramos@unilab.edu.br"
+    dscannerHome = "tool 'SonarScanner'"
   }
   stages {
     stage('Iniciando CI/CD') {
@@ -84,7 +85,6 @@ pipeline {
     }
     stage('SonarQube Analysis') {
       steps {
-        def scannerHome = tool 'SonarScanner';
         withSonarQubeEnv(installationName:'SonarQube') {
           sh 'cd ./source'
           sh "${scannerHome}/bin/sonar-scanner"
