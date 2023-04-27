@@ -76,33 +76,18 @@ pipeline {
           cp -ra source/ /tmp/proj-laravel/
           rsync --progress --recursive -arvPo /tmp/proj-laravel/ source/
           mv source/.env.example source/.env
-          touch sonar-project.properties && echo "sonar.projectKey=$APP_NAME" >> ./source/sonar-project.properties
+          touch sonar-project.properties && echo "sonar.projectKey=$APP_NAME" > ./source/sonar-project.properties
           ls -la source/
           printenv
         '''
       }
     }
-    // node {
-    //   stage('SCM') {
-    //     checkout scm
-    //   }
-    //   stage('SonarQube Analysis') {
-    //     def scannerHome = tool 'SonarScanner';
-    //     withSonarQubeEnv() {
-    //       sh "${scannerHome}/bin/sonar-scanner"
-    //     }
-    //   }
-    // }
     stage('SonarQube Analysis') {
-      def scannerHome = tool 'SonarScanner';
       steps {
-        container('maven') {  
-          withSonarQubeEnv(installationName:'SonarQube') {
-            //sh "./gradlew sonar"
-            //sh "./source/gradlew sonar"
-            sh 'cd ./source'
-            sh "${scannerHome}/bin/sonar-scanner"
-          }
+        def scannerHome = tool 'SonarScanner';
+        withSonarQubeEnv(installationName:'SonarQube') {
+          sh 'cd ./source'
+          sh "${scannerHome}/bin/sonar-scanner"
         }
       }
     }
