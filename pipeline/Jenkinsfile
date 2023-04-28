@@ -127,13 +127,15 @@ pipeline {
       steps {
         container('maven') {
           script {
+            /*
             sh '''
               set -x
-              openssl s_client -showcerts -connect dti-sonar.unilab.edu.br:443 </dev/null 2>/dev/null|openssl x509 -outform PEM > ca.crt
-              cp ${JAVA_HOME}/lib/security/cacerts /mnt/keystore.jks
-              ${JAVA_HOME}/bin/keytool -import -trustcacerts -alias caAlias -file ca.crt -keystore /mnt/keystore.jks -noprompt -storepass changeit >/dev/null
-              cp /mnt/keystore.jks ${JAVA_HOME}/lib/security/cacerts
+              openssl s_client -showcerts -connect k8s.unilab.edu.br:443 </dev/null 2>/dev/null|openssl x509 -outform PEM > /tmp/ca.crt
+              cp /usr/lib/jvm/msopenjdk-17-amd64/lib/security/cacerts /tmp/keystore.jks
+              /usr/lib/jvm/msopenjdk-17-amd64/bin/keytool -import -trustcacerts -alias caCert -file /tmp/ca.crt -keystore /tmp/keystore.jks -noprompt -storepass changeit >/dev/null
+              cp /tmp/keystore.jks /usr/lib/jvm/msopenjdk-17-amd64/lib/security/cacerts
             '''
+            */
             
             def scannerHome = tool 'SonarScanner'
             def branchName = env.BRANCH_NAME
