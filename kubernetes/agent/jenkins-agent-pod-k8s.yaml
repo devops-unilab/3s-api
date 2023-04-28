@@ -35,6 +35,7 @@ metadata:
     datree.skip/CONTAINERS_MISSING_READINESSPROBE_KEY: readiness probe não é relevante para contêineres de shell CI/CD CLI
     datree.skip/CONTAINERS_MISSING_LIVENESSPROBE_KEY: liveness probe não é relevante para contêineres de shell CI/CD CLI
 spec:
+  serviceAccountName: vault
   priorityClassName: high-priority-apps  # requer priorityclass.yaml
   affinity:
     # Evite preempção que pode causar falhas de build
