@@ -124,7 +124,7 @@ spec:
     # ==================================================
     # https://hub.docker.com/_/maven/tags
     - name: maven
-      image: maven:3.8-openjdk-11 #erivando/maven:3.9.0-openjdk-11 # imagem customizada
+      image: dti-registro.unilab.edu.br/unilab/jenkins-debian-inbound-agent:latest # maven:3.8-openjdk-11 #erivando/maven:3.9.0-openjdk-11 # imagem customizada
       command: ["tail", "-f", "/dev/null"]  # este ou qualquer comando que seja basicamente um noop é necessário, isso é para que não substitua o ponto de entrada do contêiner base
       imagePullPolicy: Always # use o cache ou puxe a imagem para o agente
       resources:  # limites e recursos que o build contém
