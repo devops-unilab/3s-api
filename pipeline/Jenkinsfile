@@ -82,45 +82,86 @@ pipeline {
         '''
       }
     }
+    // stage('SonarQube Analysis') {
+    //   steps {
+    //     container('maven') {
+    //       script {
+    //         def scannerHome = tool 'SonarScanner'
+    //         withSonarQubeEnv('SonarQube') {
+    //           sh "${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=app-3s -Dsonar.sources=source/app3s -Dsonar.exclusions=vendor/** -Dsonar.language=php -Dsonar.sourceEncoding=UTF-8"
+    //           sh 'echo "SONAR_AUTH_TOKEN=$SONAR_AUTH_TOKEN" >> target/sonar/report-task.txt'
+    //         }
+    //         stash includes: "target/sonar/report-task.txt", name: 'sonar-report-task'
+    //       }
+    //     }
+    //   }
+    // }
+    // stage("Quality Gate") {
+    //   steps {
+    //     script {
+    //       def branchName = env.BRANCH_NAME
+    //       def qualitygate = waitForQualityGate()
+
+    //       unstash 'sonar-report-task'
+    //       def props = utils.getProperties("target/sonar/report-task.txt")
+    //       echo "properties=${props}"
+    //       def sonarServerUrl=props.getProperty('serverUrl')
+    //       def ceTaskUrl= props.getProperty('ceTaskUrl')
+    //       def ceTask
+    //       def URL url = new URL(ceTaskUrl)
+    //       if (branchName == "main") {
+    //         echo "Ignore na  branch 'develop'."
+    //       }
+    //       else {
+    //       timeout(time: 5, unit: 'MINUTES') {
+    //         if (!(qualitygate.status == 'OK' || qualitygate.status == 'WARN')) {
+    //           error "Pipeline abortada devido a falha em Quality Gate: ${qualitygate.status}"
+    //           waitForQualityGate abortPipeline: true
+    //         } 
+    //       }
+    //       }
+    //     }
+    //   }
+    // }
+
     stage('SonarQube Analysis') {
       steps {
         container('maven') {
           script {
-            def scannerHome = tool 'SonarScanner'
+
+            def branchName = env.BRANCH_NAME
+
             withSonarQubeEnv('SonarQube') {
-              sh "${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=app-3s -Dsonar.sources=source/app3s -Dsonar.exclusions=vendor/** -Dsonar.language=php -Dsonar.sourceEncoding=UTF-8"
-              sh 'echo "SONAR_AUTH_TOKEN=$SONAR_AUTH_TOKEN" >> target/sonar/report-task.txt'
+                sh "${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=app-3s -Dsonar.sources=source/app3s -Dsonar.exclusions=vendor/** -Dsonar.language=php -Dsonar.sourceEncoding=UTF-8"
+                sh "cat .scannerwork/report-task.txt"
+                def props = readProperties  file: '.scannerwork/report-task.txt'
+                echo "properties=${props}"
+                def sonarServerUrl=props['serverUrl']
+                def ceTaskUrl= props['ceTaskUrl']
+                def ceTask
+                timeout(time: 1, unit: 'MINUTES') {
+                    waitUntil {
+                        def response = httpRequest ceTaskUrl
+                        ceTask = readJSON text: response.content
+                        echo ceTask.toString()
+                        return "SUCCESS".equals(ceTask["task"]["status"])
+                    }
+                }
+                def response2 = httpRequest url : sonarServerUrl + "/api/qualitygates/project_status?analysisId=" + ceTask["task"]["analysisId"], authentication: 'SonarScanner'
+                def qualitygate =  readJSON text: response2.content
+                echo qualitygate.toString()
+
+                if (branchName == "main") {
+                  echo "Ignore na branch 'develop'."
+                }
+                else {
+                  if ("ERROR".equals(qualitygate["projectStatus"]["status"]) || !(qualitygate.status == 'OK' || qualitygate.status == 'WARN')) {
+                      error "Pipeline abortada devido a falha em Quality Gate: ${qualitygate.status}"
+                      waitForQualityGate abortPipeline: true
+                  }
+                }
             }
-            stash includes: "target/sonar/report-task.txt", name: 'sonar-report-task'
-          }
-        }
-      }
-    }
-    stage("Quality Gate") {
-      steps {
-        script {
-          def branchName = env.BRANCH_NAME
-          def qualitygate = waitForQualityGate()
-
-          unstash 'sonar-report-task'
-          def props = utils.getProperties("target/sonar/report-task.txt")
-          echo "properties=${props}"
-          def sonarServerUrl=props.getProperty('serverUrl')
-          def ceTaskUrl= props.getProperty('ceTaskUrl')
-          def ceTask
-          def URL url = new URL(ceTaskUrl)
-          echo url
-
-          if (branchName == "main") {
-            echo "Ignore na  branch 'develop'."
-          }
-          else {
-          timeout(time: 5, unit: 'MINUTES') {
-            if (!(qualitygate.status == 'OK' || qualitygate.status == 'WARN')) {
-              error "Pipeline abortada devido a falha em Quality Gate: ${qualitygate.status}"
-              waitForQualityGate abortPipeline: true
-            } 
-          }
+            
           }
         }
       }
