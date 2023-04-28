@@ -142,7 +142,7 @@ pipeline {
             env.SONAR_TOKEN = "sqa_4ff6cc386c6eb1271ba371e32469000c10203f51"
 
             withSonarQubeEnv('SonarQube') {
-                sh "${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=app-3s -Dsonar.sources=source/app3s -Dsonar.exclusions=vendor/** -Dsonar.language=php -Dsonar.sourceEncoding=UTF-8 -Dsonar.login=${env.SONAR_TOKEN}"
+                sh "${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=app-3s -Dsonar.sources=source/app3s -Dsonar.exclusions=vendor/** -Dsonar.language=php -Dsonar.sourceEncoding=UTF-8 -Dsonar.login=sqa_5c7b05796f608fff4233eacce9ba75124356d1fd"
                 sh "cat .scannerwork/report-task.txt"
                 def props = readProperties  file: '.scannerwork/report-task.txt'
                 echo "properties=${props}"
@@ -161,6 +161,8 @@ pipeline {
                 def qualitygate =  readJSON text: response2.content
                 echo qualitygate.toString()
 
+                echo httpRequest
+                
                 if (branchName == "main") {
                   echo "Ignore na branch 'develop'."
                 }
