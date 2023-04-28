@@ -157,27 +157,62 @@ pipeline {
                         return "SUCCESS".equals(ceTask["task"]["status"])
                     }
                 }
-                def response2 = httpRequest url : sonarServerUrl + "/api/qualitygates/project_status?analysisId=" + ceTask["task"]["analysisId"], authentication: 'sonar-admin'
-                def qualitygate =  readJSON text: response2.content
-                echo qualitygate.toString()
+                // def response2 = httpRequest url : sonarServerUrl + "/api/qualitygates/project_status?analysisId=" + ceTask["task"]["analysisId"], authentication: 'sonar-admin'
+                // def qualitygate =  readJSON text: response2.content
+                // echo qualitygate.toString()
 
-                echo httpRequest
+                // echo httpRequest
                 
-                if (branchName == "main") {
-                  echo "Ignore na branch 'develop'."
-                }
-                else {
-                  if ("ERROR".equals(qualitygate["projectStatus"]["status"]) || !(qualitygate.status == 'OK' || qualitygate.status == 'WARN')) {
-                      error "Pipeline abortada devido a falha em Quality Gate: ${qualitygate.status}"
-                      waitForQualityGate abortPipeline: true
-                  }
-                }
+                // if (branchName == "main") {
+                //   echo "Ignore na branch 'develop'."
+                // }
+                // else {
+                //   if ("ERROR".equals(qualitygate["projectStatus"]["status"]) || !(qualitygate.status == 'OK' || qualitygate.status == 'WARN')) {
+                //       error "Pipeline abortada devido a falha em Quality Gate: ${qualitygate.status}"
+                //       waitForQualityGate abortPipeline: true
+                //   }
+                // }
+
             }
-            
+            stash includes: "target/sonar/report-task.txt", name: 'sonar-report-task'
           }
         }
       }
     }
+
+    stage("Quality Gate") {
+      steps {
+        script {
+          def branchName = env.BRANCH_NAME
+          // def qualitygate = waitForQualityGate()
+
+          unstash 'sonar-report-task'
+          def props = utils.getProperties("target/sonar/report-task.txt")
+          echo "properties=${props}"
+          def sonarServerUrl=props.getProperty('serverUrl')
+          def ceTaskUrl= props.getProperty('ceTaskUrl')
+          def ceTask
+          def URL url = new URL(ceTaskUrl)
+
+          def response2 = httpRequest url : sonarServerUrl + "/api/qualitygates/project_status?analysisId=" + ceTask["task"]["analysisId"], authentication: 'sonar-admin'
+          def qualitygate =  readJSON text: response2.content
+          echo qualitygate.toString()
+
+          if (branchName == "main") {
+            echo "Ignore na  branch 'develop'."
+          }
+          else {
+          timeout(time: 5, unit: 'MINUTES') {
+            if (!(qualitygate.status == 'OK' || qualitygate.status == 'WARN')) {
+              error "Pipeline abortada devido a falha em Quality Gate: ${qualitygate.status}"
+              waitForQualityGate abortPipeline: true
+            } 
+          }
+          }
+        }
+      }
+    }
+
     stage('Testes') {
       steps {
         sh 'cd source/ && php artisan key:generate && php artisan make:test tests/BasicTest && composer dump-autoload'
