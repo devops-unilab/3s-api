@@ -33,7 +33,6 @@ pipeline {
     THREAD_COUNT = 6
     SEMGREP_TIMEOUT = "300"
     recipientEmails = "erivandoramos@unilab.edu.br"
-    scannerHome = "tool 'SonarScanner'"
   }
   stages {
     stage('Iniciando CI/CD') {
@@ -128,7 +127,8 @@ pipeline {
       steps {
         container('maven') {
           script {
-
+            
+            def scannerHome = tool 'SonarScanner'
             def branchName = env.BRANCH_NAME
 
             withSonarQubeEnv('SonarQube') {
