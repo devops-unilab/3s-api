@@ -148,7 +148,7 @@ pipeline {
                 def sonarServerUrl=props['serverUrl']
                 def ceTaskUrl= props['ceTaskUrl']
                 def ceTask
-                timeout(time: 1, unit: 'MINUTES') {
+                timeout(time: 2, unit: 'MINUTES') {
                     waitUntil {
                         def response = httpRequest ceTaskUrl
                         ceTask = readJSON text: response.content
