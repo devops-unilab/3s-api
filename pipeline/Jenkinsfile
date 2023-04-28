@@ -139,9 +139,10 @@ pipeline {
             
             def scannerHome = tool 'SonarScanner'
             def branchName = env.BRANCH_NAME
+            env.SONAR_TOKEN = "sqa_4ff6cc386c6eb1271ba371e32469000c10203f51"
 
             withSonarQubeEnv('SonarQube') {
-                sh "${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=app-3s -Dsonar.sources=source/app3s -Dsonar.exclusions=vendor/** -Dsonar.language=php -Dsonar.sourceEncoding=UTF-8"
+                sh "${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=app-3s -Dsonar.sources=source/app3s -Dsonar.exclusions=vendor/** -Dsonar.language=php -Dsonar.sourceEncoding=UTF-8 -Dsonar.login=${env.SONAR_TOKEN}"
                 sh "cat .scannerwork/report-task.txt"
                 def props = readProperties  file: '.scannerwork/report-task.txt'
                 echo "properties=${props}"
