@@ -174,7 +174,7 @@ pipeline {
                 // }
 
             }
-            stash includes: "target/sonar/report-task.txt", name: 'sonar-report-task'
+            // stash includes: "target/sonar/report-task.txt", name: 'sonar-report-task'
           }
         }
       }
@@ -183,20 +183,21 @@ pipeline {
     stage("Quality Gate") {
       steps {
         script {
+          // unstash 'sonar-report-task'
+
           def branchName = env.BRANCH_NAME
-          // def qualitygate = waitForQualityGate()
+          def qualitygate = waitForQualityGate()
 
-          unstash 'sonar-report-task'
-          def props = utils.getProperties("target/sonar/report-task.txt")
-          echo "properties=${props}"
-          def sonarServerUrl=props.getProperty('serverUrl')
-          def ceTaskUrl= props.getProperty('ceTaskUrl')
-          def ceTask
-          def URL url = new URL(ceTaskUrl)
+          // def props = utils.getProperties("target/sonar/report-task.txt")
+          // echo "properties=${props}"
+          // def sonarServerUrl=props.getProperty('serverUrl')
+          // def ceTaskUrl= props.getProperty('ceTaskUrl')
+          // def ceTask
+          // def URL url = new URL(ceTaskUrl)
 
-          def response2 = httpRequest url : sonarServerUrl + "/api/qualitygates/project_status?analysisId=" + ceTask["task"]["analysisId"], authentication: 'sonar-admin'
-          def qualitygate =  readJSON text: response2.content
-          echo qualitygate.toString()
+          // def response2 = httpRequest url : sonarServerUrl + "/api/qualitygates/project_status?analysisId=" + ceTask["task"]["analysisId"], authentication: 'sonar-admin'
+          // def qualitygate =  readJSON text: response2.content
+          // echo qualitygate.toString()
 
           if (branchName == "main") {
             echo "Ignore na  branch 'develop'."
