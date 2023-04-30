@@ -211,6 +211,8 @@ pipeline {
               '''
           }
           container('postgres') {
+            sh 'chmod +x source/docker/database/setup-databases.sh'
+            sh 'sleep 45s'
             sh 'source/docker/database/setup-databases.sh'
           }
         }
@@ -222,6 +224,8 @@ pipeline {
         container('postgres') {
           script {
             sh '''
+              chmod +x source/docker/database/dump-database.sh
+              chmod +x source/docker/database/restore-database.sh
               source/docker/database/dump-database.sh
               source/docker/database/restore-database.sh $PG_HOST $PG_DATABASE_STAGING $PG_USER $PG_PASSWORD_STAGING
             '''
@@ -308,6 +312,8 @@ pipeline {
         container('postgres') {
           script {
             sh '''
+              chmod +x source/docker/database/dump-database.sh
+              chmod +x source/docker/database/restore-database.sh
               source/docker/database/dump-database.sh
               source/docker/database/restore-database.sh $PG_HOST $PG_DATABASE $PG_USER $PG_PASSWORD
             '''
