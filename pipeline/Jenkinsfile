@@ -32,7 +32,26 @@ pipeline {
     TF_IN_AUTOMATION = 1
     THREAD_COUNT = 6
     SEMGREP_TIMEOUT = "300"
-    recipientEmails = "erivandoramos@unilab.edu.br"
+    JENKINS_URL = "https://dti-jenkins.unilab.edu.br"
+    SONAR_URL = "https://dti-sonar.unilab.edu.br"
+    kubeconfigCluster = "c1"
+    recipientLeadEmail = "erivandosena@gmail.com"
+    recipientTeamEmails = "erivandoramos@unilab.edu.br"
+    /* Database 3S */
+    PG_USER = "***"
+    PG_PASSWORD = "***"
+    PG_USER_ROOT = "***"
+    PG_PASSWORD_ROOT = "***"
+    PG_PASSWORD_STAGING = "***"
+    PG_DATABASE = "3s-ocorrencias"
+    PG_DATABASE_STAGING = "3s-homologacao"
+    PG_HOST = "10.130.0.154"
+    PG_PORT = "5432"
+    /* Database 3S VM Legado*/
+    HOST_DB_USER_DUMP = "***"
+    HOST_DB_PASSWORD_DUMP = "***"
+    HOST_DUMP = "200.129.19.134"
+    PORT_DUMP = "5432"
   }
   stages {
     stage('Iniciando CI/CD') {
@@ -81,146 +100,46 @@ pipeline {
         '''
       }
     }
-    // stage('SonarQube Analysis') {
-    //   steps {
-    //     container('maven') {
-    //       script {
-    //         def scannerHome = tool 'SonarScanner'
-    //         withSonarQubeEnv('SonarQube') {
-    //           sh "${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=app-3s -Dsonar.sources=source/app3s -Dsonar.exclusions=vendor/** -Dsonar.language=php -Dsonar.sourceEncoding=UTF-8"
-    //           sh 'echo "SONAR_AUTH_TOKEN=$SONAR_AUTH_TOKEN" >> target/sonar/report-task.txt'
-    //         }
-    //         stash includes: "target/sonar/report-task.txt", name: 'sonar-report-task'
-    //       }
-    //     }
-    //   }
-    // }
-    // stage("Quality Gate") {
-    //   steps {
-    //     script {
-    //       def branchName = env.BRANCH_NAME
-    //       def qualitygate = waitForQualityGate()
-
-    //       unstash 'sonar-report-task'
-    //       def props = utils.getProperties("target/sonar/report-task.txt")
-    //       echo "properties=${props}"
-    //       def sonarServerUrl=props.getProperty('serverUrl')
-    //       def ceTaskUrl= props.getProperty('ceTaskUrl')
-    //       def ceTask
-    //       def URL url = new URL(ceTaskUrl)
-    //       if (branchName == "main") {
-    //         echo "Ignore na  branch 'develop'."
-    //       }
-    //       else {
-    //       timeout(time: 5, unit: 'MINUTES') {
-    //         if (!(qualitygate.status == 'OK' || qualitygate.status == 'WARN')) {
-    //           error "Pipeline abortada devido a falha em Quality Gate: ${qualitygate.status}"
-    //           waitForQualityGate abortPipeline: true
-    //         } 
-    //       }
-    //       }
-    //     }
-    //   }
-    // }
-
     stage('SonarQube Analysis') {
       steps {
         container('maven') {
           script {
-            /*
-            sh '''
-              set -x
-              openssl s_client -showcerts -connect k8s.unilab.edu.br:443 </dev/null 2>/dev/null|openssl x509 -outform PEM > /tmp/ca.crt
-              cp /usr/lib/jvm/msopenjdk-17-amd64/lib/security/cacerts /tmp/keystore.jks
-              /usr/lib/jvm/msopenjdk-17-amd64/bin/keytool -import -trustcacerts -alias caCert -file /tmp/ca.crt -keystore /tmp/keystore.jks -noprompt -storepass changeit >/dev/null
-              cp /tmp/keystore.jks /usr/lib/jvm/msopenjdk-17-amd64/lib/security/cacerts
-            '''
-            */
-            
-            def scannerHome = tool 'SonarScanner'
             def branchName = env.BRANCH_NAME
-            env.SONAR_TOKEN = "sqa_4ff6cc386c6eb1271ba371e32469000c10203f51"
-
+            def scannerHome = tool 'SonarScanner'
             withSonarQubeEnv('SonarQube') {
-                sh "${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=app-3s -Dsonar.sources=source/app3s -Dsonar.exclusions=vendor/** -Dsonar.language=php -Dsonar.sourceEncoding=UTF-8 -Dsonar.login=sqa_5c7b05796f608fff4233eacce9ba75124356d1fd"
-                sh "cat .scannerwork/report-task.txt"
-                def props = readProperties  file: '.scannerwork/report-task.txt'
-                echo "properties=${props}"
-                def sonarServerUrl=props['serverUrl']
-                def ceTaskUrl= props['ceTaskUrl']
-                def ceTask
-                timeout(time: 2, unit: 'MINUTES') {
-                    waitUntil {
-                        def response = httpRequest ceTaskUrl
-                        ceTask = readJSON text: response.content
-                        echo ceTask.toString()
-                        return "SUCCESS".equals(ceTask["task"]["status"])
-                    }
-                }
-                // def response2 = httpRequest url : sonarServerUrl + "/api/qualitygates/project_status?analysisId=" + ceTask["task"]["analysisId"], authentication: 'sonar-admin'
-                // def qualitygate =  readJSON text: response2.content
-                // echo qualitygate.toString()
-
-                // echo httpRequest
-                
-                // if (branchName == "main") {
-                //   echo "Ignore na branch 'develop'."
-                // }
-                // else {
-                //   if ("ERROR".equals(qualitygate["projectStatus"]["status"]) || !(qualitygate.status == 'OK' || qualitygate.status == 'WARN')) {
-                //       error "Pipeline abortada devido a falha em Quality Gate: ${qualitygate.status}"
-                //       waitForQualityGate abortPipeline: true
-                //   }
-                // }
-
+              sh "${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=app-3s -Dsonar.sources=source/app3s -Dsonar.exclusions=vendor/** -Dsonar.language=php -Dsonar.sourceEncoding=UTF-8"
+              def props = readProperties  file: '.scannerwork/report-task.txt'
+              def sonarServerUrl=props['serverUrl']
+              def ceTaskUrl= props['ceTaskUrl']
+              def ceTask
+              timeout(time: 2, unit: 'MINUTES') {
+                  waitUntil {
+                      def response = httpRequest(url: ceTaskUrl, authentication: 'sonar-admin')
+                      ceTask = readJSON text: response.content
+                      echo ceTask.toString()
+                      return "SUCCESS".equals(ceTask["task"]["status"])
+                  }
+              }
+              /* Quality Gate */
+              def resp = httpRequest(url : sonarServerUrl + "/api/qualitygates/project_status?analysisId=" + ceTask["task"]["analysisId"], authentication: 'sonar-admin')
+              def qualitygate = readJSON text: resp.content
+              echo qualitygate.toString()
+              if ("ERROR".equals(qualitygate["projectStatus"]["status"])) {
+                error "Pipeline abortada devido a falha em Quality Gate: ${qualitygate.status}"
+                waitForQualityGate abortPipeline: true
+              } 
             }
-            // stash includes: "target/sonar/report-task.txt", name: 'sonar-report-task'
           }
         }
       }
     }
-
-    stage("Quality Gate") {
-      steps {
-        script {
-          // unstash 'sonar-report-task'
-
-          def branchName = env.BRANCH_NAME
-          def qualitygate = waitForQualityGate()
-
-          // def props = utils.getProperties("target/sonar/report-task.txt")
-          // echo "properties=${props}"
-          // def sonarServerUrl=props.getProperty('serverUrl')
-          // def ceTaskUrl= props.getProperty('ceTaskUrl')
-          // def ceTask
-          // def URL url = new URL(ceTaskUrl)
-
-          // def response2 = httpRequest url : sonarServerUrl + "/api/qualitygates/project_status?analysisId=" + ceTask["task"]["analysisId"], authentication: 'sonar-admin'
-          // def qualitygate =  readJSON text: response2.content
-          // echo qualitygate.toString()
-
-          if (branchName == "main") {
-            echo "Ignore na  branch 'develop'."
-          }
-          else {
-          timeout(time: 5, unit: 'MINUTES') {
-            if (!(qualitygate.status == 'OK' || qualitygate.status == 'WARN')) {
-              error "Pipeline abortada devido a falha em Quality Gate: ${qualitygate.status}"
-              waitForQualityGate abortPipeline: true
-            } 
-          }
-          }
-        }
-      }
-    }
-
     stage('Testes') {
       steps {
         sh 'cd source/ && php artisan key:generate && php artisan make:test tests/BasicTest && composer dump-autoload'
         sh 'source/vendor/bin/phpunit --no-configuration --no-extensions source/tests/'
       }
     }
-    stage('Build Image Container') {
+    stage('Build') {
       steps {
         container('docker') {
           milestone(ordinal: null, label: "Milestone: Docker Build")
@@ -232,20 +151,37 @@ pipeline {
     }
     stage('Obter segredos do Vault') {
       steps {
-        withCredentials([
-          string(credentialsId: 'role-harbor', variable: 'ROLE_ID'),
-          string(credentialsId: 'token-admin', variable: 'VAULT_TOKEN')
-        ]) {
-          script {
-            env.VAULT_ADDR = "https://dti-vault.unilab.edu.br"
-            env.SECRET_ID = sh(script: './vault write -tls-skip-verify -field=secret_id -f auth/approle/role/harbor-role/secret-id', returnStdout: true).trim()
-            env.VAULT_TOKEN = sh(script: './vault write -tls-skip-verify -field=token auth/approle/login role_id=${ROLE_ID} secret_id=${SECRET_ID}', returnStdout: true).trim()
-            env.HARBOR_USERNAME = sh(script: './vault kv get -tls-skip-verify -field=usuario secret/harbor/config', returnStdout: true).trim()
-            env.HARBOR_PASSWORD = sh(script: './vault kv get -tls-skip-verify -field=senha secret/harbor/config', returnStdout: true).trim()
+        script {
+          env.VAULT_ADDR = "https://dti-vault.unilab.edu.br"
+          /* secrets harbor */
+          withCredentials([
+            string(credentialsId: 'role-harbor', variable: 'ROLE_ID'),
+            string(credentialsId: 'token-admin', variable: 'VAULT_TOKEN')
+          ]) {
+              env.SECRET_ID = sh(script: './vault write -tls-skip-verify -field=secret_id -f auth/approle/role/harbor-role/secret-id', returnStdout: true).trim()
+              env.VAULT_TOKEN = sh(script: './vault write -tls-skip-verify -field=token auth/approle/login role_id=${ROLE_ID} secret_id=${SECRET_ID}', returnStdout: true).trim()
+              env.HARBOR_USERNAME = sh(script: './vault kv get -tls-skip-verify -field=usuario secret/harbor/config', returnStdout: true).trim()
+              env.HARBOR_PASSWORD = sh(script: './vault kv get -tls-skip-verify -field=senha secret/harbor/config', returnStdout: true).trim()
           }
+          /* secrets 3s */
+          withCredentials([
+            string(credentialsId: 'role-3s', variable: 'ROLE_ID'),
+            string(credentialsId: 'token-admin', variable: 'VAULT_TOKEN')
+          ]) {
+              env.SECRET_ID = sh(script: './vault write -tls-skip-verify -field=secret_id -f auth/approle/role/3s-role/secret-id', returnStdout: true).trim()
+              env.VAULT_TOKEN = sh(script: './vault write -tls-skip-verify -field=token auth/approle/login role_id=${ROLE_ID} secret_id=${SECRET_ID}', returnStdout: true).trim()
+              env.PG_USER  = sh(script: './vault kv get -tls-skip-verify -field=pg_user secret/3s/config', returnStdout: true).trim()
+              env.PG_PASSWORD = sh(script: './vault kv get -tls-skip-verify -field=pg_password secret/3s/config', returnStdout: true).trim()
+              env.PG_USER_ROOT  = sh(script: './vault kv get -tls-skip-verify -field=pg_user_root secret/3s/config', returnStdout: true).trim()
+              env.PG_PASSWORD_ROOT = sh(script: './vault kv get -tls-skip-verify -field=pg_password_root secret/3s/config', returnStdout: true).trim()
+              env.PG_PASSWORD_STAGING = sh(script: './vault kv get -tls-skip-verify -field=pg_password_staging secret/3s/config', returnStdout: true).trim()
+              env.HOST_DB_USER_DUMP = sh(script: './vault kv get -tls-skip-verify -field=host_db_user_dump secret/3s/config', returnStdout: true).trim()
+              env.HOST_DB_PASSWORD_DUMP = sh(script: './vault kv get -tls-skip-verify -field=host_db_password_dump secret/3s/config', returnStdout: true).trim()
+            }
         }
       }
     }
+    
     stage('Push Image Container') {
       steps {
         container('docker') { 
@@ -260,11 +196,127 @@ pipeline {
         }
       }
     }
-    stage('Deploy no Kubernetes') {
+
+    stage('Setup Database') {
       steps {
+        script {
+          withKubeConfig([credentialsId: 'kubeconfig-c1', serverUrl: 'https://dti-k8s-c1.unilab.edu.br:6443']) {
+              sh '''
+                if ! kubectl get statefulset postgres -n postgres-3s >/dev/null 2>&1; then
+                  kubectl apply -f ./kubernetes/statefulSet-postgres-3s.yaml --record
+                fi
+
+                echo "Lista de recursos."
+                kubectl get all,sa,ing,pvc -n postgres-3s -o wide
+              '''
+          }
+          container('postgres') {
+            sh 'source/docker/database/setup-databases.sh'
+          }
+        }
+      }
+    }
+
+    stage('Deploy em Staging') {
+      steps {
+        container('postgres') {
+          script {
+            sh '''
+              source/docker/database/dump-database.sh
+              source/docker/database/restore-database.sh $PG_HOST $PG_DATABASE_STAGING $PG_USER $PG_PASSWORD_STAGING
+            '''
+          }
+        }
+
+        sh "sed -i 's/postgres.postgres-3s.svc.cluster.local/10.130.0.154/' ./kubernetes/deployment-3s.yaml"
+        sh "sed -i 's/3s-ocorrencias/3s-homologacao/' ./kubernetes/deployment-3s.yaml"
+        sh "sed -i 's/:latest/:${env.DOCKER_TAG}/' ./kubernetes/deployment-3s.yaml"
+        sh "sed -i 's/.Data.data.pg_password/.Data.data.pg_password_staging/' ./kubernetes/deployment-3s.yaml"
+        sh "sed -i 's/10.130.0.153/10.130.2.153/' ./kubernetes/deployment-3s.yaml"
+        sh "sed -i 's/dti-app-test-c1.unilab.edu.br/3shomologacao.unilab.edu.br/' ./kubernetes/deployment-3s.yaml"
+        sh 'cat ./kubernetes/deployment-3s.yaml'
+
+        withKubeConfig([credentialsId: 'kubeconfig-c3', serverUrl: 'https://dti-k8s-c3.unilab.edu.br:6443']) {
+          script {
+            sh '''
+              set -x
+              echo "Verifica deploy ativo e exclui."
+              kubectl get deployment $APP_NAME -n $APP_NAMESPACE >/dev/null 2>&1 && \
+              (kubectl get pods -l $APP_NAME -n $APP_NAMESPACE --no-headers | wc -l) > 0 && \
+              kubectl delete pods -l app=$APP_NAME -n $APP_NAMESPACE --force --grace-period=0; \
+              kubectl delete deployment $APP_NAME -n $APP_NAMESPACE || echo 'DEPLOYMENT INEXISTENTE!'
+              
+              echo "Aplica deploy."
+              kubectl apply -f ./kubernetes/deployment-3s.yaml --record
+
+              echo "Lista de recursos."
+              kubectl get all,sa,ing,pvc -n $APP_NAMESPACE -o wide
+            '''
+            env.APP_URI_STAGING = sh(script: 'kubectl get ingress app-3s -n app-3s -o jsonpath="{.spec.rules[0].host}" | sed "s/^/http:\\/\\//"', returnStdout: true).trim()
+          }
+        }
+      }
+    }
+
+    stage('Aprovar Deploy') {
+      steps {
+        /*
+        script {
+          emailext mimeType:  'text/html',
+          subject: "APROVAR Deploy [${env.JOB_NAME}] ${currentBuild.fullDisplayName}",
+          to: "${env.recipientLeadEmail}",
+          body: "Prezado(a) Leader\n\n<a href="${BUILD_URL}input"><strong>Click para APROVAÇÃO</strong></a>\n" +
+          "Endpoint da homologação: ${env.APP_URI_STAGING}\n\n${env.EMAIL_ASSINATURA}\n\n\n${env.EMAIL_RODAPE}"
+        }
+        */
+        script {
+          emailext mimeType: 'text/html',
+            subject: "APROVAR Deploy [${env.JOB_NAME}] ${currentBuild.fullDisplayName}",
+            to: "${env.recipientLeadEmail}",
+            body: "Prezado(a) Leader\n\n<a href='${BUILD_URL}input'><strong>Ir para APROVAÇÃO</strong></a>\n" +
+              "Endpoint da homologação: ${env.APP_URI_STAGING}\n\n${env.EMAIL_ASSINATURA}\n\n\n${env.EMAIL_RODAPE}"
+
+          timeout(time: 48, unit: 'HOURS') {
+            input id: 'EnvType', 
+            message: 'Aprovar Deploy?', 
+            ok: 'APROVAR', parameters: [
+              choice(name: 'Cluster', choices: ['Kubernetes C1', 'Kubernetes C2', 'Kubernetes C3'], description: 'Selecione o cluster para implantar')
+            ], 
+            submitter: 'erivando,admin', submitterParameter: 'approverId'
+          }
+
+          switch (Cluster) {
+            case 'Kubernetes C1':
+              env.kubeconfigCluster = 'c1'
+              break
+            case 'Kubernetes C2':
+              env.kubeconfigCluster = 'c2'
+              break
+            case 'Kubernetes C3':
+              env.kubeconfigCluster = 'c3'
+              break
+            default:
+              error "Opção selecionada inválida"
+          }
+          
+        }
+
+      }
+    }
+    stage('Deploy Produção') {
+      steps {
+        container('postgres') {
+          script {
+            sh '''
+              source/docker/database/dump-database.sh
+              source/docker/database/restore-database.sh $PG_HOST $PG_DATABASE $PG_USER $PG_PASSWORD
+            '''
+          }
+        }
+        
         sh "sed -i 's/:latest/:${env.DOCKER_TAG}/' ./kubernetes/deployment-3s.yaml"
         sh 'cat ./kubernetes/deployment-3s.yaml'
-        withKubeConfig([credentialsId: 'kubeconfig-c1', serverUrl: 'https://dti-k8s-c1.unilab.edu.br:6443']) {
+        withKubeConfig([credentialsId: 'kubeconfig-${env.kubeconfigCluster}', serverUrl: 'https://dti-k8s-${env.kubeconfigCluster}.unilab.edu.br:6443']) {
           /*
           Teoricamente --record não é obrigatório, porém, tecnicamente torna-se obrigatório para garantir que as 
           alterações deixem um rastro de auditoria rudimentar e cumpram o processo SRE e a cultura DevOps.
@@ -284,7 +336,7 @@ pipeline {
               kubectl apply -f ./kubernetes/deployment-3s.yaml --record
 
               echo "Lista de recursos."
-              kubectl get all,ing -n $APP_NAMESPACE -o wide
+              kubectl get all,sa,ing,pvc -n $APP_NAMESPACE -o wide
             '''
             /*
             sh '''
@@ -299,10 +351,10 @@ pipeline {
               kubectl apply -f ./kubernetes/statefulSet-postgres-3s.yaml --record
 
               echo "Lista de recursos."
-              kubectl get all,ing -n postgres-3s -o wide
+              kubectl get all,sa,ing,pvc -n postgres-3s -o wide
             '''
             */
-            env.APP_URI = sh(script: 'kubectl get ingress app-3s -n app-3s -o jsonpath="{.spec.rules[0].host}" | sed "s/^/http:\\/\\//"', returnStdout: true).trim()
+            env.APP_URI_PROD = sh(script: 'kubectl get ingress app-3s -n app-3s -o jsonpath="{.spec.rules[0].host}" | sed "s/^/http:\\/\\//"', returnStdout: true).trim()
           }
         }
       }
@@ -311,18 +363,36 @@ pipeline {
   post{
     always {
       echo 'Processo de pipeline finalizado.'
+      slackSend(color: "warning", message: "Status da Pipeline #${env.BUILD_NUMBER} em ${currentBuild.currentResult}")
     }
     success {
       echo 'Processo de pipeline BEM-SUCEDIDO.'
-      mail to: "${recipientEmails}",
-      subject: "Pipeline #${env.BUILD_NUMBER} - ${env.JOB_NAME}",
-      body: "Pipeline completada com: ${currentBuild.currentResult}\n" +
-            "Detalhes da execução da pipeline em: ${env.BUILD_URL}\n" +
-            "Detalhes do teste de qualidade em: http://dti-sonar.unilab.edu.br/dashboard?id=${env.APP_NAME}\n" +
-            "Endpoint do serviço: ${env.APP_URI}\n\n${env.EMAIL_ASSINATURA}\n\n\n${env.EMAIL_RODAPE}"
+      sh "curl -o build-log.txt ${env.JENKINS_URL}/job/${env.JOB_NAME}/lastBuild/timestamps/?appendLog"
+      archiveArtifacts artifacts: 'build-log.txt', onlyIfSuccessful: true
+      emailext attachLog: true, attachmentsPattern: 'build-log.txt',
+          recipientProviders: ["${recipientTeamEmails}", developers(), requestor()],
+          subject: "Pipeline #${env.BUILD_NUMBER} ${currentBuild.currentResult} Job ${env.JOB_NAME}",
+          body: "Pipeline completada com: ${currentBuild.currentResult}\n" +
+                "Detalhes da execução da pipeline em: ${env.BUILD_URL}\n" +
+                "Detalhes do teste de qualidade em: ${env.SONAR_URL}/dashboard?id=${env.APP_NAME}\n" +
+                "Endpoint do serviço em homologação: ${env.APP_URI_STAGING}\n" +
+                "Endpoint do serviço em produção: ${env.APP_URI_PROD}\n\n${env.EMAIL_ASSINATURA}\n\n\n${env.EMAIL_RODAPE}"
+
+      slackSend(color: "good", message: "${slack_msg()}")
+      slackSend(color: "good", message: "Pipeline completada com SUCESSO! #${env.BUILD_NUMBER} ${env.JOB_NAME} (<${env.BUILD_URL}|Open>)")
     }
     failure {
       echo 'Processo de pipeline executado com falha.'
+      sh "curl -o build-log.txt ${env.JENKINS_URL}/job/${env.JOB_NAME}/lastBuild/timestamps/?appendLog"
+      archiveArtifacts artifacts: 'build-log.txt', onlyIfSuccessful: true
+      emailext attachLog: true, attachmentsPattern: 'build-log.txt',
+          recipientProviders: [developers(), requestor()],
+          subject: "Pipeline #${env.BUILD_NUMBER} ${currentBuild.currentResult} Job ${env.JOB_NAME}",
+          body: "Pipeline completada com: ${currentBuild.currentResult}\n" +
+                "Detalhes da execução da pipeline em: ${env.BUILD_URL}\n\n${env.EMAIL_ASSINATURA}\n\n\n${env.EMAIL_RODAPE}"
+
+      slackSend(color: "warning", message: "Falha na Pipeline #${env.BUILD_NUMBER} em ${currentBuild.currentResult}")
+      slackSend(color: "danger", message: "Pipeline abortada com FALHA! #${env.BUILD_NUMBER} ${env.JOB_NAME} (<${env.BUILD_URL}|Open>)")
     }
     unstable {
       echo 'Processo de pipeline possui estabilidade.'
@@ -331,4 +401,14 @@ pipeline {
       echo 'SUCESSO no processo de pipeline anteriormente falhado.'
     }
   }
+}
+
+def slack_msg()
+{
+  def JOB_NAME = env.JOB_NAME
+  def BUILD_ID = env.BUILD_ID
+  def JENKINS_MSG = "Pipeline [${env.JOB_NAME}] finalizada com SUCESSO!\n" +
+  "Logs path: ${env.JENKINS_URL}/job/${JOB_NAME}/${BUILD_ID}/consoleText\n" +
+  "Quality Gate: ${env.SONAR_URL}/dashboard?id=${env.APP_NAME}"
+  return JENKINS_MSG
 }
