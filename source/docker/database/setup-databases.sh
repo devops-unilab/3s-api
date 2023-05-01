@@ -38,6 +38,8 @@
 
 set -xeu
 
+source source/docker/database/setup-databases-env.sh
+
 database_exists() {
     local database_name="$1"
     psql -tAc "SELECT 1 FROM pg_database WHERE datname='$database_name'" | grep -q 1
