@@ -211,7 +211,6 @@ pipeline {
           }
           container('postgres') {
             sh '''
-              apt update && apt install -y postgresql-client
               chmod +x source/docker/database/setup-databases.sh
               sleep 45s
               source/docker/database/setup-databases.sh

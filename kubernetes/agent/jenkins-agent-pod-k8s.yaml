@@ -142,7 +142,7 @@ spec:
     # ==================================================
     # https://hub.docker.com/_/postgres/tags
     - name: postgres
-      image: postgres:bullseye
+      image: postgres:alpine
       command: ["tail", "-f", "/dev/null"] 
       imagePullPolicy: Always # use o cache ou puxe a imagem para o agente
       resources:  # limites e recursos que o build contém
@@ -152,6 +152,13 @@ spec:
         limits:
           cpu: "2000m"
           memory: "1Gi"
+      env:
+        - name: LANG
+          value: en_US.UTF-8
+        - name: LANGUAGE
+          value: en_US:en:pt
+        - name: LC_ALL
+          value: en_US.UTF-8
       volumeMounts:
         - name: postgresql-data
           mountPath: /var/lib/postgresql/data
