@@ -220,7 +220,8 @@ pipeline {
               export PG_PASSWORD_HOMOLOGACAO=$PG_PASSWORD_HOMOLOGACAO
               chmod +x source/docker/database/setup-databases.sh
               sleep 45s
-              ./source/docker/database/setup-databases.sh
+              ls - la .
+              /bin/bash -l -c './source/docker/database/setup-databases.sh'
             '''
           }
         }
@@ -239,8 +240,8 @@ pipeline {
               export PG_DATABASE_RESTORE=$PG_DATABASE_HOMOLOGACAO
               chmod +x source/docker/database/dump-database.sh
               chmod +x source/docker/database/restore-database.sh
-              ./source/docker/database/dump-database.sh
-              ./source/docker/database/restore-database.sh
+              /bin/bash -l -c './source/docker/database/dump-database.sh'
+              /bin/bash -l -c './source/docker/database/restore-database.sh'
             '''
           }
         }
