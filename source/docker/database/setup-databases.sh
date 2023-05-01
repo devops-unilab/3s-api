@@ -38,20 +38,20 @@
 
 set -xeu
 
-source source/docker/database/setup-databases-env.sh
+connection_string="postgresql://$PG_USER_ROOT:$PG_ROOT_PASSWORD@$PG_HOST:$PG_PORT/$PG_DATABASE"
 
 database_exists() {
     local database_name="$1"
     psql -tAc "SELECT 1 FROM pg_database WHERE datname='$database_name'" | grep -q 1
 }
 
-while ! PGPASSWORD=$PG_PASSWORD psql -h $PG_HOST -p $PG_PORT -U $PG_USER -lqt | cut -d \| -f 1 | grep -qw $PG_DATABASE; do
-  echo "Aguardando a disponibilidade do banco de dados $PG_DATABASE em $PG_HOST"
-  sleep 1
+until psql "$connection_string" -c '\q'; do
+  >&2 echo "PostgreSQL is unavailable - sleeping"
+  sleep 5
 done
 
 # Verifica setup de databases, usuários e concede permissões
-psql -tA "postgresql://$PG_USER_ROOT:$PG_ROOT_PASSWORD@$PG_HOST/postgres" <<-EOSQL
+psql -tA "$connection_string" <<-EOSQL
     if ! database_exists "$PG_DATABASE"; then
         psql -c "CREATE DATABASE \"$PG_DATABASE\";"
     fi

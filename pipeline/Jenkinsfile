@@ -177,7 +177,6 @@ pipeline {
               env.PG_PASSWORD_HOMOLOGACAO = sh(script: './vault kv get -tls-skip-verify -field=db_password_staging secret/3s/config', returnStdout: true).trim()
               env.DB_USER_DUMP = sh(script: './vault kv get -tls-skip-verify -field=db_user_dump secret/3s/config', returnStdout: true).trim()
               env.DB_PASSWORD_DUMP = sh(script: './vault kv get -tls-skip-verify -field=db_password_dump secret/3s/config', returnStdout: true).trim()
-              sh 'chmod +x source/docker/database/setup-databases-env.sh'
             }
         }
       }
