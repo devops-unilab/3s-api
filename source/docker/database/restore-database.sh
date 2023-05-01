@@ -33,11 +33,9 @@
 
 set -xeu
 
-remote_host="$1"
-remote_database="$2"
-remote_user="$3"
-remote_password="$4"
-export POSTGRES_PASSWORD="$remote_password"
+PG_USER="$1"
+PG_PASSWORD_RESTORE="$2"
+PG_DATABASE_RESTORE="$3"
 
 pg_restore --list /tmp/bd_pg_dump.dmp | sed -E 's/(.* EXTENSION )/; \1/g' > /tmp/bd_pg_dump.toc
-pg_restore -v -j 2 -Fc -c -L /tmp/bd_pg_dump.toc -d postgresql://$remote_user:$POSTGRES_PASSWORD@$remote_host:5432/$remote_database /tmp/bd_pg_dump.dmp
+pg_restore -v -j 2 -Fc -c -L /tmp/bd_pg_dump.toc -d postgresql://$PG_USER:$PG_PASSWORD_RESTORE@$HOST_DUMP:$PORT_DUMP/$PG_DATABASE_RESTORE /tmp/bd_pg_dump.dmp

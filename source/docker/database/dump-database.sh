@@ -31,6 +31,9 @@
 
 set -xeu
 
+DB_USER_DUMP="$1"
+DB_PASSWORD_DUMP="$2"
+
 # Aguardar até que não haja mais atividades de banco de dados
 while [[ $(psql "postgresql://$DB_USER_DUMP:$DB_PASSWORD_DUMP@$HOST_DUMP:$PORT_DUMP/postgres" -c "SELECT count(*) FROM pg_stat_activity WHERE datname = 'ocorrencias';" -t) -gt 0 ]]
 do
