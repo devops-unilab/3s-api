@@ -23,6 +23,39 @@
 #   https://github.com/erivandosena/pipeline-cicd/tree/main/pipeline
 ---
 apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: pv-postgres
+spec:
+  capacity:
+    storage: 10Gi
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: local-storage
+  local:
+    path: /mnt/data
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+      - matchExpressions:
+        - key: kubernetes.io/hostname
+          operator: In
+          values:
+          - $(NODE_NAME)
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pvc-postgres
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: local-storage
+  resources:
+    requests:
+      storage: 1Gi
+---
+apiVersion: v1
 kind: Pod
 metadata:
   # O nome não é realmente necessário, mas é uma solução alternativa (workaround) para as regras de datree's que não estão funcionando de outra forma: https://github.com/datreeio/datree/issues/730
@@ -80,7 +113,7 @@ spec:
     # ==================================================
     # https://hub.docker.com/_/php/tags
     - name: php8
-      image: php:8.1-apache-bullseye # imagem customizada
+      image: php:8.1-apache-bullseye
       command: ["tail", "-f", "/dev/null"]  # este ou qualquer comando que seja basicamente um noop é necessário, isso é para que não substitua o ponto de entrada do contêiner base
       imagePullPolicy: Always # use o cache ou puxe a imagem para o agente
       resources:  # limites e recursos que o build contém
@@ -109,7 +142,7 @@ spec:
     # ==================================================
     # https://hub.docker.com/_/postgres/tags
     - name: postgres
-      image: postgres:15-bullseye # imagem customizada
+      image: postgres:bullseye
       command: ["tail", "-f", "/dev/null"] 
       imagePullPolicy: Always # use o cache ou puxe a imagem para o agente
       resources:  # limites e recursos que o build contém
@@ -432,5 +465,8 @@ spec:
       hostPath:
         path: /var/run/docker.sock
     - name: postgresql-data
-      hostPath:
-        path: /var/lib/postgresql/data
+      persistentVolumeClaim:
+        claimName: pvc-postgres
+    # - name: postgresql-data
+    #   hostPath:
+    #     path: /var/lib/postgresql/data

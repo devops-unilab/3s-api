@@ -44,8 +44,8 @@ database_exists() {
 }
 
 while ! PGPASSWORD=$PG_PASSWORD psql -h $PG_HOST -p $PG_PORT -U $PG_USER -lqt | cut -d \| -f 1 | grep -qw $PG_DATABASE; do
-  echo "Aguardando a disponibilidade do banco de dados $PG_DATABASE em $PG_HOST:$PG_PORT..."
-  sleep 15
+  echo "Aguardando a disponibilidade do banco de dados $PG_DATABASE em $PG_HOST"
+  sleep 1
 done
 
 # Verifica setup de databases, usuários e concede permissões

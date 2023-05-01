@@ -210,9 +210,12 @@ pipeline {
               '''
           }
           container('postgres') {
-            sh 'chmod +x source/docker/database/setup-databases.sh'
-            sh 'sleep 45s'
-            sh 'source/docker/database/setup-databases.sh'
+            sh '''
+              apt update && apt install -y postgresql-client
+              chmod +x source/docker/database/setup-databases.sh
+              sleep 45s
+              source/docker/database/setup-databases.sh
+            '''
           }
         }
       }
