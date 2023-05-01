@@ -213,11 +213,11 @@ pipeline {
           }
           container('postgres') {
             sh '''
-              export PG_USER=$env.PG_USER
-              export PG_PASSWORD=$env.PG_PASSWORD
-              export PG_USER_ROOT=$env.PG_USER_ROOT
-              export PG_ROOT_PASSWORD=$env.PG_ROOT_PASSWORD
-              export PG_PASSWORD_HOMOLOGACAO=$env.PG_PASSWORD_HOMOLOGACAO
+              export PG_USER=$PG_USER
+              export PG_PASSWORD=$PG_PASSWORD
+              export PG_USER_ROOT=$PG_USER_ROOT
+              export PG_ROOT_PASSWORD=$PG_ROOT_PASSWORD
+              export PG_PASSWORD_HOMOLOGACAO=$PG_PASSWORD_HOMOLOGACAO
               chmod +x source/docker/database/setup-databases.sh
               sleep 45s
               ./source/docker/database/setup-databases.sh
@@ -232,11 +232,11 @@ pipeline {
         container('postgres') {
           script {
             sh '''
-              export DB_USER_DUMP=$env.DB_USER_DUMP
-              export DB_PASSWORD_DUMP=$env.DB_PASSWORD_DUMP
-              export PG_USER=$env.PG_USER
-              export PG_PASSWORD_RESTORE=$env.PG_PASSWORD_HOMOLOGACAO
-              export PG_DATABASE_RESTORE=$env.PG_DATABASE_HOMOLOGACAO
+              export DB_USER_DUMP=$DB_USER_DUMP
+              export DB_PASSWORD_DUMP=$DB_PASSWORD_DUMP
+              export PG_USER=$PG_USER
+              export PG_PASSWORD_RESTORE=$PG_PASSWORD_HOMOLOGACAO
+              export PG_DATABASE_RESTORE=$PG_DATABASE_HOMOLOGACAO
               chmod +x source/docker/database/dump-database.sh
               chmod +x source/docker/database/restore-database.sh
               ./source/docker/database/dump-database.sh
@@ -319,11 +319,11 @@ pipeline {
         container('postgres') {
           script {
             sh '''
-              export DB_USER_DUMP=$env.DB_USER_DUMP
-              export DB_PASSWORD_DUMP=$env.DB_PASSWORD_DUMP
-              export PG_USER=$env.PG_USER
-              export PG_PASSWORD_RESTORE=$env.PG_PASSWORD
-              export PG_DATABASE_RESTORE=$env.PG_DATABASE
+              export DB_USER_DUMP=$DB_USER_DUMP
+              export DB_PASSWORD_DUMP=$DB_PASSWORD_DUMP
+              export PG_USER=$PG_USER
+              export PG_PASSWORD_RESTORE=$PG_PASSWORD
+              export PG_DATABASE_RESTORE=$PG_DATABASE
               chmod +x source/docker/database/dump-database.sh
               chmod +x source/docker/database/restore-database.sh
               ./source/docker/database/dump-database.sh
