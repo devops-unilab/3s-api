@@ -142,7 +142,7 @@ spec:
     # ==================================================
     # https://hub.docker.com/_/postgres/tags
     - name: postgres
-      image: postgres:alpine
+      image: postgres:latest
       command: ["tail", "-f", "/dev/null"] 
       imagePullPolicy: Always # use o cache ou puxe a imagem para o agente
       resources:  # limites e recursos que o build contém
@@ -159,9 +159,11 @@ spec:
           value: en_US:en:pt
         - name: LC_ALL
           value: en_US.UTF-8
+        - name: PGDATA
+          value: /var/lib/postgresql/data/pgdata
       volumeMounts:
         - name: postgresql-data
-          mountPath: /var/lib/postgresql/data
+          mountPath: /var/lib/postgresql/data/pgdata
     # ==================================================
     # https://hub.docker.com/_/maven/tags
     - name: maven
@@ -476,4 +478,4 @@ spec:
     #     claimName: pvc-postgres
     - name: postgresql-data
       hostPath:
-        path: /var/lib/postgresql/data
+        path: /var/lib/postgresql/data/pgdata
