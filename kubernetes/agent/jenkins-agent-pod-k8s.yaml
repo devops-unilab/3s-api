@@ -21,39 +21,39 @@
 # veja o modelo Jenkinsfile referenciando este modelo de pod:
 #
 #   https://github.com/erivandosena/pipeline-cicd/tree/main/pipeline
----
-apiVersion: v1
-kind: PersistentVolume
-metadata:
-  name: pv-postgres
-spec:
-  capacity:
-    storage: 10Gi
-  accessModes:
-    - ReadWriteOnce
-  storageClassName: local-storage
-  local:
-    path: /mnt/data
-  nodeAffinity:
-    required:
-      nodeSelectorTerms:
-      - matchExpressions:
-        - key: kubernetes.io/hostname
-          operator: In
-          values:
-          - $(NODE_NAME)
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: pvc-postgres
-spec:
-  accessModes:
-    - ReadWriteOnce
-  storageClassName: local-storage
-  resources:
-    requests:
-      storage: 1Gi
+# ---
+# apiVersion: v1
+# kind: PersistentVolume
+# metadata:
+#   name: pv-postgres
+# spec:
+#   capacity:
+#     storage: 10Gi
+#   accessModes:
+#     - ReadWriteOnce
+#   storageClassName: local-storage
+#   local:
+#     path: /mnt/data
+#   nodeAffinity:
+#     required:
+#       nodeSelectorTerms:
+#       - matchExpressions:
+#         - key: kubernetes.io/hostname
+#           operator: In
+#           values:
+#           - $(NODE_NAME)
+# ---
+# apiVersion: v1
+# kind: PersistentVolumeClaim
+# metadata:
+#   name: pvc-postgres
+# spec:
+#   accessModes:
+#     - ReadWriteOnce
+#   storageClassName: local-storage
+#   resources:
+#     requests:
+#       storage: 1Gi
 ---
 apiVersion: v1
 kind: Pod
@@ -464,9 +464,9 @@ spec:
     - name: docker
       hostPath:
         path: /var/run/docker.sock
-    - name: postgresql-data
-      persistentVolumeClaim:
-        claimName: pvc-postgres
     # - name: postgresql-data
-    #   hostPath:
-    #     path: /var/lib/postgresql/data
+    #   persistentVolumeClaim:
+    #     claimName: pvc-postgres
+    - name: postgresql-data
+      hostPath:
+        path: /var/lib/postgresql/data
