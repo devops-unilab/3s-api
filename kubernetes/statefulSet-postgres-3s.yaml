@@ -7,20 +7,19 @@ kind: Namespace
 metadata:
   name: postgres-3s
 
----
-apiVersion: v1
-kind: Secret
-metadata:
-  name: postgres-3s-secret
-  namespace: postgres-3s
-type: Opaque
-data:
-  PG_PASSWORD: PFBBU1NXT1JEX0JZX1ZBVUxUPg==
-  PG_PRIMARY_PASSWORD: PFBBU1NXT1JEX0JZX1ZBVUxUPg==
-  PG_ROOT_PASSWORD: PFBBU1NXT1JEX0JZX1ZBVUxUPg==
-  DB_PASSWORD_DUMP: PFBBU1NXT1JEX0JZX1ZBVUxUPg==
-  PG_PASSWORD_HOMOLOGACAO: PFBBU1NXT1JEX0JZX1ZBVUxUPg==
-
+# ---
+# apiVersion: v1
+# kind: Secret
+# metadata:
+#   name: postgres-3s-secret
+#   namespace: postgres-3s
+# type: Opaque
+# data:
+#   PG_PASSWORD: PFBBU1NXT1JEX0JZX1ZBVUxUPg==
+#   PG_PRIMARY_PASSWORD: PFBBU1NXT1JEX0JZX1ZBVUxUPg==
+#   PG_ROOT_PASSWORD: PFBBU1NXT1JEX0JZX1ZBVUxUPg==
+#   DB_PASSWORD_DUMP: PFBBU1NXT1JEX0JZX1ZBVUxUPg==
+#   PG_PASSWORD_HOMOLOGACAO: PFBBU1NXT1JEX0JZX1ZBVUxUPg==
 ---
 apiVersion: v1
 kind: ConfigMap
@@ -288,12 +287,15 @@ spec:
         vault.hashicorp.com/agent-inject-secret-config: 'secret/data/3s/config'
         vault.hashicorp.com/agent-inject-template-config: |
           {{ with secret "secret/data/3s/config" -}}
+            export PG_USER='{{ .Data.data.pg_user }}'
             export PG_PASSWORD='{{ .Data.data.pg_password }}'
             export PG_PRIMARY_PASSWORD='{{ .Data.data.pg_primary_password }}'
+            export PG_USER_ROOT='{{ .Data.data.pg_user_root }}'
             export PG_ROOT_PASSWORD='{{ .Data.data.pg_root_password }}'
+            export DB_USER_DUMP='{{ .Data.data.db_user_dump }}'
             export DB_PASSWORD_DUMP='{{ .Data.data.db_password_dump }}'
-            export PG_PASSWORD_HOMOLOGACAO='{{ .Data.data.pg_password_staging }}'
-          {{- end }}        
+            export PG_PASSWORD_HOMOLOGACAO='{{ .Data.data.db_password_staging }}'
+          {{- end }} 
         vault.hashicorp.com/role: "3s-role"
         vault.hashicorp.com/auth-path: auth/kubernetes/c1
     spec:
@@ -315,8 +317,8 @@ spec:
           ports:
             - containerPort: 5432
           envFrom:
-            - secretRef:
-                name: postgres-3s-secret
+            # - secretRef:
+            #     name: postgres-3s-secret
             - configMapRef:
                 name: postgres-3s-config
           volumeMounts:

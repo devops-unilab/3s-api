@@ -32,14 +32,14 @@
 set -xeu
 
 # Aguardar até que não haja mais atividades de banco de dados
-while [[ $(psql "postgresql://$HOST_DB_USER_DUMP:$HOST_DB_PASSWORD_DUMP@$HOST_DUMP/postgres" -c "SELECT count(*) FROM pg_stat_activity WHERE datname = 'ocorrencias';" -t) -gt 0 ]]
+while [[ $(psql "postgresql://$DB_USER_DUMP:$DB_PASSWORD_DUMP@$HOST_DUMP:$PORT_DUMP/postgres" -c "SELECT count(*) FROM pg_stat_activity WHERE datname = 'ocorrencias';" -t) -gt 0 ]]
 do
   echo "Ainda há atividades de banco de dados. Aguardando..."
   sleep 1
 done
 
 # Realiza backup por dump incluindo objetos grandes
-pg_dump "postgresql://$HOST_DB_USER_DUMP:$HOST_DB_PASSWORD_DUMP@$HOST_DUMP:5432/ocorrencias" --no-owner --no-acl -Fc -b -v -f /tmp/bd_pg_dump.dmp
+pg_dump "postgresql://$DB_USER_DUMP:$DB_PASSWORD_DUMP@$HOST_DUMP:$PORT_DUMP/ocorrencias" --no-owner --no-acl -Fc -b -v -f /tmp/bd_pg_dump.dmp
 
 
 
