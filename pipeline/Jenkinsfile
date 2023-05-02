@@ -337,12 +337,12 @@ pipeline {
                 vaultSecrets: getSecretsConfig()) {
 
                 withEnv([
-                  "PG_USER=$PG_USER"
-                  "PG_PASSWORD=$PG_PASSWORD"
-                  "PG_USER_ROOT=$PG_USER_ROOT"
-                  "PG_ROOT_PASSWORD=$PG_ROOT_PASSWORD"
-                  "PG_PASSWORD_HOMOLOGACAO=$PG_PASSWORD_HOMOLOGACAO"
-                  "DB_USER_DUMP=$DB_USER_DUMP"
+                  "PG_USER=$PG_USER",
+                  "PG_PASSWORD=$PG_PASSWORD",
+                  "PG_USER_ROOT=$PG_USER_ROOT",
+                  "PG_ROOT_PASSWORD=$PG_ROOT_PASSWORD",
+                  "PG_PASSWORD_HOMOLOGACAO=$PG_PASSWORD_HOMOLOGACAO",
+                  "DB_USER_DUMP=$DB_USER_DUMP",
                   "DB_PASSWORD_DUMP=$DB_PASSWORD_DUMP"
                   ]) {
                   
