@@ -154,6 +154,7 @@ setup_databases() {
         fi
         
         array_users=("3s" "ocorrencias_user" "admindti" "cicero_robson" "luansidney" "manoeljr")
+        username=""
         for username in ${array_users[@]}; do
             if ! psql -tAc "SELECT 1 FROM pg_roles WHERE rolname='$username'" | grep -q 1; then
                 psql -c "CREATE USER \"$username\";"
