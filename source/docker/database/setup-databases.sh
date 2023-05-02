@@ -69,6 +69,7 @@ psql -tA "$connection_string_root" <<-EOSQL
     fi
 
     users=("$USERS_ROOT_DUMP")
+    user=""
     for user in "${users[@]}"; do
         if ! psql -tAc "SELECT 1 FROM pg_roles WHERE rolname='$user'" | grep -q 1; then
             psql -c "CREATE USER \"$user\";"

@@ -1,19 +1,19 @@
 #!/usr/bin/env groovy
 
 def getSecretsConfig(){
-    return [[
-      engineVersion: 2, 
-      path: 'secret/3s/config', 
-      secretValues: [
-        [envVar: 'PG_USER', isRequired: false, vaultKey: 'pg_user'], 
-        [envVar: 'PG_PASSWORD', isRequired: false, vaultKey: 'pg_password'],
-        [envVar: 'PG_USER_ROOT', isRequired: false, vaultKey: 'pg_user_root'],
-        [envVar: 'PG_ROOT_PASSWORD', isRequired: false, vaultKey: 'pg_root_password'],
-        [envVar: 'PG_PASSWORD_HOMOLOGACAO', isRequired: false, vaultKey: 'db_password_staging'],
-        [envVar: 'DB_USER_DUMP', isRequired: false, vaultKey: 'db_user_dump'],
-        [envVar: 'DB_PASSWORD_DUMP', isRequired: false, vaultKey: 'db_password_dump']
-      ]
-    ]]
+  return [[
+    engineVersion: 2, 
+    path: 'secret/3s/config', 
+    secretValues: [
+      [envVar: 'PG_USER', isRequired: false, vaultKey: 'pg_user'], 
+      [envVar: 'PG_PASSWORD', isRequired: false, vaultKey: 'pg_password'],
+      [envVar: 'PG_USER_ROOT', isRequired: false, vaultKey: 'pg_user_root'],
+      [envVar: 'PG_ROOT_PASSWORD', isRequired: false, vaultKey: 'pg_root_password'],
+      [envVar: 'PG_PASSWORD_HOMOLOGACAO', isRequired: false, vaultKey: 'db_password_staging'],
+      [envVar: 'DB_USER_DUMP', isRequired: false, vaultKey: 'db_user_dump'],
+      [envVar: 'DB_PASSWORD_DUMP', isRequired: false, vaultKey: 'db_password_dump']
+    ]
+  ]]
 }
 
 pipeline {
