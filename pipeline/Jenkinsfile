@@ -299,7 +299,7 @@ pipeline {
     stage('Setup Database') {
       steps {
         script {
-          try {
+          
             withKubeConfig([credentialsId: 'kubeconfig-c1', serverUrl: 'https://dti-k8s-c1.unilab.edu.br:6443']) {
                 sh '''
                   if ! kubectl get statefulset postgres -n postgres-3s >/dev/null 2>&1; then
@@ -310,15 +310,6 @@ pipeline {
                 '''
             }
             // container('postgres') {
-
-              withVault(configuration: [
-                engineVersion: 2, 
-                skipSslVerification: true, 
-                timeout: 60, 
-                vaultCredentialId: 'token-admin-vault-plugin', 
-                vaultUrl: 'https://dti-vault.unilab.edu.br']) {
-                  // some block
-              }
 
               withVault(configuration: [
                 engineVersion: 2, 
@@ -362,10 +353,7 @@ pipeline {
                 '''
               }
             // }
-          } catch (e) {
-            currentBuild.result = 'FALHA'
-            throw e
-          }
+  
         }
       }
     }
