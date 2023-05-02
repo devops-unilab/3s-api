@@ -98,7 +98,7 @@
 # users_admin=("3s" "ocorrencias_user")
 # users_all=("3s" "ocorrencias_user" "admindti" "cicero_robson" "luansidney" "manoeljr")
 
-set -eu
+set -ex
 
 verifica_postgres() {
     local db_prod="$1"
@@ -154,8 +154,11 @@ setup_databases() {
         fi
         
         array_users=("3s" "ocorrencias_user" "admindti" "cicero_robson" "luansidney" "manoeljr")
-        username=""
-        for username in ${array_users[@]}; do
+        for i in ${!array_users[@]}; do
+
+            echo "O elemento $i é ${array_users[$i]}"
+            username="${array_users[$i]}"
+
             if ! psql -tAc "SELECT 1 FROM pg_roles WHERE rolname='$username'" | grep -q 1; then
                 psql -c "CREATE USER \"$username\";"
                 psql -c "GRANT CONNECT ON DATABASE \"$db_prod\" TO \"$username\";"
@@ -167,9 +170,13 @@ setup_databases() {
                 psql -c "ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT USAGE, SELECT ON SEQUENCES TO "$username";"
             fi
         done
-
+        
         array_users=("3s" "ocorrencias_user")
-        for username in ${array_users[@]}; do
+        for i in ${!array_users[@]}; do
+
+            echo "O elemento $i é ${array_users[$i]}"
+            username="${array_users[$i]}"
+
             if ! check_user_permissions "$username" "$db_prod"; then
                 psql -c "GRANT ALL PRIVILEGES ON DATABASE \"$db_prod\" TO \"$username\";"
             fi
