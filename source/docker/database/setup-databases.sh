@@ -68,7 +68,7 @@ psql -tA "$connection_string_root" <<-EOSQL
         psql -c "CREATE DATABASE \"$PG_DATABASE_HOMOLOGACAO\";"
     fi
 
-    users=($USERS_ROOT_DUMP)
+    users=("$USERS_ROOT_DUMP")
     for user in "${users[@]}"; do
         if ! psql -tAc "SELECT 1 FROM pg_roles WHERE rolname='$user'" | grep -q 1; then
             psql -c "CREATE USER \"$user\";"
@@ -87,7 +87,7 @@ psql -tA "$connection_string_root" <<-EOSQL
         fi
     done
 
-    users_admin=($USERS_DUMP)
+    users_admin=("$USERS_DUMP")
     for user in "${users_admin[@]}"; do
         if [[ "$(psql -tAc "SELECT pg_get_userbyid(d.datdba) FROM pg_database d WHERE d.datname = '$PG_DATABASE_HOMOLOGACAO'")" != "$user" ]]; then
             psql -c "ALTER DATABASE \"$PG_DATABASE_HOMOLOGACAO\" OWNER TO \"$user\";"
