@@ -36,25 +36,54 @@
 #   -w, --no-password        nunca solicitar senha
 #   -W, --password           forçar prompt de senha (should happen automatically)
 
-set -eu
+set -euo pipefail
 
 connection_string_root="postgresql://$PG_USER_ROOT:$PG_ROOT_PASSWORD@$PG_HOST:$PG_PORT"
-max_attempts=15
 
+# # Define as constantes
+# readonly MAX_ATTEMPTS=15
+# readonly WAIT_TIME=5
+
+# # Define a função para verificar a conexão com o PostgreSQL
+# function verifica_postgres() {
+#     local database="${1:?Database name not provided}"
+#     attempts=0
+#     until psql "$connection_string_root/$database" -c '\q'; do
+#         >&2 echo "PostgreSQL indisponível! Tentando novamente em ${WAIT_TIME} segundos..."
+#         sleep ${WAIT_TIME}
+
+#         attempts=$((attempts+1))
+#         if [ $attempts -eq $MAX_ATTEMPTS ]; then
+#             >&2 echo "Falha ao conectar ao PostgreSQL após $MAX_ATTEMPTS tentativas."
+#             exit 1
+#         fi
+#     done
+# }
+
+# set -euo pipefail
+
+# Define as constantes
+readonly MAX_ATTEMPTS=15
+readonly WAIT_TIME=5
+
+# Define a função para verificar a conexão com o PostgreSQL
 function verifica_postgres() {
-    local database="$1"
-    attempts=0
-    until psql "$connection_string_root/$database" -c '\q'; do
-        >&2 echo "PostgreSQL indisponível! Sleeping..."
-        sleep 5
+    local connection_string="$1"
+    local database="$2"
+    local attempts=0
+
+    until psql "${connection_string}/${database}" -c '\q'; do
+        >&2 echo "PostgreSQL indisponível! Tentando novamente em ${WAIT_TIME} segundos..."
+        sleep ${WAIT_TIME}
 
         attempts=$((attempts+1))
-        if [ $attempts -eq $max_attempts ]; then
-            >&2 echo "Falha ao conectar ao PostgreSQL após $max_attempts tentativas."
+        if [ ${attempts} -eq ${MAX_ATTEMPTS} ]; then
+            >&2 echo "Falha ao conectar ao PostgreSQL após ${MAX_ATTEMPTS} tentativas."
             exit 1
         fi
     done
 }
+
 
 function database_exists() {
     local database_name="$1"
@@ -167,7 +196,7 @@ function atribui_privilegios_woner() {
 EOSQL
 }
 
-verifica_postgres "$PG_DATABASE"
+verifica_postgres "$connection_string_root" "$PG_DATABASE"
 
 if ! database_exists "$PG_DATABASE"; then
     create_database $PG_DATABASE $PG_USER
