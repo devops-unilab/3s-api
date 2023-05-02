@@ -68,8 +68,9 @@ pipeline {
     DB_PASSWORD_DUMP = "*"
     HOST_DUMP = "200.129.19.134"
     PORT_DUMP = "5432"
-    USERS_DUMP = '"3s" "ocorrencias_user"'
-    USERS_ROOT_DUMP = '"3s" "admindti" "cicero_robson" "luansidney" "manoeljr"'
+    USERS_DUMP = '"3s" "admindti" "cicero_robson" "luansidney" "manoeljr"'
+    USERS_DUMP_ROOT = '"3s" "ocorrencias_user"'
+    USERS_DUMP_ALL = '"3s" "ocorrencias_user" "admindti" "cicero_robson" "luansidney" "manoeljr"'
   }
   stages {
     stage('Iniciando CI/CD') {
