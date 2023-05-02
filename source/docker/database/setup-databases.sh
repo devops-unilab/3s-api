@@ -100,6 +100,18 @@ set -eu
 # users_admin=("3s" "ocorrencias_user")
 # users_all=("3s" "ocorrencias_user" "admindti" "cicero_robson" "luansidney" "manoeljr")
 
+verifica_postgres() {
+    local db_prod="$1"
+    local db_root="$2"
+    local db_password="$3"
+    local db_host="$4"
+    local db_port="$5"
+    until psql "postgresql://$db_root:$db_password@$db_host:$db_port/$db_prod" -c '\q'; do
+    >&2 echo "PostgreSQL indisponível! Sleeping..."
+    sleep 5
+    done
+}
+
 database_exists() {
     local database_name="$1"
     psql -tAc "SELECT 1 FROM pg_database WHERE datname='$database_name'" | grep -q 1
@@ -173,19 +185,6 @@ setup_databases() {
         psql -d "$db_prod" -tAc "\q";
         psql -d "$db_staging" -tAc "\q";
 EOSQL
-}
-
-
-verifica_postgres() {
-    local db_prod="$1"
-    local db_root="$2"
-    local db_password="$3"
-    local db_host="$4"
-    local db_port="$5"
-    until psql "postgresql://$db_root:$db_password@$db_host:$db_port/$db_prod" -c '\q'; do
-    >&2 echo "PostgreSQL indisponível! Sleeping..."
-    sleep 5
-    done
 }
 
 verifica_postgres "$PG_DATABASE" "$PG_USER_ROOT" "$PG_ROOT_PASSWORD" "$PG_HOST" "$PG_PORT"
