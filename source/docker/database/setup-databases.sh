@@ -36,8 +36,6 @@
 #   -w, --no-password        nunca solicitar senha
 #   -W, --password           forçar prompt de senha (should happen automatically)
 
-set -eu
-
 # PG_USER="$1"
 # PG_PASSWORD="$2"
 # PG_USER_ROOT="$3"
@@ -100,6 +98,8 @@ set -eu
 # users_admin=("3s" "ocorrencias_user")
 # users_all=("3s" "ocorrencias_user" "admindti" "cicero_robson" "luansidney" "manoeljr")
 
+set -eu
+
 verifica_postgres() {
     local db_prod="$1"
     local db_root="$2"
@@ -145,8 +145,9 @@ setup_databases() {
         if ! database_exists "$db_staging"; then
             psql -c "CREATE DATABASE \"$db_staging\";"
         fi
-
-        for user in ("3s" "ocorrencias_user" "admindti" "cicero_robson" "luansidney" "manoeljr"); do
+        
+        array_users=("3s" "ocorrencias_user" "admindti" "cicero_robson" "luansidney" "manoeljr")
+        for user in ${array_users[@]}; do
             if ! psql -tAc "SELECT 1 FROM pg_roles WHERE rolname='$user'" | grep -q 1; then
                 psql -c "CREATE USER \"$user\";"
                 psql -c "GRANT CONNECT ON DATABASE \"$db_prod\" TO \"$user\";"
@@ -159,7 +160,8 @@ setup_databases() {
             fi
         done
 
-        for user in ("3s" "ocorrencias_user"); do
+        array_users=("3s" "ocorrencias_user")
+        for user in ${array_users[@]}; do
             if ! check_user_permissions "$user" "$db_prod"; then
                 psql -c "GRANT ALL PRIVILEGES ON DATABASE \"$db_prod\" TO \"$user\";"
             fi
@@ -168,14 +170,14 @@ setup_databases() {
                 psql -c "GRANT ALL PRIVILEGES ON DATABASE \"$db_staging\" TO \"$user\";"
             fi
 
-            if [[ $(psql -tA "$connection_string_root" -c "SELECT pg_catalog.pg_get_userbyid(d.datdba) AS owner FROM pg_catalog.db_prod d WHERE d.datname = '$db_prod'") = "$user" ]]; then
+            if [[ $(psql -tA "postgresql://$db_root:$db_password@$db_host:$db_port/$db_prod" -c "SELECT pg_catalog.pg_get_userbyid(d.datdba) AS owner FROM pg_catalog.db_prod d WHERE d.datname = '$db_prod'") = "$user" ]]; then
                 echo "O usuário $user é o dono do database $db_prod"
             else
                 psql -c "ALTER DATABASE \"$db_prod\" OWNER TO \"$user\";"
             fi
 
             # Verifica se o usuário é dono do database $db_staging
-            if [[ $(psql -tA "$connection_string_root" -c "SELECT pg_catalog.pg_get_userbyid(d.datdba) AS owner FROM pg_catalog.db_prod d WHERE d.datname = '$db_staging'") = "$user" ]]; then
+            if [[ $(psql -tA "postgresql://$db_root:$db_password@$db_host:$db_port/$db_prod" -c "SELECT pg_catalog.pg_get_userbyid(d.datdba) AS owner FROM pg_catalog.db_prod d WHERE d.datname = '$db_staging'") = "$user" ]]; then
                 echo "O usuário $user é o dono do database $db_staging"
             else
                 psql -c "ALTER DATABASE \"$db_staging\" OWNER TO \"$user\";"
