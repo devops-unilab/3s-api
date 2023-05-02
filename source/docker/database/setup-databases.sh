@@ -176,10 +176,19 @@ EOSQL
 }
 
 
-until psql "$connection_string_root" -c '\q'; do
-  >&2 echo "PostgreSQL is unavailable - sleeping"
-  sleep 5
-done
+verifica_postgres() {
+    local db_prod="$1"
+    local db_root="$2"
+    local db_password="$3"
+    local db_host="$4"
+    local db_port="$5"
+    until psql "postgresql://$db_root:$db_password@$db_host:$db_port/$db_prod" -c '\q'; do
+    >&2 echo "PostgreSQL indisponível! Sleeping..."
+    sleep 5
+    done
+}
+
+verifica_postgres "$PG_DATABASE" "$PG_USER_ROOT" "$PG_ROOT_PASSWORD" "$PG_HOST" "$PG_PORT"
 
 setup_databases "$PG_DATABASE" "$PG_DATABASE_HOMOLOGACAO" "$PG_USER_ROOT" "$PG_ROOT_PASSWORD" "$PG_HOST" "$PG_PORT"
 
