@@ -153,7 +153,7 @@ pipeline {
     }
     stage('Obter segredos do Vault') {
       steps {
-        // script {
+        script {
           env.VAULT_ADDR = "https://dti-vault.unilab.edu.br"
           /* secrets harbor */
           withCredentials([
@@ -189,7 +189,7 @@ pipeline {
           //     //   env.DB_PASSWORD_DUMP = "${DB_PASSWORD_DUMP}"
           //     // '''
           //   }
-        // }
+        }
       }
     }
 
