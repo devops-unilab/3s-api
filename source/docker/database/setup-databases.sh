@@ -36,7 +36,7 @@
 #   -w, --no-password        nunca solicitar senha
 #   -W, --password           forçar prompt de senha (should happen automatically)
 
-set -xeu
+set -eu
 
 # PG_USER="$1"
 # PG_PASSWORD="$2"
@@ -92,13 +92,13 @@ set -xeu
 
 # EOSQL
 
-connection_string_root="postgresql://$PG_USER_ROOT:$PG_ROOT_PASSWORD@$PG_HOST:$PG_PORT/$PG_DATABASE"
-connection_string_prod="postgresql://$PG_USER:$PG_PASSWORD@$PG_HOST:$PG_PORT"
-connection_string_staging="postgresql://$PG_USER:$PG_PASSWORD_HOMOLOGACAO@$PG_HOST:$PG_PORT"
+# connection_string_root="postgresql://$PG_USER_ROOT:$PG_ROOT_PASSWORD@$PG_HOST:$PG_PORT/$PG_DATABASE"
+# connection_string_prod="postgresql://$PG_USER:$PG_PASSWORD@$PG_HOST:$PG_PORT"
+# connection_string_staging="postgresql://$PG_USER:$PG_PASSWORD_HOMOLOGACAO@$PG_HOST:$PG_PORT"
 
-users=("3s" "admindti" "cicero_robson" "luansidney" "manoeljr")
-users_admin=("3s" "ocorrencias_user")
-users_all=("3s" "ocorrencias_user" "admindti" "cicero_robson" "luansidney" "manoeljr")
+# users=("3s" "admindti" "cicero_robson" "luansidney" "manoeljr")
+# users_admin=("3s" "ocorrencias_user")
+# users_all=("3s" "ocorrencias_user" "admindti" "cicero_robson" "luansidney" "manoeljr")
 
 database_exists() {
     local database_name="$1"
@@ -120,8 +120,12 @@ check_user_permissions() {
 setup_databases() {
     local db_prod="$1"
     local db_staging="$2"
+    local db_root="$3"
+    local db_password="$4"
+    local db_host="$5"
+    local db_port="$6"
 
-    psql -tA "$connection_string_root" <<-EOSQL
+    psql -tA "postgresql://$db_root:$db_password@$db_host:$db_port/$db_prod" <<-EOSQL
         if ! database_exists "$db_prod"; then
             psql -c "CREATE DATABASE \"$db_prod\";"
         fi
@@ -177,7 +181,7 @@ until psql "$connection_string_root" -c '\q'; do
   sleep 5
 done
 
-setup_databases "$PG_DATABASE" "$PG_DATABASE_HOMOLOGACAO"
+setup_databases "$PG_DATABASE" "$PG_DATABASE_HOMOLOGACAO" "$PG_USER_ROOT" "$PG_ROOT_PASSWORD" "$PG_HOST" "$PG_PORT"
 
 # Verifica setup de databases, usuários e concede permissões
     # for user in "${users_all[@]}"; do
