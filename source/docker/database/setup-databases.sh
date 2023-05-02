@@ -96,41 +96,90 @@ connection_string_root="postgresql://$PG_USER_ROOT:$PG_ROOT_PASSWORD@$PG_HOST:$P
 connection_string_prod="postgresql://$PG_USER:$PG_PASSWORD@$PG_HOST:$PG_PORT"
 connection_string_staging="postgresql://$PG_USER:$PG_PASSWORD_HOMOLOGACAO@$PG_HOST:$PG_PORT"
 
-USERS=("3s" "admindti" "cicero_robson" "luansidney" "manoeljr")
+users=("3s" "admindti" "cicero_robson" "luansidney" "manoeljr")
 users_admin=("3s" "ocorrencias_user")
 users_all=("3s" "ocorrencias_user" "admindti" "cicero_robson" "luansidney" "manoeljr")
-
 
 database_exists() {
     local database_name="$1"
     psql -tAc "SELECT 1 FROM pg_database WHERE datname='$database_name'" | grep -q 1
 }
 
+check_user_permissions() {
+    local user="$1"
+    local database="$2"
+    local result="$(psql -tAc "SELECT has_database_privilege('$user', '$database', 'CREATE')" 2>/dev/null)"
+
+    if [ "$result" == "t" ]; then
+        return 0
+    else
+        return 1
+    fi
+}
+
+setup_databases() {
+    local db_prod="$1"
+    local db_staging="$2"
+
+    psql -tA "$connection_string_root" <<-EOSQL
+        if ! database_exists "$db_prod"; then
+            psql -c "CREATE DATABASE \"$db_prod\";"
+        fi
+
+        if ! database_exists "$db_staging"; then
+            psql -c "CREATE DATABASE \"$db_staging\";"
+        fi
+
+        for user in ("3s" "ocorrencias_user" "admindti" "cicero_robson" "luansidney" "manoeljr"); do
+            if ! psql -tAc "SELECT 1 FROM pg_roles WHERE rolname='$user'" | grep -q 1; then
+                psql -c "CREATE USER \"$user\";"
+                psql -c "GRANT CONNECT ON DATABASE \"$db_prod\" TO \"$user\";"
+                psql -c "GRANT CONNECT ON DATABASE \"$db_staging\" TO \"$user\";"
+                # concede outras permissoes
+                psql -c "GRANT USAGE, CREATE, TEMPORARY ON SCHEMA public TO "$user";"
+                psql -c "ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT USAGE, CREATE, TEMPORARY ON TABLES TO "$user";"
+                psql -c "ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT SELECT, INSERT, UPDATE, DELETE ON TABLES TO "$user";"
+                psql -c "ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT USAGE, SELECT ON SEQUENCES TO "$user";"
+            fi
+        done
+
+        for user in ("3s" "ocorrencias_user"); do
+            if ! check_user_permissions "$user" "$db_prod"; then
+                psql -c "GRANT ALL PRIVILEGES ON DATABASE \"$db_prod\" TO \"$user\";"
+            fi
+
+            if ! check_user_permissions "$user" "$db_staging"; then
+                psql -c "GRANT ALL PRIVILEGES ON DATABASE \"$db_staging\" TO \"$user\";"
+            fi
+
+            if [[ $(psql -tA "$connection_string_root" -c "SELECT pg_catalog.pg_get_userbyid(d.datdba) AS owner FROM pg_catalog.db_prod d WHERE d.datname = '$db_prod'") = "$user" ]]; then
+                echo "O usuário $user é o dono do database $db_prod"
+            else
+                psql -c "ALTER DATABASE \"$db_prod\" OWNER TO \"$user\";"
+            fi
+
+            # Verifica se o usuário é dono do database $db_staging
+            if [[ $(psql -tA "$connection_string_root" -c "SELECT pg_catalog.pg_get_userbyid(d.datdba) AS owner FROM pg_catalog.db_prod d WHERE d.datname = '$db_staging'") = "$user" ]]; then
+                echo "O usuário $user é o dono do database $db_staging"
+            else
+                psql -c "ALTER DATABASE \"$db_staging\" OWNER TO \"$user\";"
+            fi
+        done
+
+        psql -d "$db_prod" -tAc "\q";
+        psql -d "$db_staging" -tAc "\q";
+EOSQL
+}
+
+
 until psql "$connection_string_root" -c '\q'; do
   >&2 echo "PostgreSQL is unavailable - sleeping"
   sleep 5
 done
 
+setup_databases "$PG_DATABASE" "$PG_DATABASE_HOMOLOGACAO"
+
 # Verifica setup de databases, usuários e concede permissões
-psql -tA "$connection_string_root" <<-EOSQL
-    if ! database_exists "$PG_DATABASE"; then
-        psql -c "CREATE DATABASE \"$PG_DATABASE\";"
-    fi
-
-    if ! database_exists "$PG_DATABASE_HOMOLOGACAO"; then
-        psql -c "CREATE DATABASE \"$PG_DATABASE_HOMOLOGACAO\";"
-    fi
-
-    for USER in "${USERS[@]}"; do
-        if ! psql -tAc "SELECT 1 FROM pg_roles WHERE rolname='$USER'" | grep -q 1; then
-            psql -c "CREATE USER \"$USER\";"
-            psql -c "GRANT CONNECT ON DATABASE \"$PG_DATABASE\" TO \"$USER\";"
-            psql -c "GRANT CONNECT ON DATABASE \"$PG_DATABASE_HOMOLOGACAO\" TO \"$USER\";"
-            echo "Permissões concedidas para usuário $USER"
-        fi
-    done
-EOSQL
-
     # for user in "${users_all[@]}"; do
     #     if ! psql -tAc "SELECT 1 FROM pg_roles WHERE rolname='$user'" | grep -q 1; then
     #         psql -c "CREATE USER \"$user\";"
