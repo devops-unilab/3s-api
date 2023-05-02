@@ -101,14 +101,16 @@
 set -eu
 
 connection_string_root="postgresql://$PG_USER_ROOT:$PG_ROOT_PASSWORD@$PG_HOST:$PG_PORT"
+max_attempts=15
 
 function verifica_postgres() {
     local database="$1"
+    attempts=0
     until psql "$connection_string_root/$database" -c '\q'; do
         >&2 echo "PostgreSQL indisponível! Sleeping..."
         sleep 5
-        attempts=$((attempts+1))
         
+        attempts=$((attempts+1))
         if [ $attempts -eq $max_attempts ]; then
             >&2 echo "Falha ao conectar ao PostgreSQL após $max_attempts tentativas."
             exit 1
