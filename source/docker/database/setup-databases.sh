@@ -121,20 +121,13 @@ psql -tA "$connection_string_root" <<-EOSQL
         psql -c "CREATE DATABASE \"$PG_DATABASE_HOMOLOGACAO\";"
     fi
 
-    i=0
-    while [ $i -lt ${#USERS[@]} ]; do
-        USER="${USERS[$i]}"
-        echo "Verificando usuário $USER"
+    for USER in "${USERS[@]}"; do
         if ! psql -tAc "SELECT 1 FROM pg_roles WHERE rolname='$USER'" | grep -q 1; then
             psql -c "CREATE USER \"$USER\";"
             psql -c "GRANT CONNECT ON DATABASE \"$PG_DATABASE\" TO \"$USER\";"
             psql -c "GRANT CONNECT ON DATABASE \"$PG_DATABASE_HOMOLOGACAO\" TO \"$USER\";"
             echo "Permissões concedidas para usuário $USER"
-        else
-            echo "Usuário $USER já possui permissões de GRANT CONNECT ON DATABASE"
         fi
-
-        i=$((i+1))
     done
 EOSQL
 
