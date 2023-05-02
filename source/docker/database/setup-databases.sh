@@ -98,7 +98,7 @@
 # users_admin=("3s" "ocorrencias_user")
 # users_all=("3s" "ocorrencias_user" "admindti" "cicero_robson" "luansidney" "manoeljr")
 
-set -ex
+set -eu
 
 connection_string_root="postgresql://$PG_USER_ROOT:$PG_ROOT_PASSWORD@$PG_HOST:$PG_PORT"
 
@@ -167,8 +167,8 @@ EOSQL
 }
 
 function check_user_privilegios() {
-    local user="$1"
-    local database="$2"
+    local database="$1"
+    local user="$2"
     local result="$(psql -tAc "SELECT has_database_privilege('$user', '$database', 'CREATE')" 2>/dev/null)"
 
     if [ "$result" == "t" ]; then
@@ -181,7 +181,7 @@ function check_user_privilegios() {
 function check_owner_database() {
     local database="$1"
     local user="$2"
-    if [[ $(psql -tA "$connection_string_root/postgres" -c "SELECT pg_catalog.pg_get_userbyid(d.datdba) AS owner FROM pg_catalog.db_prod d WHERE d.datname = '$database'") = "$user" ]]; then
+    if [[ $(psql -tA "$connection_string_root/postgres" -c "SELECT pg_catalog.pg_get_userbyid(d.datdba) AS owner FROM pg_catalog."$database" d WHERE d.datname = '$database'") = "$user" ]]; then
         return 1
     else
         return 0
@@ -222,6 +222,7 @@ function atribui_privilegios_woner() {
 
     psql -tA "$connection_string_root/postgres" <<-EOSQL
         ALTER DATABASE \"$database\" OWNER TO \"$user\";"
+        GRANT ALL PRIVILEGES ON DATABASE \"$database\" TO \"$user\";"
 EOSQL
 }
 
@@ -245,8 +246,14 @@ for i in ${!array_users[@]}; do
         create_user_admin "$username"
     fi
 
-    if ! check_owner_database "$PG_DATABASE" "$username"; then
-        atribui_privilegios_woner $PG_DATABASE $username
+    if ! check_user_privilegios "$PG_DATABASE" "$username"; then
+        atribui_privilegios "$PG_DATABASE" "$username"
+        atribui_privilegios_woner "$PG_DATABASE" "$username"
+    fi
+
+    if ! check_user_privilegios "$PG_DATABASE_HOMOLOGACAO" "$username"; then
+        atribui_privilegios "$PG_DATABASE_HOMOLOGACAO" "$username"
+        atribui_privilegios_woner "$PG_DATABASE_HOMOLOGACAO" "$username"
     fi
 
 done
@@ -261,8 +268,12 @@ for i in ${!array_users[@]}; do
         create_user_regular "$username"
     fi
 
-    if ! check_owner_database "$PG_DATABASE_HOMOLOGACAO" "$username"; then
-        atribui_privilegios_woner $PG_DATABASE_HOMOLOGACAO $username
+    if ! check_user_privilegios "$PG_DATABASE" "$username"; then
+        atribui_privilegios "$PG_DATABASE" "$username"
+    fi
+
+    if ! check_user_privilegios "$PG_DATABASE_HOMOLOGACAO" "$username"; then
+        atribui_privilegios "$PG_DATABASE_HOMOLOGACAO" "$username"
     fi
 
 done
