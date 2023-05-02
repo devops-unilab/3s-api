@@ -137,6 +137,13 @@ setup_databases() {
     local db_host="$5"
     local db_port="$6"
 
+    echo "db_prod: $db_prod"
+    echo "db_staging: $db_staging"
+    echo "db_root: $db_root"
+    echo "db_password: $db_password"
+    echo "db_host: $db_host"
+    echo "db_port: $db_port"
+
     psql -tA "postgresql://$db_root:$db_password@$db_host:$db_port/$db_prod" <<-EOSQL
         if ! database_exists "$db_prod"; then
             psql -c "CREATE DATABASE \"$db_prod\";"
@@ -147,40 +154,40 @@ setup_databases() {
         fi
         
         array_users=("3s" "ocorrencias_user" "admindti" "cicero_robson" "luansidney" "manoeljr")
-        for user in ${array_users[@]}; do
-            if ! psql -tAc "SELECT 1 FROM pg_roles WHERE rolname='$user'" | grep -q 1; then
-                psql -c "CREATE USER \"$user\";"
-                psql -c "GRANT CONNECT ON DATABASE \"$db_prod\" TO \"$user\";"
-                psql -c "GRANT CONNECT ON DATABASE \"$db_staging\" TO \"$user\";"
+        for username in ${array_users[@]}; do
+            if ! psql -tAc "SELECT 1 FROM pg_roles WHERE rolname='$username'" | grep -q 1; then
+                psql -c "CREATE USER \"$username\";"
+                psql -c "GRANT CONNECT ON DATABASE \"$db_prod\" TO \"$username\";"
+                psql -c "GRANT CONNECT ON DATABASE \"$db_staging\" TO \"$username\";"
                 # concede outras permissoes
-                psql -c "GRANT USAGE, CREATE, TEMPORARY ON SCHEMA public TO "$user";"
-                psql -c "ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT USAGE, CREATE, TEMPORARY ON TABLES TO "$user";"
-                psql -c "ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT SELECT, INSERT, UPDATE, DELETE ON TABLES TO "$user";"
-                psql -c "ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT USAGE, SELECT ON SEQUENCES TO "$user";"
+                psql -c "GRANT USAGE, CREATE, TEMPORARY ON SCHEMA public TO "$username";"
+                psql -c "ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT USAGE, CREATE, TEMPORARY ON TABLES TO "$username";"
+                psql -c "ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT SELECT, INSERT, UPDATE, DELETE ON TABLES TO "$username";"
+                psql -c "ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT USAGE, SELECT ON SEQUENCES TO "$username";"
             fi
         done
 
         array_users=("3s" "ocorrencias_user")
-        for user in ${array_users[@]}; do
-            if ! check_user_permissions "$user" "$db_prod"; then
-                psql -c "GRANT ALL PRIVILEGES ON DATABASE \"$db_prod\" TO \"$user\";"
+        for username in ${array_users[@]}; do
+            if ! check_user_permissions "$username" "$db_prod"; then
+                psql -c "GRANT ALL PRIVILEGES ON DATABASE \"$db_prod\" TO \"$username\";"
             fi
 
-            if ! check_user_permissions "$user" "$db_staging"; then
-                psql -c "GRANT ALL PRIVILEGES ON DATABASE \"$db_staging\" TO \"$user\";"
+            if ! check_user_permissions "$username" "$db_staging"; then
+                psql -c "GRANT ALL PRIVILEGES ON DATABASE \"$db_staging\" TO \"$username\";"
             fi
 
-            if [[ $(psql -tA "postgresql://$db_root:$db_password@$db_host:$db_port/$db_prod" -c "SELECT pg_catalog.pg_get_userbyid(d.datdba) AS owner FROM pg_catalog.db_prod d WHERE d.datname = '$db_prod'") = "$user" ]]; then
-                echo "O usuário $user é o dono do database $db_prod"
+            if [[ $(psql -tA "postgresql://$db_root:$db_password@$db_host:$db_port/$db_prod" -c "SELECT pg_catalog.pg_get_userbyid(d.datdba) AS owner FROM pg_catalog.db_prod d WHERE d.datname = '$db_prod'") = "$username" ]]; then
+                echo "O usuário $username é o dono do database $db_prod"
             else
-                psql -c "ALTER DATABASE \"$db_prod\" OWNER TO \"$user\";"
+                psql -c "ALTER DATABASE \"$db_prod\" OWNER TO \"$username\";"
             fi
 
             # Verifica se o usuário é dono do database $db_staging
-            if [[ $(psql -tA "postgresql://$db_root:$db_password@$db_host:$db_port/$db_prod" -c "SELECT pg_catalog.pg_get_userbyid(d.datdba) AS owner FROM pg_catalog.db_prod d WHERE d.datname = '$db_staging'") = "$user" ]]; then
-                echo "O usuário $user é o dono do database $db_staging"
+            if [[ $(psql -tA "postgresql://$db_root:$db_password@$db_host:$db_port/$db_prod" -c "SELECT pg_catalog.pg_get_userbyid(d.datdba) AS owner FROM pg_catalog.db_prod d WHERE d.datname = '$db_staging'") = "$username" ]]; then
+                echo "O usuário $username é o dono do database $db_staging"
             else
-                psql -c "ALTER DATABASE \"$db_staging\" OWNER TO \"$user\";"
+                psql -c "ALTER DATABASE \"$db_staging\" OWNER TO \"$username\";"
             fi
         done
 
