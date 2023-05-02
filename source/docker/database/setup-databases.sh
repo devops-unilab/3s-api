@@ -38,11 +38,11 @@
 
 set -xeu
 
-# PG_USER="$1"
-# PG_PASSWORD="$2"
-# PG_USER_ROOT="$3"
-# PG_ROOT_PASSWORD="$4"
-# PG_PASSWORD_HOMOLOGACAO="$5"
+PG_USER="$1"
+PG_PASSWORD="$2"
+PG_USER_ROOT="$3"
+PG_ROOT_PASSWORD="$4"
+PG_PASSWORD_HOMOLOGACAO="$5"
 
 connection_string_root="postgresql://$PG_USER_ROOT:$PG_ROOT_PASSWORD@$PG_HOST:$PG_PORT/$PG_DATABASE"
 connection_string_prod="postgresql://$PG_USER:$PG_PASSWORD@$PG_HOST:$PG_PORT"
