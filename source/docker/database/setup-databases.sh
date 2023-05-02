@@ -77,7 +77,6 @@ psql -tA "$connection_string_root" <<-EOSQL
     while [ $i -lt ${#USERS[@]} ]; do
         USER="${USERS[$i]}"
         echo "Verificando usuário $USER"
-
         if ! psql -tAc "SELECT 1 FROM pg_roles WHERE rolname='$USER'" | grep -q 1; then
             psql -c "CREATE USER \"$USER\";"
             psql -c "GRANT CONNECT ON DATABASE \"$PG_DATABASE\" TO \"$USER\";"
@@ -89,6 +88,9 @@ psql -tA "$connection_string_root" <<-EOSQL
 
         i=$((i+1))
     done
+
+
+EOSQL
 
     # for user in "${users_all[@]}"; do
     #     if ! psql -tAc "SELECT 1 FROM pg_roles WHERE rolname='$user'" | grep -q 1; then
@@ -116,7 +118,7 @@ psql -tA "$connection_string_root" <<-EOSQL
     #     fi
     # done
     # psql -d postgres -tAc "\q";
-EOSQL
+
 
 # # Conceder permissões adicionais aos usuários root
 # psql -tA "$connection_string_prod/$PG_DATABASE" <<-EOSQL
