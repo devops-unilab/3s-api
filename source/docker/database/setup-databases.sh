@@ -48,9 +48,9 @@ connection_string_root="postgresql://$PG_USER_ROOT:$PG_ROOT_PASSWORD@$PG_HOST:$P
 connection_string_prod="postgresql://$PG_USER:$PG_PASSWORD@$PG_HOST:$PG_PORT"
 connection_string_staging="postgresql://$PG_USER:$PG_PASSWORD_HOMOLOGACAO@$PG_HOST:$PG_PORT"
 
-users = ("3s" "admindti" "cicero_robson" "luansidney" "manoeljr")
-users_admin = ("3s" "ocorrencias_user")
-users_all = ("3s" "ocorrencias_user" "admindti" "cicero_robson" "luansidney" "manoeljr")
+users=("3s" "admindti" "cicero_robson" "luansidney" "manoeljr")
+users_admin=("3s" "ocorrencias_user")
+users_all=("3s" "ocorrencias_user" "admindti" "cicero_robson" "luansidney" "manoeljr")
 
 
 database_exists() {
@@ -81,7 +81,7 @@ psql -tA "$connection_string_root" <<-EOSQL
         fi
     done
 
-    for user in "${users_admin[@]}"; do
+    for user in "${users[@]}"; do
         if [[ "$(psql -tAc "SELECT pg_get_userbyid(d.datdba) FROM pg_database d WHERE d.datname = '$PG_DATABASE_HOMOLOGACAO'")" != "$user" ]]; then
             psql -c "GRANT ALL PRIVILEGES ON DATABASE \"$PG_DATABASE_HOMOLOGACAO\" TO \"$user\";"
         fi
