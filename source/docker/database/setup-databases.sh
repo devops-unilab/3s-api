@@ -48,7 +48,7 @@ connection_string_root="postgresql://$PG_USER_ROOT:$PG_ROOT_PASSWORD@$PG_HOST:$P
 connection_string_prod="postgresql://$PG_USER:$PG_PASSWORD@$PG_HOST:$PG_PORT"
 connection_string_staging="postgresql://$PG_USER:$PG_PASSWORD_HOMOLOGACAO@$PG_HOST:$PG_PORT"
 
-users=("3s" "admindti" "cicero_robson" "luansidney" "manoeljr")
+USERS=("3s" "admindti" "cicero_robson" "luansidney" "manoeljr")
 users_admin=("3s" "ocorrencias_user")
 users_all=("3s" "ocorrencias_user" "admindti" "cicero_robson" "luansidney" "manoeljr")
 
@@ -73,52 +73,69 @@ psql -tA "$connection_string_root" <<-EOSQL
         psql -c "CREATE DATABASE \"$PG_DATABASE_HOMOLOGACAO\";"
     fi
 
-    for user in "${users_all[@]}"; do
-        if ! psql -tAc "SELECT 1 FROM pg_roles WHERE rolname='$user'" | grep -q 1; then
-            psql -c "CREATE USER \"$user\";"
-            psql -c "GRANT CONNECT ON DATABASE \"$PG_DATABASE\" TO \"$user\";"
-            psql -c "GRANT CONNECT ON DATABASE \"$PG_DATABASE_HOMOLOGACAO\" TO \"$user\";"
+    i=0
+    while [ $i -lt ${#USERS[@]} ]; do
+        USER="${USERS[$i]}"
+        echo "Verificando usuário $USER"
+
+        if ! psql -tAc "SELECT 1 FROM pg_roles WHERE rolname='$USER'" | grep -q 1; then
+            psql -c "CREATE USER \"$USER\";"
+            psql -c "GRANT CONNECT ON DATABASE \"$PG_DATABASE\" TO \"$USER\";"
+            psql -c "GRANT CONNECT ON DATABASE \"$PG_DATABASE_HOMOLOGACAO\" TO \"$USER\";"
+            echo "Permissões concedidas para usuário $USER"
+        else
+            echo "Usuário $USER já possui permissões de GRANT CONNECT ON DATABASE"
         fi
+
+        i=$((i+1))
     done
 
-    for user in "${users[@]}"; do
-        if [[ "$(psql -tAc "SELECT pg_get_userbyid(d.datdba) FROM pg_database d WHERE d.datname = '$PG_DATABASE_HOMOLOGACAO'")" != "$user" ]]; then
-            psql -c "GRANT ALL PRIVILEGES ON DATABASE \"$PG_DATABASE_HOMOLOGACAO\" TO \"$user\";"
-        fi
-        if [[ "$(psql -tAc "SELECT pg_get_userbyid(d.datdba) FROM pg_database d WHERE d.datname = '$PG_DATABASE'")" != "$user" ]]; then
-            psql -c "GRANT ALL PRIVILEGES ON DATABASE \"$PG_DATABASE\" TO \"$user\";"
-        fi
-    done
+    # for user in "${users_all[@]}"; do
+    #     if ! psql -tAc "SELECT 1 FROM pg_roles WHERE rolname='$user'" | grep -q 1; then
+    #         psql -c "CREATE USER \"$user\";"
+    #         psql -c "GRANT CONNECT ON DATABASE \"$PG_DATABASE\" TO \"$user\";"
+    #         psql -c "GRANT CONNECT ON DATABASE \"$PG_DATABASE_HOMOLOGACAO\" TO \"$user\";"
+    #     fi
+    # done
 
-    for user in "${users_admin[@]}"; do
-        if [[ "$(psql -tAc "SELECT pg_get_userbyid(d.datdba) FROM pg_database d WHERE d.datname = '$PG_DATABASE_HOMOLOGACAO'")" != "$user" ]]; then
-            psql -c "ALTER DATABASE \"$PG_DATABASE_HOMOLOGACAO\" OWNER TO \"$user\";"
-        fi
-        if [[ "$(psql -tAc "SELECT pg_get_userbyid(d.datdba) FROM pg_database d WHERE d.datname = '$PG_DATABASE'")" != "$user" ]]; then
-            psql -c "ALTER DATABASE \"$PG_DATABASE\" OWNER TO \"$user\";"
-        fi
-    done
-    psql -d postgres -tAc "\q";
+    # for user in "${users[@]}"; do
+    #     if [[ "$(psql -tAc "SELECT pg_get_userbyid(d.datdba) FROM pg_database d WHERE d.datname = '$PG_DATABASE_HOMOLOGACAO'")" != "$user" ]]; then
+    #         psql -c "GRANT ALL PRIVILEGES ON DATABASE \"$PG_DATABASE_HOMOLOGACAO\" TO \"$user\";"
+    #     fi
+    #     if [[ "$(psql -tAc "SELECT pg_get_userbyid(d.datdba) FROM pg_database d WHERE d.datname = '$PG_DATABASE'")" != "$user" ]]; then
+    #         psql -c "GRANT ALL PRIVILEGES ON DATABASE \"$PG_DATABASE\" TO \"$user\";"
+    #     fi
+    # done
+
+    # for user in "${users_admin[@]}"; do
+    #     if [[ "$(psql -tAc "SELECT pg_get_userbyid(d.datdba) FROM pg_database d WHERE d.datname = '$PG_DATABASE_HOMOLOGACAO'")" != "$user" ]]; then
+    #         psql -c "ALTER DATABASE \"$PG_DATABASE_HOMOLOGACAO\" OWNER TO \"$user\";"
+    #     fi
+    #     if [[ "$(psql -tAc "SELECT pg_get_userbyid(d.datdba) FROM pg_database d WHERE d.datname = '$PG_DATABASE'")" != "$user" ]]; then
+    #         psql -c "ALTER DATABASE \"$PG_DATABASE\" OWNER TO \"$user\";"
+    #     fi
+    # done
+    # psql -d postgres -tAc "\q";
 EOSQL
 
-# Conceder permissões adicionais aos usuários root
-psql -tA "$connection_string_prod/$PG_DATABASE" <<-EOSQL
-    for user in "${users_all[@]}"; do
-        psql -c "GRANT USAGE, CREATE, TEMPORARY ON SCHEMA public TO "$user";"
-        psql -c "ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT USAGE, CREATE, TEMPORARY ON TABLES TO "$user";"
-        psql -c "ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT SELECT, INSERT, UPDATE, DELETE ON TABLES TO "$user";"
-        psql -c "ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT USAGE, SELECT ON SEQUENCES TO "$user";"
-    done
-    psql -d "$PG_DATABASE" -tAc "\q";
-EOSQL
+# # Conceder permissões adicionais aos usuários root
+# psql -tA "$connection_string_prod/$PG_DATABASE" <<-EOSQL
+#     for user in "${users_all[@]}"; do
+#         psql -c "GRANT USAGE, CREATE, TEMPORARY ON SCHEMA public TO "$user";"
+#         psql -c "ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT USAGE, CREATE, TEMPORARY ON TABLES TO "$user";"
+#         psql -c "ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT SELECT, INSERT, UPDATE, DELETE ON TABLES TO "$user";"
+#         psql -c "ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT USAGE, SELECT ON SEQUENCES TO "$user";"
+#     done
+#     psql -d "$PG_DATABASE" -tAc "\q";
+# EOSQL
 
-# Conceder permissões adicionais aos usuários regulares
-psql -tA "$connection_string_staging/$PG_DATABASE_HOMOLOGACAO" <<-EOSQL
-    for user in "${users_all[@]}"; do
-        psql -c "GRANT USAGE, CREATE, TEMPORARY ON SCHEMA public TO \"$user\";"
-        psql -c "ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT USAGE, CREATE, TEMPORARY ON TABLES TO \"$user\";"
-        psql -c "ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT SELECT, INSERT, UPDATE, DELETE ON TABLES TO \"$user\";"
-        psql -c "ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT USAGE, SELECT ON SEQUENCES TO \"$user\";"
-    done
-    psql -d "$PG_DATABASE_HOMOLOGACAO" -tAc "\q";
-EOSQL
+# # Conceder permissões adicionais aos usuários regulares
+# psql -tA "$connection_string_staging/$PG_DATABASE_HOMOLOGACAO" <<-EOSQL
+#     for user in "${users_all[@]}"; do
+#         psql -c "GRANT USAGE, CREATE, TEMPORARY ON SCHEMA public TO \"$user\";"
+#         psql -c "ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT USAGE, CREATE, TEMPORARY ON TABLES TO \"$user\";"
+#         psql -c "ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT SELECT, INSERT, UPDATE, DELETE ON TABLES TO \"$user\";"
+#         psql -c "ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT USAGE, SELECT ON SEQUENCES TO \"$user\";"
+#     done
+#     psql -d "$PG_DATABASE_HOMOLOGACAO" -tAc "\q";
+# EOSQL
