@@ -44,6 +44,54 @@ set -xeu
 # PG_ROOT_PASSWORD="$4"
 # PG_PASSWORD_HOMOLOGACAO="$5"
 
+# connection_string_root="postgresql://$PG_USER_ROOT:$PG_ROOT_PASSWORD@$PG_HOST:$PG_PORT/$PG_DATABASE"
+# connection_string_prod="postgresql://$PG_USER:$PG_PASSWORD@$PG_HOST:$PG_PORT"
+# connection_string_staging="postgresql://$PG_USER:$PG_PASSWORD_HOMOLOGACAO@$PG_HOST:$PG_PORT"
+
+# USERS=("3s" "admindti" "cicero_robson" "luansidney" "manoeljr")
+# users_admin=("3s" "ocorrencias_user")
+# users_all=("3s" "ocorrencias_user" "admindti" "cicero_robson" "luansidney" "manoeljr")
+
+
+# database_exists() {
+#     local database_name="$1"
+#     psql -tAc "SELECT 1 FROM pg_database WHERE datname='$database_name'" | grep -q 1
+# }
+
+# until psql "$connection_string_root" -c '\q'; do
+#   >&2 echo "PostgreSQL is unavailable - sleeping"
+#   sleep 5
+# done
+
+# # Verifica setup de databases, usuários e concede permissões
+# psql -tA "$connection_string_root" <<-EOSQL
+#     if ! database_exists "$PG_DATABASE"; then
+#         psql -c "CREATE DATABASE \"$PG_DATABASE\";"
+#     fi
+
+#     if ! database_exists "$PG_DATABASE_HOMOLOGACAO"; then
+#         psql -c "CREATE DATABASE \"$PG_DATABASE_HOMOLOGACAO\";"
+#     fi
+
+#     i=0
+#     while [ $i -lt ${#USERS[@]} ]; do
+#         USER="${USERS[$i]}"
+#         echo "Verificando usuário $USER"
+#         if ! psql -tAc "SELECT 1 FROM pg_roles WHERE rolname='$USER'" | grep -q 1; then
+#             psql -c "CREATE USER \"$USER\";"
+#             psql -c "GRANT CONNECT ON DATABASE \"$PG_DATABASE\" TO \"$USER\";"
+#             psql -c "GRANT CONNECT ON DATABASE \"$PG_DATABASE_HOMOLOGACAO\" TO \"$USER\";"
+#             echo "Permissões concedidas para usuário $USER"
+#         else
+#             echo "Usuário $USER já possui permissões de GRANT CONNECT ON DATABASE"
+#         fi
+
+#         i=$((i+1))
+#     done
+
+
+# EOSQL
+
 connection_string_root="postgresql://$PG_USER_ROOT:$PG_ROOT_PASSWORD@$PG_HOST:$PG_PORT/$PG_DATABASE"
 connection_string_prod="postgresql://$PG_USER:$PG_PASSWORD@$PG_HOST:$PG_PORT"
 connection_string_staging="postgresql://$PG_USER:$PG_PASSWORD_HOMOLOGACAO@$PG_HOST:$PG_PORT"
@@ -88,8 +136,6 @@ psql -tA "$connection_string_root" <<-EOSQL
 
         i=$((i+1))
     done
-
-
 EOSQL
 
     # for user in "${users_all[@]}"; do
