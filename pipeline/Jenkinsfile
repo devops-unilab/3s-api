@@ -72,6 +72,12 @@ pipeline {
     USERS_DUMP = '"3s" "admindti" "cicero_robson" "luansidney" "manoeljr"'
     USERS_DUMP_ROOT = '"3s" "ocorrencias_user"'
     USERS_DUMP_ALL = '"3s" "ocorrencias_user" "admindti" "cicero_robson" "luansidney" "manoeljr"'
+
+    LANG="pt_BR.UTF-8"
+    LC_CTYPE="pt_BR.UTF-8"
+    LC_ALL="pt_BR.UTF-8"
+    LANGUAGE="pt_BR:pt:en"
+
   }
   stages {
     stage('Iniciando CI/CD') {
@@ -92,8 +98,9 @@ pipeline {
             rsync \
             postgresql-client \
             locales \
+            sudo \
             && rm -rf /var/lib/apt/lists/*
-            
+
           # Instala kubectl
           curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl" 
           curl -LO "https://dl.k8s.io/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl.sha256"
@@ -119,6 +126,23 @@ pipeline {
           mv source/.env.example source/.env
           ls -la source/
           printenv
+
+          # Execute o comando para reconfigurar as localidades
+          DEBIAN_FRONTEND=noninteractive dpkg-reconfigure locales 
+
+          # Selecione a opção 378 (pt_BR.UTF-8 UTF-8)
+          echo "pt_BR.UTF-8 UTF-8" | tee -a /etc/locale.gen
+          locale-gen pt_BR.UTF-8
+
+          # Selecione a opção 3 (pt_BR.UTF-8)
+          echo LANG=pt_BR.UTF-8 | tee /etc/default/locale
+          echo LC_CTYPE=pt_BR.UTF-8 | tee -a /etc/default/locale
+          echo LC_ALL=pt_BR.UTF-8 | tee -a /etc/default/locale
+          echo LANGUAGE=pt_BR:pt:en | tee -a /etc/default/locale
+
+          # Atualize as variáveis de ambiente
+          sudo -s
+          source /etc/default/locale
         '''
       }
     }

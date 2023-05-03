@@ -36,13 +36,9 @@
 #   -w, --no-password        nunca solicitar senha
 #   -W, --password           forcar prompt de senha (should happen automatically)
 
-set -euo pipefail
+# set -euo pipefail
 
-# Configurando locales para pt_BR.UTF-8..."
-dpkg-reconfigure locales
-echo "pt_BR.UTF-8 UTF-8" | tee -a /etc/locale.gen && \
-DEBIAN_FRONTEND=noninteractive dpkg-reconfigure locales && \
-update-locale LANG=pt_BR.UTF-8 LC_CTYPE=pt_BR.UTF-8 LC_ALL=pt_BR.UTF-8 LANGUAGE=pt_BR:pt:en
+set eu
 
 connection_string_root="postgresql://$PG_USER_ROOT:$PG_ROOT_PASSWORD@$PG_HOST:$PG_PORT"
 readonly MAX_ATTEMPTS=15
