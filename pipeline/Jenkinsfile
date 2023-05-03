@@ -109,10 +109,10 @@ pipeline {
             unzip \
             rsync \
             postgresql-client \
+            locales \
             && rm -rf /var/lib/apt/lists/*
 
           # Reconfigurar as localidades
-          DEBIAN_FRONTEND=noninteractive dpkg-reconfigure locales 
           echo "pt_BR.UTF-8 UTF-8" | tee -a /etc/locale.gen
           locale-gen pt_BR.UTF-8
           echo LANG=pt_BR.UTF-8 | tee /etc/default/locale
@@ -123,6 +123,7 @@ pipeline {
           export LC_CTYPE=pt_BR.UTF-8
           export LC_ALL=pt_BR.UTF-8
           export LANGUAGE=pt_BR:pt:en
+          DEBIAN_FRONTEND=noninteractive dpkg-reconfigure locales 
 
           # Instala kubectl
           curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl" 
