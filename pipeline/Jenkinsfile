@@ -103,13 +103,13 @@ pipeline {
         sh '''
           # Instala pacotes
           apt-get update && apt-get install -y --no-install-recommends \
+            locales \
             sudo \
             curl \
             wget \
             unzip \
             rsync \
             postgresql-client \
-            locales \
             && rm -rf /var/lib/apt/lists/*
 
           # Reconfigurar as localidades
@@ -267,6 +267,9 @@ pipeline {
         }
           container('postgres') { 
           script {
+
+          sh 'apt-get update && apt-get install -y locales procps sudo'
+
           withVault([configuration: configuration, vaultSecrets: secrets]) {
             // sh "echo ${env.PRIVATE_TOKEN}"
             // sh "echo ${env.PUBLIC_TOKEN}"
