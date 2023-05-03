@@ -101,9 +101,6 @@ pipeline {
         }
         // executar alguns comandos shell para configurar outros detalhes.
         sh '''
-          sed -i 's/# pt_BR.UTF-8 UTF-8/pt_BR.UTF-8 UTF-8/' /etc/locale.gen
-          locale-gen pt_BR.UTF-8
-          
           # Instala pacotes
           apt-get update && apt-get install -y --no-install-recommends \
             sudo \
@@ -112,7 +109,6 @@ pipeline {
             unzip \
             rsync \
             postgresql-client \
-            locales \
             && rm -rf /var/lib/apt/lists/*
 
           # Reconfigurar as localidades
@@ -268,8 +264,7 @@ pipeline {
             kubectl get all,sa,ing,pvc -n postgres-3s -o wide
           '''
         }
-        // container('postgres') { 
-
+          container('postgres') { 
           script {
           withVault([configuration: configuration, vaultSecrets: secrets]) {
             // sh "echo ${env.PRIVATE_TOKEN}"
@@ -366,6 +361,7 @@ pipeline {
           //     }
           // }
         // }
+          }
           }
       }
     }
