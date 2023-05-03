@@ -107,6 +107,8 @@ if [[ ! -z "$7" ]]; then
   DB_PASSWORD_DUMP="$7"
 fi
 
+printenv
+
 connection_string_root="postgresql://$PG_USER_ROOT:$PG_ROOT_PASSWORD@$PG_HOST:$PG_PORT"
 
 # funcoes
