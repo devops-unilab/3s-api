@@ -38,6 +38,10 @@
 
 set -euo pipefail
 
+export LANGUAGE=pt_BR:en:pt
+export LC_ALL=pt_BR.UTF-8
+export LANG=pt_BR.UTF-8
+
 connection_string_root="postgresql://$PG_USER_ROOT:$PG_ROOT_PASSWORD@$PG_HOST:$PG_PORT"
 readonly MAX_ATTEMPTS=15
 readonly WAIT_TIME=5
