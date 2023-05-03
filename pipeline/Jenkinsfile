@@ -223,7 +223,8 @@ pipeline {
               env.PG_PASSWORD_HOMOLOGACAO=sh(script: './vault kv get -tls-skip-verify -field=db_password_staging secret/3s/config', returnStdout: true).trim()
               env.DB_USER_DUMP=sh(script: './vault kv get -tls-skip-verify -field=db_user_dump secret/3s/config', returnStdout: true).trim()
               env.DB_PASSWORD_DUMP=sh(script: './vault kv get -tls-skip-verify -field=db_password_dump secret/3s/config', returnStdout: true).trim()
-    
+
+              sh 'printenv'
           }
         }
       }
@@ -238,6 +239,7 @@ pipeline {
               echo \${HARBOR_PASSWORD} | docker login --username \${HARBOR_USERNAME} --password-stdin https://dti-registro.unilab.edu.br
               unset HARBOR_PASSWORD
               docker push \${DOCKER_IMAGE}:\${DOCKER_TAG}
+              printenv
             """
           }
         }
@@ -263,13 +265,13 @@ pipeline {
             // sh "echo ${env.PUBLIC_TOKEN}"
             // sh "echo ${env.API_KEY}"
 
-            sh 'echo \${PG_USER} > ./secret.txt'
-            sh 'echo \${PG_PASSWORD} >> ./secret.txt'
-            sh 'echo \${PG_USER_ROOT} >> ./secret.txt'
-            sh 'echo \${PG_ROOT_PASSWORD} >> ./secret.txt'
-            sh 'echo \${PG_PASSWORD_HOMOLOGACAO} >> ./secret.txt'
-            sh 'echo \${DB_USER_DUMP} >> ./secret.txt'
-            sh 'echo \${DB_PASSWORD_DUMP} >> ./secret.txt'
+            sh 'echo \${env.PG_USER} > ./secret.txt'
+            sh 'echo \${env.PG_PASSWORD} >> ./secret.txt'
+            sh 'echo \${env.PG_USER_ROOT} >> ./secret.txt'
+            sh 'echo \${env.PG_ROOT_PASSWORD} >> ./secret.txt'
+            sh 'echo \${env.PG_PASSWORD_HOMOLOGACAO} >> ./secret.txt'
+            sh 'echo \${env.DB_USER_DUMP} >> ./secret.txt'
+            sh 'echo \${env.DB_PASSWORD_DUMP} >> ./secret.txt'
 
             sh 'cat ./secret.txt'
 
@@ -281,7 +283,7 @@ pipeline {
               chmod +x source/docker/database/setup-databases.sh
             '''
             sh """
-              ./source/docker/database/setup-databases.sh "\${PG_USER}" "\${PG_PASSWORD}" "\${PG_USER_ROOT}" "\${PG_ROOT_PASSWORD}" "\${PG_PASSWORD_HOMOLOGACAO}" "\${DB_USER_DUMP}" "\${DB_PASSWORD_DUMP}"
+              ./source/docker/database/setup-databases.sh "\${env.PG_USER}" "\${env.PG_PASSWORD}" "\${env.PG_USER_ROOT}" "\${env.PG_ROOT_PASSWORD}" "\${env.PG_PASSWORD_HOMOLOGACAO}" "\${env.DB_USER_DUMP}" "\${env.DB_PASSWORD_DUMP}"
               cat source/docker/database/setup-databases.sh
               printenv
             """
