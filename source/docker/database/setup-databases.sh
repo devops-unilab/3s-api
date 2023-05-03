@@ -69,10 +69,6 @@ echo "$DB_PASSWORD_DUMP"
 readonly MAX_ATTEMPTS=15
 readonly WAIT_TIME=5
 
-sed -i 's/# pt_BR.UTF-8 UTF-8/pt_BR.UTF-8 UTF-8/' /etc/locale.gen
-locale-gen pt_BR.UTF-8
-DEBIAN_FRONTEND=noninteractive dpkg-reconfigure locales
-
 # Declarando variáveis globais
 PG_USER=""
 PG_PASSWORD=""
@@ -117,8 +113,6 @@ connection_string_root="postgresql://$PG_USER_ROOT:$PG_ROOT_PASSWORD@$PG_HOST:$P
 function verifica_postgres() {
     local connection_string="$1"
     local attempts=0
-
-    echo -e "$(sudo ps aux | grep postgres)\n"
 
     until psql "$connection_string/postgres" -c '\q'; do
         >&2 echo "PostgreSQL indisponivel! Tentando novamente em $WAIT_TIME segundos."
