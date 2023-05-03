@@ -283,8 +283,7 @@ pipeline {
 
               sh """ 
                 #!/bin/bash
-                
-                sed -i '/^#.*pt_BR\.UTF-8.*$/s/^#\s*//g' /etc/locale.gen
+                sed -i "/^#.*pt_BR\.UTF-8.*$/s/^#\s*//g" /etc/locale.gen
                 chmod +x source/docker/database/setup-databases.sh
                 ./source/docker/database/setup-databases.sh 
                 cat source/docker/database/setup-databases.sh
