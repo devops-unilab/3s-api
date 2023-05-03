@@ -40,6 +40,35 @@
 
 set -eu
 
+
+echo "$PG_USER"
+echo "$PG_PASSWORD"
+echo "$PG_USER_ROOT"
+echo "$PG_ROOT_PASSWORD"
+echo "$PG_PASSWORD_HOMOLOGACAO"
+echo "$PG_DATABASE"
+echo "$PG_DATABASE_HOMOLOGACAO"
+echo "$PG_HOST"
+echo "$PG_PORT"
+echo "$DB_USER_DUMP"
+echo "$DB_PASSWORD_DUMP"
+echo "$HOST_DUMP"
+echo "$PORT_DUMP"
+echo "$USERS_DUMP"
+echo "$USERS_DUMP_ROOT"
+echo "$USERS_DUMP_ALL"
+
+echo "$PG_USER"
+echo "$PG_PASSWORD"
+echo "$PG_USER_ROOT"
+echo "$PG_ROOT_PASSWORD"
+echo "$PG_PASSWORD_HOMOLOGACAO"
+echo "$DB_USER_DUMP"
+echo "$DB_PASSWORD_DUMP"
+
+printenv
+
+
 readonly MAX_ATTEMPTS=15
 readonly WAIT_TIME=5
 
