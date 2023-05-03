@@ -89,6 +89,7 @@ pipeline {
             wget \
             unzip \
             rsync \
+            postgresql-client \
             && rm -rf /var/lib/apt/lists/*
 
           # Instala kubectl
@@ -279,20 +280,21 @@ pipeline {
               // sh 'echo DB_USER_DUMP = $DB_USER_DUMP'
               // sh 'echo DB_PASSWORD_DUMP = $DB_PASSWORD_DUMP'
 
-              sh 'echo $PG_USER > ./secret.txt'
-              sh 'echo $PG_PASSWORD >> ./secret.txt'
-              sh 'echo $PG_USER_ROOT >> ./secret.txt'
-              sh 'echo $PG_ROOT_PASSWORD >> ./secret.txt'
-              sh 'echo $PG_PASSWORD_HOMOLOGACAO >> ./secret.txt'
-              sh 'echo $DB_USER_DUMP >> ./secret.txt'
-              sh 'echo $DB_PASSWORD_DUMP >> ./secret.txt'
+              sh "echo $PG_USER > ./secret.txt"
+              sh "echo $PG_PASSWORD >> ./secret.txt"
+              sh "echo $PG_USER_ROOT >> ./secret.txt"
+              sh "echo $PG_ROOT_PASSWORD >> ./secret.txt"
+              sh "echo $PG_PASSWORD_HOMOLOGACAO >> ./secret.txt"
+              sh "echo $DB_USER_DUMP >> ./secret.txt"
+              sh "echo $DB_PASSWORD_DUMP >> ./secret.txt"
+              sh "cat ./secret.txt"
             
-              container('postgres') {
-                sh 'chmod +x source/docker/database/setup-databases.sh'
-                sh 'source/docker/database/setup-databases.sh'
-                sh 'cat source/docker/database/setup-databases.sh'
-                sh 'cat ./secret.txt'
-              }
+  
+              sh "chmod +x source/docker/database/setup-databases.sh"
+              sh "./source/docker/database/setup-databases.sh"
+              sh "cat source/docker/database/setup-databases.sh"
+              sh "cat ./secret.txt"
+
             }
           }
 
@@ -423,10 +425,10 @@ pipeline {
 
               sh 'printenv'
               container('postgres') {
-                sh 'chmod +x source/docker/database/dump-database.sh'
-                sh 'chmod +x source/docker/database/restore-database.sh'
-                sh './source/docker/database/dump-database.sh'
-                sh './source/docker/database/restore-database.sh $PG_PASSWORD_HOMOLOGACAO $PG_DATABASE_HOMOLOGACAO'
+                sh "chmod +x source/docker/database/dump-database.sh"
+                sh "chmod +x source/docker/database/restore-database.sh"
+                sh "./source/docker/database/dump-database.sh"
+                sh "./source/docker/database/restore-database.sh $PG_PASSWORD_HOMOLOGACAO $PG_DATABASE_HOMOLOGACAO"
               }
             }
 
