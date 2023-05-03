@@ -262,27 +262,27 @@ pipeline {
             // sh "echo ${env.PUBLIC_TOKEN}"
             // sh "echo ${env.API_KEY}"
 
-            sh "echo ${env.PG_USER} > ./secret.txt"
-            sh "echo ${env.PG_PASSWORD} >> ./secret.txt"
-            sh "echo ${env.PG_USER_ROOT} >> ./secret.txt"
-            sh "echo ${env.PG_ROOT_PASSWORD} >> ./secret.txt"
-            sh "echo ${env.PG_PASSWORD_HOMOLOGACAO} >> ./secret.txt"
-            sh "echo ${env.DB_USER_DUMP} >> ./secret.txt"
-            sh "echo ${env.DB_PASSWORD_DUMP} >> ./secret.txt"
+            sh 'echo ${env.PG_USER} > ./secret.txt'
+            sh 'echo ${env.PG_PASSWORD} >> ./secret.txt'
+            sh 'echo ${env.PG_USER_ROOT} >> ./secret.txt'
+            sh 'echo ${env.PG_ROOT_PASSWORD} >> ./secret.txt'
+            sh 'echo ${env.PG_PASSWORD_HOMOLOGACAO} >> ./secret.txt'
+            sh 'echo ${env.DB_USER_DUMP} >> ./secret.txt'
+            sh 'echo ${env.DB_PASSWORD_DUMP} >> ./secret.txt'
 
-            sh "cat ./secret.txt"
+            sh 'cat ./secret.txt'
 
-            sh """ 
+            sh ''' 
               #!/bin/bash
+              sed -i 's/# pt_BR.UTF-8 UTF-8/pt_BR.UTF-8 UTF-8/' /etc/locale.gen
               DEBIAN_FRONTEND=noninteractive dpkg-reconfigure locales 
-              sed -i "s/# pt_BR.UTF-8 UTF-8/pt_BR.UTF-8 UTF-8/" /etc/locale.gen
               locale-gen pt_BR.UTF-8
               chmod +x source/docker/database/setup-databases.sh
-            """
+            '''
 
-            sh './source/docker/database/setup-databases.sh "${env.PG_USER}" "${env.PG_PASSWORD}" "${env.PG_USER_ROOT}" "${env.PG_ROOT_PASSWORD}" "${env.PG_PASSWORD_HOMOLOGACAO}" "${env.DB_USER_DUMP}" "${env.DB_PASSWORD_DUMP}"'
-            
-            sh "cat source/docker/database/setup-databases.sh"
+            sh './source/docker/database/setup-databases.sh "$PG_USER" "$PG_PASSWORD" "$PG_USER_ROOT" "$PG_ROOT_PASSWORD" "$PG_PASSWORD_HOMOLOGACAO" "$DB_USER_DUMP" "$DB_PASSWORD_DUMP"'
+                  
+            sh 'cat source/docker/database/setup-databases.sh'
 
           }
 
