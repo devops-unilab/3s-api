@@ -43,13 +43,43 @@ set -eu
 readonly MAX_ATTEMPTS=15
 readonly WAIT_TIME=5
 
-readonly PG_USER="$1"
-readonly PG_PASSWORD="$2"
-readonly PG_USER_ROOT="$3"
-readonly PG_ROOT_PASSWORD="$4"
-readonly PG_PASSWORD_HOMOLOGACAO="$5"
-readonly DB_USER_DUMP="$6"
-readonly DB_PASSWORD_DUMP="$7"
+# Declarando variáveis globais
+PG_USER=""
+PG_PASSWORD=""
+PG_USER_ROOT=""
+PG_ROOT_PASSWORD=""
+PG_PASSWORD_HOMOLOGACAO=""
+DB_USER_DUMP=""
+DB_PASSWORD_DUMP=""
+
+# Recebendo valores externos e atribuindo às variáveis globais
+if [[ ! -z "$1" ]]; then
+  PG_USER="$1"
+fi
+
+if [[ ! -z "$2" ]]; then
+  PG_PASSWORD="$2"
+fi
+
+if [[ ! -z "$3" ]]; then
+  PG_USER_ROOT="$3"
+fi
+
+if [[ ! -z "$4" ]]; then
+  PG_ROOT_PASSWORD="$4"
+fi
+
+if [[ ! -z "$5" ]]; then
+  PG_PASSWORD_HOMOLOGACAO="$5"
+fi
+
+if [[ ! -z "$6" ]]; then
+  DB_USER_DUMP="$6"
+fi
+
+if [[ ! -z "$7" ]]; then
+  DB_PASSWORD_DUMP="$7"
+fi
 
 connection_string_root="postgresql://$PG_USER_ROOT:$PG_ROOT_PASSWORD@$PG_HOST:$PG_PORT"
 
