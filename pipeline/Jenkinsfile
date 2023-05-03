@@ -287,21 +287,36 @@ pipeline {
               // sh 'echo DB_USER_DUMP = $DB_USER_DUMP'
               // sh 'echo DB_PASSWORD_DUMP = $DB_PASSWORD_DUMP'
 
-              sh "echo $PG_USER > ./secret.txt"
-              sh "echo $PG_PASSWORD >> ./secret.txt"
-              sh "echo $PG_USER_ROOT >> ./secret.txt"
-              sh "echo $PG_ROOT_PASSWORD >> ./secret.txt"
-              sh "echo $PG_PASSWORD_HOMOLOGACAO >> ./secret.txt"
-              sh "echo $DB_USER_DUMP >> ./secret.txt"
-              sh "echo $DB_PASSWORD_DUMP >> ./secret.txt"
-              sh "cat ./secret.txt"
-            
+              // sh "echo $PG_USER > ./secret.txt"
+              // sh "echo $PG_PASSWORD >> ./secret.txt"
+              // sh "echo $PG_USER_ROOT >> ./secret.txt"
+              // sh "echo $PG_ROOT_PASSWORD >> ./secret.txt"
+              // sh "echo $PG_PASSWORD_HOMOLOGACAO >> ./secret.txt"
+              // sh "echo $DB_USER_DUMP >> ./secret.txt"
+              // sh "echo $DB_PASSWORD_DUMP >> ./secret.txt"
+              // sh "cat ./secret.txt"
+
+              sh 'echo $PG_USER > ./secret.txt'
+              sh 'echo $PG_PASSWORD >> ./secret.txt'
+              sh 'echo $PG_USER_ROOT >> ./secret.txt'
+              sh 'echo $PG_ROOT_PASSWORD >> ./secret.txt'
+              sh 'echo $PG_PASSWORD_HOMOLOGACAO >> ./secret.txt'
+              sh 'echo $DB_USER_DUMP >> ./secret.txt'
+              sh 'echo $DB_PASSWORD_DUMP >> ./secret.txt'
+
+              sh 'cat ./secret.txt'
+
               sh """
                 chmod +x source/docker/database/setup-databases.sh
                 ./source/docker/database/setup-databases.sh
                 cat source/docker/database/setup-databases.sh
               """
+            
             }
+
+
+
+
           }
 
             // sh 'echo $PG_USER > ./secret.txt'
