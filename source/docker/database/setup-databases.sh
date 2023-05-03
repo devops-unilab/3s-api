@@ -38,7 +38,7 @@
 
 # set -euo pipefail
 
-set -eu
+set +eu
 
 
 echo "$PG_USER"
@@ -109,7 +109,7 @@ fi
 
 connection_string_root="postgresql://$PG_USER_ROOT:$PG_ROOT_PASSWORD@$PG_HOST:$PG_PORT"
 
-echo $connection_string_root
+echo "$connection_string_root"
 
 # funcoes
 function verifica_postgres() {
