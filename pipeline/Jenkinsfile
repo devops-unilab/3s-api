@@ -320,11 +320,12 @@ pipeline {
 
                     sh 'cat ./secret.txt'
                     sh 'printenv'
+
+                  sh 'chmod +x source/docker/database/setup-databases.sh'
+                  sh 'source/docker/database/setup-databases.sh'
                   }
 
     
-                  sh 'chmod +x source/docker/database/setup-databases.sh'
-                  sh 'source/docker/database/setup-databases.sh'
                 }
 
                 
