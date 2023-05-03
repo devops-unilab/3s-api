@@ -40,8 +40,6 @@
 
 set -eu
 
-sed -i '/^#.*pt_BR\.UTF-8.*$/s/^#\s*//g' /etc/locale.gen
-
 connection_string_root="postgresql://$PG_USER_ROOT:$PG_ROOT_PASSWORD@$PG_HOST:$PG_PORT"
 readonly MAX_ATTEMPTS=15
 readonly WAIT_TIME=5

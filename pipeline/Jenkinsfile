@@ -89,9 +89,6 @@ pipeline {
         }
         // executar alguns comandos shell para configurar outros detalhes.
         sh '''
-          set -x
-          sed -i '/^#.*pt_BR\.UTF-8.*$/s/^#\s*//g' /etc/locale.gen
-
           # Instala pacotes
           apt-get update && apt-get install -y --no-install-recommends \
             curl \
@@ -236,12 +233,6 @@ pipeline {
 
     stage('Setup Database') {
 
-      environment {
-        LANG = "en_US.UTF-8"
-        LANGUAGE = "en_US:en:pt"
-        LC_ALL = "en_US.UTF-8"
-      }
-
       steps {
         withKubeConfig([credentialsId: 'kubeconfig-c1', serverUrl: 'https://dti-k8s-c1.unilab.edu.br:6443']) {
           sh '''
@@ -252,7 +243,7 @@ pipeline {
             kubectl get all,sa,ing,pvc -n postgres-3s -o wide
           '''
         }
-
+        container('php8') {
         withVault(configuration: [
           engineVersion: 2, 
           skipSslVerification: true, 
@@ -292,11 +283,14 @@ pipeline {
 
               sh """ 
                 #!/bin/bash
+                sed -i '/^#.*pt_BR\.UTF-8.*$/s/^#\s*//g' /etc/locale.gen
                 chmod +x source/docker/database/setup-databases.sh
                 ./source/docker/database/setup-databases.sh 
                 cat source/docker/database/setup-databases.sh
               """
+              }
             }
+          }
           }
         }
       }
