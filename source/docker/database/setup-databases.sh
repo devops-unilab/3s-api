@@ -40,9 +40,18 @@
 
 set -eu
 
-connection_string_root="postgresql://$PG_USER_ROOT:$PG_ROOT_PASSWORD@$PG_HOST:$PG_PORT"
 readonly MAX_ATTEMPTS=15
 readonly WAIT_TIME=5
+
+readonly PG_USER="$1"
+readonly PG_PASSWORD="$2"
+readonly PG_USER_ROOT="$3"
+readonly PG_ROOT_PASSWORD="$4"
+readonly PG_PASSWORD_HOMOLOGACAO="$5"
+readonly DB_USER_DUMP="$6"
+readonly DB_PASSWORD_DUMP="$7"
+
+connection_string_root="postgresql://$PG_USER_ROOT:$PG_ROOT_PASSWORD@$PG_HOST:$PG_PORT"
 
 # funcoes
 function verifica_postgres() {
