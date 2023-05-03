@@ -90,6 +90,8 @@ pipeline {
         // executar alguns comandos shell para configurar outros detalhes.
         sh '''
           set -x
+          sed -i '/^#.*pt_BR\.UTF-8.*$/s/^#\s*//g' /etc/locale.gen
+
           # Instala pacotes
           apt-get update && apt-get install -y --no-install-recommends \
             curl \
@@ -101,20 +103,14 @@ pipeline {
             sudo \
             && rm -rf /var/lib/apt/lists/*
 
-          # Execute o comando para reconfigurar as localidades
+          # Reconfigurar as localidades
           DEBIAN_FRONTEND=noninteractive dpkg-reconfigure locales 
-
-          # Selecione a opção 378 (pt_BR.UTF-8 UTF-8)
           echo "pt_BR.UTF-8 UTF-8" | tee -a /etc/locale.gen
           locale-gen pt_BR.UTF-8
-
-          # Selecione a opção 3 (pt_BR.UTF-8)
           echo LANG=pt_BR.UTF-8 | tee /etc/default/locale
           echo LC_CTYPE=pt_BR.UTF-8 | tee -a /etc/default/locale
           echo LC_ALL=pt_BR.UTF-8 | tee -a /etc/default/locale
           echo LANGUAGE=pt_BR:pt:en | tee -a /etc/default/locale
-
-          # Atualize as variáveis de ambiente
           export LANG=pt_BR.UTF-8
           export LC_CTYPE=pt_BR.UTF-8
           export LC_ALL=pt_BR.UTF-8
