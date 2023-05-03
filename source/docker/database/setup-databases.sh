@@ -107,14 +107,16 @@ if [[ ! -z "$7" ]]; then
   DB_PASSWORD_DUMP="$7"
 fi
 
-printenv
-
 connection_string_root="postgresql://$PG_USER_ROOT:$PG_ROOT_PASSWORD@$PG_HOST:$PG_PORT"
+
+echo $connection_string_root
 
 # funcoes
 function verifica_postgres() {
     local connection_string="$1"
     local attempts=0
+
+    echo "$connection_string/postgres"
 
     until psql "$connection_string/postgres" -c '\q'; do
         >&2 echo "PostgreSQL indisponivel! Tentando novamente em $WAIT_TIME segundos."
