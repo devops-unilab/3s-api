@@ -154,11 +154,13 @@ spec:
           memory: "1Gi"
       env:
         - name: LANG
-          value: en_US.UTF-8
+          value: pt_BR.UTF-8
         - name: LANGUAGE
-          value: en_US:en:pt
+          value: pt_BR:pt:en
         - name: LC_ALL
-          value: en_US.UTF-8
+          value: pt_BR.UTF-8
+        - name: LC_CTYPE
+          value: pt_BR.UTF-8
       volumeMounts:
         - name: postgresql-data
           mountPath: /var/lib/postgresql/data
