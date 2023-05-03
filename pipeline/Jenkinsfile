@@ -232,7 +232,6 @@ pipeline {
     }
 
     stage('Setup Database') {
-
       steps {
         withKubeConfig([credentialsId: 'kubeconfig-c1', serverUrl: 'https://dti-k8s-c1.unilab.edu.br:6443']) {
           sh '''
@@ -243,54 +242,53 @@ pipeline {
             kubectl get all,sa,ing,pvc -n postgres-3s -o wide
           '''
         }
-        container('php8') {
-        withVault(configuration: [
-          engineVersion: 2, 
-          skipSslVerification: true, 
-          timeout: 60, 
-          vaultCredentialId: 'token-admin-vault-plugin', 
-          vaultUrl: 'https://dti-vault.unilab.edu.br'], 
-          vaultSecrets: getSecretsConfig()) {
-          script {
-            withEnv([
-              "PG_USER=${env.PG_USER}",
-              "PG_PASSWORD=${env.PG_PASSWORD}",
-              "PG_USER_ROOT=${env.PG_USER_ROOT}",
-              "PG_ROOT_PASSWORD=${env.PG_ROOT_PASSWORD}",
-              "PG_PASSWORD_HOMOLOGACAO=${env.PG_PASSWORD_HOMOLOGACAO}",
-              "DB_USER_DUMP=${env.DB_USER_DUMP}",
-              "DB_PASSWORD_DUMP=${env.DB_PASSWORD_DUMP}",
-              "PG_DATABASE=${env.PG_DATABASE}",
-              "PG_DATABASE_HOMOLOGACAO=${env.PG_DATABASE_HOMOLOGACAO}",
-              "PG_HOST=${env.PG_HOST}",
-              "PG_PORT=${env.PG_PORT}",
-              "HOST_DUMP=${env.HOST_DUMP}",
-              "PORT_DUMP=${env.PORT_DUMP}",
-              "USERS_DUMP=${env.USERS_DUMP}",
-              "USERS_DUMP_ROOT =${env.USERS_DUMP_ROOT}",
-              "USERS_DUMP_ALL=${env.USERS_DUMP_ALL}"
-            ]) {
+        container('postgres') { 
 
-              sh 'echo $PG_USER > ./secret.txt'
-              sh 'echo $PG_PASSWORD >> ./secret.txt'
-              sh 'echo $PG_USER_ROOT >> ./secret.txt'
-              sh 'echo $PG_ROOT_PASSWORD >> ./secret.txt'
-              sh 'echo $PG_PASSWORD_HOMOLOGACAO >> ./secret.txt'
-              sh 'echo $DB_USER_DUMP >> ./secret.txt'
-              sh 'echo $DB_PASSWORD_DUMP >> ./secret.txt'
+          withVault(configuration: [
+            engineVersion: 2, 
+            skipSslVerification: true, 
+            timeout: 60, 
+            vaultCredentialId: 'token-admin-vault-plugin', 
+            vaultUrl: 'https://dti-vault.unilab.edu.br'], 
+            vaultSecrets: getSecretsConfig()) {
+              withEnv([
+                "PG_USER=${env.PG_USER}",
+                "PG_PASSWORD=${env.PG_PASSWORD}",
+                "PG_USER_ROOT=${env.PG_USER_ROOT}",
+                "PG_ROOT_PASSWORD=${env.PG_ROOT_PASSWORD}",
+                "PG_PASSWORD_HOMOLOGACAO=${env.PG_PASSWORD_HOMOLOGACAO}",
+                "DB_USER_DUMP=${env.DB_USER_DUMP}",
+                "DB_PASSWORD_DUMP=${env.DB_PASSWORD_DUMP}",
+                "PG_DATABASE=${env.PG_DATABASE}",
+                "PG_DATABASE_HOMOLOGACAO=${env.PG_DATABASE_HOMOLOGACAO}",
+                "PG_HOST=${env.PG_HOST}",
+                "PG_PORT=${env.PG_PORT}",
+                "HOST_DUMP=${env.HOST_DUMP}",
+                "PORT_DUMP=${env.PORT_DUMP}",
+                "USERS_DUMP=${env.USERS_DUMP}",
+                "USERS_DUMP_ROOT =${env.USERS_DUMP_ROOT}",
+                "USERS_DUMP_ALL=${env.USERS_DUMP_ALL}"
+              ]) {
+                script {
+                  sh 'echo $PG_USER > ./secret.txt'
+                  sh 'echo $PG_PASSWORD >> ./secret.txt'
+                  sh 'echo $PG_USER_ROOT >> ./secret.txt'
+                  sh 'echo $PG_ROOT_PASSWORD >> ./secret.txt'
+                  sh 'echo $PG_PASSWORD_HOMOLOGACAO >> ./secret.txt'
+                  sh 'echo $DB_USER_DUMP >> ./secret.txt'
+                  sh 'echo $DB_PASSWORD_DUMP >> ./secret.txt'
 
-              sh 'cat ./secret.txt'
+                  sh 'cat ./secret.txt'
 
-              sh """ 
-                #!/bin/bash
-                sed -i "s/# pt_BR.UTF-8 UTF-8/pt_BR.UTF-8 UTF-8/" /etc/locale.gen
-                chmod +x source/docker/database/setup-databases.sh
-                ./source/docker/database/setup-databases.sh 
-                cat source/docker/database/setup-databases.sh
-              """
+                  sh """ 
+                    #!/bin/bash
+                    sed -i "s/# pt_BR.UTF-8 UTF-8/pt_BR.UTF-8 UTF-8/" /etc/locale.gen
+                    chmod +x source/docker/database/setup-databases.sh
+                    ./source/docker/database/setup-databases.sh 
+                    cat source/docker/database/setup-databases.sh
+                  """
+                }
               }
-            }
-          }
           }
         }
       }
