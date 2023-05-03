@@ -69,7 +69,6 @@ readonly WAIT_TIME=5
 # Define a função para verificar a conexão com o PostgreSQL
 function verifica_postgres() {
     local connection_string="$1"
-    local database="$2"
     local attempts=0
 
     until psql -tAc "${connection_string}/postgres" -qc '\q'; do
