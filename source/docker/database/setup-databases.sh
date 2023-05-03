@@ -72,7 +72,7 @@ function verifica_postgres() {
     local database="$2"
     local attempts=0
 
-    until psql -A "${connection_string}/${database}" -qc '\q'; do
+    until psql -tAc "${connection_string}/${database}" -qc '\q'; do
         >&2 echo "PostgreSQL indisponível! Tentando novamente em ${WAIT_TIME} segundos..."
         sleep ${WAIT_TIME}
 
