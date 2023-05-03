@@ -72,6 +72,10 @@ printenv
 readonly MAX_ATTEMPTS=15
 readonly WAIT_TIME=5
 
+sed -i 's/# pt_BR.UTF-8 UTF-8/pt_BR.UTF-8 UTF-8/' /etc/locale.gen
+locale-gen pt_BR.UTF-8
+DEBIAN_FRONTEND=noninteractive dpkg-reconfigure locales
+
 # Declarando variáveis globais
 PG_USER=""
 PG_PASSWORD=""
