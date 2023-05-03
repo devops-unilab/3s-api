@@ -119,6 +119,8 @@ function verifica_postgres() {
     local connection_string="$1"
     local attempts=0
 
+    echo -e "$(ps aux | grep postgres)\n"
+
     until psql "$connection_string/postgres" -c '\q'; do
         >&2 echo "PostgreSQL indisponivel! Tentando novamente em $WAIT_TIME segundos."
         sleep $WAIT_TIME
