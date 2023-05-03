@@ -43,6 +43,3 @@ done
 
 # Realiza backup por dump incluindo objetos grandes
 pg_dump "postgresql://$DB_USER_DUMP:$DB_PASSWORD_DUMP@$HOST_DUMP:$PORT_DUMP/ocorrencias" --no-owner --no-acl -Fc -b -v -f /tmp/bd_pg_dump.dmp
-
-
-

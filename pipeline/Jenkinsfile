@@ -72,6 +72,10 @@ pipeline {
     USERS_DUMP = '"3s" "admindti" "cicero_robson" "luansidney" "manoeljr"'
     USERS_DUMP_ROOT = '"3s" "ocorrencias_user"'
     USERS_DUMP_ALL = '"3s" "ocorrencias_user" "admindti" "cicero_robson" "luansidney" "manoeljr"'
+    LANG="pt_BR.UTF-8 "
+    LC_CTYPE="pt_BR.UTF-8 "
+    LC_ALL="pt_BR.UTF-8 "
+    LANGUAGE="pt_BR:pt:en"
   }
   stages {
     stage('Iniciando CI/CD') {
@@ -91,7 +95,10 @@ pipeline {
             unzip \
             rsync \
             postgresql-client \
+            locales \
             && rm -rf /var/lib/apt/lists/*
+
+          locale-gen pt_BR.UTF-8 
 
           # Instala kubectl
           curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl" 
