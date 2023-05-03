@@ -47,13 +47,13 @@ function verifica_postgres() {
     local connection_string="$1"
     local attempts=0
 
-    until psql "${connection_string}/postgres" -c '\q'; do
-        >&2 echo "PostgreSQL indisponivel! Tentando novamente em ${WAIT_TIME} segundos..."
-        sleep ${WAIT_TIME}
+    until psql "$connection_string/postgres" -c '\q'; do
+        >&2 echo "PostgreSQL indisponivel! Tentando novamente em $WAIT_TIME segundos."
+        sleep $WAIT_TIME
 
         attempts=$((attempts+1))
-        if [ ${attempts} -eq ${MAX_ATTEMPTS} ]; then
-            >&2 echo "Falha ao conectar ao PostgreSQL apos ${MAX_ATTEMPTS} tentativas."
+        if [ $attempts -eq $MAX_ATTEMPTS ]; then
+            >&2 echo "Falha ao conectar ao PostgreSQL apos $MAX_ATTEMPTS tentativas."
             exit 1
         fi
     done
@@ -66,12 +66,11 @@ function database_exists() {
 
 function user_exists() {
     local username="$1"
-    return $(psql -tAc "SELECT 1 FROM pg_roles WHERE rolname='$username'" | grep -qc 1)
+    return $(psql -tAc "SELECT 1 FROM pg_roles WHERE rolname='$username';" | grep -qc 1)
 }
 
 function create_user_admin() {
     local username=$1
-
     psql -tc "$connection_string_root/postgres" <<-EOSQL
         CREATE ROLE "$username" WITH
             SUPERUSER
@@ -83,13 +82,12 @@ function create_user_admin() {
             CONNECTION LIMIT -1
             PASSWORD 'md5' || md5('$username');
 
-        COMMENT ON ROLE "$username" IS 'Usuario admin padrao.';
+        COMMENT ON ROLE "$username" IS 'Usuario admin padrao';
 EOSQL
 }
 
 function create_user_regular() {
     local username=$1
-
     psql -tc "$connection_string_root/postgres" <<-EOSQL
         CREATE ROLE "$username" WITH
             LOGIN 
@@ -100,14 +98,14 @@ function create_user_regular() {
             CONNECTION LIMIT -1
             PASSWORD 'md5' || md5('$username');
 
-        COMMENT ON ROLE "$username" IS 'Usuario regular padrao.';
+        COMMENT ON ROLE "$username" IS 'Usuario regular padrao';
 EOSQL
 }
 
 function check_user_privilegios() {
     local database="$1"
     local user="$2"
-    local result="$(psql -tAc "SELECT has_database_privilege('$user', '$database', 'CREATE')" 2>/dev/null)"
+    local result="$(psql -tAc "SELECT has_database_privilege('$user', '$database', 'CREATE');" 2>/dev/null)"
 
     if [ "$result" == "t" ]; then
         return 1
@@ -119,7 +117,7 @@ function check_user_privilegios() {
 function check_owner_database() {
     local database="$1"
     local user="$2"
-    if [[ $(psql -tA "$connection_string_root/postgres" -c "SELECT pg_catalog.pg_get_userbyid(d.datdba) AS owner FROM pg_catalog."$database" d WHERE d.datname = '$database'") = "$user" ]]; then
+    if [[ $(psql -tA "$connection_string_root/postgres" -c "SELECT pg_catalog.pg_get_userbyid(d.datdba) AS owner FROM pg_catalog."$database" d WHERE d.datname = '$database';") = "$user" ]]; then
         return 1
     else
         return 0
@@ -129,7 +127,6 @@ function check_owner_database() {
 function create_database() {
 	local database=$1
     local user=$2
-
     psql -tc "$connection_string_root/postgres" <<-EOSQL
         CREATE DATABASE "$database"
             WITH
@@ -138,14 +135,13 @@ function create_database() {
             CONNECTION LIMIT = -1
             TEMPLATE template0;
 
-        COMMENT ON DATABASE "$database" IS 'Dadabase PostgreSQL $database.';
+        COMMENT ON DATABASE "$database" IS 'Dadabase PostgreSQL $database';
 EOSQL
 }
 
 function atribui_privilegios() {
     local database="$1"
     local user="$2"
-
     psql -tc "$connection_string_root/postgres" <<-EOSQL
         GRANT CONNECT ON DATABASE "$database" TO "$user";
         GRANT USAGE, CREATE, TEMPORARY ON SCHEMA public TO "$user";
@@ -153,16 +149,11 @@ function atribui_privilegios() {
         ALTER DEFAULT PRIVILEGES IN DATABASE $database GRANT SELECT, INSERT, UPDATE, DELETE ON TABLES TO "$user";
         ALTER DEFAULT PRIVILEGES IN DATABASE $database GRANT USAGE, SELECT ON SEQUENCES TO "$user";
 EOSQL
-
-    psql -tc "$connection_string_root/$database" <<-EOSQL
-        GRANT USAGE, CREATE, TEMPORARY ON SCHEMA public TO "$user";
-EOSQL
 }
 
 function atribui_privilegios_woner() {
     local database="$1"
     local user="$2"
-
     psql -tc "$connection_string_root/postgres" <<-EOSQL
         ALTER DATABASE "$database" OWNER TO "$user";"
         GRANT USAGE, CREATE, TEMPORARY ON SCHEMA public TO "$user";
