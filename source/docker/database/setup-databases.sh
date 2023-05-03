@@ -72,7 +72,7 @@ function verifica_postgres() {
     local database="$2"
     local attempts=0
 
-    until psql -tAc "${connection_string}/${database}" -qc '\q'; do
+    until psql -tAc "${connection_string}/postgres" -qc '\q'; do
         >&2 echo "PostgreSQL indisponível! Tentando novamente em ${WAIT_TIME} segundos..."
         sleep ${WAIT_TIME}
 
@@ -196,7 +196,7 @@ function atribui_privilegios_woner() {
 EOSQL
 }
 
-verifica_postgres "$connection_string_root" "$PG_DATABASE"
+verifica_postgres "$connection_string_root"
 
 if ! database_exists "$PG_DATABASE"; then
     create_database $PG_DATABASE $PG_USER
