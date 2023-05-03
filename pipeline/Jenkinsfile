@@ -301,11 +301,12 @@ pipeline {
                   // '''
 
                   sh 'cat ./secret.txt'
-
                   sh 'printenv'
+                }
 
+                script {
                   sh 'chmod +x source/docker/database/setup-databases.sh'
-                  sh './source/docker/database/setup-databases.sh'
+                  sh 'source/docker/database/setup-databases.sh'
                 }
 
                 

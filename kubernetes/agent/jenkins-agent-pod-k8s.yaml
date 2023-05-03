@@ -159,11 +159,9 @@ spec:
           value: en_US:en:pt
         - name: LC_ALL
           value: en_US.UTF-8
-        - name: PGDATA
-          value: /var/lib/postgresql/data/pgdata
       volumeMounts:
         - name: postgresql-data
-          mountPath: /var/lib/postgresql/data/pgdata
+          mountPath: /var/lib/postgresql/data
     # ==================================================
     # https://hub.docker.com/_/maven/tags
     - name: maven
@@ -478,4 +476,4 @@ spec:
     #     claimName: pvc-postgres
     - name: postgresql-data
       hostPath:
-        path: /var/lib/postgresql/data/pgdata
+        path: /var/lib/postgresql/data
