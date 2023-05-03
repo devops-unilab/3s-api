@@ -66,8 +66,6 @@ echo "$PG_PASSWORD_HOMOLOGACAO"
 echo "$DB_USER_DUMP"
 echo "$DB_PASSWORD_DUMP"
 
-printenv
-
 
 readonly MAX_ATTEMPTS=15
 readonly WAIT_TIME=5
