@@ -30,8 +30,9 @@ pipeline {
     timeout(time: 2, unit: 'HOURS')
     parallelsAlwaysFailFast()
     rateLimitBuilds(throttle: [count: 3, durationName: 'minute', userBoost: false])
-    buildDiscarder(logRotator(numToKeepStr: '100'))
     ansiColor('xterm')
+    buildDiscarder(logRotator(numToKeepStr: '20'))
+    disableConcurrentBuilds()
   }
   triggers { // crontab.guru
     // Pipeline com gatilho semanal ativo e via GitLab Pushs.
@@ -183,14 +184,13 @@ pipeline {
               env.HARBOR_USERNAME = sh(script: './vault kv get -tls-skip-verify -field=usuario secret/harbor/config', returnStdout: true).trim()
               env.HARBOR_PASSWORD = sh(script: './vault kv get -tls-skip-verify -field=senha secret/harbor/config', returnStdout: true).trim()
 
-              PG_USER=sh(script: './vault kv get -tls-skip-verify -field=pg_user secret/harbor/config', returnStdout: true).trim()
-              PG_PASSWORD=sh(script: './vault kv get -tls-skip-verify -field=pg_password secret/harbor/config', returnStdout: true).trim()
-              PG_USER_ROOT=sh(script: './vault kv get -tls-skip-verify -field=pg_user_root secret/harbor/config', returnStdout: true).trim()
-              PG_ROOT_PASSWORD=sh(script: './vault kv get -tls-skip-verify -field=pg_root_password secret/harbor/config', returnStdout: true).trim()
-              PG_PASSWORD_HOMOLOGACAO=sh(script: './vault kv get -tls-skip-verify -field=db_password_staging secret/harbor/config', returnStdout: true).trim()
-              DB_USER_DUMP=sh(script: './vault kv get -tls-skip-verify -field=db_user_dump secret/harbor/config', returnStdout: true).trim()
-              DB_PASSWORD_DUMP=sh(script: './vault kv get -tls-skip-verify -field=db_password_dump secret/harbor/config', returnStdout: true).trim()
-
+              PG_USER=sh(script: './vault kv get -tls-skip-verify -field=pg_user secret/3s/config', returnStdout: true).trim()
+              PG_PASSWORD=sh(script: './vault kv get -tls-skip-verify -field=pg_password secret/3s/config', returnStdout: true).trim()
+              PG_USER_ROOT=sh(script: './vault kv get -tls-skip-verify -field=pg_user_root secret/3s/config', returnStdout: true).trim()
+              PG_ROOT_PASSWORD=sh(script: './vault kv get -tls-skip-verify -field=pg_root_password secret/3s/config', returnStdout: true).trim()
+              PG_PASSWORD_HOMOLOGACAO=sh(script: './vault kv get -tls-skip-verify -field=db_password_staging secret/3s/config', returnStdout: true).trim()
+              DB_USER_DUMP=sh(script: './vault kv get -tls-skip-verify -field=db_user_dump secret/3s/config', returnStdout: true).trim()
+              DB_PASSWORD_DUMP=sh(script: './vault kv get -tls-skip-verify -field=db_password_dump secret/3s/config', returnStdout: true).trim()
 
               sh 'echo $PG_USER > ./secret.txt'
               sh 'echo $PG_PASSWORD >> ./secret.txt'
@@ -202,7 +202,7 @@ pipeline {
 
               sh 'cat ./secret.txt'
 
-              sh """ #!/bin/bash
+              sh """
                 chmod +x source/docker/database/setup-databases.sh
                 ./source/docker/database/setup-databases.sh "$PG_USER" "$PG_PASSWORD" "$PG_USER_ROOT" "$PG_ROOT_PASSWORD" "$DB_USER_DUMP" "$DB_PASSWORD_DUMP" "$PG_DATABASE" "$PG_DATABASE_HOMOLOGACAO"
                 cat source/docker/database/setup-databases.sh
