@@ -144,8 +144,8 @@ spec:
     - name: postgres
       image: postgres:13.6
       command: ["tail", "-f", "/dev/null"] 
-      imagePullPolicy: Always # use o cache ou puxe a imagem para o agente
-      resources:  # limites e recursos que o build contém
+      imagePullPolicy: IfNotPresent
+      resources:
         requests:
           cpu: "250m"
           memory: "512Mi"
@@ -153,17 +153,23 @@ spec:
           cpu: "2000m"
           memory: "1Gi"
       env:
+        - name: POSTGRES_USER
+          value: postgres
+        - name: POSTGRES_PASSWORD
+          value: postgres
+        - name: POSTGRES_DB
+          value: agent
+        # - name: PGDATA
+        #   value: /var/lib/postgresql/data/pgdata
         - name: LANG
           value: pt_BR.UTF-8
         - name: LANGUAGE
           value: pt_BR:pt:en
         - name: LC_ALL
           value: pt_BR.UTF-8
-        # - name: PGDATA
-        #   value: /var/lib/postgresql/data/pgdata
       volumeMounts:
         - name: postgresql-data
-          mountPath: /var/lib/postgresql/data/pgdata
+          mountPath: /var/lib/postgresql/data
     # ==================================================
     # https://hub.docker.com/_/maven/tags
     - name: maven
@@ -473,9 +479,7 @@ spec:
     - name: docker
       hostPath:
         path: /var/run/docker.sock
-    # - name: postgresql-data
-    #   persistentVolumeClaim:
-    #     claimName: pvc-postgres
     - name: postgresql-data
-      hostPath:
-        path: /var/lib/postgresql/data/pgdata
+      emptyDir: {}
+      # hostPath:
+      #   path: /var/lib/postgresql/data

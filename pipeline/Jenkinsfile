@@ -303,21 +303,14 @@ pipeline {
               sh 'printenv'
             }
             sh ''' 
-              apt-get update && apt-get install -y locales procps sudo
-              apt-get update && apt-get install -y --no-install-recommends \
+              DEBIAN_FRONTEND=noninteractive apt-get update && apt-get install -y --no-install-recommends \
                 locales \
                 sudo \
                 procps \
                 && rm -rf /var/lib/apt/lists/*
               sed -i 's/# pt_BR.UTF-8 UTF-8/pt_BR.UTF-8 UTF-8/' /etc/locale.gen
               locale-gen pt_BR.UTF-8
-              DEBIAN_FRONTEND=noninteractive dpkg-reconfigure locales
-              apt-get remove postgresql -y
-              apt-get purge postgresql -y
-              apt-get autoremove -y
-              apt-get install -y postgresql-13
-              pg_createcluster 13 main
-              sudo /etc/init.d/postgresql restart
+
               echo -e "$(sudo ps aux | grep postgres)\n"
 
               chmod +x source/docker/database/setup-databases.sh
