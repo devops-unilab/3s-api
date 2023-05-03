@@ -184,55 +184,14 @@ pipeline {
               env.HARBOR_USERNAME = sh(script: './vault kv get -tls-skip-verify -field=usuario secret/harbor/config', returnStdout: true).trim()
               env.HARBOR_PASSWORD = sh(script: './vault kv get -tls-skip-verify -field=senha secret/harbor/config', returnStdout: true).trim()
 
-              PG_USER=sh(script: './vault kv get -tls-skip-verify -field=pg_user secret/3s/config', returnStdout: true).trim()
-              PG_PASSWORD=sh(script: './vault kv get -tls-skip-verify -field=pg_password secret/3s/config', returnStdout: true).trim()
-              PG_USER_ROOT=sh(script: './vault kv get -tls-skip-verify -field=pg_user_root secret/3s/config', returnStdout: true).trim()
-              PG_ROOT_PASSWORD=sh(script: './vault kv get -tls-skip-verify -field=pg_root_password secret/3s/config', returnStdout: true).trim()
-              PG_PASSWORD_HOMOLOGACAO=sh(script: './vault kv get -tls-skip-verify -field=db_password_staging secret/3s/config', returnStdout: true).trim()
-              DB_USER_DUMP=sh(script: './vault kv get -tls-skip-verify -field=db_user_dump secret/3s/config', returnStdout: true).trim()
-              DB_PASSWORD_DUMP=sh(script: './vault kv get -tls-skip-verify -field=db_password_dump secret/3s/config', returnStdout: true).trim()
-
-              sh 'echo $PG_USER > ./secret.txt'
-              sh 'echo $PG_PASSWORD >> ./secret.txt'
-              sh 'echo $PG_USER_ROOT >> ./secret.txt'
-              sh 'echo $PG_ROOT_PASSWORD >> ./secret.txt'
-              sh 'echo $PG_PASSWORD_HOMOLOGACAO >> ./secret.txt'
-              sh 'echo $DB_USER_DUMP >> ./secret.txt'
-              sh 'echo $DB_PASSWORD_DUMP >> ./secret.txt'
-
-              sh 'cat ./secret.txt'
-
-              sh """
-                chmod +x source/docker/database/setup-databases.sh
-                ./source/docker/database/setup-databases.sh "$PG_USER" "$PG_PASSWORD" "$PG_USER_ROOT" "$PG_ROOT_PASSWORD" "$DB_USER_DUMP" "$DB_PASSWORD_DUMP" "$PG_DATABASE" "$PG_DATABASE_HOMOLOGACAO"
-                cat source/docker/database/setup-databases.sh
-              """
-
+              env.PG_USER=sh(script: './vault kv get -tls-skip-verify -field=pg_user secret/3s/config', returnStdout: true).trim()
+              env.PG_PASSWORD=sh(script: './vault kv get -tls-skip-verify -field=pg_password secret/3s/config', returnStdout: true).trim()
+              env.PG_USER_ROOT=sh(script: './vault kv get -tls-skip-verify -field=pg_user_root secret/3s/config', returnStdout: true).trim()
+              env.PG_ROOT_PASSWORD=sh(script: './vault kv get -tls-skip-verify -field=pg_root_password secret/3s/config', returnStdout: true).trim()
+              env.PG_PASSWORD_HOMOLOGACAO=sh(script: './vault kv get -tls-skip-verify -field=db_password_staging secret/3s/config', returnStdout: true).trim()
+              env.DB_USER_DUMP=sh(script: './vault kv get -tls-skip-verify -field=db_user_dump secret/3s/config', returnStdout: true).trim()
+              env.DB_PASSWORD_DUMP=sh(script: './vault kv get -tls-skip-verify -field=db_password_dump secret/3s/config', returnStdout: true).trim()
           }
-          // /* secrets 3s */
-          // withCredentials([
-          //   string(credentialsId: 'role-3s', variable: 'ROLE_ID'),
-          //   string(credentialsId: 'token-admin', variable: 'VAULT_TOKEN')
-          // ]) {
-          //     env.SECRET_ID = sh(script: './vault write -tls-skip-verify -field=secret_id -f auth/approle/role/3s-role/secret-id', returnStdout: true).trim()
-          //     env.VAULT_TOKEN = sh(script: './vault write -tls-skip-verify -field=token auth/approle/login role_id=${ROLE_ID} secret_id=${SECRET_ID}', returnStdout: true).trim()
-          //     PG_USER  = sh(script: './vault kv get -tls-skip-verify -field=pg_user secret/3s/config', returnStdout: true).trim()
-          //     PG_PASSWORD = sh(script: './vault kv get -tls-skip-verify -field=pg_password secret/3s/config', returnStdout: true).trim()
-          //     PG_USER_ROOT  = sh(script: './vault kv get -tls-skip-verify -field=pg_user_root secret/3s/config', returnStdout: true).trim()
-          //     PG_ROOT_PASSWORD = sh(script: './vault kv get -tls-skip-verify -field=pg_root_password secret/3s/config', returnStdout: true).trim()
-          //     PG_PASSWORD_HOMOLOGACAO = sh(script: './vault kv get -tls-skip-verify -field=db_password_staging secret/3s/config', returnStdout: true).trim()
-          //     DB_USER_DUMP = sh(script: './vault kv get -tls-skip-verify -field=db_user_dump secret/3s/config', returnStdout: true).trim()
-          //     DB_PASSWORD_DUMP = sh(script: './vault kv get -tls-skip-verify -field=db_password_dump secret/3s/config', returnStdout: true).trim()
-          //     // sh '''
-          //     //   env.PG_USER  = "${PG_USER}"
-          //     //   env.PG_PASSWORD = "${PG_PASSWORD}"
-          //     //   env.PG_USER_ROOT  = "${PG_USER_ROOT}"
-          //     //   env.PG_ROOT_PASSWORD = "${PG_ROOT_PASSWORD}"
-          //     //   env.PG_PASSWORD_HOMOLOGACAO = "${PG_PASSWORD_HOMOLOGACAO}"
-          //     //   env.DB_USER_DUMP = "${DB_USER_DUMP}"
-          //     //   env.DB_PASSWORD_DUMP = "${DB_PASSWORD_DUMP}"
-          //     // '''
-          //   }
         }
       }
     }
@@ -297,30 +256,6 @@ pipeline {
               "USERS_DUMP_ROOT =${env.USERS_DUMP_ROOT}",
               "USERS_DUMP_ALL=${env.USERS_DUMP_ALL}"
             ]) {
-              // echo "PG_USER: ${env.PG_USER}"
-              // echo "PG_PASSWORD: ${env.PG_PASSWORD}"
-              // echo "PG_USER_ROOT: ${env.PG_USER_ROOT}"
-              // echo "PG_ROOT_PASSWORD: ${env.PG_ROOT_PASSWORD}"
-              // echo "PG_PASSWORD_HOMOLOGACAO: ${env.PG_PASSWORD_HOMOLOGACAO}"
-              // echo "DB_USER_DUMP: ${env.DB_USER_DUMP}"
-              // echo "DB_PASSWORD_DUMP: ${env.DB_PASSWORD_DUMP}"
-
-              // sh 'echo PG_USER = $PG_USER'
-              // sh 'echo PG_PASSWORD = $PG_PASSWORD'
-              // sh 'echo PG_USER_ROOT = $PG_USER_ROOT'
-              // sh 'echo PG_ROOT_PASSWORD = $PG_ROOT_PASSWORD'
-              // sh 'echo PG_PASSWORD_HOMOLOGACAO = $PG_PASSWORD_HOMOLOGACAO'
-              // sh 'echo DB_USER_DUMP = $DB_USER_DUMP'
-              // sh 'echo DB_PASSWORD_DUMP = $DB_PASSWORD_DUMP'
-
-              // sh "echo $PG_USER > ./secret.txt"
-              // sh "echo $PG_PASSWORD >> ./secret.txt"
-              // sh "echo $PG_USER_ROOT >> ./secret.txt"
-              // sh "echo $PG_ROOT_PASSWORD >> ./secret.txt"
-              // sh "echo $PG_PASSWORD_HOMOLOGACAO >> ./secret.txt"
-              // sh "echo $DB_USER_DUMP >> ./secret.txt"
-              // sh "echo $DB_PASSWORD_DUMP >> ./secret.txt"
-              // sh "cat ./secret.txt"
 
               sh 'echo $PG_USER > ./secret.txt'
               sh 'echo $PG_PASSWORD >> ./secret.txt'
@@ -332,83 +267,15 @@ pipeline {
 
               sh 'cat ./secret.txt'
 
-              sh """ #!/bin/bash
+              sh """ 
+                #!/bin/bash
                 chmod +x source/docker/database/setup-databases.sh
-                ./source/docker/database/setup-databases.sh "$PG_USER" "$PG_PASSWORD" "$PG_USER_ROOT" "$PG_ROOT_PASSWORD" "$DB_USER_DUMP" "$DB_PASSWORD_DUMP" "$PG_DATABASE" "$PG_DATABASE_HOMOLOGACAO"
+                ./source/docker/database/setup-databases.sh 
                 cat source/docker/database/setup-databases.sh
               """
-            
             }
-
-
-
-
           }
-
-            // sh 'echo $PG_USER > ./secret.txt'
-            // sh 'echo $PG_PASSWORD >> ./secret.txt'
-            // sh 'echo $PG_USER_ROOT >> ./secret.txt'
-            // sh 'echo $PG_ROOT_PASSWORD >> ./secret.txt'
-            // sh 'echo $PG_PASSWORD_HOMOLOGACAO >> ./secret.txt'
-            // sh 'echo $DB_USER_DUMP >> ./secret.txt'
-            // sh 'echo $DB_PASSWORD_DUMP >> ./secret.txt'
-
-            // sh '''
-            //   chmod +x source/docker/database/setup-databases.sh
-            //   sleep 45s
-            //   ls -la .
-            //   ./source/docker/database/setup-databases.sh $PG_USER $PG_PASSWORD $PG_USER_ROOT $PG_ROOT_PASSWORD $PG_PASSWORD_HOMOLOGACAO $DB_USER_DUMP $DB_PASSWORD_DUMP
-            // '''
-
-            // sh 'cat ./secret.txt'
-            // sh 'printenv'
-
         }
-
-            
-            
-            /*
-            withVault(configuration: [
-              engineVersion: 2, 
-              skipSslVerification: true, 
-              timeout: 60, 
-              vaultCredentialId: 'token-admin-vault-plugin', 
-              vaultUrl: 'https://dti-vault.unilab.edu.br'], 
-              vaultSecrets: [
-                [
-                  engineVersion: 2, 
-                  path: 'secret/3s/config', 
-                  secretValues: [
-                    [envVar: 'PG_USER', isRequired: false, vaultKey: 'pg_user'], 
-                    [envVar: 'PG_PASSWORD', isRequired: false, vaultKey: 'pg_password'],
-                    [envVar: 'PG_USER_ROOT', isRequired: false, vaultKey: 'pg_user_root'],
-                    [envVar: 'PG_ROOT_PASSWORD', isRequired: false, vaultKey: 'pg_root_password'],
-                    [envVar: 'PG_PASSWORD_HOMOLOGACAO', isRequired: false, vaultKey: 'db_password_staging'],
-                    [envVar: 'DB_USER_DUMP', isRequired: false, vaultKey: 'db_user_dump'],
-                    [envVar: 'DB_PASSWORD_DUMP', isRequired: false, vaultKey: 'db_password_dump']
-                  ]
-                ]
-              ]) {
-                // some block
-              sh '''
-                echo "PG_USER: $PG_USER"
-                echo "PG_PASSWORD: $PG_PASSWORD"
-                echo "PG_USER_ROOT: $PG_USER_ROOT"
-                echo "PG_ROOT_PASSWORD: $PG_ROOT_PASSWORD"
-                echo "PG_PASSWORD_HOMOLOGACAO: $PG_PASSWORD_HOMOLOGACAO"
-                echo "DB_USER_DUMP: $DB_USER_DUMP"
-                echo "DB_PASSWORD_DUMP: $DB_PASSWORD_DUMP"
-              '''
-            }
-            */
-            // container('postgres') {
-            // sh '''
-            //   # Use the secrets obtained from Vault here
-            //   chmod +x source/docker/database/setup-databases.sh
-            //   sleep 45s
-            //   ls -la .
-            //   ./source/docker/database/setup-databases.sh env.PG_USER env.PG_PASSWORD env.PG_USER_ROOT env.PG_ROOT_PASSWORD env.PG_PASSWORD_HOMOLOGACAO env.DB_USER_DUMP env.DB_PASSWORD_DUMP
-            // '''
       }
     }
 
