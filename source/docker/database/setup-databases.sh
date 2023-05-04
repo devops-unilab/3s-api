@@ -111,6 +111,7 @@ readonly WAIT_TIME=5
 #connection_string_root='postgresql://$PG_USER_ROOT:$PG_ROOT_PASSWORD@$PG_HOST:$PG_PORT'
 
 connection_string_root="-h $PG_HOST -p $PG_PORT -U $PG_USER_ROOT -d $PG_DATABASE -w"
+connection_string_root_con="-d host=$PG_HOST port=$PG_PORT dbname=$PG_DATABASE user=$PG_USER_ROOT -w"
 
 echo "$connection_string_root"
 
@@ -145,7 +146,7 @@ function user_exists() {
 
 function create_user_admin() {
     local username=$1
-    psql -tc $connection_string_root <<-EOSQL
+    psql ON_ERROR_STOP=1 $connection_string_root_con 2>/dev/null <<-EOSQL
         CREATE ROLE "$username" WITH
             SUPERUSER
             LOGIN 
@@ -162,7 +163,7 @@ EOSQL
 
 function create_user_regular() {
     local username=$1
-    psql -tc $connection_string_root <<-EOSQL
+    psql ON_ERROR_STOP=1 $connection_string_root_con 2>/dev/null <<-EOSQL
         CREATE ROLE "$username" WITH
             LOGIN 
             CREATEDB
@@ -179,7 +180,7 @@ EOSQL
 function check_user_privilegios() {
     local database="$1"
     local user="$2"
-    local result=$(psql -tA $connection_string_root -c  "SELECT has_database_privilege('$user', '$database', 'CREATE');" 2>/dev/null)
+    local result=$(psql -tA $connection_string_root -c "SELECT has_database_privilege('$user', '$database', 'CREATE');" 2>/dev/null)
 
     if [ "$result" == "t" ]; then
         return 1
@@ -201,7 +202,7 @@ function check_owner_database() {
 function create_database() {
 	local database=$1
     local user=$2
-    psql -tc $connection_string_root <<-EOSQL
+    psql -t $connection_string_root <<-EOSQL
         CREATE DATABASE "$database"
             WITH
             OWNER = "$user"
@@ -216,7 +217,7 @@ EOSQL
 function atribui_privilegios() {
     local database="$1"
     local user="$2"
-    psql -tc $connection_string_root <<-EOSQL
+    psql ON_ERROR_STOP=1 $connection_string_root_con 2>/dev/null <<-EOSQL
         GRANT CONNECT ON DATABASE "$database" TO "$user";
         GRANT USAGE, CREATE, TEMPORARY ON SCHEMA public TO "$user";
         ALTER DEFAULT PRIVILEGES IN DATABASE $database GRANT USAGE, CREATE, TEMPORARY ON TABLES TO "$user";
@@ -228,7 +229,7 @@ EOSQL
 function atribui_privilegios_woner() {
     local database="$1"
     local user="$2"
-    psql -tc $connection_string_root <<-EOSQL
+    psql ON_ERROR_STOP=1 $connection_string_root_con 2>/dev/null <<-EOSQL
         ALTER DATABASE "$database" OWNER TO "$user";"
         GRANT USAGE, CREATE, TEMPORARY ON SCHEMA public TO "$user";
         GRANT ALL PRIVILEGES ON DATABASE "$database" TO "$user";"
