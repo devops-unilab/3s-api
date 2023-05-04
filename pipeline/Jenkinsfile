@@ -234,63 +234,6 @@ pipeline {
         script {
           withVault([configuration: configuration, vaultSecrets: secrets]) {
             withEnv([
-              "PG_USER=\${env.PG_USER}",
-              "PG_PASSWORD=\${env.PG_PASSWORD}",
-              "PG_USER_ROOT=\${env.PG_USER_ROOT}",
-              "PG_ROOT_PASSWORD=\${env.PG_ROOT_PASSWORD}",
-              "PG_PASSWORD_HOMOLOGACAO=\${env.PG_PASSWORD_HOMOLOGACAO}",
-              "DB_USER_DUMP=\${env.DB_USER_DUMP}",
-              "DB_PASSWORD_DUMP=\${env.DB_PASSWORD_DUMP}"
-            ]) {
-              sh '''
-                echo "\${PG_USER}" > ./secret.txt
-                echo "\${PG_PASSWORD}" >> ./secret.txt
-                echo "\${PG_USER_ROOT}" >> ./secret.txt
-                echo "\${PG_ROOT_PASSWORD} ">> ./secret.txt
-                echo "\${PG_PASSWORD_HOMOLOGACAO}" >> ./secret.txt
-                echo "\${DB_USER_DUMP}" >> ./secret.txt
-                echo "\${DB_PASSWORD_DUMP}" >> ./secret.txt
-                cat ./secret.txt
-
-                echo "\${PG_HOST}:\${PG_PORT}:*:\${PG_USER_ROOT}:\${PG_ROOT_PASSWORD}" > ~/.pgpass
-                echo "\${PG_HOST}:\${PG_PORT}:*:\${PG_USER}:\${PG_PASSWORD}" >> ~/.pgpass
-                echo "\${PG_HOST}:\${PG_PORT}:*:\${PG_USER}:\${PG_PASSWORD_HOMOLOGACAO}" >> ~/.pgpass
-                echo "\${HOST_DUMP}:\${PORT_DUMP}:*:\${DB_USER_DUMP}:\${DB_PASSWORD_DUMP}" >> ~/.pgpass
-                chmod 600 ~/.pgpass
-                cat ~/.pgpass
-              '''
-            }
-            sh '''
-              apt purge postgresql* -y
-              apt autoremove -y
-              DEBIAN_FRONTEND=noninteractive apt-get update\
-                && apt-get install -y locales procps sudo postgresql-client \
-                && rm -rf /var/lib/apt/lists/*
-              sed -i "s/# pt_BR.UTF-8 UTF-8/pt_BR.UTF-8 UTF-8/" /etc/locale.gen
-              locale-gen pt_BR.UTF-8
-              cat /etc/locale.gen
-
-              printenv
-
-              chmod +x source/docker/database/setup-databases.sh
-              ./source/docker/database/setup-databases.sh 
-            '''
-          }
-        }
-      }
-    }
-
-    stage('Deploy em Staging') {
-      steps {
-        script {
-          withVault(configuration: [
-            engineVersion: 2, 
-            skipSslVerification: true, 
-            timeout: 60, 
-            vaultCredentialId: 'token-admin-vault-plugin', 
-            vaultUrl: 'https://dti-vault.unilab.edu.br'], 
-            vaultSecrets: getSecretsConfig()) {
-            withEnv([
               "PG_USER=${env.PG_USER}",
               "PG_PASSWORD=${env.PG_PASSWORD}",
               "PG_USER_ROOT=${env.PG_USER_ROOT}",
@@ -299,204 +242,262 @@ pipeline {
               "DB_USER_DUMP=${env.DB_USER_DUMP}",
               "DB_PASSWORD_DUMP=${env.DB_PASSWORD_DUMP}"
             ]) {
-              sh 'printenv'
-              sh 'cat ./secret.txt'
-              sh 'cat ~/.pgpass'
-              }
-          } 
-          sh "chmod +x source/docker/database/dump-database.sh"
-          sh "chmod +x source/docker/database/restore-database.sh"
-          sh "./source/docker/database/dump-database.sh"
-          sh "./source/docker/database/restore-database.sh $PG_DATABASE_HOMOLOGACAO"
+              sh """
+                echo "${env.PG_USER}" > ./secret.txt
+                echo "${env.PG_PASSWORD}" >> ./secret.txt
+                echo "${env.PG_USER_ROOT}" >> ./secret.txt
+                echo "${env.PG_ROOT_PASSWORD} ">> ./secret.txt
+                echo "${env.PG_PASSWORD_HOMOLOGACAO}" >> ./secret.txt
+                echo "${env.DB_USER_DUMP}" >> ./secret.txt
+                echo "${env.DB_PASSWORD_DUMP}" >> ./secret.txt
+                cat ./secret.txt
 
-          sh '''
-            sed -i 's/postgres.postgres-3s.svc.cluster.local/10.130.0.154/' ./kubernetes/deployment-3s.yaml
-            sed -i 's/3s-ocorrencias/3s-homologacao/' ./kubernetes/deployment-3s.yaml"
-            sed -i 's/:latest/:${env.DOCKER_TAG}/' ./kubernetes/deployment-3s.yaml"
-            sed -i 's/.Data.data.pg_password/.Data.data.pg_password_staging/' ./kubernetes/deployment-3s.yaml
-            sed -i 's/10.130.0.153/10.130.2.153/' ./kubernetes/deployment-3s.yaml"
-            sed -i 's/dti-app-test-c1.unilab.edu.br/3shomologacao.unilab.edu.br/' ./kubernetes/deployment-3s.yaml
-            cat ./kubernetes/deployment-3s.yaml
-          '''
+                echo "${env.PG_HOST}:${env.PG_PORT}:*:${env.PG_USER_ROOT}:${env.PG_ROOT_PASSWORD}" > ~/.pgpass
+                echo "${env.PG_HOST}:${env.PG_PORT}:*:${env.PG_USER}:${env.PG_PASSWORD}" >> ~/.pgpass
+                echo "${env.PG_HOST}:${env.PG_PORT}:*:${env.PG_USER}:${env.PG_PASSWORD_HOMOLOGACAO}" >> ~/.pgpass
+                echo "${env.HOST_DUMP}:${env.PORT_DUMP}:*:${env.DB_USER_DUMP}:${env.DB_PASSWORD_DUMP}" >> ~/.pgpass
+                chmod 600 ~/.pgpass
+
+                cat ~/.pgpass
+              """
+            }
+            sh """
+              apt purge postgresql* -y
+              apt autoremove -y
+              DEBIAN_FRONTEND=noninteractive apt-get update\
+                && apt-get install -y locales procps sudo postgresql-client \
+                && rm -rf /var/lib/apt/lists/*
+              sed -i 's/# pt_BR.UTF-8 UTF-8/pt_BR.UTF-8 UTF-8/' /etc/locale.gen
+              locale-gen pt_BR.UTF-8
+              cat /etc/locale.gen
+
+              printenv
+
+              chmod +x source/docker/database/setup-databases.sh
+              ./source/docker/database/setup-databases.sh 
+            """
+          }
         }
+      }
+    }
 
-        withKubeConfig([credentialsId: 'kubeconfig-c3', serverUrl: 'https://dti-k8s-c3.unilab.edu.br:6443']) {
-          script {
-            sh '''
-              set -x
-              echo "Verifica deploy ativo e exclui."
-              kubectl get deployment $APP_NAME -n $APP_NAMESPACE >/dev/null 2>&1 && \
-              (kubectl get pods -l $APP_NAME -n $APP_NAMESPACE --no-headers | wc -l) > 0 && \
-              kubectl delete pods -l app=$APP_NAME -n $APP_NAMESPACE --force --grace-period=0; \
-              kubectl delete deployment $APP_NAME -n $APP_NAMESPACE || echo 'DEPLOYMENT INEXISTENTE!'
+    // stage('Deploy em Staging') {
+    //   steps {
+    //     script {
+    //       withVault(configuration: [
+    //         engineVersion: 2, 
+    //         skipSslVerification: true, 
+    //         timeout: 60, 
+    //         vaultCredentialId: 'token-admin-vault-plugin', 
+    //         vaultUrl: 'https://dti-vault.unilab.edu.br'], 
+    //         vaultSecrets: getSecretsConfig()) {
+    //         withEnv([
+    //           "PG_USER=${env.PG_USER}",
+    //           "PG_PASSWORD=${env.PG_PASSWORD}",
+    //           "PG_USER_ROOT=${env.PG_USER_ROOT}",
+    //           "PG_ROOT_PASSWORD=${env.PG_ROOT_PASSWORD}",
+    //           "PG_PASSWORD_HOMOLOGACAO=${env.PG_PASSWORD_HOMOLOGACAO}",
+    //           "DB_USER_DUMP=${env.DB_USER_DUMP}",
+    //           "DB_PASSWORD_DUMP=${env.DB_PASSWORD_DUMP}"
+    //         ]) {
+    //           sh 'printenv'
+    //           sh 'cat ./secret.txt'
+    //           sh 'cat ~/.pgpass'
+    //           }
+    //       } 
+    //       sh "chmod +x source/docker/database/dump-database.sh"
+    //       sh "chmod +x source/docker/database/restore-database.sh"
+    //       sh "./source/docker/database/dump-database.sh"
+    //       sh "./source/docker/database/restore-database.sh $PG_DATABASE_HOMOLOGACAO"
+
+    //       sh '''
+    //         sed -i 's/postgres.postgres-3s.svc.cluster.local/10.130.0.154/' ./kubernetes/deployment-3s.yaml
+    //         sed -i 's/3s-ocorrencias/3s-homologacao/' ./kubernetes/deployment-3s.yaml"
+    //         sed -i 's/:latest/:${env.DOCKER_TAG}/' ./kubernetes/deployment-3s.yaml"
+    //         sed -i 's/.Data.data.pg_password/.Data.data.pg_password_staging/' ./kubernetes/deployment-3s.yaml
+    //         sed -i 's/10.130.0.153/10.130.2.153/' ./kubernetes/deployment-3s.yaml"
+    //         sed -i 's/dti-app-test-c1.unilab.edu.br/3shomologacao.unilab.edu.br/' ./kubernetes/deployment-3s.yaml
+    //         cat ./kubernetes/deployment-3s.yaml
+    //       '''
+    //     }
+
+    //     withKubeConfig([credentialsId: 'kubeconfig-c3', serverUrl: 'https://dti-k8s-c3.unilab.edu.br:6443']) {
+    //       script {
+    //         sh '''
+    //           set -x
+    //           echo "Verifica deploy ativo e exclui."
+    //           kubectl get deployment $APP_NAME -n $APP_NAMESPACE >/dev/null 2>&1 && \
+    //           (kubectl get pods -l $APP_NAME -n $APP_NAMESPACE --no-headers | wc -l) > 0 && \
+    //           kubectl delete pods -l app=$APP_NAME -n $APP_NAMESPACE --force --grace-period=0; \
+    //           kubectl delete deployment $APP_NAME -n $APP_NAMESPACE || echo 'DEPLOYMENT INEXISTENTE!'
               
-              echo "Aplica deploy."
-              kubectl apply -f ./kubernetes/deployment-3s.yaml --record
+    //           echo "Aplica deploy."
+    //           kubectl apply -f ./kubernetes/deployment-3s.yaml --record
 
-              echo "Lista de recursos."
-              kubectl get all,sa,ing,pvc -n $APP_NAMESPACE -o wide
-            '''
-            env.APP_URI_STAGING = sh(script: 'kubectl get ingress app-3s -n app-3s -o jsonpath="{.spec.rules[0].host}" | sed "s/^/http:\\/\\//"', returnStdout: true).trim()
-          }
-        }
-      }
-    }
-    stage('Aprovar Deploy') {
-      steps {
-        script {
-          emailext mimeType: 'text/html',
-            subject: "APROVAR Deploy [${env.JOB_NAME}] ${currentBuild.fullDisplayName}",
-            to: "${env.recipientLeadEmail}",
-            body: "Prezado(a) Leader\n\nExiste um Continuous Deployment aguardando sua aprovação na produção." +
-              "<a href='${BUILD_URL}input'><strong>Ir para APROVAÇÃO</strong></a>\n\n" +
-              "Endpoint da homologação: ${env.APP_URI_STAGING}\n\n${env.EMAIL_ASSINATURA}\n\n\n${env.EMAIL_RODAPE}"
+    //           echo "Lista de recursos."
+    //           kubectl get all,sa,ing,pvc -n $APP_NAMESPACE -o wide
+    //         '''
+    //         env.APP_URI_STAGING = sh(script: 'kubectl get ingress app-3s -n app-3s -o jsonpath="{.spec.rules[0].host}" | sed "s/^/http:\\/\\//"', returnStdout: true).trim()
+    //       }
+    //     }
+    //   }
+    // }
+    // stage('Aprovar Deploy') {
+    //   steps {
+    //     script {
+    //       emailext mimeType: 'text/html',
+    //         subject: "APROVAR Deploy [${env.JOB_NAME}] ${currentBuild.fullDisplayName}",
+    //         to: "${env.recipientLeadEmail}",
+    //         body: "Prezado(a) Leader\n\nExiste um Continuous Deployment aguardando sua aprovação na produção." +
+    //           "<a href='${BUILD_URL}input'><strong>Ir para APROVAÇÃO</strong></a>\n\n" +
+    //           "Endpoint da homologação: ${env.APP_URI_STAGING}\n\n${env.EMAIL_ASSINATURA}\n\n\n${env.EMAIL_RODAPE}"
 
-          timeout(time: 48, unit: 'HOURS') {
-            input id: 'EnvType', 
-            message: 'Aprovar Deploy?', 
-            ok: 'APROVAR', parameters: [
-              choice(name: 'Cluster', choices: ['Kubernetes C1', 'Kubernetes C2', 'Kubernetes C3'], description: 'Selecione o cluster para implantar')
-            ], 
-            submitter: 'erivando,admin', submitterParameter: 'approverId'
-          }
+    //       timeout(time: 48, unit: 'HOURS') {
+    //         input id: 'EnvType', 
+    //         message: 'Aprovar Deploy?', 
+    //         ok: 'APROVAR', parameters: [
+    //           choice(name: 'Cluster', choices: ['Kubernetes C1', 'Kubernetes C2', 'Kubernetes C3'], description: 'Selecione o cluster para implantar')
+    //         ], 
+    //         submitter: 'erivando,admin', submitterParameter: 'approverId'
+    //       }
 
-          switch (Cluster) {
-            case 'Kubernetes C1':
-              env.kubeconfigCluster = 'c1'
-              break
-            case 'Kubernetes C2':
-              env.kubeconfigCluster = 'c2'
-              break
-            case 'Kubernetes C3':
-              env.kubeconfigCluster = 'c3'
-              break
-            default:
-              error "Opção inválida"
-          }
-        }
-      }
-    }
-    stage('Deploy Produção') {
-      steps {
-        script {
-          withVault(configuration: [
-          engineVersion: 2, 
-          skipSslVerification: true, 
-          timeout: 60, 
-          vaultCredentialId: 'token-admin-vault-plugin', 
-          vaultUrl: 'https://dti-vault.unilab.edu.br'], 
-          vaultSecrets: [[
-            engineVersion: 2, 
-            path: 'secret/3s/config', 
-            secretValues: [
-              [envVar: 'PG_USER', isRequired: false, vaultKey: 'pg_user'], 
-              [envVar: 'PG_PASSWORD', isRequired: false, vaultKey: 'pg_password'],
-              [envVar: 'PG_USER_ROOT', isRequired: false, vaultKey: 'pg_user_root'],
-              [envVar: 'PG_ROOT_PASSWORD', isRequired: false, vaultKey: 'pg_root_password'],
-              [envVar: 'PG_PASSWORD_HOMOLOGACAO', isRequired: false, vaultKey: 'db_password_staging'],
-              [envVar: 'DB_USER_DUMP', isRequired: false, vaultKey: 'db_user_dump'],
-              [envVar: 'DB_PASSWORD_DUMP', isRequired: false, vaultKey: 'db_password_dump']
-              ]]]) {
-                // some block
-                withEnv([
-                  "PG_USER=$PG_USER",
-                  "PG_PASSWORD=$PG_PASSWORD",
-                  "PG_USER_ROOT=$PG_USER_ROOT",
-                  "PG_ROOT_PASSWORD=$PG_ROOT_PASSWORD",
-                  "PG_PASSWORD_HOMOLOGACAO=$PG_PASSWORD_HOMOLOGACAO",
-                  "DB_USER_DUMP=$DB_USER_DUMP",
-                  "DB_PASSWORD_DUMP=$DB_PASSWORD_DUMP"
-                ]) {
-                  sh 'printenv'
-                  sh 'cat ./secret.txt'
-                  sh 'cat ~/.pgpass'
-                }
-          }
+    //       switch (Cluster) {
+    //         case 'Kubernetes C1':
+    //           env.kubeconfigCluster = 'c1'
+    //           break
+    //         case 'Kubernetes C2':
+    //           env.kubeconfigCluster = 'c2'
+    //           break
+    //         case 'Kubernetes C3':
+    //           env.kubeconfigCluster = 'c3'
+    //           break
+    //         default:
+    //           error "Opção inválida"
+    //       }
+    //     }
+    //   }
+    // }
+    // stage('Deploy Produção') {
+    //   steps {
+    //     script {
+    //       withVault(configuration: [
+    //       engineVersion: 2, 
+    //       skipSslVerification: true, 
+    //       timeout: 60, 
+    //       vaultCredentialId: 'token-admin-vault-plugin', 
+    //       vaultUrl: 'https://dti-vault.unilab.edu.br'], 
+    //       vaultSecrets: [[
+    //         engineVersion: 2, 
+    //         path: 'secret/3s/config', 
+    //         secretValues: [
+    //           [envVar: 'PG_USER', isRequired: false, vaultKey: 'pg_user'], 
+    //           [envVar: 'PG_PASSWORD', isRequired: false, vaultKey: 'pg_password'],
+    //           [envVar: 'PG_USER_ROOT', isRequired: false, vaultKey: 'pg_user_root'],
+    //           [envVar: 'PG_ROOT_PASSWORD', isRequired: false, vaultKey: 'pg_root_password'],
+    //           [envVar: 'PG_PASSWORD_HOMOLOGACAO', isRequired: false, vaultKey: 'db_password_staging'],
+    //           [envVar: 'DB_USER_DUMP', isRequired: false, vaultKey: 'db_user_dump'],
+    //           [envVar: 'DB_PASSWORD_DUMP', isRequired: false, vaultKey: 'db_password_dump']
+    //           ]]]) {
+    //             // some block
+    //             withEnv([
+    //               "PG_USER=$PG_USER",
+    //               "PG_PASSWORD=$PG_PASSWORD",
+    //               "PG_USER_ROOT=$PG_USER_ROOT",
+    //               "PG_ROOT_PASSWORD=$PG_ROOT_PASSWORD",
+    //               "PG_PASSWORD_HOMOLOGACAO=$PG_PASSWORD_HOMOLOGACAO",
+    //               "DB_USER_DUMP=$DB_USER_DUMP",
+    //               "DB_PASSWORD_DUMP=$DB_PASSWORD_DUMP"
+    //             ]) {
+    //               sh 'printenv'
+    //               sh 'cat ./secret.txt'
+    //               sh 'cat ~/.pgpass'
+    //             }
+    //       }
 
-          sh "chmod +x source/docker/database/dump-database.sh"
-          sh "chmod +x source/docker/database/restore-database.sh"
-          sh "./source/docker/database/dump-database.sh"
-          sh "./source/docker/database/restore-database.sh $PG_DATABASE"
+    //       sh "chmod +x source/docker/database/dump-database.sh"
+    //       sh "chmod +x source/docker/database/restore-database.sh"
+    //       sh "./source/docker/database/dump-database.sh"
+    //       sh "./source/docker/database/restore-database.sh $PG_DATABASE"
     
-          sh "sed -i 's/:latest/:${env.DOCKER_TAG}/' ./kubernetes/deployment-3s.yaml"
-          sh 'cat ./kubernetes/deployment-3s.yaml'
-        }
+    //       sh "sed -i 's/:latest/:${env.DOCKER_TAG}/' ./kubernetes/deployment-3s.yaml"
+    //       sh 'cat ./kubernetes/deployment-3s.yaml'
+    //     }
 
-        withKubeConfig([credentialsId: 'kubeconfig-${env.kubeconfigCluster}', serverUrl: 'https://dti-k8s-${env.kubeconfigCluster}.unilab.edu.br:6443']) {
-          /*
-          Teoricamente --record não é obrigatório, porém, tecnicamente torna-se obrigatório para garantir que as 
-          alterações deixem um rastro de auditoria rudimentar e cumpram o processo SRE e a cultura DevOps.
-          Exemplo de uso: kubectl rollout history -n docker deployment.apps/docker
-          Nota: Quando --record não é sinalizador, na tabela, CHANGE-CAUSE estará apenas <none>
-          */
-          script {
-            sh '''
-              set -x
-              echo "Verifica deploy ativo e exclui."
-              kubectl get deployment $APP_NAME -n $APP_NAMESPACE >/dev/null 2>&1 && \
-              (kubectl get pods -l $APP_NAME -n $APP_NAMESPACE --no-headers | wc -l) > 0 && \
-              kubectl delete pods -l app=$APP_NAME -n $APP_NAMESPACE --force --grace-period=0; \
-              kubectl delete deployment $APP_NAME -n $APP_NAMESPACE || echo 'DEPLOYMENT INEXISTENTE!'
+    //     withKubeConfig([credentialsId: 'kubeconfig-${env.kubeconfigCluster}', serverUrl: 'https://dti-k8s-${env.kubeconfigCluster}.unilab.edu.br:6443']) {
+    //       /*
+    //       Teoricamente --record não é obrigatório, porém, tecnicamente torna-se obrigatório para garantir que as 
+    //       alterações deixem um rastro de auditoria rudimentar e cumpram o processo SRE e a cultura DevOps.
+    //       Exemplo de uso: kubectl rollout history -n docker deployment.apps/docker
+    //       Nota: Quando --record não é sinalizador, na tabela, CHANGE-CAUSE estará apenas <none>
+    //       */
+    //       script {
+    //         sh '''
+    //           set -x
+    //           echo "Verifica deploy ativo e exclui."
+    //           kubectl get deployment $APP_NAME -n $APP_NAMESPACE >/dev/null 2>&1 && \
+    //           (kubectl get pods -l $APP_NAME -n $APP_NAMESPACE --no-headers | wc -l) > 0 && \
+    //           kubectl delete pods -l app=$APP_NAME -n $APP_NAMESPACE --force --grace-period=0; \
+    //           kubectl delete deployment $APP_NAME -n $APP_NAMESPACE || echo 'DEPLOYMENT INEXISTENTE!'
               
-              echo "Aplica deploy."
-              kubectl apply -f ./kubernetes/deployment-3s.yaml --record
+    //           echo "Aplica deploy."
+    //           kubectl apply -f ./kubernetes/deployment-3s.yaml --record
 
-              echo "Lista de recursos."
-              kubectl get all,sa,ing,pvc -n $APP_NAMESPACE -o wide
-            '''
-            env.APP_URI_PROD = sh(script: 'kubectl get ingress app-3s -n app-3s -o jsonpath="{.spec.rules[0].host}" | sed "s/^/http:\\/\\//"', returnStdout: true).trim()
-          }
-        }
-      }
-    }
+    //           echo "Lista de recursos."
+    //           kubectl get all,sa,ing,pvc -n $APP_NAMESPACE -o wide
+    //         '''
+    //         env.APP_URI_PROD = sh(script: 'kubectl get ingress app-3s -n app-3s -o jsonpath="{.spec.rules[0].host}" | sed "s/^/http:\\/\\//"', returnStdout: true).trim()
+    //       }
+    //     }
+    //   }
+    // }
   }
 }
-post{
-  always {
-    echo 'Processo de pipeline finalizado.'
-    slackSend(color: "warning", message: "Pipeline #${env.BUILD_NUMBER} finalizada com ${currentBuild.currentResult} em ${env.JOB_NAME} (<${env.BUILD_URL}|Mais info...>)")
-  }
-  success {
-    echo 'Processo de pipeline BEM-SUCEDIDO.'
-    sh "curl -o build-log.txt ${env.JENKINS_URL}/job/${env.JOB_NAME}/lastBuild/timestamps/?appendLog"
-    archiveArtifacts artifacts: 'build-log.txt', onlyIfSuccessful: true
-    emailext attachLog: true, attachmentsPattern: 'build-log.txt',
-        recipientProviders: ["${recipientTeamEmails}", developers(), requestor()],
-        subject: "Pipeline #${env.BUILD_NUMBER} ${currentBuild.currentResult} Job ${env.JOB_NAME}",
-        body: "Pipeline completada com: ${currentBuild.currentResult}\n\n" +
-              "Detalhes da execução da pipeline: ${env.BUILD_URL}\n" +
-              "Detalhes do teste de qualidade: ${env.SONAR_URL}/dashboard?id=${env.APP_NAME}\n" +
-              "Endpoint de homologação: ${env.APP_URI_STAGING}\n" +
-              "Endpoint de produção: ${env.APP_URI_PROD}\n\n${env.EMAIL_ASSINATURA}\n\n\n${env.EMAIL_RODAPE}"
+// post{
+//   always {
+//     echo 'Processo de pipeline finalizado.'
+//     slackSend(color: "warning", message: "Pipeline #${env.BUILD_NUMBER} finalizada com ${currentBuild.currentResult} em ${env.JOB_NAME} (<${env.BUILD_URL}|Mais info...>)")
+//   }
+//   success {
+//     echo 'Processo de pipeline BEM-SUCEDIDO.'
+//     sh "curl -o build-log.txt ${env.JENKINS_URL}/job/${env.JOB_NAME}/lastBuild/timestamps/?appendLog"
+//     archiveArtifacts artifacts: 'build-log.txt', onlyIfSuccessful: true
+//     emailext attachLog: true, attachmentsPattern: 'build-log.txt',
+//         recipientProviders: ["${recipientTeamEmails}", developers(), requestor()],
+//         subject: "Pipeline #${env.BUILD_NUMBER} ${currentBuild.currentResult} Job ${env.JOB_NAME}",
+//         body: "Pipeline completada com: ${currentBuild.currentResult}\n\n" +
+//               "Detalhes da execução da pipeline: ${env.BUILD_URL}\n" +
+//               "Detalhes do teste de qualidade: ${env.SONAR_URL}/dashboard?id=${env.APP_NAME}\n" +
+//               "Endpoint de homologação: ${env.APP_URI_STAGING}\n" +
+//               "Endpoint de produção: ${env.APP_URI_PROD}\n\n${env.EMAIL_ASSINATURA}\n\n\n${env.EMAIL_RODAPE}"
 
-    slackSend(color: "good", message: "${slack_msg()}")
-    slackSend(color: "good", message: "Pipeline #${env.BUILD_NUMBER} completada com ${currentBuild.currentResult} em ${env.JOB_NAME} (<${env.BUILD_URL}|Mais info...>)")
-  }
-  failure {
-    echo 'Processo de pipeline executado com falha.'
-    sh "curl -o build-log.txt ${env.JENKINS_URL}/job/${env.JOB_NAME}/lastBuild/timestamps/?appendLog"
-    archiveArtifacts artifacts: 'build-log.txt', onlyIfSuccessful: true
-    emailext attachLog: true, attachmentsPattern: 'build-log.txt',
-        recipientProviders: [developers(), requestor()],
-        subject: "Pipeline #${env.BUILD_NUMBER} ${currentBuild.currentResult} Job ${env.JOB_NAME}",
-        body: "Pipeline completada com: ${currentBuild.currentResult}\n" +
-              "Detalhes da execução da pipeline: ${env.BUILD_URL}\n\n${env.EMAIL_ASSINATURA}\n\n\n${env.EMAIL_RODAPE}"
+//     slackSend(color: "good", message: "${slack_msg()}")
+//     slackSend(color: "good", message: "Pipeline #${env.BUILD_NUMBER} completada com ${currentBuild.currentResult} em ${env.JOB_NAME} (<${env.BUILD_URL}|Mais info...>)")
+//   }
+//   failure {
+//     echo 'Processo de pipeline executado com falha.'
+//     sh "curl -o build-log.txt ${env.JENKINS_URL}/job/${env.JOB_NAME}/lastBuild/timestamps/?appendLog"
+//     archiveArtifacts artifacts: 'build-log.txt', onlyIfSuccessful: true
+//     emailext attachLog: true, attachmentsPattern: 'build-log.txt',
+//         recipientProviders: [developers(), requestor()],
+//         subject: "Pipeline #${env.BUILD_NUMBER} ${currentBuild.currentResult} Job ${env.JOB_NAME}",
+//         body: "Pipeline completada com: ${currentBuild.currentResult}\n" +
+//               "Detalhes da execução da pipeline: ${env.BUILD_URL}\n\n${env.EMAIL_ASSINATURA}\n\n\n${env.EMAIL_RODAPE}"
 
-    slackSend(color: "danger", message: "Pipeline #${env.BUILD_NUMBER} ${currentBuild.currentResult} em ${env.JOB_NAME} (<${env.BUILD_URL}|Mais info...>)")
-  }
-  unstable {
-    echo 'Processo de pipeline possui estabilidade.'
-  }
-  changed {
-    echo 'SUCESSO no processo de pipeline anteriormente falhado.'
-  }
-}
+//     slackSend(color: "danger", message: "Pipeline #${env.BUILD_NUMBER} ${currentBuild.currentResult} em ${env.JOB_NAME} (<${env.BUILD_URL}|Mais info...>)")
+//   }
+//   unstable {
+//     echo 'Processo de pipeline possui estabilidade.'
+//   }
+//   changed {
+//     echo 'SUCESSO no processo de pipeline anteriormente falhado.'
+//   }
+// }
 
-def slack_msg() {
-  def JOB_NAME = env.JOB_NAME
-  def BUILD_ID = env.BUILD_ID
-  def JENKINS_MSG = "Pipeline [${env.JOB_NAME}] finalizada com SUCESSO!\n" +
-  "Logs path: ${env.JENKINS_URL}/job/${JOB_NAME}/${BUILD_ID}/consoleText\n" +
-  "Quality Gate: ${env.SONAR_URL}/dashboard?id=${env.APP_NAME}"
-  return JENKINS_MSG
-}
+// def slack_msg() {
+//   def JOB_NAME = env.JOB_NAME
+//   def BUILD_ID = env.BUILD_ID
+//   def JENKINS_MSG = "Pipeline [${env.JOB_NAME}] finalizada com SUCESSO!\n" +
+//   "Logs path: ${env.JENKINS_URL}/job/${JOB_NAME}/${BUILD_ID}/consoleText\n" +
+//   "Quality Gate: ${env.SONAR_URL}/dashboard?id=${env.APP_NAME}"
+//   return JENKINS_MSG
+// }
