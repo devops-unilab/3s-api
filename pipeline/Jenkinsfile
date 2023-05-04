@@ -83,6 +83,7 @@ pipeline {
     PORT_DUMP = "5432"
     USERS_DUMP = '"cicero_robson" "luansidney" "manoeljr"'
     USERS_DUMP_ROOT = '"3s" "ocorrencias_user" "admindti"'
+    PGPASSFILE="/home/jenkins/agent/workspace/.pgpass"
   }
   stages {
     stage('Iniciando CI/CD') {
@@ -257,14 +258,12 @@ pipeline {
                 echo '${env.DB_PASSWORD_DUMP}' >> ./secret.txt
                 cat ./secret.txt
 
-                echo '${env.PG_HOST}:${env.PG_PORT}:*:${env.PG_USER_ROOT}:${env.PG_ROOT_PASSWORD}' > ~/.pgpass
-                echo '${env.PG_HOST}:${env.PG_PORT}:*:${env.PG_USER}:${env.PG_PASSWORD}' >> ~/.pgpass
-                echo '${env.PG_HOST}:${env.PG_PORT}:*:${env.PG_USER}:${env.PG_PASSWORD_HOMOLOGACAO}' >> ~/.pgpass
-                echo '${env.HOST_DUMP}:${env.PORT_DUMP}:*:${env.DB_USER_DUMP}:${env.DB_PASSWORD_DUMP}' >> ~/.pgpass
-                export PGPASSFILE='~/.pgpass'
-                chmod 600 ~/.pgpass
-
-                cat ~/.pgpass
+                echo '${env.PG_HOST}:${env.PG_PORT}:*:${env.PG_USER_ROOT}:${env.PG_ROOT_PASSWORD}' > /home/jenkins/agent/workspace/.pgpass
+                echo '${env.PG_HOST}:${env.PG_PORT}:*:${env.PG_USER}:${env.PG_PASSWORD}' >> /home/jenkins/agent/workspace/.pgpass
+                echo '${env.PG_HOST}:${env.PG_PORT}:*:${env.PG_USER}:${env.PG_PASSWORD_HOMOLOGACAO}' >> /home/jenkins/agent/workspace/.pgpass
+                echo '${env.HOST_DUMP}:${env.PORT_DUMP}:*:${env.DB_USER_DUMP}:${env.DB_PASSWORD_DUMP}' >> /home/jenkins/agent/workspace/.pgpass
+                chmod 0600 /home/jenkins/agent/workspace/.pgpass
+                cat /home/jenkins/agent/workspace/.pgpass
               """
             }
             sh """
