@@ -101,7 +101,7 @@ pipeline {
             && rm -rf /var/lib/apt/lists/*
 
           # Setup locale
-          noninteractive dpkg-reconfigure locales 
+          dpkg-reconfigure locales 
           echo "pt_BR.UTF-8 UTF-8" | tee -a /etc/locale.gen
           locale-gen pt_BR.UTF-8
           echo LANG=pt_BR.UTF-8 | tee /etc/default/locale
