@@ -110,8 +110,6 @@ readonly WAIT_TIME=5
 
 connection_string_root="postgresql://$PG_USER_ROOT:$PG_ROOT_PASSWORD@$PG_HOST:$PG_PORT"
 
-echo "$connection_string_root"
-
 # funcoes
 function verifica_postgres() {
     local connection_string="$1"
