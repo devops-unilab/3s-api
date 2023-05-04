@@ -128,16 +128,36 @@ function verifica_postgres() {
             exit 1
         fi
     done
+    echo "Servidor PostgreSQL UP!"
 }
+
+# function database_exists() {
+#     local database_name="$1"
+#     return $(psql -tAc "SELECT 1 FROM pg_database WHERE datname='$database_name';" | grep -qc 1)
+# }
 
 function database_exists() {
     local database_name="$1"
-    return $(psql -tAc "SELECT 1 FROM pg_database WHERE datname='$database_name';" | grep -qc 1)
+    local result=$(psql -t "$connection_string_root/postgres" <<-EOSQL
+        SELECT 1 FROM pg_database WHERE datname='$database_name';
+EOSQL
+    )
+    return $(echo "$result" | grep -qc 1)
 }
+
+
+# function user_exists() {
+#     local username="$1"
+#     return $(psql -tAc "SELECT 1 FROM pg_roles WHERE rolname='$username';" | grep -qc 1)
+# }
 
 function user_exists() {
     local username="$1"
-    return $(psql -tAc "SELECT 1 FROM pg_roles WHERE rolname='$username';" | grep -qc 1)
+    local result=$(psql -t "$connection_string_root/postgres" <<-EOSQL
+        SELECT 1 FROM pg_roles WHERE rolname='$username';
+EOSQL
+    )
+    return $(echo "$result" | grep -qc 1)
 }
 
 function create_user_admin() {
@@ -173,17 +193,52 @@ function create_user_regular() {
 EOSQL
 }
 
-function check_user_privilegios() {
+# function check_user_privilegios() {
+#     local database="$1"
+#     local user="$2"
+#     local result="$(psql -tAc "SELECT has_database_privilege('$user', '$database', 'CREATE');" 2>/dev/null)"
+
+#     if [ "$result" == "t" ]; then
+#         return 1
+#     else
+#         return 0
+#     fi
+# }
+
+# function check_user_privilegios() {
+#     local database="$1"
+#     local user="$2"
+#     local result=$(psql -t "$connection_string_root/postgres" <<-EOSQL
+#         SELECT has_database_privilege('$user', '$database', 'CREATE');
+# EOSQL
+#     )
+#     local retorno=$(echo "$result" | 2>/dev/null)
+#     # return $(echo "$result" | grep -qc 1)
+
+#     if [ "$retorno" == "t" ]; then
+#         return 1
+#     else
+#         return 0
+#     fi
+
+# }
+
+
+function check_user_privileges() {
     local database="$1"
     local user="$2"
-    local result="$(psql -tAc "SELECT has_database_privilege('$user', '$database', 'CREATE');" 2>/dev/null)"
+    local result=$(psql -t "$connection_string_root/postgres" <<-EOSQL
+        SELECT has_database_privilege('$user', '$database', 'CREATE');
+EOSQL
+    )
 
-    if [ "$result" == "t" ]; then
+    if [ "$result" = "t" ]; then
         return 1
     else
         return 0
     fi
 }
+
 
 function check_owner_database() {
     local database="$1"
