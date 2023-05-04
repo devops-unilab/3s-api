@@ -114,7 +114,7 @@ EOSQL
 function check_user_privilegios() {
     local database="$1"
     local user="$2"
-    local result=$(psql -tA $connection_string_root_con -c "SELECT has_database_privilege('$user', '$database', 'CREATE');" 2>/dev/null)
+    local result=$(psql -tA $connection_string_root_con -c "SELECT has_database_privilege($user, $database, 'CREATE');" 2>/dev/null)
 
     if [ "$result" == "t" ]; then
         return 1
@@ -126,7 +126,7 @@ function check_user_privilegios() {
 function check_owner_database() {
     local database="$1"
     local user="$2"
-    if [[ $(psql -tA $connection_string_root_con -c "SELECT pg_catalog.pg_get_userbyid(d.datdba) AS owner FROM pg_catalog."$database" d WHERE d.datname = '$database';") = "$user" ]]; then
+    if [[ $(psql -tA $connection_string_root_con -c "SELECT pg_catalog.pg_get_userbyid(d.datdba) AS owner FROM pg_catalog."$database" d WHERE d.datname = $database;") = "$user" ]]; then
         return 1
     else
         return 0
@@ -152,11 +152,11 @@ function atribui_privilegios() {
     local database="$1"
     local user="$2"
     psql -v ON_ERROR_STOP=1 -d $connection_string_root_con <<-EOSQL
-        GRANT CONNECT ON DATABASE "$database" TO "$user";
-        GRANT USAGE, CREATE, TEMPORARY ON SCHEMA public TO "$user";
-        ALTER DEFAULT PRIVILEGES IN DATABASE $database GRANT USAGE, CREATE, TEMPORARY ON TABLES TO "$user";
-        ALTER DEFAULT PRIVILEGES IN DATABASE $database GRANT SELECT, INSERT, UPDATE, DELETE ON TABLES TO "$user";
-        ALTER DEFAULT PRIVILEGES IN DATABASE $database GRANT USAGE, SELECT ON SEQUENCES TO "$user";
+        GRANT CONNECT ON DATABASE $database TO $user;
+        GRANT USAGE, CREATE, TEMPORARY ON SCHEMA public TO $user;
+        ALTER DEFAULT PRIVILEGES IN DATABASE $database GRANT USAGE, CREATE, TEMPORARY ON TABLES TO $user;
+        ALTER DEFAULT PRIVILEGES IN DATABASE $database GRANT SELECT, INSERT, UPDATE, DELETE ON TABLES TO $user;
+        ALTER DEFAULT PRIVILEGES IN DATABASE $database GRANT USAGE, SELECT ON SEQUENCES TO $user;
 EOSQL
 }
 
@@ -164,9 +164,9 @@ function atribui_privilegios_woner() {
     local database="$1"
     local user="$2"
     psql -v ON_ERROR_STOP=1 -d $connection_string_root_con <<-EOSQL
-        ALTER DATABASE "$database" OWNER TO "$user";"
-        GRANT USAGE, CREATE, TEMPORARY ON SCHEMA public TO "$user";
-        GRANT ALL PRIVILEGES ON DATABASE "$database" TO "$user";"
+        ALTER DATABASE $database OWNER TO $user;
+        GRANT USAGE, CREATE, TEMPORARY ON SCHEMA public TO $user;
+        GRANT ALL PRIVILEGES ON DATABASE $database TO $user;"
 EOSQL
 }
 
@@ -192,10 +192,18 @@ for i in ${!array_users[@]}; do
     fi
 
     if ! check_user_privilegios "$PG_DATABASE" "$username"; then
-        atribui_privilegios_woner "$PG_DATABASE" "$username"
+        atribui_privilegios "$PG_DATABASE" "$username"
     fi
 
     if ! check_user_privilegios "$PG_DATABASE_HOMOLOGACAO" "$username"; then
+        atribui_privilegios "$PG_DATABASE_HOMOLOGACAO" "$username"
+    fi
+
+    if ! check_owner_database "$PG_DATABASE" "$username"; then
+        atribui_privilegios_woner "$PG_DATABASE" "$username"
+    fi
+
+    if ! check_owner_database "$PG_DATABASE_HOMOLOGACAO" "$username"; then
         atribui_privilegios_woner "$PG_DATABASE_HOMOLOGACAO" "$username"
     fi
 done
