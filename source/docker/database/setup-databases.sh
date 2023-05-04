@@ -235,7 +235,7 @@ EOSQL
 }
 
 # Aguarda conexao com o PostgreSQL
-verifica_postgres "$connection_string_root"
+verifica_postgres $connection_string_root
 
 # Setup database
 if ! database_exists "$PG_DATABASE"; then
