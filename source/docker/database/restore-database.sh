@@ -31,7 +31,7 @@
 
 # uso: ./estore-database.sh db.host.com db user password
 
-set -xeu
+set +eu
 
 # PG_USER="$1"
 PG_PASSWORD_RESTORE="$1"

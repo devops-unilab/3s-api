@@ -40,72 +40,73 @@
 
 set +eu
 
+printenv
 
-echo "$PG_USER"
-echo "$PG_PASSWORD"
-echo "$PG_USER_ROOT"
-echo "$PG_ROOT_PASSWORD"
-echo "$PG_PASSWORD_HOMOLOGACAO"
-echo "$PG_DATABASE"
-echo "$PG_DATABASE_HOMOLOGACAO"
-echo "$PG_HOST"
-echo "$PG_PORT"
-echo "$DB_USER_DUMP"
-echo "$DB_PASSWORD_DUMP"
-echo "$HOST_DUMP"
-echo "$PORT_DUMP"
-echo "$USERS_DUMP"
-echo "$USERS_DUMP_ROOT"
-echo "$USERS_DUMP_ALL"
+# echo "$PG_USER"
+# echo "$PG_PASSWORD"
+# echo "$PG_USER_ROOT"
+# echo "$PG_ROOT_PASSWORD"
+# echo "$PG_PASSWORD_HOMOLOGACAO"
+# echo "$PG_DATABASE"
+# echo "$PG_DATABASE_HOMOLOGACAO"
+# echo "$PG_HOST"
+# echo "$PG_PORT"
+# echo "$DB_USER_DUMP"
+# echo "$DB_PASSWORD_DUMP"
+# echo "$HOST_DUMP"
+# echo "$PORT_DUMP"
+# echo "$USERS_DUMP"
+# echo "$USERS_DUMP_ROOT"
+# echo "$USERS_DUMP_ALL"
 
-echo "$PG_USER"
-echo "$PG_PASSWORD"
-echo "$PG_USER_ROOT"
-echo "$PG_ROOT_PASSWORD"
-echo "$PG_PASSWORD_HOMOLOGACAO"
-echo "$DB_USER_DUMP"
-echo "$DB_PASSWORD_DUMP"
+# echo "$PG_USER"
+# echo "$PG_PASSWORD"
+# echo "$PG_USER_ROOT"
+# echo "$PG_ROOT_PASSWORD"
+# echo "$PG_PASSWORD_HOMOLOGACAO"
+# echo "$DB_USER_DUMP"
+# echo "$DB_PASSWORD_DUMP"
 
 readonly MAX_ATTEMPTS=15
 readonly WAIT_TIME=5
 
-# Declarando variáveis globais
-PG_USER=""
-PG_PASSWORD=""
-PG_USER_ROOT=""
-PG_ROOT_PASSWORD=""
-PG_PASSWORD_HOMOLOGACAO=""
-DB_USER_DUMP=""
-DB_PASSWORD_DUMP=""
+# # Declarando variáveis globais
+# PG_USER=""
+# PG_PASSWORD=""
+# PG_USER_ROOT=""
+# PG_ROOT_PASSWORD=""
+# PG_PASSWORD_HOMOLOGACAO=""
+# DB_USER_DUMP=""
+# DB_PASSWORD_DUMP=""
 
-# Recebendo valores externos e atribuindo às variáveis globais
-if [[ ! -z "$1" ]]; then
-  PG_USER="$1"
-fi
+# # Recebendo valores externos e atribuindo às variáveis globais
+# if [[ ! -z "$1" ]]; then
+#   PG_USER="$1"
+# fi
 
-if [[ ! -z "$2" ]]; then
-  PG_PASSWORD="$2"
-fi
+# if [[ ! -z "$2" ]]; then
+#   PG_PASSWORD="$2"
+# fi
 
-if [[ ! -z "$3" ]]; then
-  PG_USER_ROOT="$3"
-fi
+# if [[ ! -z "$3" ]]; then
+#   PG_USER_ROOT="$3"
+# fi
 
-if [[ ! -z "$4" ]]; then
-  PG_ROOT_PASSWORD="$4"
-fi
+# if [[ ! -z "$4" ]]; then
+#   PG_ROOT_PASSWORD="$4"
+# fi
 
-if [[ ! -z "$5" ]]; then
-  PG_PASSWORD_HOMOLOGACAO="$5"
-fi
+# if [[ ! -z "$5" ]]; then
+#   PG_PASSWORD_HOMOLOGACAO="$5"
+# fi
 
-if [[ ! -z "$6" ]]; then
-  DB_USER_DUMP="$6"
-fi
+# if [[ ! -z "$6" ]]; then
+#   DB_USER_DUMP="$6"
+# fi
 
-if [[ ! -z "$7" ]]; then
-  DB_PASSWORD_DUMP="$7"
-fi
+# if [[ ! -z "$7" ]]; then
+#   DB_PASSWORD_DUMP="$7"
+# fi
 
 connection_string_root="postgresql://$PG_USER_ROOT:$PG_ROOT_PASSWORD@$PG_HOST:$PG_PORT"
 
@@ -115,8 +116,6 @@ echo "$connection_string_root"
 function verifica_postgres() {
     local connection_string="$1"
     local attempts=0
-
-    echo "$connection_string/postgres"
 
     until psql "$connection_string/postgres" -c '\q'; do
         >&2 echo "PostgreSQL indisponivel! Tentando novamente em $WAIT_TIME segundos."
@@ -131,33 +130,14 @@ function verifica_postgres() {
     echo "Servidor PostgreSQL UP!"
 }
 
-# function database_exists() {
-#     local database_name="$1"
-#     return $(psql -tAc "SELECT 1 FROM pg_database WHERE datname='$database_name';" | grep -qc 1)
-# }
-
 function database_exists() {
     local database_name="$1"
-    local result=$(psql -t "$connection_string_root/postgres" <<-EOSQL
-        SELECT 1 FROM pg_database WHERE datname='$database_name';
-EOSQL
-    )
-    return $(echo "$result" | grep -qc 1)
+    return=$(psql -tA "$connection_string_root/postgres" -c "SELECT 1 FROM pg_database WHERE datname='$database_name';" | grep -qc 1)
 }
-
-
-# function user_exists() {
-#     local username="$1"
-#     return $(psql -tAc "SELECT 1 FROM pg_roles WHERE rolname='$username';" | grep -qc 1)
-# }
 
 function user_exists() {
     local username="$1"
-    local result=$(psql -t "$connection_string_root/postgres" <<-EOSQL
-        SELECT 1 FROM pg_roles WHERE rolname='$username';
-EOSQL
-    )
-    return $(echo "$result" | grep -qc 1)
+    return $(psql -tAc "SELECT 1 FROM pg_roles WHERE rolname='$username';" | grep -qc 1)
 }
 
 function create_user_admin() {
@@ -193,52 +173,17 @@ function create_user_regular() {
 EOSQL
 }
 
-# function check_user_privilegios() {
-#     local database="$1"
-#     local user="$2"
-#     local result="$(psql -tAc "SELECT has_database_privilege('$user', '$database', 'CREATE');" 2>/dev/null)"
-
-#     if [ "$result" == "t" ]; then
-#         return 1
-#     else
-#         return 0
-#     fi
-# }
-
-# function check_user_privilegios() {
-#     local database="$1"
-#     local user="$2"
-#     local result=$(psql -t "$connection_string_root/postgres" <<-EOSQL
-#         SELECT has_database_privilege('$user', '$database', 'CREATE');
-# EOSQL
-#     )
-#     local retorno=$(echo "$result" | 2>/dev/null)
-#     # return $(echo "$result" | grep -qc 1)
-
-#     if [ "$retorno" == "t" ]; then
-#         return 1
-#     else
-#         return 0
-#     fi
-
-# }
-
-
-function check_user_privileges() {
+function check_user_privilegios() {
     local database="$1"
     local user="$2"
-    local result=$(psql -t "$connection_string_root/postgres" <<-EOSQL
-        SELECT has_database_privilege('$user', '$database', 'CREATE');
-EOSQL
-    )
+    local result=$(psql -tA "$connection_string_root/postgres" -c  "SELECT has_database_privilege('$user', '$database', 'CREATE');" 2>/dev/null)
 
-    if [ "$result" = "t" ]; then
+    if [ "$result" == "t" ]; then
         return 1
     else
         return 0
     fi
 }
-
 
 function check_owner_database() {
     local database="$1"
@@ -299,11 +244,10 @@ if ! database_exists "$PG_DATABASE_HOMOLOGACAO"; then
     create_database $PG_DATABASE_HOMOLOGACAO $PG_USER
 fi
 
-# Setup user
-array_users=("3s" "ocorrencias_user" "admindti")
+# Setup user admin
+array_users=(${USERS_DUMP_ROOT})
 for i in ${!array_users[@]}; do
 
-    echo "O elemento $i e ${array_users[$i]}"
     username="${array_users[$i]}"
 
     if ! user_exists "$username"; then
@@ -319,10 +263,10 @@ for i in ${!array_users[@]}; do
     fi
 done
 
-array_users=("cicero_robson" "luansidney" "manoeljr")
+# Setup user regular
+array_users=(${USERS_DUMP})
 for i in ${!array_users[@]}; do
 
-    echo "O elemento $i e ${array_users[$i]}"
     username="${array_users[$i]}"
 
     if ! user_exists "$username"; then
