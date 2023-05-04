@@ -101,8 +101,13 @@ pipeline {
             && rm -rf /var/lib/apt/lists/*
 
           # Setup locale
-          sed -i 's/# pt_BR.UTF-8 UTF-8/pt_BR.UTF-8 UTF-8/' /etc/locale.gen
+          noninteractive dpkg-reconfigure locales 
+          echo "pt_BR.UTF-8 UTF-8" | tee -a /etc/locale.gen
           locale-gen pt_BR.UTF-8
+          echo LANG=pt_BR.UTF-8 | tee /etc/default/locale
+          echo LC_CTYPE=pt_BR.UTF-8 | tee -a /etc/default/locale
+          echo LC_ALL=pt_BR.UTF-8 | tee -a /etc/default/locale
+          echo LANGUAGE=pt_BR:pt:en | tee -a /etc/default/locale
 
           # Instala kubectl
           curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl" 
