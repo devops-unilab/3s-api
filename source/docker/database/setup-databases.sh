@@ -40,75 +40,10 @@
 
 set +eu
 
-printenv
-
-# echo "$PG_USER"
-# echo "$PG_PASSWORD"
-# echo "$PG_USER_ROOT"
-# echo "$PG_ROOT_PASSWORD"
-# echo "$PG_PASSWORD_HOMOLOGACAO"
-# echo "$PG_DATABASE"
-# echo "$PG_DATABASE_HOMOLOGACAO"
-# echo "$PG_HOST"
-# echo "$PG_PORT"
-# echo "$DB_USER_DUMP"
-# echo "$DB_PASSWORD_DUMP"
-# echo "$HOST_DUMP"
-# echo "$PORT_DUMP"
-# echo "$USERS_DUMP"
-# echo "$USERS_DUMP_ROOT"
-# echo "$USERS_DUMP_ALL"
-
-# echo "$PG_USER"
-# echo "$PG_PASSWORD"
-# echo "$PG_USER_ROOT"
-# echo "$PG_ROOT_PASSWORD"
-# echo "$PG_PASSWORD_HOMOLOGACAO"
-# echo "$DB_USER_DUMP"
-# echo "$DB_PASSWORD_DUMP"
+# printenv
 
 readonly MAX_ATTEMPTS=20
 readonly WAIT_TIME=5
-
-# # Declarando variáveis globais
-# PG_USER=""
-# PG_PASSWORD=""
-# PG_USER_ROOT=""
-# PG_ROOT_PASSWORD=""
-# PG_PASSWORD_HOMOLOGACAO=""
-# DB_USER_DUMP=""
-# DB_PASSWORD_DUMP=""
-
-# # Recebendo valores externos e atribuindo às variáveis globais
-# if [[ ! -z "$1" ]]; then
-#   PG_USER="$1"
-# fi
-
-# if [[ ! -z "$2" ]]; then
-#   PG_PASSWORD="$2"
-# fi
-
-# if [[ ! -z "$3" ]]; then
-#   PG_USER_ROOT="$3"
-# fi
-
-# if [[ ! -z "$4" ]]; then
-#   PG_ROOT_PASSWORD="$4"
-# fi
-
-# if [[ ! -z "$5" ]]; then
-#   PG_PASSWORD_HOMOLOGACAO="$5"
-# fi
-
-# if [[ ! -z "$6" ]]; then
-#   DB_USER_DUMP="$6"
-# fi
-
-# if [[ ! -z "$7" ]]; then
-#   DB_PASSWORD_DUMP="$7"
-# fi
-
-#connection_string_root='postgresql://$PG_USER_ROOT:$PG_ROOT_PASSWORD@$PG_HOST:$PG_PORT'
 
 connection_string_root="-h $PG_HOST -p $PG_PORT -U $PG_USER_ROOT -d $PG_DATABASE -w"
 connection_string_root_con="-d host=$PG_HOST port=$PG_PORT dbname=$PG_DATABASE user=$PG_USER_ROOT -w"
@@ -146,7 +81,7 @@ function user_exists() {
 
 function create_user_admin() {
     local username=$1
-    psql ON_ERROR_STOP=1 $connection_string_root_con 2>/dev/null <<-EOSQL
+    psql -v ON_ERROR_STOP=1 $connection_string_root_con  <<-EOSQL
         CREATE ROLE "$username" WITH
             SUPERUSER
             LOGIN 
@@ -155,7 +90,7 @@ function create_user_admin() {
             REPLICATION
             INHERIT
             CONNECTION LIMIT -1
-            PASSWORD 'md5' || md5('$username');
+            PASSWORD 'md5' || md5('"$username"');
 
         COMMENT ON ROLE "$username" IS 'Usuario admin padrao';
 EOSQL
@@ -163,7 +98,7 @@ EOSQL
 
 function create_user_regular() {
     local username=$1
-    psql ON_ERROR_STOP=1 $connection_string_root_con 2>/dev/null <<-EOSQL
+    psql -v ON_ERROR_STOP=1 $connection_string_root_con <<-EOSQL
         CREATE ROLE "$username" WITH
             LOGIN 
             CREATEDB
@@ -171,7 +106,7 @@ function create_user_regular() {
             REPLICATION
             INHERIT
             CONNECTION LIMIT -1
-            PASSWORD 'md5' || md5('$username');
+            PASSWORD 'md5' || md5('"$username"');
 
         COMMENT ON ROLE "$username" IS 'Usuario regular padrao';
 EOSQL
@@ -202,7 +137,7 @@ function check_owner_database() {
 function create_database() {
 	local database=$1
     local user=$2
-    psql -t $connection_string_root <<-EOSQL
+    psql -v ON_ERROR_STOP=1 $connection_string_root <<-EOSQL
         CREATE DATABASE "$database"
             WITH
             OWNER = "$user"
@@ -217,7 +152,7 @@ EOSQL
 function atribui_privilegios() {
     local database="$1"
     local user="$2"
-    psql ON_ERROR_STOP=1 $connection_string_root_con 2>/dev/null <<-EOSQL
+    psql -v ON_ERROR_STOP=1 $connection_string_root_con 2>/dev/null <<-EOSQL
         GRANT CONNECT ON DATABASE "$database" TO "$user";
         GRANT USAGE, CREATE, TEMPORARY ON SCHEMA public TO "$user";
         ALTER DEFAULT PRIVILEGES IN DATABASE $database GRANT USAGE, CREATE, TEMPORARY ON TABLES TO "$user";
@@ -229,7 +164,7 @@ EOSQL
 function atribui_privilegios_woner() {
     local database="$1"
     local user="$2"
-    psql ON_ERROR_STOP=1 $connection_string_root_con 2>/dev/null <<-EOSQL
+    psql -v ON_ERROR_STOP=1 $connection_string_root_con 2>/dev/null <<-EOSQL
         ALTER DATABASE "$database" OWNER TO "$user";"
         GRANT USAGE, CREATE, TEMPORARY ON SCHEMA public TO "$user";
         GRANT ALL PRIVILEGES ON DATABASE "$database" TO "$user";"
@@ -251,7 +186,6 @@ fi
 # Setup user admin
 array_users=(${USERS_DUMP_ROOT})
 for i in ${!array_users[@]}; do
-
     username="${array_users[$i]}"
 
     if ! user_exists "$username"; then
@@ -270,7 +204,6 @@ done
 # Setup user regular
 array_users=(${USERS_DUMP})
 for i in ${!array_users[@]}; do
-
     username="${array_users[$i]}"
 
     if ! user_exists "$username"; then
