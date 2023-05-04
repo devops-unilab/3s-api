@@ -34,7 +34,7 @@ set +eu
 # DB_USER_DUMP="$1"
 # DB_PASSWORD_DUMP="$2"
 
-connection_string_dump='-h $HOST_DUMP -p $PORT_DUMP -U $DB_USER_DUMP -d $DB_DATABASE_DUMP -w'
+connection_string_dump='-h \${HOST_DUMP} -p \${PORT_DUMP} -U \${DB_USER_DUMP} -d \${DB_DATABASE_DUMP} -w'
 
 echo "$connection_string_dump"
 

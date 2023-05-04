@@ -267,15 +267,23 @@ pipeline {
               "DB_PASSWORD_DUMP=$DB_PASSWORD_DUMP"
             ]) {
 
-              // sh 'echo \${PG_USER}'
-              // sh 'echo \${PG_PASSWORD}'
-              // sh 'echo \${PG_USER_ROOT}'
-              // sh 'echo \${PG_ROOT_PASSWORD}'
-              // sh 'echo \${PG_PASSWORD_HOMOLOGACAO}'
-              // sh 'echo \${DB_USER_DUMP}'
-              // sh 'echo \${DB_PASSWORD_DUMP}'
+              sh 'echo \${PG_USER}'
+              sh 'echo \${PG_PASSWORD}'
+              sh 'echo \${PG_USER_ROOT}'
+              sh 'echo \${PG_ROOT_PASSWORD}'
+              sh 'echo \${PG_PASSWORD_HOMOLOGACAO}'
+              sh 'echo \${DB_USER_DUMP}'
+              sh 'echo \${DB_PASSWORD_DUMP}'
               
               sh 'cat ./secret.txt'
+
+              sh 'echo "\${PG_HOST}:\${PG_PORT}:*:\${PG_USER_ROOT}:\${PG_ROOT_PASSWORD}" > ~/.pgpass'
+              sh 'echo "\${PG_HOST}:\${PG_PORT}:*:\${PG_USER}:\${PG_PASSWORD}" >> ~/.pgpass'
+              sh 'echo "\${PG_HOST}:\${PG_PORT}:*:\${PG_USER}:\${PG_PASSWORD_HOMOLOGACAO}" >> ~/.pgpass'
+              sh 'echo "\${HOST_DUMP}:\${PORT_DUMP}:*:\${DB_USER_DUMP}:\${DB_PASSWORD_DUMP}" >> ~/.pgpass'
+              sh 'chmod 600 ~/.pgpass'
+
+              sh 'cat ~/.pgpass'
             }
             sh ''' 
               apt purge postgresql* -y
@@ -285,11 +293,6 @@ pipeline {
                 && rm -rf /var/lib/apt/lists/*
               sed -i 's/# pt_BR.UTF-8 UTF-8/pt_BR.UTF-8 UTF-8/' /etc/locale.gen
               locale-gen pt_BR.UTF-8
-              echo '$PG_HOST:$PG_PORT:*:$PG_USER_ROOT:$PG_ROOT_PASSWORD' > ~/.pgpass
-              echo '$PG_HOST:$PG_PORT:*:$PG_USER:$PG_PASSWORD' >> ~/.pgpass
-              echo '$PG_HOST:$PG_PORT:*:$PG_USER:$PG_PASSWORD_HOMOLOGACAO' >> ~/.pgpass
-              echo '$HOST_DUMP:$PORT_DUMP:*:$DB_USER_DUMP:$DB_PASSWORD_DUMP' >> ~/.pgpass
-              chmod 600 ~/.pgpass
 
               chmod +x source/docker/database/setup-databases.sh
 
