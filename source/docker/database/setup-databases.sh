@@ -108,7 +108,9 @@ function user_exists() {
 
 function create_user_admin() { 
     local username=$1
-    if ! user_exists "$username"; then
+    if user_exists "$username"; then
+        echo "Role $username existente!"
+    else
         psql -v ON_ERROR_STOP=1 -d $connection_string_root_con <<-EOSQL
             CREATE ROLE $username WITH
                 SUPERUSER
@@ -143,7 +145,9 @@ EOSQL
 
 function create_user_regular() {
     local username=$1
-    if ! user_exists "$username"; then
+    if user_exists "$username"; then
+        echo "Role $username existente!"
+    else
         psql -v ON_ERROR_STOP=1 -d $connection_string_root_con <<-EOSQL
             CREATE ROLE $username WITH
                 LOGIN 
