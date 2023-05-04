@@ -80,7 +80,7 @@ function user_exists() {
 function create_user_admin() {
     local username=$1
     psql -v ON_ERROR_STOP=1 -d $connection_string_root_con <<-EOSQL
-        CREATE ROLE "$username" WITH
+        CREATE ROLE $username WITH
             SUPERUSER
             LOGIN 
             CREATEDB
@@ -88,25 +88,25 @@ function create_user_admin() {
             REPLICATION
             INHERIT
             CONNECTION LIMIT -1
-            PASSWORD 'md5' || md5('"$username"');
+            PASSWORD 'md5' || md5('$username');
 
-        COMMENT ON ROLE "$username" IS 'Usuario admin padrao';
+        COMMENT ON ROLE $username IS 'Usuario admin padrao';
 EOSQL
 }
 
 function create_user_regular() {
     local username=$1
     psql -v ON_ERROR_STOP=1 -d $connection_string_root_con <<-EOSQL
-        CREATE ROLE "$username" WITH
+        CREATE ROLE $username WITH
             LOGIN 
             CREATEDB
             CREATEROLE
             REPLICATION
             INHERIT
             CONNECTION LIMIT -1
-            PASSWORD 'md5' || md5('"$username"');
+            PASSWORD 'md5' || md5('$username');
 
-        COMMENT ON ROLE "$username" IS 'Usuario regular padrao';
+        COMMENT ON ROLE $username IS 'Usuario regular padrao';
 EOSQL
 }
 
@@ -136,14 +136,14 @@ function create_database() {
 	local database=$1
     local user=$2
     psql -v ON_ERROR_STOP=1 -d $connection_string_root_con <<-EOSQL
-        CREATE DATABASE "$database"
+        CREATE DATABASE $database
             WITH
-            OWNER = "$user"
+            OWNER = $user
             ENCODING = 'UTF8'
             CONNECTION LIMIT = -1
             TEMPLATE template0;
 
-        COMMENT ON DATABASE "$database" IS 'Dadabase PostgreSQL $database';
+        COMMENT ON DATABASE $database IS 'Dadabase PostgreSQL $database';
 EOSQL
 }
 
