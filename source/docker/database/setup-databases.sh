@@ -96,7 +96,7 @@ function user_exists() {
 # }
 
 
-function create_user_admin() {
+function create_user_admin() { 
     local username=$1
     if ! user_exists $username; then
         psql -v ON_ERROR_STOP=1 -d $connection_string_root_con <<-EOSQL
