@@ -243,19 +243,19 @@ pipeline {
               "DB_PASSWORD_DUMP=\${env.DB_PASSWORD_DUMP}"
             ]) {
               sh '''
-                echo \${PG_USER} > ./secret.txt
-                echo \${PG_PASSWORD} >> ./secret.txt
-                echo \${PG_USER_ROOT} >> ./secret.txt
-                echo \${PG_ROOT_PASSWORD} >> ./secret.txt
-                echo \${PG_PASSWORD_HOMOLOGACAO} >> ./secret.txt
-                echo \${DB_USER_DUMP} >> ./secret.txt
-                echo \${DB_PASSWORD_DUMP} >> ./secret.txt
+                echo "\${PG_USER}" > ./secret.txt
+                echo "\${PG_PASSWORD}" >> ./secret.txt
+                echo "\${PG_USER_ROOT}" >> ./secret.txt
+                echo "\${PG_ROOT_PASSWORD} ">> ./secret.txt
+                echo "\${PG_PASSWORD_HOMOLOGACAO}" >> ./secret.txt
+                echo "\${DB_USER_DUMP}" >> ./secret.txt
+                echo "\${DB_PASSWORD_DUMP}" >> ./secret.txt
                 cat ./secret.txt
 
-                echo \${PG_HOST}:\${PG_PORT}:*:\${PG_USER_ROOT}:\${PG_ROOT_PASSWORD} > ~/.pgpass
-                echo \${PG_HOST}:\${PG_PORT}:*:\${PG_USER}:\${PG_PASSWORD}" >> ~/.pgpass
-                echo \${PG_HOST}:\${PG_PORT}:*:\${PG_USER}:\${PG_PASSWORD_HOMOLOGACAO} >> ~/.pgpass
-                echo \${HOST_DUMP}:\${PORT_DUMP}:*:\${DB_USER_DUMP}:\${DB_PASSWORD_DUMP} >> ~/.pgpass
+                echo "\${PG_HOST}:\${PG_PORT}:*:\${PG_USER_ROOT}:\${PG_ROOT_PASSWORD}" > ~/.pgpass
+                echo "\${PG_HOST}:\${PG_PORT}:*:\${PG_USER}:\${PG_PASSWORD}" >> ~/.pgpass
+                echo "\${PG_HOST}:\${PG_PORT}:*:\${PG_USER}:\${PG_PASSWORD_HOMOLOGACAO}" >> ~/.pgpass
+                echo "\${HOST_DUMP}:\${PORT_DUMP}:*:\${DB_USER_DUMP}:\${DB_PASSWORD_DUMP}" >> ~/.pgpass
                 chmod 600 ~/.pgpass
                 cat ~/.pgpass
               '''
@@ -266,8 +266,9 @@ pipeline {
               DEBIAN_FRONTEND=noninteractive apt-get update\
                 && apt-get install -y locales procps sudo postgresql-client \
                 && rm -rf /var/lib/apt/lists/*
-              sed -i 's/# pt_BR.UTF-8 UTF-8/pt_BR.UTF-8 UTF-8/' /etc/locale.gen
+              sed -i "s/# pt_BR.UTF-8 UTF-8/pt_BR.UTF-8 UTF-8/" /etc/locale.gen
               locale-gen pt_BR.UTF-8
+              cat /etc/locale.gen
 
               printenv
 
