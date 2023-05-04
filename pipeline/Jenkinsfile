@@ -96,16 +96,13 @@ pipeline {
         // executar alguns comandos shell para configurar outros detalhes.
         sh '''
           # Instala pacotes
-          DEBIAN_FRONTEND=noninteractive apt-get update && apt-get install -y --no-install-recommends \
-            locales \
-            sudo \
-            curl \
-            wget \
+          DEBIAN_FRONTEND=noninteractive apt-get update &&\
+            apt-get install -y locales sudo curl wget \
             unzip \
             rsync \
             postgresql-client \
             && rm -rf /var/lib/apt/lists/*
-            
+
           # Instala kubectl
           curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl" 
           curl -LO "https://dl.k8s.io/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl.sha256"
@@ -284,16 +281,13 @@ pipeline {
               sh 'printenv'
             }
             sh ''' 
-              DEBIAN_FRONTEND=noninteractive apt-get update && apt-get -y upgrade \
-                apt-get install -y --no-install-recommends \
-                locales \
-                procps \
-                sudo \
+              DEBIAN_FRONTEND=noninteractive apt-get update\
+                && apt-get install -y locales procps sudo\
                 && rm -rf /var/lib/apt/lists/*
               sed -i 's/# pt_BR.UTF-8 UTF-8/pt_BR.UTF-8 UTF-8/' /etc/locale.gen
               locale-gen pt_BR.UTF-8
               pg_createcluster 13 main
-              sudo /etc/init.d/postgresql restart
+              /etc/init.d/postgresql restart
               sudo -u postgres psql -c "ALTER USER postgres WITH PASSWORD 'postgres';" -c '\\q'
               echo -e "$(sudo ps aux | grep postgres)\n"
 
