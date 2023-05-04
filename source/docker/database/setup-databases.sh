@@ -110,7 +110,7 @@ function create_user_admin() {
     local username=$1
     if [[ $(user_exists "$username") -eq 0 ]]; then
         psql -v ON_ERROR_STOP=1 -d $connection_string_root_con <<-EOSQL
-            CREATE ROLE "$username" WITH
+            CREATE ROLE $username WITH
                 SUPERUSER
                 LOGIN 
                 CREATEDB
@@ -120,7 +120,7 @@ function create_user_admin() {
                 CONNECTION LIMIT -1
                 PASSWORD 'md56ca6a5dafcdbc6a71988f97f4fc56fa1';
 
-            COMMENT ON ROLE "$username" IS 'Usuario admin padrao';
+            COMMENT ON ROLE $username IS 'Usuario admin padrao';
 EOSQL
     fi
 }
@@ -145,7 +145,7 @@ function create_user_regular() {
     local username=$1
     if [[ $(user_exists "$username") -eq 0 ]]; then
         psql -v ON_ERROR_STOP=1 -d $connection_string_root_con <<-EOSQL
-            CREATE ROLE "$username" WITH
+            CREATE ROLE $username WITH
                 LOGIN 
                 CREATEDB
                 CREATEROLE
@@ -154,7 +154,7 @@ function create_user_regular() {
                 CONNECTION LIMIT -1
                 PASSWORD 'md56ca6a5dafcdbc6a71988f97f4fc56fa1';
 
-            COMMENT ON ROLE "$username" IS 'Usuario regular padrao';
+            COMMENT ON ROLE $username IS 'Usuario regular padrao';
 EOSQL
     fi
 }
