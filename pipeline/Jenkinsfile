@@ -406,7 +406,7 @@ pipeline {
                 sh 'cat ./secret.txt'
                 sh 'cat ~/.pgpass'
               }
-            }
+        }
 
         sh "chmod +x source/docker/database/dump-database.sh"
         sh "chmod +x source/docker/database/restore-database.sh"
