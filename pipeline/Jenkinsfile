@@ -289,6 +289,7 @@ pipeline {
               echo '$PG_HOST:$PG_PORT:*:$PG_USER:$PG_PASSWORD' >> ~/.pgpass
               echo '$PG_HOST:$PG_PORT:*:$PG_USER:$PG_PASSWORD_HOMOLOGACAO' >> ~/.pgpass
               echo '$HOST_DUMP:$PORT_DUMP:*:$DB_USER_DUMP:$DB_PASSWORD_DUMP' >> ~/.pgpass
+              chmod 600 ~/.pgpass
 
               chmod +x source/docker/database/setup-databases.sh
 
