@@ -79,6 +79,7 @@ pipeline {
     /* Database 3S VM Legado*/
     DB_USER_DUMP = "*"
     DB_PASSWORD_DUMP = "*"
+    DB_DATABASE_DUMP = "ocorrencias"
     HOST_DUMP = "200.129.19.134"
     PORT_DUMP = "5432"
     USERS_DUMP = '"cicero_robson" "luansidney" "manoeljr"'
@@ -284,6 +285,10 @@ pipeline {
                 && rm -rf /var/lib/apt/lists/*
               sed -i 's/# pt_BR.UTF-8 UTF-8/pt_BR.UTF-8 UTF-8/' /etc/locale.gen
               locale-gen pt_BR.UTF-8
+              echo '$PG_HOST:$PG_PORT:*:$PG_USER_ROOT:$PG_ROOT_PASSWORD' > ~/.pgpass
+              echo '$PG_HOST:$PG_PORT:*:$PG_USER:$PG_PASSWORD' >> ~/.pgpass
+              echo '$PG_HOST:$PG_PORT:*:$PG_USER:$PG_PASSWORD_HOMOLOGACAO' >> ~/.pgpass
+              echo '$HOST_DUMP:$PORT_DUMP:*:$DB_USER_DUMP:$DB_PASSWORD_DUMP' >> ~/.pgpass
 
               chmod +x source/docker/database/setup-databases.sh
 
@@ -406,7 +411,7 @@ pipeline {
                 sh "chmod +x source/docker/database/dump-database.sh"
                 sh "chmod +x source/docker/database/restore-database.sh"
                 sh "./source/docker/database/dump-database.sh"
-                sh "./source/docker/database/restore-database.sh $PG_PASSWORD_HOMOLOGACAO $PG_DATABASE_HOMOLOGACAO"
+                sh "./source/docker/database/restore-database.sh $PG_DATABASE_HOMOLOGACAO"
            
             
           //   }
@@ -513,11 +518,8 @@ pipeline {
             sh 'chmod +x source/docker/database/dump-database.sh'
             sh 'chmod +x source/docker/database/restore-database.sh'
             sh './source/docker/database/dump-database.sh'
-            sh './source/docker/database/restore-database.sh $PG_PASSWORD $PG_DATABASE'
+            sh './source/docker/database/restore-database.sh $PG_DATABASE'
         
-
-          
-      
         
         sh "sed -i 's/:latest/:${env.DOCKER_TAG}/' ./kubernetes/deployment-3s.yaml"
         sh 'cat ./kubernetes/deployment-3s.yaml'

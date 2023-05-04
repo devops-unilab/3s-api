@@ -34,12 +34,16 @@ set +eu
 # DB_USER_DUMP="$1"
 # DB_PASSWORD_DUMP="$2"
 
+connection_string_dump='-h $HOST_DUMP -p $PORT_DUMP -U $DB_USER_DUMP -d $DB_DATABASE_DUMP -w'
+
+echo "$connection_string_dump"
+
 # Aguardar até que não haja mais atividades de banco de dados
-while [[ $(psql "postgresql://$DB_USER_DUMP:$DB_PASSWORD_DUMP@$HOST_DUMP:$PORT_DUMP/postgres" -c "SELECT count(*) FROM pg_stat_activity WHERE datname = 'ocorrencias';" -t) -gt 0 ]]
+while [[ $(psql "$connection_string_dump" -c "SELECT count(*) FROM pg_stat_activity WHERE datname = 'ocorrencias';" -t) -gt 0 ]]
 do
   echo "Ainda há atividades de banco de dados. Aguardando..."
   sleep 1
 done
 
 # Realiza backup por dump incluindo objetos grandes
-pg_dump "postgresql://$DB_USER_DUMP:$DB_PASSWORD_DUMP@$HOST_DUMP:$PORT_DUMP/ocorrencias" --no-owner --no-acl -Fc -b -v -f /tmp/bd_pg_dump.dmp
+pg_dump "$connection_string_dump" --no-owner --no-acl -Fc -b -v -f /tmp/bd_pg_dump.dmp
