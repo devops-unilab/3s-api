@@ -96,11 +96,11 @@ pipeline {
         // executar alguns comandos shell para configurar outros detalhes.
         sh '''
           # Instala pacotes
-          DEBIAN_FRONTEND=noninteractive apt-get update && apt-get upgrade -y 
+          apt-get update && apt-get upgrade -y 
           apt-get install -y locales sudo curl wget postgresql-client unzip rsync procps
 
           # Setup locale
-          dpkg-reconfigure locales 
+          DEBIAN_FRONTEND=noninteractive dpkg-reconfigure locales 
           sed -i 's/# pt_BR.UTF-8 UTF-8/pt_BR.UTF-8 UTF-8/' /etc/locale.gen
           locale-gen pt_BR.UTF-8
           echo LANG=pt_BR.UTF-8 | tee /etc/default/locale
