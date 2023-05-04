@@ -78,37 +78,79 @@ function user_exists() {
     return $(psql -tA $connection_string_root_con -c "SELECT 1 FROM pg_roles WHERE rolname='$username';" | grep -qc 1)
 }
 
+# function create_user_admin() {
+#     local username=$1
+#     psql -v ON_ERROR_STOP=1 -d $connection_string_root_con <<-EOSQL
+#         CREATE ROLE $username WITH
+#             SUPERUSER
+#             LOGIN 
+#             CREATEDB
+#             CREATEROLE
+#             REPLICATION
+#             INHERIT
+#             CONNECTION LIMIT -1
+#             PASSWORD 'md56ca6a5dafcdbc6a71988f97f4fc56fa1';
+
+#         COMMENT ON ROLE $username IS 'Usuario admin padrao';
+# EOSQL
+# }
+
+
 function create_user_admin() {
     local username=$1
-    psql -v ON_ERROR_STOP=1 -d $connection_string_root_con <<-EOSQL
-        CREATE ROLE $username WITH
-            SUPERUSER
-            LOGIN 
-            CREATEDB
-            CREATEROLE
-            REPLICATION
-            INHERIT
-            CONNECTION LIMIT -1
-            PASSWORD 'md56ca6a5dafcdbc6a71988f97f4fc56fa1';
+    if ! user_exists $username; then
+        psql -v ON_ERROR_STOP=1 -d $connection_string_root_con <<-EOSQL
+            CREATE ROLE $username WITH
+                SUPERUSER
+                LOGIN 
+                CREATEDB
+                CREATEROLE
+                REPLICATION
+                INHERIT
+                CONNECTION LIMIT -1
+                PASSWORD 'md56ca6a5dafcdbc6a71988f97f4fc56fa1';
 
-        COMMENT ON ROLE $username IS 'Usuario admin padrao';
+            COMMENT ON ROLE $username IS 'Usuario admin padrao';
 EOSQL
+    else
+        echo "Role $username existente!"
+    fi
 }
+
+# function create_user_regular() {
+#     local username=$1
+#     psql -v ON_ERROR_STOP=1 -d $connection_string_root_con <<-EOSQL
+#         CREATE ROLE $username WITH
+#             LOGIN 
+#             CREATEDB
+#             CREATEROLE
+#             REPLICATION
+#             INHERIT
+#             CONNECTION LIMIT -1
+#             PASSWORD 'md56ca6a5dafcdbc6a71988f97f4fc56fa1';
+
+#         COMMENT ON ROLE $username IS 'Usuario regular padrao';
+# EOSQL
+# }
 
 function create_user_regular() {
     local username=$1
-    psql -v ON_ERROR_STOP=1 -d $connection_string_root_con <<-EOSQL
-        CREATE ROLE $username WITH
-            LOGIN 
-            CREATEDB
-            CREATEROLE
-            REPLICATION
-            INHERIT
-            CONNECTION LIMIT -1
-            PASSWORD 'md56ca6a5dafcdbc6a71988f97f4fc56fa1';
+    if ! user_exists $username; then
+        psql -v ON_ERROR_STOP=1 -d $connection_string_root_con <<-EOSQL
+            CREATE ROLE $username WITH
+                LOGIN 
+                CREATEDB
+                CREATEROLE
+                REPLICATION
+                INHERIT
+                CONNECTION LIMIT -1
+                PASSWORD 'md56ca6a5dafcdbc6a71988f97f4fc56fa1';
 
-        COMMENT ON ROLE $username IS 'Usuario regular padrao';
+            COMMENT ON ROLE $username IS 'Usuario regular padrao';
 EOSQL
+    else
+        echo "Role $username existente!"
+    fi
 }
 
 function check_user_privilegios() {
@@ -187,9 +229,7 @@ array_users=(${USERS_DUMP_ROOT})
 for i in ${!array_users[@]}; do
     username="${array_users[$i]}"
 
-    if ! user_exists "$username"; then
-        create_user_admin "$username"
-    fi
+    create_user_admin "$username"
 
     if ! check_user_privilegios "$PG_DATABASE" "$username"; then
         atribui_privilegios "$PG_DATABASE" "$username"
@@ -213,9 +253,7 @@ array_users=(${USERS_DUMP})
 for i in ${!array_users[@]}; do
     username="${array_users[$i]}"
 
-    if ! user_exists "$username"; then
-        create_user_regular "$username"
-    fi
+    create_user_regular "$username"
 
     if ! check_user_privilegios "$PG_DATABASE" "$username"; then
         atribui_privilegios "$PG_DATABASE" "$username"
