@@ -93,7 +93,7 @@ pipeline {
           workspace = "$env.WORKSPACE"
         }
         // executar alguns comandos shell para configurar outros detalhes.
-        sh """
+        sh '''
           # Instala pacotes
           DEBIAN_FRONTEND=noninteractive apt-get update && apt-get upgrade -y \
             apt-get install -y locales sudo curl wget \
@@ -128,7 +128,7 @@ pipeline {
           mv source/.env.example source/.env
           ls -la source/
           printenv
-        """
+        '''
       }
     }
 
@@ -225,13 +225,13 @@ pipeline {
     stage('Setup Database') {
       steps {
         withKubeConfig([credentialsId: 'kubeconfig-c1', serverUrl: 'https://dti-k8s-c1.unilab.edu.br:6443']) {
-          sh """
+          sh '''
             if ! kubectl get statefulset postgres -n postgres-3s >/dev/null 2>&1; then
               kubectl apply -f ./kubernetes/statefulSet-postgres-3s.yaml --record
             fi
             echo "Lista de recursos."
             kubectl get all,sa,ing,pvc -n postgres-3s -o wide
-          """
+          '''
         }
         script {
           withVault([configuration: configuration, vaultSecrets: secrets]) {
