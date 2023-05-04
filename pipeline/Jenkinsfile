@@ -95,9 +95,8 @@ pipeline {
         // executar alguns comandos shell para configurar outros detalhes.
         sh '''
           # Instala pacotes
-          DEBIAN_FRONTEND=noninteractive apt-get update && apt-get upgrade -y \
-          apt-get install -y locales sudo curl wget \
-          postgresql-client unzip rsync procps
+          DEBIAN_FRONTEND=noninteractive apt-get update && apt-get upgrade -y 
+          apt-get install -y locales sudo curl wget postgresql-client unzip rsync procps
 
           # Setup locale
           dpkg-reconfigure locales 
