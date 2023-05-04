@@ -93,7 +93,7 @@ pipeline {
           workspace = "$env.WORKSPACE"
         }
         // executar alguns comandos shell para configurar outros detalhes.
-        sh """
+        sh '''
           # Instala pacotes
           DEBIAN_FRONTEND=noninteractive apt-get update &&\
             apt-get install -y locales sudo curl wget \
@@ -116,7 +116,7 @@ pipeline {
           curl -sS https://getcomposer.org/installer -o composer-setup.php 
           php composer-setup.php --install-dir=/usr/local/bin --filename=composer 
           chown -R www-data:www-data /usr/local/bin/composer 
-        """
+        '''
         sh """
           # Obtem o vendor
           composer create-project laravel/laravel --prefer-dist /tmp/proj-laravel
@@ -304,7 +304,7 @@ pipeline {
         sh "./source/docker/database/dump-database.sh"
         sh "./source/docker/database/restore-database.sh $PG_DATABASE_HOMOLOGACAO"
 
-        sh """
+        sh '''
           sed -i 's/postgres.postgres-3s.svc.cluster.local/10.130.0.154/' ./kubernetes/deployment-3s.yaml
           sed -i 's/3s-ocorrencias/3s-homologacao/' ./kubernetes/deployment-3s.yaml"
           sed -i 's/:latest/:${env.DOCKER_TAG}/' ./kubernetes/deployment-3s.yaml"
@@ -312,12 +312,12 @@ pipeline {
           sed -i 's/10.130.0.153/10.130.2.153/' ./kubernetes/deployment-3s.yaml"
           sed -i 's/dti-app-test-c1.unilab.edu.br/3shomologacao.unilab.edu.br/' ./kubernetes/deployment-3s.yaml
           cat ./kubernetes/deployment-3s.yaml
-        """
+        '''
       }
 
       withKubeConfig([credentialsId: 'kubeconfig-c3', serverUrl: 'https://dti-k8s-c3.unilab.edu.br:6443']) {
         script {
-          sh """
+          sh '''
             set -x
             echo "Verifica deploy ativo e exclui."
             kubectl get deployment $APP_NAME -n $APP_NAMESPACE >/dev/null 2>&1 && \
@@ -330,7 +330,7 @@ pipeline {
 
             echo "Lista de recursos."
             kubectl get all,sa,ing,pvc -n $APP_NAMESPACE -o wide
-          """
+          '''
           env.APP_URI_STAGING = sh(script: 'kubectl get ingress app-3s -n app-3s -o jsonpath="{.spec.rules[0].host}" | sed "s/^/http:\\/\\//"', returnStdout: true).trim()
         }
       }
