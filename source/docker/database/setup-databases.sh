@@ -184,8 +184,8 @@ if ! database_exists "$PG_DATABASE_HOMOLOGACAO"; then
 fi
 
 # Setup user admin
-array_users=(${USERS_DUMP_ROOT})
-for i in ${!array_users[@]}; do
+array_users=(\${USERS_DUMP_ROOT})
+for i in \${!array_users[@]}; do
     username="${array_users[$i]}"
 
     if ! user_exists "$username"; then
@@ -202,8 +202,8 @@ for i in ${!array_users[@]}; do
 done
 
 # Setup user regular
-array_users=(${USERS_DUMP})
-for i in ${!array_users[@]}; do
+array_users=(\${USERS_DUMP})
+for i in \${!array_users[@]}; do
     username="${array_users[$i]}"
 
     if ! user_exists "$username"; then

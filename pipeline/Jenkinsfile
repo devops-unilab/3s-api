@@ -270,7 +270,7 @@ pipeline {
 
                 chmod +x source/docker/database/setup-databases.sh
                 ./source/docker/database/setup-databases.sh 
-            '''
+              '''
           }
         }
       }
