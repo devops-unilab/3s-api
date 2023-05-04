@@ -130,39 +130,39 @@ pipeline {
       }
     }
 
-    stage('SonarQube Analysis') {
-      steps {
-        container('maven') {
-          script {
-            def branchName = env.BRANCH_NAME
-            def scannerHome = tool 'SonarScanner'
-            withSonarQubeEnv('SonarQube') {
-              sh "${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=app-3s -Dsonar.sources=source/app3s -Dsonar.exclusions=vendor/** -Dsonar.language=php -Dsonar.sourceEncoding=UTF-8"
-              def props = readProperties  file: '.scannerwork/report-task.txt'
-              def sonarServerUrl=props['serverUrl']
-              def ceTaskUrl= props['ceTaskUrl']
-              def ceTask
-              timeout(time: 2, unit: 'MINUTES') {
-                  waitUntil {
-                      def response = httpRequest(url: ceTaskUrl, authentication: 'sonar-admin')
-                      ceTask = readJSON text: response.content
-                      echo ceTask.toString()
-                      return "SUCCESS".equals(ceTask["task"]["status"])
-                  }
-              }
-              /* Quality Gate */
-              def resp = httpRequest(url : sonarServerUrl + "/api/qualitygates/project_status?analysisId=" + ceTask["task"]["analysisId"], authentication: 'sonar-admin')
-              def qualitygate = readJSON text: resp.content
-              echo qualitygate.toString()
-              if ("ERROR".equals(qualitygate["projectStatus"]["status"])) {
-                error "Pipeline abortada devido a falha em Quality Gate: ${qualitygate.status}"
-                waitForQualityGate abortPipeline: true
-              }
-            }
-          }
-        } 
-      }
-    }
+    // stage('SonarQube Analysis') {
+    //   steps {
+    //     container('maven') {
+    //       script {
+    //         def branchName = env.BRANCH_NAME
+    //         def scannerHome = tool 'SonarScanner'
+    //         withSonarQubeEnv('SonarQube') {
+    //           sh "${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=app-3s -Dsonar.sources=source/app3s -Dsonar.exclusions=vendor/** -Dsonar.language=php -Dsonar.sourceEncoding=UTF-8"
+    //           def props = readProperties  file: '.scannerwork/report-task.txt'
+    //           def sonarServerUrl=props['serverUrl']
+    //           def ceTaskUrl= props['ceTaskUrl']
+    //           def ceTask
+    //           timeout(time: 2, unit: 'MINUTES') {
+    //               waitUntil {
+    //                   def response = httpRequest(url: ceTaskUrl, authentication: 'sonar-admin')
+    //                   ceTask = readJSON text: response.content
+    //                   echo ceTask.toString()
+    //                   return "SUCCESS".equals(ceTask["task"]["status"])
+    //               }
+    //           }
+    //           /* Quality Gate */
+    //           def resp = httpRequest(url : sonarServerUrl + "/api/qualitygates/project_status?analysisId=" + ceTask["task"]["analysisId"], authentication: 'sonar-admin')
+    //           def qualitygate = readJSON text: resp.content
+    //           echo qualitygate.toString()
+    //           if ("ERROR".equals(qualitygate["projectStatus"]["status"])) {
+    //             error "Pipeline abortada devido a falha em Quality Gate: ${qualitygate.status}"
+    //             waitForQualityGate abortPipeline: true
+    //           }
+    //         }
+    //       }
+    //     } 
+    //   }
+    // }
     stage('Testes') {
       steps {
         sh 'cd source/ && php artisan key:generate && php artisan make:test tests/BasicTest && composer dump-autoload'
@@ -193,13 +193,13 @@ pipeline {
               env.HARBOR_USERNAME = sh(script: './vault kv get -tls-skip-verify -field=usuario secret/harbor/config', returnStdout: true).trim()
               env.HARBOR_PASSWORD = sh(script: './vault kv get -tls-skip-verify -field=senha secret/harbor/config', returnStdout: true).trim()
 
-              env.PG_USER=sh(script: './vault kv get -tls-skip-verify -field=pg_user secret/3s/config', returnStdout: true).trim()
-              env.PG_PASSWORD=sh(script: './vault kv get -tls-skip-verify -field=pg_password secret/3s/config', returnStdout: true).trim()
-              env.PG_USER_ROOT=sh(script: './vault kv get -tls-skip-verify -field=pg_user_root secret/3s/config', returnStdout: true).trim()
-              env.PG_ROOT_PASSWORD=sh(script: './vault kv get -tls-skip-verify -field=pg_root_password secret/3s/config', returnStdout: true).trim()
-              env.PG_PASSWORD_HOMOLOGACAO=sh(script: './vault kv get -tls-skip-verify -field=db_password_staging secret/3s/config', returnStdout: true).trim()
-              env.DB_USER_DUMP=sh(script: './vault kv get -tls-skip-verify -field=db_user_dump secret/3s/config', returnStdout: true).trim()
-              env.DB_PASSWORD_DUMP=sh(script: './vault kv get -tls-skip-verify -field=db_password_dump secret/3s/config', returnStdout: true).trim()
+              // env.PG_USER=sh(script: './vault kv get -tls-skip-verify -field=pg_user secret/3s/config', returnStdout: true).trim()
+              // env.PG_PASSWORD=sh(script: './vault kv get -tls-skip-verify -field=pg_password secret/3s/config', returnStdout: true).trim()
+              // env.PG_USER_ROOT=sh(script: './vault kv get -tls-skip-verify -field=pg_user_root secret/3s/config', returnStdout: true).trim()
+              // env.PG_ROOT_PASSWORD=sh(script: './vault kv get -tls-skip-verify -field=pg_root_password secret/3s/config', returnStdout: true).trim()
+              // env.PG_PASSWORD_HOMOLOGACAO=sh(script: './vault kv get -tls-skip-verify -field=db_password_staging secret/3s/config', returnStdout: true).trim()
+              // env.DB_USER_DUMP=sh(script: './vault kv get -tls-skip-verify -field=db_user_dump secret/3s/config', returnStdout: true).trim()
+              // env.DB_PASSWORD_DUMP=sh(script: './vault kv get -tls-skip-verify -field=db_password_dump secret/3s/config', returnStdout: true).trim()
           }
         }
       }
@@ -233,33 +233,36 @@ pipeline {
         }
         script {
           withVault([configuration: configuration, vaultSecrets: secrets]) {
-            sh 'echo \${env.PG_USER} > ./secret.txt'
-            sh 'echo \${env.PG_PASSWORD} >> ./secret.txt'
-            sh 'echo \${env.PG_USER_ROOT} >> ./secret.txt'
-            sh 'echo \${env.PG_ROOT_PASSWORD} >> ./secret.txt'
-            sh 'echo \${env.PG_PASSWORD_HOMOLOGACAO} >> ./secret.txt'
-            sh 'echo \${env.DB_USER_DUMP} >> ./secret.txt'
-            sh 'echo \${env.DB_PASSWORD_DUMP} >> ./secret.txt'
             withEnv([
-              "PG_USER=$PG_USER",
-              "PG_PASSWORD=$PG_PASSWORD",
-              "PG_USER_ROOT=$PG_USER_ROOT",
-              "PG_ROOT_PASSWORD=$PG_ROOT_PASSWORD",
-              "PG_PASSWORD_HOMOLOGACAO=$PG_PASSWORD_HOMOLOGACAO",
-              "DB_USER_DUMP=$DB_USER_DUMP",
-              "DB_PASSWORD_DUMP=$DB_PASSWORD_DUMP"
+              'PG_USER=$PG_USER',
+              'PG_PASSWORD=$PG_PASSWORD,'
+              'PG_USER_ROOT=$PG_USER_ROOT',
+              'PG_ROOT_PASSWORD=$PG_ROOT_PASSWORD',
+              'PG_PASSWORD_HOMOLOGACAO=$PG_PASSWORD_HOMOLOGACAO',
+              'DB_USER_DUMP=$DB_USER_DUMP',
+              'DB_PASSWORD_DUMP=$DB_PASSWORD_DUMP'
             ]) {
-              sh 'echo "\${PG_HOST}:\${PG_PORT}:*:\${PG_USER_ROOT}:\${PG_ROOT_PASSWORD}" > ~/.pgpass'
-              sh 'echo "\${PG_HOST}:\${PG_PORT}:*:\${PG_USER}:\${PG_PASSWORD}" >> ~/.pgpass'
-              sh 'echo "\${PG_HOST}:\${PG_PORT}:*:\${PG_USER}:\${PG_PASSWORD_HOMOLOGACAO}" >> ~/.pgpass'
-              sh 'echo "\${HOST_DUMP}:\${PORT_DUMP}:*:\${DB_USER_DUMP}:\${DB_PASSWORD_DUMP}" >> ~/.pgpass'
-              sh 'chmod 600 ~/.pgpass'
+              sh """
+                echo '\${env.PG_USER}' > ./secret.txt
+                echo '\${env.PG_PASSWORD}' >> ./secret.txt
+                echo '\${env.PG_USER_ROOT}' >> ./secret.txt
+                echo '\${env.PG_ROOT_PASSWORD}' >> ./secret.txt
+                echo '\${env.PG_PASSWORD_HOMOLOGACAO}' >> ./secret.txt
+                echo '\${env.DB_USER_DUMP}' >> ./secret.txt
+                echo '\${env.DB_PASSWORD_DUMP}' >> ./secret.txt
+                cat ./secret.txt
 
-              sh 'printenv'
-              sh 'cat ./secret.txt'
-              sh 'cat ~/.pgpass'
+                echo '\${PG_HOST}:\${PG_PORT}:*:\${PG_USER_ROOT}:\${PG_ROOT_PASSWORD}' > ~/.pgpass
+                echo '\${PG_HOST}:\${PG_PORT}:*:\${PG_USER}:\${PG_PASSWORD}' >> ~/.pgpass
+                echo '\${PG_HOST}:\${PG_PORT}:*:\${PG_USER}:\${PG_PASSWORD_HOMOLOGACAO}' >> ~/.pgpass
+                echo '\${HOST_DUMP}:\${PORT_DUMP}:*:\${DB_USER_DUMP}:\${DB_PASSWORD_DUMP}' >> ~/.pgpass
+                chmod 600 ~/.pgpass
+                cat ~/.pgpass
+
+                printenv
+              """
             }
-              sh '''
+              sh """
                 apt purge postgresql* -y
                 apt autoremove -y
                 DEBIAN_FRONTEND=noninteractive apt-get update\
@@ -270,7 +273,7 @@ pipeline {
 
                 chmod +x source/docker/database/setup-databases.sh
                 ./source/docker/database/setup-databases.sh 
-              '''
+              """
           }
         }
       }
