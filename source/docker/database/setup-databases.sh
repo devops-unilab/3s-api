@@ -42,8 +42,8 @@ set +eu
 
 readonly MAX_ATTEMPTS=20
 readonly WAIT_TIME=5
-connection_string_root="-h $PG_HOST -p $PG_PORT -U $PG_USER_ROOT -d $PG_DATABASE"
-connection_string_root_con="-d host=$PG_HOST port=$PG_PORT dbname=$PG_DATABASE user=$PG_USER_ROOT"
+connection_string_root="-h $PG_HOST -p $PG_PORT -U $PG_USER_ROOT -d $PG_DATABASE -w"
+connection_string_root_con="-d host=$PG_HOST port=$PG_PORT dbname=$PG_DATABASE user=$PG_USER_ROOT -w"
 
 echo "$connection_string_root"
 
