@@ -73,9 +73,19 @@ function database_exists() {
     return=$(psql -tA $connection_string_root_con -c "SELECT 1 FROM pg_database WHERE datname='$database_name';" | grep -qc 1)
 }
 
+# function user_exists() {
+#     local username="$1"
+#     return $(psql -tA $connection_string_root_con -c "SELECT 1 FROM pg_roles WHERE rolname='$username';" | grep -qc 1)
+# }
+
 function user_exists() {
     local username="$1"
-    return $(psql -tA $connection_string_root_con -c "SELECT 1 FROM pg_roles WHERE rolname='$username';" | grep -qc 1)
+    local exists=$(psql -tA $connection_string_root_con -c "SELECT 1 FROM pg_roles WHERE rolname='$username';")
+    if [[ -n $exists ]]; then
+        echo 1
+    else
+        echo 0
+    fi
 }
 
 # function create_user_admin() {
