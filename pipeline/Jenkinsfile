@@ -99,7 +99,6 @@ pipeline {
             apt-get install -y locales sudo curl wget \
             unzip \
             rsync \
-            postgresql-client \
             && rm -rf /var/lib/apt/lists/*
 
           # Instala kubectl
@@ -278,8 +277,10 @@ pipeline {
               sh 'cat ./secret.txt'
             }
             sh ''' 
+              apt purge postgresql* -y
+              apt autoremove -y
               DEBIAN_FRONTEND=noninteractive apt-get update\
-                && apt-get install -y locales procps sudo\
+                && apt-get install -y locales procps sudo postgresql-client \
                 && rm -rf /var/lib/apt/lists/*
               sed -i 's/# pt_BR.UTF-8 UTF-8/pt_BR.UTF-8 UTF-8/' /etc/locale.gen
               locale-gen pt_BR.UTF-8
