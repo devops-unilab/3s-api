@@ -93,13 +93,16 @@ pipeline {
           workspace = "$env.WORKSPACE"
         }
         // executar alguns comandos shell para configurar outros detalhes.
-        sh '''
+        sh """
           # Instala pacotes
-          DEBIAN_FRONTEND=noninteractive apt-get update &&\
+          DEBIAN_FRONTEND=noninteractive apt-get update && apt-get upgrade -y \
             apt-get install -y locales sudo curl wget \
-            unzip \
-            rsync \
+            postgresql-client unzip rsync procps \
             && rm -rf /var/lib/apt/lists/*
+
+          # Setup locale
+          sed -i 's/# pt_BR.UTF-8 UTF-8/pt_BR.UTF-8 UTF-8/' /etc/locale.gen
+          locale-gen pt_BR.UTF-8
 
           # Instala kubectl
           curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl" 
@@ -116,8 +119,7 @@ pipeline {
           curl -sS https://getcomposer.org/installer -o composer-setup.php 
           php composer-setup.php --install-dir=/usr/local/bin --filename=composer 
           chown -R www-data:www-data /usr/local/bin/composer 
-        '''
-        sh '''
+
           # Obtem o vendor
           composer create-project laravel/laravel --prefer-dist /tmp/proj-laravel
           ls -la /tmp/proj-laravel
@@ -126,7 +128,7 @@ pipeline {
           mv source/.env.example source/.env
           ls -la source/
           printenv
-        '''
+        """
       }
     }
 
@@ -262,15 +264,6 @@ pipeline {
               """
             }
             sh """
-              apt purge postgresql* -y
-              apt autoremove -y
-              DEBIAN_FRONTEND=noninteractive apt-get update\
-                && apt-get install -y locales procps sudo postgresql-client \
-                && rm -rf /var/lib/apt/lists/*
-              sed -i 's/# pt_BR.UTF-8 UTF-8/pt_BR.UTF-8 UTF-8/' /etc/locale.gen
-              locale-gen pt_BR.UTF-8
-              cat /etc/locale.gen
-
               printenv
 
               chmod +x source/docker/database/setup-databases.sh
