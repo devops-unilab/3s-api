@@ -132,15 +132,15 @@ function verifica_postgres() {
     echo "Servidor PostgreSQL UP!"
 }
 
-# function database_exists() {
-#     local database_name="$1"
-#     return=$(psql -tA $connection_string_root -c "SELECT 1 FROM pg_database WHERE datname='$database_name';" | grep -qc 1)
-# }
-
 function database_exists() {
     local database_name="$1"
-    psql -tA "$connection_string_root" -c "SELECT 1 FROM pg_database WHERE datname='$database_name';" | grep -q .
+    psql -tA -h "$PG_HOST" -p "$PG_PORT" -U "$PG_USER_ROOT" -d "$PG_DATABASE" -w -c "SELECT 1 FROM pg_database WHERE datname='$database_name';" | grep -qc 1
 }
+
+# function database_exists() {
+#     local database_name="$1"
+#     psql -tA -h "$PG_HOST" -p "$PG_PORT" -U "$PG_USER_ROOT" -d "$PG_DATABASE" -w -c "SELECT 1 FROM pg_database WHERE datname='$database_name';" | grep -q .
+# }
 
 function user_exists() {
     local username="$1"
