@@ -82,9 +82,9 @@ function user_exists() {
     local username="$1"
     local exists=$(psql -tA $connection_string_root_con -c "SELECT 1 FROM pg_roles WHERE rolname='$username';")
     if [[ -n $exists ]]; then
-        echo 1
+        return 1
     else
-        echo 0
+        return 0
     fi
 }
 
@@ -108,9 +108,7 @@ function user_exists() {
 
 function create_user_admin() { 
     local username=$1
-    if user_exists "$username"; then
-        echo "Role $username existente!"
-    else
+    if ! user_exists "$username"; then
         psql -v ON_ERROR_STOP=1 -d $connection_string_root_con <<-EOSQL
             CREATE ROLE $username WITH
                 SUPERUSER
@@ -145,9 +143,7 @@ EOSQL
 
 function create_user_regular() {
     local username=$1
-    if user_exists "$username"; then
-        echo "Role $username existente!"
-    else
+    if ! user_exists "$username"; then
         psql -v ON_ERROR_STOP=1 -d $connection_string_root_con <<-EOSQL
             CREATE ROLE $username WITH
                 LOGIN 
