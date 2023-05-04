@@ -34,12 +34,12 @@ set +eu
 # DB_USER_DUMP="$1"
 # DB_PASSWORD_DUMP="$2"
 
-connection_string_dump="-h \${HOST_DUMP} -p \${PORT_DUMP} -U \${DB_USER_DUMP} -d \${DB_DATABASE_DUMP} -w"
+connection_string_dump="-h $HOST_DUMP -p $PORT_DUMP -U $DB_USER_DUMP -d $DB_DATABASE_DUMP -w"
 
 echo "$connection_string_dump"
 
 # Aguardar até que não haja mais atividades de banco de dados
-while [[ $(psql "$connection_string_dump" -c "SELECT count(*) FROM pg_stat_activity WHERE datname = 'ocorrencias';" -t) -gt 0 ]]
+while [[ $(psql "$connection_string_dump" -c "SELECT count(*) FROM pg_stat_activity WHERE datname = '"$DB_DATABASE_DUMP"';" -t) -gt 0 ]]
 do
   echo "Ainda há atividades de banco de dados. Aguardando..."
   sleep 1

@@ -37,7 +37,7 @@ set +eu
 # PG_PASSWORD_RESTORE="$1"
 PG_DATABASE_RESTORE="$1"
 
-connection_string_root="\${PG_HOST} -p \${PG_PORT} -U \${PG_USER} -d \${PG_DATABASE_RESTORE} -w"
+connection_string_root="$PG_HOST -p $PG_PORT -U $PG_USER -d $PG_DATABASE_RESTORE -w"
 
 echo "$connection_string_root"
 
