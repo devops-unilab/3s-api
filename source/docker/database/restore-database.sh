@@ -42,4 +42,4 @@ connection_string_root="$PG_HOST -p $PG_PORT -U $PG_USER -d $PG_DATABASE_RESTORE
 echo "$connection_string_root"
 
 pg_restore --list /tmp/bd_pg_dump.dmp | sed -E 's/(.* EXTENSION )/; \1/g' > /tmp/bd_pg_dump.toc
-pg_restore -v -j 2 -Fc -c -L /tmp/bd_pg_dump.toc -d $connection_string_root /tmp/bd_pg_dump.dmp
+pg_restore -v -j 2 -Fc -c -L /tmp/bd_pg_dump.toc -d "$connection_string_root" /tmp/bd_pg_dump.dmp
