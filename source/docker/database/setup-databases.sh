@@ -89,7 +89,7 @@ function create_user_admin() {
             REPLICATION
             INHERIT
             CONNECTION LIMIT -1
-            PASSWORD 'md5' || md5($username);
+            PASSWORD 'md56ca6a5dafcdbc6a71988f97f4fc56fa1';
 
         COMMENT ON ROLE $username IS 'Usuario admin padrao';
 EOSQL
@@ -105,7 +105,7 @@ function create_user_regular() {
             REPLICATION
             INHERIT
             CONNECTION LIMIT -1
-            PASSWORD 'md5' || md5($username);
+            PASSWORD 'md56ca6a5dafcdbc6a71988f97f4fc56fa1';
 
         COMMENT ON ROLE $username IS 'Usuario regular padrao';
 EOSQL
