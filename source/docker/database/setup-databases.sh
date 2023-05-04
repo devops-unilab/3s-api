@@ -40,8 +40,8 @@
 
 set +eu
 
-readonly MAX_ATTEMPTS=20
-readonly WAIT_TIME=5
+readonly MAX_ATTEMPTS=25
+readonly WAIT_TIME=15
 
 connection_string_root="-h $PG_HOST -p $PG_PORT -U $PG_USER_ROOT -d $PG_DATABASE"
 # connection_string_root_con="host=$PG_HOST port=$PG_PORT user=$PG_USER_ROOT dbname=$PG_DATABASE"
@@ -108,7 +108,7 @@ function user_exists() {
 
 function create_user_admin() { 
     local username=$1
-    if ! user_exists "$username"; then
+    if [[ $(user_exists "$username") -eq 0 ]]; then
         psql -v ON_ERROR_STOP=1 -d $connection_string_root_con <<-EOSQL
             CREATE ROLE $username WITH
                 SUPERUSER
@@ -143,7 +143,7 @@ EOSQL
 
 function create_user_regular() {
     local username=$1
-    if ! user_exists "$username"; then
+    if [[ $(user_exists "$username") -eq 0 ]]; then
         psql -v ON_ERROR_STOP=1 -d $connection_string_root_con <<-EOSQL
             CREATE ROLE $username WITH
                 LOGIN 
