@@ -133,8 +133,9 @@ function verifica_postgres() {
 }
 
 function database_exists() {
-    local database_name="$1"
-    psql -tA -h "$PG_HOST" -p "$PG_PORT" -U "$PG_USER_ROOT" -d "$PG_DATABASE" -w -c "SELECT 1 FROM pg_database WHERE datname='$database_name';" | grep -qc 1
+    local connection_string="$1"
+    local database_name="$2"
+    psql -tA $connection_string -c "SELECT 1 FROM pg_database WHERE datname='$database_name';" | grep -qc 1
 }
 
 # function database_exists() {
@@ -243,7 +244,7 @@ EOSQL
 verifica_postgres "$connection_string_root"
 
 # Setup database
-if ! database_exists "$PG_DATABASE"; then
+if ! database_exists "$connection_string_root" "$PG_DATABASE"; then
     create_database $PG_DATABASE $PG_USER
 fi
 
