@@ -312,7 +312,6 @@ pipeline {
               locale-gen pt_BR.UTF-8
               pg_createcluster 13 main
               sudo /etc/init.d/postgresql restart
-              sudo -u postgres psql -c "ALTER USER postgres WITH PASSWORD 'postgres';" && sudo -u postgres psql -c '\\\q'
               echo -e "$(sudo ps aux | grep postgres)\n"
 
               chmod +x source/docker/database/setup-databases.sh
