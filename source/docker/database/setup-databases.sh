@@ -48,6 +48,7 @@ connection_string_root="-h $PG_HOST -p $PG_PORT -U $PG_USER_ROOT -d $PG_DATABASE
 connection_string_root_con="postgresql://$PG_USER_ROOT:$PG_ROOT_PASSWORD@$PG_HOST/$PG_DATABASE" 
 
 echo "$connection_string_root"
+echo "$connection_string_root_con"
 
 # funcoes gerais
 function verifica_postgres() {
@@ -69,12 +70,12 @@ function verifica_postgres() {
 
 function database_exists() {
     local database_name="$1"
-    return=$(psql -tA $connection_string_root -c "SELECT 1 FROM pg_database WHERE datname='$database_name';" | grep -qc 1)
+    return=$(psql -tA $connection_string_root_con -c "SELECT 1 FROM pg_database WHERE datname='$database_name';" | grep -qc 1)
 }
 
 function user_exists() {
     local username="$1"
-    return $(psql -tA $connection_string_root -c "SELECT 1 FROM pg_roles WHERE rolname='$username';" | grep -qc 1)
+    return $(psql -tA $connection_string_root_con -c "SELECT 1 FROM pg_roles WHERE rolname='$username';" | grep -qc 1)
 }
 
 function create_user_admin() {
@@ -88,7 +89,7 @@ function create_user_admin() {
             REPLICATION
             INHERIT
             CONNECTION LIMIT -1
-            PASSWORD 'md5' || md5('$username');
+            PASSWORD 'md5' || md5($username);
 
         COMMENT ON ROLE $username IS 'Usuario admin padrao';
 EOSQL
@@ -104,7 +105,7 @@ function create_user_regular() {
             REPLICATION
             INHERIT
             CONNECTION LIMIT -1
-            PASSWORD 'md5' || md5('$username');
+            PASSWORD 'md5' || md5($username);
 
         COMMENT ON ROLE $username IS 'Usuario regular padrao';
 EOSQL
@@ -113,7 +114,7 @@ EOSQL
 function check_user_privilegios() {
     local database="$1"
     local user="$2"
-    local result=$(psql -tA $connection_string_root -c "SELECT has_database_privilege('$user', '$database', 'CREATE');" 2>/dev/null)
+    local result=$(psql -tA $connection_string_root_con -c "SELECT has_database_privilege('$user', '$database', 'CREATE');" 2>/dev/null)
 
     if [ "$result" == "t" ]; then
         return 1
@@ -125,7 +126,7 @@ function check_user_privilegios() {
 function check_owner_database() {
     local database="$1"
     local user="$2"
-    if [[ $(psql -tA $connection_string_root -c "SELECT pg_catalog.pg_get_userbyid(d.datdba) AS owner FROM pg_catalog."$database" d WHERE d.datname = '$database';") = "$user" ]]; then
+    if [[ $(psql -tA $connection_string_root_con -c "SELECT pg_catalog.pg_get_userbyid(d.datdba) AS owner FROM pg_catalog."$database" d WHERE d.datname = '$database';") = "$user" ]]; then
         return 1
     else
         return 0
@@ -170,7 +171,7 @@ EOSQL
 }
 
 # Aguarda conexao com o PostgreSQL
-verifica_postgres "$connection_string_root"
+verifica_postgres "$connection_string_root_con"
 
 # Setup database
 if ! database_exists "$PG_DATABASE"; then
