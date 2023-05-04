@@ -98,7 +98,7 @@ function user_exists() {
 
 function create_user_admin() { 
     local username=$1
-    if ! user_exists $username; then
+    if ! user_exists "$username"; then
         psql -v ON_ERROR_STOP=1 -d $connection_string_root_con <<-EOSQL
             CREATE ROLE $username WITH
                 SUPERUSER
@@ -112,8 +112,6 @@ function create_user_admin() {
 
             COMMENT ON ROLE $username IS 'Usuario admin padrao';
 EOSQL
-    else
-        echo "Role $username existente!"
     fi
 }
 
@@ -135,7 +133,7 @@ EOSQL
 
 function create_user_regular() {
     local username=$1
-    if ! user_exists $username; then
+    if ! user_exists "$username"; then
         psql -v ON_ERROR_STOP=1 -d $connection_string_root_con <<-EOSQL
             CREATE ROLE $username WITH
                 LOGIN 
@@ -148,15 +146,13 @@ function create_user_regular() {
 
             COMMENT ON ROLE $username IS 'Usuario regular padrao';
 EOSQL
-    else
-        echo "Role $username existente!"
     fi
 }
 
 function check_user_privilegios() {
     local database="$1"
     local user="$2"
-    local result=$(psql -tA $connection_string_root_con -c "SELECT has_database_privilege($user, $database, 'CREATE');" 2>/dev/null)
+    local result=$(psql -tA $connection_string_root_con -c "SELECT has_database_privilege('$user', '$database', 'CREATE');" 2>/dev/null)
 
     if [ "$result" == "t" ]; then
         return 1
@@ -168,7 +164,7 @@ function check_user_privilegios() {
 function check_owner_database() {
     local database="$1"
     local user="$2"
-    if [[ $(psql -tA $connection_string_root_con -c "SELECT pg_catalog.pg_get_userbyid(d.datdba) AS owner FROM pg_catalog.pg_database d WHERE d.datname = $database;") = $user ]]; then
+    if [[ $(psql -tA $connection_string_root_con -c "SELECT pg_catalog.pg_get_userbyid(d.datdba) AS owner FROM pg_catalog.pg_database d WHERE d.datname = '$database';") = $user ]]; then
         return 1
     else
         return 0
