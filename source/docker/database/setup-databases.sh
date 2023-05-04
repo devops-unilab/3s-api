@@ -110,7 +110,7 @@ readonly WAIT_TIME=5
 
 #connection_string_root='postgresql://$PG_USER_ROOT:$PG_ROOT_PASSWORD@$PG_HOST:$PG_PORT'
 
-connection_string_root='-h \${PG_HOST} -p \${PG_PORT} -U \${PG_USER_ROOT} -d \${PG_DATABASE} -w'
+connection_string_root="-h \${PG_HOST} -p \${PG_PORT} -U \${PG_USER_ROOT} -d \${PG_DATABASE} -w"
 
 echo "$connection_string_root"
 
