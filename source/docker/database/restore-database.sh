@@ -43,4 +43,12 @@ function restore_postgres_homolog() {
     local connection_string_root_con="postgresql://$PG_USER:$PG_PASSWORD_HOMOLOGACAO@$PG_HOST:$PG_PORT/$PG_DATABASE_HOMOLOGACAO" 
     pg_restore --list /tmp/bd_pg_dump.dmp | sed -E 's/(.* EXTENSION )/; \1/g' > /tmp/bd_pg_dump.toc
     pg_restore -v -j 2 -Fc -c -L /tmp/bd_pg_dump.toc -d $connection_string_root_con /tmp/bd_pg_dump.dmp
+
+    # Verificar se pg_restore foi executado com sucesso
+    if [ "$?" -ne 0 ]; then
+        echo "Erro ao restaurar o database!"
+        exit 1
+    else
+        echo "O banco de dados foi restaurado com sucesso!"
+    fi
 }
