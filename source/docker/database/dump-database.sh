@@ -31,11 +31,12 @@
 
 set +eu
 
-# DB_USER_DUMP="$1"
-# DB_PASSWORD_DUMP="$2"
+readonly MAX_ATTEMPTS=25
+readonly WAIT_TIME=10
+
 
 # connection_string_dump="-h $HOST_DUMP -p $PORT_DUMP -U $DB_USER_DUMP -d $DB_DATABASE_DUMP -w"
-connection_string_dump_con="postgresql://$DB_USER_DUMP:$DB_PASSWORD_DUMP@$HOST_DUMP:$PORT_DUMP/$DB_DATABASE_DUMP" 
+connection_string_dump_con="postgresql://$DB_USER_DUMP:$DB_PASSWORD_DUMP@$HOST_DUMP:$PORT_DUMP/postgres" 
 
 echo "$connection_string_dump_con"
 
@@ -43,8 +44,15 @@ echo "$connection_string_dump_con"
 while [[ $(psql $connection_string_dump_con -c "SELECT count(*) FROM pg_stat_activity WHERE datname = '$DB_DATABASE_DUMP';" -t) -gt 0 ]]
 do
   echo "Ainda há atividades de banco de dados. Aguardando..."
-  sleep 1
+  sleep $WAIT_TIME
+  attempts=$((attempts+1))
+  if [ $attempts -eq $MAX_ATTEMPTS ]; then
+      >&2 echo "Todas atividades encerradas na tentaviva $MAX_ATTEMPTS."
+      exit 1
+  fi
 done
+echo "Database PostgreSQL DOWN!"
+
 
 # Realiza backup por dump incluindo objetos grandes
 pg_dump $connection_string_dump_con --no-owner --no-acl -Fc -b -v -f /tmp/bd_pg_dump.dmp
