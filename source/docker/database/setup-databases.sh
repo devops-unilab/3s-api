@@ -198,19 +198,19 @@ for i in ${!array_users[@]}; do
 
     create_user_admin "$username"
 
-    if ! check_user_privilegios "$PG_DATABASE" "$username"; then
+    if [[ $(check_user_privilegios "$PG_DATABASE" "$username") -eq 0 ]]; then
         atribui_privilegios "$PG_DATABASE" "$username"
     fi
 
-    if ! check_user_privilegios "$PG_DATABASE_HOMOLOGACAO" "$username"; then
+    if [[ $(check_user_privilegios "$PG_DATABASE_HOMOLOGACAO" "$username") -eq 0 ]]; then
         atribui_privilegios "$PG_DATABASE_HOMOLOGACAO" "$username"
     fi
 
-    if ! check_owner_database "$PG_DATABASE" "$username"; then
+    if [[ $(check_owner_database "$PG_DATABASE" "$username") -eq 0 ]]; then
         atribui_privilegios_woner "$PG_DATABASE" "$username"
     fi
 
-    if ! check_owner_database "$PG_DATABASE_HOMOLOGACAO" "$username"; then
+    if [[ $(check_owner_database "$PG_DATABASE_HOMOLOGACAO" "$username") -eq 0 ]]; then
         atribui_privilegios_woner "$PG_DATABASE_HOMOLOGACAO" "$username"
     fi
 done
@@ -221,12 +221,12 @@ for i in ${!array_users[@]}; do
     username="${array_users[$i]}"
 
     create_user_regular "$username"
-
-    if ! check_user_privilegios "$PG_DATABASE" "$username"; then
+    
+    if [[ $(check_user_privilegios "$PG_DATABASE" "$username") -eq 0 ]]; then
         atribui_privilegios "$PG_DATABASE" "$username"
     fi
 
-    if ! check_user_privilegios "$PG_DATABASE_HOMOLOGACAO" "$username"; then
+    if [[ $(check_user_privilegios "$PG_DATABASE_HOMOLOGACAO" "$username") -eq 0 ]]; then
         atribui_privilegios "$PG_DATABASE_HOMOLOGACAO" "$username"
     fi
 done
