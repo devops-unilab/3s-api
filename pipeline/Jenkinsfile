@@ -277,67 +277,70 @@ pipeline {
       }
     }
 
-    // stage('Deploy em Staging') {
-    //   steps {
-    //     script {
-    //       withVault(configuration: [
-    //         engineVersion: 2, 
-    //         skipSslVerification: true, 
-    //         timeout: 60, 
-    //         vaultCredentialId: 'token-admin-vault-plugin', 
-    //         vaultUrl: 'https://dti-vault.unilab.edu.br'], 
-    //         vaultSecrets: getSecretsConfig()) {
-    //         withEnv([
-    //           "PG_USER=${env.PG_USER}",
-    //           "PG_PASSWORD=${env.PG_PASSWORD}",
-    //           "PG_USER_ROOT=${env.PG_USER_ROOT}",
-    //           "PG_ROOT_PASSWORD=${env.PG_ROOT_PASSWORD}",
-    //           "PG_PASSWORD_HOMOLOGACAO=${env.PG_PASSWORD_HOMOLOGACAO}",
-    //           "DB_USER_DUMP=${env.DB_USER_DUMP}",
-    //           "DB_PASSWORD_DUMP=${env.DB_PASSWORD_DUMP}"
-    //         ]) {
-    //           sh 'printenv'
-    //           sh 'cat ./secret.txt'
-    //           sh 'cat ~/.pgpass'
-    //           }
-    //       } 
-    //       sh "chmod +x source/docker/database/dump-database.sh"
-    //       sh "chmod +x source/docker/database/restore-database.sh"
-    //       sh "./source/docker/database/dump-database.sh"
-    //       sh "./source/docker/database/restore-database.sh $PG_DATABASE_HOMOLOGACAO"
+    stage('Deploy em Staging') {
+      steps {
+        script {
+          withVault(configuration: [
+            engineVersion: 2, 
+            skipSslVerification: true, 
+            timeout: 60, 
+            vaultCredentialId: 'token-admin-vault-plugin', 
+            vaultUrl: 'https://dti-vault.unilab.edu.br'], 
+            vaultSecrets: getSecretsConfig()) {
+            withEnv([
+              "PG_USER=${env.PG_USER}",
+              "PG_PASSWORD=${env.PG_PASSWORD}",
+              "PG_USER_ROOT=${env.PG_USER_ROOT}",
+              "PG_ROOT_PASSWORD=${env.PG_ROOT_PASSWORD}",
+              "PG_PASSWORD_HOMOLOGACAO=${env.PG_PASSWORD_HOMOLOGACAO}",
+              "DB_USER_DUMP=${env.DB_USER_DUMP}",
+              "DB_PASSWORD_DUMP=${env.DB_PASSWORD_DUMP}"
+            ]) {
+              sh 'printenv'
+              sh 'cat ./secret.txt'
+              sh 'cat ~/.pgpass'
+              }
 
-    //       sh '''
-    //         sed -i 's/postgres.postgres-3s.svc.cluster.local/10.130.0.154/' ./kubernetes/deployment-3s.yaml
-    //         sed -i 's/3s-ocorrencias/3s-homologacao/' ./kubernetes/deployment-3s.yaml"
-    //         sed -i 's/:latest/:${env.DOCKER_TAG}/' ./kubernetes/deployment-3s.yaml"
-    //         sed -i 's/.Data.data.pg_password/.Data.data.pg_password_staging/' ./kubernetes/deployment-3s.yaml
-    //         sed -i 's/10.130.0.153/10.130.2.153/' ./kubernetes/deployment-3s.yaml"
-    //         sed -i 's/dti-app-test-c1.unilab.edu.br/3shomologacao.unilab.edu.br/' ./kubernetes/deployment-3s.yaml
-    //         cat ./kubernetes/deployment-3s.yaml
-    //       '''
-    //     }
+              sh "chmod +x source/docker/database/dump-database.sh"
+              sh "chmod +x source/docker/database/restore-database.sh"
+              sh "./source/docker/database/dump-database.sh"
+              sh "./source/docker/database/restore-database.sh $PG_DATABASE_HOMOLOGACAO"
+          } 
 
-    //     withKubeConfig([credentialsId: 'kubeconfig-c3', serverUrl: 'https://dti-k8s-c3.unilab.edu.br:6443']) {
-    //       script {
-    //         sh '''
-    //           set -x
-    //           echo "Verifica deploy ativo e exclui."
-    //           kubectl get deployment $APP_NAME -n $APP_NAMESPACE >/dev/null 2>&1 && \
-    //           (kubectl get pods -l $APP_NAME -n $APP_NAMESPACE --no-headers | wc -l) > 0 && \
-    //           kubectl delete pods -l app=$APP_NAME -n $APP_NAMESPACE --force --grace-period=0; \
-    //           kubectl delete deployment $APP_NAME -n $APP_NAMESPACE || echo 'DEPLOYMENT INEXISTENTE!'
-              
-    //           echo "Aplica deploy."
-    //           kubectl apply -f ./kubernetes/deployment-3s.yaml --record
 
-    //           echo "Lista de recursos."
-    //           kubectl get all,sa,ing,pvc -n $APP_NAMESPACE -o wide
-    //         '''
-    //         env.APP_URI_STAGING = sh(script: 'kubectl get ingress app-3s -n app-3s -o jsonpath="{.spec.rules[0].host}" | sed "s/^/http:\\/\\//"', returnStdout: true).trim()
-    //       }
-    //     }
-    //   }
-    // }
+          //   sh '''
+          //     sed -i 's/postgres.postgres-3s.svc.cluster.local/10.130.0.154/' ./kubernetes/deployment-3s.yaml
+          //     sed -i 's/3s-ocorrencias/3s-homologacao/' ./kubernetes/deployment-3s.yaml"
+          //     sed -i 's/:latest/:${env.DOCKER_TAG}/' ./kubernetes/deployment-3s.yaml"
+          //     sed -i 's/.Data.data.pg_password/.Data.data.pg_password_staging/' ./kubernetes/deployment-3s.yaml
+          //     sed -i 's/10.130.0.153/10.130.2.153/' ./kubernetes/deployment-3s.yaml"
+          //     sed -i 's/dti-app-test-c1.unilab.edu.br/3shomologacao.unilab.edu.br/' ./kubernetes/deployment-3s.yaml
+          //     cat ./kubernetes/deployment-3s.yaml
+          //   '''
+          // }
+
+          // withKubeConfig([credentialsId: 'kubeconfig-c3', serverUrl: 'https://dti-k8s-c3.unilab.edu.br:6443']) {
+          //   script {
+          //     sh '''
+          //       set -x
+          //       echo "Verifica deploy ativo e exclui."
+          //       kubectl get deployment $APP_NAME -n $APP_NAMESPACE >/dev/null 2>&1 && \
+          //       (kubectl get pods -l $APP_NAME -n $APP_NAMESPACE --no-headers | wc -l) > 0 && \
+          //       kubectl delete pods -l app=$APP_NAME -n $APP_NAMESPACE --force --grace-period=0; \
+          //       kubectl delete deployment $APP_NAME -n $APP_NAMESPACE || echo 'DEPLOYMENT INEXISTENTE!'
+                
+          //       echo "Aplica deploy."
+          //       kubectl apply -f ./kubernetes/deployment-3s.yaml --record
+
+          //       echo "Lista de recursos."
+          //       kubectl get all,sa,ing,pvc -n $APP_NAMESPACE -o wide
+          //     '''
+          //     env.APP_URI_STAGING = sh(script: 'kubectl get ingress app-3s -n app-3s -o jsonpath="{.spec.rules[0].host}" | sed "s/^/http:\\/\\//"', returnStdout: true).trim()
+          //   }
+          // }
+        }
+      }
+    }
     // stage('Aprovar Deploy') {
     //   steps {
     //     script {

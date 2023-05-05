@@ -73,11 +73,6 @@ function database_exists() {
     return=$(psql -tA $connection_string_root_con -c "SELECT 1 FROM pg_database WHERE datname='$database_name';" | grep -qc 1)
 }
 
-# function user_exists() {
-#     local username="$1"
-#     return $(psql -tA $connection_string_root_con -c "SELECT 1 FROM pg_roles WHERE rolname='$username';" | grep -qc 1)
-# }
-
 function user_exists() {
     local username="$1"
     local exists=$(psql -tA $connection_string_root_con -c "SELECT 1 FROM pg_roles WHERE rolname='$username';")
@@ -87,24 +82,6 @@ function user_exists() {
         return 0
     fi
 }
-
-# function create_user_admin() {
-#     local username=$1
-#     psql -v ON_ERROR_STOP=1 -d $connection_string_root_con <<-EOSQL
-#         CREATE ROLE $username WITH
-#             SUPERUSER
-#             LOGIN 
-#             CREATEDB
-#             CREATEROLE
-#             REPLICATION
-#             INHERIT
-#             CONNECTION LIMIT -1
-#             PASSWORD 'md56ca6a5dafcdbc6a71988f97f4fc56fa1';
-
-#         COMMENT ON ROLE $username IS 'Usuario admin padrao';
-# EOSQL
-# }
-
 
 function create_user_admin() { 
     local username=$1
@@ -124,22 +101,6 @@ function create_user_admin() {
 EOSQL
     fi
 }
-
-# function create_user_regular() {
-#     local username=$1
-#     psql -v ON_ERROR_STOP=1 -d $connection_string_root_con <<-EOSQL
-#         CREATE ROLE $username WITH
-#             LOGIN 
-#             CREATEDB
-#             CREATEROLE
-#             REPLICATION
-#             INHERIT
-#             CONNECTION LIMIT -1
-#             PASSWORD 'md56ca6a5dafcdbc6a71988f97f4fc56fa1';
-
-#         COMMENT ON ROLE $username IS 'Usuario regular padrao';
-# EOSQL
-# }
 
 function create_user_regular() {
     local username=$1

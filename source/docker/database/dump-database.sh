@@ -39,7 +39,7 @@ connection_string_dump="-h $HOST_DUMP -p $PORT_DUMP -U $DB_USER_DUMP -d $DB_DATA
 echo "$connection_string_dump"
 
 # Aguardar até que não haja mais atividades de banco de dados
-while [[ $(psql $connection_string_dump -c "SELECT count(*) FROM pg_stat_activity WHERE datname = '"$DB_DATABASE_DUMP"';" -t) -gt 0 ]]
+while [[ $(psql $connection_string_dump -c "SELECT count(*) FROM pg_stat_activity WHERE datname = '$DB_DATABASE_DUMP';" -t) -gt 0 ]]
 do
   echo "Ainda há atividades de banco de dados. Aguardando..."
   sleep 1
