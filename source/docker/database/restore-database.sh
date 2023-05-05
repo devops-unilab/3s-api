@@ -42,7 +42,7 @@ set +eu
 function restore_postgres_prod() {
     local connection_string_root_con="postgresql://$PG_USER_ROOT:$PG_ROOT_PASSWORD@$PG_HOST:$PG_PORT/$PG_DATABASE" 
     pg_restore --list /tmp/bd_pg_dump.dmp | sed -E 's/(.* EXTENSION )/; \1/g' > /tmp/bd_pg_dump.toc
-    pg_restore -v -j 2 -Fc -c -L /tmp/bd_pg_dump.toc $connection_string_root_con /tmp/bd_pg_dump.dmp
+    pg_restore -v -j 2 -Fc -c -L /tmp/bd_pg_dump.toc -d $connection_string_root_con /tmp/bd_pg_dump.dmp
 }
 
 function restore_postgres_homolog() {
@@ -50,7 +50,7 @@ function restore_postgres_homolog() {
     echo "Gerando o mapa de referencia para lista de objetos..."
     pg_restore --list /tmp/bd_pg_dump.dmp | sed -E 's/(.* EXTENSION )/; \1/g' > /tmp/bd_pg_dump.toc
     echo "Iniciando restore do banco de dados..."
-    pg_restore -v -j 2 -Fc -c -L /tmp/bd_pg_dump.toc $connection_string_root_con /tmp/bd_pg_dump.dmp
+    pg_restore -v -j 2 -Fc -c -L /tmp/bd_pg_dump.toc -d $connection_string_root_con /tmp/bd_pg_dump.dmp
     if [ "$?" -ne 0 ]; then
         echo "Erro ao restaurar o database!"
         exit 1

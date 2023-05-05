@@ -69,13 +69,20 @@ function database_exists() {
 
 function user_exists() {
     local username="$1"
-    local exists=$(psql -tA $connection_string_root_con -c "SELECT 1 FROM pg_roles WHERE rolname='$username';")
-    if [[ -n $exists ]]; then
+    local result=$(psql -tA $connection_string_root_con -c "SELECT 1 FROM pg_roles WHERE rolname='$username';")
+    if [[ "$result" == "1" ]]; then
         return 1
     else
         return 0
     fi
 }
+
+    if [[ "$result" == "t" ]]; then
+        return 1
+    else
+        return 0
+    fi
+
 
 function create_user_admin() { 
     local username=$1
