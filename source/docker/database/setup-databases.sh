@@ -175,7 +175,6 @@ function atribui_privilegios_owner() {
     local user="$2"
     psql -v ON_ERROR_STOP=1 -d $connection_string_root_con <<-EOSQL
         ALTER DATABASE "$database" OWNER TO $user;
-        GRANT USAGE, CREATE, TEMPORARY ON SCHEMA public TO $user;
         GRANT ALL PRIVILEGES ON DATABASE "$database" TO $user;"
 EOSQL
 }
