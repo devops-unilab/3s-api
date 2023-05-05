@@ -162,8 +162,9 @@ function atribui_privilegios() {
     local user="$2"
     psql -v ON_ERROR_STOP=1 -d $connection_string_root_con <<-EOSQL
         GRANT CONNECT ON DATABASE "$database" TO $user;
-        GRANT CREATE ON SCHEMA public TO $user;
-        GRANT SELECT, CREATE ON ALL TABLES IN SCHEMA public TO $user;
+        GRANT SELECT ON SCHEMA public TO $user;
+        GRANT SELECT ON ALL TABLES IN SCHEMA public TO $user;
+        GRANT SELECT ON ALL SEQUENCES IN SCHEMA public TO $user;
         ALTER DEFAULT PRIVILEGES FOR USER $user GRANT CREATE ON TABLES TO $user;
         ALTER DEFAULT PRIVILEGES FOR USER $user GRANT SELECT, INSERT, UPDATE, DELETE ON TABLES TO $user;
         ALTER DEFAULT PRIVILEGES FOR USER $user GRANT TRUNCATE, REFERENCES, TRIGGER ON TABLES TO $user;
