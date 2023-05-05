@@ -306,7 +306,7 @@ pipeline {
               sh "./source/docker/database/dump-database.sh"
               // sh './source/docker/database/restore-database.sh restore_postgres_homolog'
 
-              sh """ #!/bin/bash 
+              sh ''' #!/bin/bash 
 
               ls -la /tmp
 
@@ -323,7 +323,7 @@ pipeline {
                   echo "O banco de dados foi restaurado com sucesso!"
               fi
 
-              """
+              '''
 
 
 
