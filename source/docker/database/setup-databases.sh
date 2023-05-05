@@ -124,9 +124,8 @@ EOSQL
 function check_user_privilegios() {
     local database="$1"
     local user="$2"
-    local result=$(psql -tA $connection_string_root_con -c "SELECT has_database_privilege('$user', '$database', 'CREATE');" 2>/dev/null)
-
-    if [[ "$result" == "t" ]]; then
+    local result=$(psql -tA $connection_string_root_con -c "SELECT has_database_privilege('$user', '$database', 'CREATE')::int;" 2>/dev/null)
+    if [[ "$result" -eq 1 ]]; then
         return 1
     else
         return 0
