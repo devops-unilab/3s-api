@@ -301,28 +301,19 @@ pipeline {
               sh 'cat ./secret.txt'
               }
 
-              sh "chmod +x source/docker/database/dump-database.sh"
-              sh "chmod +x source/docker/database/restore-database.sh"
-              sh "./source/docker/database/dump-database.sh"
-              // sh './source/docker/database/restore-database.sh restore_postgres_homolog'
+              // sh "chmod +x source/docker/database/dump-database.sh"
+              // sh "chmod +x source/docker/database/restore-database.sh"
+              // sh "./source/docker/database/dump-database.sh"
+              // // sh './source/docker/database/restore-database.sh restore_postgres_homolog'
 
               sh ''' #!/bin/bash 
 
+              chmod +x source/docker/database/dump-database.sh
+              chmod +x source/docker/database/restore-database.sh
+              ./source/docker/database/dump-database.sh
               ls -la /tmp
-
-              local connection_string_root_con="postgresql://$PG_USER_ROOT:$PG_ROOT_PASSWORD@$PG_HOST:$PG_PORT/$PG_DATABASE_HOMOLOGACAO" 
-              echo "Gerando o mapa de referencia para lista de objetos..."
-              pg_restore --verbose --list /tmp/bd_pg_dump.dmp | sed -E 's/(.* EXTENSION )/; \1/g' > /tmp/bd_pg_dump.toc
+              ./source/docker/database/restore-database.sh restore_postgres_homolog
               ls -la /tmp
-              echo "Iniciando restore do banco de dados..."
-              pg_restore --verbose -j 2 -Fc -c -L /tmp/bd_pg_dump.toc -d $connection_string_root_con /tmp/bd_pg_dump.dmp
-              if [ "$?" -ne 0 ]; then
-                  echo "Erro ao restaurar o database!"
-                  exit 1
-              else
-                  echo "O banco de dados foi restaurado com sucesso!"
-              fi
-
               '''
 
 

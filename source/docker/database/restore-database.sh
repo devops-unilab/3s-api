@@ -38,6 +38,9 @@
 
 set +eu
 
+# Recupera a function
+fn_name=$1
+
 # Funcoes restore
 function restore_postgres_prod() {
     local connection_string_root_con="postgresql://$PG_USER_ROOT:$PG_ROOT_PASSWORD@$PG_HOST:$PG_PORT/$PG_DATABASE" 
@@ -58,3 +61,17 @@ function restore_postgres_homolog() {
         echo "O banco de dados foi restaurado com sucesso!"
     fi
 }
+
+# Switch para function
+case $fn_name in
+    restore_postgres_prod)
+        restore_postgres_prod
+        ;;
+    restore_postgres_homolog)
+        restore_postgres_homolog
+        ;;
+    *)
+        echo "Function inexistente!"
+        exit 1
+        ;;
+esac
