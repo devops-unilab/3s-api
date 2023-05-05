@@ -34,13 +34,9 @@ set +eu
 readonly MAX_ATTEMPTS=25
 readonly WAIT_TIME=10
 
-
-# connection_string_dump="-h $HOST_DUMP -p $PORT_DUMP -U $DB_USER_DUMP -d $DB_DATABASE_DUMP -w"
 connection_string_dump_con="postgresql://$DB_USER_DUMP:$DB_PASSWORD_DUMP@$HOST_DUMP:$PORT_DUMP/postgres" 
 
-echo "$connection_string_dump_con"
-
-# Aguardar até que não haja mais atividades de banco de dados
+# Aguardar até não haver atividades no banco de dados
 while [[ $(psql $connection_string_dump_con -c "SELECT count(*) FROM pg_stat_activity WHERE datname = '$DB_DATABASE_DUMP';" -t) -gt 0 ]]
 do
   echo "Ainda há atividades de banco de dados. Aguardando..."

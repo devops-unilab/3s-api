@@ -135,7 +135,7 @@ function check_user_privilegios() {
 function check_owner_database() {
     local database="$1"
     local user="$2"
-    if [[ $(psql -tA $connection_string_root_con -c "SELECT pg_catalog.pg_get_userbyid(d.datdba) AS owner FROM pg_catalog.pg_database d WHERE d.datname = '$database';") == $user ]]; then
+    if [[ $(psql -tA $connection_string_root_con -c "SELECT pg_catalog.pg_get_userbyid(d.datdba) AS owner FROM pg_catalog.pg_database d WHERE d.datname = $database;") == '$user' ]]; then
         return 1
     else
         return 0
@@ -146,14 +146,14 @@ function create_database() {
 	local database=$1
     local user=$2
     psql -v ON_ERROR_STOP=1 -d $connection_string_root_con -E <<-EOSQL
-        CREATE DATABASE "$database"
+        CREATE DATABASE "$(quote_ident $database)"
             WITH
             OWNER = '$user'
             ENCODING = 'UTF8'
             CONNECTION LIMIT = -1
             TEMPLATE template0;
 
-        COMMENT ON DATABASE "$database" IS 'Dadabase PostgreSQL $database';
+        COMMENT ON DATABASE $database IS 'Dadabase PostgreSQL $database';
 EOSQL
 }
 
@@ -161,11 +161,11 @@ function atribui_privilegios() {
     local database="$1"
     local user="$2"
     psql -v ON_ERROR_STOP=1 -d $connection_string_root_con -E <<-EOSQL
-        GRANT CONNECT ON DATABASE "$database" TO "$user";
-        GRANT USAGE, CREATE, TEMPORARY ON SCHEMA public TO "$user";
-        ALTER DEFAULT PRIVILEGES IN DATABASE "$database" GRANT USAGE, CREATE, TEMPORARY ON TABLES TO "$user";
-        ALTER DEFAULT PRIVILEGES IN DATABASE "$database" GRANT SELECT, INSERT, UPDATE, DELETE ON TABLES TO "$user";
-        ALTER DEFAULT PRIVILEGES IN DATABASE "$database" GRANT USAGE, SELECT ON SEQUENCES TO "$user";
+        GRANT CONNECT ON DATABASE $database TO $user;
+        GRANT USAGE, CREATE, TEMPORARY ON SCHEMA public TO $user;
+        ALTER DEFAULT PRIVILEGES IN DATABASE $database GRANT USAGE, CREATE, TEMPORARY ON TABLES TO $user;
+        ALTER DEFAULT PRIVILEGES IN DATABASE $database GRANT SELECT, INSERT, UPDATE, DELETE ON TABLES TO $user;
+        ALTER DEFAULT PRIVILEGES IN DATABASE $database GRANT USAGE, SELECT ON SEQUENCES TO $user;
 EOSQL
 }
 
@@ -173,9 +173,9 @@ function atribui_privilegios_woner() {
     local database="$1"
     local user="$2"
     psql -v ON_ERROR_STOP=1 -d $connection_string_root_con -E <<-EOSQL
-        ALTER DATABASE "$database" OWNER TO "$user";
-        GRANT USAGE, CREATE, TEMPORARY ON SCHEMA public TO "$user";
-        GRANT ALL PRIVILEGES ON DATABASE "$database" TO "$user";"
+        ALTER DATABASE $database OWNER TO $user;
+        GRANT USAGE, CREATE, TEMPORARY ON SCHEMA public TO $user;
+        GRANT ALL PRIVILEGES ON DATABASE $database TO $user;"
 EOSQL
 }
 
