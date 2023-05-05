@@ -164,6 +164,7 @@ function atribui_privilegios() {
         GRANT CONNECT ON DATABASE "$database" TO $user;
         GRANT USAGE ON SCHEMA public TO $user;
         GRANT CREATE ON SCHEMA public TO $user;
+        GRANT CREATE ON DATABASE $database TO $user;
         GRANT SELECT ON ALL TABLES IN SCHEMA public TO $user;
         GRANT SELECT ON ALL SEQUENCES IN SCHEMA public TO $user;
         ALTER DEFAULT PRIVILEGES FOR USER $user GRANT SELECT, INSERT, UPDATE, DELETE ON TABLES TO $user;
