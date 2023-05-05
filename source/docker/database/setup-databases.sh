@@ -68,7 +68,7 @@ function verifica_postgres() {
     echo "Servidor PostgreSQL UP!"
 }
 
-function database_exists() {
+function database_exists() { 
     local database_name="$1"
     return=$(psql -tA $connection_string_root_con -c "SELECT 1 FROM pg_database WHERE datname='$database_name';" | grep -qc 1)
 }
