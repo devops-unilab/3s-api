@@ -303,7 +303,7 @@ pipeline {
               sh "chmod +x source/docker/database/dump-database.sh"
               sh "chmod +x source/docker/database/restore-database.sh"
               sh "./source/docker/database/dump-database.sh"
-              sh "./source/docker/database/restore-database.sh $PG_PASSWORD_HOMOLOGACAO $PG_DATABASE_HOMOLOGACAO"
+              sh "./source/docker/database/restore-database.sh; restore_postgres $PG_PASSWORD_HOMOLOGACAO $PG_DATABASE_HOMOLOGACAO"
           } 
 
           //   sh '''
