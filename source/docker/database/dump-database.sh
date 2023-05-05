@@ -53,6 +53,5 @@ do
 done
 echo "Database PostgreSQL DOWN!"
 
-
 # Realiza backup por dump incluindo objetos grandes
 pg_dump $connection_string_dump_con --no-owner --no-acl -Fc -b -v -f /tmp/bd_pg_dump.dmp
