@@ -34,10 +34,11 @@
 set +eu
 
 # PG_USER="$1"
-# PG_PASSWORD_RESTORE="$1"
-PG_DATABASE_RESTORE="$1"
+PG_PASSWORD_RESTORE="$1"
+PG_DATABASE_RESTORE="$2"
 
-connection_string_root="$PG_HOST -p $PG_PORT -U $PG_USER -d $PG_DATABASE_RESTORE -w"
+# connection_string_root="$PG_HOST -p $PG_PORT -U $PG_USER -d $PG_DATABASE_RESTORE -w"
+connection_string_root_con="postgresql://$PG_USER:$PG_PASSWORD_RESTORE@$PG_HOST:$PG_PORT/$PG_DATABASE_RESTORE" 
 
 echo "$connection_string_root"
 

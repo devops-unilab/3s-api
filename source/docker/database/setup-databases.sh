@@ -43,11 +43,11 @@ set +eu
 readonly MAX_ATTEMPTS=25
 readonly WAIT_TIME=15
 
-connection_string_root="-h $PG_HOST -p $PG_PORT -U $PG_USER_ROOT -d $PG_DATABASE"
+# connection_string_root="-h $PG_HOST -p $PG_PORT -U $PG_USER_ROOT -d $PG_DATABASE"
 # connection_string_root_con="host=$PG_HOST port=$PG_PORT user=$PG_USER_ROOT dbname=$PG_DATABASE"
-connection_string_root_con="postgresql://$PG_USER_ROOT:$PG_ROOT_PASSWORD@$PG_HOST/$PG_DATABASE" 
+connection_string_root_con="postgresql://$PG_HOST:$PG_ROOT_PASSWORD@$PG_HOST:$PG_PORT/$PG_DATABASE" 
 
-echo "$connection_string_root"
+# echo "$connection_string_root"
 echo "$connection_string_root_con"
 
 # funcoes gerais
@@ -125,7 +125,7 @@ function check_user_privilegios() {
     local user="$2"
     local result=$(psql -tA $connection_string_root_con -c "SELECT has_database_privilege('$user', '$database', 'CREATE');" 2>/dev/null)
 
-    if [ "$result" == "t" ]; then
+    if [[ "$result" == "t" ]]; then
         return 1
     else
         return 0
@@ -135,7 +135,7 @@ function check_user_privilegios() {
 function check_owner_database() {
     local database="$1"
     local user="$2"
-    if [[ $(psql -tA $connection_string_root_con -c "SELECT pg_catalog.pg_get_userbyid(d.datdba) AS owner FROM pg_catalog.pg_database d WHERE d.datname = '$database';") = '$user' ]]; then
+    if [[ $(psql -tA $connection_string_root_con -c "SELECT pg_catalog.pg_get_userbyid(d.datdba) AS owner FROM pg_catalog.pg_database d WHERE d.datname = '$database';") == '$user' ]]; then
         return 1
     else
         return 0
