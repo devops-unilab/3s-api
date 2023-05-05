@@ -298,7 +298,6 @@ pipeline {
             ]) {
               sh 'printenv'
               sh 'cat ./secret.txt'
-              sh 'cat ~/.pgpass'
               }
 
               sh "chmod +x source/docker/database/dump-database.sh"
@@ -306,7 +305,6 @@ pipeline {
               sh "./source/docker/database/dump-database.sh"
               sh "./source/docker/database/restore-database.sh $PG_DATABASE_HOMOLOGACAO"
           } 
-
 
           //   sh '''
           //     sed -i 's/postgres.postgres-3s.svc.cluster.local/10.130.0.154/' ./kubernetes/deployment-3s.yaml
