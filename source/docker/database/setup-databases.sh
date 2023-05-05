@@ -64,13 +64,13 @@ function verifica_postgres() {
 
 function database_exists() { 
     local database_name="$1"
-    return=$(psql -tA $connection_string_root_con -c "SELECT 1 FROM pg_database WHERE datname='$database_name';" | grep -qc 1)
+    return=$(psql -tA $connection_string_root_con -c "SELECT 1 FROM pg_database WHERE datname='$database_name';" | grep -c 1)
 }
 
 function user_exists() {
     local username="$1"
     local result=$(psql -tA $connection_string_root_con -c "SELECT 1 FROM pg_roles WHERE rolname='$username';")
-    if [[ "$result" == "1" ]]; then
+    if [[ "$result" -eq 1 ]]; then
         return 1
     else
         return 0
