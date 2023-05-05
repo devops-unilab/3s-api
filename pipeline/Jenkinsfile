@@ -65,6 +65,7 @@ pipeline {
     kubeconfigCluster = "c1"
     recipientLeadEmail = "erivandosena@gmail.com"
     recipientTeamEmails = "erivandoramos@unilab.edu.br"
+    VAULT_ADDR = "https://dti-vault.unilab.edu.br"
     /* Database 3S */
     PG_USER = "*"
     PG_PASSWORD = "*"
@@ -303,8 +304,8 @@ pipeline {
               sh "chmod +x source/docker/database/dump-database.sh"
               sh "chmod +x source/docker/database/restore-database.sh"
               sh "./source/docker/database/dump-database.sh"
-              sh "./source/docker/database/restore-database.sh; restore_postgres $PG_PASSWORD_HOMOLOGACAO $PG_DATABASE_HOMOLOGACAO"
-          } 
+              sh "./source/docker/database/restore-database.sh; restore_postgres_homolog
+      
 
           //   sh '''
           //     sed -i 's/postgres.postgres-3s.svc.cluster.local/10.130.0.154/' ./kubernetes/deployment-3s.yaml

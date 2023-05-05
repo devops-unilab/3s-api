@@ -33,27 +33,14 @@
 
 set +eu
 
-# # PG_USER="$1"
-# PG_PASSWORD_RESTORE="$1"
-# PG_DATABASE_RESTORE="$2"
-
-# $PG_PASSWORD_HOMOLOGACAO
-
-# PGPASSWORD=mysecretpassword psql -U myuser -d mydatabase -c "SELECT * FROM mytable"
-
-# # connection_string_root="$PG_HOST -p $PG_PORT -U $PG_USER -d $PG_DATABASE_RESTORE -w"
-# connection_string_root_con="postgresql://$PG_USER:$PG_PASSWORD_RESTORE@$PG_HOST:$PG_PORT/$PG_DATABASE_RESTORE" 
-
-# echo "$connection_string_root"
-
-# withCredentials([string(credentialsId: 'PG_PASSWORD_HOMOLOGACAO', variable: 'PG_PASSWORD')]) {
-#   sh "comando que utiliza a senha $PG_PASSWORD"
-# }
-
-function restore_postgres() {
-    local PASSWORD_RESTORE="$1"
-    local DATABASE_RESTORE="$2"
-    local connection_string_root_con="postgresql://$PG_USER:$PASSWORD_RESTORE@$PG_HOST:$PG_PORT/$DATABASE_RESTORE" 
+function restore_postgres_prod() {
+    local connection_string_root_con="postgresql://$PG_USER:$PG_PASSWORD@$PG_HOST:$PG_PORT/$PG_DATABASE" 
     pg_restore --list /tmp/bd_pg_dump.dmp | sed -E 's/(.* EXTENSION )/; \1/g' > /tmp/bd_pg_dump.toc
-    pg_restore -v -j 2 -Fc -c -L /tmp/bd_pg_dump.toc -d $connection_string_root /tmp/bd_pg_dump.dmp
+    pg_restore -v -j 2 -Fc -c -L /tmp/bd_pg_dump.toc -d $connection_string_root_con /tmp/bd_pg_dump.dmp
+}
+
+function restore_postgres_homolog() {
+    local connection_string_root_con="postgresql://$PG_USER:$PG_PASSWORD_HOMOLOGACAO@$PG_HOST:$PG_PORT/$PG_DATABASE_HOMOLOGACAO" 
+    pg_restore --list /tmp/bd_pg_dump.dmp | sed -E 's/(.* EXTENSION )/; \1/g' > /tmp/bd_pg_dump.toc
+    pg_restore -v -j 2 -Fc -c -L /tmp/bd_pg_dump.toc -d $connection_string_root_con /tmp/bd_pg_dump.dmp
 }
