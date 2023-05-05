@@ -135,7 +135,7 @@ function check_user_privilegios() {
 function check_owner_database() {
     local database="$1"
     local user="$2"
-    if [[ $(psql -tA $connection_string_root_con -c "SELECT pg_catalog.pg_get_userbyid(d.datdba) AS owner FROM pg_catalog.pg_database d WHERE d.datname = "$(quote_ident $database)";") == '$user' ]]; then
+    if [[ $(psql -tA $connection_string_root_con -c "SELECT pg_catalog.pg_get_userbyid(d.datdba) AS owner FROM pg_catalog.pg_database d WHERE d.datname = '$database';") == '$user' ]]; then
         return 1
     else
         return 0
@@ -146,7 +146,7 @@ function create_database() {
 	local database=$1
     local user=$2
     psql -v ON_ERROR_STOP=1 -d $connection_string_root_con <<-EOSQL
-        CREATE DATABASE "$(quote_ident $database)"
+        CREATE DATABASE "$database"
             WITH
             OWNER = '$user'
             ENCODING = 'UTF8'
