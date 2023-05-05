@@ -36,19 +36,12 @@
 #   -w, --no-password        nunca solicitar senha
 #   -W, --password           forcar prompt de senha (should happen automatically)
 
-# set -euo pipefail
-
-set +eu
+set -euo pipefail
 
 readonly MAX_ATTEMPTS=25
 readonly WAIT_TIME=15
 
-# connection_string_root="-h $PG_HOST -p $PG_PORT -U $PG_USER_ROOT -d $PG_DATABASE"
-# connection_string_root_con="host=$PG_HOST port=$PG_PORT user=$PG_USER_ROOT dbname=$PG_DATABASE"
 connection_string_root_con="postgresql://$PG_USER_ROOT:$PG_ROOT_PASSWORD@$PG_HOST:$PG_PORT/$PG_DATABASE" 
-
-# echo "$connection_string_root"
-echo "$connection_string_root_con"
 
 # funcoes gerais
 function verifica_postgres() {
