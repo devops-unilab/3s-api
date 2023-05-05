@@ -163,16 +163,14 @@ function atribui_privilegios() {
     psql -v ON_ERROR_STOP=1 -d $connection_string_root_con <<-EOSQL
         GRANT CONNECT ON DATABASE "$database" TO $user;
         GRANT USAGE, CREATE ON SCHEMA public TO $user;
-        GRANT CONNECT ON DATABASE "$database" TO $user;
-        GRANT USAGE, CREATE ON SCHEMA public TO $user;
-        ALTER DEFAULT PRIVILEGES GRANT USAGE, CREATE ON TABLES TO $user;
-        ALTER DEFAULT PRIVILEGES GRANT SELECT, INSERT, UPDATE, DELETE ON TABLES TO $user;
-        ALTER DEFAULT PRIVILEGES GRANT TRUNCATE, REFERENCES, TRIGGER ON TABLES TO $user;
-        ALTER DEFAULT PRIVILEGES GRANT USAGE, SELECT ON SEQUENCES TO $user;
+        ALTER DEFAULT PRIVILEGES FOR USER "$user" GRANT USAGE, CREATE ON TABLES TO $user;
+        ALTER DEFAULT PRIVILEGES FOR USER "$user" GRANT SELECT, INSERT, UPDATE, DELETE ON TABLES TO $user;
+        ALTER DEFAULT PRIVILEGES FOR USER "$user" GRANT TRUNCATE, REFERENCES, TRIGGER ON TABLES TO $user;
+        ALTER DEFAULT PRIVILEGES FOR USER "$user" IN SCHEMA public GRANT USAGE, SELECT ON SEQUENCES TO $user;
 EOSQL
 }
 
-function atribui_privilegios_woner() {
+function atribui_privilegios_owner() {
     local database="$1"
     local user="$2"
     psql -v ON_ERROR_STOP=1 -d $connection_string_root_con <<-EOSQL
@@ -210,11 +208,11 @@ for i in ${!array_users[@]}; do
     fi
 
     if [[ $(check_owner_database "$PG_DATABASE" "$username") -eq 0 ]]; then
-        atribui_privilegios_woner "$PG_DATABASE" "$username"
+        atribui_privilegios_owner "$PG_DATABASE" "$username"
     fi
 
     if [[ $(check_owner_database "$PG_DATABASE_HOMOLOGACAO" "$username") -eq 0 ]]; then
-        atribui_privilegios_woner "$PG_DATABASE_HOMOLOGACAO" "$username"
+        atribui_privilegios_owner "$PG_DATABASE_HOMOLOGACAO" "$username"
     fi
 done
 
