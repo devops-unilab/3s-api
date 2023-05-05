@@ -97,7 +97,7 @@ function create_user_admin() {
                 CONNECTION LIMIT -1
                 PASSWORD 'md56ca6a5dafcdbc6a71988f97f4fc56fa1';
 
-            COMMENT ON ROLE $username IS 'Usuario admin padrao';
+            COMMENT ON ROLE "$username" IS 'Usuario admin padrao';
 EOSQL
     fi
 }
@@ -115,7 +115,7 @@ function create_user_regular() {
                 CONNECTION LIMIT -1
                 PASSWORD 'md56ca6a5dafcdbc6a71988f97f4fc56fa1';
 
-            COMMENT ON ROLE $username IS 'Usuario regular padrao';
+            COMMENT ON ROLE "$username" IS 'Usuario regular padrao';
 EOSQL
     fi
 }
@@ -153,7 +153,7 @@ function create_database() {
             CONNECTION LIMIT = -1
             TEMPLATE template0;
 
-        COMMENT ON DATABASE $database IS 'Dadabase PostgreSQL $database';
+        COMMENT ON DATABASE "$database" IS 'Dadabase PostgreSQL $database';
 EOSQL
 }
 
@@ -161,11 +161,11 @@ function atribui_privilegios() {
     local database="$1"
     local user="$2"
     psql -v ON_ERROR_STOP=1 -d $connection_string_root_con <<-EOSQL
-        GRANT CONNECT ON DATABASE $database TO $user;
-        GRANT USAGE, CREATE, TEMPORARY ON SCHEMA public TO $user;
-        ALTER DEFAULT PRIVILEGES IN DATABASE $database GRANT USAGE, CREATE, TEMPORARY ON TABLES TO $user;
-        ALTER DEFAULT PRIVILEGES IN DATABASE $database GRANT SELECT, INSERT, UPDATE, DELETE ON TABLES TO $user;
-        ALTER DEFAULT PRIVILEGES IN DATABASE $database GRANT USAGE, SELECT ON SEQUENCES TO $user;
+        GRANT CONNECT ON DATABASE "$database" TO "$user";
+        GRANT USAGE, CREATE, TEMPORARY ON SCHEMA public TO "$user";
+        ALTER DEFAULT PRIVILEGES IN DATABASE "$database" GRANT USAGE, CREATE, TEMPORARY ON TABLES TO "$user";
+        ALTER DEFAULT PRIVILEGES IN DATABASE "$database" GRANT SELECT, INSERT, UPDATE, DELETE ON TABLES TO "$user";
+        ALTER DEFAULT PRIVILEGES IN DATABASE "$database" GRANT USAGE, SELECT ON SEQUENCES TO "$user";
 EOSQL
 }
 
@@ -173,9 +173,9 @@ function atribui_privilegios_woner() {
     local database="$1"
     local user="$2"
     psql -v ON_ERROR_STOP=1 -d $connection_string_root_con <<-EOSQL
-        ALTER DATABASE $database OWNER TO $user;
-        GRANT USAGE, CREATE, TEMPORARY ON SCHEMA public TO $user;
-        GRANT ALL PRIVILEGES ON DATABASE $database TO $user;"
+        ALTER DATABASE "$database" OWNER TO "$user";
+        GRANT USAGE, CREATE, TEMPORARY ON SCHEMA public TO "$user";
+        GRANT ALL PRIVILEGES ON DATABASE "$database" TO "$user";"
 EOSQL
 }
 
@@ -221,7 +221,7 @@ for i in ${!array_users[@]}; do
     username="${array_users[$i]}"
 
     create_user_regular "$username"
-    
+
     if [[ $(check_user_privilegios "$PG_DATABASE" "$username") -eq 0 ]]; then
         atribui_privilegios "$PG_DATABASE" "$username"
     fi
