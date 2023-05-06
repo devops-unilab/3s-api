@@ -327,6 +327,7 @@ pipeline {
               sed -i 's/:latest/:${env.DOCKER_TAG}/' ./kubernetes/deployment-3s.yaml
               sed -i 's/.pg_password/.pg_password_staging/' ./kubernetes/deployment-3s.yaml
               sed -i 's/10.130.0.153/10.130.2.153/' ./kubernetes/deployment-3s.yaml
+              sed -i 's/harbor-regcred-k8sc1/harbor-regcred-k8sc3/' ./kubernetes/deployment-3s.yaml
               sed -i 's/dti-app-test-c1.unilab.edu.br/3shomologacao.unilab.edu.br/' ./kubernetes/deployment-3s.yaml
               cat ./kubernetes/deployment-3s.yaml
             """
@@ -335,20 +336,22 @@ pipeline {
           withKubeConfig([credentialsId: 'kubeconfig-c3', serverUrl: 'https://dti-k8s-c3.unilab.edu.br:6443']) {
             //script {
               sh """
-                set -x
-                echo "Verifica deploy ativo e exclui."
+                echo 'Verifica deploy ativo e exclui.'
                 kubectl get deployment $APP_NAME -n $APP_NAMESPACE >/dev/null 2>&1 && \
                 (kubectl get pods -l $APP_NAME -n $APP_NAMESPACE --no-headers | wc -l) > 0 && \
                 kubectl delete pods -l app=$APP_NAME -n $APP_NAMESPACE --force --grace-period=0; \
                 kubectl delete deployment $APP_NAME -n $APP_NAMESPACE || echo 'DEPLOYMENT INEXISTENTE!'
                 
-                echo "Aplica deploy."
+                echo 'Aplica deploy.'
                 kubectl apply -f ./kubernetes/deployment-3s.yaml --record
 
-                echo "Lista de recursos."
+                echo 'Lista de recursos.'
                 kubectl get all,sa,ing,pvc -n $APP_NAMESPACE -o wide
               """
               env.APP_URI_STAGING = sh(script: 'kubectl get ingress app-3s -n app-3s -o jsonpath="{.spec.rules[0].host}" | sed "s/^/http:\\/\\//"', returnStdout: true).trim()
+              withEnv(["APP_URI=${env.APP_URI}"]) {
+                echo 'Endpoint: $APP_URI'
+              }
             //}
           }
         }
