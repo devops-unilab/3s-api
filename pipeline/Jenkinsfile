@@ -298,7 +298,7 @@ pipeline {
               "DB_USER_DUMP=${env.DB_USER_DUMP}",
               "DB_PASSWORD_DUMP=${env.DB_PASSWORD_DUMP}"
             ]) {
-              sh 'printenv'
+              //sh 'printenv'
               sh 'cat ./secret.txt'
               }
 
@@ -316,9 +316,11 @@ pipeline {
               ./source/docker/database/restore-database.sh restore_postgres_homolog
               ls -la /tmp
               '''
-            }
+    
 
             sh """
+              ls -la .
+              pwd
               printenv
               sed -i 's/postgres.postgres-3s.svc.cluster.local/10.130.0.154/' ./kubernetes/deployment-3s.yaml
               sed -i 's/3s-ocorrencias/3s-homologacao/' ./kubernetes/deployment-3s.yaml"
@@ -328,7 +330,7 @@ pipeline {
               sed -i 's/dti-app-test-c1.unilab.edu.br/3shomologacao.unilab.edu.br/' ./kubernetes/deployment-3s.yaml
               cat ./kubernetes/deployment-3s.yaml
             """
-          // }
+          }
 
           withKubeConfig([credentialsId: 'kubeconfig-c3', serverUrl: 'https://dti-k8s-c3.unilab.edu.br:6443']) {
             //script {
