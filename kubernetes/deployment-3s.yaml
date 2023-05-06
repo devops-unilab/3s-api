@@ -110,8 +110,8 @@ metadata:
   name: app-3s
   namespace: app-3s
 automountServiceAccountToken: true
-# imagePullSecrets:
-#   - name: app-3s-regcred
+imagePullSecrets:
+  - name: harbor-regcred-k8sc1
 
 ---
 apiVersion: v1
@@ -185,8 +185,8 @@ spec:
         - name: 3s-uploads
           persistentVolumeClaim:
             claimName: pvc-app-3s
-      imagePullSecrets:
-        - name: harbor-regcred-k8sc1
+      # imagePullSecrets:
+      #   - name: harbor-regcred-k8sc1
   selector:
     matchLabels:
         app: app-3s
