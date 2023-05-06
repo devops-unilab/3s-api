@@ -326,7 +326,7 @@ pipeline {
               sed -i 's/3s-ocorrencias/3s-homologacao/' ./kubernetes/deployment-3s.yaml
               sed -i 's/:latest/:${env.DOCKER_TAG}/' ./kubernetes/deployment-3s.yaml
               sed -i 's/.pg_password/.pg_password_staging/' ./kubernetes/deployment-3s.yaml
-              sed -i 's/auth\/kubernetes\/c1/auth\/kubernetes\/c3/' ./kubernetes/deployment-3s.yaml
+              sed -i 's/auth\\/kubernetes\\/c1/auth\\/kubernetes\\/c3/' ./kubernetes/deployment-3s.yaml
               sed -i 's/harbor-regcred-k8sc1/harbor-regcred-k8sc3/' ./kubernetes/deployment-3s.yaml
               sed -i 's/10.130.0.153/10.130.2.153/' ./kubernetes/deployment-3s.yaml
               sed -i 's/dti-app-test-c1.unilab.edu.br/3shomologacao.unilab.edu.br/' ./kubernetes/deployment-3s.yaml
