@@ -363,36 +363,39 @@ pipeline {
             emailext mimeType: 'text/html',
             subject: "APROVAR Deploy [${env.JOB_NAME}] ${currentBuild.fullDisplayName}",
             to: "${env.recipientLeadEmail}",
-            body: "<p>Prezado(a) Leader</p>\n\nExiste um Continuous Deployment (CD) aguardando aprovação na produção." +
-              "</ br><p><a href='${BUILD_URL}input'><strong>Ir para APROVAÇÃO</strong></a></p></ br>\n\n" +
-              "Endpoint da homologação: ${env.APP_URI_STAGING}\n\n</ br></ br>${env.EMAIL_ASSINATURA}\n\n\n</ br></ br></ br>${env.EMAIL_RODAPE}"
+            body: "<p>Prezado(a) Leader</p>Existe um Continuous Deployment (CD) aguardando aprovação na produção." +
+              "<h3><a href='${BUILD_URL}input'><strong>Ir para APROVAÇÃO</strong></a></h3>" +
+              "<p>Endpoint da homologação: ${env.APP_URI_STAGING}</p><p>${env.EMAIL_ASSINATURA}</p><hr><p>${env.EMAIL_RODAPE}</p>"
 
-          timeout(time: 48, unit: 'HOURS') {
-            input id: 'EnvType', 
-            message: 'Aprovar Deploy?', 
-            ok: 'APROVAR', parameters: [
-              choice(name: 'Cluster', choices: ['Kubernetes C1', 'Kubernetes C2', 'Kubernetes C3'], description: 'Selecione o cluster para implantar')
-            ], 
-            submitter: 'erivando,admin', submitterParameter: 'approverId'
-          }
+          parameters {
+            timeout(time: 48, unit: 'HOURS') {
+              
+              input id: 'EnvType', 
+              message: 'Aprovar Deploy?', 
+              ok: 'APROVAR', parameters: [
+                choice(name: 'Cluster', choices: ['Kubernetes C1', 'Kubernetes C2', 'Kubernetes C3'], description: 'Selecione o cluster para implantar')
+              ], 
+              submitter: 'erivando,admin', submitterParameter: 'approverId'
+            }
 
-          switch (params.Cluster) {
-            case 'Kubernetes C1':
-              env.kubeconfigCluster = 'c1'
-              break
-            case 'Kubernetes C2':
-              env.kubeconfigCluster = 'c2'
-              break
-            case 'Kubernetes C3':
-              env.kubeconfigCluster = 'c3'
-              break
-            default:
-              error "Opção inválida"
-          }
-          withEnv([
-            "kubeconfigCluster=${env.kubeconfigCluster}"
-          ]) {
-          sh 'printenv'
+            switch (${params.Cluster}) {
+              case 'Kubernetes C1':
+                env.kubeconfigCluster = 'c1'
+                break
+              case 'Kubernetes C2':
+                env.kubeconfigCluster = 'c2'
+                break
+              case 'Kubernetes C3':
+                env.kubeconfigCluster = 'c3'
+                break
+              default:
+                error "Opção inválida"
+            }
+            withEnv([
+              "kubeconfigCluster=${env.kubeconfigCluster}"
+            ]) {
+            sh 'printenv'
+            }
           }
         }
       }
