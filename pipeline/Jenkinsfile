@@ -391,15 +391,24 @@ pipeline {
                 //     }
                 // }
 
-                input id: 'EnvType', 
-                message: 'Aprovar Deploy?', 
-                ok: 'APROVAR', 
-                parameters: [choice(name: 'Cluster', choices: clusterChoices, 
-                description: 'Selecione o cluster para implantar')], 
-                submitter: 'leader, sysadmin, admin',
-                submitterParameter: 'approverId'
+                def CLUSTER = (input 
+                  id: 'EnvType', 
+                  message: 'Aprovar Deploy?', 
+                  ok: 'APROVAR', 
+                  parameters: [
+                      choice(
+                          name: 'Cluster', 
+                          choices: clusterChoices, 
+                          description: 'Selecione o cluster para implantar'
+                      )
+                  ], 
+                  submitter: 'leader, sysadmin, admin',
+                  submitterParameter: 'approverId'
+                )
 
-                switch ("${params.Cluster}") {
+                sh "echo ${env.CLUSTER}"
+    
+                switch ("${CLUSTER}") {
                   case "Kubernetes C1":
                     env.kubeconfigCluster = "c1"
                     break
@@ -410,11 +419,11 @@ pipeline {
                     env.kubeconfigCluster = "c3"
                     break
                   default:
-                    error "Opção ${Cluster} inválida por ${approverId} para ${env.kubeconfigCluster}."
+                    error "Opção ${CLUSTER} inválida por ${approverId} para ${kubeconfigCluster}."
                 }
 
                 withEnv([
-                "kubeconfigCluster=${Cluster}"
+                "kubeconfigCluster=${CLUSTER}"
                 ]) {
                 sh 'printenv'
                 }
@@ -422,7 +431,7 @@ pipeline {
               }
 
             } catch (Exception err) {
-              echo "Ocorreu uma falha: ${err.getMessage()} ${Cluster} ${approverId} ${env.kubeconfigCluster}"
+              echo "Ocorreu uma falha: ${err.getMessage()} ${CLUSTER} ${approverId} ${kubeconfigCluster}"
               currentBuild.result = 'ABORTED';
               return;
             }
