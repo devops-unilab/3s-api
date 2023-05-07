@@ -370,9 +370,9 @@ pipeline {
               // https://digitalvarys.com/jenkins-declarative-pipeline-with-examples/
             // https://devopscube.com/declarative-pipeline-parameters/
             // https://www.blazemeter.com/blog/jenkins-declarative-pipeline
+            def CLUSTER
+            def clusterChoices = ['Kubernetes C1', 'Kubernetes C2', 'Kubernetes C3']
             try {
-              def CLUSTER
-              def clusterChoices = ['Kubernetes C1', 'Kubernetes C2', 'Kubernetes C3']
               timeout(time: 48, unit: 'HOURS') {
 
 
