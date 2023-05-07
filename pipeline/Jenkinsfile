@@ -372,6 +372,7 @@ pipeline {
             // https://devopscube.com/declarative-pipeline-parameters/
             // https://www.blazemeter.com/blog/jenkins-declarative-pipeline
             try {
+              def Cluster = ['Kubernetes C1', 'Kubernetes C2', 'Kubernetes C3']
               timeout(time: 48, unit: 'HOURS') {
 
 
@@ -394,9 +395,8 @@ pipeline {
                 input id: 'EnvType', 
                 message: 'Aprovar Deploy?', 
                 ok: 'APROVAR', 
-                parameters: [choice(name: 'Cluster', choices: ['Kubernetes C1', 'Kubernetes C2', 'Kubernetes C3'], 
-                description: 'Selecione o cluster para implantar')], 
-                submitter: 'role:leader, role:sysadmin, role:admin',
+                parameters: [choice(name: 'Cluster', choices: Cluster, description: 'Selecione o cluster para implantar')], 
+                submitter: 'leader, sysadmin, admin',
                 submitterParameter: 'approverId'
               }
 
