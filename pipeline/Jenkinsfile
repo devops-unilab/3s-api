@@ -391,8 +391,7 @@ pipeline {
                 //     }
                 // }
 
-                def CLUSTER = (input 
-                  id: 'EnvType', 
+                def CLUSTER = (input id: 'EnvType', 
                   message: 'Aprovar Deploy?', 
                   ok: 'APROVAR', 
                   parameters: [
@@ -403,8 +402,7 @@ pipeline {
                       )
                   ], 
                   submitter: 'leader, sysadmin, admin',
-                  submitterParameter: 'approverId'
-                )
+                  submitterParameter: 'approverId')
 
                 sh "echo ${env.CLUSTER}"
     
