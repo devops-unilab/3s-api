@@ -360,12 +360,12 @@ pipeline {
     stage('Aprovar Deploy') {
       steps {
         script {
-          emailext mimeType: 'text/html',
+            emailext mimeType: 'text/html',
             subject: "APROVAR Deploy [${env.JOB_NAME}] ${currentBuild.fullDisplayName}",
             to: "${env.recipientLeadEmail}",
-            body: "Prezado(a) Leader\n\nExiste um Continuous Deployment (CD) aguardando aprovação na produção." +
-              "<a href='${BUILD_URL}input'><strong>Ir para APROVAÇÃO</strong></a>\n\n" +
-              "Endpoint da homologação: ${env.APP_URI_STAGING}\n\n${env.EMAIL_ASSINATURA}\n\n\n${env.EMAIL_RODAPE}"
+            body: "<p>Prezado(a) Leader</p>\n\nExiste um Continuous Deployment (CD) aguardando aprovação na produção." +
+              "</ br><p><a href='${BUILD_URL}input'><strong>Ir para APROVAÇÃO</strong></a></p></ br>\n\n" +
+              "Endpoint da homologação: ${env.APP_URI_STAGING}\n\n</ br></ br>${env.EMAIL_ASSINATURA}\n\n\n</ br></ br></ br>${env.EMAIL_RODAPE}"
 
           timeout(time: 48, unit: 'HOURS') {
             input id: 'EnvType', 
@@ -376,7 +376,7 @@ pipeline {
             submitter: 'erivando,admin', submitterParameter: 'approverId'
           }
 
-          switch (Cluster) {
+          switch (params.Cluster) {
             case 'Kubernetes C1':
               env.kubeconfigCluster = 'c1'
               break
