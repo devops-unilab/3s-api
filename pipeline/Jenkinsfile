@@ -377,7 +377,7 @@ pipeline {
               submitter: 'erivando,admin', submitterParameter: 'approverId'
             }
 
-            switch (${params.Cluster}) {
+            switch ('\${params.Cluster}') {
               case 'Kubernetes C1':
                 env.kubeconfigCluster = 'c1'
                 break
@@ -388,7 +388,7 @@ pipeline {
                 env.kubeconfigCluster = 'c3'
                 break
               default:
-                error "Opção inválida"
+                error 'Opção \${params.Cluster} inválida'
             }
             withEnv([
               "kubeconfigCluster=${env.kubeconfigCluster}"
