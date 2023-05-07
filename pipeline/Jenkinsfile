@@ -38,8 +38,9 @@ pipeline {
     }
   }
   options {
+    retry(2)
     timestamps()
-    timeout(time: 2, unit: 'HOURS')
+    timeout(time: 24, unit: 'HOURS')
     parallelsAlwaysFailFast()
     rateLimitBuilds(throttle: [count: 3, durationName: 'minute', userBoost: false])
     ansiColor('xterm')
@@ -367,36 +368,62 @@ pipeline {
               "<h3><a href='${BUILD_URL}input'><strong>Ir para APROVAÇÃO</strong></a></h3>" +
               "<p>Endpoint da homologação: ${env.APP_URI_STAGING}</p><p>${env.EMAIL_ASSINATURA}</p><hr><p>${env.EMAIL_RODAPE}</p>"
 
-            timeout(time: 48, unit: 'HOURS') {
-              
-              input id: 'EnvType', 
-              message: 'Aprovar Deploy?', 
-              ok: 'APROVAR', parameters: [
-                choice(name: 'Cluster', choices: ['Kubernetes C1', 'Kubernetes C2', 'Kubernetes C3'], description: 'Selecione o cluster para implantar')
-              ] //, submitterParameter: 'approverId'
-            
- 
-              switch (inputResult) {
-                case "Kubernetes C1":
-                  env.kubeconfigCluster = "c1"
-                  break
-                case "Kubernetes C2":
-                  env.kubeconfigCluster = "c2"
-                  break
-                case "Kubernetes C3":
-                  env.kubeconfigCluster = "c3"
-                  break
-                default:
-                  error "Opção ${inputResult} inválida."
+              // https://digitalvarys.com/jenkins-declarative-pipeline-with-examples/
+            // https://devopscube.com/declarative-pipeline-parameters/
+            // https://www.blazemeter.com/blog/jenkins-declarative-pipeline
+            try {
+              timeout(time: 48, unit: 'HOURS') {
+
+
+                // input id: 'Aprovar-deploy', 
+                // message: 'Aprovar Deploy?', 
+                // ok: 'Aprovar', 
+                // parameters: [choice(choices: ['A', 'B', 'C'], description: 'Opções', name: 'Escolha')], 
+                // submitterParameter: 'user-submitter'
+
+
+                // input {
+                //     message "Can we Proceed?"
+                //     ok "Yes"
+                //     submitter "Digital Varys"
+                //     parameters {
+                //         string(name: 'PERSON', defaultValue: 'DigiralVarys', description: 'Member')
+                //     }
+                // }
+
+                input id: 'EnvType', 
+                message: 'Aprovar Deploy?', 
+                ok: 'APROVAR', 
+                parameters: [choice(name: 'Cluster', choices: ['Kubernetes C1', 'Kubernetes C2', 'Kubernetes C3'], 
+                description: 'Selecione o cluster para implantar')], 
+                submitter: 'role:leader, role:sysadmin, role:admin',
+                submitterParameter: 'approverId'
               }
 
-            withEnv([
-              "kubeconfigCluster=${env.kubeconfigCluster}"
-            ]) {
-            sh 'printenv'
-            }
+                switch ("${params.Cluster}") {
+                  case "Kubernetes C1":
+                    env.kubeconfigCluster = "c1"
+                    break
+                  case "Kubernetes C2":
+                    env.kubeconfigCluster = "c2"
+                    break
+                  case "Kubernetes C3":
+                    env.kubeconfigCluster = "c3"
+                    break
+                  default:
+                    error "Opção ${Cluster} inválida por ${approverId} para ${env.kubeconfigCluster}."
+                }
 
-          }
+                withEnv([
+                "kubeconfigCluster=${Cluster}"
+                ]) {
+                sh 'printenv'
+                }
+
+
+            } catch (Exception err) {
+                echo "Ocorreu erro."
+            }
 
         }
       }
