@@ -77,15 +77,16 @@ data:
   VITE_PUSHER_PORT: '${PUSHER_PORT}'
   VITE_PUSHER_SCHEME: '${PUSHER_SCHEME}'
   VITE_PUSHER_APP_CLUSTER: '${PUSHER_APP_CLUSTER}'
-# ---
-# apiVersion: v1
-# data:
-#   .dockerconfigjson: eyJhdXRocyI6eyJodHRwczovL2R0aS1yZWdpc3Ryby51bmlsYWIuZWR1LmJyIjp7InVzZXJuYW1lIjoiZGVzZW52b2x2ZWRvciIsInBhc3N3b3JkIjoiRGVzZW52b2x2ZWRvcjIwMjMiLCJlbWFpbCI6ImRlc2Vudm9sdmVkb3JAbm9yZXBseS51bmlsYWIuZWR1LmJyIiwiYXV0aCI6IlpHVnpaVzUyYjJ4MlpXUnZjanBFWlhObGJuWnZiSFpsWkc5eU1qQXlNdz09In19fQ==
-# kind: Secret
-# metadata:
-#   name: app-3s-regcred
-#   namespace: app-3s
-# type: kubernetes.io/dockerconfigjson
+
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: app-3s-harbor-regcred-k8sc1
+  namespace: app-3s
+data:
+  .dockerconfigjson: eyJhdXRocyI6eyJodHRwczovL2R0aS1yZWdpc3Ryby51bmlsYWIuZWR1LmJyIjp7InVzZXJuYW1lIjoiazhzLWMxIiwicGFzc3dvcmQiOiJLOHMtYzFAdW5pbGFiMjAyMyIsImVtYWlsIjoiZHRpLWs4cy1jMUBub3JlcGx5LnVuaWxhYi5lZHUuYnIiLCJhdXRoIjoiYXpoekxXTXhPa3M0Y3kxak1VQjFibWxzWVdJeU1ESXoifX19
+type: kubernetes.io/dockerconfigjson
 
 ---
 apiVersion: v1
@@ -111,7 +112,7 @@ metadata:
   namespace: app-3s
 automountServiceAccountToken: true
 imagePullSecrets:
-  - name: harbor-regcred-k8sc1
+  - name: app-3s-harbor-regcred-k8sc1
 
 ---
 apiVersion: v1
