@@ -371,6 +371,7 @@ pipeline {
             // https://devopscube.com/declarative-pipeline-parameters/
             // https://www.blazemeter.com/blog/jenkins-declarative-pipeline
             try {
+              def CLUSTER
               def clusterChoices = ['Kubernetes C1', 'Kubernetes C2', 'Kubernetes C3']
               timeout(time: 48, unit: 'HOURS') {
 
@@ -391,7 +392,8 @@ pipeline {
                 //     }
                 // }
 
-                def CLUSTER = (input id: 'EnvType', 
+                CLUSTER = (input 
+                  id: 'EnvType', 
                   message: 'Aprovar Deploy?', 
                   ok: 'APROVAR', 
                   parameters: [
