@@ -422,7 +422,9 @@ pipeline {
 
 
             } catch (Exception err) {
-                echo "Ocorreu erro."
+              echo "Ocorreu uma falha: ${err.getMessage()} ${Cluster} ${approverId} ${env.kubeconfigCluster}"
+              currentBuild.result = 'ABORTED';
+              return;
             }
 
         }
@@ -474,8 +476,13 @@ pipeline {
               '''
 
             sh """
+            sed -i 's/10.130.0.154/postgres.postgres-3s.svc.cluster.local/' ./kubernetes/deployment-3s.yaml
+            sed -i 's/3s-homologacao/3s-ocorrencias/' ./kubernetes/deployment-3s.yaml
             sed -i 's/:latest/:${env.DOCKER_TAG}/' ./kubernetes/deployment-3s.yaml
-            sed -i 's/auth\\/kubernetes\\/c1/auth\\/kubernetes\\/${env.kubeconfigCluster}/' ./kubernetes/deployment-3s.yaml
+            sed -i 's/.pg_password_staging/.pg_password/' ./kubernetes/deployment-3s.yaml
+            sed -i 's/auth\\/kubernetes\\/c3/auth\\/kubernetes\\/c1/' ./kubernetes/deployment-3s.yaml
+            sed -i 's/10.130.2.153/10.130.0.153/' ./kubernetes/deployment-3s.yaml
+            sed -i 's/3shomologacao.unilab.edu.br/dti-app-test-c1.unilab.edu.br/' ./kubernetes/deployment-3s.yaml
             cat ./kubernetes/deployment-3s.yaml
             """
           }
