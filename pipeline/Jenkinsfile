@@ -38,7 +38,6 @@ pipeline {
     }
   }
   options {
-    retry(2)
     timestamps()
     timeout(time: 24, unit: 'HOURS')
     parallelsAlwaysFailFast()
@@ -372,7 +371,7 @@ pipeline {
             // https://devopscube.com/declarative-pipeline-parameters/
             // https://www.blazemeter.com/blog/jenkins-declarative-pipeline
             try {
-              def Cluster = ['Kubernetes C1', 'Kubernetes C2', 'Kubernetes C3']
+              def clusterChoices = ['Kubernetes C1', 'Kubernetes C2', 'Kubernetes C3']
               timeout(time: 48, unit: 'HOURS') {
 
 
@@ -395,10 +394,10 @@ pipeline {
                 input id: 'EnvType', 
                 message: 'Aprovar Deploy?', 
                 ok: 'APROVAR', 
-                parameters: [choice(name: 'Cluster', choices: Cluster, description: 'Selecione o cluster para implantar')], 
+                parameters: [choice(name: 'Cluster', choices: clusterChoices, 
+                description: 'Selecione o cluster para implantar')], 
                 submitter: 'leader, sysadmin, admin',
                 submitterParameter: 'approverId'
-              }
 
                 switch ("${params.Cluster}") {
                   case "Kubernetes C1":
@@ -420,6 +419,7 @@ pipeline {
                 sh 'printenv'
                 }
 
+              }
 
             } catch (Exception err) {
               echo "Ocorreu uma falha: ${err.getMessage()} ${Cluster} ${approverId} ${env.kubeconfigCluster}"
