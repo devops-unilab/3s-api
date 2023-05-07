@@ -82,10 +82,10 @@ data:
 apiVersion: v1
 kind: Secret
 metadata:
-  name: harbor-regcred-k8sc1
+  name: harbor-regcred
   namespace: app-3s
 data:
-  .dockerconfigjson: eyJhdXRocyI6eyJodHRwczovL2R0aS1yZWdpc3Ryby51bmlsYWIuZWR1LmJyIjp7InVzZXJuYW1lIjoiazhzLWMzIiwicGFzc3dvcmQiOiJLOHMtYzNAdW5pbGFiMjAyMyIsImVtYWlsIjoiZHRpLWs4cy1jM0Bub3JlcGx5LnVuaWxhYi5lZHUuYnIiLCJhdXRoIjoiYXpoekxXTXpPa3M0Y3kxak0wQjFibWxzWVdJeU1ESXoifX19
+  .dockerconfigjson: eyJhdXRocyI6eyJodHRwczovL2R0aS1yZWdpc3Ryby51bmlsYWIuZWR1LmJyIjp7InVzZXJuYW1lIjoiazhzIiwicGFzc3dvcmQiOiJLOHNAdW5pbGFiMjAyMyIsImVtYWlsIjoiZHRpLWs4c0Bub3JlcGx5LnVuaWxhYi5lZHUuYnIiLCJZWFYwYUNJNkltczRjenBMT0hOQWRXNXBiR0ZpTWpBeU13PT0ifX19
 type: kubernetes.io/dockerconfigjson
 
 ---
@@ -187,7 +187,7 @@ spec:
           persistentVolumeClaim:
             claimName: pvc-app-3s
       imagePullSecrets:
-        - name: harbor-regcred-k8sc1
+        - name: harbor-regcred
   selector:
     matchLabels:
         app: app-3s
