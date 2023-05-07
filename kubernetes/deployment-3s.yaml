@@ -78,15 +78,15 @@ data:
   VITE_PUSHER_SCHEME: '${PUSHER_SCHEME}'
   VITE_PUSHER_APP_CLUSTER: '${PUSHER_APP_CLUSTER}'
 
----
-apiVersion: v1
-kind: Secret
-metadata:
-  name: app-3s-harbor-regcred-k8sc1
-  namespace: app-3s
-data:
-  .dockerconfigjson: eyJhdXRocyI6eyJodHRwczovL2R0aS1yZWdpc3Ryby51bmlsYWIuZWR1LmJyIjp7InVzZXJuYW1lIjoiazhzLWMxIiwicGFzc3dvcmQiOiJLOHMtYzFAdW5pbGFiMjAyMyIsImVtYWlsIjoiZHRpLWs4cy1jMUBub3JlcGx5LnVuaWxhYi5lZHUuYnIiLCJhdXRoIjoiYXpoekxXTXhPa3M0Y3kxak1VQjFibWxzWVdJeU1ESXoifX19
-type: kubernetes.io/dockerconfigjson
+# ---
+# apiVersion: v1
+# kind: Secret
+# metadata:
+#   name: app-3s-harbor-regcred-k8sc1
+#   namespace: app-3s
+# data:
+#   .dockerconfigjson: {"auths":{"https://dti-registro.unilab.edu.br":{"username":"k8s-c1","password":"K8s-c1@unilab2023","email":"dti-k8s-c1@noreply.unilab.edu.br","auth":"azhzLWMxOks4cy1jMUB1bmlsYWIyMDIz"}}}
+# type: kubernetes.io/dockerconfigjson
 
 ---
 apiVersion: v1
@@ -111,8 +111,8 @@ metadata:
   name: app-3s
   namespace: app-3s
 automountServiceAccountToken: true
-imagePullSecrets:
-  - name: app-3s-harbor-regcred-k8sc1
+# imagePullSecrets:
+#   - name: app-3s-harbor-regcred-k8sc1
 
 ---
 apiVersion: v1
@@ -186,8 +186,8 @@ spec:
         - name: 3s-uploads
           persistentVolumeClaim:
             claimName: pvc-app-3s
-      # imagePullSecrets:
-      #   - name: harbor-regcred-k8sc1
+      imagePullSecrets:
+        - name: harbor-regcred-k8sc1
   selector:
     matchLabels:
         app: app-3s
