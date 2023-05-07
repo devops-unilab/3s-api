@@ -373,11 +373,10 @@ pipeline {
               message: 'Aprovar Deploy?', 
               ok: 'APROVAR', parameters: [
                 choice(name: 'Cluster', choices: ['Kubernetes C1', 'Kubernetes C2', 'Kubernetes C3'], description: 'Selecione o cluster para implantar')
-              ]
-              // submitter: 'erivando,admin', submitterParameter: 'approverId'
+              ] //, submitterParameter: 'approverId'
             
-            if (inputResult && inputResult.Cluster) {
-              switch ("${params.Cluster}") {
+ 
+              switch (inputResult) {
                 case "Kubernetes C1":
                   env.kubeconfigCluster = "c1"
                   break
@@ -388,11 +387,9 @@ pipeline {
                   env.kubeconfigCluster = "c3"
                   break
                 default:
-                  error "Opção ${params.Cluster} inválida."
+                  error "Opção ${inputResult} inválida."
               }
-            } else {
-              error "Nenhuma opção de cluster selecionada"
-            }
+
             withEnv([
               "kubeconfigCluster=${env.kubeconfigCluster}"
             ]) {
