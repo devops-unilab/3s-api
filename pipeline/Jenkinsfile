@@ -367,7 +367,6 @@ pipeline {
               "<h3><a href='${BUILD_URL}input'><strong>Ir para APROVAÇÃO</strong></a></h3>" +
               "<p>Endpoint da homologação: ${env.APP_URI_STAGING}</p><p>${env.EMAIL_ASSINATURA}</p><hr><p>${env.EMAIL_RODAPE}</p>"
 
-          parameters {
             timeout(time: 48, unit: 'HOURS') {
               
               input id: 'EnvType', 
@@ -396,7 +395,6 @@ pipeline {
             ]) {
             sh 'printenv'
             }
-          }
         }
       }
     }
