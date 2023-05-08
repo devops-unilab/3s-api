@@ -63,7 +63,7 @@ pipeline {
     JENKINS_URL = "https://dti-jenkins.unilab.edu.br"
     SONAR_URL = "https://dti-sonar.unilab.edu.br"
     kubeconfigCluster = "c1"
-    recipientLeadEmail = "michel.machado@unilab.edu.br"
+    recipientLeadEmail = "erivandosena@gmail.com"
     recipientTeamEmails = "erivandoramos@unilab.edu.br, jefponte@unilab.edu.br"
     VAULT_ADDR = "https://dti-vault.unilab.edu.br"
     /* Database 3S */
