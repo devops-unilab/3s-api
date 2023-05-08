@@ -507,16 +507,24 @@ pipeline {
       // sh "curl -o build-log.txt ${env.JENKINS_URL}/job/${env.JOB_NAME}/lastBuild/timestamps/?appendLog"
       // archiveArtifacts artifacts: 'build-log.txt', onlyIfSuccessful: true
       // emailext attachLog: true, attachmentsPattern: 'build-log.txt',
-        emailext recipientProviders: ["${recipientTeamEmails}", developers(), requestor()],
-          subject: "Pipeline #${env.BUILD_NUMBER} ${currentBuild.currentResult} Job ${env.JOB_NAME}",
-          body: "Pipeline completada com: ${currentBuild.currentResult}\n\n" +
-                "Detalhes da execução da pipeline: ${env.BUILD_URL}\n" +
-                "Detalhes do teste de qualidade: ${env.SONAR_URL}/dashboard?id=${env.APP_NAME}\n" +
-                "Endpoint de homologação: ${env.APP_URI_STAGING}\n" +
-                "Endpoint de produção: ${env.APP_URI_PROD}\n" +
-                "Aprovado por: ${env.approver}\n\n${env.EMAIL_ASSINATURA}\n\n\n${env.EMAIL_RODAPE}"
-
-      // slackSend(color: "good", message: "${slack_msg()}")
+      emailext (
+          emailext mimeType: 'text/html',
+          subject: "Pipeline #'${env.BUILD_NUMBER} ${currentBuild.currentResult} Job ${env.JOB_NAME}'",
+          body: """
+          SUCCESSFUL: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]':
+          Check console output at "${env.JOB_NAME} [${env.BUILD_NUMBER}]"
+          <p>Pipeline completada com: '${currentBuild.currentResult}'</p>
+          <p>Detalhes da execução da pipeline: '${env.BUILD_URL}'</p>
+          <p>Detalhes do teste de qualidade: '${env.SONAR_URL}/dashboard?id=${env.APP_NAME}'</p> 
+          <p>Endpoint de homologação: '${env.APP_URI_STAGING}'</p>
+          <p>Endpoint de produção: '${env.APP_URI_PROD}'</p>
+          <p>Aprovado por: '${env.approver}'</p>
+          <p>'${env.EMAIL_ASSINATURA}</p><hr><p>${env.EMAIL_RODAPE}'</p>
+          """,
+          // recipientProviders: [[$class: 'DevelopersRecipientProvider']]
+          // recipientProviders: ["${recipientTeamEmails}", developers(), requestor()]
+          recipientProviders: ["${recipientTeamEmails}", requestor()]
+        )
       slackSend(color: "good", message: "Pipeline #${env.BUILD_NUMBER} completada com ${currentBuild.currentResult} em ${env.JOB_NAME} (<${env.BUILD_URL}|Mais info...>)")
     }
     failure {
@@ -524,10 +532,18 @@ pipeline {
       // sh "curl -o build-log.txt ${env.JENKINS_URL}/job/${env.JOB_NAME}/lastBuild/timestamps/?appendLog"
       // archiveArtifacts artifacts: 'build-log.txt', onlyIfSuccessful: true
       // emailext attachLog: true, attachmentsPattern: 'build-log.txt',
-        emailext recipientProviders: [developers(), requestor()],
-          subject: "Pipeline #${env.BUILD_NUMBER} ${currentBuild.currentResult} Job ${env.JOB_NAME}",
-          body: "Pipeline completada com: ${currentBuild.currentResult}\n" +
-                "Detalhes da execução da pipeline: ${env.BUILD_URL}\n\n${env.EMAIL_ASSINATURA}\n\n\n${env.EMAIL_RODAPE}"
+      emailext (
+          emailext mimeType: 'text/html',
+          subject: "Pipeline #'${env.BUILD_NUMBER} ${currentBuild.currentResult} Job ${env.JOB_NAME}'",
+          body: """
+          Pipeline completada com: '${currentBuild.currentResult}'
+          Detalhes da execução da pipeline: '${env.BUILD_URL}'
+          <p>'${env.EMAIL_ASSINATURA}</p><hr><p>${env.EMAIL_RODAPE}'</p>
+          """,
+          // recipientProviders: [[$class: 'DevelopersRecipientProvider']]
+          // recipientProviders: ["${recipientTeamEmails}", developers(), requestor()]
+          recipientProviders: ["${recipientTeamEmails}", requestor()]
+        )
 
       slackSend(color: "danger", message: "Pipeline #${env.BUILD_NUMBER} ${currentBuild.currentResult} em ${env.JOB_NAME} (<${env.BUILD_URL}|Mais info...>)")
     }
