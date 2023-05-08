@@ -375,10 +375,12 @@ pipeline {
                 env.kubeconfigCluster = "c1"
                 break
               case "Kubernetes C2":
-                env.kubeconfigCluster = "c2"
+                // env.kubeconfigCluster = "c2"
+                echo "\033[31mALERT: Cluster K8S não habilitado!\033[0m"
                 break
               case "Kubernetes C3":
-                env.kubeconfigCluster = "c3"
+                // env.kubeconfigCluster = "c3"
+                echo "033[31mALERT: Cluster K8S não habilitado!\033[0m"
                 break
               default:
                 error "N/A"
