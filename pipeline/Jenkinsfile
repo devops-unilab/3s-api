@@ -383,7 +383,7 @@ pipeline {
             withEnv([
             "kubeconfigCluster=${env.kubeconfigCluster}"
             ]) {
-              env.APPROVER_NAME = "${env.approver}"
+              env.APPROVER_NAME = approval['approver']
             }
           } catch(Exception e) {
             currentBuild.result = 'ABORTED';
@@ -484,7 +484,7 @@ pipeline {
     success {
       echo 'Processo de pipeline BEM-SUCEDIDO.'
       emailext (
-          attachLog: true, 
+          attachLog: false, 
           attachmentsPattern: 'build.log',
           mimeType: 'text/html',
           subject: "Pipeline #${env.BUILD_NUMBER} ${currentBuild.currentResult} Job ${env.JOB_NAME}",
