@@ -458,7 +458,7 @@ pipeline {
                   //   throw new Exception('Cancelar escolha')
                   //   }
                   if (!hasAllowedRole) {
-                    throw new Exception("Você não tem permissão. É necessário possuir ao menos uma das roles: ${allowedRolesString}")
+                    throw new Exception("Você não tem permissão. É necessário possuir ao menos uma das roles: " + allowedRolesString)
                   }
                   switch (approval['choice']) {
                     case "Kubernetes C1":
@@ -481,7 +481,7 @@ pipeline {
                   }
 
                 } catch(Exception e) {
-                    error e
+                    echo "Ocorreu uma falha: ${e.getMessage()}"
                     // currentBuild.result = 'FAILED'
                     currentBuild.result = 'ABORTED';
                     return;
