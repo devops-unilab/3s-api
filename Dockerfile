@@ -98,7 +98,7 @@ RUN composer install --ignore-platform-reqs --no-interaction --no-progress --no-
 
 RUN sed -i "s/'default' => env('DB_CONNECTION', 'mysql'),/'default' => env('DB_CONNECTION', 'pgsql'),/g" config/database.php
 RUN sed -i "s/        \/\//        '*',/g" app/Http/Middleware/VerifyCsrfToken.php
-RUN cp docker/apache/000-default.conf /etc/apache2/sites-available/000-default.conf \
+RUN cp bash/apache/000-default.conf /etc/apache2/sites-available/000-default.conf \
   && apachectl configtest
 
 # Setup user and ssh
@@ -123,7 +123,7 @@ FROM dev as production
 ENV APP_ENV=production
 ENV APP_DEBUG=false
 
-RUN cp docker/php/conf.d/opcache.ini /usr/local/etc/php/conf.d/opcache.ini \
+RUN cp bash/php/conf.d/opcache.ini /usr/local/etc/php/conf.d/opcache.ini \
   && ln -s /etc/apache2/sites-available/000-default.conf /etc/apache2/sites-enabled/default.conf
 
 COPY --from=dev /var/www/html /var/www/html

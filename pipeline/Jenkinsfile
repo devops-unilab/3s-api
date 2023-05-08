@@ -271,8 +271,8 @@ pipeline {
               """
             }
             sh """
-              chmod +x source/scripts/database/setup-databases.sh
-              ./source/scripts/database/setup-databases.sh 
+              chmod +x source/bash/database/setup-databases.sh
+              ./source/bash/database/setup-databases.sh 
             """
           }
         }
@@ -302,10 +302,10 @@ pipeline {
               }
 
               sh ''' #!/bin/bash 
-              chmod +x source/scripts/database/dump-database.sh
-              chmod +x source/scripts/database/restore-database.sh
-              ./source/scripts/database/dump-database.sh
-              ./source/scripts/database/restore-database.sh restore_postgres_homolog
+              chmod +x source/bash/database/dump-database.sh
+              chmod +x source/bash/database/restore-database.sh
+              ./source/bash/database/dump-database.sh
+              ./source/bash/database/restore-database.sh restore_postgres_homolog
               '''
     
             sh """
@@ -433,10 +433,10 @@ pipeline {
 
 
               sh ''' #!/bin/bash 
-              chmod +x source/scripts/database/dump-database.sh
-              chmod +x source/scripts/database/restore-database.sh
-              ./source/scripts/database/dump-database.sh
-              ./source/scripts/database/restore-database.sh restore_postgres_prod
+              chmod +x source/bash/database/dump-database.sh
+              chmod +x source/bash/database/restore-database.sh
+              ./source/bash/database/dump-database.sh
+              ./source/bash/database/restore-database.sh restore_postgres_prod
               '''
 
             sh """

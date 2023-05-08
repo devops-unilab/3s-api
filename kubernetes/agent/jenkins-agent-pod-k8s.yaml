@@ -139,37 +139,37 @@ spec:
       volumeMounts:
         - name: docker
           mountPath: /var/run/docker.sock # Uso do mecanismo do docker do host k8s
-    # ==================================================
-    # https://hub.docker.com/_/postgres/tags
-    - name: postgres
-      image: postgres:13.6
-      command: ["tail", "-f", "/dev/null"] 
-      imagePullPolicy: IfNotPresent
-      resources:
-        requests:
-          cpu: "250m"
-          memory: "512Mi"
-        limits:
-          cpu: "2000m"
-          memory: "1Gi"
-      env:
-        - name: POSTGRES_USER
-          value: postgres
-        - name: POSTGRES_PASSWORD
-          value: postgres
-        - name: POSTGRES_DB
-          value: agent
-        # - name: PGDATA
-        #   value: /var/lib/postgresql/data/pgdata
-        - name: LANG
-          value: pt_BR.UTF-8
-        - name: LANGUAGE
-          value: pt_BR:pt:en
-        - name: LC_ALL
-          value: pt_BR.UTF-8
-      volumeMounts:
-        - name: postgresql-data
-          mountPath: /var/lib/postgresql/data
+    # # ==================================================
+    # # https://hub.docker.com/_/postgres/tags
+    # - name: postgres
+    #   image: postgres:13.6
+    #   command: ["tail", "-f", "/dev/null"] 
+    #   imagePullPolicy: IfNotPresent
+    #   resources:
+    #     requests:
+    #       cpu: "250m"
+    #       memory: "512Mi"
+    #     limits:
+    #       cpu: "2000m"
+    #       memory: "1Gi"
+    #   env:
+    #     - name: POSTGRES_USER
+    #       value: postgres
+    #     - name: POSTGRES_PASSWORD
+    #       value: postgres
+    #     - name: POSTGRES_DB
+    #       value: agent
+    #     # - name: PGDATA
+    #     #   value: /var/lib/postgresql/data/pgdata
+    #     - name: LANG
+    #       value: pt_BR.UTF-8
+    #     - name: LANGUAGE
+    #       value: pt_BR:pt:en
+    #     - name: LC_ALL
+    #       value: pt_BR.UTF-8
+    #   volumeMounts:
+    #     - name: postgresql-data
+    #       mountPath: /var/lib/postgresql/data
     # ==================================================
     # https://hub.docker.com/_/maven/tags
     - name: maven
@@ -479,7 +479,5 @@ spec:
     - name: docker
       hostPath:
         path: /var/run/docker.sock
-    - name: postgresql-data
-      emptyDir: {}
-      # hostPath:
-      #   path: /var/lib/postgresql/data
+    # - name: postgresql-data
+    #   emptyDir: {}
