@@ -49,7 +49,7 @@ while [[ $(psql $connection_string_dump_con -c "SELECT count(*) FROM pg_stat_act
 do
   echo "Ainda há atividades de banco de dados. Aguardando..."
   sleep $WAIT_TIME
-  attempts=$((attempts+1))
+  attempts=$((attempts+2))
   if [ $attempts -eq $MAX_ATTEMPTS ]; then
       >&2 echo "Todas atividades encerradas na tentaviva $MAX_ATTEMPTS."
       exit 1
