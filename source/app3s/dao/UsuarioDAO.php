@@ -14,34 +14,6 @@ use app3s\util\Sessao;
 
 class UsuarioDAO extends DAO {
     
-    public function getIdUnidade(Usuario $usuario){
-        $idUnidade = array();
-        $id = $usuario->getId();
-        $daoSIGAA = new DAO(null, "SIG");
-        $sql2 = "SELECT
-                *
-                FROM vw_autenticacao_3s
-                WHERE id = :id LIMIT 1";
-        try {
-            $stmt = $daoSIGAA->getConnection()->prepare($sql2);
-            $stmt->bindParam(":id", $id, PDO::PARAM_INT);
-            $stmt->execute();
-            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            foreach ( $result as $linha2 ) {
-                
-                if($linha2['id_status_servidor'] == 1)
-                {
-                    $idUnidade[$linha2['id_unidade']] = $linha2['sigla_unidade'];
-                    return $idUnidade;//Status Inativo
-                }
-            }
-        } catch(PDOException $e) {
-            echo $e->getMessage();
-            return $idUnidade;
-        }
-        return $idUnidade;
-        
-    }
 
   /**
      * Verifica na base de autenticação se usuário está ativo ou não.

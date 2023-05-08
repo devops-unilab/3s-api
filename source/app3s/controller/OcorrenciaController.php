@@ -562,7 +562,7 @@ class OcorrenciaController {
         $usuario->setNivel(Sessao::NIVEL_ADM);
         $listaTecnicos2 = $usuarioDao->fetchByNivel($usuario);
         $listaTecnicos = array_merge($listaTecnicos, $listaTecnicos2);
-        
+        $allUsers = $usuarioDao->fetch();
         
         $listaAreas = $areaResponsavelDao->fetch();
         
@@ -648,7 +648,32 @@ class OcorrenciaController {
 	    echo '
                                 </select>
                               </div>
-                        </form>';
+
+						
+						<div class="form-group">
+						<label for="select-requisitante">Usuário Requisitante</label>
+						<select id="select-requisitante">
+						  <option value="">Selecione um atendente</option>';
+						  
+			foreach($allUsers as $userElement){
+				$selectedAtt = '';
+				if(isset($_GET['requisitante'])){
+					if($userElement->getId() == $_GET['requisitante']){
+						$selectedAtt = 'selected';
+					}
+				}
+				echo '
+									<option value="'.$userElement->getId().'" '.$selectedAtt.'>'.$userElement->getNome().'</option>';
+			}
+
+echo '
+						</select>
+					  </div>
+				</form>
+						
+						
+						';
+						
 	    $this->filtroAvancado($listaAreas, $requisitantes);
         echo '
                             <form id="form-filtro-campus">
@@ -707,6 +732,9 @@ class OcorrenciaController {
 	    if(isset($_GET['tecnico'])){
 	        $arrayFiltros['tecnico'] = intval($_GET['tecnico']);
 	    }
+		if(isset($_GET['requisitante'])){
+	        $arrayFiltros['requisitante'] = intval($_GET['requisitante']);
+	    }
 	    if(isset($_GET['data_abertura1'])){
 	        $arrayFiltros['data_abertura1'] = date("Y-m-d 01:01:01", strtotime($_GET['data_abertura1']));
 	    }
@@ -760,7 +788,7 @@ class OcorrenciaController {
 	        
 	        $arrayFiltros = array();
 	        $arrayFiltros = $this->getArrayFiltros();
-	        
+	       
 	        $lista = $this->dao->pesquisaParaTec($ocorrencia, $this->arrayStatusPendente(), $arrayFiltros);
 	        $lista2 = $this->dao->pesquisaParaTec($ocorrencia, $this->arrayStatusFinalizado(), $arrayFiltros);
 	        
@@ -933,15 +961,10 @@ class OcorrenciaController {
 	        $usuarioDao = new UsuarioDAO($this->dao->getConnection());
 	        
 	        $usuarioDao->fillById($usuario);
-	        
-	        $idUnidade = $usuarioDao->getIdUnidade($usuario);
-	        
-	        if(count($idUnidade) > 0){
-	            foreach($idUnidade as $id => $sigla){
-	                $ocorrencia->setIdLocal ( $id );
-	                $ocorrencia->setLocal ( $sigla );
-	            }
-	        }
+	        $sessao = new Sessao();
+			$ocorrencia->setIdLocal ( $sessao->getIdUnidade() );
+			$ocorrencia->setLocal ( $sessao->getUnidade());
+
 	        if(trim($ocorrencia->getLocal()) == ""){
 	            $ocorrencia->setLocal ( 'teste' );
 	        }

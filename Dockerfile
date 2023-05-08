@@ -79,20 +79,23 @@ RUN dpkg-reconfigure locales tzdata -f noninteractive
 ENV APACHE_RUN_USER www-data
 ENV APACHE_RUN_GROUP www-data
 
+ARG WORKDIR=${WORKDIR}
+
 RUN cd /opt \
   && curl -sS https://getcomposer.org/installer -o composer-setup.php \
   && php composer-setup.php --install-dir=/usr/local/bin --filename=composer \
   && composer 
 
-# Get vendor (Proj NOVO com docker-compose ou Pipeline CI/CD)
-RUN cd /opt && composer create-project laravel/laravel --prefer-dist proj-laravel
-RUN rsync --progress --recursive -arvPo /opt/proj-laravel/ /var/www/html/
-RUN rm -r /opt/proj-laravel
+# New Project in Docker example
+# RUN cd /opt && composer create-project laravel/laravel --prefer-dist proj-laravel
+# RUN rsync --progress --recursive -arvPo /opt/roj-laravel/ ${WORKDIR}/
+# RUN rm -r /opt/roj-laravel
 
-# Proj EXISTENTE
-COPY source/ /var/www/html
-RUN mkdir -p ./public/uploads/ocorrencia/anexo
- 
+COPY . ${WORKDIR}
+RUN mkdir -p ${WORKDIR}/public/uploads/ocorrencia/anexo
+
+WORKDIR ${WORKDIR}
+
 RUN composer install --ignore-platform-reqs --no-interaction --no-progress --no-scripts --optimize-autoloader \
   && php artisan -V
 
@@ -113,7 +116,7 @@ RUN update-rc.d ssh enable
 RUN php artisan config:clear && \
   php artisan config:cache && \
   php artisan route:cache && \
-  chmod 777 -R /var/www/html/storage/ && \
+  chmod 777 -R storage/ && \
   chown -Rf www-data:www-data /var/www/ && \
   a2enmod rewrite
 
@@ -126,20 +129,17 @@ ENV APP_DEBUG=false
 RUN cp docker/php/conf.d/opcache.ini /usr/local/etc/php/conf.d/opcache.ini \
   && ln -s /etc/apache2/sites-available/000-default.conf /etc/apache2/sites-enabled/default.conf
 
-COPY --from=dev /var/www/html /var/www/html
-
-WORKDIR /var/www/html
-
+COPY --from=dev ${WORKDIR} ${WORKDIR}
 RUN composer install --prefer-dist --no-interaction --no-dev
 
 RUN php artisan config:cache && \
   php artisan route:cache && \
   php artisan key:generate && \
-  chmod 777 -R /var/www/html/storage/ && \
+  chmod 777 -R storage/ && \
   chown -Rf www-data:www-data /var/www/ && \
   a2enmod rewrite
 
-VOLUME ["/var/www/html/public/uploads"]
+VOLUME ["${WORKDIR}/public/uploads"]
 
 EXPOSE 80 22
 

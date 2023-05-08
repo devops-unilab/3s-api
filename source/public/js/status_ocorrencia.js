@@ -9,6 +9,10 @@ $('#select-tecnico').selectize({
     create: false,
     sortField: 'text'
 });
+$('#select-requisitante').selectize({
+    create: false,
+    sortField: 'text'
+});
 $('#select-servico').selectize({
     create: false,
     sortField: 'text'

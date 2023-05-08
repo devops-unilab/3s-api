@@ -59,8 +59,8 @@ services:
       - ./source/.env
     volumes:
       - postgresql_data:/var/lib/postgresql/data
-      - ./source/scripts/database/init.sql:/mnt/01init.sql
-      - ./source/scripts/database/create-postgres-db.sh:/docker-entrypoint-initdb.d/postgres-db.sh
+      - ./source/docker/database/init.sql:/mnt/01init.sql
+      - ./source/docker/database/create-postgres-db.sh:/docker-entrypoint-initdb.d/postgres-db.sh
     networks:
       - developer
 
@@ -74,10 +74,10 @@ services:
     ports:
       - 8090:80
     env_file:
-      - ./source/scripts/pgadmin/.env.pgadmin
+      - ./source/docker/pgadmin/.env.pgadmin
     volumes:
       - pgadmin_data:/var/lib/pgadmin
-      - ./source/scripts/pgadmin/servers.json:/pgadmin4/servers.json:rw
+      - ./source/docker/pgadmin/servers.json:/pgadmin4/servers.json:rw
     networks:
       - developer
     depends_on:

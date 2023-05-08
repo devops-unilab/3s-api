@@ -113,7 +113,11 @@ spec:
     # ==================================================
     # https://hub.docker.com/_/php/tags
     - name: php8
+<<<<<<< HEAD:pipeline/jenkins-agent-pod-k8s.yaml
+      image: php:8.1-apache-bullseye # imagem customizada
+=======
       image: php:8.1-apache-bullseye
+>>>>>>> developer:kubernetes/agent/jenkins-agent-pod-k8s.yaml
       command: ["tail", "-f", "/dev/null"]  # este ou qualquer comando que seja basicamente um noop é necessário, isso é para que não substitua o ponto de entrada do contêiner base
       imagePullPolicy: Always # use o cache ou puxe a imagem para o agente
       resources:  # limites e recursos que o build contém

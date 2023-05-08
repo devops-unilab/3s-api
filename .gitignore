@@ -467,11 +467,6 @@ composer.phar
 
 /wpcs/*
 
-##### SASS
-.sass-cache/
-*.css.map
-*.sass.map
-*.scss.map
 
 ##### Laravel
 /**/.phpunit.cache
@@ -480,7 +475,6 @@ composer.phar
 /**/public/hot
 /**/public/storage
 /**/storage/*.key
-/**/vendor
 /**/.env
 /**/.env.backup
 /**/.env.production
@@ -499,7 +493,7 @@ composer.phar
 *.sqlite3
 *.db
 !/source/.env.example
-!/source/scripts/pgadmin/.env.pgadmin.example
+!/source/docker/pgadmin/.env.pgadmin.example
 /source/public/uploads
 /source/vendor
 /vault

@@ -1,17 +1,28 @@
----
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: app-3s
+  name: <APP_NAMESPACE>
   
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: <APP_NAME>-secret
+  namespace: <APP_NAMESPACE>
+type: Opaque
+data:
+  DB_PASSWORD: M3MhQCMkMjAyMw==
+  DB_PASSWORD_SIGAA: KytFbjNyR2lA
+  MAIL_PASSWORD: ''
+
 ---
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: app-3s-config
-  namespace: app-3s
+  name: <APP_NAME>-config
+  namespace: <APP_NAMESPACE>
   labels:
-    app: app-3s
+    app: <APP_NAME>
 data:
   # defaults
   TZ: 'America/Fortaleza'
@@ -20,16 +31,18 @@ data:
   DB_HOST: 'postgres.postgres-3s.svc.cluster.local'
   DB_PORT: '5432'
   DB_DATABASE: '3s-ocorrencias'
+  DB_USERNAME: '3s'
   # sigaa
   DB_CONNECTION_SIGAA: 'pgsql'
+  DB_HOST_SIGAA: '10.129.19.31'
   DB_PORT_SIGAA: '5432'
   DB_DATABASE_SIGAA: 'sistemas_comum'
+  DB_USERNAME_SIGAA: '3s'
   # smtp
   MAIL_MAILER: 'smtp'
   MAIL_HOST: 'smtp.noreply.unilab.edu.br'
   MAIL_PORT: '25'
   MAIL_USERNAME: ''
-  MAIL_PASSWORD: ''
   MAIL_ENCRYPTION: ''
   MAIL_FROM_ADDRESS: '3s@noreply.unilab.edu.br'
   MAIL_FROM_NAME: '3S - Sistema de Solicitacao de Ocorrencias'
@@ -79,25 +92,25 @@ data:
   VITE_PUSHER_APP_CLUSTER: '${PUSHER_APP_CLUSTER}'
 
 ---
+# kubectl create secret docker-registry registro-regcred --docker-server=https://dti-registro.unilab.edu.br --docker-username=desenvolvedor --docker-password=Desenvolvedor2023 --docker-email=dti-registro@noreply.unilab.edu.br --output yaml
+# kubectl get secret registro-regcred --output=yaml
 apiVersion: v1
+data:
+  .dockerconfigjson: eyJhdXRocyI6eyJodHRwczovL2R0aS1yZWdpc3Ryby51bmlsYWIuZWR1LmJyIjp7InVzZXJuYW1lIjoiYWRtaW4iLCJwYXNzd29yZCI6IkR0aUB1bmlsYWIyMDIzIiwiZW1haWwiOiJkaXNpckB1bmlsYWIuZWR1LmJyIiwiYXV0aCI6IllXUnRhVzQ2UkhScFFIVnVhV3hoWWpJd01qTT0ifX19
 kind: Secret
 metadata:
-  name: harbor-regcred
-  namespace: app-3s
-data:
-  .dockerconfigjson: eyJhdXRocyI6eyJodHRwczovL2R0aS1yZWdpc3Ryby51bmlsYWIuZWR1LmJyIjp7InVzZXJuYW1lIjoiazhzIiwicGFzc3dvcmQiOiJLOHNAdW5pbGFiMjAyMyIsImVtYWlsIjoiZHRpLWs4c0Bub3JlcGx5LnVuaWxhYi5lZHUuYnIiLCJhdXRoIjoiYXpoek9rczRjMEIxYm1sc1lXSXlNREl6In19fQ==
+  name: registro-regcred
+  namespace: <APP_NAMESPACE>
 type: kubernetes.io/dockerconfigjson
 
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: pvc-app-3s
-  namespace: app-3s
+  name: pvc-<APP_NAME>
+  namespace: <APP_NAMESPACE>
   labels:
-    app: app-3s
-  annotations:
-    nfs.io/storage-path: "uploads"
+    app: <APP_NAME>
 spec:
   storageClassName: nfs-storage-k8s
   accessModes:
@@ -107,58 +120,21 @@ spec:
       storage: 50Gi
 
 ---
-apiVersion: v1
-kind: ServiceAccount
-metadata:
-  name: app-3s
-  namespace: app-3s
-automountServiceAccountToken: true
-# imagePullSecrets:
-#   - name: app-3s-harbor-regcred-k8sc1
-
----
-apiVersion: v1
-kind: Secret
-metadata:
- name: app-3s
- namespace: app-3s
- annotations:
-   kubernetes.io/service-account.name: app-3s
-type: kubernetes.io/service-account-token
-
----
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: app-3s
-  namespace: app-3s
+  name: <APP_NAME>
+  namespace: <APP_NAMESPACE>
 spec:
   replicas: 1
   template:
     metadata:
       labels:
-        app: app-3s
-      annotations:
-        vault.hashicorp.com/agent-inject: "true"
-        vault.hashicorp.com/agent-inject-status: 'update'
-        vault.hashicorp.com/tls-skip-verify: "true"
-        vault.hashicorp.com/agent-inject-secret-config: 'secret/data/3s/config'
-        vault.hashicorp.com/agent-inject-template-config: |
-          {{ with secret "secret/data/3s/config" -}}
-            export DB_PASSWORD='{{ .Data.data.pg_password }}'
-            export DB_USERNAME='{{ .Data.data.pg_user }}'
-            export DB_USERNAME_SIGAA='{{ .Data.data.db_username_sigaa }}'
-            export DB_PASSWORD_SIGAA='{{ .Data.data.db_password_sigaa }}'
-            export DB_HOST_SIGAA='{{ .Data.data.db_host_sigaa }}'
-          {{- end }}  
-        vault.hashicorp.com/role: "3s-role"
-        vault.hashicorp.com/auth-path: auth/kubernetes/c1
+        app: <APP_NAME>
     spec:
-      serviceAccountName: "app-3s"
       containers:
-      - name: app-3s
-        image: dti-registro.unilab.edu.br/unilab/app-3s:latest
-        command: ["/bin/bash", "-c", "sudo -s; source /vault/secrets/config; apache2-foreground"]
+      - name: <CONTAINER_NAME>
+        image: <IMAGE_TAG>
         resources:
           requests:
             cpu: 200m
@@ -173,8 +149,10 @@ spec:
         - containerPort: 37389
           name: ssh
         envFrom:
+          - secretRef:
+              name: <APP_NAME>-secret
           - configMapRef:
-              name: app-3s-config
+              name: <APP_NAME>-config
         volumeMounts:
         - name: tz-america
           mountPath: /etc/localtime
@@ -187,26 +165,25 @@ spec:
             type: File
         - name: 3s-uploads
           persistentVolumeClaim:
-            claimName: pvc-app-3s
+            claimName: pvc-<APP_NAME>
       imagePullSecrets:
-        - name: harbor-regcred
+      - name: registro-regcred
   selector:
     matchLabels:
-        app: app-3s
-
+        app: <APP_NAME>
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: app-3s
-  namespace: app-3s
+  name: <APP_NAME>
+  namespace: <APP_NAMESPACE>
   labels:
-    app: app-3s
+    app: <APP_NAME>
   annotations:
     metallb.universe.tf/address-pool: int-pool
 spec:
   selector:
-    app: app-3s
+    app: <APP_NAME>
   ports:
     - protocol: TCP
       port: 80
@@ -223,8 +200,8 @@ spec:
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-   name: app-3s
-   namespace: app-3s
+   name: <APP_NAME>
+   namespace: <APP_NAMESPACE>
    annotations:
       haproxy.org/check: enabled
       haproxy.org/forwarded-for: enabled
@@ -240,7 +217,7 @@ spec:
             pathType: Prefix
             backend:
                service:
-                  name: app-3s
+                  name: <APP_NAME>
                   port:
                      number: 80
                      

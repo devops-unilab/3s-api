@@ -2319,6 +2319,13 @@ class OcorrenciaDAO extends DAO {
             (ocorrencia.id_usuario_indicado  = $idUsuario OR ocorrencia.id_usuario_atendente  = $idUsuario)";
             
         }
+        if(isset($arrayFiltros['requisitante'])){
+            
+            $idUsuario = $arrayFiltros['requisitante'];
+            $arrPedacos[] = "
+            (ocorrencia.id_usuario_cliente  = $idUsuario)";
+            
+        }
         if(isset($arrayFiltros['solicitacao'])){
             $idUsuario = $sessao->getIdUsuario();
             $arrPedacos[] = "

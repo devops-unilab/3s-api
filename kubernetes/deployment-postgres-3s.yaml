@@ -1,0 +1,391 @@
+
+# DATABASE POSTGRESQL
+# ------------------------------------------------------------------------------------
+# -- CONFIGURA USUARIO E SENHA | 3s
+# ------------------------------------------------------------------------------------
+# create USER "3s" WITH 
+#     SUPERUSER
+#     LOGIN 
+#     CREATEDB
+#     CREATEROLE
+#     REPLICATION
+#     INHERIT
+#     CONNECTION LIMIT -1
+#     PASSWORD '<PASSWD>';
+# COMMENT ON ROLE "3s" IS 'Usuário padrão 3s-ocorrencias.';
+
+# ------------------------------------------------------------------------------------
+# -- CRIA DATABASE | 3s-ocorrencias
+# ------------------------------------------------------------------------------------
+# CREATE DATABASE 3s-ocorrencias
+#     WITH
+#     OWNER = "3s"
+#     ENCODING = 'UTF8'
+#     CONNECTION LIMIT = -1
+#     TEMPLATE template0;
+# COMMENT ON DATABASE 3s-ocorrencias IS 'Dadabase para 3S';
+#
+# apt install -y iputils-ping telnet curl postgresql-client
+# psql -h postgres.postgres-3s.svc.cluster.local -p 5432 -U 3s -d 3s-ocorrencias
+# kubectl delete pv $(kubectl get pv | tail -n+2 | awk '$5 == "Released" {print $1}')
+
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: postgres-3s
+
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: postgres-3s-secret
+  namespace: postgres-3s
+type: Opaque
+data:
+  PG_PASSWORD: M3MhQCMkMjAyMw==
+  PG_PRIMARY_PASSWORD: YWRtaW4hQCMkMjAyMw==
+  PG_ROOT_PASSWORD: cG9zdGdyZXMhQCMkMjAyMw==
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: postgres-3s-config
+  namespace: postgres-3s
+  labels:
+    app: postgres
+data:
+  PG_USER: 3s
+  PG_PRIMARY_USER: admin
+  PGHOST: /tmp
+  PG_MODE: primary # primary, replica, set
+  PG_DATABASE: 3s-ocorrencias
+  PG_PRIMARY_HOST: postgres.postgres-3s.svc.cluster.local
+  PG_PRIMARY_PORT: "5432"
+  MODE: postgres
+  CRUNCHY_DEBUG: "TRUE"
+
+  init.sql: |
+
+    # SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE datname = '3s-ocorrencias';
+    # DROP DATABASE "3s-ocorrencias" WITH (FORCE);
+
+    # CREATE DATABASE "3s-ocorrencias"
+    #     WITH
+    #     OWNER = postgres
+    #     ENCODING = 'UTF8'
+    #     TABLESPACE = pg_default
+    #     CONNECTION LIMIT = -1
+    #     IS_TEMPLATE = False;
+
+    # COMMENT ON DATABASE "3s-ocorrencias" IS 'Dadabase PosgresSQL do sistema 3S.';
+    # GRANT ALL ON DATABASE "3s-ocorrencias" TO "3s";
+
+    # /usr/local/pgsql-15/pg_dump --file "/var/lib/pgadmin/storage/admin_admin.com/3s-pgsql-backup" --host "3s.unilab.edu.br" --port "5432" --username "ocorrencias_user" --no-password --verbose --format=c --blobs "ocorrencias"
+    # /usr/lib/postgresql/15/bin/pg_dump "host=10.130.0.154 port=5432 dbname=3s-ocorrencias user=3s password=3s\!@#$\2023" -v > /tmp/3s-backup
+
+    # /usr/local/pgsql-13/pg_restore --host "postgres.postgres-3s.svc.cluster.local" --port "5432" --username "postgres" --no-password --role "3s" --dbname "3s-ocorrencias" --verbose "/var/lib/pgadmin/storage/admin_admin.com/3s"
+    # psql -U postgres -d laravel < /tmp/3s-backup
+
+    -- Role: "3s"
+    DROP ROLE IF EXISTS "3s";
+    CREATE ROLE "3s" WITH
+      LOGIN
+    --   SUPERUSER
+      INHERIT
+      CREATEDB
+      CREATEROLE
+      REPLICATION
+      CONNECTION LIMIT -1
+      ENCRYPTED PASSWORD 'SCRAM-SHA-256$4096:3Jqsy2/uZq6sOWbF0ff0Pg==$cPHoXFvpbnUG1sesgk56le9jTGpBcMemuzkh3sXEA/8=:+D7jh16yPQr/kAw/dccT0Rz52Mgi4JgwD1m0hJKp2Qo=';
+    COMMENT ON ROLE "3s" IS 'Usuário padrão do database 3s-ocorrencias.';
+
+    -- Role: ocorrencias_user
+    -- DROP ROLE IF EXISTS ocorrencias_user;
+
+    CREATE ROLE ocorrencias_user WITH
+      LOGIN
+      NOSUPERUSER
+      INHERIT
+      NOCREATEDB
+      NOCREATEROLE
+      NOREPLICATION;
+
+    -- Role: admindti
+    -- DROP ROLE IF EXISTS admindti;
+
+    CREATE ROLE admindti WITH
+      LOGIN
+      SUPERUSER
+      INHERIT
+      NOCREATEDB
+      NOCREATEROLE
+      NOREPLICATION;
+
+    -- Role: cicero_robson
+    -- DROP ROLE IF EXISTS cicero_robson;
+
+    CREATE ROLE cicero_robson WITH
+      LOGIN
+      SUPERUSER
+      INHERIT
+      CREATEDB
+      CREATEROLE
+      NOREPLICATION;
+
+    -- Role: luansidney
+    -- DROP ROLE IF EXISTS luansidney;
+
+    CREATE ROLE luansidney WITH
+      LOGIN
+      SUPERUSER
+      INHERIT
+      CREATEDB
+      NOCREATEROLE
+      NOREPLICATION;
+
+    -- Role: manoeljr
+    -- DROP ROLE IF EXISTS manoeljr;
+
+    CREATE ROLE manoeljr WITH
+      LOGIN
+      SUPERUSER
+      INHERIT
+      CREATEDB
+      CREATEROLE
+      NOREPLICATION;
+
+    -- Role: rafael
+    -- DROP ROLE IF EXISTS rafael;
+
+    CREATE ROLE rafael WITH
+      LOGIN
+      SUPERUSER
+      INHERIT
+      CREATEDB
+      NOCREATEROLE
+      NOREPLICATION;
+
+    -- Role: tiago17
+    -- DROP ROLE IF EXISTS tiago17;
+
+    CREATE ROLE tiago17 WITH
+      LOGIN
+      SUPERUSER
+      NOINHERIT
+      CREATEDB
+      CREATEROLE
+      NOREPLICATION;
+
+    CREATE TABLE IF NOT EXISTS failed_jobs (
+        id         bigserial                           not null,
+        uuid       varchar(255)                        not null,
+        connection text                                not null,
+        queue      text                                not null,
+        payload    varchar(255)                        not null,
+        exception  varchar(255)                        not null,
+        failed_at  timestamp default CURRENT_TIMESTAMP not null,
+        constraint failed_jobs_uuid_unique unique(uuid)
+    );
+
+    CREATE TABLE IF NOT EXISTS migrations (
+        id         bigserial   not null,
+        migration varchar(255) not null,
+        batch     int          not null
+    );
+
+    CREATE TABLE IF NOT EXISTS password_resets (
+        email      varchar(255) not null,
+        token      varchar(255) not null,
+        created_at timestamp    null
+    );
+
+    create index password_resets_email_index on password_resets (email);
+
+    CREATE TABLE IF NOT EXISTS personal_access_tokens (
+        id             bigserial       not null,
+        tokenable_type varchar(255)    not null,
+        tokenable_id   oid             not null,
+        name           varchar(255)    not null,
+        token          varchar(64)     not null,
+        abilities      text            null,
+        last_used_at   timestamp       null,
+        expires_at     timestamp       null,
+        created_at     timestamp       null,
+        updated_at     timestamp       null,
+        constraint personal_access_tokens_token_unique unique (token)
+    );
+
+    create index personal_access_tokens_tokenable_type_tokenable_id_index
+        on personal_access_tokens (tokenable_type, tokenable_id);
+
+    CREATE TABLE IF NOT EXISTS users (
+        id                bigserial    not null,
+        name              varchar(255) not null,
+        email             varchar(255) not null,
+        email_verified_at timestamp    null,
+        password          varchar(255) not null,
+        remember_token    varchar(100) null,
+        created_at        timestamp    null,
+        updated_at        timestamp    null,
+        constraint users_email_unique unique (email)
+    );
+
+    INSERT INTO migrations (migration, batch) (
+        SELECT '2014_10_12_000000_create_users_table',1 WHERE NOT EXISTS (
+        SELECT 1 FROM migrations WHERE migration='2014_10_12_000000_create_users_table' AND batch=1)
+    );
+    INSERT INTO migrations (migration, batch) (
+        SELECT '2014_10_12_100000_create_password_resets_table',1 WHERE NOT EXISTS (
+        SELECT 1 FROM migrations WHERE migration='2014_10_12_100000_create_password_resets_table' AND batch=1)
+    );
+    INSERT INTO migrations (migration, batch) (
+        SELECT '2019_08_19_000000_create_failed_jobs_table',1 WHERE NOT EXISTS (
+        SELECT 1 FROM migrations WHERE migration='2019_08_19_000000_create_failed_jobs_table' AND batch=1)
+    );
+    INSERT INTO migrations (migration, batch) (
+        SELECT '2019_12_14_000001_create_personal_access_tokens_table','1' WHERE NOT EXISTS (
+        SELECT 1 FROM migrations WHERE migration='2019_12_14_000001_create_personal_access_tokens_table' AND batch=1)
+    );
+
+    INSERT INTO users (name, email, email_verified_at, password, remember_token, created_at, updated_at) (
+      SELECT 'teste user', 'teste@user.com', null, '$2y$10$bXcKxcdPExJR/29r1rZJk.7S8KKwr8Ri.uuN9TirPvB2TLeWQrliq', null, '2023-03-09 20:34:28', '2023-03-09 20:34:28' WHERE NOT EXISTS (
+        SELECT 1 FROM users WHERE email='teste@user.com')
+    );
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pvc-postgres-3s
+  namespace: postgres-3s
+  labels:
+    app: postgres
+spec:
+  storageClassName: nfs-storage-k8s
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 5Gi
+
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: postgres-3s-sa
+  namespace: postgres-3s
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgres
+  namespace: postgres-3s
+  labels:
+    app: postgres
+  annotations:
+    metallb.universe.tf/address-pool: int-pool
+spec:
+  # clusterIP: None
+  # type: NodePort
+  type: LoadBalancer
+  loadBalancerIP: 10.130.0.154
+  externalTrafficPolicy: Local
+  ports:
+    - protocol: TCP
+      port: 5432
+      nodePort: 30100
+      name: pgsql
+  selector:
+    app: postgres
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgres-3s-primary
+  namespace: postgres-3s
+  labels:
+    name: postgres-3s-primary
+spec:
+  ports:
+    - protocol: TCP
+      port: 5432
+      nodePort: 0
+  selector:
+    name: postgres-3s-primary
+  type: ClusterIP
+  sessionAffinity: None
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgres-3s-replica
+  namespace: postgres-3s
+  labels:
+    name: postgres-3s-replica
+spec:
+  ports:
+    - protocol: TCP
+      port: 5432
+      nodePort: 0
+  selector:
+    name: postgres-3s-replica
+  type: ClusterIP
+  sessionAffinity: None
+
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: postgres
+  namespace: postgres-3s
+spec:
+  selector:
+    matchLabels:
+      app: postgres
+  serviceName: postgres
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: postgres
+        name: postgres-3s-replica
+    spec:
+      serviceAccount: postgres-3s-sa
+      securityContext:
+        fsGroup: 26
+      containers:
+        - name: postgres
+          image: crunchydata/crunchy-postgres:centos8-13.6-4.7.5
+          imagePullPolicy: Always
+          resources:
+            requests:
+              cpu: 50m
+              memory: 256Mi
+            limits:
+              cpu: 990m
+              memory: 1024Mi
+          ports:
+            - containerPort: 5432
+          envFrom:
+            - secretRef:
+                name: postgres-3s-secret
+            - configMapRef:
+                name: postgres-3s-config
+          volumeMounts:
+            - name: pgdata
+              mountPath: /pgdata
+              readOnly: false
+            # - name: postgresql-initdb
+            #   mountPath: /docker-entrypoint-initdb.d/01init.sql
+            #   subPath: init.sql
+      volumes:
+        # - name: postgresql-initdb
+        #   configMap:
+        #     name: postgres-3s-config
+        - name: pgdata
+          persistentVolumeClaim:
+            claimName: pvc-postgres-3s
+            

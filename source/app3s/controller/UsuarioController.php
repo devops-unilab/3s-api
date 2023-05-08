@@ -13,7 +13,8 @@ use app3s\dao\UsuarioDAO;
 use app3s\model\Usuario;
 use app3s\util\Sessao;
 use app3s\view\UsuarioView;
-
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Http;
 
 class UsuarioController {
 
@@ -26,6 +27,55 @@ class UsuarioController {
 	}
 
 	
+	public function autenticar(Usuario $usuario)
+	{
+
+		$login = $usuario->getLogin();
+		$senha = $usuario->getSenha();
+		$data = ['login' =>  $login, 'senha' => $senha];
+		$response = Http::post(env('UNILAB_API_ORIGIN').'/authenticate', $data);
+		$responseJ = json_decode($response->body());
+
+		$idUsuario  = 0;
+
+		if (isset($responseJ->id)) {
+			$idUsuario = intval($responseJ->id);
+		}
+		if ($idUsuario === 0) {
+			return false;
+		}
+		$headers = [
+			'Authorization' => 'Bearer ' .$responseJ->access_token,
+		];
+		$response = Http::withHeaders($headers)->get(env('UNILAB_API_ORIGIN').'/user', $headers);
+		$responseJ2 = json_decode($response->body());
+		
+		$nivel = 'c';
+		if ($responseJ2->id_status_servidor != 1) {
+			$nivel = 'd';
+		}
+
+		$data = DB::table('usuario')->where("id", $idUsuario)->first();
+		if ($data === null) {
+			DB::table('usuario')->insert(
+				[
+					'id' => $idUsuario,
+					'nome' => $responseJ2->nome,
+					'email' => $responseJ2->email,
+					'login' => $responseJ2->login,
+					'nivel' => $nivel
+				]
+			);
+			
+		} else {
+			$nivel = $data->nivel; 
+		}
+		$usuario->setId($idUsuario);
+		$usuario->setNome($responseJ2->nome);
+		$usuario->setEmail($responseJ2->email);
+		$usuario->setNivel($nivel);
+		return true;
+	}
 	public function mudarNivel(){
 		
 		$sessao = new Sessao();
@@ -52,57 +102,24 @@ class UsuarioController {
 	    }
 	    $usuario = new Usuario();
 	    $usuario->setLogin($_POST['usuario']);
-	    $usuario->setSenha(md5($_POST['senha']));
+	    $usuario->setSenha($_POST['senha']);
 	    
-	    if ($this->dao->autenticar($usuario)) {
+	    if ($this->autenticar($usuario)) {
 	        
 	        $sessao = new Sessao();
 	        $sessao->criaSessao($usuario->getId(), $usuario->getNivel(), $usuario->getLogin(), $usuario->getNome(), $usuario->getEmail());
-	        
-	        $idUnidade = $this->dao->getIdUnidade($usuario);
-	        if(count($idUnidade) > 0){
-	            foreach($idUnidade as $id => $sigla){
-	                $sessao->setIDUnidade($id);
-	                $sessao->setUnidade($sigla );
-	            }
-	        }
-	        
-	        
+			$dataSIG = DB::connection('sigaa')->table('vw_autenticacao_3s')
+			->where("id", $usuario->getId())->first();
+			
+
+			$sessao->setIDUnidade($dataSIG->id_unidade);
+			$sessao->setUnidade($dataSIG->sigla_unidade);
 	        echo ":sucesso:".$sessao->getNivelAcesso();
 	    }else{
 	        echo ":falha";
 	    }
 	}
 	
-	public function fazerLogin(){
-	    if (!isset($_POST['logar'])) {
-	        return;
-	    }
-	    
-	    $usuario = new Usuario();
-	    $usuario->setLogin($_POST['usuario']);
-	    $usuario->setSenha(md5($_POST['senha']));
-	    
-	    if ($this->dao->autenticar($usuario)) {
-	        
-	        $sessao = new Sessao();
-	        $sessao->criaSessao($usuario->getId(), $usuario->getNivel(), $usuario->getLogin(), $usuario->getNome(), $usuario->getEmail());
-	        
-	        echo '
-<div class="alert alert-success" role="alert">
-  Login realizado com Sucesso
-</div>
-';
-	        echo '<META HTTP-EQUIV="REFRESH" CONTENT="3; URL=./">';
-	    } else {
-	        echo '
-<div class="alert alert-danger" role="alert">
-  Você errou a senha! Tente novamente!
-</div>
-	            
-';
-	    }
-	}
 	
 	public function telaLogin(){
 	    echo '
@@ -110,7 +127,6 @@ class UsuarioController {
     <div class="row">
         <div class="card mb-4">
             <div class="card-body">';
-	    $this->fazerLogin();
 	    $this->view->formLogin();
 	    echo '
             </div>

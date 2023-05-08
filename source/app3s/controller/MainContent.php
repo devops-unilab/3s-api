@@ -30,7 +30,17 @@ class MainContent{
             case Sessao::NIVEL_COMUM:
                 $this->contentComum();
                 break;
+            case Sessao::NIVEL_DISABLED:
+                echo '<div class="card mb-4">
+                        <div class="container">
+                            <div class="row m-5">
+                                <h1>Seu acesso está desabilitado. É necessário solicitar seu acesso à DTI. </h1>
+                            </div>
+                        </div>
+                    </div>';
+                break;
             default:
+            
                 $usuarioController = new UsuarioController();
                 $usuarioController->telaLogin();
                 break;
