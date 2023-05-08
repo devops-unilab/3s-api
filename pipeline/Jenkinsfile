@@ -85,6 +85,7 @@ pipeline {
     USERS_DUMP = '"cicero_robson" "luansidney" "manoeljr"'
     USERS_DUMP_ROOT = '"ocorrencias_user" "admindti" "3s"'
     PGPASSFILE="/home/jenkins/agent/workspace/.pgpass"
+    APROVADORES = "admin, erivandosena, michel"
   }
   stages {
     stage('Iniciando CI/CD') {
@@ -407,7 +408,7 @@ pipeline {
                     message: 'Aprovar Deploy?',
                     ok: 'APROVAR',
                     submitterParameter: 'approver',
-                    // submitter: 'leader, sysadmin, admin',
+                    submitter: "${env.APROVADORES}",
                     parameters: [
                       choice(
                         choices: clusterChoices, 
@@ -422,10 +423,10 @@ pipeline {
                   // } else {
                   //   throw new Exception('Cancelar escolha')
                   //   }
-                  if (!hasAllowedRole) {
-                    // throw new Exception("Você não tem permissão. É necessário possuir ao menos uma das roles: " + allowedRolesString)
-                    error("Você não tem permissão. É necessário possuir ao menos uma das roles: ${allowedRolesString}")
-                  }
+                  // if (!hasAllowedRole) {
+                  //   // throw new Exception("Você não tem permissão. É necessário possuir ao menos uma das roles: " + allowedRolesString)
+                  //   error("Você não tem permissão. É necessário possuir ao menos uma das roles: ${allowedRolesString}")
+                  // }
                   switch (approval['choice']) {
                     case "Kubernetes C1":
                       env.kubeconfigCluster = "c1"
