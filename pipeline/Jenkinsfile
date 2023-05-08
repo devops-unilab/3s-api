@@ -128,12 +128,10 @@ pipeline {
 
           # Obtem o vendor
           composer create-project laravel/laravel --prefer-dist /tmp/proj-laravel
-          ls -la /tmp/proj-laravel
           cp -ra source/ /tmp/proj-laravel/
           rsync --progress --recursive -arvPo /tmp/proj-laravel/ source/
           mv source/.env.example source/.env
           ls -la source/
-          printenv
         '''
       }
     }
@@ -270,8 +268,6 @@ pipeline {
               """
             }
             sh """
-              printenv
-
               chmod +x source/docker/database/setup-databases.sh
               ./source/docker/database/setup-databases.sh 
             """
@@ -306,15 +302,10 @@ pipeline {
               chmod +x source/docker/database/dump-database.sh
               chmod +x source/docker/database/restore-database.sh
               ./source/docker/database/dump-database.sh
-              ls -la /tmp
               ./source/docker/database/restore-database.sh restore_postgres_homolog
-              ls -la /tmp
               '''
     
             sh """
-              ls -la .
-              pwd
-              printenv
               sed -i 's/postgres.postgres-3s.svc.cluster.local/10.130.0.154/' ./kubernetes/deployment-3s.yaml
               sed -i 's/3s-ocorrencias/3s-homologacao/' ./kubernetes/deployment-3s.yaml
               sed -i 's/:latest/:${env.DOCKER_TAG}/' ./kubernetes/deployment-3s.yaml
@@ -340,9 +331,9 @@ pipeline {
               echo 'Lista de recursos.'
               kubectl get all,sa,ing,pvc -n $APP_NAMESPACE -o wide
             """
-            env.APP_URI_PROD = sh(script: 'kubectl get ingress app-3s -n app-3s -o jsonpath="{.spec.rules[0].host}" | sed "s/^/http:\\/\\//"', returnStdout: true).trim()
-            withEnv(["APP_URI=${env.APP_URI_PROD}"]) {
-              sh 'echo Endpoint: $APP_URI_PROD'
+            env.APP_URI_STAGING = sh(script: 'kubectl get ingress app-3s -n app-3s -o jsonpath="{.spec.rules[0].host}" | sed "s/^/http:\\/\\//"', returnStdout: true).trim()
+            withEnv(["APP_URI=${env.APP_URI_STAGING}"]) {
+              sh 'echo Endpoint: $APP_URI_STAGING'
             }
           }
         }
@@ -361,8 +352,6 @@ pipeline {
                   <h3><a href='${BUILD_URL}input'><strong>Ir para APROVAÇÃO</strong></a></h3>
                   <p>Endpoint da homologação: ${env.APP_URI_STAGING}</p><p>${env.EMAIL_ASSINATURA}</p><hr><p>${env.EMAIL_RODAPE}</p>
               """)
-            // timeout(time: 48, unit: 'HOURS') {
-              
             def clusterChoices = ['Kubernetes C1', 'Kubernetes C2', 'Kubernetes C3']
             def approval = input(
               id: 'ApprovalID',
@@ -394,9 +383,8 @@ pipeline {
             withEnv([
             "kubeconfigCluster=${env.kubeconfigCluster}"
             ]) {
-            sh 'printenv'
+
             }
-            // }
           } catch(Exception e) {
             currentBuild.result = 'ABORTED';
             error(e.getMessage())
@@ -435,8 +423,7 @@ pipeline {
                   "DB_USER_DUMP=${env.DB_USER_DUMP}",
                   "DB_PASSWORD_DUMP=${env.DB_PASSWORD_DUMP}"
                 ]) {
-                  sh 'printenv'
-                  sh 'cat ./secret.txt'
+
                 }
 
 
@@ -444,9 +431,7 @@ pipeline {
               chmod +x source/docker/database/dump-database.sh
               chmod +x source/docker/database/restore-database.sh
               ./source/docker/database/dump-database.sh
-              ls -la /tmp
               ./source/docker/database/restore-database.sh restore_postgres_prod
-              ls -la /tmp
               '''
 
             sh """
@@ -483,7 +468,7 @@ pipeline {
               kubectl get all,sa,ing,pvc -n $APP_NAMESPACE -o wide
             """
             env.APP_URI_PROD = sh(script: 'kubectl get ingress app-3s -n app-3s -o jsonpath="{.spec.rules[0].host}" | sed "s/^/http:\\/\\//"', returnStdout: true).trim()
-            withEnv(["APP_URI=${env.APP_URI_PROD}"]) {
+            withEnv(["APP_URI_PROD=${env.APP_URI_PROD}"]) {
               sh 'echo Endpoint: $APP_URI_PROD'
             }
           }
@@ -491,14 +476,6 @@ pipeline {
       }
     }
   }
-
-  // stage('Migrar Binários') {
-  //   steps {
-  //     script {
-  //        sh "rsync -e 'ssh -p 37389' --progress --recursive -arvPo ./ erivando@3s.unilab.edu.br:/dados/sites/pub/ocorrencias/uploads/ 3s@10.130.0.153:/var/www/html/public/uploads/"
-  //     }
-  //   }
-  // }
   post{
     always {
       echo 'Processo de pipeline finalizado.'
@@ -506,19 +483,19 @@ pipeline {
     }
     success {
       echo 'Processo de pipeline BEM-SUCEDIDO.'
-      sh "curl -o build-log.txt -k ${env.JENKINS_URL}/job/${env.JOB_NAME}/lastBuild/timestamps/?appendLog"
-      archiveArtifacts artifacts: 'build-log.txt', onlyIfSuccessful: true
       emailext (
           attachLog: true, 
-          attachmentsPattern: 'build-log.txt',
+          attachmentsPattern: 'build.log',
           mimeType: 'text/html',
           subject: "Pipeline #${env.BUILD_NUMBER} ${currentBuild.currentResult} Job ${env.JOB_NAME}",
           body: """
-          SUCCESSFUL: Job ${env.JOB_NAME} [${env.BUILD_NUMBER}]:
-          Check console output at "${env.JOB_NAME} [${env.BUILD_NUMBER}]
-          <p>Pipeline completada com: ${currentBuild.currentResult}</p>
+          Pipeline completada com: ${currentBuild.currentResult}
           <p>Detalhes da execução da pipeline: ${env.BUILD_URL}</p>
-          <p>Detalhes do teste de qualidade: '${env.SONAR_URL}/dashboard?id=${env.APP_NAME}</p> 
+          <p>Detalhes do teste de qualidade: ${env.SONAR_URL}/dashboard?id=${env.APP_NAME}</p> 
+          Detalhes do projeto Git:
+          Commit: ${env.GIT_COMMIT}<br />
+          Autor: ${env.GIT_AUTHOR_NAME}<br />
+          E-mail: ${env.GIT_AUTHOR_EMAIL}
           <p>Endpoint de homologação: ${env.APP_URI_STAGING}</p>
           <p>Endpoint de produção: ${env.APP_URI_PROD}</p>
           <p>Aprovado por: ${env.approver}</p>
@@ -531,11 +508,9 @@ pipeline {
     }
     failure {
       echo 'Processo de pipeline executado com falha.'
-      sh "curl -o build-log.txt -k ${env.JENKINS_URL}/job/${env.JOB_NAME}/lastBuild/timestamps/?appendLog"
-      archiveArtifacts artifacts: 'build-log.txt', onlyIfSuccessful: true
       emailext (
           attachLog: true, 
-          attachmentsPattern: 'build-log.txt',
+          attachmentsPattern: 'build.log',
           mimeType: 'text/html',
           subject: "Pipeline #${env.BUILD_NUMBER} ${currentBuild.currentResult} Job ${env.JOB_NAME}",
           body: """
