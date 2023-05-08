@@ -63,8 +63,8 @@ pipeline {
     JENKINS_URL = "https://dti-jenkins.unilab.edu.br"
     SONAR_URL = "https://dti-sonar.unilab.edu.br"
     kubeconfigCluster = "c1"
-    recipientLeadEmail = "erivandosena@gmail.com"
-    recipientTeamEmails = "erivandoramos@unilab.edu.br, jefponte@unilab.edu.br"
+    recipientLeadEmail = "michel.machado@unilab.edu.br, erivandoramos@unilab.edu.br"
+    recipientTeamEmails = "erivandosena@gmail.com, jefponte@unilab.edu.br"
     VAULT_ADDR = "https://dti-vault.unilab.edu.br"
     /* Database 3S */
     PG_USER = "*"
@@ -495,7 +495,7 @@ pipeline {
           mimeType: 'text/html',
           subject: "Pipeline #${env.BUILD_NUMBER} ${currentBuild.currentResult} Job ${env.JOB_NAME}",
           body: """
-          Prezados Stakeholders
+          Parabéns! Team
           <p>Pipeline completada com: ${currentBuild.currentResult}</p>
           Detalhes da execução da pipeline: ${env.BUILD_URL}<br />
           Detalhes do teste de qualidade: ${env.SONAR_URL}/dashboard?id=${env.APP_NAME}<br /></p>
@@ -522,7 +522,7 @@ pipeline {
           Detalhes da execução da pipeline: ${env.BUILD_URL}</p><br />
           <p>${env.EMAIL_ASSINATURA}</p><hr><p>${env.EMAIL_RODAPE}</p>
           """,
-          to: "${env.recipientLeadEmail}, ${env.recipientTeamEmails}",
+          to: "${env.recipientTeamEmails}",
           recipientProviders: []
         )
       slackSend(color: "danger", message: "Pipeline #${env.BUILD_NUMBER} ${currentBuild.currentResult} em ${env.JOB_NAME} (<${env.BUILD_URL}|Mais info...>)")
