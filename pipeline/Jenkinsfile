@@ -63,8 +63,8 @@ pipeline {
     JENKINS_URL = "https://dti-jenkins.unilab.edu.br"
     SONAR_URL = "https://dti-sonar.unilab.edu.br"
     kubeconfigCluster = "c1"
-    recipientLeadEmail = "erivandosena@gmail.com"
-    recipientTeamEmails = "erivandoramos@unilab.edu.br"
+    recipientLeadEmail = "michel.machado@unilab.edu.br"
+    recipientTeamEmails = "erivandoramos@unilab.edu.br, jefponte@unilab.edu.br"
     VAULT_ADDR = "https://dti-vault.unilab.edu.br"
     /* Database 3S */
     PG_USER = "*"
@@ -169,12 +169,14 @@ pipeline {
         } 
       }
     }
+
     stage('Testes') {
       steps {
         sh 'cd source/ && php artisan key:generate && php artisan make:test tests/BasicTest && composer dump-autoload'
         sh 'source/vendor/bin/phpunit --no-configuration --no-extensions source/tests/'
       }
     }
+
     // stage('Build') {
     //   steps {
     //     container('docker') {
@@ -185,6 +187,7 @@ pipeline {
     //     }
     //   }
     // }
+
     stage('Obter segredos do Vault') {
       steps {
         script {
@@ -339,6 +342,7 @@ pipeline {
         }
       }
     }
+
     stage('Aprovar Deploy') {
       steps {
         script {
@@ -383,7 +387,7 @@ pipeline {
             withEnv([
             "kubeconfigCluster=${env.kubeconfigCluster}"
             ]) {
-              env.APPROVER_NAME = approval['approver']
+              env.APPROVER_NAME = approval['approver'] "${approval['approver']}"
             }
           } catch(Exception e) {
             currentBuild.result = 'ABORTED';
@@ -392,6 +396,7 @@ pipeline {
         }
       }
     }
+
     stage('Deploy Produção') {
       steps {
         script {
@@ -476,6 +481,7 @@ pipeline {
       }
     }
   }
+
   post{
     always {
       echo 'Processo de pipeline finalizado.'
@@ -498,7 +504,7 @@ pipeline {
           Deploy aprovado por: <strong>${env.APPROVER_NAME}</strong></p><br />
           <p>${env.EMAIL_ASSINATURA}</p><hr><p>${env.EMAIL_RODAPE}</p>
           """,
-          to: "${env.recipientLeadEmail}",
+          to: "${env.recipientLeadEmail}, ${env.recipientTeamEmails}",
           recipientProviders: []
         )
       slackSend(color: "good", message: "Pipeline #${env.BUILD_NUMBER} completada com ${currentBuild.currentResult} em ${env.JOB_NAME} (<${env.BUILD_URL}|Mais info...>)")
@@ -516,7 +522,7 @@ pipeline {
           Detalhes da execução da pipeline: ${env.BUILD_URL}</p><br />
           <p>${env.EMAIL_ASSINATURA}</p><hr><p>${env.EMAIL_RODAPE}</p>
           """,
-          to: "${env.recipientLeadEmail}",
+          to: "${env.recipientLeadEmail}, ${env.recipientTeamEmails}",
           recipientProviders: []
         )
       slackSend(color: "danger", message: "Pipeline #${env.BUILD_NUMBER} ${currentBuild.currentResult} em ${env.JOB_NAME} (<${env.BUILD_URL}|Mais info...>)")
