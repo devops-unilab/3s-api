@@ -368,18 +368,30 @@ pipeline {
               "<h3><a href='${BUILD_URL}input'><strong>Ir para APROVAÇÃO</strong></a></h3>" +
               "<p>Endpoint da homologação: ${env.APP_URI_STAGING}</p><p>${env.EMAIL_ASSINATURA}</p><hr><p>${env.EMAIL_RODAPE}</p>"
 
-            def currentUser = Jenkins.instance.getSecurityRealm().getCurrentUser()
+            // def currentUser = Jenkins.instance.getSecurityRealm().getCurrentUser()
+            // def hasAllowedRole = false
+            // def allowedRoles = ['leader', 'sysadmin', 'admin']
+            // def allowedRolesString = allowedRoles.join(', ')
+            // if (currentUser != null) {
+            //   def authorities = currentUser.getAuthorities()
+            //   if (authorities != null && !authorities.isEmpty()) {
+            //     hasAllowedRole = authorities.any { role -> allowedRoles.contains(role.getAuthority()) }
+            //   }
+            // }
+            // def userHasAllowedRole = hasAllowedRole.toString()
+
+
+            def currentUser = currentBuild.getBuildCauses()[0].getUserId()
             def hasAllowedRole = false
             def allowedRoles = ['leader', 'sysadmin', 'admin']
             def allowedRolesString = allowedRoles.join(', ')
+
             if (currentUser != null) {
-              def authorities = currentUser.getAuthorities()
+              def authorities = hudson.model.User.get(currentUser).getAuthorities()
               if (authorities != null && !authorities.isEmpty()) {
                 hasAllowedRole = authorities.any { role -> allowedRoles.contains(role.getAuthority()) }
               }
             }
-            def userHasAllowedRole = hasAllowedRole.toString()
-
 
               // https://digitalvarys.com/jenkins-declarative-pipeline-with-examples/
             // https://devopscube.com/declarative-pipeline-parameters/
@@ -424,7 +436,7 @@ pipeline {
                   // } else {
                   //   throw new Exception('Cancelar escolha')
                   //   }
-                  if (!userHasAllowedRole) {
+                  if (!hasAllowedRole) {
                     throw new Exception("Você não tem permissão. É necessário possuir ao menos uma das roles: ${allowedRolesString}")
                   }
                   switch (approval['choice']) {
