@@ -506,9 +506,8 @@ pipeline {
       echo 'Processo de pipeline BEM-SUCEDIDO.'
       // sh "curl -o build-log.txt ${env.JENKINS_URL}/job/${env.JOB_NAME}/lastBuild/timestamps/?appendLog"
       // archiveArtifacts artifacts: 'build-log.txt', onlyIfSuccessful: true
-      emailext 
-          // attachLog: true, attachmentsPattern: 'build-log.txt',
-          recipientProviders: ["${recipientTeamEmails}", developers(), requestor()],
+      // emailext attachLog: true, attachmentsPattern: 'build-log.txt',
+        emailext recipientProviders: ["${recipientTeamEmails}", developers(), requestor()],
           subject: "Pipeline #${env.BUILD_NUMBER} ${currentBuild.currentResult} Job ${env.JOB_NAME}",
           body: "Pipeline completada com: ${currentBuild.currentResult}\n\n" +
                 "Detalhes da execução da pipeline: ${env.BUILD_URL}\n" +
@@ -524,9 +523,8 @@ pipeline {
       echo 'Processo de pipeline executado com falha.'
       // sh "curl -o build-log.txt ${env.JENKINS_URL}/job/${env.JOB_NAME}/lastBuild/timestamps/?appendLog"
       // archiveArtifacts artifacts: 'build-log.txt', onlyIfSuccessful: true
-      emailext 
-          // attachLog: true, attachmentsPattern: 'build-log.txt',
-          recipientProviders: [developers(), requestor()],
+      // emailext attachLog: true, attachmentsPattern: 'build-log.txt',
+        emailext recipientProviders: [developers(), requestor()],
           subject: "Pipeline #${env.BUILD_NUMBER} ${currentBuild.currentResult} Job ${env.JOB_NAME}",
           body: "Pipeline completada com: ${currentBuild.currentResult}\n" +
                 "Detalhes da execução da pipeline: ${env.BUILD_URL}\n\n${env.EMAIL_ASSINATURA}\n\n\n${env.EMAIL_RODAPE}"
