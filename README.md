@@ -19,7 +19,12 @@
 
 # Topologia CI/CD - DTI/Unilab
 
-![DevOps CI/CD](./pipeline/fluxo-topologia-pipeline-ci-cd.png)
+![DevOps CI/CD](./kubernetes/agent/fluxo-topologia-pipeline-ci-cd.png)
+
+# Gitflow seguido
+Sugestão de Gitflow para o fluxo de GitLab a ser adotado pelo time dev compátivel com o GitOps aplicado nas stacks de CI/CD.
+<img width=550px src="https://nvie.com/img/git-model@2x.png" alt="Gitflow">  
+By Vincent Driessen | 2010 | https://nvie.com/posts/a-successful-git-branching-model/
 
 ## Iniciando
 
@@ -34,7 +39,7 @@ Já é um profissional? Basta editar este README.md e torná-lo seu. Quer facili
 
 ```
 cd existing_repo
-git remote add origin http://dti-gitlab.unilab.edu.br/disir/infra/3s_cicd.git
+git remote add origin http://dti-gitlab.unilab.edu.br/disir/3s_cicd.git
 git branch -M main
 git push -uf origin main
 ```
