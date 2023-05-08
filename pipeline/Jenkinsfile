@@ -351,16 +351,16 @@ pipeline {
     stage('Aprovar Deploy') {
       steps {
         script {
+          try {
+            emailext mimeType: 'text/html',
+            subject: "Aprovar Deploy [${env.JOB_NAME}] ${currentBuild.fullDisplayName}",
+            to: "${env.recipientLeadEmail}",
+            body: "<p>Prezado(a) Leader</p>Existe um Continuous Deployment (CD) aguardando aprovação na produção." +
+              "<h3><a href='${BUILD_URL}input'><strong>Ir para APROVAÇÃO</strong></a></h3>" +
+              "<p>Endpoint da homologação: ${env.APP_URI_STAGING}</p><p>${env.EMAIL_ASSINATURA}</p><hr><p>${env.EMAIL_RODAPE}</p>"
 
-          emailext mimeType: 'text/html',
-          subject: "Aprovar Deploy [${env.JOB_NAME}] ${currentBuild.fullDisplayName}",
-          to: "${env.recipientLeadEmail}",
-          body: "<p>Prezado(a) Leader</p>Existe um Continuous Deployment (CD) aguardando aprovação na produção." +
-            "<h3><a href='${BUILD_URL}input'><strong>Ir para APROVAÇÃO</strong></a></h3>" +
-            "<p>Endpoint da homologação: ${env.APP_URI_STAGING}</p><p>${env.EMAIL_ASSINATURA}</p><hr><p>${env.EMAIL_RODAPE}</p>"
-
-          timeout(time: 48, unit: 'HOURS') {
-            try {
+            timeout(time: 48, unit: 'HOURS') {
+              
               def clusterChoices = ['Kubernetes C1', 'Kubernetes C2', 'Kubernetes C3']
               def approval = input(
                 id: 'ApprovalID',
@@ -394,13 +394,12 @@ pipeline {
               ]) {
               sh 'printenv'
               }
-
-              } catch(Exception e) {
-                echo "Ocorreu uma falha: ${e.getMessage()}"
-                currentBuild.result = 'FAILED';
-                return;
-            }   
-          }
+            }
+          } catch(Exception e) {
+            echo "Ocorreu uma falha: ${e.getMessage()}"
+            currentBuild.result = 'ABORTED';
+            return;
+            }  
         }
       }
     }
@@ -481,6 +480,8 @@ pipeline {
 
               echo "Lista de recursos."
               kubectl get all,sa,ing,pvc -n $APP_NAMESPACE -o wide
+
+              rsync -e "ssh -p 37389" --progress --recursive -arvPo ./ erivando@10.130.0.40:/dados/pgd-docker-mssqlserver-sgp-dti/
             """
             env.APP_URI_PROD = sh(script: 'kubectl get ingress app-3s -n app-3s -o jsonpath="{.spec.rules[0].host}" | sed "s/^/http:\\/\\//"', returnStdout: true).trim()
             withEnv(["APP_URI=${env.APP_URI_PROD}"]) {
