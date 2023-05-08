@@ -416,19 +416,19 @@ pipeline {
                     env.kubeconfigCluster = "c3"
                     break
                   default:
-                    error "Opção ${Cluster} inválida por ${approverId} para ${env.kubeconfigCluster}."
+                    error "Opção ${params.Cluster} inválida por ${params.approverId} para ${kubeconfigCluster}."
                 }
               }
 
               withEnv([
-              "kubeconfigCluster=${Cluster}"
+              "kubeconfigCluster=${params.Cluster}"
               ]) {
               sh 'printenv'
               }
 
 
             } catch (Exception err) {
-              echo "Ocorreu uma falha: ${err.getMessage()} ${params.Cluster} ${approverId} ${kubeconfigCluster}"
+              echo "Ocorreu uma falha: ${err.getMessage()} ${params.Cluster} ${params.approverId} ${kubeconfigCluster}"
               currentBuild.result = 'ABORTED';
               return;
             }
