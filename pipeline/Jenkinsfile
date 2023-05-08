@@ -311,7 +311,6 @@ pipeline {
               ls -la /tmp
               '''
     
-
             sh """
               ls -la .
               pwd
@@ -341,9 +340,9 @@ pipeline {
               echo 'Lista de recursos.'
               kubectl get all,sa,ing,pvc -n $APP_NAMESPACE -o wide
             """
-            env.APP_URI_STAGING = sh(script: 'kubectl get ingress app-3s -n app-3s -o jsonpath="{.spec.rules[0].host}" | sed "s/^/http:\\/\\//"', returnStdout: true).trim()
-            withEnv(["APP_URI=${env.APP_URI}"]) {
-                sh 'echo Endpoint: $APP_URI'
+            env.APP_URI_PROD = sh(script: 'kubectl get ingress app-3s -n app-3s -o jsonpath="{.spec.rules[0].host}" | sed "s/^/http:\\/\\//"', returnStdout: true).trim()
+            withEnv(["APP_URI=${env.APP_URI_PROD}"]) {
+              sh 'echo Endpoint: $APP_URI_PROD'
             }
           }
         }
@@ -353,128 +352,55 @@ pipeline {
       steps {
         script {
 
-            emailext mimeType: 'text/html',
-            subject: "Aprovar Deploy [${env.JOB_NAME}] ${currentBuild.fullDisplayName}",
-            to: "${env.recipientLeadEmail}",
-            body: "<p>Prezado(a) Leader</p>Existe um Continuous Deployment (CD) aguardando aprovação na produção." +
-              "<h3><a href='${BUILD_URL}input'><strong>Ir para APROVAÇÃO</strong></a></h3>" +
-              "<p>Endpoint da homologação: ${env.APP_URI_STAGING}</p><p>${env.EMAIL_ASSINATURA}</p><hr><p>${env.EMAIL_RODAPE}</p>"
+          emailext mimeType: 'text/html',
+          subject: "Aprovar Deploy [${env.JOB_NAME}] ${currentBuild.fullDisplayName}",
+          to: "${env.recipientLeadEmail}",
+          body: "<p>Prezado(a) Leader</p>Existe um Continuous Deployment (CD) aguardando aprovação na produção." +
+            "<h3><a href='${BUILD_URL}input'><strong>Ir para APROVAÇÃO</strong></a></h3>" +
+            "<p>Endpoint da homologação: ${env.APP_URI_STAGING}</p><p>${env.EMAIL_ASSINATURA}</p><hr><p>${env.EMAIL_RODAPE}</p>"
 
-            def currentUser = null
-            def hasAllowedRole = false
-            def allowedRoles = ['leader', 'sysadmin', 'admin']
-            def allowedRolesString = allowedRoles.join(', ')
+          timeout(time: 48, unit: 'HOURS') {
+            try {
+              def clusterChoices = ['Kubernetes C1', 'Kubernetes C2', 'Kubernetes C3']
+              def approval = input(
+                id: 'ApprovalID',
+                message: 'Aprovar Deploy?',
+                ok: 'APROVAR',
+                submitterParameter: 'approver',
+                submitter: "${env.APROVADORES}",
+                parameters: [
+                  choice(
+                    choices: clusterChoices, 
+                    description: 'Selecione o cluster para implantar', 
+                    name: 'choice')
+                ])
 
-            def cause = currentBuild.getBuildCauses()?.get(0)
-            if (cause && cause.userId) {
-              currentUser = cause.userId
-            }
-
-            if (currentUser) {
-              def user = hudson.model.User.getById(currentUser, false)
-              if (user) {
-                def authorities = user.getAuthorities()
-                if (authorities && !authorities.isEmpty()) {
-                  hasAllowedRole = authorities.any { role -> allowedRoles.contains(role.getAuthority()) }
-                }
-              }
-            }
-
-              // https://digitalvarys.com/jenkins-declarative-pipeline-with-examples/
-            // https://devopscube.com/declarative-pipeline-parameters/
-            // https://www.blazemeter.com/blog/jenkins-declarative-pipeline
-            
-            // try {
-              timeout(time: 48, unit: 'HOURS') {
-
-                // input id: 'EnvType', 
-                // message: 'Aprovar Deploy?', 
-                // ok: 'APROVAR', 
-                // parameters: [
-                //     choice(
-                //         name: 'Cluster', 
-                //         choices: clusterChoices, 
-                //         description: 'Selecione o cluster para implantar'
-                //     )
-                // ], 
-                // submitter: 'leader, sysadmin, admin',
-                // submitterParameter: 'approverId'
-
-
-                try {
-                  def clusterChoices = ['Kubernetes C1', 'Kubernetes C2', 'Kubernetes C3']
-                  def approval = input(
-                    id: 'ApprovalID',
-                    message: 'Aprovar Deploy?',
-                    ok: 'APROVAR',
-                    submitterParameter: 'approver',
-                    submitter: "${env.APROVADORES}",
-                    parameters: [
-                      choice(
-                        choices: clusterChoices, 
-                        description: 'Selecione o cluster para implantar', 
-                        name: 'choice')
-                    ])
-                  // if (approval['approver'] != validRole) {
-                  //   throw new Exception('Você não tem permissão.')
-                  // }
-                  // if (approval['choice'] == 'Deploy') {
-                  //   currentBuild.result = 'Success'
-                  // } else {
-                  //   throw new Exception('Cancelar escolha')
-                  //   }
-                  // if (!hasAllowedRole) {
-                  //   // throw new Exception("Você não tem permissão. É necessário possuir ao menos uma das roles: " + allowedRolesString)
-                  //   error("Você não tem permissão. É necessário possuir ao menos uma das roles: ${allowedRolesString}")
-                  // }
-                  switch (approval['choice']) {
-                    case "Kubernetes C1":
-                      env.kubeconfigCluster = "c1"
-                      break
-                    case "Kubernetes C2":
-                      env.kubeconfigCluster = "c2"
-                      break
-                    case "Kubernetes C3":
-                      env.kubeconfigCluster = "c3"
-                      break
-                    default:
-                      error "N/A"
-                  }
-
-                  withEnv([
-                  "kubeconfigCluster=${env.kubeconfigCluster}"
-                  ]) {
-                  sh 'printenv'
-                  }
-
-                } catch(Exception e) {
-                    echo "Ocorreu uma falha: ${e.getMessage()}"
-                    // currentBuild.result = 'FAILED'
-                    currentBuild.result = 'ABORTED';
-                    return;
-                }   
-
-                // switch ("${params.Cluster}") {
-                //   case "Kubernetes C1":
-                //     env.kubeconfigCluster = "c1"
-                //     break
-                //   case "Kubernetes C2":
-                //     env.kubeconfigCluster = "c2"
-                //     break
-                //   case "Kubernetes C3":
-                //     env.kubeconfigCluster = "c3"
-                //     break
-                //   default:
-                //     error "Opção ${params.Cluster} inválida por ${params.approverId} para ${kubeconfigCluster}."
-                // }
+              switch (approval['choice']) {
+                case "Kubernetes C1":
+                  env.kubeconfigCluster = "c1"
+                  break
+                case "Kubernetes C2":
+                  env.kubeconfigCluster = "c2"
+                  break
+                case "Kubernetes C3":
+                  env.kubeconfigCluster = "c3"
+                  break
+                default:
+                  error "N/A"
               }
 
-            // } catch (Exception err) {
-            //   echo "Ocorreu uma falha: ${err.getMessage()} ${params.Cluster} ${params.approverId} ${kubeconfigCluster}"
-            //   currentBuild.result = 'ABORTED';
-            //   return;
-            // }
+              withEnv([
+              "kubeconfigCluster=${env.kubeconfigCluster}"
+              ]) {
+              sh 'printenv'
+              }
 
+              } catch(Exception e) {
+                echo "Ocorreu uma falha: ${e.getMessage()}"
+                currentBuild.result = 'ABORTED';
+                return;
+            }   
+          }
         }
       }
     }
@@ -535,16 +461,13 @@ pipeline {
             """
           }
 
-        }
-
-        withKubeConfig([credentialsId: "kubeconfig-${env.kubeconfigCluster}", serverUrl: "https://dti-k8s-${env.kubeconfigCluster}.unilab.edu.br:6443"]) {
-          /*
-          Teoricamente --record não é obrigatório, porém, tecnicamente torna-se obrigatório para garantir que as 
-          alterações deixem um rastro de auditoria rudimentar e cumpram o processo SRE e a cultura DevOps.
-          Exemplo de uso: kubectl rollout history -n docker deployment.apps/docker
-          Nota: Quando --record não é sinalizador, na tabela, CHANGE-CAUSE estará apenas <none>
-          */
-          script {
+          withKubeConfig([credentialsId: "kubeconfig-${env.kubeconfigCluster}", serverUrl: "https://dti-k8s-${env.kubeconfigCluster}.unilab.edu.br:6443"]) {
+            /*
+            Teoricamente --record não é obrigatório, porém, tecnicamente torna-se obrigatório para garantir que as 
+            alterações deixem um rastro de auditoria rudimentar e cumpram o processo SRE e a cultura DevOps.
+            Exemplo de uso: kubectl rollout history -n docker deployment.apps/docker
+            Nota: Quando --record não é sinalizador, na tabela, CHANGE-CAUSE estará apenas <none>
+            */
             sh """
               set -x
               echo "Verifica deploy ativo e exclui."
@@ -561,61 +484,61 @@ pipeline {
             """
             env.APP_URI_PROD = sh(script: 'kubectl get ingress app-3s -n app-3s -o jsonpath="{.spec.rules[0].host}" | sed "s/^/http:\\/\\//"', returnStdout: true).trim()
             withEnv(["APP_URI=${env.APP_URI_PROD}"]) {
-                sh 'echo Endpoint: $APP_URI_PROD'
+              sh 'echo Endpoint: $APP_URI_PROD'
             }
-            
           }
         }
       }
     }
   }
 }
-// post{
-//   always {
-//     echo 'Processo de pipeline finalizado.'
-//     slackSend(color: "warning", message: "Pipeline #${env.BUILD_NUMBER} finalizada com ${currentBuild.currentResult} em ${env.JOB_NAME} (<${env.BUILD_URL}|Mais info...>)")
-//   }
-//   success {
-//     echo 'Processo de pipeline BEM-SUCEDIDO.'
-//     sh "curl -o build-log.txt ${env.JENKINS_URL}/job/${env.JOB_NAME}/lastBuild/timestamps/?appendLog"
-//     archiveArtifacts artifacts: 'build-log.txt', onlyIfSuccessful: true
-//     emailext attachLog: true, attachmentsPattern: 'build-log.txt',
-//         recipientProviders: ["${recipientTeamEmails}", developers(), requestor()],
-//         subject: "Pipeline #${env.BUILD_NUMBER} ${currentBuild.currentResult} Job ${env.JOB_NAME}",
-//         body: "Pipeline completada com: ${currentBuild.currentResult}\n\n" +
-//               "Detalhes da execução da pipeline: ${env.BUILD_URL}\n" +
-//               "Detalhes do teste de qualidade: ${env.SONAR_URL}/dashboard?id=${env.APP_NAME}\n" +
-//               "Endpoint de homologação: ${env.APP_URI_STAGING}\n" +
-//               "Endpoint de produção: ${env.APP_URI_PROD}\n\n${env.EMAIL_ASSINATURA}\n\n\n${env.EMAIL_RODAPE}"
+post{
+  always {
+    echo 'Processo de pipeline finalizado.'
+    slackSend(color: "warning", message: "Pipeline #${env.BUILD_NUMBER} finalizada com ${currentBuild.currentResult} em ${env.JOB_NAME} (<${env.BUILD_URL}|Mais info...>)")
+  }
+  success {
+    echo 'Processo de pipeline BEM-SUCEDIDO.'
+    sh "curl -o build-log.txt ${env.JENKINS_URL}/job/${env.JOB_NAME}/lastBuild/timestamps/?appendLog"
+    archiveArtifacts artifacts: 'build-log.txt', onlyIfSuccessful: true
+    emailext attachLog: true, attachmentsPattern: 'build-log.txt',
+        recipientProviders: ["${recipientTeamEmails}", developers(), requestor()],
+        subject: "Pipeline #${env.BUILD_NUMBER} ${currentBuild.currentResult} Job ${env.JOB_NAME}",
+        body: "Pipeline completada com: ${currentBuild.currentResult}\n\n" +
+              "Detalhes da execução da pipeline: ${env.BUILD_URL}\n" +
+              "Detalhes do teste de qualidade: ${env.SONAR_URL}/dashboard?id=${env.APP_NAME}\n" +
+              "Endpoint de homologação: ${env.APP_URI_STAGING}\n" +
+              "Endpoint de produção: ${env.APP_URI_PROD}\n" +
+              "Aprovado por: ${env.approver}\n\n${env.EMAIL_ASSINATURA}\n\n\n${env.EMAIL_RODAPE}"
 
-//     slackSend(color: "good", message: "${slack_msg()}")
-//     slackSend(color: "good", message: "Pipeline #${env.BUILD_NUMBER} completada com ${currentBuild.currentResult} em ${env.JOB_NAME} (<${env.BUILD_URL}|Mais info...>)")
-//   }
-//   failure {
-//     echo 'Processo de pipeline executado com falha.'
-//     sh "curl -o build-log.txt ${env.JENKINS_URL}/job/${env.JOB_NAME}/lastBuild/timestamps/?appendLog"
-//     archiveArtifacts artifacts: 'build-log.txt', onlyIfSuccessful: true
-//     emailext attachLog: true, attachmentsPattern: 'build-log.txt',
-//         recipientProviders: [developers(), requestor()],
-//         subject: "Pipeline #${env.BUILD_NUMBER} ${currentBuild.currentResult} Job ${env.JOB_NAME}",
-//         body: "Pipeline completada com: ${currentBuild.currentResult}\n" +
-//               "Detalhes da execução da pipeline: ${env.BUILD_URL}\n\n${env.EMAIL_ASSINATURA}\n\n\n${env.EMAIL_RODAPE}"
+    slackSend(color: "good", message: "${slack_msg()}")
+    slackSend(color: "good", message: "Pipeline #${env.BUILD_NUMBER} completada com ${currentBuild.currentResult} em ${env.JOB_NAME} (<${env.BUILD_URL}|Mais info...>)")
+  }
+  failure {
+    echo 'Processo de pipeline executado com falha.'
+    sh "curl -o build-log.txt ${env.JENKINS_URL}/job/${env.JOB_NAME}/lastBuild/timestamps/?appendLog"
+    archiveArtifacts artifacts: 'build-log.txt', onlyIfSuccessful: true
+    emailext attachLog: true, attachmentsPattern: 'build-log.txt',
+        recipientProviders: [developers(), requestor()],
+        subject: "Pipeline #${env.BUILD_NUMBER} ${currentBuild.currentResult} Job ${env.JOB_NAME}",
+        body: "Pipeline completada com: ${currentBuild.currentResult}\n" +
+              "Detalhes da execução da pipeline: ${env.BUILD_URL}\n\n${env.EMAIL_ASSINATURA}\n\n\n${env.EMAIL_RODAPE}"
 
-//     slackSend(color: "danger", message: "Pipeline #${env.BUILD_NUMBER} ${currentBuild.currentResult} em ${env.JOB_NAME} (<${env.BUILD_URL}|Mais info...>)")
-//   }
-//   unstable {
-//     echo 'Processo de pipeline possui estabilidade.'
-//   }
-//   changed {
-//     echo 'SUCESSO no processo de pipeline anteriormente falhado.'
-//   }
-// }
+    slackSend(color: "danger", message: "Pipeline #${env.BUILD_NUMBER} ${currentBuild.currentResult} em ${env.JOB_NAME} (<${env.BUILD_URL}|Mais info...>)")
+  }
+  unstable {
+    echo 'Processo de pipeline possui estabilidade.'
+  }
+  changed {
+    echo 'SUCESSO no processo de pipeline anteriormente falhado.'
+  }
+}
 
-// def slack_msg() {
-//   def JOB_NAME = env.JOB_NAME
-//   def BUILD_ID = env.BUILD_ID
-//   def JENKINS_MSG = "Pipeline [${env.JOB_NAME}] finalizada com SUCESSO!\n" +
-//   "Logs path: ${env.JENKINS_URL}/job/${JOB_NAME}/${BUILD_ID}/consoleText\n" +
-//   "Quality Gate: ${env.SONAR_URL}/dashboard?id=${env.APP_NAME}"
-//   return JENKINS_MSG
-// }
+def slack_msg() {
+  def JOB_NAME = env.JOB_NAME
+  def BUILD_ID = env.BUILD_ID
+  def JENKINS_MSG = "Pipeline [${env.JOB_NAME}] finalizada com SUCESSO!\n" +
+  "Logs path: ${env.JENKINS_URL}/job/${JOB_NAME}/${BUILD_ID}/consoleText\n" +
+  "Quality Gate: ${env.SONAR_URL}/dashboard?id=${env.APP_NAME}"
+  return JENKINS_MSG
+}
