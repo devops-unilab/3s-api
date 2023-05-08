@@ -524,10 +524,8 @@ pipeline {
           <p>Aprovado por: ${env.approver}</p>
           <p>${env.EMAIL_ASSINATURA}</p><hr><p>${env.EMAIL_RODAPE}</p>
           """,
-          // recipientProviders: [[$class: 'DevelopersRecipientProvider']]
-          // recipientProviders: ["${recipientTeamEmails}", developers(), requestor()]
           to: "${env.recipientLeadEmail}",
-          recipientProviders: [[$class: 'RequestorRecipientProvider']]
+          recipientProviders: []
         )
       slackSend(color: "good", message: "Pipeline #${env.BUILD_NUMBER} completada com ${currentBuild.currentResult} em ${env.JOB_NAME} (<${env.BUILD_URL}|Mais info...>)")
     }
@@ -545,10 +543,8 @@ pipeline {
           Detalhes da execução da pipeline: ${env.BUILD_URL}
           <p>${env.EMAIL_ASSINATURA}</p><hr><p>${env.EMAIL_RODAPE}</p>
           """,
-          // recipientProviders: [[$class: 'DevelopersRecipientProvider']]
-          // recipientProviders: ["${recipientTeamEmails}", developers(), requestor()]
           to: "${env.recipientLeadEmail}",
-          recipientProviders: [[$class: 'RequestorRecipientProvider']]
+          recipientProviders: []
         )
       slackSend(color: "danger", message: "Pipeline #${env.BUILD_NUMBER} ${currentBuild.currentResult} em ${env.JOB_NAME} (<${env.BUILD_URL}|Mais info...>)")
     }
