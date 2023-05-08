@@ -370,68 +370,92 @@ pipeline {
               // https://digitalvarys.com/jenkins-declarative-pipeline-with-examples/
             // https://devopscube.com/declarative-pipeline-parameters/
             // https://www.blazemeter.com/blog/jenkins-declarative-pipeline
-            def clusterChoices = ['Kubernetes C1', 'Kubernetes C2', 'Kubernetes C3']
-            try {
+            
+            // try {
               timeout(time: 48, unit: 'HOURS') {
 
-
-                // input id: 'Aprovar-deploy', 
+                // input id: 'EnvType', 
                 // message: 'Aprovar Deploy?', 
-                // ok: 'Aprovar', 
-                // parameters: [choice(choices: ['A', 'B', 'C'], description: 'Opções', name: 'Escolha')], 
-                // submitterParameter: 'user-submitter'
+                // ok: 'APROVAR', 
+                // parameters: [
+                //     choice(
+                //         name: 'Cluster', 
+                //         choices: clusterChoices, 
+                //         description: 'Selecione o cluster para implantar'
+                //     )
+                // ], 
+                // submitter: 'leader, sysadmin, admin',
+                // submitterParameter: 'approverId'
 
 
-                // input {
-                //     message "Can we Proceed?"
-                //     ok "Yes"
-                //     submitter "Digital Varys"
-                //     parameters {
-                //         string(name: 'PERSON', defaultValue: 'DigiralVarys', description: 'Member')
-                //     }
-                // }
-
-                input id: 'EnvType', 
-                message: 'Aprovar Deploy?', 
-                ok: 'APROVAR', 
-                parameters: [
-                    choice(
-                        name: 'Cluster', 
+                try {
+                  def clusterChoices = ['Kubernetes C1', 'Kubernetes C2', 'Kubernetes C3']
+                  def approval = input(
+                    id: 'ApprovalID',
+                    message: 'Aprovar Deploy?',
+                    submitterParameter: 'approver',
+                    parameters: [
+                      choice(
                         choices: clusterChoices, 
-                        description: 'Selecione o cluster para implantar'
-                    )
-                ], 
-                submitter: 'leader, sysadmin, admin',
-                submitterParameter: 'approverId'
+                        description: 'Selecione o cluster para implantar', 
+                        name: 'choice')
+                    ])
+                  if (approval['approver'] != "${administrator}") {
+                    throw new Exception('Você não tem permissão.')
+                  }
+                  if (approval['choice'] == 'Deploy') {
+                    currentBuild.result = 'Success'
+                  } else {
+                    throw new Exception('Cancelar escolha')
+                    }
 
+                  switch (approval['choice']) {
+                    case "Kubernetes C1":
+                      env.kubeconfigCluster = "c1"
+                      break
+                    case "Kubernetes C2":
+                      env.kubeconfigCluster = "c2"
+                      break
+                    case "Kubernetes C3":
+                      env.kubeconfigCluster = "c3"
+                      break
+                    default:
+                      error "N/A"
+                  }
 
-                switch ("${params.Cluster}") {
-                  case "Kubernetes C1":
-                    env.kubeconfigCluster = "c1"
-                    break
-                  case "Kubernetes C2":
-                    env.kubeconfigCluster = "c2"
-                    break
-                  case "Kubernetes C3":
-                    env.kubeconfigCluster = "c3"
-                    break
-                  default:
-                    error "Opção ${params.Cluster} inválida por ${params.approverId} para ${kubeconfigCluster}."
-                }
+                  withEnv([
+                  "kubeconfigCluster=${env.kubeconfigCluster}"
+                  ]) {
+                  sh 'printenv'
+                  }
+
+                } catch(Exception e) {
+                    error e
+                    // currentBuild.result = 'FAILED'
+                    currentBuild.result = 'ABORTED';
+                    return;
+                }   
+
+                // switch ("${params.Cluster}") {
+                //   case "Kubernetes C1":
+                //     env.kubeconfigCluster = "c1"
+                //     break
+                //   case "Kubernetes C2":
+                //     env.kubeconfigCluster = "c2"
+                //     break
+                //   case "Kubernetes C3":
+                //     env.kubeconfigCluster = "c3"
+                //     break
+                //   default:
+                //     error "Opção ${params.Cluster} inválida por ${params.approverId} para ${kubeconfigCluster}."
+                // }
               }
 
-              withEnv([
-              "kubeconfigCluster=${params.Cluster}"
-              ]) {
-              sh 'printenv'
-              }
-
-
-            } catch (Exception err) {
-              echo "Ocorreu uma falha: ${err.getMessage()} ${params.Cluster} ${params.approverId} ${kubeconfigCluster}"
-              currentBuild.result = 'ABORTED';
-              return;
-            }
+            // } catch (Exception err) {
+            //   echo "Ocorreu uma falha: ${err.getMessage()} ${params.Cluster} ${params.approverId} ${kubeconfigCluster}"
+            //   currentBuild.result = 'ABORTED';
+            //   return;
+            // }
 
         }
       }
