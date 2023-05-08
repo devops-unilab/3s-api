@@ -381,15 +381,36 @@ pipeline {
             // def userHasAllowedRole = hasAllowedRole.toString()
 
 
-            def currentUser = currentBuild.getBuildCauses()[0].getUserId()
+            // def currentUser = currentBuild.getBuildCauses()[0].getUserId()
+            // def hasAllowedRole = false
+            // def allowedRoles = ['leader', 'sysadmin', 'admin']
+            // def allowedRolesString = allowedRoles.join(', ')
+
+            // if (currentUser != null) {
+            //   def authorities = hudson.model.User.get(currentUser).getAuthorities()
+            //   if (authorities != null && !authorities.isEmpty()) {
+            //     hasAllowedRole = authorities.any { role -> allowedRoles.contains(role.getAuthority()) }
+            //   }
+            // }
+
+
+            def currentUser = null
             def hasAllowedRole = false
             def allowedRoles = ['leader', 'sysadmin', 'admin']
             def allowedRolesString = allowedRoles.join(', ')
 
-            if (currentUser != null) {
-              def authorities = hudson.model.User.get(currentUser).getAuthorities()
-              if (authorities != null && !authorities.isEmpty()) {
-                hasAllowedRole = authorities.any { role -> allowedRoles.contains(role.getAuthority()) }
+            def cause = currentBuild.getBuildCauses()?.get(0)
+            if (cause && cause.userId) {
+              currentUser = cause.userId
+            }
+
+            if (currentUser) {
+              def user = hudson.model.User.getById(currentUser, false)
+              if (user) {
+                def authorities = user.getAuthorities()
+                if (authorities && !authorities.isEmpty()) {
+                  hasAllowedRole = authorities.any { role -> allowedRoles.contains(role.getAuthority()) }
+                }
               }
             }
 
