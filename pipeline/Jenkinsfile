@@ -350,7 +350,7 @@ pipeline {
               body: """
                   <p>Prezado(a) Leader</p>Existe um Continuous Deployment (CD) aguardando aprovação na produção.
                   <h3><a href='${BUILD_URL}input'><strong>Ir para APROVAÇÃO</strong></a></h3>
-                  <p>Endpoint da homologação: ${env.APP_URI_STAGING}</p><p>${env.EMAIL_ASSINATURA}</p><hr><p>${env.EMAIL_RODAPE}</p>
+                  <p>Endpoint da homologação: ${env.APP_URI_STAGING}</p><br /><p>${env.EMAIL_ASSINATURA}</p><hr><p>${env.EMAIL_RODAPE}</p>
               """)
             def clusterChoices = ['Kubernetes C1', 'Kubernetes C2', 'Kubernetes C3']
             def approval = input(
@@ -383,7 +383,7 @@ pipeline {
             withEnv([
             "kubeconfigCluster=${env.kubeconfigCluster}"
             ]) {
-
+              env.APPROVER_NAME = "${env.approver}"
             }
           } catch(Exception e) {
             currentBuild.result = 'ABORTED';
@@ -489,16 +489,13 @@ pipeline {
           mimeType: 'text/html',
           subject: "Pipeline #${env.BUILD_NUMBER} ${currentBuild.currentResult} Job ${env.JOB_NAME}",
           body: """
-          Pipeline completada com: ${currentBuild.currentResult}
-          <p>Detalhes da execução da pipeline: ${env.BUILD_URL}</p>
-          <p>Detalhes do teste de qualidade: ${env.SONAR_URL}/dashboard?id=${env.APP_NAME}</p> 
-          Detalhes do projeto Git:
-          Commit: ${env.GIT_COMMIT}<br />
-          Autor: ${env.GIT_AUTHOR_NAME}<br />
-          E-mail: ${env.GIT_AUTHOR_EMAIL}
-          <p>Endpoint de homologação: ${env.APP_URI_STAGING}</p>
-          <p>Endpoint de produção: ${env.APP_URI_PROD}</p>
-          <p>Aprovado por: ${env.approver}</p>
+          Prezados Stakeholders
+          <p>Pipeline completada com: ${currentBuild.currentResult}</p>
+          Detalhes da execução da pipeline: ${env.BUILD_URL}<br />
+          Detalhes do teste de qualidade: ${env.SONAR_URL}/dashboard?id=${env.APP_NAME}<br /></p>
+          Endpoint de homologação: ${env.APP_URI_STAGING}<br />
+          Endpoint de produção: ${env.APP_URI_PROD}<br />
+          Deploy aprovado por: <strong>${env.APPROVER_NAME}</strong></p><br />
           <p>${env.EMAIL_ASSINATURA}</p><hr><p>${env.EMAIL_RODAPE}</p>
           """,
           to: "${env.recipientLeadEmail}",
@@ -514,8 +511,9 @@ pipeline {
           mimeType: 'text/html',
           subject: "Pipeline #${env.BUILD_NUMBER} ${currentBuild.currentResult} Job ${env.JOB_NAME}",
           body: """
-          Pipeline completada com: ${currentBuild.currentResult}
-          Detalhes da execução da pipeline: ${env.BUILD_URL}
+          Prezados Stakeholders
+          <p>Pipeline completada com: ${currentBuild.currentResult}<br />
+          Detalhes da execução da pipeline: ${env.BUILD_URL}</p><br />
           <p>${env.EMAIL_ASSINATURA}</p><hr><p>${env.EMAIL_RODAPE}</p>
           """,
           to: "${env.recipientLeadEmail}",
