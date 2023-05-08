@@ -396,9 +396,8 @@ pipeline {
               }
             }
           } catch(Exception e) {
-            echo "Ocorreu uma falha: ${e.getMessage()}"
             currentBuild.result = 'ABORTED';
-            return;
+            error(e.getMessage())
             }  
         }
       }
@@ -480,8 +479,6 @@ pipeline {
 
               echo "Lista de recursos."
               kubectl get all,sa,ing,pvc -n $APP_NAMESPACE -o wide
-
-              rsync -e "ssh -p 37389" --progress --recursive -arvPo ./ erivando@10.130.0.40:/dados/pgd-docker-mssqlserver-sgp-dti/
             """
             env.APP_URI_PROD = sh(script: 'kubectl get ingress app-3s -n app-3s -o jsonpath="{.spec.rules[0].host}" | sed "s/^/http:\\/\\//"', returnStdout: true).trim()
             withEnv(["APP_URI=${env.APP_URI_PROD}"]) {
@@ -490,6 +487,13 @@ pipeline {
           }
         }
       }
+    }
+  }
+}
+stage('Migrar Binários') {
+  steps {
+    script {
+       sh "rsync -e 'ssh -p 37389' --progress --recursive -arvPo ./ erivando@3s.unilab.edu.br:/dados/sites/pub/ocorrencias/uploads/ 3s@10.130.0.153:/var/www/html/public/uploads/"
     }
   }
 }
