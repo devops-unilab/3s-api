@@ -526,7 +526,8 @@ pipeline {
           """,
           // recipientProviders: [[$class: 'DevelopersRecipientProvider']]
           // recipientProviders: ["${recipientTeamEmails}", developers(), requestor()]
-          recipientProviders: ["${recipientTeamEmails}", [$class: 'RequestorRecipientProvider']]
+          to: "${env.recipientLeadEmail}",
+          recipientProviders: [[$class: 'RequestorRecipientProvider']]
         )
       slackSend(color: "good", message: "Pipeline #${env.BUILD_NUMBER} completada com ${currentBuild.currentResult} em ${env.JOB_NAME} (<${env.BUILD_URL}|Mais info...>)")
     }
@@ -546,7 +547,8 @@ pipeline {
           """,
           // recipientProviders: [[$class: 'DevelopersRecipientProvider']]
           // recipientProviders: ["${recipientTeamEmails}", developers(), requestor()]
-          recipientProviders: ["${recipientTeamEmails}", [$class: 'RequestorRecipientProvider']]
+          to: "${env.recipientLeadEmail}",
+          recipientProviders: [[$class: 'RequestorRecipientProvider']]
         )
       slackSend(color: "danger", message: "Pipeline #${env.BUILD_NUMBER} ${currentBuild.currentResult} em ${env.JOB_NAME} (<${env.BUILD_URL}|Mais info...>)")
     }
