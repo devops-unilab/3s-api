@@ -372,10 +372,10 @@ pipeline {
                   choice(
                     choices: clusterChoices, 
                     description: 'Selecione o cluster para implantar', 
-                    name: 'choice')
+                    name: 'Cluster')
                 ])
 
-              switch (approval['choice']) {
+              switch (approval['Cluster']) {
                 case "Kubernetes C1":
                   env.kubeconfigCluster = "c1"
                   break
@@ -504,9 +504,10 @@ pipeline {
     }
     success {
       echo 'Processo de pipeline BEM-SUCEDIDO.'
-      sh "curl -o build-log.txt ${env.JENKINS_URL}/job/${env.JOB_NAME}/lastBuild/timestamps/?appendLog"
-      archiveArtifacts artifacts: 'build-log.txt', onlyIfSuccessful: true
-      emailext attachLog: true, attachmentsPattern: 'build-log.txt',
+      // sh "curl -o build-log.txt ${env.JENKINS_URL}/job/${env.JOB_NAME}/lastBuild/timestamps/?appendLog"
+      // archiveArtifacts artifacts: 'build-log.txt', onlyIfSuccessful: true
+      emailext 
+          // attachLog: true, attachmentsPattern: 'build-log.txt',
           recipientProviders: ["${recipientTeamEmails}", developers(), requestor()],
           subject: "Pipeline #${env.BUILD_NUMBER} ${currentBuild.currentResult} Job ${env.JOB_NAME}",
           body: "Pipeline completada com: ${currentBuild.currentResult}\n\n" +
@@ -516,14 +517,15 @@ pipeline {
                 "Endpoint de produção: ${env.APP_URI_PROD}\n" +
                 "Aprovado por: ${env.approver}\n\n${env.EMAIL_ASSINATURA}\n\n\n${env.EMAIL_RODAPE}"
 
-      slackSend(color: "good", message: "${slack_msg()}")
+      // slackSend(color: "good", message: "${slack_msg()}")
       slackSend(color: "good", message: "Pipeline #${env.BUILD_NUMBER} completada com ${currentBuild.currentResult} em ${env.JOB_NAME} (<${env.BUILD_URL}|Mais info...>)")
     }
     failure {
       echo 'Processo de pipeline executado com falha.'
-      sh "curl -o build-log.txt ${env.JENKINS_URL}/job/${env.JOB_NAME}/lastBuild/timestamps/?appendLog"
-      archiveArtifacts artifacts: 'build-log.txt', onlyIfSuccessful: true
-      emailext attachLog: true, attachmentsPattern: 'build-log.txt',
+      // sh "curl -o build-log.txt ${env.JENKINS_URL}/job/${env.JOB_NAME}/lastBuild/timestamps/?appendLog"
+      // archiveArtifacts artifacts: 'build-log.txt', onlyIfSuccessful: true
+      emailext 
+          // attachLog: true, attachmentsPattern: 'build-log.txt',
           recipientProviders: [developers(), requestor()],
           subject: "Pipeline #${env.BUILD_NUMBER} ${currentBuild.currentResult} Job ${env.JOB_NAME}",
           body: "Pipeline completada com: ${currentBuild.currentResult}\n" +
@@ -540,11 +542,11 @@ pipeline {
   }
 }
 
-def slack_msg() {
-  def JOB_NAME = env.JOB_NAME
-  def BUILD_ID = env.BUILD_ID
-  def JENKINS_MSG = "Pipeline [${env.JOB_NAME}] finalizada com SUCESSO!\n" +
-  "Logs path: ${env.JENKINS_URL}/job/${JOB_NAME}/${BUILD_ID}/consoleText\n" +
-  "Quality Gate: ${env.SONAR_URL}/dashboard?id=${env.APP_NAME}"
-  return JENKINS_MSG
-}
+// def slack_msg() {
+//   def JOB_NAME = env.JOB_NAME
+//   def BUILD_ID = env.BUILD_ID
+//   def JENKINS_MSG = "Pipeline [${env.JOB_NAME}] finalizada com SUCESSO!\n" +
+//   "Logs path: ${env.JENKINS_URL}/job/${JOB_NAME}/${BUILD_ID}/consoleText\n" +
+//   "Quality Gate: ${env.SONAR_URL}/dashboard?id=${env.APP_NAME}"
+//   return JENKINS_MSG
+// }
