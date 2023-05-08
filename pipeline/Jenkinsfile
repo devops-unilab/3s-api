@@ -504,22 +504,23 @@ pipeline {
     }
     success {
       echo 'Processo de pipeline BEM-SUCEDIDO.'
-      // sh "curl -o build-log.txt ${env.JENKINS_URL}/job/${env.JOB_NAME}/lastBuild/timestamps/?appendLog"
-      // archiveArtifacts artifacts: 'build-log.txt', onlyIfSuccessful: true
-      // emailext attachLog: true, attachmentsPattern: 'build-log.txt',
+      sh "curl -o build-log.txt -k ${env.JENKINS_URL}/job/${env.JOB_NAME}/lastBuild/timestamps/?appendLog"
+      archiveArtifacts artifacts: 'build-log.txt', onlyIfSuccessful: true
       emailext (
-          emailext mimeType: 'text/html',
-          subject: "Pipeline #'${env.BUILD_NUMBER} ${currentBuild.currentResult} Job ${env.JOB_NAME}'",
+          attachLog: true, 
+          attachmentsPattern: 'build-log.txt',
+          mimeType: 'text/html',
+          subject: "Pipeline #${env.BUILD_NUMBER} ${currentBuild.currentResult} Job ${env.JOB_NAME}",
           body: """
-          SUCCESSFUL: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]':
-          Check console output at "${env.JOB_NAME} [${env.BUILD_NUMBER}]"
-          <p>Pipeline completada com: '${currentBuild.currentResult}'</p>
-          <p>Detalhes da execução da pipeline: '${env.BUILD_URL}'</p>
-          <p>Detalhes do teste de qualidade: '${env.SONAR_URL}/dashboard?id=${env.APP_NAME}'</p> 
-          <p>Endpoint de homologação: '${env.APP_URI_STAGING}'</p>
-          <p>Endpoint de produção: '${env.APP_URI_PROD}'</p>
-          <p>Aprovado por: '${env.approver}'</p>
-          <p>'${env.EMAIL_ASSINATURA}</p><hr><p>${env.EMAIL_RODAPE}'</p>
+          SUCCESSFUL: Job ${env.JOB_NAME} [${env.BUILD_NUMBER}]:
+          Check console output at "${env.JOB_NAME} [${env.BUILD_NUMBER}]
+          <p>Pipeline completada com: ${currentBuild.currentResult}</p>
+          <p>Detalhes da execução da pipeline: ${env.BUILD_URL}</p>
+          <p>Detalhes do teste de qualidade: '${env.SONAR_URL}/dashboard?id=${env.APP_NAME}</p> 
+          <p>Endpoint de homologação: ${env.APP_URI_STAGING}</p>
+          <p>Endpoint de produção: ${env.APP_URI_PROD}</p>
+          <p>Aprovado por: ${env.approver}</p>
+          <p>${env.EMAIL_ASSINATURA}</p><hr><p>${env.EMAIL_RODAPE}</p>
           """,
           // recipientProviders: [[$class: 'DevelopersRecipientProvider']]
           // recipientProviders: ["${recipientTeamEmails}", developers(), requestor()]
@@ -529,22 +530,22 @@ pipeline {
     }
     failure {
       echo 'Processo de pipeline executado com falha.'
-      // sh "curl -o build-log.txt ${env.JENKINS_URL}/job/${env.JOB_NAME}/lastBuild/timestamps/?appendLog"
-      // archiveArtifacts artifacts: 'build-log.txt', onlyIfSuccessful: true
-      // emailext attachLog: true, attachmentsPattern: 'build-log.txt',
+      sh "curl -o build-log.txt -k ${env.JENKINS_URL}/job/${env.JOB_NAME}/lastBuild/timestamps/?appendLog"
+      archiveArtifacts artifacts: 'build-log.txt', onlyIfSuccessful: true
       emailext (
-          emailext mimeType: 'text/html',
-          subject: "Pipeline #'${env.BUILD_NUMBER} ${currentBuild.currentResult} Job ${env.JOB_NAME}'",
+          attachLog: true, 
+          attachmentsPattern: 'build-log.txt',
+          mimeType: 'text/html',
+          subject: "Pipeline #${env.BUILD_NUMBER} ${currentBuild.currentResult} Job ${env.JOB_NAME}",
           body: """
-          Pipeline completada com: '${currentBuild.currentResult}'
-          Detalhes da execução da pipeline: '${env.BUILD_URL}'
-          <p>'${env.EMAIL_ASSINATURA}</p><hr><p>${env.EMAIL_RODAPE}'</p>
+          Pipeline completada com: ${currentBuild.currentResult}
+          Detalhes da execução da pipeline: ${env.BUILD_URL}
+          <p>${env.EMAIL_ASSINATURA}</p><hr><p>${env.EMAIL_RODAPE}</p>
           """,
           // recipientProviders: [[$class: 'DevelopersRecipientProvider']]
           // recipientProviders: ["${recipientTeamEmails}", developers(), requestor()]
           recipientProviders: ["${recipientTeamEmails}", requestor()]
         )
-
       slackSend(color: "danger", message: "Pipeline #${env.BUILD_NUMBER} ${currentBuild.currentResult} em ${env.JOB_NAME} (<${env.BUILD_URL}|Mais info...>)")
     }
     unstable {
@@ -555,12 +556,3 @@ pipeline {
     }
   }
 }
-
-// def slack_msg() {
-//   def JOB_NAME = env.JOB_NAME
-//   def BUILD_ID = env.BUILD_ID
-//   def JENKINS_MSG = "Pipeline [${env.JOB_NAME}] finalizada com SUCESSO!\n" +
-//   "Logs path: ${env.JENKINS_URL}/job/${JOB_NAME}/${BUILD_ID}/consoleText\n" +
-//   "Quality Gate: ${env.SONAR_URL}/dashboard?id=${env.APP_NAME}"
-//   return JENKINS_MSG
-// }
