@@ -360,12 +360,26 @@ pipeline {
     stage('Aprovar Deploy') {
       steps {
         script {
+
             emailext mimeType: 'text/html',
             subject: "Aprovar Deploy [${env.JOB_NAME}] ${currentBuild.fullDisplayName}",
             to: "${env.recipientLeadEmail}",
             body: "<p>Prezado(a) Leader</p>Existe um Continuous Deployment (CD) aguardando aprovação na produção." +
               "<h3><a href='${BUILD_URL}input'><strong>Ir para APROVAÇÃO</strong></a></h3>" +
               "<p>Endpoint da homologação: ${env.APP_URI_STAGING}</p><p>${env.EMAIL_ASSINATURA}</p><hr><p>${env.EMAIL_RODAPE}</p>"
+
+            def currentUser = Jenkins.instance.getSecurityRealm().getCurrentUser()
+            def hasAllowedRole = false
+            def allowedRoles = ['leader', 'sysadmin', 'admin']
+            def allowedRolesString = allowedRoles.join(', ')
+            if (currentUser != null) {
+              def authorities = currentUser.getAuthorities()
+              if (authorities != null && !authorities.isEmpty()) {
+                hasAllowedRole = authorities.any { role -> allowedRoles.contains(role.getAuthority()) }
+              }
+            }
+            def userHasAllowedRole = hasAllowedRole.toString()
+
 
               // https://digitalvarys.com/jenkins-declarative-pipeline-with-examples/
             // https://devopscube.com/declarative-pipeline-parameters/
@@ -393,22 +407,26 @@ pipeline {
                   def approval = input(
                     id: 'ApprovalID',
                     message: 'Aprovar Deploy?',
+                    ok: 'APROVAR',
                     submitterParameter: 'approver',
+                    // submitter: 'leader, sysadmin, admin',
                     parameters: [
                       choice(
                         choices: clusterChoices, 
                         description: 'Selecione o cluster para implantar', 
                         name: 'choice')
                     ])
-                  if (approval['approver'] != "${administrator}") {
-                    throw new Exception('Você não tem permissão.')
+                  // if (approval['approver'] != validRole) {
+                  //   throw new Exception('Você não tem permissão.')
+                  // }
+                  // if (approval['choice'] == 'Deploy') {
+                  //   currentBuild.result = 'Success'
+                  // } else {
+                  //   throw new Exception('Cancelar escolha')
+                  //   }
+                  if (!userHasAllowedRole) {
+                    throw new Exception("Você não tem permissão. É necessário possuir ao menos uma das roles: ${allowedRolesString}")
                   }
-                  if (approval['choice'] == 'Deploy') {
-                    currentBuild.result = 'Success'
-                  } else {
-                    throw new Exception('Cancelar escolha')
-                    }
-
                   switch (approval['choice']) {
                     case "Kubernetes C1":
                       env.kubeconfigCluster = "c1"
