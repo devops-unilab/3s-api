@@ -359,7 +359,7 @@ pipeline {
               "<h3><a href='${BUILD_URL}input'><strong>Ir para APROVAÇÃO</strong></a></h3>" +
               "<p>Endpoint da homologação: ${env.APP_URI_STAGING}</p><p>${env.EMAIL_ASSINATURA}</p><hr><p>${env.EMAIL_RODAPE}</p>"
 
-            timeout(time: 48, unit: 'HOURS') {
+            // timeout(time: 48, unit: 'HOURS') {
               
               def clusterChoices = ['Kubernetes C1', 'Kubernetes C2', 'Kubernetes C3']
               def approval = input(
@@ -394,7 +394,7 @@ pipeline {
               ]) {
               sh 'printenv'
               }
-            }
+            // }
           } catch(Exception e) {
             currentBuild.result = 'ABORTED';
             error(e.getMessage())
@@ -490,13 +490,13 @@ pipeline {
     }
   }
 }
-stage('Migrar Binários') {
-  steps {
-    script {
-       sh "rsync -e 'ssh -p 37389' --progress --recursive -arvPo ./ erivando@3s.unilab.edu.br:/dados/sites/pub/ocorrencias/uploads/ 3s@10.130.0.153:/var/www/html/public/uploads/"
-    }
-  }
-}
+// stage('Migrar Binários') {
+//   steps {
+//     script {
+//        sh "rsync -e 'ssh -p 37389' --progress --recursive -arvPo ./ erivando@3s.unilab.edu.br:/dados/sites/pub/ocorrencias/uploads/ 3s@10.130.0.153:/var/www/html/public/uploads/"
+//     }
+//   }
+// }
 post{
   always {
     echo 'Processo de pipeline finalizado.'
