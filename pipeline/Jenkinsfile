@@ -370,7 +370,6 @@ pipeline {
               // https://digitalvarys.com/jenkins-declarative-pipeline-with-examples/
             // https://devopscube.com/declarative-pipeline-parameters/
             // https://www.blazemeter.com/blog/jenkins-declarative-pipeline
-            def CLUSTER
             def clusterChoices = ['Kubernetes C1', 'Kubernetes C2', 'Kubernetes C3']
             try {
               timeout(time: 48, unit: 'HOURS') {
@@ -392,23 +391,21 @@ pipeline {
                 //     }
                 // }
 
-                CLUSTER = (input 
-                  id: 'EnvType', 
-                  message: 'Aprovar Deploy?', 
-                  ok: 'APROVAR', 
-                  parameters: [
-                      choice(
-                          name: 'Cluster', 
-                          choices: clusterChoices, 
-                          description: 'Selecione o cluster para implantar'
-                      )
-                  ], 
-                  submitter: 'leader, sysadmin, admin',
-                  submitterParameter: 'approverId')
+                input id: 'EnvType', 
+                message: 'Aprovar Deploy?', 
+                ok: 'APROVAR', 
+                parameters: [
+                    choice(
+                        name: 'Cluster', 
+                        choices: clusterChoices, 
+                        description: 'Selecione o cluster para implantar'
+                    )
+                ], 
+                submitter: 'leader, sysadmin, admin',
+                submitterParameter: 'approverId'
 
-                sh "echo ${env.CLUSTER}"
-    
-                switch ("${CLUSTER}") {
+
+                switch ("${params.Cluster}") {
                   case "Kubernetes C1":
                     env.kubeconfigCluster = "c1"
                     break
@@ -419,19 +416,19 @@ pipeline {
                     env.kubeconfigCluster = "c3"
                     break
                   default:
-                    error "Opção ${CLUSTER} inválida por ${approverId} para ${kubeconfigCluster}."
+                    error "Opção ${Cluster} inválida por ${approverId} para ${env.kubeconfigCluster}."
                 }
-
-                withEnv([
-                "kubeconfigCluster=${CLUSTER}"
-                ]) {
-                sh 'printenv'
-                }
-
               }
 
+              withEnv([
+              "kubeconfigCluster=${Cluster}"
+              ]) {
+              sh 'printenv'
+              }
+
+
             } catch (Exception err) {
-              echo "Ocorreu uma falha: ${err.getMessage()} ${CLUSTER} ${approverId} ${kubeconfigCluster}"
+              echo "Ocorreu uma falha: ${err.getMessage()} ${params.Cluster} ${approverId} ${kubeconfigCluster}"
               currentBuild.result = 'ABORTED';
               return;
             }
