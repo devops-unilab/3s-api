@@ -63,7 +63,7 @@ pipeline {
     JENKINS_URL = "https://dti-jenkins.unilab.edu.br"
     SONAR_URL = "https://dti-sonar.unilab.edu.br"
     kubeconfigCluster = "c1"
-    recipientLeadEmail = "michel.machado@unilab.edu.br, erivandoramos@unilab.edu.br"
+    recipientLeadEmail = "erivandoramos@unilab.edu.br"
     recipientTeamEmails = "erivandosena@gmail.com, jefponte@unilab.edu.br"
     VAULT_ADDR = "https://dti-vault.unilab.edu.br"
     /* Database 3S */
@@ -343,6 +343,8 @@ pipeline {
       }
     }
 
+    /*
+    // habilitar estagios impacta na versao de producao
     stage('Aprovar Deploy') {
       steps {
         script {
@@ -374,10 +376,10 @@ pipeline {
               case "Kubernetes C1":
                 env.kubeconfigCluster = "c1"
                 break
-              case "Kubernetes C2": /* c2 desabilitado para CD */
+              case "Kubernetes C2": // c2 desabilitado para CD
                 env.kubeconfigCluster = "c1" 
                 break
-              case "Kubernetes C3": /* c3 desabilitado para CD */
+              case "Kubernetes C3":  // c3 desabilitado para CD
                 env.kubeconfigCluster = "c1"
                 break
               default:
@@ -452,12 +454,10 @@ pipeline {
           }
 
           withKubeConfig([credentialsId: "kubeconfig-${env.kubeconfigCluster}", serverUrl: "https://dti-k8s-${env.kubeconfigCluster}.unilab.edu.br:6443"]) {
-            /*
-            Teoricamente --record não é obrigatório, porém, tecnicamente torna-se obrigatório para garantir que as 
-            alterações deixem um rastro de auditoria rudimentar e cumpram o processo SRE e a cultura DevOps.
-            Exemplo de uso: kubectl rollout history -n docker deployment.apps/docker
-            Nota: Quando --record não é sinalizador, na tabela, CHANGE-CAUSE estará apenas <none>
-            */
+            // Teoricamente --record não é obrigatório, porém, tecnicamente torna-se obrigatório para garantir que as 
+            // alterações deixem um rastro de auditoria rudimentar e cumpram o processo SRE e a cultura DevOps.
+            // Exemplo de uso: kubectl rollout history -n docker deployment.apps/docker
+            // Nota: Quando --record não é sinalizador, na tabela, CHANGE-CAUSE estará apenas <none>
             sh """
               set -x
               echo "Verifica deploy ativo e exclui."
@@ -480,8 +480,8 @@ pipeline {
         }
       }
     }
+    */
   }
-
   post{
     always {
       echo 'Processo de pipeline finalizado.'

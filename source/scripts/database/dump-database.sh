@@ -36,7 +36,6 @@
 #   -w, --no-password        nunca solicitar senha
 #   -W, --password           forcar prompt de senha (should happen automatically)
 
-# set -euo pipefail
 set +eu
 
 readonly MAX_ATTEMPTS=25
