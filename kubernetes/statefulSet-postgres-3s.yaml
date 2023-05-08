@@ -1,0 +1,338 @@
+# apt install -y iputils-ping telnet curl postgresql-client
+# psql -h postgres.postgres-3s.svc.cluster.local -p 5432 -U 3s -d 3s-ocorrencias
+# kubectl delete pv $(kubectl get pv | tail -n+2 | awk '$5 == "Released" {print $1}')
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: postgres-3s
+
+# ---
+# apiVersion: v1
+# kind: Secret
+# metadata:
+#   name: postgres-3s-secret
+#   namespace: postgres-3s
+# type: Opaque
+# data:
+#   PG_PASSWORD: PFBBU1NXT1JEX0JZX1ZBVUxUPg==
+#   PG_PRIMARY_PASSWORD: PFBBU1NXT1JEX0JZX1ZBVUxUPg==
+#   PG_ROOT_PASSWORD: PFBBU1NXT1JEX0JZX1ZBVUxUPg==
+#   DB_PASSWORD_DUMP: PFBBU1NXT1JEX0JZX1ZBVUxUPg==
+#   PG_PASSWORD_HOMOLOGACAO: PFBBU1NXT1JEX0JZX1ZBVUxUPg==
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: postgres-3s-config
+  namespace: postgres-3s
+  labels:
+    app: postgres
+data:
+  PG_USER: "3s"
+  PG_PRIMARY_USER: primary
+  PGHOST: "/tmp"
+  PG_MODE: "primary" # primary, replica, set
+  PG_DATABASE: "3s-ocorrencias"
+  PG_PRIMARY_HOST: "postgres.postgres-3s.svc.cluster.local"
+  PG_PRIMARY_PORT: "5432"
+  MODE: "postgres"
+  CRUNCHY_DEBUG: "TRUE"
+  # HOMOLOGACAO_DB: "3s-homologacao"
+
+  # init.sql: |
+  #   set -eu
+  #   # Aguarda que o PostgreSQL esteja Up.
+  #   sleep 30s
+  #   if [ "$( psql -XtAc "SELECT 1 FROM pg_database WHERE datname='$HOMOLOGACAO_DB'" )" != '1' ]
+  #   then
+  #     CREATE DATABASE "$HOMOLOGACAO_DB"
+  #       WITH
+  #       OWNER = "$PG_USER"
+  #       ENCODING = 'UTF8'
+  #       TABLESPACE = pg_default
+  #       CONNECTION LIMIT = -1
+  #       IS_TEMPLATE = False;
+  #     COMMENT ON DATABASE "$HOMOLOGACAO_DB" IS 'Dadabase PosgresSQL de Homologação.';
+  #     GRANT ALL PRIVILEGES ON DATABASE $HOMOLOGACAO_DB TO "$PG_USER";
+  #     GRANT ALL PRIVILEGES ON DATABASE $PG_DATABASE TO "$PG_USER";
+  #   fi
+
+  # SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE datname = '3s-ocorrencias';
+  # DROP DATABASE "3s-ocorrencias" WITH (FORCE);
+
+  # CREATE DATABASE "3s-ocorrencias"
+  #     WITH
+  #     OWNER = postgres
+  #     ENCODING = 'UTF8'
+  #     TABLESPACE = pg_default
+  #     CONNECTION LIMIT = -1
+  #     IS_TEMPLATE = False;
+
+  # COMMENT ON DATABASE "3s-ocorrencias" IS 'Dadabase PosgresSQL do sistema 3S.';
+  # GRANT ALL ON DATABASE "3s-ocorrencias" TO "3s";
+
+  # /usr/local/pgsql-15/pg_dump --file "/var/lib/pgadmin/storage/admin_admin.com/3s-pgsql-backup" --host "3s.unilab.edu.br" --port "5432" --username "ocorrencias_user" --no-password --verbose --format=c --blobs "ocorrencias"
+  # /usr/lib/postgresql/15/bin/pg_dump "host=10.130.0.154 port=5432 dbname=3s-ocorrencias user=3s password=3s\!@#$\2023" -v > /tmp/3s-backup
+
+  # /usr/local/pgsql-13/pg_restore --host "postgres.postgres-3s.svc.cluster.local" --port "5432" --username "postgres" --no-password --role "3s" --dbname "3s-ocorrencias" --verbose "/var/lib/pgadmin/storage/admin_admin.com/3s"
+  # psql -U postgres -d laravel < /tmp/3s-backup
+
+  # -- Role: "3s"
+  # DROP ROLE IF EXISTS "3s";
+  # CREATE ROLE "3s" WITH
+  #   LOGIN
+  # --   SUPERUSER
+  #   INHERIT
+  #   CREATEDB
+  #   CREATEROLE
+  #   REPLICATION
+  #   CONNECTION LIMIT -1
+  #   ENCRYPTED PASSWORD 'SCRAM-SHA-256$4096:3Jqsy2/uZq6sOWbF0ff0Pg==$cPHoXFvpbnUG1sesgk56le9jTGpBcMemuzkh3sXEA/8=:+D7jh16yPQr/kAw/dccT0Rz52Mgi4JgwD1m0hJKp2Qo=';
+  # COMMENT ON ROLE "3s" IS 'Usuário padrão do database 3s-ocorrencias.';
+
+  # -- Role: ocorrencias_user
+  # -- DROP ROLE IF EXISTS ocorrencias_user;
+
+  # CREATE ROLE ocorrencias_user WITH
+  #   LOGIN
+  #   NOSUPERUSER
+  #   INHERIT
+  #   NOCREATEDB
+  #   NOCREATEROLE
+  #   NOREPLICATION;
+
+  # -- Role: admindti
+  # -- DROP ROLE IF EXISTS admindti;
+
+  # CREATE ROLE admindti WITH
+  #   LOGIN
+  #   SUPERUSER
+  #   INHERIT
+  #   NOCREATEDB
+  #   NOCREATEROLE
+  #   NOREPLICATION;
+
+  # -- Role: cicero_robson
+  # -- DROP ROLE IF EXISTS cicero_robson;
+
+  # CREATE ROLE cicero_robson WITH
+  #   LOGIN
+  #   SUPERUSER
+  #   INHERIT
+  #   CREATEDB
+  #   CREATEROLE
+  #   NOREPLICATION;
+
+  # -- Role: luansidney
+  # -- DROP ROLE IF EXISTS luansidney;
+
+  # CREATE ROLE luansidney WITH
+  #   LOGIN
+  #   SUPERUSER
+  #   INHERIT
+  #   CREATEDB
+  #   NOCREATEROLE
+  #   NOREPLICATION;
+
+  # -- Role: manoeljr
+  # -- DROP ROLE IF EXISTS manoeljr;
+
+  # CREATE ROLE manoeljr WITH
+  #   LOGIN
+  #   SUPERUSER
+  #   INHERIT
+  #   CREATEDB
+  #   CREATEROLE
+  #   NOREPLICATION;
+
+  # -- Role: rafael
+  # -- DROP ROLE IF EXISTS rafael;
+
+  # CREATE ROLE rafael WITH
+  #   LOGIN
+  #   SUPERUSER
+  #   INHERIT
+  #   CREATEDB
+  #   NOCREATEROLE
+  #   NOREPLICATION;
+
+  # -- Role: tiago17
+  # -- DROP ROLE IF EXISTS tiago17;
+
+  # CREATE ROLE tiago17 WITH
+  #   LOGIN
+  #   SUPERUSER
+  #   NOINHERIT
+  #   CREATEDB
+  #   CREATEROLE
+  #   NOREPLICATION;
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pvc-postgres-3s
+  namespace: postgres-3s
+  labels:
+    app: postgres
+spec:
+  storageClassName: nfs-storage-k8s
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 5Gi
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgres
+  namespace: postgres-3s
+  labels:
+    app: postgres
+  annotations:
+    metallb.universe.tf/address-pool: int-pool
+spec:
+  # clusterIP: None
+  # type: NodePort
+  type: LoadBalancer
+  loadBalancerIP: 10.130.0.154
+  externalTrafficPolicy: Local
+  ports:
+    - protocol: TCP
+      port: 5432
+      nodePort: 30100
+      name: pgsql
+  selector:
+    app: postgres
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgres-3s-primary
+  namespace: postgres-3s
+  labels:
+    name: postgres-3s-primary
+spec:
+  ports:
+    - protocol: TCP
+      port: 5432
+      nodePort: 0
+  selector:
+    name: postgres-3s-primary
+  type: ClusterIP
+  sessionAffinity: None
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgres-3s-replica
+  namespace: postgres-3s
+  labels:
+    name: postgres-3s-replica
+spec:
+  ports:
+    - protocol: TCP
+      port: 5432
+      nodePort: 0
+  selector:
+    name: postgres-3s-replica
+  type: ClusterIP
+  sessionAffinity: None
+
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: postgres-3s-sa
+  namespace: postgres-3s
+automountServiceAccountToken: true
+imagePullSecrets:
+  - name: app-3s-regcred
+
+---
+apiVersion: v1
+kind: Secret
+metadata:
+ name: postgres
+ namespace: postgres-3s
+ annotations:
+   kubernetes.io/service-account.name: postgres
+type: kubernetes.io/service-account-token
+
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: postgres
+  namespace: postgres-3s
+spec:
+  selector:
+    matchLabels:
+      app: postgres
+  serviceName: postgres
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: postgres
+        name: postgres-3s-replica
+      annotations:
+        vault.hashicorp.com/agent-inject: "true"
+        vault.hashicorp.com/agent-inject-status: 'update'
+        vault.hashicorp.com/tls-skip-verify: "true"
+        vault.hashicorp.com/agent-inject-secret-config: 'secret/data/3s/config'
+        vault.hashicorp.com/agent-inject-template-config: |
+          {{ with secret "secret/data/3s/config" -}}
+            export PG_USER='{{ .Data.data.pg_user }}'
+            export PG_PASSWORD='{{ .Data.data.pg_password }}'
+            export PG_PRIMARY_PASSWORD='{{ .Data.data.pg_primary_password }}'
+            export PG_USER_ROOT='{{ .Data.data.pg_user_root }}'
+            export PG_ROOT_PASSWORD='{{ .Data.data.pg_root_password }}'
+            export DB_USER_DUMP='{{ .Data.data.db_user_dump }}'
+            export DB_PASSWORD_DUMP='{{ .Data.data.db_password_dump }}'
+            export PG_PASSWORD_HOMOLOGACAO='{{ .Data.data.db_password_staging }}'
+          {{- end }} 
+        vault.hashicorp.com/role: "3s-role"
+        vault.hashicorp.com/auth-path: auth/kubernetes/c1
+    spec:
+      serviceAccount: postgres-3s-sa
+      securityContext:
+        fsGroup: 26
+      containers:
+        - name: postgres
+          image: crunchydata/crunchy-postgres:centos8-13.6-4.7.5
+          command: ["/bin/sh", "-c", "source /vault/secrets/config; /opt/crunchy/bin/start.sh"]
+          imagePullPolicy: Always
+          resources:
+            requests:
+              cpu: 50m
+              memory: 256Mi
+            limits:
+              cpu: 990m
+              memory: 1024Mi
+          ports:
+            - containerPort: 5432
+          envFrom:
+            # - secretRef:
+            #     name: postgres-3s-secret
+            - configMapRef:
+                name: postgres-3s-config
+          volumeMounts:
+            - name: pgdata
+              mountPath: /pgdata
+              readOnly: false
+            # - name: postgresql-initdb
+            #   mountPath: /docker-entrypoint-initdb.d/01init.sql
+            #   subPath: init.sql
+      volumes:
+        - name: postgresql-initdb
+          configMap:
+            name: postgres-3s-config
+        - name: pgdata
+          persistentVolumeClaim:
+            claimName: pvc-postgres-3s
+            
