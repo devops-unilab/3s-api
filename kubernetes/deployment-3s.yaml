@@ -13,7 +13,6 @@ metadata:
   labels:
     app: app-3s
 data:
-  # defaults
   TZ: 'America/Fortaleza'
   # 3s
   DB_CONNECTION: 'pgsql'
@@ -24,7 +23,6 @@ data:
   DB_CONNECTION_SIGAA: 'pgsql'
   DB_PORT_SIGAA: '5432'
   DB_DATABASE_SIGAA: 'sistemas_comum'
-  # smtp
   MAIL_MAILER: 'smtp'
   MAIL_HOST: 'smtp.noreply.unilab.edu.br'
   MAIL_PORT: '25'
@@ -33,37 +31,30 @@ data:
   MAIL_ENCRYPTION: ''
   MAIL_FROM_ADDRESS: '3s@noreply.unilab.edu.br'
   MAIL_FROM_NAME: '3S - Sistema de Solicitacao de Ocorrencias'
-
   # Laravel Default
   APP_NAME: 'Laravel'
   APP_ENV: 'local'
   APP_KEY: 'base64:ZG55aXZleG8yOXk4ZGhkNnVoeWYxMnpjN2VhcHBibG0='
   APP_DEBUG: 'false'
   APP_URL: 'http://dti-app-test-c1.unilab.edu.br'
-  # a
   LOG_CHANNEL: 'stack'
   LOG_DEPRECATIONS_CHANNEL: 'null'
   LOG_LEVEL: 'error'
-  # b
   BROADCAST_DRIVER: 'log'
   CACHE_DRIVER: 'file'
   FILESYSTEM_DISK: 'local'
   QUEUE_CONNECTION: 'sync'
   SESSION_DRIVER: 'file'
   SESSION_LIFETIME: '120'
-  # c
   MEMCACHED_HOST: '127.0.0.1'
-  # d
   REDIS_HOST: '127.0.0.1'
   REDIS_PASSWORD: 'null'
   REDIS_PORT: '6379'
-  # e
   AWS_ACCESS_KEY_ID: ''
   AWS_SECRET_ACCESS_KEY: ''
   AWS_DEFAULT_REGION: 'us-east-1'
   AWS_BUCKET: ''
   AWS_USE_PATH_STYLE_ENDPOINT: 'false'
-  # f
   PUSHER_APP_ID: ''
   PUSHER_APP_KEY: ''
   PUSHER_APP_SECRET: ''
@@ -71,7 +62,6 @@ data:
   PUSHER_PORT: '443'
   PUSHER_SCHEME: 'https'
   PUSHER_APP_CLUSTER: 'mt1'
-  # g
   VITE_PUSHER_APP_KEY: '${PUSHER_APP_KEY}'
   VITE_PUSHER_HOST: '${PUSHER_HOST}'
   VITE_PUSHER_PORT: '${PUSHER_PORT}'
@@ -113,8 +103,6 @@ metadata:
   name: app-3s
   namespace: app-3s
 automountServiceAccountToken: true
-# imagePullSecrets:
-#   - name: app-3s-harbor-regcred-k8sc1
 
 ---
 apiVersion: v1

@@ -17,5 +17,3 @@ yarn-error.log
 /.fleet
 /.idea
 /.vscode
-/**/docker/pgadmin/.env.pgadmin
-!/**/docker/pgadmin/.env.pgadmin.example

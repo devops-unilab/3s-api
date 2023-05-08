@@ -499,7 +499,7 @@ composer.phar
 *.sqlite3
 *.db
 !/source/.env.example
-!/source/scripts/pgadmin/.env.pgadmin.example
+!/source/bash/pgadmin/.env.pgadmin.example
 /source/public/uploads
 /source/vendor
 /vault
