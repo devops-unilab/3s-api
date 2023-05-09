@@ -204,25 +204,27 @@ pipeline {
 
     stage('Push Image Container') {
       steps {
-        container('docker') { 
-          env.VAULT_ADDR = "https://dti-vault.unilab.edu.br"
-          withCredentials([
-          string(credentialsId: 'role-harbor', variable: 'ROLE_ID'),
-          string(credentialsId: 'token-admin', variable: 'VAULT_TOKEN')
-          ]) {
-            env.SECRET_ID = sh(script: './vault write -tls-skip-verify -field=secret_id -f auth/approle/role/harbor-role/secret-id', returnStdout: true).trim()
-            env.VAULT_TOKEN = sh(script: './vault write -tls-skip-verify -field=token auth/approle/login role_id=${ROLE_ID} secret_id=${SECRET_ID}', returnStdout: true).trim()
-            env.HARBOR_USERNAME = sh(script: './vault kv get -tls-skip-verify -field=usuario secret/harbor/config', returnStdout: true).trim()
-            env.HARBOR_PASSWORD = sh(script: './vault kv get -tls-skip-verify -field=senha secret/harbor/config', returnStdout: true).trim()
+        script {
+          container('docker') { 
+            env.VAULT_ADDR = "https://dti-vault.unilab.edu.br"
+            withCredentials([
+            string(credentialsId: 'role-harbor', variable: 'ROLE_ID'),
+            string(credentialsId: 'token-admin', variable: 'VAULT_TOKEN')
+            ]) {
+              env.SECRET_ID = sh(script: './vault write -tls-skip-verify -field=secret_id -f auth/approle/role/harbor-role/secret-id', returnStdout: true).trim()
+              env.VAULT_TOKEN = sh(script: './vault write -tls-skip-verify -field=token auth/approle/login role_id=${ROLE_ID} secret_id=${SECRET_ID}', returnStdout: true).trim()
+              env.HARBOR_USERNAME = sh(script: './vault kv get -tls-skip-verify -field=usuario secret/harbor/config', returnStdout: true).trim()
+              env.HARBOR_PASSWORD = sh(script: './vault kv get -tls-skip-verify -field=senha secret/harbor/config', returnStdout: true).trim()
 
-            milestone(ordinal: null, label: "Milestone: Docker Push")
-            timeout(time: 15, unit: 'MINUTES') {
+              milestone(ordinal: null, label: "Milestone: Docker Push")
+              timeout(time: 15, unit: 'MINUTES') {
 
-            sh """
-              echo \${HARBOR_PASSWORD} | docker login --username \${HARBOR_USERNAME} --password-stdin https://dti-registro.unilab.edu.br
-              unset HARBOR_PASSWORD
-              docker push \${DOCKER_IMAGE}:\${DOCKER_TAG}
-            """
+              sh """
+                echo \${HARBOR_PASSWORD} | docker login --username \${HARBOR_USERNAME} --password-stdin https://dti-registro.unilab.edu.br
+                unset HARBOR_PASSWORD
+                docker push \${DOCKER_IMAGE}:\${DOCKER_TAG}
+              """
+              }
             }
           }
         }
