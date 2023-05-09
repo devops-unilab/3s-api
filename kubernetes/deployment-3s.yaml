@@ -35,11 +35,11 @@ data:
   APP_NAME: 'Laravel'
   APP_ENV: 'local'
   APP_KEY: 'base64:ZG55aXZleG8yOXk4ZGhkNnVoeWYxMnpjN2VhcHBibG0='
-  APP_DEBUG: 'false'
+  APP_DEBUG: 'true'
   APP_URL: 'http://dti-app-test-c1.unilab.edu.br'
   LOG_CHANNEL: 'stack'
   LOG_DEPRECATIONS_CHANNEL: 'null'
-  LOG_LEVEL: 'error'
+  LOG_LEVEL: 'debug'
   BROADCAST_DRIVER: 'log'
   CACHE_DRIVER: 'file'
   FILESYSTEM_DISK: 'local'
@@ -139,7 +139,7 @@ spec:
             export DB_USERNAME_SIGAA='{{ .Data.data.db_username_sigaa }}'
             export DB_PASSWORD_SIGAA='{{ .Data.data.db_password_sigaa }}'
             export DB_HOST_SIGAA='{{ .Data.data.db_host_sigaa }}'
-          {{- end }}  
+          {{- end }}
         vault.hashicorp.com/role: "3s-role"
         vault.hashicorp.com/auth-path: auth/kubernetes/c1
     spec:
