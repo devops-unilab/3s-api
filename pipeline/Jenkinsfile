@@ -11,7 +11,11 @@ def getSecretsConfig(){
       [envVar: 'PG_ROOT_PASSWORD', isRequired: false, vaultKey: 'pg_root_password'],
       [envVar: 'PG_PASSWORD_HOMOLOGACAO', isRequired: false, vaultKey: 'db_password_staging'],
       [envVar: 'DB_USER_DUMP', isRequired: false, vaultKey: 'db_user_dump'],
-      [envVar: 'DB_PASSWORD_DUMP', isRequired: false, vaultKey: 'db_password_dump']
+      [envVar: 'DB_PASSWORD_DUMP', isRequired: false, vaultKey: 'db_password_dump'],
+      [envVar: 'DB_DATABASE_SIGAA', isRequired: false, vaultKey: 'db_database_sigaa'],
+      [envVar: 'DB_USERNAME_SIGAA', isRequired: false, vaultKey: 'db_username_sigaa'],
+      [envVar: 'DB_PASSWORD_SIGAA', isRequired: false, vaultKey: 'db_password_sigaa'],
+      [envVar: 'DB_HOST_SIGAA', isRequired: false, vaultKey: 'db_host_sigaa'],
     ]
   ]]
 }
@@ -24,7 +28,13 @@ def secrets = [
     [envVar: 'PG_ROOT_PASSWORD', vaultKey: 'pg_root_password'],
     [envVar: 'PG_PASSWORD_HOMOLOGACAO', vaultKey: 'db_password_staging'],
     [envVar: 'DB_USER_DUMP', vaultKey: 'db_user_dump'],
-    [envVar: 'DB_PASSWORD_DUMP', vaultKey: 'db_password_dump']]],
+    [envVar: 'DB_PASSWORD_DUMP', vaultKey: 'db_password_dump'],
+    [envVar: 'DB_DATABASE_SIGAA', vaultKey: 'db_database_sigaa'],
+    [envVar: 'DB_USERNAME_SIGAA', vaultKey: 'db_username_sigaa'],
+    [envVar: 'DB_PASSWORD_SIGAA', vaultKey: 'db_password_sigaa'],
+    [envVar: 'DB_HOST_SIGAA', vaultKey: 'db_host_sigaa']
+    ]],
+    
 ]
 def configuration = [vaultUrl: 'https://dti-vault.unilab.edu.br',  vaultCredentialId: 'id-3s-role', engineVersion: 2]
 
@@ -63,7 +73,7 @@ pipeline {
     JENKINS_URL = "https://dti-jenkins.unilab.edu.br"
     SONAR_URL = "https://dti-sonar.unilab.edu.br"
     kubeconfigCluster = "c1"
-    recipientLeadEmail = "michel.machado@unilab.edu.br, erivandoramos@unilab.edu.br"
+    recipientLeadEmail = "erivandoramos@unilab.edu.br, michel.machado@unilab.edu.br"
     recipientTeamEmails = "erivandosena@gmail.com, jefponte@unilab.edu.br"
     VAULT_ADDR = "https://dti-vault.unilab.edu.br"
     /* Database 3S */
@@ -76,6 +86,13 @@ pipeline {
     PG_DATABASE_HOMOLOGACAO = "3s-homologacao"
     PG_HOST = "10.130.0.154"
     PG_PORT = "5432"
+    /* Database SIGAA */
+    DB_CONNECTION_SIGAA="pgsql"
+    DB_HOST_SIGAA="*"
+    DB_PORT_SIGAA="5432"
+    DB_DATABASE_SIGAA="*"
+    DB_USERNAME_SIGAA="*"
+    DB_PASSWORD_SIGAA="*"
     /* Database 3S VM Legado*/
     DB_USER_DUMP = "*"
     DB_PASSWORD_DUMP = "*"
@@ -85,7 +102,7 @@ pipeline {
     USERS_DUMP = '"cicero_robson" "luansidney" "manoeljr"'
     USERS_DUMP_ROOT = '"ocorrencias_user" "admindti" "3s"'
     PGPASSFILE="/home/jenkins/agent/workspace/.pgpass"
-    APROVADORES = "admin, erivandosena, michel"
+    APROVADORES = "admin, erivandosena, michel, jefponte"
   }
   stages {
     stage('Iniciando CI/CD') {
@@ -97,6 +114,7 @@ pipeline {
         }
         // executar alguns comandos shell para configurar outros detalhes.
         sh '''
+          ls -la source/public/
           # Instala pacotes
           apt-get update && apt-get upgrade -y 
           apt-get install -y locales sudo curl wget postgresql-client unzip rsync procps
@@ -127,11 +145,12 @@ pipeline {
           chown -R www-data:www-data /usr/local/bin/composer 
 
           # Obtem o vendor
-          composer create-project laravel/laravel --prefer-dist /tmp/proj-laravel
-          cp -ra source/ /tmp/proj-laravel/
-          rsync --progress --recursive -arvPo /tmp/proj-laravel/ source/
+          cd source/
+          composer install --ignore-platform-reqs --no-interaction --no-progress --no-scripts --optimize-autoloader
+          cd ..
           mv source/.env.example source/.env
           ls -la source/
+          ls -la source/public
         '''
       }
     }
@@ -172,7 +191,7 @@ pipeline {
 
     stage('Testes') {
       steps {
-        sh 'cd source/ && php artisan key:generate && php artisan make:test tests/BasicTest && composer dump-autoload'
+        sh 'cd source/ && php artisan key:generate'
         sh 'source/vendor/bin/phpunit --no-configuration --no-extensions source/tests/'
       }
     }
@@ -210,6 +229,11 @@ pipeline {
               env.DB_USER_DUMP=sh(script: './vault kv get -tls-skip-verify -field=db_user_dump secret/3s/config', returnStdout: true).trim()
               env.DB_PASSWORD_DUMP=sh(script: './vault kv get -tls-skip-verify -field=db_password_dump secret/3s/config', returnStdout: true).trim()
 
+              env.DB_DATABASE_SIGAA=sh(script: './vault kv get -tls-skip-verify -field=db_database_sigaa secret/3s/config', returnStdout: true).trim()
+              env.DB_USERNAME_SIGAA=sh(script: './vault kv get -tls-skip-verify -field=db_username_sigaa secret/3s/config', returnStdout: true).trim()
+              env.DB_PASSWORD_SIGAA=sh(script: './vault kv get -tls-skip-verify -field=db_password_sigaa secret/3s/config', returnStdout: true).trim()
+              env.DB_HOST_SIGAA=sh(script: './vault kv get -tls-skip-verify -field=db_host_sigaa secret/3s/config', returnStdout: true).trim()
+
               withEnv([
                 "PG_USER=${env.PG_USER}",
                 "PG_PASSWORD=${env.PG_PASSWORD}",
@@ -217,11 +241,15 @@ pipeline {
                 "PG_ROOT_PASSWORD=${env.PG_ROOT_PASSWORD}",
                 "PG_PASSWORD_HOMOLOGACAO=${env.PG_PASSWORD_HOMOLOGACAO}",
                 "DB_USER_DUMP=${env.DB_USER_DUMP}",
-                "DB_PASSWORD_DUMP=${env.DB_PASSWORD_DUMP}"
+                "DB_PASSWORD_DUMP=${env.DB_PASSWORD_DUMP}",
+                "DB_DATABASE_SIGAA=${env.DB_DATABASE_SIGAA}",
+                "DB_USERNAME_SIGAA=${env.DB_USERNAME_SIGAA}",
+                "DB_PASSWORD_SIGAA=${env.DB_PASSWORD_SIGAA}",
+                "DB_HOST_SIGAA=${env.DB_HOST_SIGAA}"
               ]) {
 
               }
-
+              
           }
         }
       }
@@ -263,18 +291,13 @@ pipeline {
               "PG_ROOT_PASSWORD=${env.PG_ROOT_PASSWORD}",
               "PG_PASSWORD_HOMOLOGACAO=${env.PG_PASSWORD_HOMOLOGACAO}",
               "DB_USER_DUMP=${env.DB_USER_DUMP}",
-              "DB_PASSWORD_DUMP=${env.DB_PASSWORD_DUMP}"
+              "DB_PASSWORD_DUMP=${env.DB_PASSWORD_DUMP}",
+              "DB_DATABASE_SIGAA=${env.DB_DATABASE_SIGAA}",
+              "DB_USERNAME_SIGAA=${env.DB_USERNAME_SIGAA}",
+              "DB_PASSWORD_SIGAA=${env.DB_PASSWORD_SIGAA}",
+              "DB_HOST_SIGAA=${env.DB_HOST_SIGAA}"
             ]) {
               sh """
-                echo '${env.PG_USER}' > ./secret.txt
-                echo '${env.PG_PASSWORD}' >> ./secret.txt
-                echo '${env.PG_USER_ROOT}' >> ./secret.txt
-                echo '${env.PG_ROOT_PASSWORD}' >> ./secret.txt
-                echo '${env.PG_PASSWORD_HOMOLOGACAO}' >> ./secret.txt
-                echo '${env.DB_USER_DUMP}' >> ./secret.txt
-                echo '${env.DB_PASSWORD_DUMP}' >> ./secret.txt
-                cat ./secret.txt
-
                 echo '${env.PG_HOST}:${env.PG_PORT}:*:${env.PG_USER_ROOT}:${env.PG_ROOT_PASSWORD}' > /home/jenkins/agent/workspace/.pgpass
                 echo '${env.PG_HOST}:${env.PG_PORT}:*:${env.PG_USER}:${env.PG_PASSWORD}' >> /home/jenkins/agent/workspace/.pgpass
                 echo '${env.PG_HOST}:${env.PG_PORT}:*:${env.PG_USER}:${env.PG_PASSWORD_HOMOLOGACAO}' >> /home/jenkins/agent/workspace/.pgpass
@@ -309,9 +332,13 @@ pipeline {
               "PG_ROOT_PASSWORD=${env.PG_ROOT_PASSWORD}",
               "PG_PASSWORD_HOMOLOGACAO=${env.PG_PASSWORD_HOMOLOGACAO}",
               "DB_USER_DUMP=${env.DB_USER_DUMP}",
-              "DB_PASSWORD_DUMP=${env.DB_PASSWORD_DUMP}"
-            ]) {
-              sh 'cat ./secret.txt'
+              "DB_PASSWORD_DUMP=${env.DB_PASSWORD_DUMP}", 
+              "DB_DATABASE_SIGAA=${env.DB_DATABASE_SIGAA}",
+              "DB_USERNAME_SIGAA=${env.DB_USERNAME_SIGAA}",
+              "DB_PASSWORD_SIGAA=${env.DB_PASSWORD_SIGAA}",
+              "DB_HOST_SIGAA=${env.DB_HOST_SIGAA}"
+
+            ]) {              
               }
 
               sh ''' #!/bin/bash 
@@ -387,10 +414,10 @@ pipeline {
               case "Kubernetes C1":
                 env.kubeconfigCluster = "c1"
                 break
-              case "Kubernetes C2": /* c2 desabilitado para CD */
+              case "Kubernetes C2": // c2 desabilitado para CD
                 env.kubeconfigCluster = "c1" 
                 break
-              case "Kubernetes C3": /* c3 desabilitado para CD */
+              case "Kubernetes C3":  // c3 desabilitado para CD
                 env.kubeconfigCluster = "c1"
                 break
               default:
@@ -429,7 +456,11 @@ pipeline {
               [envVar: 'PG_ROOT_PASSWORD', isRequired: false, vaultKey: 'pg_root_password'],
               [envVar: 'PG_PASSWORD_HOMOLOGACAO', isRequired: false, vaultKey: 'db_password_staging'],
               [envVar: 'DB_USER_DUMP', isRequired: false, vaultKey: 'db_user_dump'],
-              [envVar: 'DB_PASSWORD_DUMP', isRequired: false, vaultKey: 'db_password_dump']
+              [envVar: 'DB_PASSWORD_DUMP', isRequired: false, vaultKey: 'db_password_dump'],
+              [envVar: 'DB_DATABASE_SIGAA', isRequired: false, vaultKey: 'db_database_sigaa'],
+              [envVar: 'DB_USERNAME_SIGAA', isRequired: false, vaultKey: 'db_username_sigaa'],
+              [envVar: 'DB_PASSWORD_SIGAA', isRequired: false, vaultKey: 'db_password_sigaa'],
+              [envVar: 'DB_HOST_SIGAA', isRequired: false, vaultKey: 'db_host_sigaa'],
               ]]]) {
                 // some block
                 withEnv([
@@ -439,7 +470,11 @@ pipeline {
                   "PG_ROOT_PASSWORD=${env.PG_ROOT_PASSWORD}",
                   "PG_PASSWORD_HOMOLOGACAO=${env.PG_PASSWORD_HOMOLOGACAO}",
                   "DB_USER_DUMP=${env.DB_USER_DUMP}",
-                  "DB_PASSWORD_DUMP=${env.DB_PASSWORD_DUMP}"
+                  "DB_PASSWORD_DUMP=${env.DB_PASSWORD_DUMP}", 
+                  "DB_DATABASE_SIGAA=${env.DB_DATABASE_SIGAA}",
+                  "DB_USERNAME_SIGAA=${env.DB_USERNAME_SIGAA}",
+                  "DB_PASSWORD_SIGAA=${env.DB_PASSWORD_SIGAA}",
+                  "DB_HOST_SIGAA=${env.DB_HOST_SIGAA}"
                 ]) {
 
                 }
@@ -465,12 +500,10 @@ pipeline {
           }
 
           withKubeConfig([credentialsId: "kubeconfig-${env.kubeconfigCluster}", serverUrl: "https://dti-k8s-${env.kubeconfigCluster}.unilab.edu.br:6443"]) {
-            /*
-            Teoricamente --record não é obrigatório, porém, tecnicamente torna-se obrigatório para garantir que as 
-            alterações deixem um rastro de auditoria rudimentar e cumpram o processo SRE e a cultura DevOps.
-            Exemplo de uso: kubectl rollout history -n docker deployment.apps/docker
-            Nota: Quando --record não é sinalizador, na tabela, CHANGE-CAUSE estará apenas <none>
-            */
+            // Teoricamente --record não é obrigatório, porém, tecnicamente torna-se obrigatório para garantir que as 
+            // alterações deixem um rastro de auditoria rudimentar e cumpram o processo SRE e a cultura DevOps.
+            // Exemplo de uso: kubectl rollout history -n docker deployment.apps/docker
+            // Nota: Quando --record não é sinalizador, na tabela, CHANGE-CAUSE estará apenas <none>
             sh """
               set -x
               echo "Verifica deploy ativo e exclui."
@@ -493,8 +526,8 @@ pipeline {
         }
       }
     }
-  }
 
+  }
   post{
     always {
       echo 'Processo de pipeline finalizado.'
