@@ -143,7 +143,7 @@ pipeline {
             def branchName = env.BRANCH_NAME
             def scannerHome = tool 'SonarScanner'
             withSonarQubeEnv('SonarQube') {
-              sh "${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=app-3s -Dsonar.sources=source/app3s -Dsonar.exclusions=vendor/** -Dsonar.language=php -Dsonar.sourceEncoding=UTF-8"
+              sh "${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=app-3s-prod -Dsonar.sources=source/app3s -Dsonar.exclusions=vendor/** -Dsonar.language=php -Dsonar.sourceEncoding=UTF-8"
               def props = readProperties  file: '.scannerwork/report-task.txt'
               def sonarServerUrl=props['serverUrl']
               def ceTaskUrl= props['ceTaskUrl']
