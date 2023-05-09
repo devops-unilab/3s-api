@@ -79,11 +79,17 @@ RUN dpkg-reconfigure locales tzdata -f noninteractive
 ENV APACHE_RUN_USER www-data
 ENV APACHE_RUN_GROUP www-data
 
+RUN cd /opt \
+  && curl -sS https://getcomposer.org/installer -o composer-setup.php \
+  && php composer-setup.php --install-dir=/usr/local/bin --filename=composer \
+  && composer 
 
-
+# Proj EXISTENTE
 COPY source/ /var/www/html
 RUN mkdir -p ./public/uploads/ocorrencia/anexo
-RUN composer install --ignore-platform-reqs --no-interaction --no-progress --no-scripts --optimize-autoloader
+ 
+RUN composer install --ignore-platform-reqs --no-interaction --no-progress --no-scripts --optimize-autoloader \
+  && php artisan -V
 
 RUN sed -i "s/'default' => env('DB_CONNECTION', 'mysql'),/'default' => env('DB_CONNECTION', 'pgsql'),/g" config/database.php
 RUN sed -i "s/        \/\//        '*',/g" app/Http/Middleware/VerifyCsrfToken.php
