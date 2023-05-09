@@ -338,8 +338,7 @@ pipeline {
               "DB_PASSWORD_SIGAA=${env.DB_PASSWORD_SIGAA}",
               "DB_HOST_SIGAA=${env.DB_HOST_SIGAA}"
 
-            ]) {
-              sh 'cat ./secret.txt'
+            ]) {              
               }
 
               sh ''' #!/bin/bash 
