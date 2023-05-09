@@ -122,7 +122,7 @@ pipeline {
           chmod u+x ./kubectl
           install -o root -g root -m 0755 kubectl /usr/bin/kubectl
           kubectl version --client -ojson
-
+          
           # Instala Vault
           curl -o vault.zip -k https://releases.hashicorp.com/vault/1.12.1/vault_1.12.1_linux_amd64.zip; yes | unzip vault.zip
 
