@@ -172,7 +172,7 @@ pipeline {
 
     stage('Testes') {
       steps {
-        sh 'cd source/ && php artisan key:generate && php artisan make:test tests/BasicTest && composer dump-autoload'
+        sh 'cd source/ && php artisan key:generate'
         sh 'source/vendor/bin/phpunit --no-configuration --no-extensions source/tests/'
       }
     }
