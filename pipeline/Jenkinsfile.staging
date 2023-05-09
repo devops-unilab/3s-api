@@ -29,10 +29,10 @@ def secrets = [
     [envVar: 'PG_PASSWORD_HOMOLOGACAO', vaultKey: 'db_password_staging'],
     [envVar: 'DB_USER_DUMP', vaultKey: 'db_user_dump'],
     [envVar: 'DB_PASSWORD_DUMP', vaultKey: 'db_password_dump']
-    [envVar: 'DB_DATABASE_SIGAA', isRequired: false, vaultKey: 'db_database_sigaa'],
-    [envVar: 'DB_USERNAME_SIGAA', isRequired: false, vaultKey: 'db_username_sigaa'],
-    [envVar: 'DB_PASSWORD_SIGAA', isRequired: false, vaultKey: 'db_password_sigaa'],
-    [envVar: 'DB_HOST_SIGAA', isRequired: false, vaultKey: 'db_host_sigaa']
+    [envVar: 'DB_DATABASE_SIGAA', vaultKey: 'db_database_sigaa'],
+    [envVar: 'DB_USERNAME_SIGAA', vaultKey: 'db_username_sigaa'],
+    [envVar: 'DB_PASSWORD_SIGAA', vaultKey: 'db_password_sigaa'],
+    [envVar: 'DB_HOST_SIGAA', vaultKey: 'db_host_sigaa']
     ]],
     
 ]
@@ -102,7 +102,7 @@ pipeline {
     USERS_DUMP = '"cicero_robson" "luansidney" "manoeljr"'
     USERS_DUMP_ROOT = '"ocorrencias_user" "admindti" "3s"'
     PGPASSFILE="/home/jenkins/agent/workspace/.pgpass"
-    APROVADORES = "admin, erivandosena, michel"
+    APROVADORES = "admin, erivandosena, michel, jefponte"
   }
   stages {
     stage('Iniciando CI/CD') {
