@@ -127,9 +127,9 @@ pipeline {
           chown -R www-data:www-data /usr/local/bin/composer 
 
           # Obtem o vendor
-          composer create-project laravel/laravel --prefer-dist /tmp/proj-laravel
-          cp -ra source/ /tmp/proj-laravel/
-          rsync --progress --recursive -arvPo /tmp/proj-laravel/ source/
+          cd source/
+          composer install --ignore-platform-reqs --no-interaction --no-progress --no-scripts --optimize-autoloader
+          cd ..
           mv source/.env.example source/.env
           ls -la source/
         '''
