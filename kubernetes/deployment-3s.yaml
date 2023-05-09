@@ -135,6 +135,7 @@ spec:
           {{ with secret "secret/data/3s/config" -}}
             export DB_PASSWORD='{{ .Data.data.pg_password }}'
             export DB_USERNAME='{{ .Data.data.pg_user }}'
+            export DB_DATABASE_SIGAA='{{ .Data.data.db_database_sigaa }}'
             export DB_USERNAME_SIGAA='{{ .Data.data.db_username_sigaa }}'
             export DB_PASSWORD_SIGAA='{{ .Data.data.db_password_sigaa }}'
             export DB_HOST_SIGAA='{{ .Data.data.db_host_sigaa }}'
