@@ -87,9 +87,9 @@ pipeline {
     PG_HOST = "10.130.0.154"
     PG_PORT = "5432"
     /* Database SIGAA */
-    DB_CONNECTION_SIGAA=pgsql
+    DB_CONNECTION_SIGAA="pgsql"
     DB_HOST_SIGAA="*"
-    DB_PORT_SIGAA=5432
+    DB_PORT_SIGAA="5432"
     DB_DATABASE_SIGAA="*"
     DB_USERNAME_SIGAA="*"
     DB_PASSWORD_SIGAA="*"
