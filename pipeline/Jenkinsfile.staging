@@ -97,6 +97,7 @@ pipeline {
         }
         // executar alguns comandos shell para configurar outros detalhes.
         sh '''
+          ls -la source/public/
           # Instala pacotes
           apt-get update && apt-get upgrade -y 
           apt-get install -y locales sudo curl wget postgresql-client unzip rsync procps
@@ -132,6 +133,7 @@ pipeline {
           cd ..
           mv source/.env.example source/.env
           ls -la source/
+          ls -la source/public
         '''
       }
     }
