@@ -4,7 +4,8 @@ namespace app3s\controller;
 
 
 
-class MainAjax{
+class MainAjax
+{
     
     public function main(){
         switch ($_GET['ajax']){

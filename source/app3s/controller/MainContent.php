@@ -6,7 +6,8 @@ use app3s\util\Sessao;
 use app3s\dao\DAO;
 
 
-class MainContent{
+class MainContent
+{
     
     
     public function main()

@@ -3,7 +3,8 @@
 namespace app3s\controller;
 
 
-class MainApi{
+class MainApi
+{
 
     public function main(){
         $controller = new MensagemForumApiRestController();

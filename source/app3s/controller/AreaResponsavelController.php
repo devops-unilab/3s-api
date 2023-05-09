@@ -12,7 +12,8 @@ use app3s\model\AreaResponsavel;
 use app3s\view\AreaResponsavelView;
 
 
-class AreaResponsavelController {
+class AreaResponsavelController 
+{
 
 	protected  $view;
     protected $dao;
