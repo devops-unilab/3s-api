@@ -49,12 +49,11 @@ pipeline {
     THREAD_COUNT = 6
     SEMGREP_TIMEOUT = "300"
     JENKINS_URL = "https://dti-jenkins.unilab.edu.br"
-    SONAR_URL = "https://dti-sonar.unilab.edu.br"
     RECIPIENT_LEAD_EMAILS = "erivandoramos@unilab.edu.br, jefponte@unilab.edu.br"
     RECIPIENT_TEAM_EMAILS = "erivandosena@gmail.com, j.pontee@gmail.com"
     VAULT_ADDR = "https://dti-vault.unilab.edu.br"
-
-    PROJECT_KEY = "app-3s-prod"
+    SONAR_URL = "https://dti-sonar.unilab.edu.br"
+    SONAR_PROJECT_KEY = "app-3s-prod"
 
     /* Database 3S */
     PG_USER = "*"
@@ -108,7 +107,7 @@ pipeline {
           chmod u+x ./kubectl
           install -o root -g root -m 0755 kubectl /usr/bin/kubectl
           kubectl version --client -ojson
-          
+
           # Instala Vault
           curl -o vault.zip -k https://releases.hashicorp.com/vault/1.12.1/vault_1.12.1_linux_amd64.zip; yes | unzip vault.zip
 
@@ -134,7 +133,7 @@ pipeline {
           script {
             def branchName = env.BRANCH_NAME
             def scannerHome = tool 'SonarScanner'
-            def projectKey = env.PROJECT_KEY
+            def projectKey = env.SONAR_PROJECT_KEY
             withSonarQubeEnv('SonarQube') {
               sh "${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=${projectKey} -Dsonar.sources=source/app3s -Dsonar.exclusions=vendor/** -Dsonar.language=php -Dsonar.sourceEncoding=UTF-8"
               def props = readProperties  file: '.scannerwork/report-task.txt'
@@ -303,9 +302,7 @@ pipeline {
               sh 'echo Endpoint: $APP_URI_STAGING'
             }
           }
-
-        }
-      }
+       }
     }
   }
 
@@ -326,7 +323,7 @@ pipeline {
           Parabéns! Team
           <p>Pipeline completada com: ${currentBuild.currentResult}<br />
           Detalhes da execução da pipeline: ${env.BUILD_URL}<br />
-          Detalhes do teste de qualidade: ${env.SONAR_URL}/dashboard?id=${env.PROJECT_KEY}</p>
+          Detalhes do teste de qualidade: ${env.SONAR_URL}/dashboard?id=${env.SONAR_PROJECT_KEY}</p>
           <p><strong>Endpoint de homologação: ${env.APP_URI_STAGING}</strong></p><br />
           <p>${env.EMAIL_ASSINATURA}</p><hr><p>${env.EMAIL_RODAPE}</p>
           """,
