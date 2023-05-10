@@ -194,14 +194,6 @@ pipeline {
       }
     }
 
-    stage('Obter segredos do Vault') {
-      steps {
-        script {
-
-        }
-      }
-    }
-
     stage('Push Image Container') {
       steps {
         script {
