@@ -302,7 +302,8 @@ pipeline {
               sh 'echo Endpoint: $APP_URI_STAGING'
             }
           }
-       }
+        }
+      }
     }
   }
 
