@@ -2,7 +2,8 @@
 
 def configuration = [
   vaultUrl: 'https://dti-vault.unilab.edu.br', 
-  vaultCredentialId: 'id-3s-role', engineVersion: 2
+  vaultCredentialId: 'id-3s-role', 
+  engineVersion: 2
 ]
 
 def secrets = [
