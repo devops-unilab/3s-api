@@ -40,8 +40,9 @@ pipeline {
   environment {
     /* Gerais */
     APP_NAME = "app-3s"
-    APP_VERSION = "1.0.0"
     APP_NAMESPACE = "app-3s"
+    TAG = sh(returnStdout: true, script: "git rev-parse --short=10 HEAD").trim()
+    APP_VERSION = "${env.TAG}"
     DOCKER_TAG = "${env.GIT_BRANCH.split('/')[-1]}"
     DOCKER_IMAGE = "dti-registro.unilab.edu.br/unilab/${APP_NAME}"
     BUILD_NUMBER = "${env.BUILD_NUMBER}"
@@ -203,7 +204,9 @@ pipeline {
               sh """
                 echo \${HARBOR_PASSWORD} | docker login --username \${HARBOR_USERNAME} --password-stdin https://dti-registro.unilab.edu.br
                 unset HARBOR_PASSWORD
-                docker push \${DOCKER_IMAGE}:\${DOCKER_TAG}
+
+                docker tag \${DOCKER_IMAGE}:\${DOCKER_TAG} \${DOCKER_IMAGE}:\${TAG}
+                docker push \${DOCKER_IMAGE}:\${TAG}
               """
               }
             }
@@ -389,7 +392,7 @@ pipeline {
                 sed -i 's/3s-homologacao/3s-ocorrencias/' ./kubernetes/deployment-3s.yaml
                 sed -i 's/.db_password_sigaa_holog/.db_password_sigaa/' ./kubernetes/deployment-3s.yaml
                 sed -i 's/.db_host_sigaa_holog/.db_host_sigaa/' ./kubernetes/deployment-3s.yaml
-                sed -i 's/:${env.DOCKER_TAG}/:${env.DOCKER_TAG}/' ./kubernetes/deployment-3s.yaml
+                sed -i 's/:${env.DOCKER_TAG}/:${env.TAG}/' ./kubernetes/deployment-3s.yaml
                 sed -i 's/auth\\/kubernetes\\/c3/auth\\/kubernetes\\/c1/' ./kubernetes/deployment-3s.yaml
                 sed -i 's/10.130.2.153/10.130.0.153/' ./kubernetes/deployment-3s.yaml
                 sed -i 's/3shomologacao.unilab.edu.br/dti-app-test-c1.unilab.edu.br/' ./kubernetes/deployment-3s.yaml
