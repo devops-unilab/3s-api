@@ -1,24 +1,9 @@
 #!/usr/bin/env groovy
 
-def getSecretsConfig(){
-  return [[
-    engineVersion: 2, 
-    path: 'secret/3s/config', 
-    secretValues: [
-      [envVar: 'PG_USER', isRequired: false, vaultKey: 'pg_user'], 
-      [envVar: 'PG_PASSWORD', isRequired: false, vaultKey: 'pg_password'],
-      [envVar: 'PG_USER_ROOT', isRequired: false, vaultKey: 'pg_user_root'],
-      [envVar: 'PG_ROOT_PASSWORD', isRequired: false, vaultKey: 'pg_root_password'],
-      [envVar: 'PG_PASSWORD_HOMOLOGACAO', isRequired: false, vaultKey: 'db_password_staging'],
-      [envVar: 'DB_USER_DUMP', isRequired: false, vaultKey: 'db_user_dump'],
-      [envVar: 'DB_PASSWORD_DUMP', isRequired: false, vaultKey: 'db_password_dump'],
-      [envVar: 'DB_DATABASE_SIGAA', isRequired: false, vaultKey: 'db_database_sigaa'],
-      [envVar: 'DB_USERNAME_SIGAA', isRequired: false, vaultKey: 'db_username_sigaa'],
-      [envVar: 'DB_PASSWORD_SIGAA', isRequired: false, vaultKey: 'db_password_sigaa'],
-      [envVar: 'DB_HOST_SIGAA', isRequired: false, vaultKey: 'db_host_sigaa'],
-    ]
-  ]]
-}
+def configuration = [
+  vaultUrl: 'https://dti-vault.unilab.edu.br', 
+  vaultCredentialId: 'id-3s-role', engineVersion: 2
+]
 
 def secrets = [
   [path: 'secret/3s/config', engineVersion: 2, secretValues: [
@@ -26,17 +11,10 @@ def secrets = [
     [envVar: 'PG_PASSWORD', vaultKey: 'pg_password'],
     [envVar: 'PG_USER_ROOT', vaultKey: 'pg_user_root'],
     [envVar: 'PG_ROOT_PASSWORD', vaultKey: 'pg_root_password'],
-    [envVar: 'PG_PASSWORD_HOMOLOGACAO', vaultKey: 'db_password_staging'],
     [envVar: 'DB_USER_DUMP', vaultKey: 'db_user_dump'],
-    [envVar: 'DB_PASSWORD_DUMP', vaultKey: 'db_password_dump'],
-    [envVar: 'DB_DATABASE_SIGAA', vaultKey: 'db_database_sigaa'],
-    [envVar: 'DB_USERNAME_SIGAA', vaultKey: 'db_username_sigaa'],
-    [envVar: 'DB_PASSWORD_SIGAA', vaultKey: 'db_password_sigaa'],
-    [envVar: 'DB_HOST_SIGAA', vaultKey: 'db_host_sigaa']
-    ]],
-    
+    [envVar: 'DB_PASSWORD_DUMP', vaultKey: 'db_password_dump']
+  ]],
 ]
-def configuration = [vaultUrl: 'https://dti-vault.unilab.edu.br',  vaultCredentialId: 'id-3s-role', engineVersion: 2]
 
 pipeline {
   agent {
@@ -47,6 +25,7 @@ pipeline {
       defaultContainer 'php8'
     }
   }
+
   options {
     timestamps()
     timeout(time: 24, unit: 'HOURS')
@@ -56,10 +35,9 @@ pipeline {
     buildDiscarder(logRotator(numToKeepStr: '20'))
     disableConcurrentBuilds()
   }
-  triggers {
-    cron('0 0 * * 1') 
-  }
+
   environment {
+    /* Gerais */
     APP_NAME = "app-3s"
     APP_VERSION = "1.0.0"
     APP_NAMESPACE = "app-3s"
@@ -71,29 +49,24 @@ pipeline {
     THREAD_COUNT = 6
     SEMGREP_TIMEOUT = "300"
     JENKINS_URL = "https://dti-jenkins.unilab.edu.br"
-    SONAR_URL = "https://dti-sonar.unilab.edu.br"
-    kubeconfigCluster = "c1"
-    recipientLeadEmail = "erivandoramos@unilab.edu.br, michel.machado@unilab.edu.br"
-    recipientTeamEmails = "erivandosena@gmail.com, jefponte@unilab.edu.br"
+    RECIPIENT_LEAD_EMAILS = "erivandoramos@unilab.edu.br, michel.machado@unilab.edu.br"
+    RECIPIENT_TEAM_EMAILS = "erivandosena@gmail.com, jefponte@unilab.edu.br"
+    K8S_CLUSTER = "c1"
     VAULT_ADDR = "https://dti-vault.unilab.edu.br"
+    SONAR_URL = "https://dti-sonar.unilab.edu.br"
+    SONAR_PROJECT_KEY = "app-3s-prod"
+
     /* Database 3S */
     PG_USER = "*"
     PG_PASSWORD = "*"
     PG_USER_ROOT = "*"
     PG_ROOT_PASSWORD = "*"
-    PG_PASSWORD_HOMOLOGACAO = "*"
     PG_DATABASE = "3s-ocorrencias"
     PG_DATABASE_HOMOLOGACAO = "3s-homologacao"
     PG_HOST = "10.130.0.154"
     PG_PORT = "5432"
-    /* Database SIGAA */
-    DB_CONNECTION_SIGAA="pgsql"
-    DB_HOST_SIGAA="*"
-    DB_PORT_SIGAA="5432"
-    DB_DATABASE_SIGAA="*"
-    DB_USERNAME_SIGAA="*"
-    DB_PASSWORD_SIGAA="*"
-    /* Database 3S VM Legado*/
+
+    /* Database Migrations */
     DB_USER_DUMP = "*"
     DB_PASSWORD_DUMP = "*"
     DB_DATABASE_DUMP = "ocorrencias"
@@ -101,9 +74,10 @@ pipeline {
     PORT_DUMP = "5432"
     USERS_DUMP = '"cicero_robson" "luansidney" "manoeljr"'
     USERS_DUMP_ROOT = '"ocorrencias_user" "admindti" "3s"'
-    PGPASSFILE="/home/jenkins/agent/workspace/.pgpass"
+    PGPASSFILE = "/home/jenkins/agent/workspace/.pgpass"
     APROVADORES = "admin, erivandosena, michel, jefponte"
   }
+
   stages {
     stage('Iniciando CI/CD') {
       steps {
@@ -112,9 +86,9 @@ pipeline {
           currentBuild.displayName = "$BUILD_DISPLAY_NAME (${GIT_COMMIT.take(8)})"
           workspace = "$env.WORKSPACE"
         }
+        
         // executar alguns comandos shell para configurar outros detalhes.
         sh '''
-          ls -la source/public/
           # Instala pacotes
           apt-get update && apt-get upgrade -y 
           apt-get install -y locales sudo curl wget postgresql-client unzip rsync procps
@@ -161,8 +135,9 @@ pipeline {
           script {
             def branchName = env.BRANCH_NAME
             def scannerHome = tool 'SonarScanner'
+            def projectKey = env.SONAR_PROJECT_KEY
             withSonarQubeEnv('SonarQube') {
-              sh "${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=app-3s-prod -Dsonar.sources=source/app3s -Dsonar.exclusions=vendor/** -Dsonar.language=php -Dsonar.sourceEncoding=UTF-8"
+              sh "${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=${projectKey} -Dsonar.sources=source/app3s -Dsonar.exclusions=vendor/** -Dsonar.language=php -Dsonar.sourceEncoding=UTF-8"
               def props = readProperties  file: '.scannerwork/report-task.txt'
               def sonarServerUrl=props['serverUrl']
               def ceTaskUrl= props['ceTaskUrl']
@@ -207,12 +182,12 @@ pipeline {
       }
     }
 
-    stage('Obter segredos do Vault') {
+    stage('Push Image Container') {
       steps {
         script {
-          /* secrets harbor */
-          env.VAULT_ADDR = "https://dti-vault.unilab.edu.br"
-          withCredentials([
+          container('docker') { 
+            env.VAULT_ADDR = "https://dti-vault.unilab.edu.br"
+            withCredentials([
             string(credentialsId: 'role-harbor', variable: 'ROLE_ID'),
             string(credentialsId: 'token-admin', variable: 'VAULT_TOKEN')
             ]) {
@@ -221,50 +196,16 @@ pipeline {
               env.HARBOR_USERNAME = sh(script: './vault kv get -tls-skip-verify -field=usuario secret/harbor/config', returnStdout: true).trim()
               env.HARBOR_PASSWORD = sh(script: './vault kv get -tls-skip-verify -field=senha secret/harbor/config', returnStdout: true).trim()
 
-              env.PG_USER=sh(script: './vault kv get -tls-skip-verify -field=pg_user secret/3s/config', returnStdout: true).trim()
-              env.PG_PASSWORD=sh(script: './vault kv get -tls-skip-verify -field=pg_password secret/3s/config', returnStdout: true).trim()
-              env.PG_USER_ROOT=sh(script: './vault kv get -tls-skip-verify -field=pg_user_root secret/3s/config', returnStdout: true).trim()
-              env.PG_ROOT_PASSWORD=sh(script: './vault kv get -tls-skip-verify -field=pg_root_password secret/3s/config', returnStdout: true).trim()
-              env.PG_PASSWORD_HOMOLOGACAO=sh(script: './vault kv get -tls-skip-verify -field=db_password_staging secret/3s/config', returnStdout: true).trim()
-              env.DB_USER_DUMP=sh(script: './vault kv get -tls-skip-verify -field=db_user_dump secret/3s/config', returnStdout: true).trim()
-              env.DB_PASSWORD_DUMP=sh(script: './vault kv get -tls-skip-verify -field=db_password_dump secret/3s/config', returnStdout: true).trim()
+              milestone(ordinal: null, label: "Milestone: Docker Push")
+              timeout(time: 15, unit: 'MINUTES') {
 
-              env.DB_DATABASE_SIGAA=sh(script: './vault kv get -tls-skip-verify -field=db_database_sigaa secret/3s/config', returnStdout: true).trim()
-              env.DB_USERNAME_SIGAA=sh(script: './vault kv get -tls-skip-verify -field=db_username_sigaa secret/3s/config', returnStdout: true).trim()
-              env.DB_PASSWORD_SIGAA=sh(script: './vault kv get -tls-skip-verify -field=db_password_sigaa secret/3s/config', returnStdout: true).trim()
-              env.DB_HOST_SIGAA=sh(script: './vault kv get -tls-skip-verify -field=db_host_sigaa secret/3s/config', returnStdout: true).trim()
-
-              withEnv([
-                "PG_USER=${env.PG_USER}",
-                "PG_PASSWORD=${env.PG_PASSWORD}",
-                "PG_USER_ROOT=${env.PG_USER_ROOT}",
-                "PG_ROOT_PASSWORD=${env.PG_ROOT_PASSWORD}",
-                "PG_PASSWORD_HOMOLOGACAO=${env.PG_PASSWORD_HOMOLOGACAO}",
-                "DB_USER_DUMP=${env.DB_USER_DUMP}",
-                "DB_PASSWORD_DUMP=${env.DB_PASSWORD_DUMP}",
-                "DB_DATABASE_SIGAA=${env.DB_DATABASE_SIGAA}",
-                "DB_USERNAME_SIGAA=${env.DB_USERNAME_SIGAA}",
-                "DB_PASSWORD_SIGAA=${env.DB_PASSWORD_SIGAA}",
-                "DB_HOST_SIGAA=${env.DB_HOST_SIGAA}"
-              ]) {
-
+              sh """
+                echo \${HARBOR_PASSWORD} | docker login --username \${HARBOR_USERNAME} --password-stdin https://dti-registro.unilab.edu.br
+                unset HARBOR_PASSWORD
+                docker push \${DOCKER_IMAGE}:\${DOCKER_TAG}
+              """
               }
-              
-          }
-        }
-      }
-    }
-
-    stage('Push Image Container') {
-      steps {
-        container('docker') { 
-          milestone(ordinal: null, label: "Milestone: Docker Push")
-          timeout(time: 15, unit: 'MINUTES') {
-            sh """
-              echo \${HARBOR_PASSWORD} | docker login --username \${HARBOR_USERNAME} --password-stdin https://dti-registro.unilab.edu.br
-              unset HARBOR_PASSWORD
-              docker push \${DOCKER_IMAGE}:\${DOCKER_TAG}
-            """
+            }
           }
         }
       }
@@ -289,28 +230,22 @@ pipeline {
               "PG_PASSWORD=${env.PG_PASSWORD}",
               "PG_USER_ROOT=${env.PG_USER_ROOT}",
               "PG_ROOT_PASSWORD=${env.PG_ROOT_PASSWORD}",
-              "PG_PASSWORD_HOMOLOGACAO=${env.PG_PASSWORD_HOMOLOGACAO}",
               "DB_USER_DUMP=${env.DB_USER_DUMP}",
-              "DB_PASSWORD_DUMP=${env.DB_PASSWORD_DUMP}",
-              "DB_DATABASE_SIGAA=${env.DB_DATABASE_SIGAA}",
-              "DB_USERNAME_SIGAA=${env.DB_USERNAME_SIGAA}",
-              "DB_PASSWORD_SIGAA=${env.DB_PASSWORD_SIGAA}",
-              "DB_HOST_SIGAA=${env.DB_HOST_SIGAA}"
+              "DB_PASSWORD_DUMP=${env.DB_PASSWORD_DUMP}"
             ]) {
               sh """
-                echo '${env.PG_HOST}:${env.PG_PORT}:*:${env.PG_USER_ROOT}:${env.PG_ROOT_PASSWORD}' > /home/jenkins/agent/workspace/.pgpass
-                echo '${env.PG_HOST}:${env.PG_PORT}:*:${env.PG_USER}:${env.PG_PASSWORD}' >> /home/jenkins/agent/workspace/.pgpass
-                echo '${env.PG_HOST}:${env.PG_PORT}:*:${env.PG_USER}:${env.PG_PASSWORD_HOMOLOGACAO}' >> /home/jenkins/agent/workspace/.pgpass
-                echo '${env.HOST_DUMP}:${env.PORT_DUMP}:*:${env.DB_USER_DUMP}:${env.DB_PASSWORD_DUMP}' >> /home/jenkins/agent/workspace/.pgpass
-                chmod 0600 /home/jenkins/agent/workspace/.pgpass
-                cat /home/jenkins/agent/workspace/.pgpass
+                echo '${env.PG_HOST}:${env.PG_PORT}:*:${env.PG_USER_ROOT}:${env.PG_ROOT_PASSWORD}' > '${env.PGPASSFILE}'
+                echo '${env.PG_HOST}:${env.PG_PORT}:*:${env.PG_USER}:${env.PG_PASSWORD}' >> '${env.PGPASSFILE}'
+                echo '${env.HOST_DUMP}:${env.PORT_DUMP}:*:${env.DB_USER_DUMP}:${env.DB_PASSWORD_DUMP}' >> '${env.PGPASSFILE}'
+                chmod 0600 '${env.PGPASSFILE}'
+                cat '${env.PGPASSFILE}'
+
+                chmod +x source/bash/database/setup-databases.sh
+                ./source/bash/database/setup-databases.sh 
               """
             }
-            sh """
-              chmod +x source/bash/database/setup-databases.sh
-              ./source/bash/database/setup-databases.sh 
-            """
           }
+
         }
       }
     }
@@ -318,46 +253,36 @@ pipeline {
     stage('Deploy em Staging') {
       steps {
         script {
-          withVault(configuration: [
-            engineVersion: 2, 
-            skipSslVerification: true, 
-            timeout: 60, 
-            vaultCredentialId: 'token-admin-vault-plugin', 
-            vaultUrl: 'https://dti-vault.unilab.edu.br'], 
-            vaultSecrets: getSecretsConfig()) {
+
+          withVault([configuration: configuration, vaultSecrets: secrets]) {
             withEnv([
               "PG_USER=${env.PG_USER}",
               "PG_PASSWORD=${env.PG_PASSWORD}",
               "PG_USER_ROOT=${env.PG_USER_ROOT}",
               "PG_ROOT_PASSWORD=${env.PG_ROOT_PASSWORD}",
-              "PG_PASSWORD_HOMOLOGACAO=${env.PG_PASSWORD_HOMOLOGACAO}",
               "DB_USER_DUMP=${env.DB_USER_DUMP}",
-              "DB_PASSWORD_DUMP=${env.DB_PASSWORD_DUMP}", 
-              "DB_DATABASE_SIGAA=${env.DB_DATABASE_SIGAA}",
-              "DB_USERNAME_SIGAA=${env.DB_USERNAME_SIGAA}",
-              "DB_PASSWORD_SIGAA=${env.DB_PASSWORD_SIGAA}",
-              "DB_HOST_SIGAA=${env.DB_HOST_SIGAA}"
-
-            ]) {              
-              }
+              "DB_PASSWORD_DUMP=${env.DB_PASSWORD_DUMP}"
+            ]) {
 
               sh ''' #!/bin/bash 
-              chmod +x source/bash/database/dump-database.sh
-              chmod +x source/bash/database/restore-database.sh
-              ./source/bash/database/dump-database.sh
-              ./source/bash/database/restore-database.sh restore_postgres_homolog
+                chmod +x source/bash/database/dump-database.sh
+                chmod +x source/bash/database/restore-database.sh
+                ./source/bash/database/dump-database.sh
+                ./source/bash/database/restore-database.sh restore_postgres_homolog
               '''
-    
-            sh """
-              sed -i 's/postgres.postgres-3s.svc.cluster.local/10.130.0.154/' ./kubernetes/deployment-3s.yaml
-              sed -i 's/3s-ocorrencias/3s-homologacao/' ./kubernetes/deployment-3s.yaml
-              sed -i 's/:latest/:${env.DOCKER_TAG}/' ./kubernetes/deployment-3s.yaml
-              sed -i 's/.pg_password/.pg_password_staging/' ./kubernetes/deployment-3s.yaml
-              sed -i 's/auth\\/kubernetes\\/c1/auth\\/kubernetes\\/c3/' ./kubernetes/deployment-3s.yaml
-              sed -i 's/10.130.0.153/10.130.2.153/' ./kubernetes/deployment-3s.yaml
-              sed -i 's/dti-app-test-c1.unilab.edu.br/3shomologacao.unilab.edu.br/' ./kubernetes/deployment-3s.yaml
-              cat ./kubernetes/deployment-3s.yaml
-            """
+
+              sh """
+                sed -i 's/postgres.postgres-3s.svc.cluster.local/10.130.0.154/' ./kubernetes/deployment-3s.yaml
+                sed -i 's/3s-ocorrencias/3s-homologacao/' ./kubernetes/deployment-3s.yaml
+                sed -i 's/.db_password_sigaa/.db_password_sigaa_holog/' ./kubernetes/deployment-3s.yaml
+                sed -i 's/.db_host_sigaa/.db_host_sigaa_holog/' ./kubernetes/deployment-3s.yaml
+                sed -i 's/:latest/:${env.DOCKER_TAG}/' ./kubernetes/deployment-3s.yaml
+                sed -i 's/auth\\/kubernetes\\/c1/auth\\/kubernetes\\/c3/' ./kubernetes/deployment-3s.yaml
+                sed -i 's/10.130.0.153/10.130.2.153/' ./kubernetes/deployment-3s.yaml
+                sed -i 's/dti-app-test-c1.unilab.edu.br/3shomologacao.unilab.edu.br/' ./kubernetes/deployment-3s.yaml
+                cat ./kubernetes/deployment-3s.yaml
+              """
+            }
           }
 
           withKubeConfig([credentialsId: 'kubeconfig-c3', serverUrl: 'https://dti-k8s-c3.unilab.edu.br:6443']) {
@@ -390,7 +315,7 @@ pipeline {
             emailext (
               mimeType: 'text/html',
               subject: "Aprovar Deploy [${env.JOB_NAME}] ${currentBuild.fullDisplayName}",
-              to: "${env.recipientLeadEmail}",
+              to: "${env.RECIPIENT_LEAD_EMAILS}",
               body: """
                   <p>Prezado(a) Leader</p>Existe um Continuous Deployment (CD) aguardando aprovação na produção.
                   <h3><a href='${BUILD_URL}input'><strong>Ir para APROVAÇÃO</strong></a></h3>
@@ -412,20 +337,20 @@ pipeline {
 
             switch (approval['Cluster']) {
               case "Kubernetes C1":
-                env.kubeconfigCluster = "c1"
+                env.K8S_CLUSTER = "c1"
                 break
               case "Kubernetes C2": // c2 desabilitado para CD
-                env.kubeconfigCluster = "c1" 
+                env.K8S_CLUSTER = "c1" 
                 break
               case "Kubernetes C3":  // c3 desabilitado para CD
-                env.kubeconfigCluster = "c1"
+                env.K8S_CLUSTER = "c1"
                 break
               default:
                 error "N/A"
             }
 
             withEnv([
-            "kubeconfigCluster=${env.kubeconfigCluster}"
+            "K8S_CLUSTER=${env.K8S_CLUSTER}"
             ]) {
               env.APPROVER_NAME = approval['approver']
             }
@@ -440,70 +365,39 @@ pipeline {
     stage('Deploy Produção') {
       steps {
         script {
-          withVault(configuration: [
-          engineVersion: 2, 
-          skipSslVerification: true, 
-          timeout: 60, 
-          vaultCredentialId: 'token-admin-vault-plugin', 
-          vaultUrl: 'https://dti-vault.unilab.edu.br'], 
-          vaultSecrets: [[
-            engineVersion: 2, 
-            path: 'secret/3s/config', 
-            secretValues: [
-              [envVar: 'PG_USER', isRequired: false, vaultKey: 'pg_user'], 
-              [envVar: 'PG_PASSWORD', isRequired: false, vaultKey: 'pg_password'],
-              [envVar: 'PG_USER_ROOT', isRequired: false, vaultKey: 'pg_user_root'],
-              [envVar: 'PG_ROOT_PASSWORD', isRequired: false, vaultKey: 'pg_root_password'],
-              [envVar: 'PG_PASSWORD_HOMOLOGACAO', isRequired: false, vaultKey: 'db_password_staging'],
-              [envVar: 'DB_USER_DUMP', isRequired: false, vaultKey: 'db_user_dump'],
-              [envVar: 'DB_PASSWORD_DUMP', isRequired: false, vaultKey: 'db_password_dump'],
-              [envVar: 'DB_DATABASE_SIGAA', isRequired: false, vaultKey: 'db_database_sigaa'],
-              [envVar: 'DB_USERNAME_SIGAA', isRequired: false, vaultKey: 'db_username_sigaa'],
-              [envVar: 'DB_PASSWORD_SIGAA', isRequired: false, vaultKey: 'db_password_sigaa'],
-              [envVar: 'DB_HOST_SIGAA', isRequired: false, vaultKey: 'db_host_sigaa'],
-              ]]]) {
-                // some block
-                withEnv([
-                  "PG_USER=${env.PG_USER}",
-                  "PG_PASSWORD=${env.PG_PASSWORD}",
-                  "PG_USER_ROOT=${env.PG_USER_ROOT}",
-                  "PG_ROOT_PASSWORD=${env.PG_ROOT_PASSWORD}",
-                  "PG_PASSWORD_HOMOLOGACAO=${env.PG_PASSWORD_HOMOLOGACAO}",
-                  "DB_USER_DUMP=${env.DB_USER_DUMP}",
-                  "DB_PASSWORD_DUMP=${env.DB_PASSWORD_DUMP}", 
-                  "DB_DATABASE_SIGAA=${env.DB_DATABASE_SIGAA}",
-                  "DB_USERNAME_SIGAA=${env.DB_USERNAME_SIGAA}",
-                  "DB_PASSWORD_SIGAA=${env.DB_PASSWORD_SIGAA}",
-                  "DB_HOST_SIGAA=${env.DB_HOST_SIGAA}"
-                ]) {
 
-                }
-
+          withVault([configuration: configuration, vaultSecrets: secrets]) {
+            withEnv([
+              "PG_USER=${env.PG_USER}",
+              "PG_PASSWORD=${env.PG_PASSWORD}",
+              "PG_USER_ROOT=${env.PG_USER_ROOT}",
+              "PG_ROOT_PASSWORD=${env.PG_ROOT_PASSWORD}",
+              "DB_USER_DUMP=${env.DB_USER_DUMP}",
+              "DB_PASSWORD_DUMP=${env.DB_PASSWORD_DUMP}"
+            ]) {
 
               sh ''' #!/bin/bash 
-              chmod +x source/bash/database/dump-database.sh
-              chmod +x source/bash/database/restore-database.sh
-              ./source/bash/database/dump-database.sh
-              ./source/bash/database/restore-database.sh restore_postgres_prod
+                chmod +x source/bash/database/dump-database.sh
+                chmod +x source/bash/database/restore-database.sh
+                ./source/bash/database/dump-database.sh
+                ./source/bash/database/restore-database.sh restore_postgres_prod
               '''
 
-            sh """
-            sed -i 's/10.130.0.154/postgres.postgres-3s.svc.cluster.local/' ./kubernetes/deployment-3s.yaml
-            sed -i 's/3s-homologacao/3s-ocorrencias/' ./kubernetes/deployment-3s.yaml
-            sed -i 's/:latest/:${env.DOCKER_TAG}/' ./kubernetes/deployment-3s.yaml
-            sed -i 's/.pg_password_staging/.pg_password/' ./kubernetes/deployment-3s.yaml
-            sed -i 's/auth\\/kubernetes\\/c3/auth\\/kubernetes\\/c1/' ./kubernetes/deployment-3s.yaml
-            sed -i 's/10.130.2.153/10.130.0.153/' ./kubernetes/deployment-3s.yaml
-            sed -i 's/3shomologacao.unilab.edu.br/dti-app-test-c1.unilab.edu.br/' ./kubernetes/deployment-3s.yaml
-            cat ./kubernetes/deployment-3s.yaml
-            """
+              sh """
+                sed -i 's/10.130.0.154/postgres.postgres-3s.svc.cluster.local/' ./kubernetes/deployment-3s.yaml
+                sed -i 's/3s-homologacao/3s-ocorrencias/' ./kubernetes/deployment-3s.yaml
+                sed -i 's/.db_password_sigaa_holog/.db_password_sigaa/' ./kubernetes/deployment-3s.yaml
+                sed -i 's/.db_host_sigaa_holog/.db_host_sigaa/' ./kubernetes/deployment-3s.yaml
+                sed -i 's/:${env.DOCKER_TAG}/:${env.DOCKER_TAG}/' ./kubernetes/deployment-3s.yaml
+                sed -i 's/auth\\/kubernetes\\/c3/auth\\/kubernetes\\/c1/' ./kubernetes/deployment-3s.yaml
+                sed -i 's/10.130.2.153/10.130.0.153/' ./kubernetes/deployment-3s.yaml
+                sed -i 's/3shomologacao.unilab.edu.br/dti-app-test-c1.unilab.edu.br/' ./kubernetes/deployment-3s.yaml
+                cat ./kubernetes/deployment-3s.yaml
+              """
+            }
           }
-
-          withKubeConfig([credentialsId: "kubeconfig-${env.kubeconfigCluster}", serverUrl: "https://dti-k8s-${env.kubeconfigCluster}.unilab.edu.br:6443"]) {
-            // Teoricamente --record não é obrigatório, porém, tecnicamente torna-se obrigatório para garantir que as 
-            // alterações deixem um rastro de auditoria rudimentar e cumpram o processo SRE e a cultura DevOps.
-            // Exemplo de uso: kubectl rollout history -n docker deployment.apps/docker
-            // Nota: Quando --record não é sinalizador, na tabela, CHANGE-CAUSE estará apenas <none>
+          
+          withKubeConfig([credentialsId: "kubeconfig-${env.K8S_CLUSTER}", serverUrl: "https://dti-k8s-${env.K8S_CLUSTER}.unilab.edu.br:6443"]) {
             sh """
               set -x
               echo "Verifica deploy ativo e exclui."
@@ -512,10 +406,7 @@ pipeline {
               kubectl delete pods -l app=$APP_NAME -n $APP_NAMESPACE --force --grace-period=0; \
               kubectl delete deployment $APP_NAME -n $APP_NAMESPACE || echo 'DEPLOYMENT INEXISTENTE!'
               
-              echo "Aplica deploy."
               kubectl apply -f ./kubernetes/deployment-3s.yaml --record
-
-              echo "Lista de recursos."
               kubectl get all,sa,ing,pvc -n $APP_NAMESPACE -o wide
             """
             env.APP_URI_PROD = sh(script: 'kubectl get ingress app-3s -n app-3s -o jsonpath="{.spec.rules[0].host}" | sed "s/^/http:\\/\\//"', returnStdout: true).trim()
@@ -523,16 +414,18 @@ pipeline {
               sh 'echo Endpoint: $APP_URI_PROD'
             }
           }
+
         }
       }
     }
-
   }
+
   post{
     always {
       echo 'Processo de pipeline finalizado.'
       slackSend(color: "warning", message: "Pipeline #${env.BUILD_NUMBER} finalizada com ${currentBuild.currentResult} em ${env.JOB_NAME} (<${env.BUILD_URL}|Mais info...>)")
     }
+
     success {
       echo 'Processo de pipeline BEM-SUCEDIDO.'
       emailext (
@@ -544,17 +437,18 @@ pipeline {
           Parabéns! Team
           <p>Pipeline completada com: ${currentBuild.currentResult}</p>
           Detalhes da execução da pipeline: ${env.BUILD_URL}<br />
-          Detalhes do teste de qualidade: ${env.SONAR_URL}/dashboard?id=${env.APP_NAME}<br /></p>
+          Detalhes do teste de qualidade: ${env.SONAR_URL}/dashboard?id=${env.SONAR_PROJECT_KEY}<br /></p>
           Endpoint de homologação: ${env.APP_URI_STAGING}<br />
           Endpoint de produção: ${env.APP_URI_PROD}<br />
           Deploy aprovado por: <strong>${env.APPROVER_NAME}</strong></p><br />
           <p>${env.EMAIL_ASSINATURA}</p><hr><p>${env.EMAIL_RODAPE}</p>
           """,
-          to: "${env.recipientLeadEmail}, ${env.recipientTeamEmails}",
+          to: "${env.RECIPIENT_LEAD_EMAILS}, ${env.RECIPIENT_TEAM_EMAILS}",
           recipientProviders: []
         )
       slackSend(color: "good", message: "Pipeline #${env.BUILD_NUMBER} completada com ${currentBuild.currentResult} em ${env.JOB_NAME} (<${env.BUILD_URL}|Mais info...>)")
     }
+
     failure {
       echo 'Processo de pipeline executado com falha.'
       emailext (
@@ -568,14 +462,16 @@ pipeline {
           Detalhes da execução da pipeline: ${env.BUILD_URL}</p><br />
           <p>${env.EMAIL_ASSINATURA}</p><hr><p>${env.EMAIL_RODAPE}</p>
           """,
-          to: "${env.recipientTeamEmails}",
+          to: "${env.RECIPIENT_TEAM_EMAILS}",
           recipientProviders: []
-        )
+      )
       slackSend(color: "danger", message: "Pipeline #${env.BUILD_NUMBER} ${currentBuild.currentResult} em ${env.JOB_NAME} (<${env.BUILD_URL}|Mais info...>)")
     }
+
     unstable {
       echo 'Processo de pipeline possui estabilidade.'
     }
+
     changed {
       echo 'SUCESSO no processo de pipeline anteriormente falhado.'
     }
