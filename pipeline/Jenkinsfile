@@ -41,7 +41,7 @@ pipeline {
     /* Gerais */
     APP_NAME = "app-3s"
     APP_NAMESPACE = "app-3s"
-    TAG = sh(returnStdout: true, script: "git rev-parse --short=10 HEAD").trim()
+    TAG = sh(returnStdout: true, script: "git describe --tags --abbrev=0").trim()
     APP_VERSION = "${env.TAG}"
     DOCKER_TAG = "${env.GIT_BRANCH.split('/')[-1]}"
     DOCKER_IMAGE = "dti-registro.unilab.edu.br/unilab/${APP_NAME}"
