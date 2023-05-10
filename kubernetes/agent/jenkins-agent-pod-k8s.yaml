@@ -114,7 +114,7 @@ spec:
     # https://hub.docker.com/_/php/tags
     - name: php8
       image: php:8.1-apache-bullseye
-      command: ["tail", "-f", "/dev/null"]  # este ou qualquer comando que seja basicamente um noop é necessário, isso é para que não substitua o ponto de entrada do contêiner base
+      command: ["bash", "-c", "apt-get update && apt-get install -y git && tail -f /dev/null"]  # este ou qualquer comando que seja basicamente um noop é necessário, isso é para que não substitua o ponto de entrada do contêiner base
       imagePullPolicy: Always # use o cache ou puxe a imagem para o agente
       resources:  # limites e recursos que o build contém
         requests:
