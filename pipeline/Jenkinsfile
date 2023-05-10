@@ -212,7 +212,7 @@ pipeline {
       }
     }
 
-    stage('Setup Database') {
+    stage('Database Migrate') {
       steps {
         script {
           withKubeConfig([credentialsId: 'kubeconfig-c1', serverUrl: 'https://dti-k8s-c1.unilab.edu.br:6443']) {
