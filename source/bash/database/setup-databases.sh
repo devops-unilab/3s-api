@@ -85,7 +85,7 @@ function create_user_admin() {
                 REPLICATION
                 INHERIT
                 CONNECTION LIMIT -1
-                ENCRYPTED PASSWORD 'md5e198c1d8066ea1d215b5307a524fb7fb';
+                ENCRYPTED PASSWORD 'md5a55e030aa352789c13ed92cbece13f1e';
 
             COMMENT ON ROLE $username IS 'Usuario admin padrao';
 EOSQL
@@ -103,7 +103,7 @@ function create_user_regular() {
                 REPLICATION
                 INHERIT
                 CONNECTION LIMIT -1
-                ENCRYPTED PASSWORD 'md5e198c1d8066ea1d215b5307a524fb7fb';
+                ENCRYPTED PASSWORD 'md5a55e030aa352789c13ed92cbece13f1e';
 
             COMMENT ON ROLE $username IS 'Usuario regular padrao';
 EOSQL
@@ -140,8 +140,8 @@ function create_database() {
             OWNER = '$user'
             ENCODING = 'UTF8'
             CONNECTION LIMIT = -1
-            TEMPLATE template0;
-
+            IS_TEMPLATE = False;
+            
         COMMENT ON DATABASE "$database" IS 'Dadabase PostgreSQL $database';
 EOSQL
 }
@@ -168,6 +168,7 @@ function atribui_privilegios_owner() {
     psql -v ON_ERROR_STOP=1 -d $connection_string_root_con <<-EOSQL
         ALTER DATABASE "$database" OWNER TO $user;
         GRANT ALL PRIVILEGES ON DATABASE "$database" TO $user;
+        GRANT ALL ON DATABASE "$database" TO $user;
 EOSQL
 }
 
@@ -176,7 +177,6 @@ function atribui_default_privilegios_users_database() {
     local user="$2"
     local user_database_owner="$3"
     psql -v ON_ERROR_STOP=1 -d $connection_string_root_con_bd/$database <<-EOSQL
-        ALTER DEFAULT PRIVILEGES FOR ROLE $user_database_owner GRANT ALL ON TABLES TO PUBLIC;
         ALTER DEFAULT PRIVILEGES FOR ROLE $user_database_owner GRANT ALL ON TABLES TO $user;
 EOSQL
 }
@@ -185,6 +185,13 @@ function remove_privilegio_superuser() {
     local user="$1"
     psql -v ON_ERROR_STOP=1 -d $connection_string_root_con <<-EOSQL
         ALTER ROLE "$user" NOSUPERUSER;
+EOSQL
+}
+
+function remove_schema() {
+    local user="$1"
+    psql -v ON_ERROR_STOP=1 -d $connection_string_root_con <<-EOSQL
+        DROP SCHEMA IF EXISTS "$user" CASCADE;
 EOSQL
 }
 
@@ -226,6 +233,7 @@ for i in ${!array_users[@]}; do
     if [[ $(check_owner_database "$PG_DATABASE" "$username") -eq 0 ]]; then
         atribui_privilegios_owner "$PG_DATABASE" "$username"
         remove_privilegio_superuser "$username"
+        remove_schema "$username"
     fi
 
     if [[ $(check_owner_database "$PG_DATABASE_HOMOLOGACAO" "$username") -eq 0 ]]; then
