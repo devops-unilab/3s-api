@@ -70,17 +70,12 @@ function database_exists() {
 
 function user_exists() {
     local username="$1"
-    local result=$(psql -tA $connection_string_root_con -c "SELECT 1 FROM pg_roles WHERE rolname='$username';")
-    if [[ "$result" -eq 1 ]]; then
-        return 1
-    else
-        return 0
-    fi
+    return=$(psql -tA $connection_string_root_con -c "SELECT 1 FROM pg_roles WHERE rolname='$username';" | grep -c 1)
 }
 
 function create_user_admin() { 
     local username=$1
-    if ! [[ $(user_exists "$username") -eq 0 ]]; then
+    if [[ $(user_exists "$username") -eq 0 ]]; then
         psql -v ON_ERROR_STOP=1 -d $connection_string_root_con <<-EOSQL
             CREATE ROLE $username WITH
                 SUPERUSER
@@ -99,7 +94,7 @@ EOSQL
 
 function create_user_regular() {
     local username=$1
-    if ! [[ $(user_exists "$username") -eq 0 ]]; then
+    if [[ $(user_exists "$username") -eq 0 ]]; then
         psql -v ON_ERROR_STOP=1 -d $connection_string_root_con <<-EOSQL
             CREATE ROLE $username WITH
                 LOGIN 
