@@ -43,6 +43,7 @@ readonly MAX_ATTEMPTS=25
 readonly WAIT_TIME=15
 
 connection_string_root_con="postgresql://$PG_USER_ROOT:$PG_ROOT_PASSWORD@$PG_HOST:$PG_PORT/$PG_DATABASE" 
+connection_string_root_con_bd="postgresql://$PG_USER_ROOT:$PG_ROOT_PASSWORD@$PG_HOST:$PG_PORT" 
 
 # funcoes gerais
 function verifica_postgres() {
@@ -76,13 +77,6 @@ function user_exists() {
         return 0
     fi
 }
-
-    if [[ "$result" == "t" ]]; then
-        return 1
-    else
-        return 0
-    fi
-
 
 function create_user_admin() { 
     local username=$1
@@ -186,8 +180,7 @@ function atribui_default_privilegios_users_database() {
     local database="$1"
     local user="$2"
     local user_database_owner="$3"
-    connection_string_root_con="${connection_string_root_con%/*}"
-    psql -v ON_ERROR_STOP=1 -d "$connection_string_root_con/$database" <<-EOSQL
+    psql -v ON_ERROR_STOP=1 -d $connection_string_root_con_bd/$database <<-EOSQL
         ALTER DEFAULT PRIVILEGES FOR ROLE $user_database_owner GRANT ALL ON TABLES TO PUBLIC;
         ALTER DEFAULT PRIVILEGES FOR ROLE $user_database_owner GRANT ALL ON TABLES TO $user;
 EOSQL
@@ -228,33 +221,7 @@ for i in ${!array_users[@]}; do
         atribui_privilegios "$PG_DATABASE_HOMOLOGACAO" "$username"
         atribui_default_privilegios_users_database "$PG_DATABASE_HOMOLOGACAO" "$username" "$USER_OWNER_DATABASE_DUMP"
     fi
-
-    # if [[ $(check_owner_database "$PG_DATABASE" "$username") -eq 0 ]]; then
-    #     atribui_privilegios_owner "$PG_DATABASE" "$username"
-    # fi
-
-    # if [[ $(check_owner_database "$PG_DATABASE_HOMOLOGACAO" "$username") -eq 0 ]]; then
-    #     atribui_privilegios_owner "$PG_DATABASE_HOMOLOGACAO" "$username"
-    # fi
 done
-
-# # Setup user regular
-# array_users=(${USERS_DUMP})
-# for i in ${!array_users[@]}; do
-#     username="${array_users[$i]}"
-
-#     create_user_regular "$username"
-
-#     if [[ $(check_user_privilegios "$PG_DATABASE" "$username") -eq 0 ]]; then
-#         atribui_privilegios "$PG_DATABASE" "$username"
-#         atribui_default_privilegios_users_database "$PG_DATABASE" "$username" "$USER_OWNER_DATABASE_DUMP"
-#     fi
-
-#     if [[ $(check_user_privilegios "$PG_DATABASE_HOMOLOGACAO" "$username") -eq 0 ]]; then
-#         atribui_privilegios "$PG_DATABASE_HOMOLOGACAO" "$username"
-#         atribui_default_privilegios_users_database "$PG_DATABASE_HOMOLOGACAO" "$username" "$USER_OWNER_DATABASE_DUMP"
-#     fi
-# done
 
 # Setup user owner database
 array_users=(${USER_OWNER_DATABASE_DUMP})
