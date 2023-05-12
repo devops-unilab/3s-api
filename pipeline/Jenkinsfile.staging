@@ -72,8 +72,7 @@ pipeline {
     HOST_DUMP = "200.129.19.134"
     PORT_DUMP = "5432"
     USER_OWNER_DATABASE_DUMP = "ocorrencias_user"
-    USERS_DUMP = '"cicero_robson" "luansidney" "manoeljr" "rafael" "tiago17" "admindti" "3s" "dev"'
-    USERS_DUMP_ROOT = '"3s" "admindti"'
+    USERS_DUMP = '"cicero_robson" "luansidney" "manoeljr" "rafael" "tiago17" "admindti" "3s"'
     PGPASSFILE = "/home/jenkins/agent/workspace/.pgpass"
   }
 
