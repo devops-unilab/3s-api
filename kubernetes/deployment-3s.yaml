@@ -209,6 +209,7 @@ spec:
   type: LoadBalancer
   loadBalancerIP: 10.130.0.153
   externalTrafficPolicy: Local
+  
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
