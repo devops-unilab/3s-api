@@ -212,16 +212,24 @@ array_users=(${USERS_DUMP})
 for i in ${!array_users[@]}; do
     username="${array_users[$i]}"
 
-    create_user_admin "$username"
+    if [[ "$username" == "dev" ]]; then
+        create_user_admin "$username"
+        if [[ $(check_user_privilegios "$PG_DATABASE_HOMOLOGACAO" "$username") -eq 0 ]]; then
+            atribui_privilegios "$PG_DATABASE_HOMOLOGACAO" "$username"
+            atribui_default_privilegios_users_database "$PG_DATABASE_HOMOLOGACAO" "$username" "$USER_OWNER_DATABASE_DUMP"
+        fi
+    else
+        create_user_admin "$username"
 
-    if [[ $(check_user_privilegios "$PG_DATABASE" "$username") -eq 0 ]]; then
-        atribui_privilegios "$PG_DATABASE" "$username"
-        atribui_default_privilegios_users_database "$PG_DATABASE" "$username" "$USER_OWNER_DATABASE_DUMP"
-    fi
+        if [[ $(check_user_privilegios "$PG_DATABASE" "$username") -eq 0 ]]; then
+            atribui_privilegios "$PG_DATABASE" "$username"
+            atribui_default_privilegios_users_database "$PG_DATABASE" "$username" "$USER_OWNER_DATABASE_DUMP"
+        fi
 
-    if [[ $(check_user_privilegios "$PG_DATABASE_HOMOLOGACAO" "$username") -eq 0 ]]; then
-        atribui_privilegios "$PG_DATABASE_HOMOLOGACAO" "$username"
-        atribui_default_privilegios_users_database "$PG_DATABASE_HOMOLOGACAO" "$username" "$USER_OWNER_DATABASE_DUMP"
+        if [[ $(check_user_privilegios "$PG_DATABASE_HOMOLOGACAO" "$username") -eq 0 ]]; then
+            atribui_privilegios "$PG_DATABASE_HOMOLOGACAO" "$username"
+            atribui_default_privilegios_users_database "$PG_DATABASE_HOMOLOGACAO" "$username" "$USER_OWNER_DATABASE_DUMP"
+        fi
     fi
 done
 

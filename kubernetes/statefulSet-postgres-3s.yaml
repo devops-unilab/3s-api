@@ -13,7 +13,7 @@ metadata:
   labels:
     app: postgres
 data:
-  PG_USER: "3s"
+  PG_USER: "ocorrencias_user"
   PG_PRIMARY_USER: primary
   PGHOST: "/tmp"
   PG_MODE: "primary"
