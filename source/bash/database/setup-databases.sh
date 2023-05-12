@@ -186,6 +186,7 @@ function atribui_default_privilegios_users_database() {
     local database="$1"
     local user="$2"
     local user_database_owner="$3"
+    connection_string_root_con="${connection_string_root_con%/*}"
     psql -v ON_ERROR_STOP=1 -d "$connection_string_root_con/$database" <<-EOSQL
         ALTER DEFAULT PRIVILEGES FOR ROLE $user_database_owner GRANT ALL ON TABLES TO PUBLIC;
         ALTER DEFAULT PRIVILEGES FOR ROLE $user_database_owner GRANT ALL ON TABLES TO $user;
