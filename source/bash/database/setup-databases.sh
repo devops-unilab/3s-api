@@ -179,7 +179,8 @@ function atribui_default_privilegios_users_database() {
     local user="$2"
     local user_database_owner="$3"
     psql -v ON_ERROR_STOP=1 -d $connection_string_root_con_bd/$database <<-EOSQL
-        ALTER DEFAULT PRIVILEGES FOR ROLE $user_database_owner GRANT ALL ON TABLES TO $user;
+        ALTER DEFAULT PRIVILEGES FOR ROLE $user_database_owner
+        GRANT ALL ON TABLES TO $user;
 EOSQL
 }
 
