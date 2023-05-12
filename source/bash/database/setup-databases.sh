@@ -65,12 +65,14 @@ function verifica_postgres() {
 
 function database_exists() { 
     local database_name="$1"
-    return=$(psql -tA $connection_string_root_con -c "SELECT 1 FROM pg_database WHERE datname='$database_name';" | grep -c 1)
+    local result=$(psql -tA $connection_string_root_con -c "SELECT 1 FROM pg_database WHERE datname='$database_name';" | grep -c 1)
+    return $result
 }
 
 function user_exists() {
     local username="$1"
-    return=$(psql -tA $connection_string_root_con -c "SELECT 1 FROM pg_roles WHERE rolname='$username';" | grep -c 1)
+    local result=$(psql -tA $connection_string_root_con -c "SELECT 1 FROM pg_roles WHERE rolname='$username';" | grep -c 1)
+    return $result
 }
 
 function create_user_admin() { 

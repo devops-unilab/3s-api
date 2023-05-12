@@ -148,7 +148,7 @@ spec:
             export DB_USER_DUMP='{{ .Data.data.db_user_dump }}'
             export DB_PASSWORD_DUMP='{{ .Data.data.db_password_dump }}'
           {{- end }} 
-        vault.hashicorp.com/role: "3s-role"
+        vault.hashicorp.com/role: "3s-postgres-role"
         vault.hashicorp.com/auth-path: auth/kubernetes/c1
     spec:
       serviceAccount: postgres-3s-sa
