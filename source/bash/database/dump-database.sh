@@ -48,7 +48,8 @@ connection_string_dump_dump="postgresql://$DB_USER_DUMP:$DB_PASSWORD_DUMP@$HOST_
 # Aguardar até não haver atividades no banco de dados
 while [[ $(psql $connection_string_dump_con -c "SELECT count(*) FROM pg_stat_activity WHERE datname = '$DB_DATABASE_DUMP';" -t) -gt 0 ]]
 do
-  echo "Ainda há atividades de banco de dados. Aguardando..."
+  echo "Ainda há atividades de banco de dados. Fechando conexão..."
+  psql $connection_string_dump_con -c "SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE datname = '$DB_DATABASE_DUMP';"
   sleep $WAIT_TIME
   attempts=$((attempts+2))
   if [ $attempts -eq $MAX_ATTEMPTS ]; then
