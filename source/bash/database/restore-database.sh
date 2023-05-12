@@ -47,7 +47,7 @@ function restore_postgres_prod() {
     echo "Gerando o mapa de referencia para lista de objetos..."
     pg_restore --list /tmp/bd_pg_dump.dmp | sed -E 's/(.* EXTENSION )/; \1/g' > /tmp/bd_pg_dump.toc
     echo "Iniciando restore do banco de dados..."
-    pg_restore --verbose -j 2 -Fc -c -L /tmp/bd_pg_dump.toc -d $connection_string_root_con /tmp/bd_pg_dump.dmp
+    pg_restore --verbose --no-privileges -j 2 -Fc -c --if-exists -L /tmp/bd_pg_dump.toc -d $connection_string_root_con /tmp/bd_pg_dump.dmp
     if [ "$?" -ne 0 ]; then
         echo "Erro ao restaurar o database!"
         exit 1
@@ -61,7 +61,7 @@ function restore_postgres_homolog() {
     echo "Gerando o mapa de referencia para lista de objetos..."
     pg_restore --list /tmp/bd_pg_dump.dmp | sed -E 's/(.* EXTENSION )/; \1/g' > /tmp/bd_pg_dump.toc
     echo "Iniciando restore do banco de dados..."
-    pg_restore --verbose -j 2 -Fc -c -L /tmp/bd_pg_dump.toc -d $connection_string_root_con /tmp/bd_pg_dump.dmp
+    pg_restore --verbose --no-privileges -j 2 -Fc -c --if-exists -L /tmp/bd_pg_dump.toc -d $connection_string_root_con /tmp/bd_pg_dump.dmp
     if [ "$?" -ne 0 ]; then
         echo "Erro ao restaurar o database!"
         exit 1
