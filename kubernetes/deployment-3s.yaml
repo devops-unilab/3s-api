@@ -87,8 +87,6 @@ metadata:
   namespace: app-3s
   labels:
     app: app-3s
-  annotations:
-    nfs.io/storage-path: "uploads"
 spec:
   storageClassName: nfs-storage-k8s
   accessModes:
