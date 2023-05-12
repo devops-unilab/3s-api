@@ -85,7 +85,7 @@ function create_user_admin() {
                 REPLICATION
                 INHERIT
                 CONNECTION LIMIT -1
-                ENCRYPTED PASSWORD 'md5a55e030aa352789c13ed92cbece13f1e';
+                ENCRYPTED PASSWORD 'md50425ce7fc5ce2b94d7557195912fed53';
 
             COMMENT ON ROLE $username IS 'Usuario admin padrao';
 EOSQL
@@ -103,7 +103,7 @@ function create_user_regular() {
                 REPLICATION
                 INHERIT
                 CONNECTION LIMIT -1
-                ENCRYPTED PASSWORD 'md5a55e030aa352789c13ed92cbece13f1e';
+                ENCRYPTED PASSWORD 'md50425ce7fc5ce2b94d7557195912fed53';
 
             COMMENT ON ROLE $username IS 'Usuario regular padrao';
 EOSQL
@@ -212,8 +212,8 @@ array_users=(${USERS_DUMP})
 for i in ${!array_users[@]}; do
     username="${array_users[$i]}"
 
-    if [[ "$username" == "dev" ]]; then
-        create_user_admin "$username"
+    if [[ "$username" == "3s" ]]; then
+        create_user_regular "$username"
         if [[ $(check_user_privilegios "$PG_DATABASE_HOMOLOGACAO" "$username") -eq 0 ]]; then
             atribui_privilegios "$PG_DATABASE_HOMOLOGACAO" "$username"
             atribui_default_privilegios_users_database "$PG_DATABASE_HOMOLOGACAO" "$username" "$USER_OWNER_DATABASE_DUMP"

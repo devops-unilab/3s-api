@@ -32,13 +32,13 @@ services:
   ###################################
   # Application
   ################################### 
-  app-debug:
+  app-dev-build:
     build:
-      context: ./source/
+      context: .
       dockerfile: $PWD/Dockerfile
       target: dev
     image: dti-registro.unilab.edu.br/unilab/app-3s:debug
-    container_name: 3s-debug
+    container_name: 3s-build
     restart: always
     user: "root:www-data"
     env_file:

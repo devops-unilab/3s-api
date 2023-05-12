@@ -46,6 +46,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   git \
   unzip \
   libpq-dev \
+  iputils-ping \
+  telnet \
   postgresql-client \
   && rm -rf /var/lib/apt/lists/*
 
@@ -79,24 +81,21 @@ RUN dpkg-reconfigure locales tzdata -f noninteractive
 ENV APACHE_RUN_USER www-data
 ENV APACHE_RUN_GROUP www-data
 
-RUN cd /opt \
+RUN cd /tmp \
   && curl -sS https://getcomposer.org/installer -o composer-setup.php \
   && php composer-setup.php --install-dir=/usr/local/bin --filename=composer \
-  && composer 
+  && composer
 
-# Proj EXISTENTE
 COPY source/ /var/www/html
 RUN mkdir -p ./public/uploads/ocorrencia/anexo
  
-RUN composer install --ignore-platform-reqs --no-interaction --no-progress --no-scripts --optimize-autoloader \
-  && php artisan -V
+RUN composer install --ignore-platform-reqs --no-interaction --no-progress --no-scripts --optimize-autoloader
 
 RUN sed -i "s/'default' => env('DB_CONNECTION', 'mysql'),/'default' => env('DB_CONNECTION', 'pgsql'),/g" config/database.php
 RUN sed -i "s/        \/\//        '*',/g" app/Http/Middleware/VerifyCsrfToken.php
 RUN cp bash/apache/000-default.conf /etc/apache2/sites-available/000-default.conf \
   && apachectl configtest
 
-# Setup user and ssh
 RUN adduser --no-create-home --disabled-password --shell /bin/bash --gecos "" --force-badname 3s \
   && echo "3s ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
 RUN sed -i "s/#Port 22/Port 22/g" /etc/ssh/sshd_config
@@ -133,6 +132,8 @@ RUN php artisan config:cache && \
   chmod 777 -R /var/www/html/storage/ && \
   chown -Rf www-data:www-data /var/www/ && \
   a2enmod rewrite
+
+RUN chown -R www-data:www-data /var/www/html/public/uploads && chmod -R 644 /var/www/html/public/uploads
 
 VOLUME ["/var/www/html/public/uploads"]
 
