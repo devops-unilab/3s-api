@@ -41,7 +41,7 @@ set +eu
 # Recupera a function
 fn_name=$1
 
-# Funcoes restore
+# Funcoes database
 function restore_postgres_prod() {
     local connection_string_root_con="postgresql://$PG_USER_ROOT:$PG_ROOT_PASSWORD@$PG_HOST:$PG_PORT/$PG_DATABASE" 
     echo "Gerando o mapa de referencia para lista de objetos..."
@@ -57,7 +57,7 @@ function restore_postgres_prod() {
 }
 
 function restore_postgres_homolog() {
-    local connection_string_root_con="postgresql://$PG_USER_ROOT:$PG_ROOT_PASSWORD@$PG_HOST:$PG_PORT/$PG_DATABASE_HOMOLOGACAO" 
+    local connection_string_root_con="postgresql://$PG_USER_ROOT:$PG_ROOT_PASSWORD@$PG_HOST:$PG_PORT/$PG_DATABASE_HOMOLOGACAO"
     echo "Gerando o mapa de referencia para lista de objetos..."
     pg_restore --list /tmp/bd_pg_dump.dmp | sed -E 's/(.* EXTENSION )/; \1/g' > /tmp/bd_pg_dump.toc
     echo "Iniciando restore do banco de dados..."

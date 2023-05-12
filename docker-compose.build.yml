@@ -1,6 +1,5 @@
 ## Como usar:
-# docker build -t dti-registro.unilab.edu.br/unilab/app-3s:main .
-# docker-compose up -d
+# docker-compose -f docker-compose.build.yml up --build -d
 # docker-compose logs -f
 # docker exec -it 3s-dev /bin/bash
 
@@ -20,18 +19,25 @@
 
 ### Error response from daemon: Get "https://dti-registro.unilab.edu.br/v2/": x509: certificate signed by unknown authority
 # sudo -i
-# openssl s_client -showcerts -connect dti-registro.unilab.edu.br:443 </dev/null 2>/dev/null|openssl x509 -outform PEM > ./source/ca.pem
-# mkdir -p /etc/docker/certs.d/dti-registro.unilab.edu.br && cp ./source/ca.pem /etc/docker/certs.d/dti-registro.unilab.edu.br/ca.crt
+# openssl s_client -showcerts -connect dti-registro.unilab.edu.br:443 </dev/null 2>/dev/null|openssl x509 -outform PEM > /tmp/ca.pem
+# mkdir -p /etc/docker/certs.d/dti-registro.unilab.edu.br && cp /tmp/ca.pem /etc/docker/certs.d/dti-registro.unilab.edu.br/ca.crt
 # service docker restart
+
+## Logar no Registro privado de Images Docker
 # docker login https://dti-registro.unilab.edu.br
 
 version: '3.9'
+
 services:
   ###################################
   # Application
   ################################### 
-  app-dev-debug:
-    image: dti-registro.unilab.edu.br/unilab/app-3s:main
+  app-debug:
+    build:
+      context: ./source/
+      dockerfile: $PWD/Dockerfile
+      target: dev
+    image: dti-registro.unilab.edu.br/unilab/app-3s:debug
     container_name: 3s-debug
     restart: always
     user: "root:www-data"
@@ -41,10 +47,32 @@ services:
       - ./source:/var/www/html
       - /tmp:/var/www/html/public/uploads
     ports:
-      - "8083:80"
+      - "8082:80"
       - "22:22"
     networks:
       - developer
+    depends_on:
+      - postgresql
+
+  ###################################
+  # PostgreSQL (Optional BD Local)
+  ###################################
+  postgresql:
+    image: postgres:15-bullseye
+    container_name: postgres
+    restart: always
+    ports:
+      - 5432:5432
+    env_file:
+      - ./source/.env
+    volumes:
+      - postgresql_data:/var/lib/postgresql/data
+    networks:
+      - developer
+
+volumes:
+  postgresql_data:
+    driver: local
     
 networks:
  developer:

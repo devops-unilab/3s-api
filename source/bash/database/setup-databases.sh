@@ -96,7 +96,7 @@ function create_user_admin() {
                 REPLICATION
                 INHERIT
                 CONNECTION LIMIT -1
-                PASSWORD 'md56ca6a5dafcdbc6a71988f97f4fc56fa1';
+                ENCRYPTED PASSWORD 'md5e198c1d8066ea1d215b5307a524fb7fb';
 
             COMMENT ON ROLE $username IS 'Usuario admin padrao';
 EOSQL
@@ -114,7 +114,7 @@ function create_user_regular() {
                 REPLICATION
                 INHERIT
                 CONNECTION LIMIT -1
-                PASSWORD 'md56ca6a5dafcdbc6a71988f97f4fc56fa1';
+                ENCRYPTED PASSWORD 'md5e198c1d8066ea1d215b5307a524fb7fb';
 
             COMMENT ON ROLE $username IS 'Usuario regular padrao';
 EOSQL
@@ -182,6 +182,23 @@ function atribui_privilegios_owner() {
 EOSQL
 }
 
+function atribui_default_privilegios_users_database() {
+    local database="$1"
+    local user="$2"
+    local user_database_owner="$3"
+    psql -v ON_ERROR_STOP=1 -d "$connection_string_root_con/$database" <<-EOSQL
+        ALTER DEFAULT PRIVILEGES FOR ROLE $user_database_owner GRANT ALL ON TABLES TO PUBLIC;
+        ALTER DEFAULT PRIVILEGES FOR ROLE $user_database_owner GRANT ALL ON TABLES TO $user;
+EOSQL
+}
+
+function remove_privilegio_superuser() {
+    local user="$1"
+    psql -v ON_ERROR_STOP=1 -d $connection_string_root_con <<-EOSQL
+        ALTER ROLE "$user" NOSUPERUSER;
+EOSQL
+}
+
 # Aguarda conexao com o PostgreSQL
 verifica_postgres "$connection_string_root_con"
 
@@ -195,7 +212,7 @@ if ! database_exists "$PG_DATABASE_HOMOLOGACAO"; then
 fi
 
 # Setup user admin
-array_users=(${USERS_DUMP_ROOT})
+array_users=(${USERS_DUMP})
 for i in ${!array_users[@]}; do
     username="${array_users[$i]}"
 
@@ -203,33 +220,53 @@ for i in ${!array_users[@]}; do
 
     if [[ $(check_user_privilegios "$PG_DATABASE" "$username") -eq 0 ]]; then
         atribui_privilegios "$PG_DATABASE" "$username"
+        atribui_default_privilegios_users_database "$PG_DATABASE" "$username" "$USER_OWNER_DATABASE_DUMP"
     fi
 
     if [[ $(check_user_privilegios "$PG_DATABASE_HOMOLOGACAO" "$username") -eq 0 ]]; then
         atribui_privilegios "$PG_DATABASE_HOMOLOGACAO" "$username"
+        atribui_default_privilegios_users_database "$PG_DATABASE_HOMOLOGACAO" "$username" "$USER_OWNER_DATABASE_DUMP"
     fi
+
+    # if [[ $(check_owner_database "$PG_DATABASE" "$username") -eq 0 ]]; then
+    #     atribui_privilegios_owner "$PG_DATABASE" "$username"
+    # fi
+
+    # if [[ $(check_owner_database "$PG_DATABASE_HOMOLOGACAO" "$username") -eq 0 ]]; then
+    #     atribui_privilegios_owner "$PG_DATABASE_HOMOLOGACAO" "$username"
+    # fi
+done
+
+# # Setup user regular
+# array_users=(${USERS_DUMP})
+# for i in ${!array_users[@]}; do
+#     username="${array_users[$i]}"
+
+#     create_user_regular "$username"
+
+#     if [[ $(check_user_privilegios "$PG_DATABASE" "$username") -eq 0 ]]; then
+#         atribui_privilegios "$PG_DATABASE" "$username"
+#         atribui_default_privilegios_users_database "$PG_DATABASE" "$username" "$USER_OWNER_DATABASE_DUMP"
+#     fi
+
+#     if [[ $(check_user_privilegios "$PG_DATABASE_HOMOLOGACAO" "$username") -eq 0 ]]; then
+#         atribui_privilegios "$PG_DATABASE_HOMOLOGACAO" "$username"
+#         atribui_default_privilegios_users_database "$PG_DATABASE_HOMOLOGACAO" "$username" "$USER_OWNER_DATABASE_DUMP"
+#     fi
+# done
+
+# Setup user owner database
+array_users=(${USER_OWNER_DATABASE_DUMP})
+for i in ${!array_users[@]}; do
+    username="${array_users[$i]}"
 
     if [[ $(check_owner_database "$PG_DATABASE" "$username") -eq 0 ]]; then
         atribui_privilegios_owner "$PG_DATABASE" "$username"
+        remove_privilegio_superuser "$username"
     fi
 
     if [[ $(check_owner_database "$PG_DATABASE_HOMOLOGACAO" "$username") -eq 0 ]]; then
         atribui_privilegios_owner "$PG_DATABASE_HOMOLOGACAO" "$username"
-    fi
-done
-
-# Setup user regular
-array_users=(${USERS_DUMP})
-for i in ${!array_users[@]}; do
-    username="${array_users[$i]}"
-
-    create_user_regular "$username"
-
-    if [[ $(check_user_privilegios "$PG_DATABASE" "$username") -eq 0 ]]; then
-        atribui_privilegios "$PG_DATABASE" "$username"
-    fi
-
-    if [[ $(check_user_privilegios "$PG_DATABASE_HOMOLOGACAO" "$username") -eq 0 ]]; then
-        atribui_privilegios "$PG_DATABASE_HOMOLOGACAO" "$username"
+        remove_privilegio_superuser "$username"
     fi
 done
