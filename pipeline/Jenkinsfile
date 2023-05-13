@@ -74,8 +74,8 @@ pipeline {
     DB_DATABASE_DUMP = "ocorrencias"
     HOST_DUMP = "200.129.19.134"
     PORT_DUMP = "5432"
-    USERS_DUMP = '"cicero_robson" "luansidney" "manoeljr"'
-    USERS_DUMP_ROOT = '"ocorrencias_user" "admindti" "3s"'
+    USER_OWNER_DATABASE_DUMP = "ocorrencias_user"
+    USERS_DUMP = '"cicero_robson" "luansidney" "manoeljr" "rafael" "tiago17" "admindti" "3s"'
     PGPASSFILE = "/home/jenkins/agent/workspace/.pgpass"
     APROVADORES = "admin, erivandosena, michel, jefponte"
   }
@@ -88,7 +88,7 @@ pipeline {
           currentBuild.displayName = "$BUILD_DISPLAY_NAME (${GIT_COMMIT.take(8)})"
           workspace = "$env.WORKSPACE"
         }
-        
+
         // executar alguns comandos shell para configurar outros detalhes.
         sh '''
           # Instala pacotes
@@ -204,7 +204,6 @@ pipeline {
               sh """
                 echo \${HARBOR_PASSWORD} | docker login --username \${HARBOR_USERNAME} --password-stdin https://dti-registro.unilab.edu.br
                 unset HARBOR_PASSWORD
-
                 docker tag \${DOCKER_IMAGE}:\${DOCKER_TAG} \${DOCKER_IMAGE}:\${TAG}
                 docker push \${DOCKER_IMAGE}:\${TAG}
               """
