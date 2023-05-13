@@ -47,6 +47,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   libpq-dev \
   iputils-ping \
   telnet \
+  sudo \
   postgresql-client \
   && rm -rf /var/lib/apt/lists/*
 
