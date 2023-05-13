@@ -137,6 +137,7 @@ spec:
            export DB_DATABASE_SIGAA='{{ .Data.data.db_database_sigaa }}'
            export DB_USERNAME_SIGAA='{{ .Data.data.db_username_sigaa }}'
            export DB_PASSWORD_SIGAA='{{ .Data.data.db_password_sigaa }}'
+           export DB_HOST='{{ .Data.data.db_host }}'
            export DB_HOST_SIGAA='{{ .Data.data.db_host_sigaa }}'
           {{- end }}
         vault.hashicorp.com/role: "3s-role"
