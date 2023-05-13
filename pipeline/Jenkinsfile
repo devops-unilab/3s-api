@@ -41,6 +41,7 @@ pipeline {
     /* Gerais */
     APP_NAME = "app-3s"
     APP_NAMESPACE = "app-3s"
+    APP_DOMINIO = ""
     TAG = sh(returnStdout: true, script: "git describe --tags --abbrev=0").trim()
     APP_VERSION = "${env.TAG}"
     DOCKER_TAG = "${env.GIT_BRANCH.split('/')[-1]}"
@@ -275,6 +276,9 @@ pipeline {
               '''
 
               sh """
+                sed -i 's/devops.unilab.edu.br/${env.APP_EP_STAG}/g' ./kubernetes/deployment-3s.yaml
+                sed -i 's/APP_DEBUG: "false"/APP_DEBUG: "true"/' ./kubernetes/deployment-3s.yaml
+                sed -i 's/LOG_LEVEL: "error"/LOG_LEVEL: "debug"/' ./kubernetes/deployment-3s.yaml
                 sed -i 's/postgres.postgres-3s.svc.cluster.local/10.130.0.154/' ./kubernetes/deployment-3s.yaml
                 sed -i 's/3s-ocorrencias/3s-homologacao/' ./kubernetes/deployment-3s.yaml
                 sed -i 's/.db_password_sigaa/.db_password_sigaa_holog/' ./kubernetes/deployment-3s.yaml
@@ -282,7 +286,6 @@ pipeline {
                 sed -i 's/:latest/:${env.DOCKER_TAG}/' ./kubernetes/deployment-3s.yaml
                 sed -i 's/auth\\/kubernetes\\/c1/auth\\/kubernetes\\/c3/' ./kubernetes/deployment-3s.yaml
                 sed -i 's/10.130.0.153/10.130.2.153/' ./kubernetes/deployment-3s.yaml
-                sed -i 's/dti-app-test-c1.unilab.edu.br/3shomologacao.unilab.edu.br/' ./kubernetes/deployment-3s.yaml
                 cat ./kubernetes/deployment-3s.yaml
               """
             }
@@ -387,6 +390,9 @@ pipeline {
               '''
 
               sh """
+                sed -i 's/${env.APP_EP_STAG}/${env.APP_EP_PROD}/g' ./kubernetes/deployment-3s.yaml
+                sed -i 's/APP_DEBUG: "true"/APP_DEBUG: "false"/' ./kubernetes/deployment-3s.yaml
+                sed -i 's/LOG_LEVEL: "debug"/LOG_LEVEL: "error"/' ./kubernetes/deployment-3s.yaml
                 sed -i 's/10.130.0.154/postgres.postgres-3s.svc.cluster.local/' ./kubernetes/deployment-3s.yaml
                 sed -i 's/3s-homologacao/3s-ocorrencias/' ./kubernetes/deployment-3s.yaml
                 sed -i 's/.db_password_sigaa_holog/.db_password_sigaa/' ./kubernetes/deployment-3s.yaml
@@ -394,7 +400,6 @@ pipeline {
                 sed -i 's/:${env.DOCKER_TAG}/:${env.TAG}/' ./kubernetes/deployment-3s.yaml
                 sed -i 's/auth\\/kubernetes\\/c3/auth\\/kubernetes\\/c1/' ./kubernetes/deployment-3s.yaml
                 sed -i 's/10.130.2.153/10.130.0.153/' ./kubernetes/deployment-3s.yaml
-                sed -i 's/3shomologacao.unilab.edu.br/dti-app-test-c1.unilab.edu.br/' ./kubernetes/deployment-3s.yaml
                 cat ./kubernetes/deployment-3s.yaml
               """
             }
