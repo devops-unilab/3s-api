@@ -5,7 +5,6 @@
 # Description: Este Dockerfile cria uma imagem para 3s, um aplicativo da Web escrito em PHP.
 #
 # Build instructions:
-#   cd source/
 #   docker build -t dti-registro.unilab.edu.br/unilab/app-3s:latest --build-arg 'VERSION=1.0.0 COMMIT_SHA=$(git rev-parse --short HEAD)' .
 #   docker push dti-registro.unilab.edu.br/unilab/app-3s:latest
 #
