@@ -147,7 +147,7 @@ spec:
       containers:
       - name: app-3s
         image: dti-registro.unilab.edu.br/unilab/app-3s:latest
-        command: ["/bin/bash", "-c", "source /vault/secrets/config; php artisan config:clear"]
+        command: ["/bin/bash", "-c", "source /vault/secrets/config; php artisan config:clear; apache2-foreground"]
         resources:
           requests:
             cpu: 200m
