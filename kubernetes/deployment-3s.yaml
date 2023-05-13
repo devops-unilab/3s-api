@@ -32,14 +32,14 @@ data:
   MAIL_FROM_ADDRESS: '3s@noreply.unilab.edu.br'
   MAIL_FROM_NAME: '3S - Sistema de Solicitacao de Ocorrencias'
   # Laravel Default
-  APP_NAME: 'Laravel'
+  APP_NAME: 'app-3s'
   APP_ENV: 'local'
   APP_KEY: 'base64:ZG55aXZleG8yOXk4ZGhkNnVoeWYxMnpjN2VhcHBibG0='
-  APP_DEBUG: 'true'
-  APP_URL: 'http://dti-app-test-c1.unilab.edu.br'
+  APP_DEBUG: "false"
+  APP_URL: 'http://devops.unilab.edu.br'
   LOG_CHANNEL: 'stack'
   LOG_DEPRECATIONS_CHANNEL: 'null'
-  LOG_LEVEL: 'debug'
+  LOG_LEVEL: "error"
   BROADCAST_DRIVER: 'log'
   CACHE_DRIVER: 'file'
   FILESYSTEM_DISK: 'local'
@@ -147,7 +147,7 @@ spec:
       containers:
       - name: app-3s
         image: dti-registro.unilab.edu.br/unilab/app-3s:latest
-        command: ["/bin/bash", "-c", "sudo -s; source /vault/secrets/config; apache2-foreground"]
+        command: ["/bin/bash", "-c", "source /vault/secrets/config; php artisan config:clear"]
         resources:
           requests:
             cpu: 200m
@@ -223,7 +223,7 @@ metadata:
       haproxy.org/ssl-redirect-code: '301'
 spec:
   rules:
-    - host: dti-app-test-c1.unilab.edu.br
+    - host: devops.unilab.edu.br
       http:
         paths:
           - path: /
