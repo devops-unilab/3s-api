@@ -162,8 +162,7 @@ echo '
 <script src="js/barra_2.0.js"></script>
 <script src="js/jquery-3.5.1.min.js"></script>
 <script src="vendor/popper.min.js"></script>
-<script src="vendor/bootstrap-4.6.0//js/bootstrap.min.js"></script>
- 
+<script src="vendor/bootstrap-4.6.0/js/bootstrap.min.js"></script>
 <script src="vendor/datatables/jquery.dataTables.min.js"></script>
 <script src="vendor/datatables/dataTables.bootstrap4.min.js"></script>
 <script src="js/demo/datatables-demo.js"></script>
