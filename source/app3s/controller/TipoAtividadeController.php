@@ -1,5 +1,5 @@
 <?php
-            
+
 /**
  * Classe feita para manipulação do objeto TipoAtividadeController
  * feita automaticamente com programa gerador de software inventado por
@@ -7,34 +7,37 @@
  */
 
 namespace app3s\controller;
+
 use app3s\dao\TipoAtividadeDAO;
 use app3s\model\TipoAtividade;
 use app3s\view\TipoAtividadeView;
 
 
-class TipoAtividadeController {
+class TipoAtividadeController
+{
 
 	protected  $view;
-    protected $dao;
+	protected $dao;
 
-	public function __construct(){
+	public function __construct()
+	{
 		$this->dao = new TipoAtividadeDAO();
 		$this->view = new TipoAtividadeView();
 	}
 
 
-    public function delete(){
-	    if(!isset($_GET['delete'])){
-	        return;
-	    }
-        $selected = new TipoAtividade();
-	    $selected->setId($_GET['delete']);
-        if(!isset($_POST['delete_tipo_atividade'])){
-            $this->view->confirmDelete($selected);
-            return;
-        }
-        if($this->dao->delete($selected))
-        {
+	public function delete()
+	{
+		if (!isset($_GET['delete'])) {
+			return;
+		}
+		$selected = new TipoAtividade();
+		$selected->setId($_GET['delete']);
+		if (!isset($_POST['delete_tipo_atividade'])) {
+			$this->view->confirmDelete($selected);
+			return;
+		}
+		if ($this->dao->delete($selected)) {
 			echo '
 
 <div class="alert alert-success" role="alert">
@@ -51,25 +54,26 @@ class TipoAtividadeController {
 
 ';
 		}
-    	echo '<META HTTP-EQUIV="REFRESH" CONTENT="2; URL=?page=tipo_atividade">';
-    }
+		echo '<META HTTP-EQUIV="REFRESH" CONTENT="2; URL=?page=tipo_atividade">';
+	}
 
 
 
-	public function fetch() 
-    {
+	public function fetch()
+	{
 		$list = $this->dao->fetch();
 		$this->view->showList($list);
 	}
 
 
-	public function add() {
-            
-        if(!isset($_POST['enviar_tipo_atividade'])){
-            $this->view->showInsertForm();
-		    return;
+	public function add()
+	{
+
+		if (!isset($_POST['enviar_tipo_atividade'])) {
+			$this->view->showInsertForm();
+			return;
 		}
-		if (! ( isset ( $_POST ['nome'] ))) {
+		if (!(isset($_POST['nome']))) {
 			echo '
                 <div class="alert alert-danger" role="alert">
                     Failed to register. Some field must be missing. 
@@ -78,11 +82,10 @@ class TipoAtividadeController {
                 ';
 			return;
 		}
-		$tipoAtividade = new TipoAtividade ();
-		$tipoAtividade->setNome ( $_POST ['nome'] );
-            
-		if ($this->dao->insert ($tipoAtividade ))
-        {
+		$tipoAtividade = new TipoAtividade();
+		$tipoAtividade->setNome($_POST['nome']);
+
+		if ($this->dao->insert($tipoAtividade)) {
 			echo '
 
 <div class="alert alert-success" role="alert">
@@ -99,63 +102,62 @@ class TipoAtividadeController {
 
 ';
 		}
-        echo '<META HTTP-EQUIV="REFRESH" CONTENT="3; URL=?page=tipo_atividade">';
+		echo '<META HTTP-EQUIV="REFRESH" CONTENT="3; URL=?page=tipo_atividade">';
 	}
 
 
 
-            
-	public function addAjax() {
-            
-        if(!isset($_POST['enviar_tipo_atividade'])){
-            return;    
-        }
-        
-		    
-		
-		if (! ( isset ( $_POST ['nome'] ))) {
+
+	public function addAjax()
+	{
+
+		if (!isset($_POST['enviar_tipo_atividade'])) {
+			return;
+		}
+
+
+
+		if (!(isset($_POST['nome']))) {
 			echo ':incompleto';
 			return;
 		}
-            
-		$tipoAtividade = new TipoAtividade ();
-		$tipoAtividade->setNome ( $_POST ['nome'] );
-            
-		if ($this->dao->insert ( $tipoAtividade ))
-        {
+
+		$tipoAtividade = new TipoAtividade();
+		$tipoAtividade->setNome($_POST['nome']);
+
+		if ($this->dao->insert($tipoAtividade)) {
 			$id = $this->dao->getConnection()->lastInsertId();
-            echo ':sucesso:'.$id;
-            
+			echo ':sucesso:' . $id;
 		} else {
-			 echo ':falha';
+			echo ':falha';
 		}
 	}
-            
-            
 
-            
-    public function edit(){
-	    if(!isset($_GET['edit'])){
-	        return;
-	    }
-        $selected = new TipoAtividade();
-	    $selected->setId($_GET['edit']);
-	    $this->dao->fillById($selected);
-	        
-        if(!isset($_POST['edit_tipo_atividade'])){
-            $this->view->showEditForm($selected);
-            return;
-        }
-            
-		if (! ( isset ( $_POST ['nome'] ))) {
+
+
+
+	public function edit()
+	{
+		if (!isset($_GET['edit'])) {
+			return;
+		}
+		$selected = new TipoAtividade();
+		$selected->setId($_GET['edit']);
+		$this->dao->fillById($selected);
+
+		if (!isset($_POST['edit_tipo_atividade'])) {
+			$this->view->showEditForm($selected);
+			return;
+		}
+
+		if (!(isset($_POST['nome']))) {
 			echo "Incompleto";
 			return;
 		}
 
-		$selected->setNome ( $_POST ['nome'] );
-            
-		if ($this->dao->update ($selected ))
-        {
+		$selected->setNome($_POST['nome']);
+
+		if ($this->dao->update($selected)) {
 			echo '
 
 <div class="alert alert-success" role="alert">
@@ -172,60 +174,55 @@ class TipoAtividadeController {
 
 ';
 		}
-        echo '<META HTTP-EQUIV="REFRESH" CONTENT="3; URL=?page=tipo_atividade">';
-            
-    }
-        
+		echo '<META HTTP-EQUIV="REFRESH" CONTENT="3; URL=?page=tipo_atividade">';
+	}
 
-    public function main(){
-        
-        if (isset($_GET['select'])){
-            echo '<div class="row">';
-                $this->select();
-            echo '</div>';
-            return;
-        }
-        echo '
+
+	public function main()
+	{
+
+		if (isset($_GET['select'])) {
+			echo '<div class="row">';
+			$this->select();
+			echo '</div>';
+			return;
+		}
+		echo '
 		<div class="row">';
-        echo '<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">';
-        
-        if(isset($_GET['edit'])){
-            $this->edit();
-        }else if(isset($_GET['delete'])){
-            $this->delete();
-	    }else{
-            $this->add();
-        }
-        $this->fetch();
-        
-        echo '</div>';
-        echo '</div>';
-            
-    }
-    public function mainAjax(){
+		echo '<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">';
 
-        $this->addAjax();
-        
-            
-    }
+		if (isset($_GET['edit'])) {
+			$this->edit();
+		} else if (isset($_GET['delete'])) {
+			$this->delete();
+		} else {
+			$this->add();
+		}
+		$this->fetch();
+
+		echo '</div>';
+		echo '</div>';
+	}
+	public function mainAjax()
+	{
+
+		$this->addAjax();
+	}
 
 
-            
-    public function select(){
-	    if(!isset($_GET['select'])){
-	        return;
-	    }
-        $selected = new TipoAtividade();
-	    $selected->setId($_GET['select']);
-	        
-        $this->dao->fillById($selected);
 
-        echo '<div class="col-xl-7 col-lg-7 col-md-12 col-sm-12">';
-	    $this->view->showSelected($selected);
-        echo '</div>';
-            
+	public function select()
+	{
+		if (!isset($_GET['select'])) {
+			return;
+		}
+		$selected = new TipoAtividade();
+		$selected->setId($_GET['select']);
 
-            
-    }
+		$this->dao->fillById($selected);
+
+		echo '<div class="col-xl-7 col-lg-7 col-md-12 col-sm-12">';
+		$this->view->showSelected($selected);
+		echo '</div>';
+	}
 }
-?>

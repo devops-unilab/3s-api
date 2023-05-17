@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace app3s\controller;
 
@@ -6,9 +6,10 @@ namespace app3s\controller;
 
 class MainAjax
 {
-    
-    public function main(){
-        switch ($_GET['ajax']){
+
+    public function main()
+    {
+        switch ($_GET['ajax']) {
             case 'ocorrencia':
                 $controller = new OcorrenciaController();
                 $controller->mainAjax();
@@ -45,8 +46,5 @@ class MainAjax
                 echo ':falha';
                 break;
         }
-        
     }
 }
-
-?>
