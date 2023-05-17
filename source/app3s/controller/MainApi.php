@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace app3s\controller;
 
@@ -6,11 +6,9 @@ namespace app3s\controller;
 class MainApi
 {
 
-    public function main(){
+    public function main()
+    {
         $controller = new MensagemForumApiRestController();
         $controller->main();
     }
 }
-
-
-?>
