@@ -50,6 +50,8 @@ class UsuarioController {
 		$response = Http::withHeaders($headers)->get(env('UNILAB_API_ORIGIN').'/user', $headers);
 		$responseJ2 = json_decode($response->body());
 		
+		$response = Http::withHeaders($headers)->get(env('UNILAB_API_ORIGIN').'/bond', $headers);
+		$responseJ3 = json_decode($response->body());
 		$nivel = 'c';
 		if ($responseJ2->id_status_servidor != 1) {
 			$nivel = 'd';
@@ -74,6 +76,9 @@ class UsuarioController {
 		$usuario->setNome($responseJ2->nome);
 		$usuario->setEmail($responseJ2->email);
 		$usuario->setNivel($nivel);
+
+		$usuario->idUnidade = $responseJ3[0]->id_unidade;
+		$usuario->siglaUnidade = $responseJ3[0]->sigla_unidade;
 		return true;
 	}
 	public function mudarNivel(){
@@ -108,12 +113,11 @@ class UsuarioController {
 	        
 	        $sessao = new Sessao();
 	        $sessao->criaSessao($usuario->getId(), $usuario->getNivel(), $usuario->getLogin(), $usuario->getNome(), $usuario->getEmail());
-			$dataSIG = DB::connection('sigaa')->table('vw_autenticacao_3s')
-			->where("id", $usuario->getId())->first();
+			
 			
 
-			$sessao->setIDUnidade($dataSIG->id_unidade);
-			$sessao->setUnidade($dataSIG->sigla_unidade);
+			$sessao->setIDUnidade($usuario->idUnidade);
+			$sessao->setUnidade($usuario->siglaUnidade);
 	        echo ":sucesso:".$sessao->getNivelAcesso();
 	    }else{
 	        echo ":falha";
