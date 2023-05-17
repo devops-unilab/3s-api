@@ -151,7 +151,7 @@ $(document).ready(function(e) {
             data: dados,
             success: function( data )
             {
-
+				
             	if(data.split(":")[1] == 'sucesso')
 				{
 					$("#botao-modal-resposta").click(function(){
@@ -183,15 +183,15 @@ $(document).ready(function(e) {
         //
         $('#btn-inserir-ocorrencia').attr('disabled', true);		
 		$('#btn-inserir-ocorrencia').text("Aguarde...");
-
+		console.log("Debugando");
 		jQuery.ajax({
             type: "POST",
             url: "?ajax=ocorrencia",
             data: dados,
             success: function( data )
             {
-            
-
+				console.log("VAMOS VERIFICAR O QUE VEM do servidor");
+				console.log(data);
             	if(data.split(":")[1] == 'sucesso'){
             		
             		$("#botao-modal-resposta").click(function(){

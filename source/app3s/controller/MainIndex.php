@@ -162,8 +162,7 @@ echo '
 <script src="js/barra_2.0.js"></script>
 <script src="js/jquery-3.5.1.min.js"></script>
 <script src="vendor/popper.min.js"></script>
-<script src="vendor/bootstrap-4.6.0//js/bootstrap.min.js"></script>
- 
+<script src="vendor/bootstrap-4.6.0/js/bootstrap.min.js"></script>
 <script src="vendor/datatables/jquery.dataTables.min.js"></script>
 <script src="vendor/datatables/dataTables.bootstrap4.min.js"></script>
 <script src="js/demo/datatables-demo.js"></script>
@@ -186,7 +185,7 @@ echo '
                     echo '
 <script src="js/status_ocorrencia.js?a=1"></script>
 <script src="js/jquery.easyPaginate.js?a=1"></script>
-<script src="js/ocorrencia.js?a=14"></script>';
+<script src="js/ocorrencia.js?a=145"></script>';
                     if(isset($_GET['selecionar'])){
                         echo '
 <script src="js/contador.js"></script>
@@ -209,7 +208,7 @@ echo '
             echo '
 <script src="js/status_ocorrencia.js?a=1"></script>
 <script src="js/jquery.easyPaginate.js?a=1"></script>
-<script src="js/ocorrencia.js?a=14"></script>';
+<script src="js/ocorrencia.js?a=1467"></script>';
             
             if(isset($_GET['selecionar'])){
                 echo '

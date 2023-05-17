@@ -23,7 +23,7 @@ use app3s\model\Usuario;
 use app3s\util\Mail;
 use app3s\util\Sessao;
 use app3s\view\StatusOcorrenciaView;
-
+use Illuminate\Support\Facades\Http;
 
 class StatusOcorrenciaController {
 
@@ -121,20 +121,24 @@ class StatusOcorrenciaController {
 	    if(!isset($_POST['senha'])){
 	        return false;
 	    }
-	    $usuario = new Usuario();
-	    $usuario->setSenha(md5($_POST['senha']));
-	    $usuario->setLogin($this->sessao->getLoginUsuario());
-	    
-	    $usuarioDao = new UsuarioDAO($this->dao->getConnection());
-	    if(!$usuarioDao->autenticar($usuario)){
-	        
-	        return false;
-	    }
-	    if($usuario->getId() != $this->sessao->getIdUsuario()){
+		$login = $this->sessao->getLoginUsuario();
+		$senha = $_POST['senha'];
+		$data = ['login' =>  $login, 'senha' => $senha];
+		$response = Http::post(env('UNILAB_API_ORIGIN').'/authenticate', $data);
+		$responseJ = json_decode($response->body());
+
+		$idUsuario  = 0;
+
+		if (isset($responseJ->id)) {
+			$idUsuario = intval($responseJ->id);
+		}
+		if ($idUsuario === 0) {
+			return false;
+		}
+	    if($responseJ->id != $this->sessao->getIdUsuario()){
 	        echo ":falha:Senha Incorreta.";
 	        return false;
 	    }
-	    
 	    return true;
 	}
 	public function ajaxAtender(){

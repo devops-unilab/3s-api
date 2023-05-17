@@ -17,10 +17,8 @@ class DAO {
 	 * Undocumented function
 	 *
 	 * @param PDO|null $connection
-	 * @param string $type
 	 */
-	public function __construct(PDO $connection = null, $type = "default") {
-	    $this->type = $type;
+	public function __construct(PDO $connection = null) {
 		if ($connection  != null) {
 			$this->connection = $connection;
 		} else {
@@ -29,22 +27,12 @@ class DAO {
 	}
 	    
 	public function connect() {
-	    if($this->type === "default"){
-			$sgdb = env('DB_CONNECTION');
-			$dbName = env('DB_DATABASE');
-			$host = env('DB_HOST');
-			$port = env('DB_PORT');
-			$user = env('DB_USERNAME');
-			$password = env('DB_PASSWORD');
-		}else if($this->type === "SIG"){
-			$sgdb = env('DB_CONNECTION_SIGAA');
-			$dbName = env('DB_DATABASE_SIGAA');
-			$host = env('DB_HOST_SIGAA');
-			$port = env('DB_PORT_SIGAA');
-			$user = env('DB_USERNAME_SIGAA');
-			$password = env('DB_PASSWORD_SIGAA');
-		}
-
+		$sgdb = env('DB_CONNECTION');
+		$dbName = env('DB_DATABASE');
+		$host = env('DB_HOST');
+		$port = env('DB_PORT');
+		$user = env('DB_USERNAME');
+		$password = env('DB_PASSWORD');
 	    $this->sgdb = $sgdb;
 
 		if ($sgdb == "pgsql") {
