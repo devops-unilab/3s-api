@@ -964,9 +964,9 @@ echo '
 	        $sessao = new Sessao();
 			$ocorrencia->setIdLocal ( $sessao->getIdUnidade() );
 			$ocorrencia->setLocal ( $sessao->getUnidade());
-
+			
 	        if(trim($ocorrencia->getLocal()) == ""){
-	            $ocorrencia->setLocal ( 'teste' );
+	            $ocorrencia->setLocal ( 'Não Informado' );
 	        }
 	        if(trim($ocorrencia->getIdLocal()) == ""){
 	            $ocorrencia->setIdLocal ( 1 );

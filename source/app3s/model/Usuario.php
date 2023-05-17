@@ -16,6 +16,8 @@ class Usuario {
 	private $senha;
 	private $nivel;
 	private $idSetor;
+	public $idUnidade;
+	public $siglaUnidade; 
     public function __construct(){
 
     }
