@@ -6,31 +6,31 @@ use app3s\util\Sessao;
 
 class MainIndex
 {
-  public function main()
-  {
-    $sessao = new Sessao();
-    if (isset($_GET['ajax'])) {
-      $mainAjax = new MainAjax();
-      $mainAjax->main();
-      exit(0);
-    }
-    if (isset($_REQUEST['api'])) {
-      $mainApi = new MainApi();
-      $mainApi->main();
-      exit(0);
-    }
-    if (isset($_GET["sair"])) {
-      $sessao->mataSessao();
-      echo '<META HTTP-EQUIV="REFRESH" CONTENT="0; URL=.">';
+    public function main()
+    {
+        $sessao = new Sessao();
+        if (isset($_GET['ajax'])) {
+            $mainAjax = new MainAjax();
+            $mainAjax->main();
+            exit(0);
+        }
+        if (isset($_REQUEST['api'])) {
+            $mainApi = new MainApi();
+            $mainApi->main();
+            exit(0);
+        }
+        if (isset($_GET["sair"])) {
+            $sessao->mataSessao();
+            echo '<META HTTP-EQUIV="REFRESH" CONTENT="0; URL=.">';
+        }
+
+        $this->pagina();
     }
 
-    $this->pagina();
-  }
+    public function pagina()
+    {
 
-  public function pagina()
-  {
-
-    echo '<!doctype html>
+        echo '<!doctype html>
 <html lang="pt-br">
 <head>
 
@@ -59,19 +59,19 @@ class MainIndex
 <meta http-equiv="Cache-control" content="no-cache">
 </head>
 <body>
-    	<!--     Barra do Governo -->
-	<div id="barra-brasil"
-		style="background: #7F7F7F; height: 20px; padding: 0 0 0 10px; display: block;">
-		<ul id="menu-barra-temp" style="list-style: none;">
-			<li
-				style="display: inline; float: left; padding-right: 10px; margin-right: 10px; border-right: 1px solid #EDEDED">
-				<a href="http://brasil.gov.br"
-				style="font-family: sans, sans-serif; text-decoration: none; color: white;">Portal
-					do Governo Brasileiro</a>
-			</li>
-		</ul>
-	</div>
-	<!--     Fim da Barra do Governo -->
+      <!--     Barra do Governo -->
+  <div id="barra-brasil"
+    style="background: #7F7F7F; height: 20px; padding: 0 0 0 10px; display: block;">
+    <ul id="menu-barra-temp" style="list-style: none;">
+      <li
+        style="display: inline; float: left; padding-right: 10px; margin-right: 10px; border-right: 1px solid #EDEDED">
+        <a href="http://brasil.gov.br"
+        style="font-family: sans, sans-serif; text-decoration: none; color: white;">Portal
+          do Governo Brasileiro</a>
+      </li>
+    </ul>
+  </div>
+  <!--     Fim da Barra do Governo -->
 
 
  <div id="cabecalho" class="container">
@@ -102,9 +102,9 @@ class MainIndex
     </div>
   </header>';
 
-    NavBarController::main();
+        NavBarController::main();
 
-    echo '  
+        echo '  
 
   
 </div>
@@ -117,10 +117,10 @@ class MainIndex
 
 
 
-    $principal = new MainContent();
-    $principal->main();
+        $principal = new MainContent();
+        $principal->main();
 
-    echo '
+        echo '
 
 
 
@@ -152,9 +152,9 @@ class MainIndex
     </div>
   </div>
 </div>';
-    $this->mainJS();
+        $this->mainJS();
 
-    echo '
+        echo '
 
 
 
@@ -162,11 +162,11 @@ class MainIndex
 </html>
 
 ';
-  }
+    }
 
-  public function mainJS()
-  {
-    echo '
+    public function mainJS()
+    {
+        echo '
 <script src="js/barra_2.0.js"></script>
 <script src="js/jquery-3.5.1.min.js"></script>
 <script src="vendor/popper.min.js"></script>
@@ -180,48 +180,48 @@ class MainIndex
 <script src="js/change-contraste.js?a=1"></script>
 <script src="js/ocorrencia_selectize.js?a=1"></script>
 ';
-    $this->pageJS();
-  }
+        $this->pageJS();
+    }
 
-  public function pageJS()
-  {
-    if (isset($_GET['page'])) {
-      switch ($_GET['page']) {
-        case 'ocorrencia':
+    public function pageJS()
+    {
+        if (isset($_GET['page'])) {
+            switch ($_GET['page']) {
+                case 'ocorrencia':
 
-          echo '
+                    echo '
 <script src="js/status_ocorrencia.js?a=1"></script>
 <script src="js/jquery.easyPaginate.js?a=1"></script>
 <script src="js/ocorrencia.js?a=145"></script>';
-          if (isset($_GET['selecionar'])) {
-            echo '
+                    if (isset($_GET['selecionar'])) {
+                        echo '
 <script src="js/contador.js"></script>
 <script src="js/mensagem_forum.js?a=17"></script>';
-          }
+                    }
 
-          break;
-        case 'painel_kamban':
-          echo '
+                    break;
+                case 'painel_kamban':
+                    echo '
 <script src="js/painel_kamban.js?123=a"></script>';
-          break;
-        case 'painel_tabela':
-          echo '
+                    break;
+                case 'painel_tabela':
+                    echo '
 <script src="js/painel_tabela.js"></script>';
-          break;
-        default:
-          break;
-      }
-    } else {
-      echo '
+                    break;
+                default:
+                    break;
+            }
+        } else {
+            echo '
 <script src="js/status_ocorrencia.js?a=1"></script>
 <script src="js/jquery.easyPaginate.js?a=1"></script>
 <script src="js/ocorrencia.js?a=1467"></script>';
 
-      if (isset($_GET['selecionar'])) {
-        echo '
+            if (isset($_GET['selecionar'])) {
+                echo '
 <script src="js/contador.js"></script>
 <script src="js/mensagem_forum.js?a=15"></script>';
-      }
+            }
+        }
     }
-  }
 }
