@@ -62,10 +62,7 @@ class OcorrenciaController
         if ($hora < 8) {
             return true;
         }
-        if ($hora == 11) {
-            return true;
-        }
-        return false;
+        return $hora == 11;
     }
     public function calcularHoraSolucao($dataAbertura, $tempoSla)
     {
@@ -111,15 +108,10 @@ class OcorrenciaController
 
     public function parteInteressada()
     {
-        if ($this->sessao->getNivelAcesso() == Sessao::NIVEL_TECNICO) {
-            return true;
-        } elseif ($this->sessao->getNivelAcesso() == Sessao::NIVEL_ADM) {
-            return true;
-        } elseif ($this->selecionado->getUsuarioCliente()->getId() == $this->sessao->getIdUsuario()) {
-            return true;
-        } else {
-            return false;
-        }
+        return ($this->sessao->getNivelAcesso() == Sessao::NIVEL_TECNICO
+            || $this->sessao->getNivelAcesso() == Sessao::NIVEL_ADM
+            || $this->selecionado->getUsuarioCliente()->getId() == $this->sessao->getIdUsuario()
+        );
     }
     public function getColorStatus($siglaStatus)
     {
@@ -487,7 +479,7 @@ class OcorrenciaController
                         $checkedMales = "checked";
                         break;
                     default:
-                    break;
+                        break;
                 }
             }
         }
