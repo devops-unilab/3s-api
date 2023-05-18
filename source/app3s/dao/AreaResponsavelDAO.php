@@ -160,33 +160,6 @@ class AreaResponsavelDAO extends DAO
         return $lista;
     }
 
-    public function fetchByNome(AreaResponsavel $areaResponsavel)
-    {
-        $lista = array();
-        $nome = $areaResponsavel->getNome();
-
-        $sql = "SELECT area_responsavel.id, area_responsavel.nome, area_responsavel.descricao, area_responsavel.email FROM area_responsavel
-            WHERE area_responsavel.nome like :nome";
-
-        try {
-
-            $stmt = $this->connection->prepare($sql);
-            $stmt->bindParam(":nome", $nome, PDO::PARAM_STR);
-            $stmt->execute();
-            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            foreach ($result as $row) {
-                $areaResponsavel = new AreaResponsavel();
-                $areaResponsavel->setId($row['id']);
-                $areaResponsavel->setNome($row['nome']);
-                $areaResponsavel->setDescricao($row['descricao']);
-                $areaResponsavel->setEmail($row['email']);
-                $lista[] = $areaResponsavel;
-            }
-        } catch (PDOException $e) {
-            echo $e->getMessage();
-        }
-        return $lista;
-    }
 
     public function fetchByDescricao(AreaResponsavel $areaResponsavel)
     {

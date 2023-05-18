@@ -142,31 +142,6 @@ class GrupoServicoDAO extends DAO
         return $lista;
     }
 
-    public function fetchByNome(GrupoServico $grupoServico)
-    {
-        $lista = array();
-        $nome = $grupoServico->getNome();
-
-        $sql = "SELECT grupo_servico.id, grupo_servico.nome FROM grupo_servico
-            WHERE grupo_servico.nome like :nome";
-
-        try {
-
-            $stmt = $this->connection->prepare($sql);
-            $stmt->bindParam(":nome", $nome, PDO::PARAM_STR);
-            $stmt->execute();
-            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            foreach ($result as $row) {
-                $grupoServico = new GrupoServico();
-                $grupoServico->setId($row['id']);
-                $grupoServico->setNome($row['nome']);
-                $lista[] = $grupoServico;
-            }
-        } catch (PDOException $e) {
-            echo $e->getMessage();
-        }
-        return $lista;
-    }
 
     public function fillById(GrupoServico $grupoServico)
     {

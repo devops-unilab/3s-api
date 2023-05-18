@@ -137,31 +137,6 @@ class TipoAtividadeDAO extends DAO
         return $lista;
     }
 
-    public function fetchByNome(TipoAtividade $tipoAtividade)
-    {
-        $lista = array();
-        $nome = $tipoAtividade->getNome();
-
-        $sql = "SELECT tipo_atividade.id, tipo_atividade.nome FROM tipo_atividade
-            WHERE tipo_atividade.nome like :nome";
-
-        try {
-
-            $stmt = $this->connection->prepare($sql);
-            $stmt->bindParam(":nome", $nome, PDO::PARAM_STR);
-            $stmt->execute();
-            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            foreach ($result as $row) {
-                $tipoAtividade = new TipoAtividade();
-                $tipoAtividade->setId($row['id']);
-                $tipoAtividade->setNome($row['nome']);
-                $lista[] = $tipoAtividade;
-            }
-        } catch (PDOException $e) {
-            echo $e->getMessage();
-        }
-        return $lista;
-    }
 
     public function fillById(TipoAtividade $tipoAtividade)
     {

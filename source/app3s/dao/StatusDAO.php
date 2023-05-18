@@ -174,33 +174,6 @@ class StatusDAO extends DAO
         return $lista;
     }
 
-    public function fetchByNome(Status $status)
-    {
-        $lista = array();
-        $nome = $status->getNome();
-
-        $sql = "SELECT status.id, status.sigla, status.nome FROM status
-            WHERE status.nome like :nome";
-
-        try {
-
-            $stmt = $this->connection->prepare($sql);
-            $stmt->bindParam(":nome", $nome, PDO::PARAM_STR);
-            $stmt->execute();
-            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            foreach ($result as $row) {
-                $status = new Status();
-                $status->setId($row['id']);
-                $status->setSigla($row['sigla']);
-                $status->setNome($row['nome']);
-                $lista[] = $status;
-            }
-        } catch (PDOException $e) {
-            echo $e->getMessage();
-        }
-        return $lista;
-    }
-
     public function fillById(Status $status)
     {
 
