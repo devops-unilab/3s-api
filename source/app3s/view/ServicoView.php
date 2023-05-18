@@ -18,7 +18,12 @@ class ServicoView
     public function showInsertForm($listaTipoAtividade, $listaAreaResponsavel, $listaGrupoServico)
     {
 
-        $visoes = array(ServicoController::VISAO_ADMIN, ServicoController::VISAO_INATIVO, ServicoController::VISAO_COMUM, ServicoController::VISAO_TECNICO);
+        $visoes = array(
+            ServicoController::VISAO_ADMIN,
+            ServicoController::VISAO_INATIVO,
+            ServicoController::VISAO_COMUM,
+            ServicoController::VISAO_TECNICO
+        );
 
         echo '
 <!-- Button trigger modal -->
@@ -27,7 +32,12 @@ class ServicoView
 </button>
 
 <!-- Modal -->
-<div class="modal fade" id="modalAddServico" tabindex="-1" role="dialog" aria-labelledby="labelAddServico" aria-hidden="true">
+<div class="modal fade"
+    id="modalAddServico"
+    tabindex="-1"
+    role="dialog"
+    aria-labelledby="labelAddServico"
+    aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -44,17 +54,29 @@ class ServicoView
 
                                         <div class="form-group">
                                             <label for="nome">Nome</label>
-                                            <input type="text" class="form-control"  name="nome" id="nome" placeholder="Nome">
+                                            <input type="text"
+                                                class="form-control"
+                                                 name="nome"
+                                                id="nome"
+                                                placeholder="Nome">
                                         </div>
 
                                         <div class="form-group">
                                             <label for="descricao">Descricao</label>
-                                            <input type="text" class="form-control"  name="descricao" id="descricao" placeholder="Descricao">
+                                            <input type="text"
+                                                class="form-control"
+                                                 name="descricao"
+                                                id="descricao"
+                                                placeholder="Descricao">
                                         </div>
 
                                         <div class="form-group">
                                             <label for="tempo_sla">Tempo Sla</label>
-                                            <input type="number" class="form-control"  name="tempo_sla" id="tempo_sla" placeholder="Tempo Sla">
+                                            <input type="number"
+                                                class="form-control"
+                                                name="tempo_sla"
+                                                id="tempo_sla"
+                                                placeholder="Tempo Sla">
                                         </div>
 
 
@@ -187,8 +209,12 @@ class ServicoView
             echo '<td>' . ServicoController::toStringVisao($element->getVisao()) . '</td>';
             echo '<td>
 
-<a href="?page=servico&edit=' . $element->getId() . '" class="btn btn-success btn-circle btn-lg"><i class="fa fa-pencil icone-maior"></i></a>
-<a href="?page=servico&delete=' . $element->getId() . '" class="btn btn-danger btn-circle btn-lg"><i class="fa fa-trash icone-maior"></i></a>
+<a href="?page=servico&edit=' . $element->getId() . '" class="btn btn-success btn-circle btn-lg">
+    <i class="fa fa-pencil icone-maior"></i>
+</a>
+<a href="?page=servico&delete=' . $element->getId() . '" class="btn btn-danger btn-circle btn-lg">
+    <i class="fa fa-trash icone-maior"></i>
+</a>
 
                       </td>';
             echo '</tr>';
@@ -215,7 +241,12 @@ class ServicoView
     public function showEditForm($listaTipoAtividade, $listaAreaResponsavel, $listaGrupoServico, Servico $selecionado)
     {
 
-        $visoes = array(ServicoController::VISAO_ADMIN, ServicoController::VISAO_INATIVO, ServicoController::VISAO_COMUM, ServicoController::VISAO_TECNICO);
+        $visoes = array(
+            ServicoController::VISAO_ADMIN,
+            ServicoController::VISAO_INATIVO,
+            ServicoController::VISAO_COMUM,
+            ServicoController::VISAO_TECNICO
+        );
 
         echo '
 
@@ -230,15 +261,30 @@ class ServicoView
             <form class="user" method="post" id="edit_form_servico">
                                         <div class="form-group">
                                             <label for="nome">Nome</label>
-                                            <input type="text" class="form-control" value="' . $selecionado->getNome() . '"  name="nome" id="nome" placeholder="Nome">
+                                            <input type="text"
+                                                class="form-control"
+                                                value="' . $selecionado->getNome() . '"
+                                                 name="nome"
+                                                id="nome"
+                                                placeholder="Nome">
                                         </div>
                                         <div class="form-group">
                                             <label for="descricao">Descricao</label>
-                                            <input type="text" class="form-control" value="' . $selecionado->getDescricao() . '"  name="descricao" id="descricao" placeholder="Descricao">
+                                            <input type="text"
+                                                class="form-control"
+                                                value="' . $selecionado->getDescricao() . '"
+                                                 name="descricao"
+                                                id="descricao"
+                                                placeholder="Descricao">
                                         </div>
                                         <div class="form-group">
                                             <label for="tempo_sla">Tempo SLA(Em horas)</label>
-                                            <input type="number" class="form-control" value="' . $selecionado->getTempoSla() . '"  name="tempo_sla" id="tempo_sla" placeholder="Tempo Sla">
+                                            <input type="number"
+                                                class="form-control"
+                                                value="' . $selecionado->getTempoSla() . '"
+                                                 name="tempo_sla"
+                                                id="tempo_sla"
+                                                placeholder="Tempo Sla">
                                         </div>
 
 
@@ -346,7 +392,10 @@ class ServicoView
                                     </div>
                                       <form class="user" method="post">Tem certeza que deseja apagar este serviço?
 
-                                        <input type="submit" class="btn btn-primary btn-user btn-block" value="Delete" name="delete_servico">
+                                        <input type="submit"
+                                            class="btn btn-primary btn-user btn-block"
+                                            value="Delete"
+                                            name="delete_servico">
                                         <hr>
 
                                       </form>
