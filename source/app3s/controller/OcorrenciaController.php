@@ -62,10 +62,7 @@ class OcorrenciaController
         if ($hora < 8) {
             return true;
         }
-        if ($hora == 11) {
-            return true;
-        }
-        return false;
+        return $hora == 11;
     }
     public function calcularHoraSolucao($dataAbertura, $tempoSla)
     {
@@ -86,13 +83,13 @@ class OcorrenciaController
             $dataAbertura = date("Y-m-d H:00:00", strtotime('+1 hour', strtotime($dataAbertura)));
         }
 
-
+        $formatDate = "Y-m-d H:i:s";
         $timeEstimado = strtotime($dataAbertura);
         $tempoSla++;
         for ($i = 0; $i < $tempoSla; $i++) {
 
             $timeEstimado = strtotime('+' . $i . ' hour', strtotime($dataAbertura));
-            $horaEstimada = date("Y-m-d H:i:s", $timeEstimado);
+            $horaEstimada = date($formatDate, $timeEstimado);
             while ($this->fimDeSemana($horaEstimada)) {
                 $horaEstimada = date("Y-m-d 08:00:00", strtotime('+1 day', strtotime($horaEstimada)));
                 $i = $i + 24;
@@ -100,26 +97,21 @@ class OcorrenciaController
             }
 
             while ($this->foraDoExpediente($horaEstimada)) {
-                $horaEstimada = date("Y-m-d H:i:s", strtotime('+1 hour', strtotime($horaEstimada)));
+                $horaEstimada = date($formatDate, strtotime('+1 hour', strtotime($horaEstimada)));
                 $i++;
                 $tempoSla++;
             }
         }
-        return date('Y-m-d H:i:s', $timeEstimado);
+        return date($formatDate, $timeEstimado);
     }
 
 
     public function parteInteressada()
     {
-        if ($this->sessao->getNivelAcesso() == Sessao::NIVEL_TECNICO) {
-            return true;
-        } elseif ($this->sessao->getNivelAcesso() == Sessao::NIVEL_ADM) {
-            return true;
-        } elseif ($this->selecionado->getUsuarioCliente()->getId() == $this->sessao->getIdUsuario()) {
-            return true;
-        } else {
-            return false;
-        }
+        return ($this->sessao->getNivelAcesso() == Sessao::NIVEL_TECNICO
+            || $this->sessao->getNivelAcesso() == Sessao::NIVEL_ADM
+            || $this->selecionado->getUsuarioCliente()->getId() == $this->sessao->getIdUsuario()
+        );
     }
     public function getColorStatus($siglaStatus)
     {
@@ -487,7 +479,7 @@ class OcorrenciaController
                         $checkedMales = "checked";
                         break;
                     default:
-                    break;
+                        break;
                 }
             }
         }
@@ -851,7 +843,8 @@ class OcorrenciaController
         $ocorrencia->setPatrimonio($_POST['patrimonio']);
         $ocorrencia->setRamal($_POST['ramal']);
         $ocorrencia->setEmail($_POST['email']);
-        $ocorrencia->setDataAbertura(date("Y-m-d H:i:s"));
+        $formatDate = "Y-m-d H:i:s";
+        $ocorrencia->setDataAbertura(date($formatDate));
 
         if ($_FILES['anexo']['name'] != null) {
             $path = 'uploads/';
@@ -900,7 +893,7 @@ class OcorrenciaController
         $statusOcorrenciaDAO = new StatusOcorrenciaDAO($this->dao->getConnection());
 
         $statusOcorrencia = new StatusOcorrencia();
-        $statusOcorrencia->setDataMudanca(date("Y-m-d H:i:s"));
+        $statusOcorrencia->setDataMudanca(date($formatDate));
         $statusOcorrencia->getStatus()->setId(2);
         $statusOcorrencia->setUsuario($usuario);
         $statusOcorrencia->setMensagem("Ocorrência liberada para que qualquer técnico possa atender.");

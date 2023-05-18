@@ -48,7 +48,8 @@ class AreaResponsavelDAO extends DAO
 
     public function insert(AreaResponsavel $areaResponsavel)
     {
-        $sql = "INSERT INTO area_responsavel(nome, descricao, email) VALUES (:nome, :descricao, :email);";
+        $sql = "INSERT INTO area_responsavel(nome, descricao, email)
+        VALUES (:nome, :descricao, :email);";
         $nome = $areaResponsavel->getNome();
         $descricao = $areaResponsavel->getDescricao();
         $email = $areaResponsavel->getEmail();
@@ -115,9 +116,9 @@ class AreaResponsavelDAO extends DAO
     {
 
         $id = $areaResponsavel->getId();
-        $sql = "SELECT area_responsavel.id
-                    area_responsavel.nome
-                    area_responsavel.descricao
+        $sql = "SELECT area_responsavel.id,
+                    area_responsavel.nome,
+                    area_responsavel.descricao,
                     area_responsavel.email FROM area_responsavel
                 WHERE area_responsavel.id = :id
                  LIMIT 1000";
