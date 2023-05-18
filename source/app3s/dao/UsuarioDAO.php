@@ -58,7 +58,15 @@ class UsuarioDAO extends DAO
     public function fetch()
     {
         $list = array();
-        $sql = "SELECT usuario.id, usuario.nome, usuario.email, usuario.login, usuario.senha, usuario.nivel, usuario.id_setor FROM usuario LIMIT 1000";
+        $sql = "SELECT
+                usuario.id,
+                usuario.nome,
+                usuario.email,
+                usuario.login,
+                usuario.senha,
+                usuario.nivel,
+                usuario.id_setor
+            FROM usuario LIMIT 1000";
 
         try {
             $stmt = $this->connection->prepare($sql);
@@ -92,7 +100,15 @@ class UsuarioDAO extends DAO
         $lista = array();
         $nivel = $usuario->getNivel();
 
-        $sql = "SELECT usuario.id, usuario.nome, usuario.email, usuario.login, usuario.senha, usuario.nivel, usuario.id_setor FROM usuario
+        $sql = "SELECT
+            usuario.id,
+            usuario.nome,
+            usuario.email,
+            usuario.login,
+            usuario.senha,
+            usuario.nivel,
+            usuario.id_setor
+            FROM usuario
             WHERE usuario.nivel like :nivel";
 
         try {
@@ -123,7 +139,15 @@ class UsuarioDAO extends DAO
         $lista = array();
         $idSetor = $usuario->getIdSetor();
 
-        $sql = "SELECT usuario.id, usuario.nome, usuario.email, usuario.login, usuario.senha, usuario.nivel, usuario.id_setor FROM usuario
+        $sql = "SELECT
+            usuario.id,
+            usuario.nome,
+            usuario.email,
+            usuario.login,
+            usuario.senha,
+            usuario.nivel,
+            usuario.id_setor
+            FROM usuario
             WHERE usuario.id_setor = :idSetor";
 
         try {
