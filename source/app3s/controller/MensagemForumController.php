@@ -258,15 +258,6 @@ class MensagemForumController
         echo '<META HTTP-EQUIV="REFRESH" CONTENT="2; URL=?page=mensagem_forum">';
     }
 
-
-
-    public function fetch()
-    {
-        $list = $this->dao->fetch();
-        $this->view->showList($list);
-    }
-
-
     public function enviaEmail(MensagemForum $mensagemForum, Ocorrencia $ocorrencia)
     {
         $mail = new Mail();
@@ -339,13 +330,14 @@ class MensagemForumController
         if ($_POST['tipo'] == self::TIPO_TEXTO) {
             $mensagemForum->setMensagem($_POST['mensagem']);
         } else {
+            $path = 'uploads/';
             if ($_FILES['anexo']['name'] != null) {
-                if (!file_exists('uploads/')) {
-                    mkdir('uploads/', 0777, true);
+                if (!file_exists($path)) {
+                    mkdir($path, 0777, true);
                 }
                 $novoNome = $_FILES['anexo']['name'];
 
-                if (file_exists('uploads/' . $_FILES['anexo']['name'])) {
+                if (file_exists($path . $_FILES['anexo']['name'])) {
                     $novoNome = uniqid() . '_' . $novoNome;
                 }
 
@@ -364,7 +356,7 @@ class MensagemForumController
                     return;
                 }
 
-                if (!move_uploaded_file($_FILES['anexo']['tmp_name'], 'uploads/' . $novoNome)) {
+                if (!move_uploaded_file($_FILES['anexo']['tmp_name'], $path . $novoNome)) {
                     echo ':falha:Falha na tentativa de enviar arquivo';
                     return;
                 }
@@ -388,100 +380,9 @@ class MensagemForumController
         }
     }
 
-
-
-
-    public function edit()
-    {
-        if (!isset($_GET['edit'])) {
-            return;
-        }
-        $selected = new MensagemForum();
-        $selected->setId($_GET['edit']);
-        $this->dao->fillById($selected);
-
-        if (!isset($_POST['edit_mensagem_forum'])) {
-            $usuarioDao = new UsuarioDAO($this->dao->getConnection());
-            $listUsuario = $usuarioDao->fetch();
-
-            $this->view->showEditForm($listUsuario, $selected);
-            return;
-        }
-
-        if (!(isset($_POST['tipo']) && isset($_POST['mensagem']) && isset($_POST['data_envio']) &&  isset($_POST['usuario']))) {
-            echo "Incompleto";
-            return;
-        }
-
-        $selected->setTipo($_POST['tipo']);
-        $selected->setMensagem($_POST['mensagem']);
-        $selected->setDataEnvio($_POST['data_envio']);
-
-        if ($this->dao->update($selected)) {
-            echo '
-
-<div class="alert alert-success" role="alert">
-  Sucesso 
-</div>
-
-';
-        } else {
-            echo '
-
-<div class="alert alert-danger" role="alert">
-  Falha 
-</div>
-
-';
-        }
-        echo '<META HTTP-EQUIV="REFRESH" CONTENT="3; URL=?page=mensagem_forum">';
-    }
-
-
-    public function main()
-    {
-
-        if (isset($_GET['select'])) {
-            echo '<div class="row">';
-            $this->select();
-            echo '</div>';
-            return;
-        }
-        echo '
-        <div class="row">';
-        echo '<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">';
-
-        if (isset($_GET['edit'])) {
-            $this->edit();
-        } else if (isset($_GET['delete'])) {
-            $this->delete();
-        }
-        $this->fetch();
-
-        echo '</div>';
-        echo '</div>';
-    }
     public function mainAjax()
     {
-
         $this->addAjax();
-    }
-
-
-
-    public function select()
-    {
-        if (!isset($_GET['select'])) {
-            return;
-        }
-        $selected = new MensagemForum();
-        $selected->setId($_GET['select']);
-
-        $this->dao->fillById($selected);
-
-        echo '<div class="col-xl-7 col-lg-7 col-md-12 col-sm-12">';
-        $this->view->showSelected($selected);
-        echo '</div>';
     }
     const TIPO_ARQUIVO = 2;
     const TIPO_TEXTO = 1;

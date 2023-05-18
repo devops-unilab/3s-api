@@ -134,8 +134,6 @@ class AreaResponsavelController
     }
 
 
-
-
     public function edit()
     {
         if (!isset($_GET['edit'])) {
@@ -210,13 +208,6 @@ class AreaResponsavelController
 
         echo '</div></div></div></div>';
     }
-    public function mainAjax()
-    {
-
-        $this->addAjax();
-    }
-
-
 
     public function select()
     {

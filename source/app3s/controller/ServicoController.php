@@ -190,11 +190,6 @@ class ServicoController
 		echo '<META HTTP-EQUIV="REFRESH" CONTENT="2; URL=?page=servico">';
 	}
 
-
-
-
-
-
 	public function add()
 	{
 
@@ -249,64 +244,4 @@ class ServicoController
 		echo '<META HTTP-EQUIV="REFRESH" CONTENT="3; URL=?page=servico">';
 	}
 
-
-
-
-	public function addAjax()
-	{
-
-		if (!isset($_POST['enviar_servico'])) {
-			return;
-		}
-
-
-
-		if (!(isset($_POST['nome']) && isset($_POST['descricao']) && isset($_POST['tempo_sla']) && isset($_POST['visao']) &&  isset($_POST['tipo_atividade']) &&  isset($_POST['area_responsavel']) &&  isset($_POST['grupo_servico']))) {
-			echo ':incompleto';
-			return;
-		}
-
-		$servico = new Servico();
-		$servico->setNome($_POST['nome']);
-		$servico->setDescricao($_POST['descricao']);
-		$servico->setTempoSla($_POST['tempo_sla']);
-		$servico->setVisao($_POST['visao']);
-		$servico->getTipoAtividade()->setId($_POST['tipo_atividade']);
-		$servico->getAreaResponsavel()->setId($_POST['area_responsavel']);
-		$servico->getGrupoServico()->setId($_POST['grupo_servico']);
-
-		if ($this->dao->insert($servico)) {
-			$id = $this->dao->getConnection()->lastInsertId();
-			echo ':sucesso:' . $id;
-		} else {
-			echo ':falha';
-		}
-	}
-
-
-
-
-
-	public function mainAjax()
-	{
-
-		$this->addAjax();
-	}
-
-
-
-	public function select()
-	{
-		if (!isset($_GET['select'])) {
-			return;
-		}
-		$selected = new Servico();
-		$selected->setId($_GET['select']);
-
-		$this->dao->fillById($selected);
-
-		echo '<div class="col-xl-7 col-lg-7 col-md-12 col-sm-12">';
-		$this->view->showSelected($selected);
-		echo '</div>';
-	}
 }

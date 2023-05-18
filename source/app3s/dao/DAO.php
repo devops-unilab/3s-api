@@ -8,14 +8,9 @@ use PDO;
 class DAO
 {
 
-	protected $type;
 	protected $connection;
 	private $sgdb;
 
-	public function getSgdb()
-	{
-		return $this->sgdb;
-	}
 	/**
 	 * Undocumented function
 	 *
@@ -50,16 +45,8 @@ class DAO
 			$this->connection = new PDO('sqlite:' . $dbName);
 		}
 	}
-	public function setConnection($connection)
-	{
-		$this->connection = $connection;
-	}
 	public function getConnection()
 	{
 		return $this->connection;
-	}
-	public function closeConnection()
-	{
-		$this->connection = null;
 	}
 }
