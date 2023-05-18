@@ -533,9 +533,12 @@ class OcorrenciaView
 
         if ($timeHoje > $timeSolucaoEstimada) {
 
-
-
-            echo '<span class="text-danger"><b>Solução Estimada: </b>' . date("d/m/Y", strtotime($dataSolucao)) . ' ' . date("H", strtotime($dataSolucao)) . 'h' . date("i", strtotime($dataSolucao)) . ' min </span><br>';
+            echo '<span class="text-danger">
+                    <b>Solução Estimada: </b>'
+                . date("d/m/Y", strtotime($dataSolucao)) .
+                ' ' . date("H", strtotime($dataSolucao))
+                . 'h' . date("i", strtotime($dataSolucao)) .
+                ' min </span><br>';
             echo '<span class="escondido" id="tempo-total">' . str_pad($hours, 2, '0', STR_PAD_LEFT) . ':' . str_pad($minutos, 2, '0', STR_PAD_LEFT) . ':' . str_pad($segundos, 2, '0', STR_PAD_LEFT) . '</span>';
 
             $sessao = new Sessao();
@@ -565,18 +568,31 @@ class OcorrenciaView
             $segundos  = $diff->s;
 
 
-            echo '<p class="escondido">Tempo Restante:<span id="tempo-restante">' . str_pad($hours, 2, '0', STR_PAD_LEFT) . ':' . str_pad($minutos, 2, '0', STR_PAD_LEFT) . ':' . str_pad($segundos, 2, '0', STR_PAD_LEFT) . '</span></p>
+            echo '<p class="escondido">
+                    Tempo Restante:
+                    <span id="tempo-restante">
+                        ' . str_pad($hours, 2, '0', STR_PAD_LEFT) .
+                ':' . str_pad($minutos, 2, '0', STR_PAD_LEFT) .
+                ':' . str_pad($segundos, 2, '0', STR_PAD_LEFT) . '
+                    </span></p>
 
 ';
 
             echo '
             <img src="img/bonequinho.gif" height="75" class="escondido">
             <div class="progress escondido">
-				<div id="barra-progresso" class="progress-bar" role="progressbar" aria-valuenow="' . $percentual . '" aria-valuemin="0" aria-valuemax="100" style="width: ' . $percentual . '%;" data-toggle="tooltip" data-placement="top" title="Solução">
-					<span id="label-progresso" class="sr-only">' . $percentual . '% Completo</span>
-					<span id="label-progresso2" class="progress-type">Progresso ' . intval($percentual) . '% </span>
-				</div>
-			</div>
+                <div id="barra-progresso"
+                    class="progress-bar"
+                    role="progressbar"
+                    aria-valuenow="' . $percentual . '"
+                    aria-valuemin="0"
+                    aria-valuemax="100"
+                    style="width: ' . $percentual . '%;"
+                    data-toggle="tooltip" data-placement="top" title="Solução">
+                    <span id="label-progresso" class="sr-only">' . $percentual . '% Completo</span>
+                    <span id="label-progresso2" class="progress-type">Progresso ' . intval($percentual) . '% </span>
+                </div>
+            </div>
 
 ';
         }
@@ -587,12 +603,20 @@ class OcorrenciaView
         echo '
 
 <!-- Button trigger modal -->
-<button type="button" id="botao-pedir-ajuda" class="dropdown-item text-right" data-toggle="modal" data-target="#modalPedirAjuda">
+<button type="button"
+    id="botao-pedir-ajuda"
+    class="dropdown-item text-right"
+    data-toggle="modal" data-target="#modalPedirAjuda">
   Pedir Ajuda
 </button>
 
 <!-- Modal -->
-<div class="modal fade" id="modalPedirAjuda" tabindex="-1" role="dialog" aria-labelledby="labelPedirAjuda" aria-hidden="true">
+<div class="modal fade"
+    id="modalPedirAjuda"
+    tabindex="-1"
+    role="dialog"
+    aria-labelledby="labelPedirAjuda"
+    aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -608,7 +632,7 @@ class OcorrenciaView
 
             <span>Clique em solicitar ajuda para enviar um e-mail aos responsáveis pelo setor</span>
 
-		</form>
+        </form>
 
 
       </div>

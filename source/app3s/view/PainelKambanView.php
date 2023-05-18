@@ -61,7 +61,7 @@ class PainelKambanView extends OcorrenciaView
                 || $chamado->getStatus() == StatusOcorrenciaController::STATUS_REABERTO
                 || $chamado->getStatus() == StatusOcorrenciaController::STATUS_RESERVADO
             ) {
-                $this->exibirCartao($chamado, null, $atendentes);
+                $this->exibirCartao($chamado, $atendentes);
             }
         }
 
@@ -92,15 +92,11 @@ class PainelKambanView extends OcorrenciaView
                 ||  $chamado->getStatus() == StatusOcorrenciaController::STATUS_AGUARDANDO_ATIVO
                 ||  $chamado->getStatus() == StatusOcorrenciaController::STATUS_AGUARDANDO_USUARIO
             ) {
-                $this->exibirCartao($chamado, null, $atendentes);
+                $this->exibirCartao($chamado, $atendentes);
             }
         }
 
-        echo '</div>';
-
-
-        echo '
-                    </div>
+        echo '</div></div>
                 </div>
             </div>
         </div>';
@@ -123,16 +119,11 @@ class PainelKambanView extends OcorrenciaView
                 $chamado->getStatus() == StatusOcorrenciaController::STATUS_FECHADO
                 || $chamado->getStatus() == StatusOcorrenciaController::STATUS_FECHADO_CONFIRMADO
             ) {
-                $this->exibirCartao($chamado, null,  $atendentes);
+                $this->exibirCartao($chamado, $atendentes);
             }
         }
 
-        echo '</div>';
-
-
-        echo '
-
-                    </div>
+        echo '</div></div>
                 </div>
             </div>
         </div>
@@ -142,7 +133,7 @@ class PainelKambanView extends OcorrenciaView
     }
 
 
-    public function exibirCartao(Ocorrencia $chamado, $class = 6, $atendentes = array())
+    public function exibirCartao(Ocorrencia $chamado, $atendentes = array())
     {
         echo '<div class="col-sm-12 col-md-12 col-xl-6">';
         $bgCard = "";
@@ -249,10 +240,6 @@ class PainelKambanView extends OcorrenciaView
 
 
 
-        echo '
-                            </div>
-                        </div>
-                        ';
-        echo '</div>';
+        echo '</div></div></div>';
     }
 }
