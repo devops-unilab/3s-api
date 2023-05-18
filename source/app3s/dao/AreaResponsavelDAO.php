@@ -83,7 +83,10 @@ class AreaResponsavelDAO extends DAO
     public function fetch()
     {
         $list = array();
-        $sql = "SELECT area_responsavel.id, area_responsavel.nome, area_responsavel.descricao, area_responsavel.email FROM area_responsavel LIMIT 1000";
+        $sql = "SELECT area_responsavel.id,
+                area_responsavel.nome,
+                area_responsavel.descricao,
+                area_responsavel.email FROM area_responsavel LIMIT 1000";
 
         try {
             $stmt = $this->connection->prepare($sql);
@@ -112,7 +115,10 @@ class AreaResponsavelDAO extends DAO
     {
 
         $id = $areaResponsavel->getId();
-        $sql = "SELECT area_responsavel.id, area_responsavel.nome, area_responsavel.descricao, area_responsavel.email FROM area_responsavel
+        $sql = "SELECT area_responsavel.id
+                    area_responsavel.nome
+                    area_responsavel.descricao
+                    area_responsavel.email FROM area_responsavel
                 WHERE area_responsavel.id = :id
                  LIMIT 1000";
 

@@ -36,7 +36,12 @@ class PainelKambanController
         $this->view->formFiltro($listaAreas);
 
         echo '
-                <button id="btn-expandir-tela" type="button" class="float-right btn ml-3 btn-warning btn-circle btn-lg collapsed"><i class="fa fa-expand icone-maior"></i></button>
+                <button
+                    id="btn-expandir-tela"
+                    type="button"
+                    class="float-right btn ml-3 btn-warning btn-circle btn-lg collapsed">
+                        <i class="fa fa-expand icone-maior"></i>
+                </button>
             </div>
             <div class="card-body" id="quadro-kamban">';
         $this->quadroKamban();
