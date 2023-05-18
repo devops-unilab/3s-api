@@ -75,9 +75,7 @@ class AreaResponsavelController
             echo '
                 <div class="alert alert-danger" role="alert">
                     Failed to register. Some field must be missing.
-                </div>
-
-                ';
+                </div>';
             return;
         }
         $areaResponsavel = new AreaResponsavel();

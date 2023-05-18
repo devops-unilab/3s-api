@@ -75,7 +75,10 @@ class MensagemForumController
             $mensagemForum->setId($idChat);
             $mensagemForumDao = new MensagemForumDAO();
             $mensagemForumDao->fillById($mensagemForum);
-            if ($sessao->getIdUsuario() === $mensagemForum->getUsuario()->getId() && $ocorrencia->getStatus() === StatusOcorrenciaController::STATUS_ATENDIMENTO) {
+            if (
+                $sessao->getIdUsuario() === $mensagemForum->getUsuario()->getId()
+                && $ocorrencia->getStatus() === StatusOcorrenciaController::STATUS_ATENDIMENTO
+            ) {
                 $mensagemForumDao->delete($mensagemForum);
                 echo '<meta http-equiv = "refresh"
                  content = "0 ; url =?page=ocorrencia&selecionar=' .
@@ -144,28 +147,30 @@ class MensagemForumController
                     $nome .= ' ' . ucfirst(strtolower($listaNome[1]));
                 }
             }
-
-
+            $timeEnvio = strtotime($mensagemForum->getDataEnvio());
             echo '
 
 
 
-                        <div class="chatbox__body__message chatbox__body__message--left">
-                            <div class="chatbox_timing">
-                                <ul>
-                                    <li>
-                                        <a href="#">
-                                            <i class="fa fa-calendar"></i>
-                                            ' . date("d/m/Y", strtotime($mensagemForum->getDataEnvio())) . '
-                                        </a>
-                                    </li>
+                    <div class="chatbox__body__message chatbox__body__message--left">
+                        <div class="chatbox_timing">
+                            <ul>
                                 <li>
-                                <a href="#">
-                                    <i class="fa fa-clock-o"></i>
-                                    ' . date("H:i", strtotime($mensagemForum->getDataEnvio())) . '
-                                </a>
+                                    <a href="#">
+                                        <i class="fa fa-calendar"></i>
+                                        ' . date("d/m/Y", $timeEnvio) . '
+                                    </a>
+                                </li>
+                            <li>
+                            <a href="#">
+                                <i class="fa fa-clock-o"></i>'
+                . date("H:i", $timeEnvio) .
+                '</a>
                             </li>';
-            if ($mensagemForum->getUsuario()->getId() == $sessao->getIdUsuario() && $ocorrencia->getStatus() === StatusOcorrenciaController::STATUS_ATENDIMENTO) {
+            if (
+                $mensagemForum->getUsuario()->getId() == $sessao->getIdUsuario()
+                && $ocorrencia->getStatus() === StatusOcorrenciaController::STATUS_ATENDIMENTO
+            ) {
                 echo '
                                         <li><button data-toggle="modal" onclick="changeField(' . $mensagemForum->getId() . ')" data-target="#modalDeleteChat"><i class="fa fa-trash-o"></i> Apagar </a></button></li>';
             }
