@@ -93,8 +93,8 @@ class PainelKambanController
 
         $ocorrencia = new Ocorrencia();
         $matrixStatus = array();
-        $pendentes = $this->dao->pesquisaKamban($ocorrencia, $this->arrayStatusPendente(), $matrixStatus, $filtro);
-        $finalizados = $this->dao->pesquisaKamban($ocorrencia, $this->arrayStatusFinalizado(), $matrixStatus, $filtro);
+        $pendentes = $this->dao->pesquisaKamban($this->arrayStatusPendente(), $matrixStatus, $filtro);
+        $finalizados = $this->dao->pesquisaKamban($this->arrayStatusFinalizado(), $matrixStatus, $filtro);
 
 
 
