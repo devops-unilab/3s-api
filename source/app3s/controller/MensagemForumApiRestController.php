@@ -31,6 +31,13 @@ class MensagemForumApiRestController
             return;
         }
         header('Content-type: application/json');
+        if ($_SERVER['REQUEST_METHOD'] != 'GET') {
+            return;
+        }
+
+        if (!isset($_REQUEST['api'])) {
+            return;
+        }
         $this->get();
     }
 
@@ -48,34 +55,12 @@ class MensagemForumApiRestController
 
     public function get()
     {
-
-        if ($_SERVER['REQUEST_METHOD'] != 'GET') {
-            return;
-        }
-
-        if (!isset($_REQUEST['api'])) {
-            return;
-        }
-
         $url = explode("/", $_REQUEST['api']);
-        if (count($url) == 0 || $url[0] == "") {
-            return;
-        }
-        if (!isset($url[1])) {
-            return;
-        }
-        if ($url[1] != 'mensagem_forum') {
-            return;
-        }
-        if (!isset($url[2])) {
-            return;
-        }
-        if (isset($url[2]) == "") {
-            return;
-        }
-
+        
         $id = intval($url[2]);
-
+        if($id === 0) {
+            return; 
+        }
         $ocorrencia = new Ocorrencia();
         $ocorrencia->setId($id);
         $ocorrenciaDao = new OcorrenciaDAO($this->dao->getConnection());
