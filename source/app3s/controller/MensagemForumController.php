@@ -74,7 +74,9 @@ class MensagemForumController
             $mensagemForumDao->fillById($mensagemForum);
             if ($sessao->getIdUsuario() === $mensagemForum->getUsuario()->getId() && $ocorrencia->getStatus() === StatusOcorrenciaController::STATUS_ATENDIMENTO) {
                 $mensagemForumDao->delete($mensagemForum);
-                echo '<meta http-equiv = "refresh" content = "0 ; url =?page=ocorrencia&selecionar=' . $_GET['selecionar'] . '"/>';
+                echo '<meta http-equiv = "refresh"
+                 content = "0 ; url =?page=ocorrencia&selecionar=' . 
+                 $_GET['selecionar'] . '"/>';
             }
         }
         echo '
