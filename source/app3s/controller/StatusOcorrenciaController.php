@@ -459,10 +459,7 @@ class StatusOcorrenciaController
         if ($this->ocorrencia->getStatus() != self::STATUS_ATENDIMENTO) {
             return false;
         }
-        if ($this->sessao->getIdUsuario() != $this->ocorrencia->getIdUsuarioAtendente()) {
-            return false;
-        }
-        return true;
+        return ($this->sessao->getIdUsuario() === $this->ocorrencia->getIdUsuarioAtendente());
     }
     public function possoEditarServico(Ocorrencia $ocorrencia)
     {
@@ -509,10 +506,7 @@ class StatusOcorrenciaController
         if ($this->ocorrencia->getStatus() == self::STATUS_ABERTO) {
             return true;
         }
-        if ($this->ocorrencia->getStatus() == self::STATUS_REABERTO) {
-            return true;
-        }
-        return false;
+        return ($this->ocorrencia->getStatus() == self::STATUS_REABERTO);
     }
 
 
@@ -570,10 +564,7 @@ class StatusOcorrenciaController
         if ($this->sessao->getIdUsuario() != $this->ocorrencia->getUsuarioCliente()->getId()) {
             return false;
         }
-        if ($this->ocorrencia->getStatus() != self::STATUS_FECHADO) {
-            return false;
-        }
-        return true;
+        return ($this->ocorrencia->getStatus() === self::STATUS_FECHADO);
     }
 
     public function possoFechar()

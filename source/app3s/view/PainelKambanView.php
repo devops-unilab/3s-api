@@ -178,6 +178,8 @@ class PainelKambanView extends OcorrenciaView
                 $texto = "text-light";
                 break;
             default:
+                $bgCard = 'bg-warning';
+                $texto = "text-light";
                 break;
         }
 

@@ -13,9 +13,6 @@ class Status
     private $id;
     private $sigla;
     private $nome;
-    public function __construct()
-    {
-    }
     public function setId($id)
     {
         $this->id = $id;
