@@ -78,8 +78,8 @@ class UsuarioController
 		$usuario->setEmail($responseJ2->email);
 		$usuario->setNivel($nivel);
 
-		$usuario->idUnidade = $responseJ3[0]->id_unidade;
-		$usuario->siglaUnidade = $responseJ3[0]->sigla_unidade;
+		$usuario->setIdUnidade($responseJ3[0]->id_unidade);
+		$usuario->setSiglaUnidade($responseJ3[0]->sigla_unidade);
 		return true;
 	}
 	public function mudarNivel()
@@ -116,11 +116,8 @@ class UsuarioController
 
 			$sessao = new Sessao();
 			$sessao->criaSessao($usuario->getId(), $usuario->getNivel(), $usuario->getLogin(), $usuario->getNome(), $usuario->getEmail());
-
-
-
-			$sessao->setIDUnidade($usuario->idUnidade);
-			$sessao->setUnidade($usuario->siglaUnidade);
+			$sessao->setIDUnidade($usuario->getIdUnidade());
+			$sessao->setUnidade($usuario->getSiglaUnidade());
 			echo ":sucesso:" . $sessao->getNivelAcesso();
 		} else {
 			echo ":falha";
