@@ -149,86 +149,6 @@ class UsuarioController
 	}
 
 
-	public function add()
-	{
-
-		if (!isset($_POST['enviar_usuario'])) {
-			$this->view->showInsertForm();
-			return;
-		}
-		if (!(isset($_POST['nome']) && isset($_POST['email']) && isset($_POST['login']) && isset($_POST['senha']) && isset($_POST['nivel']) && isset($_POST['id_setor']))) {
-			echo '
-                <div class="alert alert-danger" role="alert">
-                    Failed to register. Some field must be missing. 
-                </div>
-
-                ';
-			return;
-		}
-		$usuario = new Usuario();
-		$usuario->setNome($_POST['nome']);
-		$usuario->setEmail($_POST['email']);
-		$usuario->setLogin($_POST['login']);
-		$usuario->setSenha($_POST['senha']);
-		$usuario->setNivel($_POST['nivel']);
-		$usuario->setIdSetor($_POST['id_setor']);
-
-		if ($this->dao->insert($usuario)) {
-			echo '
-
-<div class="alert alert-success" role="alert">
-  Sucesso ao inserir Usuario
-</div>
-
-';
-		} else {
-			echo '
-
-<div class="alert alert-danger" role="alert">
-  Falha ao tentar Inserir Usuario
-</div>
-
-';
-		}
-		echo '<META HTTP-EQUIV="REFRESH" CONTENT="3; URL=?page=usuario">';
-	}
-
-
-
-
-	public function addAjax()
-	{
-
-		if (!isset($_POST['enviar_usuario'])) {
-			return;
-		}
-
-
-
-		if (!(isset($_POST['nome']) && isset($_POST['email']) && isset($_POST['login']) && isset($_POST['senha']) && isset($_POST['nivel']) && isset($_POST['id_setor']))) {
-			echo ':incompleto';
-			return;
-		}
-
-		$usuario = new Usuario();
-		$usuario->setNome($_POST['nome']);
-		$usuario->setEmail($_POST['email']);
-		$usuario->setLogin($_POST['login']);
-		$usuario->setSenha($_POST['senha']);
-		$usuario->setNivel($_POST['nivel']);
-		$usuario->setIdSetor($_POST['id_setor']);
-
-		if ($this->dao->insert($usuario)) {
-			$id = $this->dao->getConnection()->lastInsertId();
-			echo ':sucesso:' . $id;
-		} else {
-			echo ':falha';
-		}
-	}
-
-
-
-
 	public function edit()
 	{
 		if (!isset($_GET['edit'])) {
@@ -297,15 +217,6 @@ class UsuarioController
 			$this->edit();
 		}
 		$this->fetch();
-
-		echo '</div>';
-		echo '</div>';
-		echo '</div>';
-		echo '</div>';
-	}
-	public function mainAjax()
-	{
-
-		$this->addAjax();
+		echo '</div></div></div></div>';
 	}
 }

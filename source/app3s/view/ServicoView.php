@@ -324,35 +324,6 @@ class ServicoView {
 
 
 
-
-            
-        public function showSelected(Servico $servico){
-            echo '
-            
-	<div class="card o-hidden border-0 shadow-lg">
-        <div class="card">
-            <div class="card-header">
-                  Servico selecionado
-            </div>
-            <div class="card-body">
-                Id: '.$servico->getId().'<br>
-                Nome: '.$servico->getNome().'<br>
-                Descricao: '.$servico->getDescricao().'<br>
-                Tempo Sla: '.$servico->getTempoSla().'<br>
-                Visao: '.$servico->getVisao().'<br>
-                Tipo Atividade: '.$servico->getTipoAtividade().'<br>
-                Area Responsavel: '.$servico->getAreaResponsavel().'<br>
-                Grupo Servico: '.$servico->getGrupoServico().'<br>
-            
-            </div>
-        </div>
-    </div>
-            
-            
-';
-    }
-
-
     
     public function confirmDelete(Servico $servico) {
         echo '
@@ -386,7 +357,4 @@ class ServicoView {
             
 	</div>';
     }
-                      
-
-
 }
