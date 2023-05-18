@@ -270,7 +270,9 @@ class MensagemForumController
 
 
 
-        $saldacao =  '<p>Prezado(a) ' . $ocorrencia->getUsuarioCliente()->getNome() . ' ,</p>';
+        $saldacao =  '<p>
+        Prezado
+        (a) ' . $ocorrencia->getUsuarioCliente()->getNome() . ' ,</p>';
         $corpo = '<p>Avisamos que houve uma mensagem nova na solicitação <a href="https://3s.unilab.edu.br/?page=ocorrencia&selecionar=' . $ocorrencia->getId() . '">Nº' . $ocorrencia->getId() . '</a></p>';
 
         $corpo .= '<ul>
@@ -297,9 +299,7 @@ class MensagemForumController
             $usuarioDao->fillById($atendente);
             $destinatario = $atendente->getEmail();
             $nome = $atendente->getNome();
-
-            $saldacao =  '<p>Prezado(a) ' . $nome . ' ,</p>';
-            $mail->enviarEmail($destinatario, $nome, $assunto, $saldacao . $corpo);
+            
         } else if ($ocorrencia->getIdUsuarioIndicado() != null) {
 
             $indicado = new Usuario();
@@ -307,10 +307,10 @@ class MensagemForumController
             $usuarioDao->fillById($indicado);
             $destinatario = $indicado->getEmail();
             $nome = $indicado->getNome();
-
-            $saldacao =  '<p>Prezado(a) ' . $nome . ' ,</p>';
-            $mail->enviarEmail($destinatario, $nome, $assunto, $saldacao . $corpo);
+            
         }
+        $saldacao =  '<p>Prezado(a) ' . $nome . ' ,</p>';
+        $mail->enviarEmail($destinatario, $nome, $assunto, $saldacao . $corpo);
     }
 
     public function addAjax()
