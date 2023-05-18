@@ -58,7 +58,7 @@ class MainContent
             $controller = new OcorrenciaController();
             $controller->main();
         } else {
-            echo '<p>Página solicitada não encontrada.</p>';
+            $this->notFound();
         }
     }
 
@@ -92,7 +92,7 @@ class MainContent
                     $controller->main();
                     break;
                 default:
-                    echo '<p>Página solicitada não encontrada.</p>';
+                    $this->notFound();
                     break;
             }
         } else {
@@ -101,7 +101,9 @@ class MainContent
         }
     }
 
-
+    public function notFound() {
+        $this->notFound();
+    }
     public function contentTec()
     {
         if (isset($_GET['page'])) {
@@ -119,7 +121,7 @@ class MainContent
                     $controller->main();
                     break;
                 default:
-                    echo '<p>Página solicitada não encontrada.</p>';
+                    $this->notFound();
                     break;
             }
         } else {
