@@ -310,6 +310,8 @@ class OcorrenciaView
             case StatusOcorrenciaController::STATUS_AGUARDANDO_ATIVO:
                 $strStatus = "Aguardando ativo da DTI";
                 break;
+            default:
+                break;
         }
         return $strStatus;
     }
@@ -321,7 +323,7 @@ class OcorrenciaView
      * @param Ocorrencia $ocorrencia
      * @param array:StatusOcorrencia $listaStatus
      */
-    public function mostrarSelecionado2(Ocorrencia $ocorrencia, $dataAbertura, $dataSolucao)
+    public function mostrarSelecionado2(Ocorrencia $ocorrencia)
     {
         $statusView = new StatusOcorrenciaView();
         $controller = new StatusOcorrenciaController();

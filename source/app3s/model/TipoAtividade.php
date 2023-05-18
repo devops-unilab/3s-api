@@ -30,8 +30,5 @@ class TipoAtividade
     {
         return $this->nome;
     }
-    public function __toString()
-    {
-        return $this->id . ' - ' . $this->nome;
-    }
+
 }

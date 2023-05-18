@@ -77,13 +77,4 @@ class StatusOcorrencia
     {
         return $this->dataMudanca;
     }
-    public function __toString()
-    {
-        return $this->id .
-        ' - ' . $this->ocorrencia .
-        ' - ' . $this->status .
-        ' - ' . $this->mensagem .
-        ' - ' . $this->usuario .
-        ' - ' . $this->dataMudanca;
-    }
 }
