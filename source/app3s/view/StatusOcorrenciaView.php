@@ -17,182 +17,200 @@ class StatusOcorrenciaView
 
 
 
-  public function botaoCancelar($posso = false)
-  {
-    $strDisable = "";
-    if (!$posso) {
-      $strDisable = 'disabled';
-    }
-    echo '
-
-<!-- Button trigger modal -->
-<button type="button" acao="cancelar" ' . $strDisable . ' class="dropdown-item  botao-status"  data-toggle="modal" data-target="#modalStatus">
+    public function botaoCancelar($posso = false)
+    {
+        $strDisable = "";
+        if (!$posso) {
+            $strDisable = 'disabled';
+        }
+        echo '
+<button type="button"
+     acao="cancelar" ' . $strDisable . '
+class="dropdown-item  botao-status"
+data-toggle="modal" data-target="#modalStatus">
   Cancelar
 </button>
 
 ';
-  }
-
-
-
-  public function botaoAtender($posso = false)
-  {
-    $strDisable = "";
-    if (!$posso) {
-      $strDisable = 'disabled';
     }
-    echo '
+
+
+
+    public function botaoAtender($posso = false)
+    {
+        $strDisable = "";
+        if (!$posso) {
+            $strDisable = 'disabled';
+        }
+        echo '
 <!-- Button trigger modal -->
-<button type="button"  ' . $strDisable . '  acao="atender" class="dropdown-item  botao-status"  data-toggle="modal" data-target="#modalStatus">
+<button type="button"
+      '
+            . $strDisable . '
+            acao="atender" class="dropdown-item  botao-status"  data-toggle="modal" data-target="#modalStatus">
   Atender
 </button>
 
 ';
-  }
-
-  public function botaoAvaliar($posso = false)
-  {
-    $strDisable = "";
-    if (!$posso) {
-      $strDisable = 'disabled';
     }
-    echo '
+
+    public function botaoAvaliar($posso = false)
+    {
+        $strDisable = "";
+        if (!$posso) {
+            $strDisable = 'disabled';
+        }
+        echo '
 <!-- Button trigger modal -->
-<button type="button" ' . $strDisable . '  id="avaliar-btn" acao="avaliar"  class="dropdown-item"  data-toggle="modal" data-target="#modalStatus">
+<button type="button"
+     ' . $strDisable . '  id="avaliar-btn" acao="avaliar"  class="dropdown-item"  data-toggle="modal" data-target="#modalStatus">
   Confirmar
 </button>
 
 ';
-  }
-
-  public function botaoReabrir($posso = false)
-  {
-    $strDisable = "";
-    if (!$posso) {
-      $strDisable = 'disabled';
     }
-    echo '
+
+    public function botaoReabrir($posso = false)
+    {
+        $strDisable = "";
+        if (!$posso) {
+            $strDisable = 'disabled';
+        }
+        echo '
 <!-- Button trigger modal -->
 <button id="botao-reabrir" type="button" ' . $strDisable . '  acao="reabrir"  class="dropdown-item"  data-toggle="modal" data-target="#modalStatus">
   Reabrir
 </button>
 
 ';
-  }
+    }
 
-  public function botaoReservar()
-  {
-    echo '
+    public function botaoReservar()
+    {
+        echo '
 <!-- Button trigger modal -->
-<button type="button" acao="reservar" id="botao-reservar" class="dropdown-item"  data-toggle="modal" data-target="#modalStatus">
+<button type="button"
+     acao="reservar" id="botao-reservar" class="dropdown-item"  data-toggle="modal" data-target="#modalStatus">
   Reservar
 </button>
 
 ';
-  }
-
-  public function botaoFechar($posso = false)
-  {
-    $strDisable = "";
-    if (!$posso) {
-      $strDisable = 'disabled';
     }
-    echo '
+
+    public function botaoFechar($posso = false)
+    {
+        $strDisable = "";
+        if (!$posso) {
+            $strDisable = 'disabled';
+        }
+        echo '
 <!-- Button trigger modal -->
-<button type="button" ' . $strDisable . '  acao="fechar"  class="dropdown-item  botao-status"  data-toggle="modal" data-target="#modalStatus">
+<button type="button"
+     ' . $strDisable . '  acao="fechar"  class="dropdown-item  botao-status"  data-toggle="modal" data-target="#modalStatus">
   Fechar
 </button>
 
 ';
-  }
+    }
 
-  public function botaoLiberar()
-  {
-    echo '
+    public function botaoLiberar()
+    {
+        echo '
 <!-- Button trigger modal -->
-<button type="button" acao="liberar_atendimento"  class="dropdown-item  botao-status"  data-toggle="modal" data-target="#modalStatus">
+<button type="button"
+     acao="liberar_atendimento"  class="dropdown-item  botao-status"  data-toggle="modal" data-target="#modalStatus">
   Liberar Ocorrência
 </button>
 
 ';
-  }
+    }
 
-  public function botaoEditarServico()
-  {
-    echo '
+    public function botaoEditarServico()
+    {
+        echo '
 <!-- Button trigger modal -->
 <button type="button" id="botao-editar-servico" acao="editar_servico"  class="dropdown-item text-right"  data-toggle="modal" data-target="#modalStatus">
   Editar Serviço
 </button>
 
 ';
-  }
+    }
 
 
-  public function botaoEditarSolucao()
-  {
-    echo '
+    public function botaoEditarSolucao()
+    {
+        echo '
 <!-- Button trigger modal -->
 <button id="botao-editar-solucao" type="button" acao="editar_solucao"  class="dropdown-item text-right"   data-toggle="modal" data-target="#modalStatus">
   Editar Solução
 </button>
 
 ';
-  }
+    }
 
-  public function botaoEditarPatrimonio()
-  {
-    echo '
+    public function botaoEditarPatrimonio()
+    {
+        echo '
 <!-- Button trigger modal -->
 <button id="botao-editar-patrimonio" type="button" acao="editar_patrimonio"  class="dropdown-item text-right"   data-toggle="modal" data-target="#modalStatus">
   Editar Patrimônio
 </button>
 
 ';
-  }
+    }
 
-  public function botaoEditarAreaResponsavel()
-  {
-    echo '
+    public function botaoEditarAreaResponsavel()
+    {
+        echo '
 <!-- Button trigger modal -->
 <button id="botao-editar-area" type="button" acao="editar_area"  class="dropdown-item text-right"   data-toggle="modal" data-target="#modalStatus">
   Editar Setor Responsável
 </button>
 
 ';
-  }
-  public function botaoAguardarUsuario()
-  {
-    echo '
+    }
+    public function botaoAguardarUsuario()
+    {
+        echo '
 <!-- Button trigger modal -->
-<button type="button" acao="aguardar_usuario"  class="dropdown-item  botao-status"  data-toggle="modal" data-target="#modalStatus">
+<button type="button"
+     acao="aguardar_usuario"  class="dropdown-item  botao-status"  data-toggle="modal" data-target="#modalStatus">
   Aguardar Usuário
 </button>
 
 ';
-  }
+    }
 
 
-  public function botaoAguardarAtivos()
-  {
-    echo '
+    public function botaoAguardarAtivos()
+    {
+        echo '
 <!-- Button trigger modal -->
-<button type="button" acao="aguardar_ativos"  class="dropdown-item  botao-status"  data-toggle="modal" data-target="#modalStatus">
+<button type="button"
+     acao="aguardar_ativos"  class="dropdown-item  botao-status"  data-toggle="modal" data-target="#modalStatus">
   Aguardar Ativos de TI
 </button>
 
 ';
-  }
+    }
 
-  public function modalFormStatus(Ocorrencia $ocorrencia, $listaTecnicos = array(), $listaServicos = array(), $listaAreas = array())
-  {
-    echo '<!-- Modal -->
-<div class="modal fade modal_form_status" id="modalStatus" tabindex="-1" aria-labelledby="labelModalCancelar" aria-hidden="true">
+    public function modalFormStatus(
+        Ocorrencia $ocorrencia,
+        $listaTecnicos = array(),
+        $listaServicos = array(),
+        $listaAreas = array()
+    ) {
+        echo '
+<div class="modal fade modal_form_status"
+    id="modalStatus" tabindex="-1"
+    aria-labelledby="labelModalCancelar"
+    aria-hidden="true">
 <div class="modal-dialog">
 <div class="modal-content">
   <div class="modal-header">
     <h5 class="modal-title" id="labelModalCancelar">Alterar Status</h5>
-    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+    <button type="button"
+         class="close" data-dismiss="modal" aria-label="Close">
       <span aria-hidden="true">&times;</span>
     </button>
   </div>
@@ -203,21 +221,22 @@ class StatusOcorrenciaView
             <label for="select-servico">Selecione um Serviço</label>
             <select name="id_servico" id="select-servico">
                 <option value="" selected>Selecione um Serviço</option>';
-    foreach ($listaServicos as $servico) {
-      echo '
+        foreach ($listaServicos as $servico) {
+            echo '
                     <option value="' . $servico->getId() . '">' . $servico->getNome();
-      if ($servico->getDescricao() != "") {
-        echo ' - (' . $servico->getDescricao() . ') ';
-      }
-      echo '</option>';
-    }
+            if ($servico->getDescricao() != "") {
+                echo ' - (' . $servico->getDescricao() . ') ';
+            }
+            echo '</option>';
+        }
 
-    echo '
+        echo '
             </select>
         </div>
         <div id="container-editar-solucao" class="form-group escondido">
             <label for="solucao">Solução</label>
-            <textarea class="form-control" id="solucao" name="solucao" rows="2">' . strip_tags($ocorrencia->getSolucao()) . '</textarea>
+            <textarea class="form-control" id="solucao" name="solucao" rows="2">'
+            . strip_tags($ocorrencia->getSolucao()) . '</textarea>
         </div>
         <div id="container-editar-patrimonio" class="form-group escondido">
             <label for="solucao">Patrimônio</label>
@@ -233,12 +252,12 @@ class StatusOcorrenciaView
             <label for="select-tecnico">Selecione um Técnico</label>
             <select name="tecnico" id="select-tecnico">
                 <option value="" selected>Selecione um Técnico</option>';
-    foreach ($listaTecnicos as $tecnico) {
-      echo '
+        foreach ($listaTecnicos as $tecnico) {
+            echo '
                 <option value="' . $tecnico->getId() . '">' . $tecnico->getNome() . '</option>';
-    }
+        }
 
-    echo '
+        echo '
             </select>
         </div>
 
@@ -249,12 +268,14 @@ class StatusOcorrenciaView
             <label for="select-area">Selecione um Setor</label>
             <select name="area_responsavel" id="select-area">
                 <option value="" selected>Selecione um Setor</option>';
-    foreach ($listaAreas as $area) {
-      echo '
-                <option value="' . $area->getId() . '">' . $area->getNome() . ' - ' . $area->getDescricao() . '</option>';
-    }
+        foreach ($listaAreas as $area) {
+            echo '
+                <option value="' . $area->getId() . '">'
+                . $area->getNome() .
+                ' - ' . $area->getDescricao() . '</option>';
+        }
 
-    echo '
+        echo '
             </select>
         </div>
 
@@ -264,11 +285,11 @@ class StatusOcorrenciaView
 
 
         ';
-    for ($i = 1; $i < 6; $i++) {
-      echo '<img class="m-2 star estrela-' . $i . '" nota="' . $i . '"  src="img/star0.png" alt="1">';
-    }
+        for ($i = 1; $i < 6; $i++) {
+            echo '<img class="m-2 star estrela-' . $i . '" nota="' . $i . '"  src="img/star0.png" alt="1">';
+        }
 
-    echo '
+        echo '
         <input type="hidden" value="0" name="avaliacao" id="campo-avaliacao">
 
       </div>
@@ -281,7 +302,8 @@ class StatusOcorrenciaView
     </form>
   </div>
   <div class="modal-footer">
-    <button type="button" class="btn btn-secondary" data-dismiss="modal">Sair</button>
+    <button type="button"
+         class="btn btn-secondary" data-dismiss="modal">Sair</button>
     <button id="botao-status"F
         form="form_status_alterar"
         type="submit"
@@ -299,5 +321,5 @@ class StatusOcorrenciaView
 
 
             ';
-  }
+    }
 }
