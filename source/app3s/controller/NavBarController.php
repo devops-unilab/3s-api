@@ -43,7 +43,11 @@ class NavBarController
     ) {
       echo '
         <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <a class="nav-link dropdown-toggle"
+              href="#" id="navbarDropdown"
+              role="button"
+              data-toggle="dropdown"
+              aria-haspopup="true" aria-expanded="false">
               Paineis
             </a>
             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
@@ -138,7 +142,15 @@ class NavBarController
       if ($sessao->getNivelAcesso() == Sessao::NIVEL_COMUM) {
         $disabled = "disabled";
       }
-      echo '<button type="button" ' . $disabled . ' nivel="' . Sessao::NIVEL_COMUM . '" id="change-to-default"  class="dropdown-item change-level">Perfil Comum</button><hr>';
+      echo '
+          <button
+              type="button"
+              ' . $disabled . '
+              nivel="' . Sessao::NIVEL_COMUM . '"
+              id="change-to-default"
+              class="dropdown-item change-level">
+            Perfil Comum
+          </button><hr>';
     }
     echo '<a href="?sair=1" id="botao-avaliar" acao="avaliar"
       class="dropdown-item">Sair</a></div></div></div></nav>';

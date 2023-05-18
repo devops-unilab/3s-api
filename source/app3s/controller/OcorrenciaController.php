@@ -162,7 +162,8 @@ class OcorrenciaController
 
 
 		if (!$this->parteInteressada()) {
-			echo '<div class="alert alert-danger" role="alert">Você não é cliente deste chamado, nem técnico para atendê-lo.</div>';
+			echo '<div class="alert alert-danger" role="alert">
+						Você não é cliente deste chamado, nem técnico para atendê-lo.</div>';
 			return;
 		}
 
@@ -184,13 +185,24 @@ class OcorrenciaController
 		$status = new Status();
 		$status->setSigla($this->selecionado->getStatus());
 		$statusDao->fillBySigla($status);
-		echo '<div class="row"><div class="col-md-12 blog-main"><div class="row"><div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">';
+		echo '<div class="row">
+				<div class="col-md-12 blog-main">
+					<div class="row">
+						<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">';
 		$statusController->painelStatus($this->selecionado, $status);
-		echo '</div></div><div class="row  border-bottom mb-3"><div class="col-md-6 blog-main"></div><div class="col-md-6 blog-main"><span class="text-right">';
+		echo '
+				</div>
+			</div>
+			<div class="row  border-bottom mb-3">
+				<div class="col-md-6 blog-main">
+			</div>
+			<div class="col-md-6 blog-main">
+			<span class="text-right">';
 		$horaEstimada = $this->calcularHoraSolucao($dataAbertura, $this->selecionado->getServico()->getTempoSla());
 		echo '</div></div></div><div class="col-md-8">';
 		$this->view->mostrarSelecionado2($this->selecionado, $listaStatus, $dataAbertura, $horaEstimada);
-		echo '</div><aside class="col-md-4 blog-sidebar"><h4 class="font-italic">Histórico</h4><div class="container">';
+		echo '</div><aside class="col-md-4 blog-sidebar">
+				<h4 class="font-italic">Histórico</h4><div class="container">';
 		foreach ($listaStatus as $status) {
 			$strCartao = $this->getColorStatus($status->getStatus()->getSigla());
 
@@ -214,7 +226,8 @@ class OcorrenciaController
 
 
                         ' . $status->getMensagem() . '<br>
-                        <strong>' . $status->getUsuario()->getNome() . '<br>' . date('d/m/Y - H:i', strtotime($status->getDataMudanca())) . '</strong>
+                        <strong>' . $status->getUsuario()->getNome() . '
+						<br>' . date('d/m/Y - H:i', strtotime($status->getDataMudanca())) . '</strong>
             	    </div>
 
 
@@ -304,13 +317,11 @@ class OcorrenciaController
 
 	public function exibirListagem($lista1, $lista2, $listaAtrasados = array())
 	{
-
-		if (count($listaAtrasados) > 0) {
-			$nChamados = count($listaAtrasados);
-			$this->painel($listaAtrasados, "Ocorrências Em Atraso ($nChamados)", 'collapseAtraso', "show");
+		$nAtrasados = count($listaAtrasados);
+		if ($nAtrasados > 0) {
+			$this->painel($listaAtrasados, "Ocorrências Em Atraso ($nAtrasados)", 'collapseAtraso', "show");
 		}
-		$nChamados = count($lista1);
-		$this->painel($lista1, "Ocorrências Em Aberto($nChamados)", 'collapseAberto', 'show');
+		$this->painel($lista1, 'Ocorrências Em Aberto('.count($lista1).')', 'collapseAberto', 'show');
 		$this->painel($lista2, "Ocorrências Encerradas", 'collapseEncerrada');
 	}
 	public function arrayStatusPendente()
@@ -379,8 +390,7 @@ class OcorrenciaController
                                 <select id="select-setores-filtro">
                                   <option value="">Selecione o Setor</option>';
 		foreach ($listaRequisitantes as $chave => $area) {
-
-			echo '<option value="' . $chave . '">' . $area . '</option>';
+			echo '<option value="' . $chave . '">' . $area . '</option> ';
 		}
 		echo '
 
@@ -522,7 +532,8 @@ class OcorrenciaController
 				}
 			}
 			echo '
-                                  <option value="' . $tecnico->getId() . '" ' . $selectedAtt . '>' . $tecnico->getNome() . '</option>';
+                                  <option value="' . $tecnico->getId() . '" ' . $selectedAtt . '>' . $tecnico->getNome() . '</option>
+';
 		}
 
 		echo '
@@ -543,7 +554,7 @@ class OcorrenciaController
 				}
 			}
 			echo '
-									<option value="' . $userElement->getId() . '" ' . $selectedAtt . '>' . $userElement->getNome() . '</option>';
+									<option value="' . $userElement->getId() . '" ' . $selectedAtt . '>' . $userElement->getNome() . '</option>  ';
 		}
 
 		echo '
