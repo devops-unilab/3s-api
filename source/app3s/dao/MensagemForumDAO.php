@@ -69,7 +69,10 @@ class MensagemForumDAO extends DAO
                 usuario.login as login_usuario_usuario,
                 usuario.senha as senha_usuario_usuario,
                 usuario.nivel as nivel_usuario_usuario,
-                usuario.id_setor as id_setor_usuario_usuario FROM mensagem_forum INNER JOIN usuario as usuario ON usuario.id = mensagem_forum.id_usuario
+                usuario.id_setor as id_setor_usuario_usuario
+                FROM mensagem_forum
+                INNER JOIN usuario as usuario
+                ON usuario.id = mensagem_forum.id_usuario
                 WHERE mensagem_forum.id = :id
                  LIMIT 1000";
 

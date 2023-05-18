@@ -92,10 +92,8 @@ class PainelKambanController
             $arrStrSetores = explode(",", $_GET['setores']);
             $filtro = 'AND( area_responsavel.id = ' . implode(" OR area_responsavel.id = ", $arrStrSetores) . ' )';
         }
-
-        $matrixStatus = array();
-        $pendentes = $this->dao->pesquisaKamban($this->arrayStatusPendente(), $matrixStatus, $filtro);
-        $finalizados = $this->dao->pesquisaKamban($this->arrayStatusFinalizado(), $matrixStatus, $filtro);
+        $pendentes = $this->dao->pesquisaKamban($this->arrayStatusPendente(), $filtro);
+        $finalizados = $this->dao->pesquisaKamban($this->arrayStatusFinalizado(), $filtro);
 
 
 

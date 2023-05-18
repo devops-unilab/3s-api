@@ -83,7 +83,13 @@ class ServicoController
             return;
         }
 
-        if (!(isset($_POST['nome']) && isset($_POST['descricao']) && isset($_POST['tempo_sla']) && isset($_POST['visao']) &&  isset($_POST['tipo_atividade']) &&  isset($_POST['area_responsavel']) &&  isset($_POST['grupo_servico']))) {
+        if (!(isset($_POST['nome'])
+            && isset($_POST['descricao'])
+            && isset($_POST['tempo_sla'])
+            && isset($_POST['visao'])
+            &&  isset($_POST['tipo_atividade'])
+            &&  isset($_POST['area_responsavel'])
+            &&  isset($_POST['grupo_servico']))) {
             echo "Incompleto";
             return;
         }
@@ -124,25 +130,18 @@ class ServicoController
      */
     public static function toStringVisao($visao)
     {
-        $str = "Valor inválido";
         switch ($visao) {
             case self::VISAO_INATIVO:
-                $str = "Inativo";
-                break;
+                return "Inativo";
             case self::VISAO_COMUM:
-                $str = "Comum";
-                break;
+                return "Comum";
             case self::VISAO_TECNICO:
-                $str = "Técnico";
-                break;
+                return "Técnico";
             case self::VISAO_ADMIN:
-                $str = "Administrador";
-                break;
+                return "Administrador";
             default:
-                $str = "Valor inválido";
-                break;
+                return "Valor inválido";
         }
-        return $str;
     }
     public function delete()
     {
@@ -179,7 +178,13 @@ class ServicoController
             $this->view->showInsertForm($listTipoAtividade, $listAreaResponsavel, $listGrupoServico);
             return;
         }
-        if (!(isset($_POST['nome']) && isset($_POST['descricao']) && isset($_POST['tempo_sla']) && isset($_POST['visao']) &&  isset($_POST['tipo_atividade']) &&  isset($_POST['area_responsavel']) &&  isset($_POST['grupo_servico']))) {
+        if (!(isset($_POST['nome'])
+            && isset($_POST['descricao'])
+            && isset($_POST['tempo_sla'])
+            && isset($_POST['visao'])
+            &&  isset($_POST['tipo_atividade'])
+            &&  isset($_POST['area_responsavel'])
+            &&  isset($_POST['grupo_servico']))) {
             echo '
                 <div class="alert alert-danger" role="alert">Failed to register. Some field must be missing. </div>';
             return;

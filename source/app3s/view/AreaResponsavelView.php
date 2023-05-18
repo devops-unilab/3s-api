@@ -13,9 +13,9 @@ use app3s\model\AreaResponsavel;
 
 class AreaResponsavelView
 {
-  public function showInsertForm()
-  {
-    echo '
+    public function showInsertForm()
+    {
+        echo '
 <!-- Button trigger modal -->
 <button
     type="button"
@@ -26,7 +26,10 @@ class AreaResponsavelView
 </button>
 
 <!-- Modal -->
-<div class="modal fade" id="modalAddAreaResponsavel" tabindex="-1" role="dialog" aria-labelledby="labelAddAreaResponsavel" aria-hidden="true">
+<div
+    class="modal fade"
+    id="modalAddAreaResponsavel" tabindex="-1"
+     role="dialog" aria-labelledby="labelAddAreaResponsavel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -78,15 +81,15 @@ class AreaResponsavelView
 
 
 ';
-  }
+    }
 
 
 
 
 
-  public function showList($lista)
-  {
-    echo '
+    public function showList($lista)
+    {
+        echo '
 
 
 
@@ -121,28 +124,29 @@ class AreaResponsavelView
                 </tfoot>
                 <tbody>';
 
-    foreach ($lista as $element) {
-      echo '<tr>';
-      echo '<td>' . $element->getId() . '</td>';
-      echo '<td>' . $element->getNome() . '</td>';
-      echo '<td>' . $element->getDescricao() . '</td>';
-      echo '<td>' . $element->getEmail() . '</td>';
-      echo '<td>
+        foreach ($lista as $element) {
+            echo '<tr>';
+            echo '<td>' . $element->getId() . '</td>';
+            echo '<td>' . $element->getNome() . '</td>';
+            echo '<td>' . $element->getDescricao() . '</td>';
+            echo '<td>' . $element->getEmail() . '</td>';
+            echo '<td>
                         <a
                             href="?page=area_responsavel&edit='
-                                . $element->getId() . '"
+                . $element->getId() . '"
                                 class="btn btn-success text-white">
                             Editar
                         </a>
                         <a
-                            href="?page=area_responsavel&delete=' . $element->getId() . '" class="btn btn-danger text-white">
+                            href="?page=area_responsavel&delete='
+                . $element->getId() . '" class="btn btn-danger text-white">
                             Apagar
                         </a>
                       </td>';
-      echo '</tr>';
-    }
+            echo '</tr>';
+        }
 
-    echo '
+        echo '
                 </tbody>
             </table>
         </div>
@@ -154,13 +158,13 @@ class AreaResponsavelView
 </div>
 
 ';
-  }
+    }
 
 
 
-  public function showEditForm(AreaResponsavel $selecionado)
-  {
-    echo '
+    public function showEditForm(AreaResponsavel $selecionado)
+    {
+        echo '
 
 
 
@@ -204,15 +208,15 @@ class AreaResponsavelView
 
 
                                       ';
-  }
+    }
 
 
 
 
 
-  public function showSelected(AreaResponsavel $arearesponsavel)
-  {
-    echo '
+    public function showSelected(AreaResponsavel $arearesponsavel)
+    {
+        echo '
 
     <div class="card o-hidden border-0 shadow-lg">
         <div class="card">
@@ -231,13 +235,13 @@ class AreaResponsavelView
 
 
 ';
-  }
+    }
 
 
 
-  public function confirmDelete(AreaResponsavel $areaResponsavel)
-  {
-    echo '
+    public function confirmDelete(AreaResponsavel $areaResponsavel)
+    {
+        echo '
 
 
 
@@ -269,5 +273,5 @@ class AreaResponsavelView
 
 
     </div>';
-  }
+    }
 }
