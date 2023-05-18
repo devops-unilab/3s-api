@@ -19,7 +19,13 @@ class NavBarController
 
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
 
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+  <button class="navbar-toggler" type="button"
+  data-toggle="collapse"
+   data-target="#navbarSupportedContent"
+  aria-controls="navbarSupportedContent"
+  aria-expanded="false"
+  aria-label="Toggle
+    navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
 
@@ -39,7 +45,11 @@ class NavBarController
         <a class="nav-link" href="?page=painel">Painel</a>
       </li>
       <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown"
+         role="button"
+          data-toggle="dropdown"
+           aria-haspopup="true"
+            aria-expanded="false">
           Relatórios
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
