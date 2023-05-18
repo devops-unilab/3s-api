@@ -23,7 +23,9 @@ class MensagemForumDAO extends DAO
 
     public function insert(MensagemForum $mensagemForum, Ocorrencia $ocorrencia)
     {
-        $sql = "INSERT INTO mensagem_forum(tipo, mensagem, id_usuario, data_envio, id_ocorrencia) VALUES (:tipo, :mensagem, :usuario, :dataEnvio, :idOcorrencia);";
+        $sql = "INSERT INTO
+                    mensagem_forum(tipo, mensagem, id_usuario, data_envio, id_ocorrencia)
+                VALUES (:tipo, :mensagem, :usuario, :dataEnvio, :idOcorrencia);";
         $tipo = $mensagemForum->getTipo();
         $mensagem = $mensagemForum->getMensagem();
         $usuario = $mensagemForum->getUsuario()->getId();
