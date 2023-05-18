@@ -87,7 +87,7 @@ class ServicoView
 
         foreach ($visoes as $element) {
 
-            echo '<option value="' . $element . '" >' . ServicoController::toStringVisao($element) . '</option>';
+            echo '<option value="' . $element . '" >' . ServicoController::toStringVisao($element) . '</option> ';
         }
 
         echo '
@@ -97,10 +97,10 @@ class ServicoView
                                         <div class="form-group">
                                           <label for="tipo_atividade">Tipo Atividade</label>
                                           <select class="form-control" id="tipo_atividade" name="tipo_atividade">
-                                            <option value="">Selecione o Tipo Atividade</option>';
+                                            <option value="">Selecione o Tipo Atividade</option>  ';
 
         foreach ($listaTipoAtividade as $element) {
-            echo '<option value="' . $element->getId() . '">' . $element . '</option>';
+            echo '<option value="' . $element->getId() . '">' . $element . '</option>   ';
         }
 
         echo '
@@ -109,10 +109,10 @@ class ServicoView
                                         <div class="form-group">
                                           <label for="area_responsavel">Area Responsavel</label>
                                           <select class="form-control" id="area_responsavel" name="area_responsavel">
-                                            <option value="">Selecione o Area Responsavel</option>';
+                                            <option value="">Selecione o Area Responsavel</option>    ';
 
         foreach ($listaAreaResponsavel as $element) {
-            echo '<option value="' . $element->getId() . '">' . $element . '</option>';
+            echo '<option value="' . $element->getId() . '">' . $element . '</option>     ';
         }
 
         echo '
@@ -121,10 +121,11 @@ class ServicoView
                                         <div class="form-group">
                                           <label for="grupo_servico">Grupo Servico</label>
                                           <select class="form-control" id="grupo_servico" name="grupo_servico">
-                                            <option value="">Selecione o Grupo Servico</option>';
+                                            <option value="">Selecione o Grupo Servico</option>     ';
 
         foreach ($listaGrupoServico as $element) {
-            echo '<option value="' . $element->getId() . '">' . $element . '</option>';
+            echo '<option value="' . $element->getId() . '">' . $element . '</option>
+            ';
         }
 
         echo '
@@ -319,7 +320,9 @@ class ServicoView
             if ($element->getId() == $selecionado->getTipoAtividade()->getId()) {
                 $strAtribut = "selected";
             }
-            echo '<option value="' . $element->getId() . '" ' . $strAtribut . ' >' . $element->getNome() . '</option>';
+            echo '<option value="' . $element->getId() . '" ' . $strAtribut . ' >' . $element->getNome() . '</option>
+
+            ';
         }
 
         echo '
@@ -335,7 +338,11 @@ class ServicoView
             if ($element->getId() == $selecionado->getAreaResponsavel()->getId()) {
                 $strAtribut = "selected";
             }
-            echo '<option value="' . $element->getId() . '" ' . $strAtribut . ' >' . $element->getNome() . '</option>';
+            echo '<option value="' . $element->getId() . '" ' . $strAtribut . ' >' . $element->getNome() . '</option>
+
+
+
+            ';
         }
 
         echo '
