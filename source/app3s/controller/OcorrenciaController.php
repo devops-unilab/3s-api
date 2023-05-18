@@ -281,12 +281,13 @@ class OcorrenciaController
             <h3 class="pb-4 mb-4 font-italic border-bottom"
             data-toggle="collapse" data-target="#' . $id . '" href="#' . $id . '">
                 ' . $strTitulo . '
-
             <button type="button" class="float-right btn ml-3
-                btn-warning btn-circle btn-lg"  data-toggle="collapse" href="#' . $id . '" role="button" aria-expanded="false"
-                aria-controls="' . $id . '"><i class="fa fa-expand icone-maior"></i></button>
+                btn-warning btn-circle btn-lg"  data-toggle="collapse"
+				 href="#' . $id . '"
+				  role="button" aria-expanded="false"
+                aria-controls="' . $id . '">
+				<i class="fa fa-expand icone-maior"></i></button>
             </h3>
-
         </div>
         <div id="' . $id . '" class="panel-collapse collapse in ' . $strShow . '">
             <div class="panel-body">';
@@ -310,7 +311,6 @@ class OcorrenciaController
 		}
 		$nChamados = count($lista1);
 		$this->painel($lista1, "Ocorrências Em Aberto($nChamados)", 'collapseAberto', 'show');
-		$nChamados = count($lista2);
 		$this->painel($lista2, "Ocorrências Encerradas", 'collapseEncerrada');
 	}
 	public function arrayStatusPendente()
@@ -353,16 +353,9 @@ class OcorrenciaController
 		} else {
 			$horaEstimada = $this->calcularHoraSolucao($dataAbertura, $ocorrencia->getServico()->getTempoSla());
 		}
-
-
 		$timeHoje = time();
 		$timeSolucaoEstimada = strtotime($horaEstimada);
-
-		if ($timeHoje > $timeSolucaoEstimada) {
-			return true;
-		} else {
-			return false;
-		}
+		return $timeHoje > $timeSolucaoEstimada;
 	}
 	public function filtroAvancado($listaAreas, $listaRequisitantes)
 	{
@@ -387,8 +380,7 @@ class OcorrenciaController
                                   <option value="">Selecione o Setor</option>';
 		foreach ($listaRequisitantes as $chave => $area) {
 
-			echo '
-                                    <option value="' . $chave . '">' . $area . '</option>';
+			echo '<option value="' . $chave . '">' . $area . '</option>';
 		}
 		echo '
 
@@ -402,8 +394,9 @@ class OcorrenciaController
                                 <select id="select-setores-filtro2">
                                   <option value="">Selecione o Solicitante</option>';
 		foreach ($listaAreas as $area) {
-			echo '
-                                    <option value="' . trim($area->getId()) . '">' . trim($area->getNome()) . '</option>';
+			echo ' <option value="' . trim($area->getId()) . '">
+					' . trim($area->getNome()) . '
+				</option>';
 		}
 		echo '
 

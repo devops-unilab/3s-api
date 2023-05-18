@@ -7,7 +7,8 @@ use app3s\util\Sessao;
 class NavBarController
 {
 
-  public static function getFirstName($name) {
+  public static function getFirstName($name)
+  {
     $arr = explode(" ", $name);
     $firstName = "";
     if (isset($arr[0])) {
@@ -36,7 +37,10 @@ class NavBarController
       <li class="nav-item">
         <a class="nav-link" href="?page=ocorrencia&cadastrar=1">Abrir Chamado</a>
       </li>';
-    if ($sessao->getNivelAcesso() == Sessao::NIVEL_ADM || $sessao->getNivelAcesso() == Sessao::NIVEL_TECNICO) {
+    if (
+      $sessao->getNivelAcesso() == Sessao::NIVEL_ADM
+      || $sessao->getNivelAcesso() == Sessao::NIVEL_TECNICO
+    ) {
       echo '
         <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -48,7 +52,10 @@ class NavBarController
             </div>
         </li>';
     }
-    if ($sessao->getNivelAcesso() == Sessao::NIVEL_ADM) {
+    if (
+      $sessao->getNivelAcesso() == Sessao::NIVEL_ADM
+      )
+      {
       echo '
         <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -76,7 +83,9 @@ class NavBarController
         </div>
         </form>
     <div class="btn-group">
-        <button class="btn btn-light dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <button class="btn btn-light dropdown-toggle"
+         type="button" data-toggle="dropdown" aria-haspopup="true"
+          aria-expanded="false">
             <i class="fa fa-user"></i> Olá, ' . $primeiroNome . '
         </button>
         <div class="dropdown-menu dropright">
