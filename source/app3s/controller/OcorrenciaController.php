@@ -114,9 +114,9 @@ class OcorrenciaController
 	{
 		if ($this->sessao->getNivelAcesso() == Sessao::NIVEL_TECNICO) {
 			return true;
-		} else if ($this->sessao->getNivelAcesso() == Sessao::NIVEL_ADM) {
+		} elseif ($this->sessao->getNivelAcesso() == Sessao::NIVEL_ADM) {
 			return true;
-		} else if ($this->selecionado->getUsuarioCliente()->getId() == $this->sessao->getIdUsuario()) {
+		} elseif ($this->selecionado->getUsuarioCliente()->getId() == $this->sessao->getIdUsuario()) {
 			return true;
 		} else {
 			return false;
@@ -127,23 +127,23 @@ class OcorrenciaController
 		$strCartao = ' alert-warning ';
 		if ($siglaStatus == 'a') {
 			$strCartao = '  notice-warning';
-		} else if ($siglaStatus == 'e') {
+		} elseif ($siglaStatus == 'e') {
 			$strCartao = '   alert-primary ';
-		} else if ($siglaStatus == 'f') {
+		} elseif ($siglaStatus == 'f') {
 			$strCartao = ' alert-success ';
-		} else if ($siglaStatus == 'g') {
+		} elseif ($siglaStatus == 'g') {
 			$strCartao = ' alert-success ';
-		} else if ($siglaStatus == 'h') {
+		} elseif ($siglaStatus == 'h') {
 			$strCartao = ' alert-warning ';
-		} else if ($siglaStatus == 'r') {
+		} elseif ($siglaStatus == 'r') {
 			$strCartao = '  alert-warning ';
-		} else if ($siglaStatus == 'b') {
+		} elseif ($siglaStatus == 'b') {
 			$strCartao = '  alert-warning ';
-		} else if ($siglaStatus == 'c') {
+		} elseif ($siglaStatus == 'c') {
 			$strCartao = '  alert-warning';
-		} else if ($siglaStatus == 'd') {
+		} elseif ($siglaStatus == 'd') {
 			$strCartao = '  alert-warning ';
-		} else if ($siglaStatus == 'i') {
+		} elseif ($siglaStatus == 'i') {
 			$strCartao = ' alert-warning';
 		}
 		return $strCartao;
@@ -153,23 +153,23 @@ class OcorrenciaController
 		$strCartao = ' alert-warning ';
 		if ($siglaStatus == 'a') {
 			$strCartao = '  notice-warning';
-		} else if ($siglaStatus == 'e') {
+		} elseif ($siglaStatus == 'e') {
 			$strCartao = '  notice-info ';
-		} else if ($siglaStatus == 'f') {
+		} elseif ($siglaStatus == 'f') {
 			$strCartao = 'notice-success ';
-		} else if ($siglaStatus == 'g') {
+		} elseif ($siglaStatus == 'g') {
 			$strCartao = 'notice-success ';
-		} else if ($siglaStatus == 'h') {
+		} elseif ($siglaStatus == 'h') {
 			$strCartao = ' notice-warning ';
-		} else if ($siglaStatus == 'r') {
+		} elseif ($siglaStatus == 'r') {
 			$strCartao = '  notice-warning ';
-		} else if ($siglaStatus == 'b') {
+		} elseif ($siglaStatus == 'b') {
 			$strCartao = '  notice-warning ';
-		} else if ($siglaStatus == 'c') {
+		} elseif ($siglaStatus == 'c') {
 			$strCartao = '   notice-warning ';
-		} else if ($siglaStatus == 'd') {
+		} elseif ($siglaStatus == 'd') {
 			$strCartao = '  notice-warning ';
-		} else if ($siglaStatus == 'i') {
+		} elseif ($siglaStatus == 'i') {
 			$strCartao = ' notice-warning';
 		}
 		return $strCartao;
@@ -338,7 +338,7 @@ class OcorrenciaController
 
 		if (isset($_GET['selecionar'])) {
 			$this->selecionar();
-		} else if (isset($_GET['cadastrar'])) {
+		} elseif (isset($_GET['cadastrar'])) {
 			$this->telaCadastro();
 		} else {
 			$this->listar();
@@ -747,7 +747,7 @@ class OcorrenciaController
 			$ocorrencia->getUsuarioCliente()->setId($this->sessao->getIdUsuario());
 			$lista = $this->dao->pesquisaPorCliente($ocorrencia, $this->arrayStatusPendente());
 			$lista2 = $this->dao->pesquisaPorCliente($ocorrencia, $this->arrayStatusFinalizado());
-		} else if ($this->sessao->getNivelAcesso() == Sessao::NIVEL_TECNICO) {
+		} elseif ($this->sessao->getNivelAcesso() == Sessao::NIVEL_TECNICO) {
 
 
 			$ocorrencia->getUsuarioCliente()->setId($this->sessao->getIdUsuario());
@@ -765,7 +765,7 @@ class OcorrenciaController
 
 			$lista = $this->dao->pesquisaParaTec($ocorrencia, $this->arrayStatusPendente(), $arrayFiltros);
 			$lista2 = $this->dao->pesquisaParaTec($ocorrencia, $this->arrayStatusFinalizado(), $arrayFiltros);
-		} else if ($this->sessao->getNivelAcesso() == Sessao::NIVEL_ADM) {
+		} elseif ($this->sessao->getNivelAcesso() == Sessao::NIVEL_ADM) {
 
 			$arrayFiltros = array();
 			$arrayFiltros = $this->getArrayFiltros();

@@ -37,15 +37,13 @@ class MensagemForumApiRestController
     public function parteInteressada(Ocorrencia $selecionado)
     {
         $sessao = new Sessao();
-        if ($sessao->getNivelAcesso() == Sessao::NIVEL_TECNICO) {
+        if ($sessao->getNivelAcesso() == Sessao::NIVEL_TECNICO || $sessao->getNivelAcesso() == Sessao::NIVEL_ADM) {
             return true;
-        } else if ($sessao->getNivelAcesso() == Sessao::NIVEL_ADM) {
-            return true;
-        } else if ($selecionado->getUsuarioCliente()->getId() == $sessao->getIdUsuario()) {
-            return true;
-        } else {
-            return false;
         }
+        if ($selecionado->getUsuarioCliente()->getId() == $sessao->getIdUsuario()) {
+            return true;
+        }
+        return false;
     }
 
     public function get()
