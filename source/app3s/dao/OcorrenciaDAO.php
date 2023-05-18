@@ -218,14 +218,36 @@ class OcorrenciaDAO extends DAO
             ocorrencia.prioridade, ocorrencia.avaliacao, ocorrencia.email,
             ocorrencia.id_usuario_atendente, ocorrencia.id_usuario_indicado,
             ocorrencia.anexo, ocorrencia.local_sala,
-            area_responsavel.id as id_area_responsavel_area_responsavel,
-            area_responsavel.nome as nome_area_responsavel_area_responsavel,
-            area_responsavel.descricao as descricao_area_responsavel_area_responsavel, area_responsavel.email as email_area_responsavel_area_responsavel, servico.id as id_servico_servico, servico.nome as nome_servico_servico, servico.descricao as descricao_servico_servico, servico.tempo_sla as tempo_sla_servico_servico, servico.visao as visao_servico_servico,
-            usuario_cliente.id as id_usuario_usuario_cliente,
-             usuario_cliente.nome as nome_usuario_usuario_cliente, usuario_cliente.email as email_usuario_usuario_cliente,
-            usuario_cliente.login as login_usuario_usuario_cliente, usuario_cliente.senha as senha_usuario_usuario_cliente,
-            usuario_cliente.nivel as nivel_usuario_usuario_cliente,
-            usuario_cliente.id_setor as id_setor_usuario_usuario_cliente
+            area_responsavel.id
+            as id_area_responsavel_area_responsavel,
+            area_responsavel.nome
+            as nome_area_responsavel_area_responsavel,
+            area_responsavel.descricao
+            as descricao_area_responsavel_area_responsavel,
+            area_responsavel.email
+            as email_area_responsavel_area_responsavel,
+            servico.id
+            as id_servico_servico,
+            servico.nome
+            as nome_servico_servico,
+            servico.descricao
+            as descricao_servico_servico,
+            servico.tempo_sla
+            as tempo_sla_servico_servico,
+            servico.visao
+            as visao_servico_servico,
+            usuario_cliente.id
+            as id_usuario_usuario_cliente,
+             usuario_cliente.nome
+            as nome_usuario_usuario_cliente, usuario_cliente.email
+            as email_usuario_usuario_cliente,
+            usuario_cliente.login
+            as login_usuario_usuario_cliente, usuario_cliente.senha
+            as senha_usuario_usuario_cliente,
+            usuario_cliente.nivel
+            as nivel_usuario_usuario_cliente,
+            usuario_cliente.id_setor
+            as id_setor_usuario_usuario_cliente
             FROM ocorrencia
             INNER JOIN area_responsavel as area_responsavel
             ON area_responsavel.id = ocorrencia.id_area_responsavel
@@ -236,8 +258,7 @@ class OcorrenciaDAO extends DAO
             (ocorrencia.id_usuario_cliente  = :idUsuarioIndicado)
             AND $strWhere
             ORDER BY ocorrencia.id DESC
-            LIMIT 1000
-";
+            LIMIT 1000";
 
         try {
 
@@ -329,22 +350,38 @@ class OcorrenciaDAO extends DAO
             ocorrencia.data_atendimento,
             ocorrencia.data_fechamento,
             ocorrencia.data_fechamento_confirmado,
-            area_responsavel.id as id_area_responsavel_area_responsavel,
-            area_responsavel.nome as nome_area_responsavel_area_responsavel,
-            area_responsavel.descricao as descricao_area_responsavel_area_responsavel,
-            area_responsavel.email as email_area_responsavel_area_responsavel,
-            servico.id as id_servico_servico,
-            servico.nome as nome_servico_servico,
-            servico.descricao as descricao_servico_servico,
-            servico.tempo_sla as tempo_sla_servico_servico,
-            servico.visao as visao_servico_servico,
-            usuario_cliente.id as id_usuario_usuario_cliente,
-            usuario_cliente.nome as nome_usuario_usuario_cliente,
-            usuario_cliente.email as email_usuario_usuario_cliente,
-            usuario_cliente.login as login_usuario_usuario_cliente,
-            usuario_cliente.senha as senha_usuario_usuario_cliente,
-            usuario_cliente.nivel as nivel_usuario_usuario_cliente,
-            usuario_cliente.id_setor as id_setor_usuario_usuario_cliente
+            area_responsavel.id
+            as id_area_responsavel_area_responsavel,
+            area_responsavel.nome
+            as nome_area_responsavel_area_responsavel,
+            area_responsavel.descricao
+            as descricao_area_responsavel_area_responsavel,
+            area_responsavel.email
+            as email_area_responsavel_area_responsavel,
+            servico.id
+            as id_servico_servico,
+            servico.nome
+            as nome_servico_servico,
+            servico.descricao
+            as descricao_servico_servico,
+            servico.tempo_sla
+            as tempo_sla_servico_servico,
+            servico.visao
+            as visao_servico_servico,
+            usuario_cliente.id
+            as id_usuario_usuario_cliente,
+            usuario_cliente.nome
+            as nome_usuario_usuario_cliente,
+            usuario_cliente.email
+            as email_usuario_usuario_cliente,
+            usuario_cliente.login
+            as login_usuario_usuario_cliente,
+            usuario_cliente.senha
+            as senha_usuario_usuario_cliente,
+            usuario_cliente.nivel
+            as nivel_usuario_usuario_cliente,
+            usuario_cliente.id_setor
+            as id_setor_usuario_usuario_cliente
             FROM ocorrencia
             INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel
             INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico
@@ -803,7 +840,10 @@ class OcorrenciaDAO extends DAO
             usuario.login as login_usuario_usuario,
             usuario.senha as senha_usuario_usuario,
             usuario.nivel as nivel_usuario_usuario,
-            usuario.id_setor as id_setor_usuario_usuario FROM mensagem_forum LEFT JOIN usuario as usuario ON usuario.id = mensagem_forum.id_usuario
+            usuario.id_setor as id_setor_usuario_usuario
+            FROM mensagem_forum
+            LEFT JOIN usuario as usuario
+                ON usuario.id = mensagem_forum.id_usuario
             WHERE id_ocorrencia = :id
             AND mensagem_forum.id > $idMinimo
             ORDER BY mensagem_forum.id ASC;";

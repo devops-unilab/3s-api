@@ -12,7 +12,7 @@ use app3s\model\Usuario;
 class PainelKambanDAO extends OcorrenciaDAO
 {
 
-    public function pesquisaKamban($arrStatus = array('a'), $matrix = array(), $filtro = '')
+    public function pesquisaKamban($arrStatus = array('a'), $filtro = '')
     {
         $lista = array('ocorrencias' => array(), 'responsaveis' => array());
         $strWhere = $this->filtroStatus($arrStatus);
