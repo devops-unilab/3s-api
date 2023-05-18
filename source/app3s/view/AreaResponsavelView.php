@@ -16,7 +16,6 @@ class AreaResponsavelView
     public function showInsertForm()
     {
         echo '
-<!-- Button trigger modal -->
 <button
     type="button"
     class="btn btn-primary m-3"
@@ -24,8 +23,6 @@ class AreaResponsavelView
     data-target="#modalAddAreaResponsavel">
   Adicionar
 </button>
-
-<!-- Modal -->
 <div
     class="modal fade"
     id="modalAddAreaResponsavel" tabindex="-1"
@@ -125,12 +122,12 @@ class AreaResponsavelView
                 <tbody>';
 
         foreach ($lista as $element) {
-            echo '<tr>';
-            echo '<td>' . $element->getId() . '</td>';
-            echo '<td>' . $element->getNome() . '</td>';
-            echo '<td>' . $element->getDescricao() . '</td>';
-            echo '<td>' . $element->getEmail() . '</td>';
-            echo '<td>
+            echo '<tr>
+                <td>' . $element->getId() . '</td>
+                <td>' . $element->getNome() . '</td>
+                <td>' . $element->getDescricao() . '</td>
+                <td>' . $element->getEmail() . '</td>
+                <td>
                         <a
                             href="?page=area_responsavel&edit='
                 . $element->getId() . '"
@@ -142,8 +139,7 @@ class AreaResponsavelView
                 . $element->getId() . '" class="btn btn-danger text-white">
                             Apagar
                         </a>
-                      </td>';
-            echo '</tr>';
+                      </td></tr>';
         }
 
         echo '
