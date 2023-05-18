@@ -171,7 +171,7 @@ class UsuarioController
 			<div class="alert alert-danger" role="alert">
 			  Formulário incompleto
 			</div>
-			
+
 			';
 			return;
 		}
@@ -204,7 +204,7 @@ class UsuarioController
 	{
 
 		echo '
-	        
+
         <div class="card mb-4">
             <div class="card-body">
 
