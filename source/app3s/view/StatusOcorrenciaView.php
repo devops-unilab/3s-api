@@ -25,11 +25,11 @@ class StatusOcorrenciaView
     }
     echo '
 
-<!-- Button trigger modal --> 
+<!-- Button trigger modal -->
 <button type="button" acao="cancelar" ' . $strDisable . ' class="dropdown-item  botao-status"  data-toggle="modal" data-target="#modalStatus">
-  Cancelar 
+  Cancelar
 </button>
-            
+
 ';
   }
 
@@ -44,9 +44,9 @@ class StatusOcorrenciaView
     echo '
 <!-- Button trigger modal -->
 <button type="button"  ' . $strDisable . '  acao="atender" class="dropdown-item  botao-status"  data-toggle="modal" data-target="#modalStatus">
-  Atender 
+  Atender
 </button>
-            
+
 ';
   }
 
@@ -59,9 +59,9 @@ class StatusOcorrenciaView
     echo '
 <!-- Button trigger modal -->
 <button type="button" ' . $strDisable . '  id="avaliar-btn" acao="avaliar"  class="dropdown-item"  data-toggle="modal" data-target="#modalStatus">
-  Confirmar 
+  Confirmar
 </button>
-        
+
 ';
   }
 
@@ -74,9 +74,9 @@ class StatusOcorrenciaView
     echo '
 <!-- Button trigger modal -->
 <button id="botao-reabrir" type="button" ' . $strDisable . '  acao="reabrir"  class="dropdown-item"  data-toggle="modal" data-target="#modalStatus">
-  Reabrir 
+  Reabrir
 </button>
-    
+
 ';
   }
 
@@ -85,9 +85,9 @@ class StatusOcorrenciaView
     echo '
 <!-- Button trigger modal -->
 <button type="button" acao="reservar" id="botao-reservar" class="dropdown-item"  data-toggle="modal" data-target="#modalStatus">
-  Reservar 
+  Reservar
 </button>
-        
+
 ';
   }
 
@@ -100,9 +100,9 @@ class StatusOcorrenciaView
     echo '
 <!-- Button trigger modal -->
 <button type="button" ' . $strDisable . '  acao="fechar"  class="dropdown-item  botao-status"  data-toggle="modal" data-target="#modalStatus">
-  Fechar 
+  Fechar
 </button>
-        
+
 ';
   }
 
@@ -113,7 +113,7 @@ class StatusOcorrenciaView
 <button type="button" acao="liberar_atendimento"  class="dropdown-item  botao-status"  data-toggle="modal" data-target="#modalStatus">
   Liberar Ocorrência
 </button>
-        
+
 ';
   }
 
@@ -124,7 +124,7 @@ class StatusOcorrenciaView
 <button type="button" id="botao-editar-servico" acao="editar_servico"  class="dropdown-item text-right"  data-toggle="modal" data-target="#modalStatus">
   Editar Serviço
 </button>
-        
+
 ';
   }
 
@@ -136,7 +136,7 @@ class StatusOcorrenciaView
 <button id="botao-editar-solucao" type="button" acao="editar_solucao"  class="dropdown-item text-right"   data-toggle="modal" data-target="#modalStatus">
   Editar Solução
 </button>
-        
+
 ';
   }
 
@@ -147,7 +147,7 @@ class StatusOcorrenciaView
 <button id="botao-editar-patrimonio" type="button" acao="editar_patrimonio"  class="dropdown-item text-right"   data-toggle="modal" data-target="#modalStatus">
   Editar Patrimônio
 </button>
-        
+
 ';
   }
 
@@ -158,7 +158,7 @@ class StatusOcorrenciaView
 <button id="botao-editar-area" type="button" acao="editar_area"  class="dropdown-item text-right"   data-toggle="modal" data-target="#modalStatus">
   Editar Setor Responsável
 </button>
-        
+
 ';
   }
   public function botaoAguardarUsuario()
@@ -168,7 +168,7 @@ class StatusOcorrenciaView
 <button type="button" acao="aguardar_usuario"  class="dropdown-item  botao-status"  data-toggle="modal" data-target="#modalStatus">
   Aguardar Usuário
 </button>
-        
+
 ';
   }
 
@@ -180,7 +180,7 @@ class StatusOcorrenciaView
 <button type="button" acao="aguardar_ativos"  class="dropdown-item  botao-status"  data-toggle="modal" data-target="#modalStatus">
   Aguardar Ativos de TI
 </button>
-        
+
 ';
   }
 
@@ -199,7 +199,7 @@ class StatusOcorrenciaView
   <div class="modal-body">
     <form method="post" id="form_status_alterar" class="form_status">
         <div id="container-editar-servico" class="form-group escondido">
-            
+
             <label for="select-servico">Selecione um Serviço</label>
             <select name="id_servico" id="select-servico">
                 <option value="" selected>Selecione um Serviço</option>';
@@ -215,21 +215,21 @@ class StatusOcorrenciaView
     echo '
             </select>
         </div>
-        <div id="container-editar-solucao" class="form-group escondido"> 
+        <div id="container-editar-solucao" class="form-group escondido">
             <label for="solucao">Solução</label>
             <textarea class="form-control" id="solucao" name="solucao" rows="2">' . strip_tags($ocorrencia->getSolucao()) . '</textarea>
         </div>
-        <div id="container-editar-patrimonio" class="form-group escondido"> 
+        <div id="container-editar-patrimonio" class="form-group escondido">
             <label for="solucao">Patrimônio</label>
             <input class="form-control" id="patrimonio" name="patrimonio" value=""/>
         </div>
-        <div id="container-mensagem-status" class="form-group escondido"> 
+        <div id="container-mensagem-status" class="form-group escondido">
             <label for="mensagem-status">Mensagem</label>
             <textarea class="form-control" id="mensagem-status" name="mensagem-status" rows="2"></textarea>
         </div>
 
         <div id="container-reservar" class="form-group escondido">
-            
+
             <label for="select-tecnico">Selecione um Técnico</label>
             <select name="tecnico" id="select-tecnico">
                 <option value="" selected>Selecione um Técnico</option>';
@@ -245,7 +245,7 @@ class StatusOcorrenciaView
 
 
         <div id="container-editar-area" class="form-group escondido">
-            
+
             <label for="select-area">Selecione um Setor</label>
             <select name="area_responsavel" id="select-area">
                 <option value="" selected>Selecione um Setor</option>';
@@ -259,7 +259,7 @@ class StatusOcorrenciaView
         </div>
 
         <div id="container-avaliacao" class="form-group escondido">
-            Faça sua avaliação:<br> 
+            Faça sua avaliação:<br>
 
 
 
@@ -270,7 +270,7 @@ class StatusOcorrenciaView
 
     echo '
         <input type="hidden" value="0" name="avaliacao" id="campo-avaliacao">
-        
+
       </div>
       <div class="form-group">
         <input type="hidden" id="campo_acao" name="status_acao" value="">
@@ -289,8 +289,8 @@ class StatusOcorrenciaView
 </div>
 </div>
 </div>
-            
-            
+
+
             ';
   }
 }

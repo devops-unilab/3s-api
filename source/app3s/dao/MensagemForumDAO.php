@@ -93,5 +93,4 @@ class MensagemForumDAO extends DAO
         }
         return $mensagemForum;
     }
-
 }

@@ -19,19 +19,18 @@ class PainelKambanView extends OcorrenciaView
     private $matrixStatus;
     private $dao;
 
-    public function formFiltro($listaAreas){
+    public function formFiltro($listaAreas)
+    {
 
 
         echo '
                 <select name="setor" id="select-setores">
                     <option value="">Filtrar por Setor</option>';
-        foreach($listaAreas as $areaResponsavel){
-            echo '<option value="'.$areaResponsavel->getId().'">'.$areaResponsavel->getNome().'</option>';
+        foreach ($listaAreas as $areaResponsavel) {
+            echo '<option value="' . $areaResponsavel->getId() . '">' . $areaResponsavel->getNome() . '</option>';
         }
         echo '
                 </select>';
-
-
     }
 
     public function mostrarQuadro($listaDeChamados, $atendentes = array())
@@ -56,11 +55,12 @@ class PainelKambanView extends OcorrenciaView
 
 
 
-        foreach($listaDeChamados as $chamado){
-            if($chamado->getStatus() == StatusOcorrenciaController::STATUS_ABERTO
+        foreach ($listaDeChamados as $chamado) {
+            if (
+                $chamado->getStatus() == StatusOcorrenciaController::STATUS_ABERTO
                 || $chamado->getStatus() == StatusOcorrenciaController::STATUS_REABERTO
-                || $chamado->getStatus() == StatusOcorrenciaController::STATUS_RESERVADO)
-            {
+                || $chamado->getStatus() == StatusOcorrenciaController::STATUS_RESERVADO
+            ) {
                 $this->exibirCartao($chamado, null, $atendentes);
             }
         }
@@ -85,12 +85,13 @@ class PainelKambanView extends OcorrenciaView
                 <div class="row">';
 
 
-        foreach($listaDeChamados as $chamado){
-            if($chamado->getStatus() == StatusOcorrenciaController::STATUS_ATENDIMENTO
+        foreach ($listaDeChamados as $chamado) {
+            if (
+                $chamado->getStatus() == StatusOcorrenciaController::STATUS_ATENDIMENTO
                 || $chamado->getStatus() == StatusOcorrenciaController::STATUS_EM_ESPERA
                 ||  $chamado->getStatus() == StatusOcorrenciaController::STATUS_AGUARDANDO_ATIVO
-                ||  $chamado->getStatus() == StatusOcorrenciaController::STATUS_AGUARDANDO_USUARIO)
-            {
+                ||  $chamado->getStatus() == StatusOcorrenciaController::STATUS_AGUARDANDO_USUARIO
+            ) {
                 $this->exibirCartao($chamado, null, $atendentes);
             }
         }
@@ -117,10 +118,11 @@ class PainelKambanView extends OcorrenciaView
                 <div class="row">';
 
 
-        foreach($listaDeChamados as $chamado){
-            if($chamado->getStatus() == StatusOcorrenciaController::STATUS_FECHADO
+        foreach ($listaDeChamados as $chamado) {
+            if (
+                $chamado->getStatus() == StatusOcorrenciaController::STATUS_FECHADO
                 || $chamado->getStatus() == StatusOcorrenciaController::STATUS_FECHADO_CONFIRMADO
-                ){
+            ) {
                 $this->exibirCartao($chamado, null,  $atendentes);
             }
         }
@@ -148,7 +150,7 @@ class PainelKambanView extends OcorrenciaView
         $texto = "text-black-50";
 
         switch ($chamado->getStatus()) {
-            case StatusOcorrenciaController::STATUS_ABERTO :
+            case StatusOcorrenciaController::STATUS_ABERTO:
                 $bgCard = 'bg-warning';
                 $texto = "text-light";
                 break;
@@ -184,68 +186,65 @@ class PainelKambanView extends OcorrenciaView
                 $bgCard = 'bg-danger';
                 $texto = "text-light";
                 break;
-
         }
 
 
 
         echo '
-                        <div class="card draggable shadow-sm '.$bgCard.'"  style="height: 260px;">
+                        <div class="card draggable shadow-sm ' . $bgCard . '"  style="height: 260px;">
                             <div class="card-body p-2">
                                 <div class="card-title">
 
-                                    <a href="?page=ocorrencia&selecionar='.$chamado->getId().'" class="'.$link.'">
-                                       #'.$chamado->getId().'
+                                    <a href="?page=ocorrencia&selecionar=' . $chamado->getId() . '" class="' . $link . '">
+                                       #' . $chamado->getId() . '
                                     </a>';
 
         echo '
 
                                 </div>
-                                <p class="'.$texto.'">
-                                   '.substr($chamado->getDescricao(), 0, 75).'[...]
+                                <p class="' . $texto . '">
+                                   ' . substr($chamado->getDescricao(), 0, 75) . '[...]
                                 </p>';
 
 
         $nome = explode(" ", $chamado->getUsuarioCliente()->getNome());
-        echo '<small  class="'.$texto.'">Demandante: ';
-        if(isset($nome[0])){
+        echo '<small  class="' . $texto . '">Demandante: ';
+        if (isset($nome[0])) {
             echo ucfirst(strtolower($nome[0]));
         }
-        if(isset($nome[1])){
-            echo ' '.ucfirst(strtolower($nome[1]));
+        if (isset($nome[1])) {
+            echo ' ' . ucfirst(strtolower($nome[1]));
         }
 
 
 
         echo ' </small><br>';
         $ocorrenciaView = new OcorrenciaView();
-        echo '<small  class="'.$texto.'">'.$ocorrenciaView->getStrStatus($chamado->getStatus()).'</small>';
+        echo '<small  class="' . $texto . '">' . $ocorrenciaView->getStrStatus($chamado->getStatus()) . '</small>';
 
 
 
-        if($chamado->getStatus() == StatusOcorrenciaController::STATUS_RESERVADO){
-            if($chamado->getIdUsuarioIndicado() != null){
+        if ($chamado->getStatus() == StatusOcorrenciaController::STATUS_RESERVADO) {
+            if ($chamado->getIdUsuarioIndicado() != null) {
                 $nome = $atendentes[$chamado->getIdUsuarioIndicado()]->getNome();
                 $nome = explode(" ", $nome);
-                echo '<br><small class="'.$texto.'">Responsável: '.ucfirst(strtolower($nome[0])).' '.ucfirst(strtolower($nome[1])).'</small>';
+                echo '<br><small class="' . $texto . '">Responsável: ' . ucfirst(strtolower($nome[0])) . ' ' . ucfirst(strtolower($nome[1])) . '</small>';
             }
-
-        } elseif($chamado->getStatus() != StatusOcorrenciaController::STATUS_ABERTO){
-            if($chamado->getIdUsuarioAtendente() != null){
+        } elseif ($chamado->getStatus() != StatusOcorrenciaController::STATUS_ABERTO) {
+            if ($chamado->getIdUsuarioAtendente() != null) {
                 $nome = $atendentes[$chamado->getIdUsuarioAtendente()]->getNome();
                 $nome = explode(" ", $nome);
-                echo '<br><small class="'.$texto.'">Responsável: '.ucfirst(strtolower($nome[0])).' '.ucfirst(strtolower($nome[1])).'</small>';
+                echo '<br><small class="' . $texto . '">Responsável: ' . ucfirst(strtolower($nome[0])) . ' ' . ucfirst(strtolower($nome[1])) . '</small>';
             }
-
         }
 
 
 
-        echo '<br><small class="'.$texto.'">Aberto em '.date("d/m/Y G:i:s",strtotime($chamado->getDataAbertura())).' </small>';
+        echo '<br><small class="' . $texto . '">Aberto em ' . date("d/m/Y G:i:s", strtotime($chamado->getDataAbertura())) . ' </small>';
 
 
-        if($chamado->getDataFechamento() != null){
-            echo '<br><small class="'.$texto.'">Fechado em '.date("d/m/Y G:i:s",strtotime( $chamado->getDataFechamento())).' </small>';
+        if ($chamado->getDataFechamento() != null) {
+            echo '<br><small class="' . $texto . '">Fechado em ' . date("d/m/Y G:i:s", strtotime($chamado->getDataFechamento())) . ' </small>';
         }
 
 

@@ -26,7 +26,7 @@ class MensagemForumView
                     <input type="hidden" name="ocorrencia" value="' . $ocorrencia->getId() . '">
                     <input type="hidden" id="campo_tipo" name="tipo" value="' . MensagemForumController::TIPO_TEXTO . '">
 
-                    <div class="custom-control custom-switch">                        
+                    <div class="custom-control custom-switch">
                       <input type="checkbox" class="custom-control-input" name="muda-tipo" id="muda-tipo">
                       <label class="custom-control-label" for="muda-tipo">Enviar Arquivo</label>
                     </div>
@@ -35,7 +35,7 @@ class MensagemForumView
                           <label class="custom-file-label" for="anexo" data-browse="Anexar">Anexar um Arquivo</label>
                     </div>
           <div class="input-group">
-            <input name="mensagem" id="campo-texto" type="text" class="form-control input-sm chat_set_height" placeholder="Digite sua mensagem aqui..." tabindex="0" dir="ltr" spellcheck="false" autocomplete="off" autocorrect="off" autocapitalize="off" contenteditable="true" />    
+            <input name="mensagem" id="campo-texto" type="text" class="form-control input-sm chat_set_height" placeholder="Digite sua mensagem aqui..." tabindex="0" dir="ltr" spellcheck="false" autocomplete="off" autocorrect="off" autocapitalize="off" contenteditable="true" />
                         <span class="input-group-btn"> <button class="btn bt_bg btn-sm" id="botao-enviar-mensagem">Enviar</button></span>
           </div>
                 </form>
@@ -46,14 +46,14 @@ class MensagemForumView
   public function confirmDelete(MensagemForum $mensagemForum)
   {
     echo '
-        
-        
-        
+
+
+
 				<div class="card o-hidden border-0 shadow-lg">
 					<div class="card-body p-0">
 						<!-- Nested Row within Card Body -->
 						<div class="row">
-        
+
 							<div class="col-lg-12">
 								<div class="p-5">
 									<div class="text-center">
@@ -63,17 +63,17 @@ class MensagemForumView
 
                                         <input type="submit" class="btn btn-primary btn-user btn-block" value="Delete" name="delete_mensagem_forum">
                                         <hr>
-                                            
+
 						              </form>
-                                            
+
 								</div>
 							</div>
 						</div>
 					</div>
-                                            
-                                            
-                                            
-                                            
+
+
+
+
 	</div>';
   }
 }

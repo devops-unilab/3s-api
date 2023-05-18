@@ -25,9 +25,9 @@ class ServicoDAO extends DAO
                 descricao = :descricao,
                 id_tipo_atividade = :idAtividade,
                 tempo_sla = :tempoSla,
-                visao = :visao, 
-                id_area_responsavel = :idArea, 
-                id_grupo_servico = :idGrupo 
+                visao = :visao,
+                id_area_responsavel = :idArea,
+                id_grupo_servico = :idGrupo
                 WHERE servico.id = :id;";
         $nome = $servico->getNome();
         $descricao = $servico->getDescricao();
@@ -82,7 +82,7 @@ class ServicoDAO extends DAO
             echo '{"error":{"text":' . $e->getMessage() . '}}';
         }
     }
-  
+
 
     public function delete(Servico $servico)
     {

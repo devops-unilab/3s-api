@@ -136,5 +136,4 @@ class AreaResponsavelDAO extends DAO
         }
         return $areaResponsavel;
     }
-
 }

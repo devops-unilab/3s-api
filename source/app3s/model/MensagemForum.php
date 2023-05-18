@@ -1,5 +1,5 @@
 <?php
-            
+
 /**
  * Classe feita para manipulação do objeto MensagemForum
  * feita automaticamente com programa gerador de software inventado por
@@ -8,55 +8,65 @@
 
 namespace app3s\model;
 
-class MensagemForum {
+class MensagemForum
+{
 	private $id;
 	private $tipo;
 	private $mensagem;
 	private $usuario;
 	private $dataEnvio;
-    public function __construct(){
+	public function __construct()
+	{
 
-        $this->usuario = new Usuario();
-    }
-	public function setId($id) {
+		$this->usuario = new Usuario();
+	}
+	public function setId($id)
+	{
 		$this->id = $id;
 	}
-		    
-	public function getId() {
+
+	public function getId()
+	{
 		return $this->id;
 	}
-	public function setTipo($tipo) {
+	public function setTipo($tipo)
+	{
 		$this->tipo = $tipo;
 	}
-		    
-	public function getTipo() {
+
+	public function getTipo()
+	{
 		return $this->tipo;
 	}
-	public function setMensagem($mensagem) {
+	public function setMensagem($mensagem)
+	{
 		$this->mensagem = $mensagem;
 	}
-		    
-	public function getMensagem() {
+
+	public function getMensagem()
+	{
 		return $this->mensagem;
 	}
-	public function setUsuario(Usuario $usuario) {
+	public function setUsuario(Usuario $usuario)
+	{
 		$this->usuario = $usuario;
 	}
-		    
-	public function getUsuario() {
+
+	public function getUsuario()
+	{
 		return $this->usuario;
 	}
-	public function setDataEnvio($dataEnvio) {
+	public function setDataEnvio($dataEnvio)
+	{
 		$this->dataEnvio = $dataEnvio;
 	}
-		    
-	public function getDataEnvio() {
+
+	public function getDataEnvio()
+	{
 		return $this->dataEnvio;
 	}
-	public function __toString(){
-	    return $this->id.' - '.$this->tipo.' - '.$this->mensagem.' - '.$this->usuario.' - '.$this->dataEnvio;
+	public function __toString()
+	{
+		return $this->id . ' - ' . $this->tipo . ' - ' . $this->mensagem . ' - ' . $this->usuario . ' - ' . $this->dataEnvio;
 	}
-                
-
 }
-?>

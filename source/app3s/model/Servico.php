@@ -1,5 +1,5 @@
 <?php
-            
+
 /**
  * Classe feita para manipulação do objeto Servico
  * feita automaticamente com programa gerador de software inventado por
@@ -8,7 +8,8 @@
 
 namespace app3s\model;
 
-class Servico {
+class Servico
+{
 	private $id;
 	private $nome;
 	private $descricao;
@@ -17,72 +18,87 @@ class Servico {
 	private $visao;
 	private $areaResponsavel;
 	private $grupoServico;
-    public function __construct(){
+	public function __construct()
+	{
 
-        $this->tipoAtividade = new TipoAtividade();
-        $this->areaResponsavel = new AreaResponsavel();
-        $this->grupoServico = new GrupoServico();
-    }
-	public function setId($id) {
+		$this->tipoAtividade = new TipoAtividade();
+		$this->areaResponsavel = new AreaResponsavel();
+		$this->grupoServico = new GrupoServico();
+	}
+	public function setId($id)
+	{
 		$this->id = $id;
 	}
-		    
-	public function getId() {
+
+	public function getId()
+	{
 		return $this->id;
 	}
-	public function setNome($nome) {
+	public function setNome($nome)
+	{
 		$this->nome = $nome;
 	}
-		    
-	public function getNome() {
+
+	public function getNome()
+	{
 		return $this->nome;
 	}
-	public function setDescricao($descricao) {
+	public function setDescricao($descricao)
+	{
 		$this->descricao = $descricao;
 	}
-		    
-	public function getDescricao() {
+
+	public function getDescricao()
+	{
 		return $this->descricao;
 	}
-	public function setTipoAtividade(TipoAtividade $tipoAtividade) {
+	public function setTipoAtividade(TipoAtividade $tipoAtividade)
+	{
 		$this->tipoAtividade = $tipoAtividade;
 	}
-		    
-	public function getTipoAtividade() {
+
+	public function getTipoAtividade()
+	{
 		return $this->tipoAtividade;
 	}
-	public function setTempoSla($tempoSla) {
+	public function setTempoSla($tempoSla)
+	{
 		$this->tempoSla = $tempoSla;
 	}
-		    
-	public function getTempoSla() {
+
+	public function getTempoSla()
+	{
 		return $this->tempoSla;
 	}
-	public function setVisao($visao) {
+	public function setVisao($visao)
+	{
 		$this->visao = $visao;
 	}
-		    
-	public function getVisao() {
+
+	public function getVisao()
+	{
 		return $this->visao;
 	}
-	public function setAreaResponsavel(AreaResponsavel $areaResponsavel) {
+	public function setAreaResponsavel(AreaResponsavel $areaResponsavel)
+	{
 		$this->areaResponsavel = $areaResponsavel;
 	}
-		    
-	public function getAreaResponsavel() {
+
+	public function getAreaResponsavel()
+	{
 		return $this->areaResponsavel;
 	}
-	public function setGrupoServico(GrupoServico $grupoServico) {
+	public function setGrupoServico(GrupoServico $grupoServico)
+	{
 		$this->grupoServico = $grupoServico;
 	}
-		    
-	public function getGrupoServico() {
+
+	public function getGrupoServico()
+	{
 		return $this->grupoServico;
 	}
-	public function __toString(){
-	    return $this->id.' - '.$this->nome.' - '.$this->descricao.' - '.$this->tipoAtividade.' - '.$this->tempoSla.' - '.$this->visao.' - '.$this->areaResponsavel.' - '.$this->grupoServico;
+	public function __toString()
+	{
+		return $this->id . ' - ' . $this->nome . ' - ' . $this->descricao . ' - ' . $this->tipoAtividade . ' - ' . $this->tempoSla . ' - ' . $this->visao . ' - ' . $this->areaResponsavel . ' - ' . $this->grupoServico;
 	}
-                
-
 }
-?>

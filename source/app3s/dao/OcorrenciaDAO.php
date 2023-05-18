@@ -655,5 +655,4 @@ class OcorrenciaDAO extends DAO
             echo $e->getMessage();
         }
     }
-
 }

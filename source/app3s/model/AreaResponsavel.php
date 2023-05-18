@@ -1,5 +1,5 @@
 <?php
-            
+
 /**
  * Classe feita para manipulação do objeto AreaResponsavel
  * feita automaticamente com programa gerador de software inventado por
@@ -8,46 +8,53 @@
 
 namespace app3s\model;
 
-class AreaResponsavel {
+class AreaResponsavel
+{
 	private $id;
 	private $nome;
 	private $descricao;
 	private $email;
-    public function __construct(){
-
-    }
-	public function setId($id) {
+	public function __construct()
+	{
+	}
+	public function setId($id)
+	{
 		$this->id = $id;
 	}
-		    
-	public function getId() {
+
+	public function getId()
+	{
 		return $this->id;
 	}
-	public function setNome($nome) {
+	public function setNome($nome)
+	{
 		$this->nome = $nome;
 	}
-		    
-	public function getNome() {
+
+	public function getNome()
+	{
 		return $this->nome;
 	}
-	public function setDescricao($descricao) {
+	public function setDescricao($descricao)
+	{
 		$this->descricao = $descricao;
 	}
-		    
-	public function getDescricao() {
+
+	public function getDescricao()
+	{
 		return $this->descricao;
 	}
-	public function setEmail($email) {
+	public function setEmail($email)
+	{
 		$this->email = $email;
 	}
-		    
-	public function getEmail() {
+
+	public function getEmail()
+	{
 		return $this->email;
 	}
-	public function __toString(){
-	    return $this->id.' - '.$this->nome.' - '.$this->descricao.' - '.$this->email;
+	public function __toString()
+	{
+		return $this->id . ' - ' . $this->nome . ' - ' . $this->descricao . ' - ' . $this->email;
 	}
-                
-
 }
-?>
