@@ -676,10 +676,9 @@ class OcorrenciaDAO extends DAO
 
     public function outroFiltro($arrayFiltros = array())
     {
-        if (count($arrayFiltros) == 0) {
+        if (empty($arrayFiltros)) {
             return "";
         }
-        $filtro = "";
         $arrPedacos = array();
         if (isset($arrayFiltros['setor'])) {
             $idSetor = $arrayFiltros['setor'];
