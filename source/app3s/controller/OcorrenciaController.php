@@ -196,8 +196,8 @@ class OcorrenciaController
 
 
 			echo '
-	            
-	            
+
+
                     <div class="notice ' . $strCartao . '">
             	       <strong>' . $status->getStatus()->getNome() . '</strong><br>';
 
@@ -211,21 +211,21 @@ class OcorrenciaController
 				}
 			}
 			echo '<br>
-                        
+
 
                         ' . $status->getMensagem() . '<br>
                         <strong>' . $status->getUsuario()->getNome() . '<br>' . date('d/m/Y - H:i', strtotime($status->getDataMudanca())) . '</strong>
             	    </div>
-                            
-                            
-                            
+
+
+
 ';
 		}
 		echo '
-	        
+
 </div>
-	        
-	        
+
+
 ';
 
 		$mensagemController = new MensagemForumController();
@@ -238,9 +238,9 @@ class OcorrenciaController
 
 
 		echo '
-	          
-	        
-	        
+
+
+
                 </aside>
             </div>';
 	}
@@ -248,7 +248,7 @@ class OcorrenciaController
 	{
 
 		echo '
-	        
+
 <div class="card mb-4">
         <div class="card-body">';
 
@@ -263,14 +263,14 @@ class OcorrenciaController
 
 
 		echo '
-	        
-	        
+
+
 	</div>
 </div>
-	        
-	        
-	        
-	        
+
+
+
+
 ';
 	}
 	public function painel($lista, $strTitulo, $id, $strShow = "")
@@ -278,15 +278,15 @@ class OcorrenciaController
 		echo '
     <div class="panel panel-default" id="panel1">
         <div class="panel-heading">
-            <h3 class="pb-4 mb-4 font-italic border-bottom" 
+            <h3 class="pb-4 mb-4 font-italic border-bottom"
             data-toggle="collapse" data-target="#' . $id . '" href="#' . $id . '">
                 ' . $strTitulo . '
-	        
-            <button type="button" class="float-right btn ml-3 
-                btn-warning btn-circle btn-lg"  data-toggle="collapse" href="#' . $id . '" role="button" aria-expanded="false" 
+
+            <button type="button" class="float-right btn ml-3
+                btn-warning btn-circle btn-lg"  data-toggle="collapse" href="#' . $id . '" role="button" aria-expanded="false"
                 aria-controls="' . $id . '"><i class="fa fa-expand icone-maior"></i></button>
             </h3>
-	        
+
         </div>
         <div id="' . $id . '" class="panel-collapse collapse in ' . $strShow . '">
             <div class="panel-body">';
@@ -295,7 +295,7 @@ class OcorrenciaController
 
 
 		echo '
-	        
+
             </div>
         </div>
     </div>';
@@ -391,12 +391,12 @@ class OcorrenciaController
                                     <option value="' . $chave . '">' . $area . '</option>';
 		}
 		echo '
-	        
+
                                 </select>
                               </div>';
 		echo '
 
-	        
+
                             <div class="form-group">
                                 <label for="filtro-data-1">Setor Responsável</label>
                                 <select id="select-setores-filtro2">
@@ -406,25 +406,25 @@ class OcorrenciaController
                                     <option value="' . trim($area->getId()) . '">' . trim($area->getNome()) . '</option>';
 		}
 		echo '
-	        
+
                                 </select>
                               </div>
-	        
+
 <hr>
                             <label for="filtro-data-1">Data de Abertura</label>
                             <div class="form-row">
                                 <div class="col-md-6 mb-3">
                                   <label for="filtro-data-1">Data Inicial</label>
                                   <input type="date" class="form-control" id="filtro-data-1" name="filtro-data-1" value="' . $dataAbertura1 . '">
-                                      
+
                                 </div>
                                 <div class="col-md-6 mb-3">
                                   <label for="filtro-data-2">Data Final</label>
                                   <input type="date" class="form-control" id="filtro-data-2" name="filtro-data-2" value="' . $dataAbertura2 . '">
-                                      
+
                                 </div>
                               </div>
-                                      
+
                             </form>';
 	}
 
@@ -509,14 +509,14 @@ class OcorrenciaController
                               <label class="custom-control-label" for="filtro-minhas-demandas">Meus Atendimentos</label>
                             </div>
 
-    
+
 
                             <div class="custom-control custom-switch mb-3">
                               <input type="checkbox" class="custom-control-input" id="filtro-minhas-solicitacoes" ' . $checkedSolicitacao . '>
                               <label class="custom-control-label" for="filtro-minhas-solicitacoes">Minhas Solicitações</label>
                             </div>
-                        
-                        
+
+
                             <div class="form-group">
                                 <label for="select-tecnico">Técnico Responsável</label>
                                 <select id="select-tecnico">
@@ -536,7 +536,7 @@ class OcorrenciaController
                                 </select>
                               </div>
 
-						
+
 						<div class="form-group">
 						<label for="select-requisitante">Usuário Requisitante</label>
 						<select id="select-requisitante">
@@ -557,8 +557,8 @@ class OcorrenciaController
 						</select>
 					  </div>
 				</form>
-						
-						
+
+
 						';
 
 		$this->filtroAvancado($listaAreas, $requisitantes);
@@ -599,7 +599,7 @@ class OcorrenciaController
                         </form>
 
 
-    
+
                   </div>
 
 ';
@@ -681,7 +681,7 @@ class OcorrenciaController
 			$arrayFiltros = array();
 			$arrayFiltros = $this->getArrayFiltros();
 
-			$listaPendentes = $this->dao->pesquisaParaTec( $this->arrayStatusPendente(), $arrayFiltros);
+			$listaPendentes = $this->dao->pesquisaParaTec($this->arrayStatusPendente(), $arrayFiltros);
 			$lista2 = $this->dao->pesquisaParaTec($this->arrayStatusFinalizado(), $arrayFiltros);
 
 
@@ -728,16 +728,16 @@ class OcorrenciaController
 
 		echo '
 
-               
 
-	        
+
+
                   <div class="p-4 mb-3 bg-light rounded">
                     <h4 class="font-italic">Sobre o Novíssimo 3s</h4>
                     <p class="mb-0">
                         Esta é uma aplicação completamente nova desenvolvida pela DTI do zero.
                         Tudo foi refeito, desde o design até a estrutura de banco de dados.
                         Os chamados antigos foram preservados em uma nova estrutura de banco de dados.
-	        
+
                     </p>
                   </div>
                 </aside><!-- /.blog-sidebar -->
@@ -762,8 +762,8 @@ class OcorrenciaController
 		echo '
             <div class="row">
                 <div class="col-md-12 blog-main">
-                    
-	        
+
+
 ';
 		$servicoDao = new ServicoDAO($this->dao->getConnection());
 		$servico = new Servico();
@@ -789,7 +789,7 @@ class OcorrenciaController
 		} else {
 			echo '
 			<h3 class="pb-4 mb-4 font-italic border-bottom" data-toggle="collapse" data-target="#collapseAberto" href="#collapseAberto" aria-expanded="true">
-				Para continuar confirme os chamados fechados. 
+				Para continuar confirme os chamados fechados.
             </h3>'; //public function exibirLista($lista)
 			$this->view->exibirLista($listaNaoAvaliados);
 		}

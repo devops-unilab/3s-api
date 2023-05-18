@@ -109,7 +109,7 @@ class MensagemForumController
                     <input type="hidden" id="chatDelete" name="chatDelete" value=""/>
                     <button type="submit" class="btn btn-primary">Confirmar</button>
                 </form>
-                
+
               </div>
             </div>
           </div>
@@ -124,7 +124,7 @@ class MensagemForumController
                     <!--<button class="chatbox__title__tray">
             <span></span>
         </button>-->
-                    
+
                 </div>
                 <div id="corpo-chat" class="chatbox__body">';
 
@@ -190,17 +190,17 @@ class MensagemForumController
                         <li>' . strip_tags($mensagemForum->getMensagem()) . '</li>';
             }
             echo '
-                                    
+
                                 </ul>
                                 <div class="clearfix"></div>
 
                             </div>
-            
+
                         </div>';
         }
         echo '<span id="ultimo-id-post" class="escondido">' . $ultimoId . '</span>';
         echo '
-                    
+
 
                 </div>
                 <div class="panel-footer">';
@@ -308,11 +308,11 @@ class MensagemForumController
                 $extensao = strtolower(end($extensaoArr));
 
                 $extensoes_permitidas = array(
-                    'xlsx', 'xlsm', 'xlsb', 'xltx', 'xltm', 
-                    'xls', 'xlt', 'xls', 'xml', 'xml', 'xlam', 
-                    'xla', 'xlw', 'xlr', 'doc', 'docm', 'docx', 
-                    'docx', 'dot', 'dotm', 'dotx', 'odt', 
-                    'pdf', 'rtf', 'txt', 'wps', 'xml', 'zip', 
+                    'xlsx', 'xlsm', 'xlsb', 'xltx', 'xltm',
+                    'xls', 'xlt', 'xls', 'xml', 'xml', 'xlam',
+                    'xla', 'xlw', 'xlr', 'doc', 'docm', 'docx',
+                    'docx', 'dot', 'dotm', 'dotx', 'odt',
+                    'pdf', 'rtf', 'txt', 'wps', 'xml', 'zip',
                     'rar', 'ovpn', 'xml', 'xps', 'jpg', 'gif',
                     'png', 'pdf', 'jpeg'
                 );

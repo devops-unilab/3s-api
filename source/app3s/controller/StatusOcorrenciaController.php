@@ -87,8 +87,10 @@ class StatusOcorrenciaController
 		if ($this->sessao == null) {
 			$this->sessao = new Sessao();
 		}
-		if ($this->sessao->getIdUsuario() 
-		!= $this->ocorrencia->getUsuarioCliente()->getId()) {
+		if (
+			$this->sessao->getIdUsuario()
+			!= $this->ocorrencia->getUsuarioCliente()->getId()
+		) {
 			return false;
 		}
 		if ($this->ocorrencia->getStatus() == self::STATUS_FECHADO) {
@@ -345,9 +347,9 @@ class StatusOcorrenciaController
 
 		echo '
 				<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
-	        
+
     				<div class="alert  bg-light d-flex justify-content-between align-items-center" role="alert">
-    				  
+
 
                 ';
 
@@ -359,7 +361,7 @@ class StatusOcorrenciaController
   <div class="dropdown-menu">
 
 
-      
+
 ';
 
 
@@ -799,7 +801,7 @@ class StatusOcorrenciaController
 	}
 	public function mainAjax()
 	{
-		//Verifica-se qual o form que foi submetido. 
+		//Verifica-se qual o form que foi submetido.
 
 		if (!isset($_POST['status_acao'])) {
 			echo ':falha:Ação não especificada';
