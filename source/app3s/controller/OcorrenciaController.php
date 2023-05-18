@@ -187,7 +187,7 @@ class OcorrenciaController
             <span class="text-right">';
         $horaEstimada = $this->calcularHoraSolucao($dataAbertura, $this->selecionado->getServico()->getTempoSla());
         echo '</div></div></div><div class="col-md-8">';
-        $this->view->mostrarSelecionado2($this->selecionado, $listaStatus, $dataAbertura, $horaEstimada);
+        $this->view->mostrarSelecionado2($this->selecionado, $dataAbertura, $horaEstimada);
         echo '</div><aside class="col-md-4 blog-sidebar">
                 <h4 class="font-italic">Histórico</h4><div class="container">';
         foreach ($listaStatus as $status) {
