@@ -941,7 +941,8 @@ class OcorrenciaController
         $corpo =  '<p>Prezado(a) ' . $statusOcorrencia->getUsuario()->getNome() . ' ,</p>';
         $corpo .= '<p>Sua solicitação foi realizada com sucesso,
                     solicitação
-                    <a href="https://3s.unilab.edu.br/?page=ocorrencia&selecionar=' . $statusOcorrencia->getOcorrencia()->getId() . '">
+                    <a href="https://3s.unilab.edu.br/?page=ocorrencia&selecionar='
+                    . $statusOcorrencia->getOcorrencia()->getId() . '">
                     Nº' . $statusOcorrencia->getOcorrencia()->getId() . '</a></p>';
         $corpo .= '<ul>
                         <li>

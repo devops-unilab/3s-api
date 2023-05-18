@@ -59,7 +59,10 @@ class StatusOcorrenciaController
         if ($this->ocorrencia->getStatus() == self::STATUS_CANCELADO) {
             return false;
         }
-        if ($this->ocorrencia->getStatus() == self::STATUS_FECHADO || $this->ocorrencia->getStatus() == self::STATUS_FECHADO_CONFIRMADO) {
+        if (
+            $this->ocorrencia->getStatus() == self::STATUS_FECHADO
+            || $this->ocorrencia->getStatus() == self::STATUS_FECHADO_CONFIRMADO
+        ) {
             return false;
         }
         if ($this->ocorrencia->getStatus() == self::STATUS_RESERVADO) {
@@ -76,7 +79,10 @@ class StatusOcorrenciaController
                 return false;
             }
         }
-        if ($this->ocorrencia->getStatus() == self::STATUS_ABERTO || $this->ocorrencia->getStatus() == self::STATUS_REABERTO) {
+        if (
+            $this->ocorrencia->getStatus() == self::STATUS_ABERTO
+            || $this->ocorrencia->getStatus() == self::STATUS_REABERTO
+        ) {
             return true;
         }
 
@@ -355,7 +361,10 @@ class StatusOcorrenciaController
 
         echo '
 <div class="btn-group">
-  <button class="btn btn-light btn-lg dropdown-toggle p-2" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+  <button
+    class="btn btn-light btn-lg dropdown-toggle p-2" type="button"
+    data-toggle="dropdown"
+    aria-haspopup="true" aria-expanded="false">
    Chamado ' . $this->ocorrencia->getId() . '
   </button>
   <div class="dropdown-menu">
@@ -368,7 +377,10 @@ class StatusOcorrenciaController
         $possoCancelar = $this->possoCancelar();
         $this->view->botaoCancelar($possoCancelar);
 
-        if ($this->sessao->getNivelAcesso() == Sessao::NIVEL_ADM || $this->sessao->getNivelAcesso() == Sessao::NIVEL_TECNICO) {
+        if (
+            $this->sessao->getNivelAcesso() == Sessao::NIVEL_ADM
+            || $this->sessao->getNivelAcesso() == Sessao::NIVEL_TECNICO
+        ) {
             $possoAtender = $this->possoAtender();
             $this->view->botaoAtender($possoAtender);
         }
@@ -424,7 +436,10 @@ class StatusOcorrenciaController
     public function possoAguardarUsuario()
     {
 
-        if ($this->sessao->getNivelAcesso() == Sessao::NIVEL_COMUM || $this->sessao->getNivelAcesso() == Sessao::NIVEL_DESLOGADO) {
+        if (
+            $this->sessao->getNivelAcesso() == Sessao::NIVEL_COMUM
+            || $this->sessao->getNivelAcesso() == Sessao::NIVEL_DESLOGADO
+        ) {
             return false;
         }
         if ($this->ocorrencia->getStatus() != self::STATUS_ATENDIMENTO) {
@@ -437,7 +452,10 @@ class StatusOcorrenciaController
     }
     public function possoAguardarAtivos()
     {
-        if ($this->sessao->getNivelAcesso() == Sessao::NIVEL_COMUM || $this->sessao->getNivelAcesso() == Sessao::NIVEL_DESLOGADO) {
+        if (
+            $this->sessao->getNivelAcesso() == Sessao::NIVEL_COMUM
+            || $this->sessao->getNivelAcesso() == Sessao::NIVEL_DESLOGADO
+        ) {
             return false;
         }
         if ($this->ocorrencia->getStatus() != self::STATUS_ATENDIMENTO) {
@@ -501,7 +519,10 @@ class StatusOcorrenciaController
     {
         $this->ocorrencia = $ocorrencia;
         $this->sessao = new Sessao();
-        if ($this->sessao->getNivelAcesso() == Sessao::NIVEL_COMUM || $this->sessao->getNivelAcesso() == Sessao::NIVEL_DESLOGADO) {
+        if (
+            $this->sessao->getNivelAcesso() == Sessao::NIVEL_COMUM
+            || $this->sessao->getNivelAcesso() == Sessao::NIVEL_DESLOGADO
+        ) {
             return false;
         }
         if ($this->ocorrencia->getStatus() != self::STATUS_ATENDIMENTO) {
@@ -941,12 +962,18 @@ class StatusOcorrenciaController
 
         $saldacao =  '<p>Prezado(a) ' . $this->statusOcorrencia->getUsuario()->getNome() . ' ,</p>';
 
-        $corpo = '<p>Avisamos que houve uma mudança no status da solicitação <a href="https://3s.unilab.edu.br/?page=ocorrencia&selecionar=' . $this->statusOcorrencia->getOcorrencia()->getId() . '">Nº' . $this->statusOcorrencia->getOcorrencia()->getId() . '</a></p>';
+        $corpo = '<p>
+                        Avisamos que houve uma mudança no status da solicitação
+                        <a href="https://3s.unilab.edu.br/?page=ocorrencia&selecionar='
+            . $this->statusOcorrencia->getOcorrencia()->getId() . '">
+                         Nº' . $this->statusOcorrencia->getOcorrencia()->getId() . '</a></p>';
         $corpo .= $mensagem;
         $corpo .= '<ul>
-                        <li>Serviço Solicitado: ' . $this->statusOcorrencia->getOcorrencia()->getServico()->getNome() . '</li>
+                        <li>Serviço Solicitado: '
+            . $this->statusOcorrencia->getOcorrencia()->getServico()->getNome() . '</li>
                         <li>Descrição do Problema: ' . $this->statusOcorrencia->getOcorrencia()->getDescricao() . '</li>
-                        <li>Setor Responsável: ' . $this->statusOcorrencia->getOcorrencia()->getAreaResponsavel()->getNome() . ' -
+                        <li>Setor Responsável: '
+            . $this->statusOcorrencia->getOcorrencia()->getAreaResponsavel()->getNome() . ' -
                         ' . $this->statusOcorrencia->getOcorrencia()->getAreaResponsavel()->getDescricao() . '</li>
                         <li>Cliente: ' . $this->ocorrencia->getUsuarioCliente()->getNome() . '</li>
                 </ul><br><p>Mensagem enviada pelo sistema 3S. Favor não responder.</p>';

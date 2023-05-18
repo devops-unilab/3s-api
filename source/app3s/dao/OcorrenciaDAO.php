@@ -104,7 +104,51 @@ class OcorrenciaDAO extends DAO
 
     public function insert(Ocorrencia $ocorrencia)
     {
-        $sql = "INSERT INTO ocorrencia(id_area_responsavel, id_servico, id_local, id_usuario_cliente, descricao, campus, patrimonio, ramal, local, status, solucao, prioridade, avaliacao, email, id_usuario_atendente, id_usuario_indicado, anexo, local_sala, data_abertura, data_atendimento, data_fechamento, data_fechamento_confirmado) VALUES (:areaResponsavel, :servico, :idLocal, :usuarioCliente, :descricao, :campus, :patrimonio, :ramal, :local, :status, :solucao, :prioridade, :avaliacao, :email, :idUsuarioAtendente, :idUsuarioIndicado, :anexo, :localSala, :dataAbertura, :dataAtendimento, :dataFechamento, :dataFechamentoConfirmado);";
+        $sql = "INSERT INTO ocorrencia
+                (id_area_responsavel,
+                    id_servico,
+                    id_local,
+                    id_usuario_cliente,
+                    descricao,
+                    campus,
+                    patrimonio,
+                    ramal,
+                    local,
+                    status,
+                    solucao,
+                    prioridade,
+                    avaliacao,
+                    email,
+                    id_usuario_atendente,
+                    id_usuario_indicado,
+                    anexo,
+                    local_sala,
+                    data_abertura,
+                    data_atendimento,
+                    data_fechamento,
+                    data_fechamento_confirmado)
+                    VALUES (:areaResponsavel,
+                    :servico,
+                    :idLocal,
+                    :usuarioCliente,
+                    :descricao,
+                    :campus,
+                    :patrimonio,
+                    :ramal,
+                    :local,
+                    :status,
+                    :solucao,
+                    :prioridade,
+                    :avaliacao,
+                    :email,
+                    :idUsuarioAtendente,
+                    :idUsuarioIndicado,
+                    :anexo,
+                    :localSala,
+                    :dataAbertura,
+                    :dataAtendimento,
+                    :dataFechamento,
+                    :dataFechamentoConfirmado);";
         $areaResponsavel = $ocorrencia->getAreaResponsavel()->getId();
         $servico = $ocorrencia->getServico()->getId();
         $idLocal = $ocorrencia->getIdLocal();
@@ -480,32 +524,50 @@ class OcorrenciaDAO extends DAO
         }
 
 
-        $sql = "SELECT ocorrencia.id, ocorrencia.id_local,
-                ocorrencia.descricao, ocorrencia.campus, ocorrencia.patrimonio,
-                ocorrencia.ramal, ocorrencia.local, ocorrencia.status,
+        $sql = "SELECT ocorrencia.id,
+        ocorrencia.id_local,
+                ocorrencia.descricao,
+                ocorrencia.campus,
+                ocorrencia.patrimonio,
+                ocorrencia.ramal,
+                ocorrencia.local,
+                ocorrencia.status,
                 ocorrencia.solucao,
-                ocorrencia.prioridade, ocorrencia.avaliacao, ocorrencia.email,
-                ocorrencia.id_usuario_atendente, ocorrencia.id_usuario_indicado,
-                ocorrencia.anexo, ocorrencia.local_sala, ocorrencia.data_abertura,
+                ocorrencia.prioridade,
+                ocorrencia.avaliacao,
+                ocorrencia.email,
+                ocorrencia.id_usuario_atendente,
+                ocorrencia.id_usuario_indicado,
+                ocorrencia.anexo,
+                ocorrencia.local_sala,
+                ocorrencia.data_abertura,
                 area_responsavel.id
                 AS id_area_responsavel_area_responsavel,
                 area_responsavel.nome
                 AS nome_area_responsavel_area_responsavel,
                 area_responsavel.descricao
-                AS descricao_area_responsavel_area_responsavel, area_responsavel.email
-                AS email_area_responsavel_area_responsavel, servico.id
-                AS id_servico_servico, servico.nome
-                AS nome_servico_servico, servico.descricao
-                AS descricao_servico_servico, servico.tempo_sla
-                AS tempo_sla_servico_servico, servico.visao
+                AS descricao_area_responsavel_area_responsavel,
+                area_responsavel.email
+                AS email_area_responsavel_area_responsavel,
+                servico.id
+                AS id_servico_servico,
+                servico.nome
+                AS nome_servico_servico,
+                servico.descricao
+                AS descricao_servico_servico,
+                servico.tempo_sla
+                AS tempo_sla_servico_servico,
+                servico.visao
                 AS visao_servico_servico,
                 usuario_cliente.id
                 AS id_usuario_usuario_cliente,
                 usuario_cliente.nome
-                AS nome_usuario_usuario_cliente, usuario_cliente.email
+                AS nome_usuario_usuario_cliente,
+                usuario_cliente.email
                 AS email_usuario_usuario_cliente,
                 usuario_cliente.login
-                AS login_usuario_usuario_cliente, usuario_cliente.senha
+                AS login_usuario_usuario_cliente,
+                usuario_cliente.senha
                 AS senha_usuario_usuario_cliente,
                 usuario_cliente.nivel
                 AS nivel_usuario_usuario_cliente,

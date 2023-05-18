@@ -59,7 +59,17 @@ class MensagemForumDAO extends DAO
     {
 
         $id = $mensagemForum->getId();
-        $sql = "SELECT mensagem_forum.id, mensagem_forum.tipo, mensagem_forum.mensagem, mensagem_forum.data_envio, usuario.id as id_usuario_usuario, usuario.nome as nome_usuario_usuario, usuario.email as email_usuario_usuario, usuario.login as login_usuario_usuario, usuario.senha as senha_usuario_usuario, usuario.nivel as nivel_usuario_usuario, usuario.id_setor as id_setor_usuario_usuario FROM mensagem_forum INNER JOIN usuario as usuario ON usuario.id = mensagem_forum.id_usuario
+        $sql = "SELECT mensagem_forum.id,
+                mensagem_forum.tipo,
+                mensagem_forum.mensagem,
+                mensagem_forum.data_envio,
+                usuario.id as id_usuario_usuario,
+                usuario.nome as nome_usuario_usuario,
+                usuario.email as email_usuario_usuario,
+                usuario.login as login_usuario_usuario,
+                usuario.senha as senha_usuario_usuario,
+                usuario.nivel as nivel_usuario_usuario,
+                usuario.id_setor as id_setor_usuario_usuario FROM mensagem_forum INNER JOIN usuario as usuario ON usuario.id = mensagem_forum.id_usuario
                 WHERE mensagem_forum.id = :id
                  LIMIT 1000";
 

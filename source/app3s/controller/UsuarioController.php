@@ -115,7 +115,13 @@ class UsuarioController
         if ($this->autenticar($usuario)) {
 
             $sessao = new Sessao();
-            $sessao->criaSessao($usuario->getId(), $usuario->getNivel(), $usuario->getLogin(), $usuario->getNome(), $usuario->getEmail());
+            $sessao->criaSessao(
+                $usuario->getId(),
+                $usuario->getNivel(),
+                $usuario->getLogin(),
+                $usuario->getNome(),
+                $usuario->getEmail()
+            );
             $sessao->setIDUnidade($usuario->getIdUnidade());
             $sessao->setUnidade($usuario->getSiglaUnidade());
             echo ":sucesso:" . $sessao->getNivelAcesso();
