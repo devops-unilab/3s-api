@@ -199,16 +199,16 @@ class ServicoView
                 <tbody>';
 
         foreach ($lista as $element) {
-            echo '<tr>';
-            echo '<td>' . $element->getId() . '</td>';
-            echo '<td>' . $element->getNome() . '</td>';
-            echo '<td>' . $element->getDescricao() . '</td>';
-            echo '<td>' . $element->getTempoSla() . '</td>';
-            echo '<td>' . $element->getTipoAtividade()->getNome() . '</td>';
-            echo '<td>' . $element->getAreaResponsavel()->getNome() . '</td>';
-            echo '<td>' . $element->getGrupoServico()->getNome() . '</td>';
-            echo '<td>' . ServicoController::toStringVisao($element->getVisao()) . '</td>';
-            echo '<td>
+            echo '<tr>
+            <td>' . $element->getId() . '</td>
+            <td>' . $element->getNome() . '</td>
+            <td>' . $element->getDescricao() . '</td>
+            <td>' . $element->getTempoSla() . '</td>
+            <td>' . $element->getTipoAtividade()->getNome() . '</td>
+            <td>' . $element->getAreaResponsavel()->getNome() . '</td>
+            <td>' . $element->getGrupoServico()->getNome() . '</td>
+            <td>' . ServicoController::toStringVisao($element->getVisao()) . '</td>
+            <td>
 
 <a href="?page=servico&edit=' . $element->getId() . '" class="btn btn-success btn-circle btn-lg">
     <i class="fa fa-pencil icone-maior"></i>
@@ -217,8 +217,7 @@ class ServicoView
     <i class="fa fa-trash icone-maior"></i>
 </a>
 
-                      </td>';
-            echo '</tr>';
+                      </td></tr>';
         }
 
         echo '
