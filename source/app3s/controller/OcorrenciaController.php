@@ -106,13 +106,6 @@ class OcorrenciaController
     }
 
 
-    public function parteInteressada()
-    {
-        return ($this->sessao->getNivelAcesso() == Sessao::NIVEL_TECNICO
-            || $this->sessao->getNivelAcesso() == Sessao::NIVEL_ADM
-            || $this->selecionado->getUsuarioCliente()->getId() == $this->sessao->getIdUsuario()
-        );
-    }
     public function getColorStatus($siglaStatus)
     {
         $strCartao = ' alert-warning ';
@@ -141,19 +134,19 @@ class OcorrenciaController
         if (!isset($_GET['selecionar'])) {
             return;
         }
-
         $this->sessao = new Sessao();
         $this->selecionado = new Ocorrencia();
         $this->selecionado->setId($_GET['selecionar']);
         $this->dao->fillById($this->selecionado);
+        if (!($this->sessao->getNivelAcesso() == Sessao::NIVEL_TECNICO
+            || $this->sessao->getNivelAcesso() == Sessao::NIVEL_ADM
+            || $this->selecionado->getUsuarioCliente()->getId() == $this->sessao->getIdUsuario()
+        )) {
 
-
-        if (!$this->parteInteressada()) {
             echo '<div class="alert alert-danger" role="alert">
-                        Você não é cliente deste chamado, nem técnico para atendê-lo.</div>';
+            Você não é cliente deste chamado, nem técnico para atendê-lo.</div>';
             return;
         }
-
         $statusDao = new StatusOcorrenciaDAO($this->dao->getConnection());
         $listaStatus = $statusDao->pesquisaPorIdOcorrencia($this->selecionado);
         $dataAbertura = null;
@@ -232,11 +225,6 @@ class OcorrenciaController
 
         $this->dao->fetchMensagens($this->selecionado);
         $mensagemController->mainOcorrencia($this->selecionado);
-
-
-
-
-
         echo '
 
 
@@ -300,16 +288,6 @@ class OcorrenciaController
             </div>
         </div>
     </div>';
-    }
-
-    public function exibirListagem($lista1, $lista2, $listaAtrasados = array())
-    {
-        $nAtrasados = count($listaAtrasados);
-        if ($nAtrasados > 0) {
-            $this->painel($listaAtrasados, "Ocorrências Em Atraso ($nAtrasados)", 'collapseAtraso', "show");
-        }
-        $this->painel($lista1, 'Ocorrências Em Aberto(' . count($lista1) . ')', 'collapseAberto', 'show');
-        $this->painel($lista2, "Ocorrências Encerradas", 'collapseEncerrada');
     }
     public function arrayStatusPendente()
     {
@@ -693,7 +671,12 @@ class OcorrenciaController
                     <div class="panel-group" id="accordion">';
 
 
-        $this->exibirListagem($lista, $lista2, $listaAtrasados);
+        $nAtrasados = count($listaAtrasados);
+        if ($nAtrasados > 0) {
+            $this->painel($listaAtrasados, "Ocorrências Em Atraso ($nAtrasados)", 'collapseAtraso', "show");
+        }
+        $this->painel($lista, 'Ocorrências Em Aberto(' . count($lista) . ')', 'collapseAberto', 'show');
+        $this->painel($lista2, "Ocorrências Encerradas", 'collapseEncerrada');
         $requisitantes = array();
         foreach ($lista as $ocorrencia) {
             $requisitantes[$ocorrencia->getIdLocal()] = $ocorrencia->getLocal();
@@ -942,5 +925,4 @@ class OcorrenciaController
 
         $mail->enviarEmail($destinatario, $nome, $assunto, $corpo);
     }
-
 }
