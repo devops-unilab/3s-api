@@ -68,8 +68,14 @@ class OcorrenciaView
             <div class="row">
                 <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
                     <div class="custom-file">
-                      <input type="file" class="custom-file-input" name="anexo" id="anexo" accept="application/msword, application/vnd.ms-excel, application/vnd.ms-powerpoint, text/plain, application/pdf, image/*, application/zip,application/rar, .ovpn, .xlsx">
-                      <label class="custom-file-label" for="anexo" data-browse="Anexar">Anexar um Arquivo</label>
+                      <input type="file"
+                        class="custom-file-input"
+                        name="anexo"
+                        id="anexo"
+                        accept="application/msword, application/vnd.ms-excel, application/vnd.ms-powerpoint, text/plain, application/pdf, image/*, application/zip,application/rar, .ovpn, .xlsx">
+                      <label class="custom-file-label"
+                        for="anexo"
+                        data-browse="Anexar">Anexar um Arquivo</label>
                     </div>
 
                 </div>
@@ -107,7 +113,10 @@ class OcorrenciaView
 
                 <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12">
                     <label for="email" >E-mail*</label>
-                    <input class="form-control" type="email" name="email" id="email" value="' . trim($sessao->getEmail()) . '" required>
+                    <input class="form-control"
+                        type="email"
+                        name="email"
+                        id="email" value="' . trim($sessao->getEmail()) . '" required>
                 </div>
 
             </div>
@@ -120,7 +129,10 @@ class OcorrenciaView
 
   </div><br><br>
 <div class="d-flex justify-content-center m-3">
-        <button id="btn-inserir-ocorrencia" form="insert_form_ocorrencia" type="submit" class="btn btn-primary">Cadastrar Ocorrência</button>
+        <button id="btn-inserir-ocorrencia"
+            form="insert_form_ocorrencia"
+            type="submit"
+            class="btn btn-primary">Cadastrar Ocorrência</button>
 
 </div><br><br>
 
@@ -164,7 +176,8 @@ class OcorrenciaView
             echo '
 
             <div class="alert ' . $strClass . ' alert-dismissable">
-                <a href="?page=ocorrencia&selecionar=' . $elemento->getId() . '" class="close"><i class="fa fa-search icone-maior"></i></a>
+                <a href="?page=ocorrencia&selecionar=' . $elemento->getId() . '"
+                    class="close"><i class="fa fa-search icone-maior"></i></a>
 
                 <strong>#' . $elemento->getId() . '</strong>
                  ' . substr($elemento->getDescricao(), 0, 80) . '...
@@ -229,7 +242,8 @@ class OcorrenciaView
             echo '
 
             <div class="alert ' . $strClass . ' alert-dismissable">
-                <a href="?page=ocorrencia&selecionar=' . $elemento->getId() . '" class="close"><i class="fa fa-search icone-maior"></i></a>
+                <a href="?page=ocorrencia&selecionar=' . $elemento->getId() . '"
+                    class="close"><i class="fa fa-search icone-maior"></i></a>
 
                 <strong>#' . $elemento->getId() . ' </strong>';
             echo $descricao;
@@ -328,7 +342,10 @@ class OcorrenciaView
 
 
         if (trim($ocorrencia->getAnexo()) != "") {
-            echo '<b>Anexo: </b><a target="_blank" href="uploads/' . $ocorrencia->getAnexo() . '"> Clique aqui</a> <br>';
+            echo '<b>Anexo: </b>
+                    <a target="_blank" href="uploads/' . $ocorrencia->getAnexo() . '">
+                        Clique aqui
+                    </a> <br>';
         }
 
         echo '
@@ -499,7 +516,13 @@ class OcorrenciaView
 
         echo '
 
-            <b>Data de Abertura: </b>' . date("d/m/Y", strtotime($dataAbertura)) . ' ' . date("H", strtotime($dataAbertura)) . 'h' . date("i", strtotime($dataAbertura)) . ' min <br>';
+            <b>Data de Abertura:
+                </b>
+                ' . date("d/m/Y", strtotime($dataAbertura)) .
+            ' ' . date("H", strtotime($dataAbertura)) .
+            'h' . date("i", strtotime($dataAbertura)) .
+            ' min
+                <br>';
 
 
         if ($ocorrencia->getStatus() == StatusOcorrenciaController::STATUS_FECHADO) {
@@ -539,7 +562,12 @@ class OcorrenciaView
                 ' ' . date("H", strtotime($dataSolucao))
                 . 'h' . date("i", strtotime($dataSolucao)) .
                 ' min </span><br>';
-            echo '<span class="escondido" id="tempo-total">' . str_pad($hours, 2, '0', STR_PAD_LEFT) . ':' . str_pad($minutos, 2, '0', STR_PAD_LEFT) . ':' . str_pad($segundos, 2, '0', STR_PAD_LEFT) . '</span>';
+            echo '<span class="escondido"
+            id="tempo-total">' .
+                str_pad($hours, 2, '0', STR_PAD_LEFT) .
+                ':' . str_pad($minutos, 2, '0', STR_PAD_LEFT) .
+                ':' . str_pad($segundos, 2, '0', STR_PAD_LEFT) .
+                '</span>';
 
             $sessao = new Sessao();
             if ($ocorrencia->getUsuarioCliente()->getId() == $sessao->getIdUsuario()) {
@@ -555,8 +583,18 @@ class OcorrenciaView
         } else {
             $percentual = ($timeRecorrido * 100) / $total;
             echo '
-                    <p class="text-primary"><b>Solução Estimada: </b>' . date("d/m/Y", strtotime($dataSolucao)) . ' ' . date("H", strtotime($dataSolucao)) . 'h' . date("i", strtotime($dataSolucao)) . ' min.';
-            echo '<p class="escondido">Tempo Total: <span id="tempo-total">' . str_pad($hours, 2, '0', STR_PAD_LEFT) . ':' . str_pad($minutos, 2, '0', STR_PAD_LEFT) . ':' . str_pad($segundos, 2, '0', STR_PAD_LEFT) . '</span></p>';
+                    <p class="text-primary">
+                        <b>Solução Estimada: </b>' .
+                date("d/m/Y", strtotime($dataSolucao)) .
+                ' ' . date("H", strtotime($dataSolucao)) .
+                'h' . date("i", strtotime($dataSolucao)) .
+                ' min.';
+            echo '<p class="escondido">
+            Tempo Total: <span id="tempo-total">' .
+                str_pad($hours, 2, '0', STR_PAD_LEFT) .
+                ':' . str_pad($minutos, 2, '0', STR_PAD_LEFT) .
+                ':' . str_pad($segundos, 2, '0', STR_PAD_LEFT) .
+                '</span></p>';
             echo '';
 
             $date1 = new DateTime();
