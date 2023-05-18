@@ -64,8 +64,8 @@ class NavBarController
             </a>
             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                 <a class="dropdown-item" href="?page=servico">Serviços</a>
-                
-  
+
+
               <div class="dropdown-divider"></div>
               <a class="dropdown-item" href="?page=area_responsavel">Unidades</a>
               <a class="dropdown-item" href="?page=usuario">Usuários</a>
@@ -90,7 +90,7 @@ class NavBarController
     $primeiroNome = ucfirst(strtolower($primeiroNome));
 
     echo '
-        
+
         <form action="" method="get">
 
         <div class="input-group">
@@ -113,8 +113,8 @@ class NavBarController
                 Setor: ' . $sessao->getUnidade() . '
             </button>
 
-            
-            
+
+
             ';
 
     if ($sessao->getNIvelOriginal() == Sessao::NIVEL_ADM) {
@@ -168,8 +168,8 @@ class NavBarController
 
 
     echo '
-            
-            
+
+
 
             <a href="?sair=1" id="botao-avaliar" acao="avaliar"  class="dropdown-item">
                 Sair

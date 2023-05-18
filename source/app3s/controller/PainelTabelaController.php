@@ -18,7 +18,7 @@ class PainelTabelaController
     public function main()
     {
         echo '
-            
+
 <div class="card mb-4">
         <div class="card-header pb-4 mb-4 font-italic">
                     Painel Kamban';
@@ -33,10 +33,10 @@ class PainelTabelaController
         echo '
 	</div>
 </div>
-            
-            
-            
-            
+
+
+
+
 ';
     }
 
@@ -120,7 +120,7 @@ class PainelTabelaController
 
 
         echo '<br><br>
-            
+
           <table id="tabela-quadro" class="table  text-center table-bordered">
               <thead class="thead-dark">
                 <tr>';

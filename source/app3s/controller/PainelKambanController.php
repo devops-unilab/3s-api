@@ -28,7 +28,7 @@ class PainelKambanController
 
 
         echo '
-            
+
 <div class="card mb-4">
         <div class="card-header pb-4 mb-4 font-italic">
                     Painel Kamban';
@@ -43,10 +43,10 @@ class PainelKambanController
         echo '
 	</div>
 </div>
-            
-            
-            
-            
+
+
+
+
 ';
     }
 

@@ -38,7 +38,7 @@ class ServicoController
 			return;
 		}
 		echo '
-	        
+
         <div class="card mb-4">
             <div class="card-body">
 
@@ -118,7 +118,7 @@ class ServicoController
 	const VISAO_ADMIN = 3;
 
 	/**
-	 * 
+	 *
 	 * @param int $visao
 	 * @return string
 	 */
@@ -212,5 +212,4 @@ class ServicoController
 		}
 		echo '<META HTTP-EQUIV="REFRESH" CONTENT="3; URL=?page=servico">';
 	}
-
 }
