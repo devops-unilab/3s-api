@@ -63,7 +63,11 @@ data-toggle="modal" data-target="#modalStatus">
         echo '
 <!-- Button trigger modal -->
 <button type="button"
-     ' . $strDisable . '  id="avaliar-btn" acao="avaliar"  class="dropdown-item"  data-toggle="modal" data-target="#modalStatus">
+     ' . $strDisable . '  id="avaliar-btn"
+     acao="avaliar"
+     class="dropdown-item"
+     data-toggle="modal"
+     data-target="#modalStatus">
   Confirmar
 </button>
 

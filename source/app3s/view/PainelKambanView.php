@@ -243,7 +243,10 @@ class PainelKambanView extends OcorrenciaView
 
 
 
-        echo '<br><small class="' . $texto . '">Aberto em ' . date("d/m/Y G:i:s", strtotime($chamado->getDataAbertura())) . ' </small>';
+        echo '<br>
+                <small class="' . $texto . '">
+                    Aberto em ' . date("d/m/Y G:i:s", strtotime($chamado->getDataAbertura())) . '
+                </small>';
 
 
         if ($chamado->getDataFechamento() != null) {
