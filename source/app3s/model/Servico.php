@@ -99,6 +99,13 @@ class Servico
     }
     public function __toString()
     {
-        return $this->id . ' - ' . $this->nome . ' - ' . $this->descricao . ' - ' . $this->tipoAtividade . ' - ' . $this->tempoSla . ' - ' . $this->visao . ' - ' . $this->areaResponsavel . ' - ' . $this->grupoServico;
+        return $this->id .
+        ' - ' . $this->nome .
+        ' - ' . $this->descricao .
+        ' - ' . $this->tipoAtividade .
+        ' - ' . $this->tempoSla .
+        ' - ' . $this->visao .
+        ' - ' . $this->areaResponsavel .
+        ' - ' . $this->grupoServico;
     }
 }

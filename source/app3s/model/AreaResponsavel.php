@@ -14,9 +14,6 @@ class AreaResponsavel
     private $nome;
     private $descricao;
     private $email;
-    public function __construct()
-    {
-    }
     public function setId($id)
     {
         $this->id = $id;

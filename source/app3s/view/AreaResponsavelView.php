@@ -17,7 +17,11 @@ class AreaResponsavelView
   {
     echo '
 <!-- Button trigger modal -->
-<button type="button" class="btn btn-primary m-3" data-toggle="modal" data-target="#modalAddAreaResponsavel">
+<button
+    type="button"
+    class="btn btn-primary m-3"
+    data-toggle="modal"
+    data-target="#modalAddAreaResponsavel">
   Adicionar
 </button>
 
@@ -124,8 +128,16 @@ class AreaResponsavelView
       echo '<td>' . $element->getDescricao() . '</td>';
       echo '<td>' . $element->getEmail() . '</td>';
       echo '<td>
-                        <a href="?page=area_responsavel&edit=' . $element->getId() . '" class="btn btn-success text-white">Editar</a>
-                        <a href="?page=area_responsavel&delete=' . $element->getId() . '" class="btn btn-danger text-white">Apagar</a>
+                        <a
+                            href="?page=area_responsavel&edit='
+                                . $element->getId() . '"
+                                class="btn btn-success text-white">
+                            Editar
+                        </a>
+                        <a
+                            href="?page=area_responsavel&delete=' . $element->getId() . '" class="btn btn-danger text-white">
+                            Apagar
+                        </a>
                       </td>';
       echo '</tr>';
     }
@@ -239,7 +251,8 @@ class AreaResponsavelView
                                     <div class="text-center">
                                         <h1 class="h4 text-gray-900 mb-4"> Delete Area Responsavel</h1>
                                     </div>
-                                      <form class="user" method="post">                    Tem certeza que deseja apagar esta área responsável?
+                                      <form class="user" method="post">
+                                        Tem certeza que deseja apagar esta área responsável?
 
                                         <input type="submit" class="btn btn-primary btn-user btn-block" value="Delete"
                                         name="delete_area_responsavel">

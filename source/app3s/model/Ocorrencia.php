@@ -265,6 +265,29 @@ class Ocorrencia
     }
     public function __toString()
     {
-        return $this->id . ' - ' . $this->areaResponsavel . ' - ' . $this->servico . ' - ' . $this->idLocal . ' - ' . $this->usuarioCliente . ' - ' . $this->descricao . ' - ' . $this->campus . ' - ' . $this->patrimonio . ' - ' . $this->ramal . ' - ' . $this->local . ' - ' . $this->status . ' - ' . $this->solucao . ' - ' . $this->prioridade . ' - ' . $this->avaliacao . ' - ' . $this->email . ' - ' . $this->idUsuarioAtendente . ' - ' . $this->idUsuarioIndicado . ' - ' . $this->anexo . ' - ' . $this->localSala . ' - ' . 'Lista: ' . implode(", ", $this->mensagens) . ' - ' . $this->dataAbertura . ' - ' . $this->dataAtendimento . ' - ' . $this->dataFechamento . ' - ' . $this->dataFechamentoConfirmado;
+        return $this->id .
+            ' - ' . $this->areaResponsavel .
+            ' - ' . $this->servico .
+            ' - ' . $this->idLocal .
+            ' - ' . $this->usuarioCliente .
+            ' - ' . $this->descricao .
+            ' - ' . $this->campus .
+            ' - ' . $this->patrimonio .
+            ' - ' . $this->ramal .
+            ' - ' . $this->local .
+            ' - ' . $this->status .
+            ' - ' . $this->solucao .
+            ' - ' . $this->prioridade .
+            ' - ' . $this->avaliacao .
+            ' - ' . $this->email .
+            ' - ' . $this->idUsuarioAtendente .
+            ' - ' . $this->idUsuarioIndicado .
+            ' - ' . $this->anexo .
+            ' - ' . $this->localSala .
+            ' - ' . 'Lista: ' . implode(", ", $this->mensagens) .
+            ' - ' . $this->dataAbertura .
+            ' - ' . $this->dataAtendimento .
+            ' - ' . $this->dataFechamento .
+            ' - ' . $this->dataFechamentoConfirmado;
     }
 }
