@@ -60,7 +60,7 @@ class ServicoView
 
                                         <div class="form-group">
                                           <label for="visao">Visão</label>
-                						  <select class="form-control" id="tipo_atividade" name="visao" id="visao">
+                                          <select class="form-control" id="tipo_atividade" name="visao" id="visao">
                                             <option value="">Selecione uma visão</option>';
 
         foreach ($visoes as $element) {
@@ -70,11 +70,11 @@ class ServicoView
 
         echo '
                                           </select>
-                						</div>
+                                        </div>
 
                                         <div class="form-group">
                                           <label for="tipo_atividade">Tipo Atividade</label>
-                						  <select class="form-control" id="tipo_atividade" name="tipo_atividade">
+                                          <select class="form-control" id="tipo_atividade" name="tipo_atividade">
                                             <option value="">Selecione o Tipo Atividade</option>';
 
         foreach ($listaTipoAtividade as $element) {
@@ -83,10 +83,10 @@ class ServicoView
 
         echo '
                                           </select>
-                						</div>
+                                        </div>
                                         <div class="form-group">
                                           <label for="area_responsavel">Area Responsavel</label>
-                						  <select class="form-control" id="area_responsavel" name="area_responsavel">
+                                          <select class="form-control" id="area_responsavel" name="area_responsavel">
                                             <option value="">Selecione o Area Responsavel</option>';
 
         foreach ($listaAreaResponsavel as $element) {
@@ -95,10 +95,10 @@ class ServicoView
 
         echo '
                                           </select>
-                						</div>
+                                        </div>
                                         <div class="form-group">
                                           <label for="grupo_servico">Grupo Servico</label>
-                						  <select class="form-control" id="grupo_servico" name="grupo_servico">
+                                          <select class="form-control" id="grupo_servico" name="grupo_servico">
                                             <option value="">Selecione o Grupo Servico</option>';
 
         foreach ($listaGrupoServico as $element) {
@@ -107,9 +107,9 @@ class ServicoView
 
         echo '
                                           </select>
-                						</div>
+                                        </div>
 
-						              </form>
+                                      </form>
 
 
       </div>
@@ -144,36 +144,36 @@ class ServicoView
                 <div class="card-body">
 
 
-		<div class="table-responsive">
-			<table class="table table-bordered" id="dataTable" width="100%"
-				cellspacing="0">
-				<thead>
-					<tr>
-						<th>Id</th>
-						<th>Nome</th>
-						<th>Descricao</th>
-						<th>Tempo Sla</th>
-						<th>Tipo Atividade</th>
-						<th>Area Responsavel</th>
-						<th>Grupo Servico</th>
-						<th>Visão</th>
-                        <th>Ações</th>
-					</tr>
-				</thead>
-				<tfoot>
-					<tr>
+        <div class="table-responsive">
+            <table class="table table-bordered" id="dataTable" width="100%"
+                cellspacing="0">
+                <thead>
+                    <tr>
                         <th>Id</th>
                         <th>Nome</th>
                         <th>Descricao</th>
                         <th>Tempo Sla</th>
-						<th>Tipo Atividade</th>
-						<th>Area Responsavel</th>
-						<th>Grupo Servico</th>
-						<th>Visão</th>
+                        <th>Tipo Atividade</th>
+                        <th>Area Responsavel</th>
+                        <th>Grupo Servico</th>
+                        <th>Visão</th>
                         <th>Ações</th>
-					</tr>
-				</tfoot>
-				<tbody>';
+                    </tr>
+                </thead>
+                <tfoot>
+                    <tr>
+                        <th>Id</th>
+                        <th>Nome</th>
+                        <th>Descricao</th>
+                        <th>Tempo Sla</th>
+                        <th>Tipo Atividade</th>
+                        <th>Area Responsavel</th>
+                        <th>Grupo Servico</th>
+                        <th>Visão</th>
+                        <th>Ações</th>
+                    </tr>
+                </tfoot>
+                <tbody>';
 
         foreach ($lista as $element) {
             echo '<tr>';
@@ -195,9 +195,9 @@ class ServicoView
         }
 
         echo '
-				</tbody>
-			</table>
-		</div>
+                </tbody>
+            </table>
+        </div>
 
 
 
@@ -231,20 +231,20 @@ class ServicoView
                                         <div class="form-group">
                                             <label for="nome">Nome</label>
                                             <input type="text" class="form-control" value="' . $selecionado->getNome() . '"  name="nome" id="nome" placeholder="Nome">
-                						</div>
+                                        </div>
                                         <div class="form-group">
                                             <label for="descricao">Descricao</label>
                                             <input type="text" class="form-control" value="' . $selecionado->getDescricao() . '"  name="descricao" id="descricao" placeholder="Descricao">
-                						</div>
+                                        </div>
                                         <div class="form-group">
                                             <label for="tempo_sla">Tempo SLA(Em horas)</label>
                                             <input type="number" class="form-control" value="' . $selecionado->getTempoSla() . '"  name="tempo_sla" id="tempo_sla" placeholder="Tempo Sla">
-                						</div>
+                                        </div>
 
 
                                         <div class="form-group">
                                           <label for="visao">Visão</label>
-                						  <select class="form-control" name="visao" id="visao">
+                                          <select class="form-control" name="visao" id="visao">
                                             <option value="">Selecione uma visão</option>';
 
         foreach ($visoes as $element) {
@@ -257,13 +257,13 @@ class ServicoView
 
         echo '
                                           </select>
-                						</div>
+                                        </div>
 
 
 
                                         <div class="form-group">
                                           <label for="tipo_atividade">Tipo Atividade</label>
-                						  <select class="form-control" id="tipo_atividade" name="tipo_atividade">
+                                          <select class="form-control" id="tipo_atividade" name="tipo_atividade">
                                             <option value="">Selecione o Tipo Atividade</option>';
 
         foreach ($listaTipoAtividade as $element) {
@@ -276,10 +276,10 @@ class ServicoView
 
         echo '
                                           </select>
-                						</div>
+                                        </div>
                                         <div class="form-group">
                                           <label for="area_responsavel">Area Responsavel</label>
-                						  <select class="form-control" id="area_responsavel" name="area_responsavel">
+                                          <select class="form-control" id="area_responsavel" name="area_responsavel">
                                             <option value="">Selecione o Area Responsavel</option>';
 
         foreach ($listaAreaResponsavel as $element) {
@@ -292,10 +292,10 @@ class ServicoView
 
         echo '
                                           </select>
-                						</div>
+                                        </div>
                                         <div class="form-group">
                                           <label for="grupo_servico">Grupo Servico</label>
-                						  <select class="form-control" id="grupo_servico" name="grupo_servico">
+                                          <select class="form-control" id="grupo_servico" name="grupo_servico">
                                             <option value="">Selecione o Grupo Servico</option>';
 
         foreach ($listaGrupoServico as $element) {
@@ -308,7 +308,7 @@ class ServicoView
 
         echo '
                                           </select>
-                						</div>
+                                        </div>
                 <input type="hidden" value="1" name="edit_servico">
                 </form>
 
@@ -322,7 +322,7 @@ class ServicoView
 
 
 
-						              ';
+                                      ';
     }
 
 
@@ -334,31 +334,31 @@ class ServicoView
 
 
 
-				<div class="card o-hidden border-0 shadow-lg">
-					<div class="card-body p-0">
-						<!-- Nested Row within Card Body -->
-						<div class="row">
+                <div class="card o-hidden border-0 shadow-lg">
+                    <div class="card-body p-0">
+                        <!-- Nested Row within Card Body -->
+                        <div class="row">
 
-							<div class="col-lg-12">
-								<div class="p-5">
-									<div class="text-center">
-										<h1 class="h4 text-gray-900 mb-4"> Apagar Serviço</h1>
-									</div>
-						              <form class="user" method="post">Tem certeza que deseja apagar este serviço?
+                            <div class="col-lg-12">
+                                <div class="p-5">
+                                    <div class="text-center">
+                                        <h1 class="h4 text-gray-900 mb-4"> Apagar Serviço</h1>
+                                    </div>
+                                      <form class="user" method="post">Tem certeza que deseja apagar este serviço?
 
                                         <input type="submit" class="btn btn-primary btn-user btn-block" value="Delete" name="delete_servico">
                                         <hr>
 
-						              </form>
+                                      </form>
 
-								</div>
-							</div>
-						</div>
-					</div>
-
-
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
 
-	</div>';
+
+
+    </div>';
     }
 }

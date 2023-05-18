@@ -282,7 +282,10 @@ class StatusOcorrenciaView
   </div>
   <div class="modal-footer">
     <button type="button" class="btn btn-secondary" data-dismiss="modal">Sair</button>
-    <button id="botao-status" form="form_status_alterar" type="submit"  class="btn btn-primary">
+    <button id="botao-status"F
+        form="form_status_alterar"
+        type="submit"
+         class="btn btn-primary">
         <span id="spinner-status"
           class="escondido spinner-border spinner-border-sm"
           role="status"

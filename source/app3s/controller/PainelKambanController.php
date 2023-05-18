@@ -41,7 +41,7 @@ class PainelKambanController
             <div class="card-body" id="quadro-kamban">';
         $this->quadroKamban();
         echo '
-	</div>
+    </div>
 </div>
 
 
