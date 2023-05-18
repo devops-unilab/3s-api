@@ -25,9 +25,10 @@ class StatusOcorrenciaView
         }
         echo '
 <button type="button"
-     acao="cancelar" ' . $strDisable . '
-class="dropdown-item  botao-status"
-data-toggle="modal" data-target="#modalStatus">
+        acao="cancelar" ' . $strDisable . '
+        class="dropdown-item  botao-status"
+        data-toggle="modal"
+        data-target="#modalStatus">
   Cancelar
 </button>
 
@@ -43,11 +44,13 @@ data-toggle="modal" data-target="#modalStatus">
             $strDisable = 'disabled';
         }
         echo '
-<!-- Button trigger modal -->
 <button type="button"
       '
             . $strDisable . '
-            acao="atender" class="dropdown-item  botao-status"  data-toggle="modal" data-target="#modalStatus">
+            acao="atender"
+            class="dropdown-item  botao-status"
+            data-toggle="modal"
+            data-target="#modalStatus">
   Atender
 </button>
 
@@ -82,7 +85,12 @@ data-toggle="modal" data-target="#modalStatus">
         }
         echo '
 <!-- Button trigger modal -->
-<button id="botao-reabrir" type="button" ' . $strDisable . '  acao="reabrir"  class="dropdown-item"  data-toggle="modal" data-target="#modalStatus">
+<button id="botao-reabrir"
+    type="button"
+    ' . $strDisable . '  acao="reabrir"
+    class="dropdown-item"
+    data-toggle="modal"
+    data-target="#modalStatus">
   Reabrir
 </button>
 
@@ -94,7 +102,10 @@ data-toggle="modal" data-target="#modalStatus">
         echo '
 <!-- Button trigger modal -->
 <button type="button"
-     acao="reservar" id="botao-reservar" class="dropdown-item"  data-toggle="modal" data-target="#modalStatus">
+     acao="reservar"
+     id="botao-reservar"
+     class="dropdown-item"
+     data-toggle="modal" data-target="#modalStatus">
   Reservar
 </button>
 
@@ -110,7 +121,9 @@ data-toggle="modal" data-target="#modalStatus">
         echo '
 <!-- Button trigger modal -->
 <button type="button"
-     ' . $strDisable . '  acao="fechar"  class="dropdown-item  botao-status"  data-toggle="modal" data-target="#modalStatus">
+     ' . $strDisable . '  acao="fechar"
+        class="dropdown-item  botao-status"
+        data-toggle="modal" data-target="#modalStatus">
   Fechar
 </button>
 
@@ -122,7 +135,9 @@ data-toggle="modal" data-target="#modalStatus">
         echo '
 <!-- Button trigger modal -->
 <button type="button"
-     acao="liberar_atendimento"  class="dropdown-item  botao-status"  data-toggle="modal" data-target="#modalStatus">
+     acao="liberar_atendimento"
+        class="dropdown-item  botao-status"
+        data-toggle="modal" data-target="#modalStatus">
   Liberar Ocorrência
 </button>
 
@@ -133,7 +148,9 @@ data-toggle="modal" data-target="#modalStatus">
     {
         echo '
 <!-- Button trigger modal -->
-<button type="button" id="botao-editar-servico" acao="editar_servico"  class="dropdown-item text-right"  data-toggle="modal" data-target="#modalStatus">
+<button type="button" id="botao-editar-servico" acao="editar_servico"
+    class="dropdown-item text-right"
+    data-toggle="modal" data-target="#modalStatus">
   Editar Serviço
 </button>
 
@@ -145,7 +162,9 @@ data-toggle="modal" data-target="#modalStatus">
     {
         echo '
 <!-- Button trigger modal -->
-<button id="botao-editar-solucao" type="button" acao="editar_solucao"  class="dropdown-item text-right"   data-toggle="modal" data-target="#modalStatus">
+<button id="botao-editar-solucao" type="button" acao="editar_solucao"
+    class="dropdown-item text-right"
+     data-toggle="modal" data-target="#modalStatus">
   Editar Solução
 </button>
 
@@ -156,7 +175,9 @@ data-toggle="modal" data-target="#modalStatus">
     {
         echo '
 <!-- Button trigger modal -->
-<button id="botao-editar-patrimonio" type="button" acao="editar_patrimonio"  class="dropdown-item text-right"   data-toggle="modal" data-target="#modalStatus">
+<button id="botao-editar-patrimonio" type="button" acao="editar_patrimonio"
+    class="dropdown-item text-right"
+     data-toggle="modal" data-target="#modalStatus">
   Editar Patrimônio
 </button>
 
@@ -167,7 +188,9 @@ data-toggle="modal" data-target="#modalStatus">
     {
         echo '
 <!-- Button trigger modal -->
-<button id="botao-editar-area" type="button" acao="editar_area"  class="dropdown-item text-right"   data-toggle="modal" data-target="#modalStatus">
+<button id="botao-editar-area" type="button" acao="editar_area"
+    class="dropdown-item text-right"
+     data-toggle="modal" data-target="#modalStatus">
   Editar Setor Responsável
 </button>
 
@@ -178,7 +201,9 @@ data-toggle="modal" data-target="#modalStatus">
         echo '
 <!-- Button trigger modal -->
 <button type="button"
-     acao="aguardar_usuario"  class="dropdown-item  botao-status"  data-toggle="modal" data-target="#modalStatus">
+     acao="aguardar_usuario"
+        class="dropdown-item  botao-status"
+        data-toggle="modal" data-target="#modalStatus">
   Aguardar Usuário
 </button>
 
@@ -191,7 +216,9 @@ data-toggle="modal" data-target="#modalStatus">
         echo '
 <!-- Button trigger modal -->
 <button type="button"
-     acao="aguardar_ativos"  class="dropdown-item  botao-status"  data-toggle="modal" data-target="#modalStatus">
+     acao="aguardar_ativos"
+        class="dropdown-item  botao-status"
+        data-toggle="modal" data-target="#modalStatus">
   Aguardar Ativos de TI
 </button>
 
