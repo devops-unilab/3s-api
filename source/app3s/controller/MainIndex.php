@@ -89,10 +89,11 @@ class MainIndex
       </div>
       <div class="col-xl-4 col-lg-12 col-md-12 col-sm-12 d-flex justify-content-center">
         <a class="text-muted" href="#"><img src="img/logo-unilab-branco.png" alt="Logo Unilab" /></a>
-        <button class="btn m-4 btn-contraste" href="#altocontraste" 
-            id="altocontraste" accesskey="3" 
-            onclick="window.toggleContrast()" 
-            onkeydown="window.toggleContrast()" 
+        <button 
+            class="btn m-4 btn-contraste" href="#altocontraste"
+            id="altocontraste" accesskey="3"
+            onclick="window.toggleContrast()"
+            onkeydown="window.toggleContrast()"
             class=" text-white ">
                 <i class="fa fa-adjust text-white"></i>
         </button>
