@@ -102,8 +102,10 @@ class MainIndex
     </div>
   </header>';
 
-    NavBarController::main();
-
+    $sessao = new Sessao();
+    if ($sessao->getNivelAcesso() != Sessao::NIVEL_DESLOGADO) {
+      NavBarController::main($sessao);
+    }
     echo '</div>
 
 <main role="main" class="container">

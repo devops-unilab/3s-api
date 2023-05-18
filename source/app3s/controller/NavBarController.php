@@ -7,14 +7,17 @@ use app3s\util\Sessao;
 class NavBarController
 {
 
-
-  public static function main()
-  {
-    $sessao = new Sessao();
-    if ($sessao->getNivelAcesso() == Sessao::NIVEL_DESLOGADO) {
-      return;
+  public static function getFirstName($name) {
+    $arr = explode(" ", $name);
+    $firstName = "";
+    if (isset($arr[0])) {
+      $firstName = $arr[0];
     }
+    return ucfirst(strtolower($firstName));
+  }
 
+  public static function main($sessao)
+  {
     echo '<nav class="navbar navbar-expand-lg navbar-light bg-light">
   <button class="navbar-toggler" type="button"
   data-toggle="collapse"
@@ -59,17 +62,8 @@ class NavBarController
             </div>
         </li>';
     }
-
-
-    echo '
-    </ul>';
-    $primeiroNome = $sessao->getNome();
-    $arr = explode(" ", $sessao->getNome());
-    if (isset($arr[0])) {
-      $primeiroNome = $arr[0];
-    }
-    $primeiroNome = ucfirst(strtolower($primeiroNome));
-
+    echo '</ul>';
+    $primeiroNome = self::getFirstName($sessao->getNome());
     echo '<form action="" method="get">
         <div class="input-group">
             <input type="hidden" name="page" value="ocorrencia">
