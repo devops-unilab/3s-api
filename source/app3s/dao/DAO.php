@@ -9,7 +9,7 @@ class DAO
 {
 
     protected $connection;
-    private $sgdb;
+
 
     /**
      * Undocumented function
