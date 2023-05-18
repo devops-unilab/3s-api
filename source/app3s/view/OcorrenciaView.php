@@ -424,7 +424,7 @@ class OcorrenciaView
         }
         echo '<hr>';
 
-        $this->painelSLA($ocorrencia, $listaStatus, $dataAbertura, $dataSolucao);
+        $this->painelSLA($ocorrencia, $dataAbertura, $dataSolucao);
 
         echo '
                     </div>
@@ -504,7 +504,7 @@ class OcorrenciaView
         echo '</div>';
     }
 
-    public function painelSLA(Ocorrencia $ocorrencia, $listaStatus, $dataAbertura, $dataSolucao)
+    public function painelSLA(Ocorrencia $ocorrencia, $dataAbertura, $dataSolucao)
     {
 
 
