@@ -35,17 +35,20 @@ class MensagemForumController
     public function allowed(Ocorrencia $ocorrencia)
     {
         $sessao = new Sessao();
-        if ($sessao->getNivelAcesso() == SESSAO::NIVEL_COMUM) {
-            if ($sessao->getIdUsuario() != $ocorrencia->getUsuarioCliente()->getId()) {
-                return false;
-            }
+        if (
+            $sessao->getNivelAcesso() == SESSAO::NIVEL_COMUM
+            && $sessao->getIdUsuario() != $ocorrencia->getUsuarioCliente()->getId()
+        ) {
+
+            return false;
         }
-        if ($sessao->getNivelAcesso() == Sessao::NIVEL_TECNICO) {
-            if ($ocorrencia->getIdUsuarioAtendente() != $sessao->getIdUsuario()) {
-                if ($sessao->getIdUsuario() != $ocorrencia->getUsuarioCliente()->getId()) {
-                    return false;
-                }
-            }
+        if (
+            $sessao->getNivelAcesso() == Sessao::NIVEL_TECNICO
+            && $ocorrencia->getIdUsuarioAtendente() != $sessao->getIdUsuario()
+            && $sessao->getIdUsuario() != $ocorrencia->getUsuarioCliente()->getId()
+        ) {
+
+            return false;
         }
         return true;
     }
@@ -75,8 +78,8 @@ class MensagemForumController
             if ($sessao->getIdUsuario() === $mensagemForum->getUsuario()->getId() && $ocorrencia->getStatus() === StatusOcorrenciaController::STATUS_ATENDIMENTO) {
                 $mensagemForumDao->delete($mensagemForum);
                 echo '<meta http-equiv = "refresh"
-                 content = "0 ; url =?page=ocorrencia&selecionar=' . 
-                 $_GET['selecionar'] . '"/>';
+                 content = "0 ; url =?page=ocorrencia&selecionar=' .
+                    $_GET['selecionar'] . '"/>';
             }
         }
         echo '
@@ -153,7 +156,7 @@ class MensagemForumController
                                     <li>
                                         <a href="#">
                                             <i class="fa fa-calendar"></i>
-                                            ' . date("d/m/Y", strtotime($mensagemForum->getDataEnvio())). '
+                                            ' . date("d/m/Y", strtotime($mensagemForum->getDataEnvio())) . '
                                         </a>
                                     </li>
                                 <li>
@@ -299,7 +302,6 @@ class MensagemForumController
             $usuarioDao->fillById($atendente);
             $destinatario = $atendente->getEmail();
             $nome = $atendente->getNome();
-            
         } else if ($ocorrencia->getIdUsuarioIndicado() != null) {
 
             $indicado = new Usuario();
@@ -307,7 +309,6 @@ class MensagemForumController
             $usuarioDao->fillById($indicado);
             $destinatario = $indicado->getEmail();
             $nome = $indicado->getNome();
-            
         }
         $saldacao =  '<p>Prezado(a) ' . $nome . ' ,</p>';
         $mail->enviarEmail($destinatario, $nome, $assunto, $saldacao . $corpo);
