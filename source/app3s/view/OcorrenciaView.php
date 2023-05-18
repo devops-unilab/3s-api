@@ -321,7 +321,7 @@ class OcorrenciaView
      * @param Ocorrencia $ocorrencia
      * @param array:StatusOcorrencia $listaStatus
      */
-    public function mostrarSelecionado2(Ocorrencia $ocorrencia, $listaStatus, $dataAbertura, $dataSolucao)
+    public function mostrarSelecionado2(Ocorrencia $ocorrencia, $dataAbertura, $dataSolucao)
     {
         $statusView = new StatusOcorrenciaView();
         $controller = new StatusOcorrenciaController();

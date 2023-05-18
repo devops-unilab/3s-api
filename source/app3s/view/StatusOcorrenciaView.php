@@ -258,7 +258,7 @@ class StatusOcorrenciaView
             if ($servico->getDescricao() != "") {
                 echo ' - (' . $servico->getDescricao() . ') ';
             }
-            echo '</option>';
+            echo '</option>     ';
         }
 
         echo '
@@ -285,7 +285,7 @@ class StatusOcorrenciaView
                 <option value="" selected>Selecione um Técnico</option>';
         foreach ($listaTecnicos as $tecnico) {
             echo '
-                <option value="' . $tecnico->getId() . '">' . $tecnico->getNome() . '</option>';
+                <option value="' . $tecnico->getId() . '">' . $tecnico->getNome() . '</option>  ';
         }
 
         echo '
@@ -298,12 +298,13 @@ class StatusOcorrenciaView
 
             <label for="select-area">Selecione um Setor</label>
             <select name="area_responsavel" id="select-area">
-                <option value="" selected>Selecione um Setor</option>';
+                <option value="" selected>Selecione um Setor</option>    ';
         foreach ($listaAreas as $area) {
             echo '
                 <option value="' . $area->getId() . '">'
                 . $area->getNome() .
-                ' - ' . $area->getDescricao() . '</option>';
+                ' - ' . $area->getDescricao() . '</option>
+                ';
         }
 
         echo '
