@@ -130,18 +130,25 @@ class ServicoController
      */
     public static function toStringVisao($visao)
     {
+        $str = "";
         switch ($visao) {
             case self::VISAO_INATIVO:
-                return "Inativo";
+                $str = "Inativo";
+                break;
             case self::VISAO_COMUM:
-                return "Comum";
+                $str = "Comum";
+                break;
             case self::VISAO_TECNICO:
-                return "Técnico";
+                $str = "Técnico";
+                break;
             case self::VISAO_ADMIN:
-                return "Administrador";
+                $str = "Administrador";
+                break;
             default:
-                return "Valor inválido";
+                $str = "Valor inválido";
+                break;
         }
+        return $str;
     }
     public function delete()
     {

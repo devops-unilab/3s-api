@@ -124,7 +124,15 @@ class OcorrenciaController
     public function getColorStatus($siglaStatus)
     {
         $strCartao = ' alert-warning ';
-        if ($siglaStatus == 'a') {
+        if (
+            $siglaStatus === 'a'
+            || $siglaStatus === 'h'
+            || $siglaStatus === 'c'
+            || $siglaStatus == 'r'
+            || $siglaStatus == 'b'
+            || $siglaStatus == 'd'
+            || $siglaStatus == 'i'
+        ) {
             $strCartao = '  notice-warning';
         } elseif ($siglaStatus == 'e') {
             $strCartao = '  notice-info ';
@@ -132,18 +140,6 @@ class OcorrenciaController
             $strCartao = 'notice-success ';
         } elseif ($siglaStatus == 'g') {
             $strCartao = 'notice-success ';
-        } elseif ($siglaStatus == 'h') {
-            $strCartao = ' notice-warning ';
-        } elseif ($siglaStatus == 'r') {
-            $strCartao = '  notice-warning ';
-        } elseif ($siglaStatus == 'b') {
-            $strCartao = '  notice-warning ';
-        } elseif ($siglaStatus == 'c') {
-            $strCartao = '   notice-warning ';
-        } elseif ($siglaStatus == 'd') {
-            $strCartao = '  notice-warning ';
-        } elseif ($siglaStatus == 'i') {
-            $strCartao = ' notice-warning';
         }
         return $strCartao;
     }
@@ -490,6 +486,8 @@ class OcorrenciaController
                     case 'males':
                         $checkedMales = "checked";
                         break;
+                    default:
+                    break;
                 }
             }
         }
