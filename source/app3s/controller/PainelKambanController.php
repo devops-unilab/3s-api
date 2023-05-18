@@ -88,10 +88,6 @@ class PainelKambanController
             $filtro = 'AND( area_responsavel.id = ' . implode(" OR area_responsavel.id = ", $arrStrSetores) . ' )';
         }
 
-
-
-
-        $ocorrencia = new Ocorrencia();
         $matrixStatus = array();
         $pendentes = $this->dao->pesquisaKamban($this->arrayStatusPendente(), $matrixStatus, $filtro);
         $finalizados = $this->dao->pesquisaKamban($this->arrayStatusFinalizado(), $matrixStatus, $filtro);

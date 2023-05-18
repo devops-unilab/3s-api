@@ -106,33 +106,6 @@ class AreaResponsavelController
 
 
 
-    public function addAjax()
-    {
-
-        if (!isset($_POST['enviar_area_responsavel'])) {
-            return;
-        }
-
-
-
-        if (!(isset($_POST['nome']) && isset($_POST['descricao']) && isset($_POST['email']))) {
-            echo ':incompleto';
-            return;
-        }
-
-        $areaResponsavel = new AreaResponsavel();
-        $areaResponsavel->setNome($_POST['nome']);
-        $areaResponsavel->setDescricao($_POST['descricao']);
-        $areaResponsavel->setEmail($_POST['email']);
-
-        if ($this->dao->insert($areaResponsavel)) {
-            $id = $this->dao->getConnection()->lastInsertId();
-            echo ':sucesso:' . $id;
-        } else {
-            echo ':falha';
-        }
-    }
-
 
     public function edit()
     {

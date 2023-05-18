@@ -171,16 +171,14 @@ class MensagemForumController
                 $mensagemForum->getUsuario()->getId() == $sessao->getIdUsuario()
                 && $ocorrencia->getStatus() === StatusOcorrenciaController::STATUS_ATENDIMENTO
             ) {
-                echo '
-                                        <li><button data-toggle="modal" onclick="changeField(' . $mensagemForum->getId() . ')" data-target="#modalDeleteChat"><i class="fa fa-trash-o"></i> Apagar </a></button></li>';
+                echo '<li>
+                        <button data-toggle="modal"
+                        onclick="changeField(' . $mensagemForum->getId() . ')"
+                         data-target="#modalDeleteChat"><i class="fa fa-trash-o">
+                         </i>Apagar</a>
+                        </button></li>';
             }
-
-            echo '
-
-                                </ul>
-                            </div>
-                            <!-- <img src="https://www.gstatic.com/webp/gallery/2.jpg" 
-                                alt="Picture">-->
+            echo '</ul></div>
                             <div class="clearfix"></div>
                             <div class="ul_section_full">
                                 <ul class="ul_msg">
@@ -210,11 +208,7 @@ class MensagemForumController
             $this->view->showInsertForm2($ocorrencia);
         }
 
-        echo '
-                    
-
-
-                </div>
+        echo '</div>
             </div>
         </div>
     </div>
@@ -225,37 +219,6 @@ class MensagemForumController
     </script>
 
 ';
-    }
-
-    public function delete()
-    {
-        if (!isset($_GET['delete'])) {
-            return;
-        }
-        $selected = new MensagemForum();
-        $selected->setId($_GET['delete']);
-        if (!isset($_POST['delete_mensagem_forum'])) {
-            $this->view->confirmDelete($selected);
-            return;
-        }
-        if ($this->dao->delete($selected)) {
-            echo '
-
-<div class="alert alert-success" role="alert">
-  Sucesso ao excluir Mensagem Forum
-</div>
-
-';
-        } else {
-            echo '
-
-<div class="alert alert-danger" role="alert">
-  Falha ao tentar excluir Mensagem Forum
-</div>
-
-';
-        }
-        echo '<META HTTP-EQUIV="REFRESH" CONTENT="2; URL=?page=mensagem_forum">';
     }
 
     public function enviaEmail(MensagemForum $mensagemForum, Ocorrencia $ocorrencia)
@@ -345,9 +308,13 @@ class MensagemForumController
                 $extensao = strtolower(end($extensaoArr));
 
                 $extensoes_permitidas = array(
-                    'xlsx', 'xlsm', 'xlsb', 'xltx', 'xltm', 'xls', 'xlt', 'xls', 'xml', 'xml', 'xlam', 'xla', 'xlw', 'xlr',
-                    'doc', 'docm', 'docx', 'docx', 'dot', 'dotm', 'dotx', 'odt', 'pdf', 'rtf', 'txt', 'wps', 'xml', 'zip', 'rar', 'ovpn',
-                    'xml', 'xps', 'jpg', 'gif', 'png', 'pdf', 'jpeg'
+                    'xlsx', 'xlsm', 'xlsb', 'xltx', 'xltm', 
+                    'xls', 'xlt', 'xls', 'xml', 'xml', 'xlam', 
+                    'xla', 'xlw', 'xlr', 'doc', 'docm', 'docx', 
+                    'docx', 'dot', 'dotm', 'dotx', 'odt', 
+                    'pdf', 'rtf', 'txt', 'wps', 'xml', 'zip', 
+                    'rar', 'ovpn', 'xml', 'xps', 'jpg', 'gif',
+                    'png', 'pdf', 'jpeg'
                 );
 
                 if (!(in_array($extensao, $extensoes_permitidas))) {

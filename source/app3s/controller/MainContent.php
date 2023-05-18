@@ -103,7 +103,7 @@ class MainContent
 
     public function notFound()
     {
-        $this->notFound();
+        echo '<p>Página não encontrada</p>';
     }
     public function contentTec()
     {
