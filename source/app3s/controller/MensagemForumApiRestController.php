@@ -56,10 +56,10 @@ class MensagemForumApiRestController
     public function get()
     {
         $url = explode("/", $_REQUEST['api']);
-        
+
         $id = intval($url[2]);
-        if($id === 0) {
-            return; 
+        if ($id === 0) {
+            return;
         }
         $ocorrencia = new Ocorrencia();
         $ocorrencia->setId($id);
