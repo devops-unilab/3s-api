@@ -15,41 +15,6 @@ use app3s\util\Sessao;
 
 class UsuarioDAO extends DAO
 {
-
-
-    /**
-     * Verifica na base de autenticação se usuário está ativo ou não.
-     * @param Usuario $usuario
-     * @return boolean
-     */
-    public function usuarioAtivo(Usuario $usuario)
-    {
-        $id = $usuario->getId();
-        $daoSIGAA = new DAO(null, "SIG");
-        $sql2 = "SELECT
-                *
-                FROM vw_autenticacao_3s
-                WHERE id = :id LIMIT 1";
-        try {
-            $stmt = $daoSIGAA->getConnection()->prepare($sql2);
-            $stmt->bindParam(":id", $id, PDO::PARAM_INT);
-            $stmt->execute();
-            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            foreach ($result as $linha2) {
-
-                if ($linha2['id_status_servidor'] == 1) {
-
-                    return true; //Status Inativo
-                }
-            }
-        } catch (PDOException $e) {
-            echo $e->getMessage();
-            return false;
-        }
-        return false;
-    }
-
-
     public function update(Usuario $usuario)
     {
         $id = $usuario->getId();
