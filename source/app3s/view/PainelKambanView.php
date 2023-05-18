@@ -177,6 +177,10 @@ class PainelKambanView extends OcorrenciaView
                 $bgCard = 'bg-danger';
                 $texto = "text-light";
                 break;
+            default:
+                $bgCard = 'bg-warning';
+                $texto = "text-light";
+                break;
         }
 
 
@@ -186,7 +190,9 @@ class PainelKambanView extends OcorrenciaView
                             <div class="card-body p-2">
                                 <div class="card-title">
 
-                                    <a href="?page=ocorrencia&selecionar=' . $chamado->getId() . '" class="' . $link . '">
+                                    <a
+                                        href="?page=ocorrencia&selecionar='
+                                        . $chamado->getId() . '" class="' . $link . '">
                                        #' . $chamado->getId() . '
                                     </a>';
 
@@ -219,13 +225,19 @@ class PainelKambanView extends OcorrenciaView
             if ($chamado->getIdUsuarioIndicado() != null) {
                 $nome = $atendentes[$chamado->getIdUsuarioIndicado()]->getNome();
                 $nome = explode(" ", $nome);
-                echo '<br><small class="' . $texto . '">Responsável: ' . ucfirst(strtolower($nome[0])) . ' ' . ucfirst(strtolower($nome[1])) . '</small>';
+                echo '<br>
+                    <small class="' . $texto . '">
+                        Responsável: ' . ucfirst(strtolower($nome[0])) . ' ' . ucfirst(strtolower($nome[1])) . '
+                    </small>';
             }
         } elseif ($chamado->getStatus() != StatusOcorrenciaController::STATUS_ABERTO) {
             if ($chamado->getIdUsuarioAtendente() != null) {
                 $nome = $atendentes[$chamado->getIdUsuarioAtendente()]->getNome();
                 $nome = explode(" ", $nome);
-                echo '<br><small class="' . $texto . '">Responsável: ' . ucfirst(strtolower($nome[0])) . ' ' . ucfirst(strtolower($nome[1])) . '</small>';
+                echo '<br>
+                    <small class="' . $texto . '">
+                        Responsável: ' . ucfirst(strtolower($nome[0])) . ' ' . ucfirst(strtolower($nome[1])) . '
+                    </small>';
             }
         }
 

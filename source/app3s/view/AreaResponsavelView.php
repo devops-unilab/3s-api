@@ -33,23 +33,30 @@ class AreaResponsavelView
       </div>
       <div class="modal-body">
           <form id="insert_form_area_responsavel" class="user" method="post">
-            <input type="hidden" name="enviar_area_responsavel" value="1">
+            <input type="hidden"
+                name="enviar_area_responsavel" value="1">
 
 
 
                                         <div class="form-group">
                                             <label for="nome">Nome</label>
-                                            <input type="text" class="form-control"  name="nome" id="nome" placeholder="Nome">
+                                            <input type="text"
+                                                class="form-control"
+                                                name="nome" id="nome" placeholder="Nome">
                                         </div>
 
                                         <div class="form-group">
                                             <label for="descricao">Descricao</label>
-                                            <input type="text" class="form-control"  name="descricao" id="descricao" placeholder="Descricao">
+                                            <input type="text"
+                                                class="form-control"
+                                                name="descricao" id="descricao" placeholder="Descricao">
                                         </div>
 
                                         <div class="form-group">
                                             <label for="email">Email</label>
-                                            <input type="text" class="form-control"  name="email" id="email" placeholder="Email">
+                                            <input type="text"
+                                                class="form-control"
+                                                name="email" id="email" placeholder="Email">
                                         </div>
 
                                       </form>
@@ -154,17 +161,24 @@ class AreaResponsavelView
             <form class="user" method="post" id="edit_form_area_responsavel">
                                         <div class="form-group">
                                             <label for="nome">Nome</label>
-                                            <input type="text" class="form-control" value="' . $selecionado->getNome() . '"  name="nome" id="nome" placeholder="Nome">
+                                            <input type="text"
+                                                class="form-control" value="' . $selecionado->getNome() . '"
+                                                name="nome" id="nome" placeholder="Nome">
                                         </div>
                                         <div class="form-group">
                                             <label for="descricao">Descricao</label>
-                                            <input type="text" class="form-control" value="' . $selecionado->getDescricao() . '"  name="descricao" id="descricao" placeholder="Descricao">
+                                            <input type="text"
+                                                class="form-control" value="' . $selecionado->getDescricao() . '"
+                                                name="descricao" id="descricao" placeholder="Descricao">
                                         </div>
                                         <div class="form-group">
                                             <label for="email">Email</label>
-                                            <input type="text" class="form-control" value="' . $selecionado->getEmail() . '"  name="email" id="email" placeholder="Email">
+                                            <input type="text"
+                                                class="form-control" value="' . $selecionado->getEmail() . '"
+                                                name="email" id="email" placeholder="Email">
                                         </div>
-                <input type="hidden" value="1" name="edit_area_responsavel">
+                <input type="hidden" value="1"
+                name="edit_area_responsavel">
                 </form>
 
         </div>
@@ -227,7 +241,8 @@ class AreaResponsavelView
                                     </div>
                                       <form class="user" method="post">                    Tem certeza que deseja apagar esta área responsável?
 
-                                        <input type="submit" class="btn btn-primary btn-user btn-block" value="Delete" name="delete_area_responsavel">
+                                        <input type="submit" class="btn btn-primary btn-user btn-block" value="Delete"
+                                        name="delete_area_responsavel">
                                         <hr>
 
                                       </form>

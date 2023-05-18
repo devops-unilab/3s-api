@@ -68,7 +68,6 @@ class MensagemForumController
     public function mainOcorrencia(Ocorrencia $ocorrencia)
     {
         $sessao = new Sessao();
-
         if (isset($_POST['chatDelete'])) {
             $idChat = intval($_POST['chatDelete']);
             $mensagemForum = new MensagemForum();
@@ -86,9 +85,6 @@ class MensagemForumController
             }
         }
         echo '
-
-
-        <!-- Modal -->
         <div class="modal fade" id="modalDeleteChat"
          tabindex="-1" aria-labelledby="modalDeleteChatLabel"
          aria-hidden="true">
@@ -114,17 +110,11 @@ class MensagemForumController
             </div>
           </div>
         </div>
-
-
 <div class="container">
         <div class="row">
             <div class="chatbox chatbox22">
                 <div class="chatbox__title">
                     <h5 class="text-white">#<span id="id-ocorrencia">' . $ocorrencia->getId() . '</span></h5>
-                    <!--<button class="chatbox__title__tray">
-            <span></span>
-        </button>-->
-
                 </div>
                 <div id="corpo-chat" class="chatbox__body">';
 
@@ -149,9 +139,6 @@ class MensagemForumController
             }
             $timeEnvio = strtotime($mensagemForum->getDataEnvio());
             echo '
-
-
-
                     <div class="chatbox__body__message chatbox__body__message--left">
                         <div class="chatbox_timing">
                             <ul>
@@ -165,8 +152,7 @@ class MensagemForumController
                             <a href="#">
                                 <i class="fa fa-clock-o"></i>'
                 . date("H:i", $timeEnvio) .
-                '</a>
-                            </li>';
+                '</a> </li>';
             if (
                 $mensagemForum->getUsuario()->getId() == $sessao->getIdUsuario()
                 && $ocorrencia->getStatus() === StatusOcorrenciaController::STATUS_ATENDIMENTO
@@ -189,25 +175,14 @@ class MensagemForumController
                 echo '
                         <li>' . strip_tags($mensagemForum->getMensagem()) . '</li>';
             }
-            echo '
-
-                                </ul>
-                                <div class="clearfix"></div>
-
-                            </div>
-
-                        </div>';
+            echo '</ul><div class="clearfix"></div></div></div>';
         }
         echo '<span id="ultimo-id-post" class="escondido">' . $ultimoId . '</span>';
-        echo '
-
-
-                </div>
+        echo '</div>
                 <div class="panel-footer">';
         if ($this->possoEnviarMensagem($ocorrencia)) {
             $this->view->showInsertForm2($ocorrencia);
         }
-
         echo '</div>
             </div>
         </div>
@@ -216,9 +191,7 @@ class MensagemForumController
     function changeField(id) {
         document.getElementById(\'chatDelete\').value = id;
     }
-    </script>
-
-';
+    </script>';
     }
 
     public function enviaEmail(MensagemForum $mensagemForum, Ocorrencia $ocorrencia)
@@ -285,8 +258,9 @@ class MensagemForumController
         if (
             !isset($_POST['enviar_mensagem_forum'])
             && !(isset($_POST['tipo'])
-            && isset($_POST['mensagem'])
-            && isset($_POST['ocorrencia']))) {
+                && isset($_POST['mensagem'])
+                && isset($_POST['ocorrencia']))
+        ) {
             echo ':incompleto';
             return;
         }
