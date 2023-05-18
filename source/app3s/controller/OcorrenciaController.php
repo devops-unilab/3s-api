@@ -105,8 +105,7 @@ class OcorrenciaController
                 $tempoSla++;
             }
         }
-        $horaEstimada = date('Y-m-d H:i:s', $timeEstimado);
-        return $horaEstimada;
+        return date('Y-m-d H:i:s', $timeEstimado);
     }
 
 
@@ -498,38 +497,27 @@ class OcorrenciaController
                 <div class="p-4 mb-3 bg-light rounded">
                     <h4 class="font-italic">Filtros</h4>
                         <form id="form-filtro-basico">
-                            <input
-                                type="hidden"
-                                value="' . $setor->getId() . '"
+                            <input type="hidden" value="' . $setor->getId() . '"
                                 id="meu-setor" name="meu-setor">
                             <div class="custom-control custom-switch">
-                              <input type="checkbox"
-                                  class="custom-control-input"
+                              <input type="checkbox" class="custom-control-input"
                                 id="filtro-meu-setor" ' . $checkedSetor . '>
-                                  <label
-                                    class="custom-control-label"
-                                    for="filtro-meu-setor">
-                                        Demandas (' . $setor->getNome() . ')
+                                  <label class="custom-control-label" for="filtro-meu-setor">
+                                  Demandas (' . $setor->getNome() . ')
                                  </label>
                             </div>
                             <div class="custom-control custom-switch">
-                              <input
-                                  type="checkbox"
+                              <input type="checkbox"
                                 class="custom-control-input"
                                 id="filtro-minhas-demandas" ' . $checkedDemanda . '>
-                              <label
-                                  class="custom-control-label"
+                              <label class="custom-control-label"
                                 for="filtro-minhas-demandas">Meus Atendimentos</label>
                             </div>
-                            <div
-                                class="custom-control
-                                custom-switch mb-3">
-                              <input
-                                  type="checkbox"
+                            <div class="custom-control custom-switch mb-3">
+                              <input type="checkbox"
                                 class="custom-control-input"
                                 id="filtro-minhas-solicitacoes" ' . $checkedSolicitacao . '>
-                              <label
-                                  class="custom-control-label"
+                              <label class="custom-control-label"
                                 for="filtro-minhas-solicitacoes">Minhas Solicitações</label>
                             </div>
                             <div class="form-group">
@@ -566,45 +554,52 @@ class OcorrenciaController
         echo '</select></div></form>';
 
         $this->filtroAvancado($listaAreas, $requisitantes);
+        $this->showFormFilter(
+            $checkedLiberdade,
+            $checkedPalmares,
+            $checkedAuroras,
+            $checkedMales
+        );
+    }
+    public function showFormFilter(
+        $checkedLiberdade,
+        $checkedPalmares,
+        $checkedAuroras,
+        $checkedMales
+    ) {
         echo '<form id="form-filtro-campus">
-                         <hr>
-                        <label for="filtro-data-1">Campus</label>
-                        <div class="form-check">
-                          <input class="form-check-input"
-                              type="checkbox" value="" id="filtro-campus-liberdade" ' . $checkedLiberdade . '>
-                          <label class="form-check-label" for="filtro-campus-liberdade">
-                            Liberdade
-                          </label>
-                        </div>
-                        <div class="form-check">
-                          <input
-                                  class="form-check-input"
-                                  type="checkbox" value=""
-                                id="filtro-campus-palmares" ' . $checkedPalmares . '>
-                          <label class="form-check-label" for="filtro-campus-palmares">
-                            Palmares
-                          </label>
-                        </div>
-
-                        <div class="form-check">
-                          <input
-                              class="form-check-input"
-                            type="checkbox"
-                            value=""
-                            id="filtro-campus-auroras" ' . $checkedAuroras . '>
-                          <label class="form-check-label" for="filtro-campus-auroras">
-                            Auroras
-                          </label>
-                        </div>
-                        <div class="form-check">
-                          <input
-                              class="form-check-input"
-                            type="checkbox"
-                            value="" id="filtro-campus-males" ' . $checkedMales . '>
-                          <label class=""font-weight-normal" for="filtro-campus-males">
-                            Malês
-                          </label>
-                        </div></form></div>';
+        <hr>
+       <label for="filtro-data-1">Campus</label>
+       <div class="form-check">
+         <input class="form-check-input"
+             type="checkbox" value="" id="filtro-campus-liberdade" ' . $checkedLiberdade . '>
+         <label class="form-check-label" for="filtro-campus-liberdade">
+           Liberdade
+         </label>
+       </div>
+       <div class="form-check">
+         <input class="form-check-input" type="checkbox" value=""
+               id="filtro-campus-palmares" ' . $checkedPalmares . '>
+         <label class="form-check-label" for="filtro-campus-palmares">
+           Palmares
+         </label>
+       </div><div class="form-check">
+         <input class="form-check-input"
+           type="checkbox"
+           value=""
+           id="filtro-campus-auroras" ' . $checkedAuroras . '>
+         <label class="form-check-label" for="filtro-campus-auroras">
+           Auroras
+         </label>
+       </div>
+       <div class="form-check">
+         <input class="form-check-input"
+           type="checkbox"
+           value="" id="filtro-campus-males" ' . $checkedMales . '>
+         <label class=""font-weight-normal" for="filtro-campus-males">
+           Malês
+         </label>
+       </div></form></div>';
     }
     public function getArrayFiltros()
     {
@@ -942,7 +937,7 @@ class OcorrenciaController
         $corpo .= '<p>Sua solicitação foi realizada com sucesso,
                     solicitação
                     <a href="https://3s.unilab.edu.br/?page=ocorrencia&selecionar='
-                    . $statusOcorrencia->getOcorrencia()->getId() . '">
+            . $statusOcorrencia->getOcorrencia()->getId() . '">
                     Nº' . $statusOcorrencia->getOcorrencia()->getId() . '</a></p>';
         $corpo .= '<ul>
                         <li>
