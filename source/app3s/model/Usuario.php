@@ -16,11 +16,8 @@ class Usuario {
 	private $senha;
 	private $nivel;
 	private $idSetor;
-	public $idUnidade;
-	public $siglaUnidade; 
-    public function __construct(){
-
-    }
+	private $idUnidade;
+	private $siglaUnidade; 
 	public function setId($id) {
 		$this->id = $id;
 	}
@@ -66,7 +63,19 @@ class Usuario {
 	public function setIdSetor($idSetor) {
 		$this->idSetor = $idSetor;
 	}
-		    
+	public function setIdUnidade($idUnidade) {
+		$this->idUnidade = $idUnidade;
+	}
+	public function getIdUnidade() {
+		return $this->idUnidade;
+	}
+	public function setSiglaUnidade($siglaUnidade) {
+		$this->siglaUnidade = $siglaUnidade;
+	}
+	public function getSiglaUnidade() {
+		return $this->siglaUnidade;
+	}
+	
 	public function getIdSetor() {
 		return $this->idSetor;
 	}
