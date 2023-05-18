@@ -192,7 +192,7 @@ class PainelKambanView extends OcorrenciaView
 
                                     <a
                                         href="?page=ocorrencia&selecionar='
-                                        . $chamado->getId() . '" class="' . $link . '">
+            . $chamado->getId() . '" class="' . $link . '">
                                        #' . $chamado->getId() . '
                                     </a>';
 
@@ -247,7 +247,10 @@ class PainelKambanView extends OcorrenciaView
 
 
         if ($chamado->getDataFechamento() != null) {
-            echo '<br><small class="' . $texto . '">Fechado em ' . date("d/m/Y G:i:s", strtotime($chamado->getDataFechamento())) . ' </small>';
+            echo '<br><small class="' . $texto . '">
+                Fechado em '
+                . date("d/m/Y G:i:s", strtotime($chamado->getDataFechamento())) . '
+                 </small>';
         }
 
 
