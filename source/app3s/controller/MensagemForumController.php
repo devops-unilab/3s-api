@@ -32,19 +32,7 @@ class MensagemForumController
     }
 
 
-
-    public function possoEnviarMensagem(Ocorrencia $ocorrencia)
-    {
-
-        if ($ocorrencia->getStatus() == StatusOcorrenciaController::STATUS_FECHADO) {
-            return false;
-        }
-        if ($ocorrencia->getStatus() == StatusOcorrenciaController::STATUS_FECHADO_CONFIRMADO) {
-            return false;
-        }
-        if ($ocorrencia->getStatus() == StatusOcorrenciaController::STATUS_CANCELADO) {
-            return false;
-        }
+    public function allowed(Ocorrencia $ocorrencia) {
         $sessao = new Sessao();
         if ($sessao->getNivelAcesso() == SESSAO::NIVEL_COMUM) {
             if ($sessao->getIdUsuario() != $ocorrencia->getUsuarioCliente()->getId()) {
@@ -59,6 +47,19 @@ class MensagemForumController
             }
         }
         return true;
+    }
+    public function possoEnviarMensagem(Ocorrencia $ocorrencia)
+    {
+
+        if (
+            $ocorrencia->getStatus() == StatusOcorrenciaController::STATUS_FECHADO
+            || $ocorrencia->getStatus() == StatusOcorrenciaController::STATUS_FECHADO_CONFIRMADO
+            || $ocorrencia->getStatus() == StatusOcorrenciaController::STATUS_CANCELADO
+        ) {
+            return false;
+        }
+        return $this->allowed($ocorrencia);
+        
     }
 
     public function mainOcorrencia(Ocorrencia $ocorrencia)
