@@ -101,7 +101,8 @@ class MainContent
         }
     }
 
-    public function notFound() {
+    public function notFound()
+    {
         $this->notFound();
     }
     public function contentTec()
