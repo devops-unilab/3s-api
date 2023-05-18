@@ -133,20 +133,14 @@ class PainelTabelaController
               </thead>
               <tbody>';
         foreach ($setores as $setor) {
-            echo '
-                <tr>
-                  <th scope="row">' . $setor->getNome() . '</th>';
+            echo '<tr><th scope="row">' . $setor->getNome() . '</th>';
             foreach ($matriz as $chave => $valor) {
-                echo '
-                  <td>' . $valor[$setor->getNome()] . '</td>';
+                echo '<td>' . $valor[$setor->getNome()] . '</td>';
             }
 
             echo '
                 </tr>';
         }
-
-        echo '
-              </tbody>
-            </table>';
+        echo '</tbody></table>';
     }
 }

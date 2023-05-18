@@ -57,10 +57,7 @@ class ServicoController
 		}
 		$this->fetch();
 
-		echo '</div>';
-		echo '</div>';
-
-		echo '</div></div>';
+		echo '</div></div></div></div>';
 	}
 
 	public function edit()
@@ -101,21 +98,9 @@ class ServicoController
 
 
 		if ($this->dao->update($selected)) {
-			echo '
-	            
-<div class="alert alert-success" role="alert">
-  Sucesso
-</div>
-	            
-';
+			echo '<div class="alert alert-success" role="alert">Sucesso</div>';
 		} else {
-			echo '
-	            
-<div class="alert alert-danger" role="alert">
-  Falha
-</div>
-	            
-';
+			echo '<div class="alert alert-danger" role="alert">Falha</div>';
 		}
 		echo '<META HTTP-EQUIV="REFRESH" CONTENT="3; URL=?page=servico">';
 	}
@@ -171,21 +156,9 @@ class ServicoController
 			return;
 		}
 		if ($this->dao->delete($selected)) {
-			echo '
-
-<div class="alert alert-success" role="alert">
-  Sucesso ao excluir Servico
-</div>
-
-';
+			echo '<div class="alert alert-success" role="alert">Sucesso ao excluir Servico</div>';
 		} else {
-			echo '
-
-<div class="alert alert-danger" role="alert">
-  Falha ao tentar excluir Servico
-</div>
-
-';
+			echo '<div class="alert alert-danger" role="alert">Falha ao tentar excluir Servico</div>';
 		}
 		echo '<META HTTP-EQUIV="REFRESH" CONTENT="2; URL=?page=servico">';
 	}
@@ -208,11 +181,7 @@ class ServicoController
 		}
 		if (!(isset($_POST['nome']) && isset($_POST['descricao']) && isset($_POST['tempo_sla']) && isset($_POST['visao']) &&  isset($_POST['tipo_atividade']) &&  isset($_POST['area_responsavel']) &&  isset($_POST['grupo_servico']))) {
 			echo '
-                <div class="alert alert-danger" role="alert">
-                    Failed to register. Some field must be missing. 
-                </div>
-
-                ';
+                <div class="alert alert-danger" role="alert">Failed to register. Some field must be missing. </div>';
 			return;
 		}
 		$servico = new Servico();

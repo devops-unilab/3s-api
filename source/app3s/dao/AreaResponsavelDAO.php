@@ -15,10 +15,6 @@ use app3s\model\AreaResponsavel;
 class AreaResponsavelDAO extends DAO
 {
 
-
-
-
-
     public function update(AreaResponsavel $areaResponsavel)
     {
         $id = $areaResponsavel->getId();
