@@ -731,12 +731,6 @@ class OcorrenciaController
                   </div>
                 </aside><!-- /.blog-sidebar -->
             </div>'; //Fecha row
-
-
-
-
-
-
     }
 
     public function telaCadastro()
@@ -948,66 +942,5 @@ class OcorrenciaController
 
         $mail->enviarEmail($destinatario, $nome, $assunto, $corpo);
     }
-    public function possoPedirAjuda()
-    {
-        if ($this->sessao == Sessao::NIVEL_DESLOGADO) {
-            return false;
-        }
-        return true;
-    }
-    public function ajaxPedirAjuda()
-    {
-        $this->sessao = new Sessao();
 
-
-        if (!isset($_POST['pedir_ajuda'])) {
-            echo ':falha: Não posso pedir ajuda';
-            return;
-        }
-        if (!isset($_POST['ocorrencia'])) {
-            echo ':falha:Falta ocorrencia';
-            return;
-        }
-        $ocorrencia = new Ocorrencia();
-        $ocorrencia->setId($_POST['ocorrencia']);
-
-        $this->dao->fillById($ocorrencia);
-
-        if (!$this->possoPedirAjuda()) {
-            echo ':falha:';
-            return;
-        }
-
-        $usuarioDao = new UsuarioDAO($this->dao->getConnection());
-        $usuario = new Usuario();
-        $usuario->setIdSetor($ocorrencia->getAreaResponsavel()->getId());
-
-        $lista = $usuarioDao->fetchByIdSetor($usuario);
-
-
-        $mail = new Mail();
-
-        $assunto = "[3S] - Chamado Nº " . $ocorrencia->getId();
-        $corpo = '<p>
-                        A solicitação Nº' .
-            $ocorrencia->getId() .
-            ' está com atraso em relação ao SLA e o cliente solicitou ajuda
-                    </p>';
-        $corpo .= '<ul>
-                        <li>Serviço Solicitado: ' . $ocorrencia->getServico()->getNome() . '</li>
-                        <li>Descrição do Problema: ' . $ocorrencia->getDescricao() . '</li>
-                        <li>Setor Responsável: ' . $ocorrencia->getServico()->getAreaResponsavel()->getNome() . ' -
-                        ' . $ocorrencia->getServico()->getAreaResponsavel()->getDescricao() . '</li>
-                </ul><br><p>Mensagem enviada pelo sistema 3S. Favor não responder.</p>';
-
-
-        foreach ($lista as $adm) {
-            if ($adm->getNivel() == Sessao::NIVEL_ADM) {
-                $saudacao =  '<p>Prezado(a) ' . $adm->getNome() . ' ,</p>';
-                $mail->enviarEmail($adm->getEmail(), $adm->getNome(), $assunto, $saudacao . $corpo);
-            }
-        }
-        $_SESSION['pediu_ajuda'] = 1;
-        echo ':sucesso:UM e-mail foi enviado aos chefes:';
-    }
 }
