@@ -89,7 +89,7 @@ class MainIndex
       </div>
       <div class="col-xl-4 col-lg-12 col-md-12 col-sm-12 d-flex justify-content-center">
         <a class="text-muted" href="#"><img src="img/logo-unilab-branco.png" alt="Logo Unilab" /></a>
-        <button 
+        <button
             class="btn m-4 btn-contraste" href="#altocontraste"
             id="altocontraste" accesskey="3"
             onclick="window.toggleContrast()"
@@ -104,10 +104,7 @@ class MainIndex
 
         NavBarController::main();
 
-        echo '  
-
-  
-</div>
+        echo '</div>
 
 <main role="main" class="container">
 
@@ -127,14 +124,20 @@ class MainIndex
 </main><!-- /.container -->
 
 <footer class="blog-footer">
-  <p>Desenvolvido pela <a href="https://dti.unilab.edu.br/"> Diretoria de Tecnologia da Informação DTI </a> / <a href="http://unilab.edu.br">Unilab</a></p>
-
+  <p>Desenvolvido pela
+  <a href="https://dti.unilab.edu.br/">
+  Diretoria de Tecnologia da Informação DTI
+  </a> /
+  <a href="http://unilab.edu.br">Unilab</a></p>
 </footer>
             
             
             
 <!-- Modal -->
-<div class="modal fade" id="modalResposta" tabindex="-1" role="dialog" aria-labelledby="labelModalResposta" aria-hidden="true">
+<div class="modal fade"
+  id="modalResposta" tabindex="-1" role="dialog"
+  aria-labelledby="labelModalResposta"
+  aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
