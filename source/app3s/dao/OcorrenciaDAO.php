@@ -994,7 +994,7 @@ class OcorrenciaDAO extends DAO
 
 
 
-    public function pesquisaParaTec(Ocorrencia $ocorrencia,  $arrStatus = array('a'), $arrayFiltros = array())
+    public function pesquisaParaTec($arrStatus = array('a'), $arrayFiltros = array())
     {
         $lista = array();
         $filtroStatus = $this->filtroStatus($arrStatus);

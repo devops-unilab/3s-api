@@ -700,15 +700,15 @@ class OcorrenciaController
 			$arrayFiltros = array();
 			$arrayFiltros = $this->getArrayFiltros();
 
-			$lista = $this->dao->pesquisaParaTec($ocorrencia, $this->arrayStatusPendente(), $arrayFiltros);
-			$lista2 = $this->dao->pesquisaParaTec($ocorrencia, $this->arrayStatusFinalizado(), $arrayFiltros);
+			$lista = $this->dao->pesquisaParaTec($this->arrayStatusPendente(), $arrayFiltros);
+			$lista2 = $this->dao->pesquisaParaTec($this->arrayStatusFinalizado(), $arrayFiltros);
 		} elseif ($this->sessao->getNivelAcesso() == Sessao::NIVEL_ADM) {
 
 			$arrayFiltros = array();
 			$arrayFiltros = $this->getArrayFiltros();
 
-			$listaPendentes = $this->dao->pesquisaParaTec($ocorrencia, $this->arrayStatusPendente(), $arrayFiltros);
-			$lista2 = $this->dao->pesquisaParaTec($ocorrencia, $this->arrayStatusFinalizado(), $arrayFiltros);
+			$listaPendentes = $this->dao->pesquisaParaTec( $this->arrayStatusPendente(), $arrayFiltros);
+			$lista2 = $this->dao->pesquisaParaTec($this->arrayStatusFinalizado(), $arrayFiltros);
 
 
 			foreach ($listaPendentes as $ocorrencia) {
