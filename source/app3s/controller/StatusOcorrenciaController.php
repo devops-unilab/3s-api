@@ -470,7 +470,10 @@ class StatusOcorrenciaController
     {
         $this->ocorrencia = $ocorrencia;
         $this->sessao = new Sessao();
-        if ($this->sessao->getNivelAcesso() == Sessao::NIVEL_COMUM || $this->sessao->getNivelAcesso() == Sessao::NIVEL_DESLOGADO) {
+        if (
+            $this->sessao->getNivelAcesso() == Sessao::NIVEL_COMUM
+            || $this->sessao->getNivelAcesso() == Sessao::NIVEL_DESLOGADO
+        ) {
             return false;
         }
         if ($this->ocorrencia->getStatus() == self::STATUS_FECHADO) {
