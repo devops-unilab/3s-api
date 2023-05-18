@@ -50,7 +50,7 @@ class ServicoController
 
 		if (isset($_GET['edit'])) {
 			$this->edit();
-		} else if (isset($_GET['delete'])) {
+		} elseif (isset($_GET['delete'])) {
 			$this->delete();
 		} else {
 			$this->add();

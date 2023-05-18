@@ -975,7 +975,7 @@ class StatusOcorrenciaController
 
 			$saldacao =  '<p>Prezado(a) ' . $nome . ' ,</p>';
 			$mail->enviarEmail($destinatario, $nome, $assunto, $saldacao . $corpo);
-		} else if ($this->statusOcorrencia->getOcorrencia()->getIdUsuarioIndicado() != null) {
+		} elseif ($this->statusOcorrencia->getOcorrencia()->getIdUsuarioIndicado() != null) {
 
 			$indicado = new Usuario();
 			$indicado->setId($this->statusOcorrencia->getOcorrencia()->getIdUsuarioIndicado());
