@@ -36,7 +36,7 @@ class PainelTabelaController
             <div class="card-body" id="quadro-tabela">';
         $this->tabelaChamados();
         echo '
-	</div>
+    </div>
 </div>
 
 

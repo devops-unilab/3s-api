@@ -10,31 +10,31 @@ namespace app3s\model;
 
 class GrupoServico
 {
-	private $id;
-	private $nome;
-	public function __construct()
-	{
-	}
-	public function setId($id)
-	{
-		$this->id = $id;
-	}
+    private $id;
+    private $nome;
+    public function __construct()
+    {
+    }
+    public function setId($id)
+    {
+        $this->id = $id;
+    }
 
-	public function getId()
-	{
-		return $this->id;
-	}
-	public function setNome($nome)
-	{
-		$this->nome = $nome;
-	}
+    public function getId()
+    {
+        return $this->id;
+    }
+    public function setNome($nome)
+    {
+        $this->nome = $nome;
+    }
 
-	public function getNome()
-	{
-		return $this->nome;
-	}
-	public function __toString()
-	{
-		return $this->id . ' - ' . $this->nome;
-	}
+    public function getNome()
+    {
+        return $this->nome;
+    }
+    public function __toString()
+    {
+        return $this->id . ' - ' . $this->nome;
+    }
 }

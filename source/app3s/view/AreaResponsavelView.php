@@ -52,7 +52,7 @@ class AreaResponsavelView
                                             <input type="text" class="form-control"  name="email" id="email" placeholder="Email">
                                         </div>
 
-						              </form>
+                                      </form>
 
 
       </div>
@@ -87,28 +87,28 @@ class AreaResponsavelView
                 <div class="card-body">
 
 
-		<div class="table-responsive">
-			<table class="table table-bordered" id="dataTable" width="100%"
-				cellspacing="0">
-				<thead>
-					<tr>
-						<th>Id</th>
-						<th>Nome</th>
-						<th>Descricao</th>
-						<th>Email</th>
-                        <th>Actions</th>
-					</tr>
-				</thead>
-				<tfoot>
-					<tr>
+        <div class="table-responsive">
+            <table class="table table-bordered" id="dataTable" width="100%"
+                cellspacing="0">
+                <thead>
+                    <tr>
                         <th>Id</th>
                         <th>Nome</th>
                         <th>Descricao</th>
                         <th>Email</th>
                         <th>Actions</th>
-					</tr>
-				</tfoot>
-				<tbody>';
+                    </tr>
+                </thead>
+                <tfoot>
+                    <tr>
+                        <th>Id</th>
+                        <th>Nome</th>
+                        <th>Descricao</th>
+                        <th>Email</th>
+                        <th>Actions</th>
+                    </tr>
+                </tfoot>
+                <tbody>';
 
     foreach ($lista as $element) {
       echo '<tr>';
@@ -124,9 +124,9 @@ class AreaResponsavelView
     }
 
     echo '
-				</tbody>
-			</table>
-		</div>
+                </tbody>
+            </table>
+        </div>
 
 
 
@@ -155,15 +155,15 @@ class AreaResponsavelView
                                         <div class="form-group">
                                             <label for="nome">Nome</label>
                                             <input type="text" class="form-control" value="' . $selecionado->getNome() . '"  name="nome" id="nome" placeholder="Nome">
-                						</div>
+                                        </div>
                                         <div class="form-group">
                                             <label for="descricao">Descricao</label>
                                             <input type="text" class="form-control" value="' . $selecionado->getDescricao() . '"  name="descricao" id="descricao" placeholder="Descricao">
-                						</div>
+                                        </div>
                                         <div class="form-group">
                                             <label for="email">Email</label>
                                             <input type="text" class="form-control" value="' . $selecionado->getEmail() . '"  name="email" id="email" placeholder="Email">
-                						</div>
+                                        </div>
                 <input type="hidden" value="1" name="edit_area_responsavel">
                 </form>
 
@@ -177,7 +177,7 @@ class AreaResponsavelView
 
 
 
-						              ';
+                                      ';
   }
 
 
@@ -188,7 +188,7 @@ class AreaResponsavelView
   {
     echo '
 
-	<div class="card o-hidden border-0 shadow-lg">
+    <div class="card o-hidden border-0 shadow-lg">
         <div class="card">
             <div class="card-header">
                   Area Responsavel selecionado
@@ -215,31 +215,31 @@ class AreaResponsavelView
 
 
 
-				<div class="card o-hidden border-0 ">
-					<div class="card-body p-0">
-						<!-- Nested Row within Card Body -->
-						<div class="row d-flex justify-content-center">
+                <div class="card o-hidden border-0 ">
+                    <div class="card-body p-0">
+                        <!-- Nested Row within Card Body -->
+                        <div class="row d-flex justify-content-center">
 
-							<div class="col-md-6">
-								<div class="p-5">
-									<div class="text-center">
-										<h1 class="h4 text-gray-900 mb-4"> Delete Area Responsavel</h1>
-									</div>
-						              <form class="user" method="post">                    Tem certeza que deseja apagar esta área responsável?
+                            <div class="col-md-6">
+                                <div class="p-5">
+                                    <div class="text-center">
+                                        <h1 class="h4 text-gray-900 mb-4"> Delete Area Responsavel</h1>
+                                    </div>
+                                      <form class="user" method="post">                    Tem certeza que deseja apagar esta área responsável?
 
                                         <input type="submit" class="btn btn-primary btn-user btn-block" value="Delete" name="delete_area_responsavel">
                                         <hr>
 
-						              </form>
+                                      </form>
 
-								</div>
-							</div>
-						</div>
-					</div>
-
-
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
 
-	</div>';
+
+
+    </div>';
   }
 }

@@ -16,11 +16,6 @@ use app3s\model\Ocorrencia;
 class MensagemForumDAO extends DAO
 {
 
-
-
-
-
-
     public function insert(MensagemForum $mensagemForum, Ocorrencia $ocorrencia)
     {
         $sql = "INSERT INTO
