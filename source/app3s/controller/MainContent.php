@@ -49,19 +49,16 @@ class MainContent
 
     public function contentComum()
     {
-        if (isset($_GET['page'])) {
-            switch ($_GET['page']) {
-                case 'ocorrencia':
-                    $controller = new OcorrenciaController();
-                    $controller->main();
-                    break;
-                default:
-                    echo '<p>Página solicitada não encontrada.</p>';
-                    break;
-            }
-        } else {
+        if (!isset($_GET['page'])) {
             $controller = new OcorrenciaController();
             $controller->main();
+            return;
+        }
+        if ($_GET['page'] === 'ocorrencia') {
+            $controller = new OcorrenciaController();
+            $controller->main();
+        } else {
+            echo '<p>Página solicitada não encontrada.</p>';
         }
     }
 
