@@ -65,12 +65,4 @@ class MensagemForum
     {
         return $this->dataEnvio;
     }
-    public function __toString()
-    {
-        return $this->id .
-        ' - ' . $this->tipo .
-        ' - ' . $this->mensagem .
-        ' - ' . $this->usuario .
-        ' - ' . $this->dataEnvio;
-    }
 }

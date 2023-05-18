@@ -50,8 +50,4 @@ class AreaResponsavel
     {
         return $this->email;
     }
-    public function __toString()
-    {
-        return $this->id . ' - ' . $this->nome . ' - ' . $this->descricao . ' - ' . $this->email;
-    }
 }

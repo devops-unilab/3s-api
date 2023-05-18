@@ -40,8 +40,4 @@ class Status
     {
         return $this->nome;
     }
-    public function __toString()
-    {
-        return $this->id . ' - ' . $this->sigla . ' - ' . $this->nome;
-    }
 }
