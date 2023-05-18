@@ -16,10 +16,6 @@ use app3s\model\StatusOcorrencia;
 class StatusOcorrenciaDAO extends DAO
 {
 
-
-
-
-
     public function pesquisaPorIdOcorrencia(Ocorrencia $ocorrencia)
     {
         $lista = array();
@@ -68,9 +64,9 @@ class StatusOcorrenciaDAO extends DAO
         try {
 
             $stmt = $this->getConnection()->prepare($sql);
-            $stmt->bindParam(":id", $id, \PDO::PARAM_INT);
+            $stmt->bindParam(":id", $id, PDO::PARAM_INT);
             $stmt->execute();
-            $result = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
             foreach ($result as $linha) {
                 $statusOcorrencia = new StatusOcorrencia();
                 $statusOcorrencia->setId($linha['id']);
@@ -104,7 +100,7 @@ class StatusOcorrenciaDAO extends DAO
                 $statusOcorrencia->getUsuario()->setIdSetor($linha['id_setor_usuario_usuario']);
                 $lista[] = $statusOcorrencia;
             }
-        } catch (\PDOException $e) {
+        } catch (PDOException $e) {
             echo $e->getMessage();
         }
         return $lista;
