@@ -418,12 +418,22 @@ class OcorrenciaController
                             <div class="form-row">
                                 <div class="col-md-6 mb-3">
                                   <label for="filtro-data-1">Data Inicial</label>
-                                  <input type="date" class="form-control" id="filtro-data-1" name="filtro-data-1" value="' . $dataAbertura1 . '">
+                                  <input
+								  	type="date"
+									class="form-control"
+									id="filtro-data-1"
+									name="filtro-data-1"
+									value="' . $dataAbertura1 . '">
 
                                 </div>
                                 <div class="col-md-6 mb-3">
                                   <label for="filtro-data-2">Data Final</label>
-                                  <input type="date" class="form-control" id="filtro-data-2" name="filtro-data-2" value="' . $dataAbertura2 . '">
+                                  <input
+								  	type="date"
+									class="form-control"
+									id="filtro-data-2"
+									name="filtro-data-2"
+									value="' . $dataAbertura2 . '">
 
                                 </div>
                               </div>
@@ -437,13 +447,10 @@ class OcorrenciaController
 		$usuario->setId($sessao->getIdUsuario());
 		$usuarioDao = new UsuarioDAO();
 		$usuarioDao->fillById($usuario);
-
 		$setor = new AreaResponsavel();
 		$setor->setId($usuario->getIdSetor());
 		$areaResponsavelDao = new AreaResponsavelDAO();
 		$areaResponsavelDao->fillById($setor);
-
-
 		$usuario = new Usuario();
 		$usuario->setNivel(Sessao::NIVEL_TECNICO);
 		$listaTecnicos = $usuarioDao->fetchByNivel($usuario);
@@ -451,9 +458,7 @@ class OcorrenciaController
 		$listaTecnicos2 = $usuarioDao->fetchByNivel($usuario);
 		$listaTecnicos = array_merge($listaTecnicos, $listaTecnicos2);
 		$allUsers = $usuarioDao->fetch();
-
 		$listaAreas = $areaResponsavelDao->fetch();
-
 		$checkedSetor = "";
 		if (isset($_GET['setor'])) {
 			$checkedSetor = 'checked';
@@ -466,8 +471,6 @@ class OcorrenciaController
 		if (isset($_GET['solicitacao'])) {
 			$checkedSolicitacao = 'checked';
 		}
-
-
 		$checkedLiberdade = "";
 		$checkedAuroras = "";
 		$checkedPalmares = "";
@@ -491,13 +494,10 @@ class OcorrenciaController
 				}
 			}
 		}
-
-
 		echo '
                 <div class="p-4 mb-3 bg-light rounded">
                     <h4 class="font-italic">Filtros</h4>
                         <form id="form-filtro-basico">
-
                             <input
 								type="hidden"
 								value="' . $setor->getId() . '"
@@ -506,12 +506,12 @@ class OcorrenciaController
                               <input type="checkbox"
 							  	class="custom-control-input"
 								id="filtro-meu-setor" ' . $checkedSetor . '>
-                              <label
-							  	class="custom-control-label"
-								for="filtro-meu-setor">Demandas (' . $setor->getNome() . ') </label>
+                              	<label
+									class="custom-control-label"
+									for="filtro-meu-setor">
+										Demandas (' . $setor->getNome() . ')
+							 	</label>
                             </div>
-
-
                             <div class="custom-control custom-switch">
                               <input
 							  	type="checkbox"
@@ -544,15 +544,15 @@ class OcorrenciaController
 				}
 			}
 			echo '
-                                  <option value="' . $tecnico->getId() . '" ' . $selectedAtt . '>' . $tecnico->getNome() . '</option>
+								<option
+								  	value="' . $tecnico->getId() . '" ' . $selectedAtt . '>
+									' . $tecnico->getNome() . '
+								</option>
 ';
 		}
-
 		echo '
                                 </select>
                               </div>
-
-
 						<div class="form-group">
 						<label for="select-requisitante">Usuário Requisitante</label>
 						<select id="select-requisitante">
@@ -565,8 +565,8 @@ class OcorrenciaController
 					$selectedAtt = 'selected';
 				}
 			}
-			echo '
-									<option value="' . $userElement->getId() . '" ' . $selectedAtt . '>' . $userElement->getNome() . '</option>  ';
+			echo '<option
+					value="' . $userElement->getId() . '" ' . $selectedAtt . '>' . $userElement->getNome() . '</option>  ';
 		}
 
 		echo '
