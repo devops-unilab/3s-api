@@ -943,7 +943,7 @@ class StatusOcorrenciaController
 
 
 
-        $saldacao =  '<p>Prezado(a) ' . $this->statusOcorrencia->getUsuario()->getNome() . ' ,</p>';
+        $saldacao =  '<p>  Prezado(a) ' . $this->statusOcorrencia->getUsuario()->getNome() . ' ,   </p>';
 
         $corpo = '<p>
                         Avisamos que houve uma mudança no status da solicitação
@@ -983,7 +983,7 @@ class StatusOcorrenciaController
             $destinatario = $atendente->getEmail();
             $nome = $atendente->getNome();
 
-            $saldacao =  '<p>Prezado(a) ' . $nome . ' ,</p>';
+            $saldacao =  ' <p>Prezado(a) ' . $nome . ' ,</p>';
             $mail->enviarEmail($destinatario, $nome, $assunto, $saldacao . $corpo);
         } elseif ($this->statusOcorrencia->getOcorrencia()->getIdUsuarioIndicado() != null) {
 
@@ -993,7 +993,7 @@ class StatusOcorrenciaController
             $destinatario = $indicado->getEmail();
             $nome = $indicado->getNome();
 
-            $saldacao =  '<p>Prezado(a) ' . $nome . ' ,</p>';
+            $saldacao =  '<p> Prezado(a) ' . $nome . ' , </p>';
             $mail->enviarEmail($destinatario, $nome, $assunto, $saldacao . $corpo);
         }
     }
