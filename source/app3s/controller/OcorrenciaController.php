@@ -752,19 +752,7 @@ class OcorrenciaController
 		foreach ($listaAtrasados as $ocorrencia) {
 			$requisitantes[$ocorrencia->getIdLocal()] = $ocorrencia->getLocal();
 		}
-
-
-
-		echo '
-                    </div>'; //Fecha panel-group
-		echo '</div>'; //fecha col-md-8
-
-		echo '
-	        
-	        
-	        
-	        
-            <aside class="col-md-4 blog-sidebar">';
+		echo '</div></div><aside class="col-md-4 blog-sidebar">';
 		if ($sessao->getNivelAcesso() == Sessao::NIVEL_ADM || $sessao->getNivelAcesso() == Sessao::NIVEL_TECNICO) {
 			$this->cardFiltro($requisitantes);
 		}
@@ -814,7 +802,10 @@ class OcorrenciaController
 
 		$listaServico = $servicoDao->fetchByVisao($servico);
 
-		if ($this->sessao->getNivelAcesso() == Sessao::NIVEL_ADM || $this->sessao->getNivelAcesso() == Sessao::NIVEL_TECNICO) {
+		if (
+			$this->sessao->getNivelAcesso() == Sessao::NIVEL_ADM
+			|| $this->sessao->getNivelAcesso() == Sessao::NIVEL_TECNICO
+		) {
 			$servico->setVisao(2);
 			$lista2 = $servicoDao->fetchByVisao($servico);
 			$listaServico = array_merge($listaServico, $lista2);
@@ -1309,14 +1300,11 @@ class OcorrenciaController
 		$selected->setId($_GET['select']);
 
 		$this->dao->fillById($selected);
+		$this->dao->fetchMensagens($selected);
 
 		echo '<div class="col-xl-7 col-lg-7 col-md-12 col-sm-12">';
 		$this->view->showSelected($selected);
-		echo '</div>';
-
-
-		$this->dao->fetchMensagens($selected);
-		echo '<div class="col-xl-6 col-lg-6 col-md-12 col-sm-12">';
+		echo '</div><div class="col-xl-6 col-lg-6 col-md-12 col-sm-12">';
 		$this->view->showMensagens($selected);
 		echo '</div>';
 	}
