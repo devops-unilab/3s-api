@@ -281,10 +281,10 @@ class MensagemForumController
     {
 
         $sessao = new Sessao();
-        if (!isset($_POST['enviar_mensagem_forum'])) {
-            return;
-        }
-        if (!(isset($_POST['tipo'])
+
+        if (
+            !isset($_POST['enviar_mensagem_forum'])
+            && !(isset($_POST['tipo'])
             && isset($_POST['mensagem'])
             && isset($_POST['ocorrencia']))) {
             echo ':incompleto';
