@@ -183,10 +183,8 @@ class OcorrenciaDAO extends DAO
             usuario_cliente.nivel as nivel_usuario_usuario_cliente,
             usuario_cliente.id_setor as id_setor_usuario_usuario_cliente
             FROM ocorrencia
-
             INNER JOIN area_responsavel as area_responsavel
             ON area_responsavel.id = ocorrencia.id_area_responsavel
-
             INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico
             LEFT JOIN usuario as usuario_cliente
             ON usuario_cliente.id = ocorrencia.id_usuario_cliente
@@ -268,45 +266,45 @@ class OcorrenciaDAO extends DAO
         $status = StatusOcorrenciaController::STATUS_FECHADO;
 
         $sql = "SELECT ocorrencia.id,
-                ocorrencia.id_local,
-                ocorrencia.descricao,
-                ocorrencia.campus,
-                ocorrencia.patrimonio,
-                ocorrencia.ramal,
-                ocorrencia.local,
-                ocorrencia.status,
-                ocorrencia.solucao,
-                ocorrencia.prioridade,
-                ocorrencia.avaliacao,
-                ocorrencia.email,
-                ocorrencia.id_usuario_atendente,
-                ocorrencia.id_usuario_indicado,
-                ocorrencia.anexo,
-                ocorrencia.local_sala,
-                ocorrencia.data_abertura,
-                ocorrencia.data_atendimento,
-                ocorrencia.data_fechamento,
-                ocorrencia.data_fechamento_confirmado,
-                area_responsavel.id as id_area_responsavel_area_responsavel,
-                area_responsavel.nome as nome_area_responsavel_area_responsavel,
-                area_responsavel.descricao as descricao_area_responsavel_area_responsavel,
-                area_responsavel.email as email_area_responsavel_area_responsavel,
-                servico.id as id_servico_servico,
-                servico.nome as nome_servico_servico,
-                servico.descricao as descricao_servico_servico,
-                servico.tempo_sla as tempo_sla_servico_servico,
-                servico.visao as visao_servico_servico,
-                usuario_cliente.id as id_usuario_usuario_cliente,
-                usuario_cliente.nome as nome_usuario_usuario_cliente,
-                usuario_cliente.email as email_usuario_usuario_cliente,
-                usuario_cliente.login as login_usuario_usuario_cliente,
-                usuario_cliente.senha as senha_usuario_usuario_cliente,
-                usuario_cliente.nivel as nivel_usuario_usuario_cliente,
-                usuario_cliente.id_setor as id_setor_usuario_usuario_cliente
-                FROM ocorrencia
-                INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel
-                INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico
-                INNER JOIN usuario as usuario_cliente ON usuario_cliente.id = ocorrencia.id_usuario_cliente
+            ocorrencia.id_local,
+            ocorrencia.descricao,
+            ocorrencia.campus,
+            ocorrencia.patrimonio,
+            ocorrencia.ramal,
+            ocorrencia.local,
+            ocorrencia.status,
+            ocorrencia.solucao,
+            ocorrencia.prioridade,
+            ocorrencia.avaliacao,
+            ocorrencia.email,
+            ocorrencia.id_usuario_atendente,
+            ocorrencia.id_usuario_indicado,
+            ocorrencia.anexo,
+            ocorrencia.local_sala,
+            ocorrencia.data_abertura,
+            ocorrencia.data_atendimento,
+            ocorrencia.data_fechamento,
+            ocorrencia.data_fechamento_confirmado,
+            area_responsavel.id as id_area_responsavel_area_responsavel,
+            area_responsavel.nome as nome_area_responsavel_area_responsavel,
+            area_responsavel.descricao as descricao_area_responsavel_area_responsavel,
+            area_responsavel.email as email_area_responsavel_area_responsavel,
+            servico.id as id_servico_servico,
+            servico.nome as nome_servico_servico,
+            servico.descricao as descricao_servico_servico,
+            servico.tempo_sla as tempo_sla_servico_servico,
+            servico.visao as visao_servico_servico,
+            usuario_cliente.id as id_usuario_usuario_cliente,
+            usuario_cliente.nome as nome_usuario_usuario_cliente,
+            usuario_cliente.email as email_usuario_usuario_cliente,
+            usuario_cliente.login as login_usuario_usuario_cliente,
+            usuario_cliente.senha as senha_usuario_usuario_cliente,
+            usuario_cliente.nivel as nivel_usuario_usuario_cliente,
+            usuario_cliente.id_setor as id_setor_usuario_usuario_cliente
+            FROM ocorrencia
+            INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel
+            INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico
+            INNER JOIN usuario as usuario_cliente ON usuario_cliente.id = ocorrencia.id_usuario_cliente
                 WHERE
                     ocorrencia.status = '$status'
                 AND
@@ -405,7 +403,7 @@ class OcorrenciaDAO extends DAO
             usuario_cliente.senha as senha_usuario_usuario_cliente,
             usuario_cliente.nivel as nivel_usuario_usuario_cliente,
             usuario_cliente.id_setor as id_setor_usuario_usuario_cliente FROM ocorrencia
-        INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel
+            INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel
             INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico
             LEFT JOIN usuario as usuario_cliente ON usuario_cliente.id = ocorrencia.id_usuario_cliente
                 WHERE ocorrencia.id = :id
