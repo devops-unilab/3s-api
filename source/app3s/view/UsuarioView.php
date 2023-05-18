@@ -35,17 +35,33 @@ class UsuarioView
                             <form id="login-form" class="form" method="post" action=".">
 
                                 <div class="form-group">
-                                    <input type="text" size="350" name="usuario" class="form-control" id="usuario" placeholder="Usuario do SIG" autofocus="autofocus">
+                                    <input
+                                        type="text"
+                                        size="350"
+                                        name="usuario"
+                                        class="form-control"
+                                        id="usuario"
+                                        placeholder="Usuario do SIG" autofocus="autofocus">
                                 </div>
 
                                 <div class="form-group">
-                                    <input type="password" class="form-control" name="senha" size="100" id="senha" placeholder="Senha do SIG">
+                                    <input type="password"
+                                        class="form-control"
+                                        name="senha"
+                                        size="100"
+                                        id="senha" placeholder="Senha do SIG">
                                 </div>
                                 <div class="forgot">
-                                    <a href="https://sigadmin.unilab.edu.br/admin/public/recuperar_senha.jsf">Esqueceu a senha?</a>
+                                    <a href="https://sigadmin.unilab.edu.br/admin/public/recuperar_senha.jsf">
+                                        Esqueceu a senha?
+                                    </a>
                                 </div>
                                 <button type="submit" id="botao-login" class="btn-primary btn-lg btn-block">
-                                    <span id="spinner-submit" class="escondido spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                    <span
+                                        id="spinner-submit"
+                                        class="escondido spinner-border spinner-border-sm"
+                                        role="status" aria-hidden="true">
+                                    </span>
                                     Entrar
                                 </button>
 
@@ -79,42 +95,46 @@ class UsuarioView
                 <div class="card-body">
 
 
-		<div class="table-responsive">
-			<table class="table table-bordered" id="dataTable" width="100%"
-				cellspacing="0">
-				<thead>
-					<tr>
-						<th>Id</th>
-						<th>Nome</th>
-						<th>Nível de Acesso</th>
-                        <th>Actions</th>
-					</tr>
-				</thead>
-				<tfoot>
-					<tr>
+        <div class="table-responsive">
+            <table class="table table-bordered" id="dataTable" width="100%"
+                cellspacing="0">
+                <thead>
+                    <tr>
                         <th>Id</th>
                         <th>Nome</th>
                         <th>Nível de Acesso</th>
                         <th>Actions</th>
-					</tr>
-				</tfoot>
-				<tbody>';
+                    </tr>
+                </thead>
+                <tfoot>
+                    <tr>
+                        <th>Id</th>
+                        <th>Nome</th>
+                        <th>Nível de Acesso</th>
+                        <th>Actions</th>
+                    </tr>
+                </tfoot>
+                <tbody>';
 
         foreach ($lista as $element) {
-            echo '<tr>';
-            echo '<td>' . $element->getId() . '</td>';
-            echo '<td>' . $element->getNome() . '</td>';
-            echo '<td>' . $element->getStrNivel() . '</td>';
-            echo '<td>
-                        <a href="?page=usuario&edit=' . $element->getId() . '" class="btn btn-success text-white">Editar</a>
-                      </td>';
+            echo '<tr>
+            <td>' . $element->getId() . '</td>
+            <td>' . $element->getNome() . '</td>
+            <td>' . $element->getStrNivel() . '</td>
+            <td>
+                <a
+                    href="?page=usuario&edit=' . $element->getId() . '"
+                    class="btn btn-success text-white">
+                    Editar
+                </a>
+            </td>';
             echo '</tr>';
         }
 
         echo '
-				</tbody>
-			</table>
-		</div>
+                </tbody>
+            </table>
+        </div>
 
 
 
@@ -144,11 +164,21 @@ class UsuarioView
                         <label for="select-nivel">Nivel</label>
 
                         <select id="select-nivel" required name="nivel">
-                            <option value="">Nível de Acesso</option>
-                            <option value="c" ' . ($selecionado->getNivel() == 'c' ? 'selected' : '') . '>Comum</option>
-                            <option value="t" ' . ($selecionado->getNivel() == 't' ? 'selected' : '') . '>Técnico</option>
-                            <option value="a" ' . ($selecionado->getNivel() == 'a' ? 'selected' : '') . '>Administrador</option>
-                            <option value="d" ' . ($selecionado->getNivel() == 'd' ? 'selected' : '') . '>Desativado</option>
+                            <option value="">
+                                Nível de Acesso
+                            </option>
+                            <option value="c" ' . ($selecionado->getNivel() == 'c' ? 'selected' : '') . '>
+                                Comum
+                            </option>
+                            <option value="t" ' . ($selecionado->getNivel() == 't' ? 'selected' : '') . '>
+                                Técnico
+                            </option>
+                            <option value="a" ' . ($selecionado->getNivel() == 'a' ? 'selected' : '') . '>
+                                Administrador
+                            </option>
+                            <option value="d" ' . ($selecionado->getNivel() == 'd' ? 'selected' : '') . '>
+                                Desativado
+                            </option>
                             ';
 
         echo '
@@ -163,7 +193,11 @@ class UsuarioView
         foreach ($setores as $area) {
 
             echo '
-                                    <option value="' . $area->getId() . '" ' . ($selecionado->getIdSetor() === $area->getId() ? 'selected' : '') . '>' . $area->getNome() . '</option>';
+                                    <option
+                                        value="' . $area->getId() . '"
+                                        ' . ($selecionado->getIdSetor() === $area->getId() ? 'selected' : '') . '>
+                                        ' . $area->getNome() . '
+                                    </option>';
         }
         echo '
 
@@ -184,6 +218,6 @@ class UsuarioView
 
 
 
-						              ';
+                                      ';
     }
 }
