@@ -1,5 +1,5 @@
 <?php
-            
+
 /**
  * Classe feita para manipulação do objeto Usuario
  * feita automaticamente com programa gerador de software inventado por
@@ -8,7 +8,8 @@
 
 namespace app3s\model;
 
-class Usuario {
+class Usuario
+{
 	private $id;
 	private $nome;
 	private $email;
@@ -17,71 +18,89 @@ class Usuario {
 	private $nivel;
 	private $idSetor;
 	private $idUnidade;
-	private $siglaUnidade; 
-	public function setId($id) {
+	private $siglaUnidade;
+	public function setId($id)
+	{
 		$this->id = $id;
 	}
-		    
-	public function getId() {
+
+	public function getId()
+	{
 		return $this->id;
 	}
-	public function setNome($nome) {
+	public function setNome($nome)
+	{
 		$this->nome = $nome;
 	}
-		    
-	public function getNome() {
+
+	public function getNome()
+	{
 		return $this->nome;
 	}
-	public function setEmail($email) {
+	public function setEmail($email)
+	{
 		$this->email = $email;
 	}
-		    
-	public function getEmail() {
+
+	public function getEmail()
+	{
 		return $this->email;
 	}
-	public function setLogin($login) {
+	public function setLogin($login)
+	{
 		$this->login = $login;
 	}
-		    
-	public function getLogin() {
+
+	public function getLogin()
+	{
 		return $this->login;
 	}
-	public function setSenha($senha) {
+	public function setSenha($senha)
+	{
 		$this->senha = $senha;
 	}
-		    
-	public function getSenha() {
+	public function getSenha()
+	{
 		return $this->senha;
 	}
-	public function setNivel($nivel) {
+	public function setNivel($nivel)
+	{
 		$this->nivel = $nivel;
 	}
-		    
-	public function getNivel() {
+
+	public function getNivel()
+	{
 		return $this->nivel;
 	}
-	public function setIdSetor($idSetor) {
+	public function setIdSetor($idSetor)
+	{
 		$this->idSetor = $idSetor;
 	}
-	public function setIdUnidade($idUnidade) {
+	public function setIdUnidade($idUnidade)
+	{
 		$this->idUnidade = $idUnidade;
 	}
-	public function getIdUnidade() {
+	public function getIdUnidade()
+	{
 		return $this->idUnidade;
 	}
-	public function setSiglaUnidade($siglaUnidade) {
+	public function setSiglaUnidade($siglaUnidade)
+	{
 		$this->siglaUnidade = $siglaUnidade;
 	}
-	public function getSiglaUnidade() {
+	public function getSiglaUnidade()
+	{
 		return $this->siglaUnidade;
 	}
-	
-	public function getIdSetor() {
+
+	public function getIdSetor()
+	{
 		return $this->idSetor;
 	}
-	public function getStrNivel() {
+	public function getStrNivel()
+	{
 		$strNivel = 'Desconhecido';
-		switch($this->nivel) {
+		switch ($this->nivel) {
 			case 'a':
 				$strNivel = 'Administrador';
 				break;
@@ -91,16 +110,14 @@ class Usuario {
 			case 'c':
 				$strNivel = 'Comum';
 				break;
-			default: 
+			default:
 				$strNivel = 'Desconhecido';
-			break;
+				break;
 		}
 		return $strNivel;
 	}
-	public function __toString(){
-	    return $this->id.' - '.$this->nome.' - '.$this->email.' - '.$this->login.' - '.$this->senha.' - '.$this->nivel.' - '.$this->idSetor;
+	public function __toString()
+	{
+		return $this->id . ' - ' . $this->nome . ' - ' . $this->email . ' - ' . $this->login . ' - ' . $this->senha . ' - ' . $this->nivel . ' - ' . $this->idSetor;
 	}
-                
-
 }
-?>
