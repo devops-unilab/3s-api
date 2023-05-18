@@ -41,16 +41,14 @@ class AreaResponsavelController
             echo '
 
 <div class="alert alert-success" role="alert">
-  Sucesso ao excluir Area Responsavel
-</div>
+  Sucesso ao excluir Area Responsavel</div>
 
 ';
         } else {
             echo '
 
 <div class="alert alert-danger" role="alert">
-  Falha ao tentar excluir Area Responsavel
-</div>
+  Falha ao tentar excluir Area Responsavel</div>
 
 ';
         }
@@ -201,8 +199,7 @@ class AreaResponsavelController
 ';
         echo '
 
-        <div class="row">';
-        echo '<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">';
+        <div class="row"><div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">';
 
         if (isset($_GET['edit'])) {
             $this->edit();
@@ -213,11 +210,7 @@ class AreaResponsavelController
         }
         $this->fetch();
 
-        echo '</div>';
-        echo '</div>';
-
-        echo '</div>';
-        echo '</div>';
+        echo '</div></div></div></div>';
     }
     public function mainAjax()
     {
