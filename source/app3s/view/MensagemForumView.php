@@ -55,7 +55,10 @@ class MensagemForumView
                 tabindex="0" dir="ltr" spellcheck="false"
                 autocomplete="off" autocorrect="off"
                 autocapitalize="off" contenteditable="true" />
-                        <span class="input-group-btn"> <button class="btn bt_bg btn-sm" id="botao-enviar-mensagem">Enviar</button></span>
+                        <span class="input-group-btn">
+                        <button class="btn bt_bg btn-sm" id="botao-enviar-mensagem">
+                            Enviar
+                        </button></span>
           </div>
                 </form>
 

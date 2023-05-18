@@ -298,7 +298,9 @@ class ServicoView
             if ($element == $selecionado->getVisao()) {
                 $strAtribut = "selected";
             }
-            echo '<option value="' . $element . '" ' . $strAtribut . ' >' . ServicoController::toStringVisao($element) . '</option>';
+            echo '<option value="' . $element . '" ' . $strAtribut . ' >
+            ' . ServicoController::toStringVisao($element) . '
+            </option>';
         }
 
         echo '

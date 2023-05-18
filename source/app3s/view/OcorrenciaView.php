@@ -72,7 +72,14 @@ class OcorrenciaView
                         class="custom-file-input"
                         name="anexo"
                         id="anexo"
-                        accept="application/msword, application/vnd.ms-excel, application/vnd.ms-powerpoint, text/plain, application/pdf, image/*, application/zip,application/rar, .ovpn, .xlsx">
+                        accept="application/msword, application/vnd.ms-excel,
+                        application/vnd.ms-powerpoint,
+                        text/plain,
+                        application/pdf,
+                        image/*,
+                        application/zip,application/rar,
+                        .ovpn,
+                        .xlsx">
                       <label class="custom-file-label"
                         for="anexo"
                         data-browse="Anexar">Anexar um Arquivo</label>
