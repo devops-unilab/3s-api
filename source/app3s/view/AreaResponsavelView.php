@@ -237,9 +237,7 @@ class AreaResponsavelView
 ';
     }
 
-
-
-    public function confirmDelete(AreaResponsavel $areaResponsavel)
+    public function confirmDelete()
     {
         echo '
 

@@ -34,7 +34,7 @@ class AreaResponsavelController
         $selected = new AreaResponsavel();
         $selected->setId($_GET['delete']);
         if (!isset($_POST['delete_area_responsavel'])) {
-            $this->view->confirmDelete($selected);
+            $this->view->confirmDelete();
             return;
         }
         if ($this->dao->delete($selected)) {

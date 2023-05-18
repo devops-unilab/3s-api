@@ -376,7 +376,7 @@ class ServicoView
 
 
 
-    public function confirmDelete(Servico $servico)
+    public function confirmDelete()
     {
         echo '
 

@@ -747,6 +747,8 @@ class OcorrenciaDAO extends DAO
                     case 'males':
                         $strWhereCampus[] = " (ocorrencia.campus = 'males') ";
                         break;
+                    default:
+                        break;
                 }
             }
             $arrPedacos[] = '(' . implode(" OR ", $strWhereCampus) . ')';
@@ -772,8 +774,7 @@ class OcorrenciaDAO extends DAO
         }
 
 
-        $filtro = implode(" AND ", $arrPedacos);
-        return $filtro;
+        return implode(" AND ", $arrPedacos);
     }
 
 

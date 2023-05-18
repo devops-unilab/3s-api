@@ -14,7 +14,9 @@ class Sessao
 
     public function __construct()
     {
-        if (!isset($_SESSION)) session_start();
+        if (!isset($_SESSION)) {
+            session_start();
+        }
     }
     public function criaSessao($id, $nivel, $login, $nome, $email)
     {
