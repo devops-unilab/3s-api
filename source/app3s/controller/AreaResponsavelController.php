@@ -38,19 +38,9 @@ class AreaResponsavelController
             return;
         }
         if ($this->dao->delete($selected)) {
-            echo '
-
-<div class="alert alert-success" role="alert">
-  Sucesso ao excluir Area Responsavel</div>
-
-';
+            echo '<div class="alert alert-success" role="alert">Sucesso ao excluir Area Responsavel</div>';
         } else {
-            echo '
-
-<div class="alert alert-danger" role="alert">
-  Falha ao tentar excluir Area Responsavel</div>
-
-';
+            echo '<div class="alert alert-danger" role="alert">Falha ao tentar excluir Area Responsavel</div>';
         }
         echo '<META HTTP-EQUIV="REFRESH" CONTENT="2; URL=?page=area_responsavel">';
     }
@@ -72,10 +62,7 @@ class AreaResponsavelController
             return;
         }
         if (!(isset($_POST['nome']) && isset($_POST['descricao']) && isset($_POST['email']))) {
-            echo '
-                <div class="alert alert-danger" role="alert">
-                    Failed to register. Some field must be missing.
-                </div>';
+            echo '<div class="alert alert-danger" role="alert">Failed to register. Some field must be missing.</div>';
             return;
         }
         $areaResponsavel = new AreaResponsavel();
@@ -84,21 +71,9 @@ class AreaResponsavelController
         $areaResponsavel->setEmail($_POST['email']);
 
         if ($this->dao->insert($areaResponsavel)) {
-            echo '
-
-<div class="alert alert-success" role="alert">
-  Sucesso ao inserir Area Responsavel
-</div>
-
-';
+            echo '<div class="alert alert-success" role="alert">Sucesso ao inserir Area Responsavel</div>';
         } else {
-            echo '
-
-<div class="alert alert-danger" role="alert">
-  Falha ao tentar Inserir Area Responsavel
-</div>
-
-';
+            echo '<div class="alert alert-danger" role="alert">Falha ao tentar Inserir Area Responsavel</div>';
         }
         echo '<META HTTP-EQUIV="REFRESH" CONTENT="3; URL=?page=area_responsavel">';
     }
@@ -131,21 +106,9 @@ class AreaResponsavelController
         $selected->setEmail($_POST['email']);
 
         if ($this->dao->update($selected)) {
-            echo '
-
-<div class="alert alert-success" role="alert">
-  Sucesso
-</div>
-
-';
+            echo '<div class="alert alert-success" role="alert">Sucesso</div>';
         } else {
-            echo '
-
-<div class="alert alert-danger" role="alert">
-  Falha
-</div>
-
-';
+            echo '<div class="alert alert-danger" role="alert">Falha</div>';
         }
         echo '<META HTTP-EQUIV="REFRESH" CONTENT="3; URL=?page=area_responsavel">';
     }
@@ -160,15 +123,8 @@ class AreaResponsavelController
             echo '</div>';
             return;
         }
-        echo '
-
-        <div class="card mb-4">
-            <div class="card-body">
-
-';
-        echo '
-
-        <div class="row"><div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">';
+        echo '<div class="card mb-4"><div class="card-body">';
+        echo '<div class="row"><div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">';
 
         if (isset($_GET['edit'])) {
             $this->edit();
