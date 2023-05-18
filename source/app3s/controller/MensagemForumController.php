@@ -235,7 +235,11 @@ class MensagemForumController
         $saldacao =  '<p>
         Prezado
         (a) ' . $ocorrencia->getUsuarioCliente()->getNome() . ' ,</p>';
-        $corpo = '<p>Avisamos que houve uma mensagem nova na solicitação <a href="https://3s.unilab.edu.br/?page=ocorrencia&selecionar=' . $ocorrencia->getId() . '">Nº' . $ocorrencia->getId() . '</a></p>';
+        $corpo = '<p>
+        Avisamos que houve uma mensagem nova na solicitação
+        <a href="https://3s.unilab.edu.br/?page=ocorrencia&selecionar=' . $ocorrencia->getId() . '">
+        Nº' . $ocorrencia->getId() . '
+        </a></p>';
 
         $corpo .= '<ul>
 
@@ -261,7 +265,7 @@ class MensagemForumController
             $usuarioDao->fillById($atendente);
             $destinatario = $atendente->getEmail();
             $nome = $atendente->getNome();
-        } else if ($ocorrencia->getIdUsuarioIndicado() != null) {
+        } elseif ($ocorrencia->getIdUsuarioIndicado() != null) {
 
             $indicado = new Usuario();
             $indicado->setId($ocorrencia->getIdUsuarioIndicado());

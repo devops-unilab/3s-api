@@ -145,7 +145,7 @@ class NavBarController
                   Perfil Comum
               </button>
               <hr>';
-    } else if ($sessao->getNIvelOriginal() == Sessao::NIVEL_TECNICO) {
+    } elseif ($sessao->getNIvelOriginal() == Sessao::NIVEL_TECNICO) {
       $disabled = "";
       if ($sessao->getNivelAcesso() == Sessao::NIVEL_TECNICO) {
         $disabled = "disabled";
