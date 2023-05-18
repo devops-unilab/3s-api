@@ -22,10 +22,6 @@ class MainAjax
                 $controller = new StatusOcorrenciaController();
                 $controller->mainAjax();
                 break;
-            case 'pedir_ajuda':
-                $controller = new OcorrenciaController();
-                $controller->ajaxPedirAjuda();
-                break;
             case 'painel_kamban':
                 $controller = new PainelKambanController();
                 $controller->quadroKamban();
