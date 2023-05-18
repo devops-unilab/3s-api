@@ -211,7 +211,6 @@ class OcorrenciaDAO extends DAO
             $stmt->execute();
             $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
             foreach ($result as $linha) {
-                $ocorrencia = new Ocorrencia();
                 $ocorrencia->setId($linha['id']);
                 $ocorrencia->setIdLocal($linha['id_local']);
                 $ocorrencia->setDescricao($linha['descricao']);
@@ -295,7 +294,6 @@ class OcorrenciaDAO extends DAO
             $stmt->execute();
             $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
             foreach ($result as $linha) {
-                $ocorrencia = new Ocorrencia();
                 $ocorrencia->setId($linha['id']);
                 $ocorrencia->setIdLocal($linha['id_local']);
                 $ocorrencia->setDescricao($linha['descricao']);
