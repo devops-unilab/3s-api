@@ -321,7 +321,7 @@ class OcorrenciaController
 		if ($nAtrasados > 0) {
 			$this->painel($listaAtrasados, "Ocorrências Em Atraso ($nAtrasados)", 'collapseAtraso', "show");
 		}
-		$this->painel($lista1, 'Ocorrências Em Aberto('.count($lista1).')', 'collapseAberto', 'show');
+		$this->painel($lista1, 'Ocorrências Em Aberto(' . count($lista1) . ')', 'collapseAberto', 'show');
 		$this->painel($lista2, "Ocorrências Encerradas", 'collapseEncerrada');
 	}
 	public function arrayStatusPendente()
@@ -430,11 +430,9 @@ class OcorrenciaController
 
                             </form>';
 	}
-
 	public function cardFiltro($requisitantes)
 	{
 		$sessao = new Sessao();
-
 		$usuario = new Usuario();
 		$usuario->setId($sessao->getIdUsuario());
 		$usuarioDao = new UsuarioDAO();
@@ -500,26 +498,40 @@ class OcorrenciaController
                     <h4 class="font-italic">Filtros</h4>
                         <form id="form-filtro-basico">
 
-                            <input type="hidden" value="' . $setor->getId() . '" id="meu-setor" name="meu-setor">
+                            <input
+								type="hidden"
+								value="' . $setor->getId() . '"
+								id="meu-setor" name="meu-setor">
                             <div class="custom-control custom-switch">
-                              <input type="checkbox" class="custom-control-input" id="filtro-meu-setor" ' . $checkedSetor . '>
-                              <label class="custom-control-label" for="filtro-meu-setor">Demandas (' . $setor->getNome() . ') </label>
+                              <input type="checkbox"
+							  	class="custom-control-input"
+								id="filtro-meu-setor" ' . $checkedSetor . '>
+                              <label
+							  	class="custom-control-label"
+								for="filtro-meu-setor">Demandas (' . $setor->getNome() . ') </label>
                             </div>
 
 
                             <div class="custom-control custom-switch">
-                              <input type="checkbox" class="custom-control-input" id="filtro-minhas-demandas" ' . $checkedDemanda . '>
-                              <label class="custom-control-label" for="filtro-minhas-demandas">Meus Atendimentos</label>
+                              <input
+							  	type="checkbox"
+								class="custom-control-input"
+								id="filtro-minhas-demandas" ' . $checkedDemanda . '>
+                              <label
+							  	class="custom-control-label"
+								for="filtro-minhas-demandas">Meus Atendimentos</label>
                             </div>
-
-
-
-                            <div class="custom-control custom-switch mb-3">
-                              <input type="checkbox" class="custom-control-input" id="filtro-minhas-solicitacoes" ' . $checkedSolicitacao . '>
-                              <label class="custom-control-label" for="filtro-minhas-solicitacoes">Minhas Solicitações</label>
+							<div
+								class="custom-control
+								custom-switch mb-3">
+                              <input
+							  	type="checkbox"
+								class="custom-control-input"
+								id="filtro-minhas-solicitacoes" ' . $checkedSolicitacao . '>
+                              <label
+							  	class="custom-control-label"
+								for="filtro-minhas-solicitacoes">Minhas Solicitações</label>
                             </div>
-
-
                             <div class="form-group">
                                 <label for="select-tecnico">Técnico Responsável</label>
                                 <select id="select-tecnico">
