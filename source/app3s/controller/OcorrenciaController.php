@@ -516,10 +516,12 @@ class OcorrenciaController
                                   <option value="">Selecione um atendente</option>';
         foreach ($listaTecnicos as $tecnico) {
             $selectedAtt = '';
-            if (isset($_GET['tecnico'])) {
-                if ($tecnico->getId() == $_GET['tecnico']) {
-                    $selectedAtt = 'selected';
-                }
+            if (
+                isset($_GET['tecnico'])
+                && $tecnico->getId() == $_GET['tecnico']
+            ) {
+
+                $selectedAtt = 'selected';
             }
             echo '<option
                     value="' . $tecnico->getId() . '" ' . $selectedAtt . '>

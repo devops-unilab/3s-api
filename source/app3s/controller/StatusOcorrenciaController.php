@@ -126,12 +126,10 @@ class StatusOcorrenciaController
         return true;
     }
 
-    public function verificarSenha()
+    public function validatePassword()
     {
         $this->sessao = new Sessao();
-        if (!isset($_POST['senha'])) {
-            return false;
-        }
+
         $login = $this->sessao->getLoginUsuario();
         $senha = $_POST['senha'];
         $data = ['login' =>  $login, 'senha' => $senha];
@@ -143,7 +141,7 @@ class StatusOcorrenciaController
         if (isset($responseJ->id)) {
             $idUsuario = intval($responseJ->id);
         }
-        if ($idUsuario === 0) {
+        if ($idUsuario === 0 || !isset($_POST['senha'])) {
             return false;
         }
         if ($responseJ->id != $this->sessao->getIdUsuario()) {
@@ -531,10 +529,7 @@ class StatusOcorrenciaController
         if ($this->ocorrencia->getStatus() != self::STATUS_ATENDIMENTO) {
             return false;
         }
-        if ($this->sessao->getIdUsuario() != $this->ocorrencia->getIdUsuarioAtendente()) {
-            return false;
-        }
-        return true;
+        return ($this->sessao->getIdUsuario() === $this->ocorrencia->getIdUsuarioAtendente());
     }
 
     public function possoEditarPatrimonio(Ocorrencia $ocorrencia)
@@ -542,13 +537,11 @@ class StatusOcorrenciaController
         $this->ocorrencia = $ocorrencia;
         $this->sessao = new Sessao();
 
-        if ($this->ocorrencia->getStatus() == self::STATUS_FECHADO) {
-            return false;
-        }
-        if ($this->ocorrencia->getStatus() == self::STATUS_CANCELADO) {
-            return false;
-        }
-        if ($this->ocorrencia->getStatus() == self::STATUS_FECHADO_CONFIRMADO) {
+        if (
+            $this->ocorrencia->getStatus() == self::STATUS_FECHADO
+            || $this->ocorrencia->getStatus() == self::STATUS_CANCELADO
+            || $this->ocorrencia->getStatus() == self::STATUS_FECHADO_CONFIRMADO
+        ) {
             return false;
         }
         if ($this->sessao->getIdUsuario() == $this->ocorrencia->getUsuarioCliente()->getId()) {
@@ -595,13 +588,9 @@ class StatusOcorrenciaController
             return false;
         }
 
-        if ($this->ocorrencia->getStatus() == Self::STATUS_ATENDIMENTO) {
-            if ($this->sessao->getIdUsuario() == $this->ocorrencia->getIdUsuarioAtendente()) {
-                return true;
-            }
-        }
-
-        return false;
+        return ($this->ocorrencia->getStatus() == Self::STATUS_ATENDIMENTO
+            && $this->sessao->getIdUsuario() == $this->ocorrencia->getIdUsuarioAtendente()
+        );
     }
     public function possoReservar()
     {
@@ -831,7 +820,7 @@ class StatusOcorrenciaController
             echo ':falha:Ação não especificada';
             return;
         }
-        if (!$this->verificarSenha()) {
+        if (!$this->validatePassword()) {
             echo ':falha:Senha incorreta';
             return;
         }
