@@ -41,6 +41,4 @@ class TipoAtividadeDAO extends DAO
         }
         return $list;
     }
-
-
 }

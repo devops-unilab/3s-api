@@ -43,5 +43,4 @@ class StatusDAO extends DAO
         }
         return $status;
     }
-
 }

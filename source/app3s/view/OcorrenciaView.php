@@ -15,10 +15,12 @@ use app3s\model\Ocorrencia;
 use app3s\model\Usuario;
 use app3s\util\Sessao;
 
-class OcorrenciaView {
+class OcorrenciaView
+{
 
 
-    public function mostraFormInserir2($listaServico){
+    public function mostraFormInserir2($listaServico)
+    {
 
         $sessao = new Sessao();
 
@@ -40,16 +42,13 @@ class OcorrenciaView {
                 <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
                     <select id="select-servicos" name="servico" required>
                         <option value="" selected="selected">Selecione um serviço</option>';
-        foreach($listaServico as $servico){
+        foreach ($listaServico as $servico) {
             echo '
-                        <option value="'.$servico->getId().'">'.$servico->getNome();
-            if($servico->getDescricao() != ""){
-                echo ' - ('.$servico->getDescricao().') ';
-
-
+                        <option value="' . $servico->getId() . '">' . $servico->getNome();
+            if ($servico->getDescricao() != "") {
+                echo ' - (' . $servico->getDescricao() . ') ';
             }
             echo '</option>';
-
         }
         echo '
 
@@ -108,7 +107,7 @@ class OcorrenciaView {
 
                 <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12">
                     <label for="email" >E-mail*</label>
-                    <input class="form-control" type="email" name="email" id="email" value="'.trim($sessao->getEmail()).'" required>
+                    <input class="form-control" type="email" name="email" id="email" value="' . trim($sessao->getEmail()) . '" required>
                 </div>
 
             </div>
@@ -138,43 +137,42 @@ class OcorrenciaView {
                    <div class="alert-group">';
 
         $strClass = 'alert-warning';
-        foreach($lista as $elemento){
+        foreach ($lista as $elemento) {
 
-            if($elemento->getStatus() == 'a'){
+            if ($elemento->getStatus() == 'a') {
                 $strClass = 'alert-warning';
-            }elseif($elemento->getStatus() == 'e'){//Em atendimento
+            } elseif ($elemento->getStatus() == 'e') { //Em atendimento
                 $strClass = 'alert-info';
-            }elseif($elemento->getStatus() == 'f'){//Fechado
+            } elseif ($elemento->getStatus() == 'f') { //Fechado
                 $strClass = 'alert-success';
-            }elseif($elemento->getStatus() == 'g'){//Fechado confirmado
+            } elseif ($elemento->getStatus() == 'g') { //Fechado confirmado
                 $strClass = 'alert-success';
-            }elseif($elemento->getStatus() == 'h'){//Cancelado
+            } elseif ($elemento->getStatus() == 'h') { //Cancelado
                 $strClass = 'alert-secondary';
-            }elseif($elemento->getStatus() == 'r'){//reaberto
+            } elseif ($elemento->getStatus() == 'r') { //reaberto
                 $strClass = 'alert-warning';
-            }elseif($elemento->getStatus() == 'b'){//reservado
+            } elseif ($elemento->getStatus() == 'b') { //reservado
                 $strClass = 'alert-warning';
-            }elseif($elemento->getStatus() == 'c'){//em espera
+            } elseif ($elemento->getStatus() == 'c') { //em espera
                 $strClass = 'alert-info';
-            }elseif($elemento->getStatus() == 'd'){//Aguardando usuario
+            } elseif ($elemento->getStatus() == 'd') { //Aguardando usuario
                 $strClass = 'alert-danger';
-            }elseif($elemento->getStatus() == 'i'){//Aguardando ativo
+            } elseif ($elemento->getStatus() == 'i') { //Aguardando ativo
                 $strClass = 'alert-danger';
             }
 
             echo '
 
-            <div class="alert '.$strClass.' alert-dismissable">
-                <a href="?page=ocorrencia&selecionar='.$elemento->getId().'" class="close"><i class="fa fa-search icone-maior"></i></a>
+            <div class="alert ' . $strClass . ' alert-dismissable">
+                <a href="?page=ocorrencia&selecionar=' . $elemento->getId() . '" class="close"><i class="fa fa-search icone-maior"></i></a>
 
-                <strong>#'.$elemento->getId().'</strong>
-                 '.substr($elemento->getDescricao(), 0, 80).'...
+                <strong>#' . $elemento->getId() . '</strong>
+                 ' . substr($elemento->getDescricao(), 0, 80) . '...
             </div>
                   ';
-
         }
 
-        if(count($lista) == 0){
+        if (count($lista) == 0) {
             echo '
 
             <div class="alert alert-light alert-dismissable text-center">
@@ -185,66 +183,61 @@ class OcorrenciaView {
         }
         echo '
                     </div>';
-
-
-
-
     }
 
     public function exibirListaPaginada($lista, $id = '')
     {
         $strId = "";
-        if($id != ''){
-            $strId = " id = ".$id;
+        if ($id != '') {
+            $strId = " id = " . $id;
         }
         echo '
 
 
-                   <div '.$strId.' class="alert-group">';
+                   <div ' . $strId . ' class="alert-group">';
 
         $strClass = 'alert-warning';
-        foreach($lista as $elemento){
+        foreach ($lista as $elemento) {
 
-            if($elemento->getStatus() == 'a'){
+            if ($elemento->getStatus() == 'a') {
                 $strClass = 'alert-warning';
-            }elseif($elemento->getStatus() == 'e'){//Em atendimento
+            } elseif ($elemento->getStatus() == 'e') { //Em atendimento
                 $strClass = 'alert-info';
-            }elseif($elemento->getStatus() == 'f'){//Fechado
+            } elseif ($elemento->getStatus() == 'f') { //Fechado
                 $strClass = 'alert-success';
-            }elseif($elemento->getStatus() == 'g'){//Fechado confirmado
+            } elseif ($elemento->getStatus() == 'g') { //Fechado confirmado
                 $strClass = 'alert-success';
-            }elseif($elemento->getStatus() == 'h'){//Cancelado
+            } elseif ($elemento->getStatus() == 'h') { //Cancelado
                 $strClass = 'alert-secondary';
-            }elseif($elemento->getStatus() == 'r'){//reaberto
+            } elseif ($elemento->getStatus() == 'r') { //reaberto
                 $strClass = 'alert-warning';
-            }elseif($elemento->getStatus() == 'b'){//reservado
+            } elseif ($elemento->getStatus() == 'b') { //reservado
                 $strClass = 'alert-warning';
-            }elseif($elemento->getStatus() == 'c'){//em espera
+            } elseif ($elemento->getStatus() == 'c') { //em espera
                 $strClass = 'alert-info';
-            }elseif($elemento->getStatus() == 'd'){//Aguardando usuario
+            } elseif ($elemento->getStatus() == 'd') { //Aguardando usuario
                 $strClass = ' alert-secondary';
-            }elseif($elemento->getStatus() == 'i'){//Aguardando ativo
+            } elseif ($elemento->getStatus() == 'i') { //Aguardando ativo
                 $strClass = 'alert-danger';
             }
 
             $descricao = "";
             $descricao = htmlspecialchars($elemento->getDescricao());
-            if(strlen($descricao) > 200){
-                $descricao = substr($descricao, 0, 200).'...';
+            if (strlen($descricao) > 200) {
+                $descricao = substr($descricao, 0, 200) . '...';
             }
             echo '
 
-            <div class="alert '.$strClass.' alert-dismissable">
-                <a href="?page=ocorrencia&selecionar='.$elemento->getId().'" class="close"><i class="fa fa-search icone-maior"></i></a>
+            <div class="alert ' . $strClass . ' alert-dismissable">
+                <a href="?page=ocorrencia&selecionar=' . $elemento->getId() . '" class="close"><i class="fa fa-search icone-maior"></i></a>
 
-                <strong>#'.$elemento->getId().' </strong>';
+                <strong>#' . $elemento->getId() . ' </strong>';
             echo $descricao;
             echo '</div>
                   ';
-
         }
 
-        if(count($lista) == 0){
+        if (count($lista) == 0) {
             echo '
 
             <div class="alert alert-light alert-dismissable text-center">
@@ -255,10 +248,6 @@ class OcorrenciaView {
         }
         echo '
                     </div>';
-
-
-
-
     }
 
 
@@ -266,9 +255,10 @@ class OcorrenciaView {
      * Passe a sigla do status
      * @param string $status
      */
-    public function getStrStatus($status){
+    public function getStrStatus($status)
+    {
         $strStatus = "Aberto";
-        switch ($status){
+        switch ($status) {
             case StatusOcorrenciaController::STATUS_ABERTO:
                 $strStatus = "Aberto";
                 break;
@@ -310,7 +300,8 @@ class OcorrenciaView {
      * @param Ocorrencia $ocorrencia
      * @param array:StatusOcorrencia $listaStatus
      */
-    public function mostrarSelecionado2(Ocorrencia $ocorrencia, $listaStatus, $dataAbertura, $dataSolucao){
+    public function mostrarSelecionado2(Ocorrencia $ocorrencia, $listaStatus, $dataAbertura, $dataSolucao)
+    {
         $statusView = new StatusOcorrenciaView();
         $controller = new StatusOcorrenciaController();
 
@@ -327,7 +318,7 @@ class OcorrenciaView {
                 <div class="card mb-4">
                     <div class="card-body">';
         echo '
-                   <b> Descricao: </b>'.strip_tags($ocorrencia->getDescricao()).'<br>';
+                   <b> Descricao: </b>' . strip_tags($ocorrencia->getDescricao()) . '<br>';
 
 
 
@@ -336,8 +327,8 @@ class OcorrenciaView {
 
 
 
-        if(trim($ocorrencia->getAnexo()) != ""){
-            echo '<b>Anexo: </b><a target="_blank" href="uploads/'.$ocorrencia->getAnexo().'"> Clique aqui</a> <br>';
+        if (trim($ocorrencia->getAnexo()) != "") {
+            echo '<b>Anexo: </b><a target="_blank" href="uploads/' . $ocorrencia->getAnexo() . '"> Clique aqui</a> <br>';
         }
 
         echo '
@@ -353,12 +344,12 @@ class OcorrenciaView {
                 <div class="card mb-4">
                     <div class="card-body">';
 
-        echo '<b>Patrimônio: </b>'.strip_tags($ocorrencia->getPatrimonio()).'<br>';
+        echo '<b>Patrimônio: </b>' . strip_tags($ocorrencia->getPatrimonio()) . '<br>';
 
 
 
 
-        if($controller->possoEditarPatrimonio($ocorrencia)){
+        if ($controller->possoEditarPatrimonio($ocorrencia)) {
             $statusView->botaoEditarPatrimonio();
         }
 
@@ -371,20 +362,20 @@ class OcorrenciaView {
 ';
 
 
-            echo '
+        echo '
                 <div class="card mb-4">
                     <div class="card-body">';
 
-           echo '<b>Solucao: </b>'.strip_tags($ocorrencia->getSolucao()).'<br>';
+        echo '<b>Solucao: </b>' . strip_tags($ocorrencia->getSolucao()) . '<br>';
 
 
 
 
-           if($controller->possoEditarSolucao($ocorrencia)){
-               $statusView->botaoEditarSolucao();
-           }
+        if ($controller->possoEditarSolucao($ocorrencia)) {
+            $statusView->botaoEditarSolucao();
+        }
 
-            echo '
+        echo '
 
 
 
@@ -403,8 +394,8 @@ class OcorrenciaView {
         echo '
                 <div class="card mb-4">
                     <div class="card-body">
-                        <b>Classificação do Chamado: </b>'.$ocorrencia->getServico()->getNome().'<br>';
-        if($controller->possoEditarServico($ocorrencia)){
+                        <b>Classificação do Chamado: </b>' . $ocorrencia->getServico()->getNome() . '<br>';
+        if ($controller->possoEditarServico($ocorrencia)) {
             $statusView->botaoEditarServico();
         }
         echo '<hr>';
@@ -420,20 +411,20 @@ class OcorrenciaView {
 
             <div class="card mb-4">
                 <div class="card-body">
-                    <b>Requisitante: </b>'.$ocorrencia->getUsuarioCliente()->getNome().' <br>';
-        if(trim($ocorrencia->getLocal()) != ""){
-            echo ' <b>Setor do Requisitante:</b> '.$ocorrencia->getLocal().'<br>';
+                    <b>Requisitante: </b>' . $ocorrencia->getUsuarioCliente()->getNome() . ' <br>';
+        if (trim($ocorrencia->getLocal()) != "") {
+            echo ' <b>Setor do Requisitante:</b> ' . $ocorrencia->getLocal() . '<br>';
         }
         echo '
-                    <b>Campus: </b>'.$ocorrencia->getCampus().' <br>
-                    <b>Email: </b>'.$ocorrencia->getEmail().' <br> ';
+                    <b>Campus: </b>' . $ocorrencia->getCampus() . ' <br>
+                    <b>Email: </b>' . $ocorrencia->getEmail() . ' <br> ';
 
 
-        if(trim($ocorrencia->getLocalSala()) != ""){
-            echo ' <b>Local/Sala: </b>'.$ocorrencia->getLocalSala().'<br>';
+        if (trim($ocorrencia->getLocalSala()) != "") {
+            echo ' <b>Local/Sala: </b>' . $ocorrencia->getLocalSala() . '<br>';
         }
-        if(trim($ocorrencia->getRamal()) != ""){
-            echo '<b>Ramal: </b>'.$ocorrencia->getRamal().'<br>';
+        if (trim($ocorrencia->getRamal()) != "") {
+            echo '<b>Ramal: </b>' . $ocorrencia->getRamal() . '<br>';
         }
 
         echo '
@@ -445,31 +436,31 @@ class OcorrenciaView {
 
         <div class="card mb-4">
             <div class="card-body">';
-        echo '<b>Setor Responsável: </b>'.$ocorrencia->getAreaResponsavel()->getNome().
-        ' - '.$ocorrencia->getAreaResponsavel()->getDescricao().'<br>';
+        echo '<b>Setor Responsável: </b>' . $ocorrencia->getAreaResponsavel()->getNome() .
+            ' - ' . $ocorrencia->getAreaResponsavel()->getDescricao() . '<br>';
 
         $usuarioDao = new UsuarioDAO();
 
 
 
-        if($ocorrencia->getStatus() == StatusOcorrenciaController::STATUS_RESERVADO){
-            if($ocorrencia->getIdUsuarioIndicado() != null){
+        if ($ocorrencia->getStatus() == StatusOcorrenciaController::STATUS_RESERVADO) {
+            if ($ocorrencia->getIdUsuarioIndicado() != null) {
                 $indicado = new Usuario();
                 $indicado->setId($ocorrencia->getIdUsuarioIndicado());
                 $usuarioDao->fillById($indicado);
-                echo '<b>Técnico Responsável: </b>'.$indicado->getNome().'<br>';
+                echo '<b>Técnico Responsável: </b>' . $indicado->getNome() . '<br>';
             }
-        }else{
-            if($ocorrencia->getIdUsuarioAtendente() != null){
+        } else {
+            if ($ocorrencia->getIdUsuarioAtendente() != null) {
 
                 $atendente = new Usuario();
                 $atendente->setId($ocorrencia->getIdUsuarioAtendente());
                 $usuarioDao->fillById($atendente);
-                echo '<b>Técnico Responsável:</b> '.$atendente->getNome().'<br>';
+                echo '<b>Técnico Responsável:</b> ' . $atendente->getNome() . '<br>';
             }
         }
 
-        if($controller->possoEditarAreaResponsavel($ocorrencia)){
+        if ($controller->possoEditarAreaResponsavel($ocorrencia)) {
             $statusView->botaoEditarAreaResponsavel();
         }
 
@@ -487,26 +478,20 @@ class OcorrenciaView {
                 </div>
 ';
         echo '</div>';
-
-
-
-
-
     }
 
-    public function painelSLA(Ocorrencia $ocorrencia, $listaStatus, $dataAbertura, $dataSolucao){
+    public function painelSLA(Ocorrencia $ocorrencia, $listaStatus, $dataAbertura, $dataSolucao)
+    {
 
 
 
         $sessao = new Sessao();
-        if($sessao->getNivelAcesso() == Sessao::NIVEL_ADM || $sessao->getNivelAcesso() == Sessao::NIVEL_TECNICO){
-            if($ocorrencia->getServico()->getTempoSla() > 1)
-            {
-                echo '<b>SLA: </b>'.$ocorrencia->getServico()->getTempoSla(). ' Horas úteis<br>';
-            }elseif($ocorrencia->getServico()->getTempoSla() == 1){
+        if ($sessao->getNivelAcesso() == Sessao::NIVEL_ADM || $sessao->getNivelAcesso() == Sessao::NIVEL_TECNICO) {
+            if ($ocorrencia->getServico()->getTempoSla() > 1) {
+                echo '<b>SLA: </b>' . $ocorrencia->getServico()->getTempoSla() . ' Horas úteis<br>';
+            } elseif ($ocorrencia->getServico()->getTempoSla() == 1) {
                 echo '<b>SLA: </b> 1 Hora útil<br>';
-
-            }else{
+            } else {
                 echo ' SLA não definido. <br>';
                 return;
             }
@@ -514,19 +499,16 @@ class OcorrenciaView {
 
         echo '
 
-            <b>Data de Abertura: </b>'.date("d/m/Y" , strtotime($dataAbertura)).' '.date("H" , strtotime($dataAbertura)).'h'.date("i" , strtotime($dataAbertura)).' min <br>';
+            <b>Data de Abertura: </b>' . date("d/m/Y", strtotime($dataAbertura)) . ' ' . date("H", strtotime($dataAbertura)) . 'h' . date("i", strtotime($dataAbertura)) . ' min <br>';
 
 
-        if($ocorrencia->getStatus() == StatusOcorrenciaController::STATUS_FECHADO)
-        {
+        if ($ocorrencia->getStatus() == StatusOcorrenciaController::STATUS_FECHADO) {
             return;
         }
-        if($ocorrencia->getStatus() == StatusOcorrenciaController::STATUS_FECHADO_CONFIRMADO)
-        {
+        if ($ocorrencia->getStatus() == StatusOcorrenciaController::STATUS_FECHADO_CONFIRMADO) {
             return;
         }
-        if($ocorrencia->getStatus() == StatusOcorrenciaController::STATUS_FECHADO)
-        {
+        if ($ocorrencia->getStatus() == StatusOcorrenciaController::STATUS_FECHADO) {
             return;
         }
 
@@ -542,71 +524,66 @@ class OcorrenciaView {
         $date2 = new DateTime($dataSolucao);
         $diff = $date2->diff($date1);
         $hours = $diff->h;
-        $hours = $hours + ($diff->days*24);
+        $hours = $hours + ($diff->days * 24);
         $minutos = $diff->i;
         $segundos  = $diff->s;
 
 
 
 
-        if($timeHoje > $timeSolucaoEstimada){
+        if ($timeHoje > $timeSolucaoEstimada) {
 
 
 
-            echo '<span class="text-danger"><b>Solução Estimada: </b>'.date("d/m/Y" , strtotime($dataSolucao)).' '.date("H" , strtotime($dataSolucao)).'h'.date("i" , strtotime($dataSolucao)).' min </span><br>';
-            echo '<span class="escondido" id="tempo-total">'. str_pad($hours, 2 , '0' , STR_PAD_LEFT).':'.str_pad($minutos, 2 , '0' , STR_PAD_LEFT).':'.str_pad($segundos, 2 , '0' , STR_PAD_LEFT).'</span>';
+            echo '<span class="text-danger"><b>Solução Estimada: </b>' . date("d/m/Y", strtotime($dataSolucao)) . ' ' . date("H", strtotime($dataSolucao)) . 'h' . date("i", strtotime($dataSolucao)) . ' min </span><br>';
+            echo '<span class="escondido" id="tempo-total">' . str_pad($hours, 2, '0', STR_PAD_LEFT) . ':' . str_pad($minutos, 2, '0', STR_PAD_LEFT) . ':' . str_pad($segundos, 2, '0', STR_PAD_LEFT) . '</span>';
 
             $sessao = new Sessao();
-            if($ocorrencia->getUsuarioCliente()->getId() == $sessao->getIdUsuario()){
-                if(!isset($_SESSION['pediu_ajuda'])){
+            if ($ocorrencia->getUsuarioCliente()->getId() == $sessao->getIdUsuario()) {
+                if (!isset($_SESSION['pediu_ajuda'])) {
                     $this->modalPedirAjuda($ocorrencia);
-                }else{
+                } else {
                     echo '<br>Você solicitou ajuda, aguarde a resposta.';
                 }
             }
             //O form do modal vai chamar o ajax no controller
 
 
-        }else{
-            $percentual = ($timeRecorrido *100)/$total;
+        } else {
+            $percentual = ($timeRecorrido * 100) / $total;
             echo '
-                    <p class="text-primary"><b>Solução Estimada: </b>'.date("d/m/Y" , strtotime($dataSolucao)).' '.date("H" , strtotime($dataSolucao)).'h'.date("i" , strtotime($dataSolucao)).' min.';
-            echo '<p class="escondido">Tempo Total: <span id="tempo-total">'. str_pad($hours, 2 , '0' , STR_PAD_LEFT).':'.str_pad($minutos, 2 , '0' , STR_PAD_LEFT).':'.str_pad($segundos, 2 , '0' , STR_PAD_LEFT).'</span></p>';
+                    <p class="text-primary"><b>Solução Estimada: </b>' . date("d/m/Y", strtotime($dataSolucao)) . ' ' . date("H", strtotime($dataSolucao)) . 'h' . date("i", strtotime($dataSolucao)) . ' min.';
+            echo '<p class="escondido">Tempo Total: <span id="tempo-total">' . str_pad($hours, 2, '0', STR_PAD_LEFT) . ':' . str_pad($minutos, 2, '0', STR_PAD_LEFT) . ':' . str_pad($segundos, 2, '0', STR_PAD_LEFT) . '</span></p>';
             echo '';
 
             $date1 = new DateTime();
             $date2 = new DateTime($dataSolucao);
             $diff = $date2->diff($date1);
             $hours = $diff->h;
-            $hours = $hours + ($diff->days*24);
+            $hours = $hours + ($diff->days * 24);
             $minutos = $diff->i;
             $segundos  = $diff->s;
 
 
-            echo '<p class="escondido">Tempo Restante:<span id="tempo-restante">'. str_pad($hours, 2 , '0' , STR_PAD_LEFT).':'.str_pad($minutos, 2 , '0' , STR_PAD_LEFT).':'.str_pad($segundos, 2 , '0' , STR_PAD_LEFT).'</span></p>
+            echo '<p class="escondido">Tempo Restante:<span id="tempo-restante">' . str_pad($hours, 2, '0', STR_PAD_LEFT) . ':' . str_pad($minutos, 2, '0', STR_PAD_LEFT) . ':' . str_pad($segundos, 2, '0', STR_PAD_LEFT) . '</span></p>
 
 ';
 
-                echo '
+            echo '
             <img src="img/bonequinho.gif" height="75" class="escondido">
             <div class="progress escondido">
-				<div id="barra-progresso" class="progress-bar" role="progressbar" aria-valuenow="'.$percentual.'" aria-valuemin="0" aria-valuemax="100" style="width: '.$percentual.'%;" data-toggle="tooltip" data-placement="top" title="Solução">
-					<span id="label-progresso" class="sr-only">'.$percentual.'% Completo</span>
-					<span id="label-progresso2" class="progress-type">Progresso '.intval($percentual).'% </span>
+				<div id="barra-progresso" class="progress-bar" role="progressbar" aria-valuenow="' . $percentual . '" aria-valuemin="0" aria-valuemax="100" style="width: ' . $percentual . '%;" data-toggle="tooltip" data-placement="top" title="Solução">
+					<span id="label-progresso" class="sr-only">' . $percentual . '% Completo</span>
+					<span id="label-progresso2" class="progress-type">Progresso ' . intval($percentual) . '% </span>
 				</div>
 			</div>
 
 ';
-
         }
-
-
-
-
-
     }
 
-    public function modalPedirAjuda(Ocorrencia $ocorrencia){
+    public function modalPedirAjuda(Ocorrencia $ocorrencia)
+    {
         echo '
 
 <!-- Button trigger modal -->
@@ -627,7 +604,7 @@ class OcorrenciaView {
       <div class="modal-body">
           <form id="form_pedir_ajuda" class="user" method="post">
             <input type="hidden" name="pedir_ajuda" value="1">
-            <input type="hidden" name="ocorrencia" value="'.$ocorrencia->getId().'">
+            <input type="hidden" name="ocorrencia" value="' . $ocorrencia->getId() . '">
 
             <span>Clique em solicitar ajuda para enviar um e-mail aos responsáveis pelo setor</span>
 
@@ -647,5 +624,4 @@ class OcorrenciaView {
 
 ';
     }
-
 }

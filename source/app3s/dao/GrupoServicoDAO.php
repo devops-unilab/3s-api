@@ -17,7 +17,7 @@ class GrupoServicoDAO extends DAO
     public function fetch()
     {
         $list = array();
-        $sql = "SELECT grupo_servico.id, grupo_servico.nome 
+        $sql = "SELECT grupo_servico.id, grupo_servico.nome
                 FROM grupo_servico LIMIT 1000";
 
         try {
@@ -40,5 +40,4 @@ class GrupoServicoDAO extends DAO
         }
         return $list;
     }
-
 }

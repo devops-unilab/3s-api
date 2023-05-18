@@ -1,5 +1,5 @@
 <?php
-            
+
 /**
  * Classe feita para manipulação do objeto Ocorrencia
  * feita automaticamente com programa gerador de software inventado por
@@ -8,7 +8,8 @@
 
 namespace app3s\model;
 
-class Ocorrencia {
+class Ocorrencia
+{
 	private $id;
 	private $areaResponsavel;
 	private $servico;
@@ -33,190 +34,237 @@ class Ocorrencia {
 	private $dataAtendimento;
 	private $dataFechamento;
 	private $dataFechamentoConfirmado;
-    public function __construct(){
+	public function __construct()
+	{
 
-        $this->areaResponsavel = new AreaResponsavel();
-        $this->servico = new Servico();
-        $this->usuarioCliente = new Usuario();
-        $this->mensagens = array();
-    }
-	public function setId($id) {
+		$this->areaResponsavel = new AreaResponsavel();
+		$this->servico = new Servico();
+		$this->usuarioCliente = new Usuario();
+		$this->mensagens = array();
+	}
+	public function setId($id)
+	{
 		$this->id = $id;
 	}
-		    
-	public function getId() {
+
+	public function getId()
+	{
 		return $this->id;
 	}
-	public function setAreaResponsavel(AreaResponsavel $areaResponsavel) {
+	public function setAreaResponsavel(AreaResponsavel $areaResponsavel)
+	{
 		$this->areaResponsavel = $areaResponsavel;
 	}
-		    
-	public function getAreaResponsavel() {
+
+	public function getAreaResponsavel()
+	{
 		return $this->areaResponsavel;
 	}
-	public function setServico(Servico $servico) {
+	public function setServico(Servico $servico)
+	{
 		$this->servico = $servico;
 	}
-		    
-	public function getServico() {
+
+	public function getServico()
+	{
 		return $this->servico;
 	}
-	public function setIdLocal($idLocal) {
+	public function setIdLocal($idLocal)
+	{
 		$this->idLocal = $idLocal;
 	}
-		    
-	public function getIdLocal() {
+
+	public function getIdLocal()
+	{
 		return $this->idLocal;
 	}
-	public function setUsuarioCliente(Usuario $usuario) {
+	public function setUsuarioCliente(Usuario $usuario)
+	{
 		$this->usuarioCliente = $usuario;
 	}
-		    
-	public function getUsuarioCliente() {
+
+	public function getUsuarioCliente()
+	{
 		return $this->usuarioCliente;
 	}
-	public function setDescricao($descricao) {
+	public function setDescricao($descricao)
+	{
 		$this->descricao = $descricao;
 	}
-		    
-	public function getDescricao() {
+
+	public function getDescricao()
+	{
 		return $this->descricao;
 	}
-	public function setCampus($campus) {
+	public function setCampus($campus)
+	{
 		$this->campus = $campus;
 	}
-		    
-	public function getCampus() {
+
+	public function getCampus()
+	{
 		return $this->campus;
 	}
-	public function setPatrimonio($patrimonio) {
+	public function setPatrimonio($patrimonio)
+	{
 		$this->patrimonio = $patrimonio;
 	}
-		    
-	public function getPatrimonio() {
+
+	public function getPatrimonio()
+	{
 		return $this->patrimonio;
 	}
-	public function setRamal($ramal) {
+	public function setRamal($ramal)
+	{
 		$this->ramal = $ramal;
 	}
-		    
-	public function getRamal() {
+
+	public function getRamal()
+	{
 		return $this->ramal;
 	}
-	public function setLocal($local) {
+	public function setLocal($local)
+	{
 		$this->local = $local;
 	}
-		    
-	public function getLocal() {
+
+	public function getLocal()
+	{
 		return $this->local;
 	}
-	public function setStatus($status) {
+	public function setStatus($status)
+	{
 		$this->status = $status;
 	}
-		    
-	public function getStatus() {
+
+	public function getStatus()
+	{
 		return $this->status;
 	}
-	public function setSolucao($solucao) {
+	public function setSolucao($solucao)
+	{
 		$this->solucao = $solucao;
 	}
-		    
-	public function getSolucao() {
+
+	public function getSolucao()
+	{
 		return $this->solucao;
 	}
-	public function setPrioridade($prioridade) {
+	public function setPrioridade($prioridade)
+	{
 		$this->prioridade = $prioridade;
 	}
-		    
-	public function getPrioridade() {
+
+	public function getPrioridade()
+	{
 		return $this->prioridade;
 	}
-	public function setAvaliacao($avaliacao) {
+	public function setAvaliacao($avaliacao)
+	{
 		$this->avaliacao = $avaliacao;
 	}
-		    
-	public function getAvaliacao() {
+
+	public function getAvaliacao()
+	{
 		return $this->avaliacao;
 	}
-	public function setEmail($email) {
+	public function setEmail($email)
+	{
 		$this->email = $email;
 	}
-		    
-	public function getEmail() {
+
+	public function getEmail()
+	{
 		return $this->email;
 	}
-	public function setIdUsuarioAtendente($idUsuarioAtendente) {
+	public function setIdUsuarioAtendente($idUsuarioAtendente)
+	{
 		$this->idUsuarioAtendente = $idUsuarioAtendente;
 	}
-		    
-	public function getIdUsuarioAtendente() {
+
+	public function getIdUsuarioAtendente()
+	{
 		return $this->idUsuarioAtendente;
 	}
-	public function setIdUsuarioIndicado($idUsuarioIndicado) {
+	public function setIdUsuarioIndicado($idUsuarioIndicado)
+	{
 		$this->idUsuarioIndicado = $idUsuarioIndicado;
 	}
-		    
-	public function getIdUsuarioIndicado() {
+
+	public function getIdUsuarioIndicado()
+	{
 		return $this->idUsuarioIndicado;
 	}
-	public function setAnexo($anexo) {
+	public function setAnexo($anexo)
+	{
 		$this->anexo = $anexo;
 	}
-		    
-	public function getAnexo() {
+
+	public function getAnexo()
+	{
 		return $this->anexo;
 	}
-	public function setLocalSala($localSala) {
+	public function setLocalSala($localSala)
+	{
 		$this->localSala = $localSala;
 	}
-		    
-	public function getLocalSala() {
+
+	public function getLocalSala()
+	{
 		return $this->localSala;
 	}
 
-	public function setMensagens($mensagens) {
+	public function setMensagens($mensagens)
+	{
 		$this->mensagens = $mensagens;
 	}
-         
-    public function addMensagemForum(MensagemForum $mensagemForum){
-        $this->mensagens[] = $mensagemForum;
-            
-    }
-	public function getMensagens() {
+
+	public function addMensagemForum(MensagemForum $mensagemForum)
+	{
+		$this->mensagens[] = $mensagemForum;
+	}
+	public function getMensagens()
+	{
 		return $this->mensagens;
 	}
-	public function setDataAbertura($dataAbertura) {
+	public function setDataAbertura($dataAbertura)
+	{
 		$this->dataAbertura = $dataAbertura;
 	}
-		    
-	public function getDataAbertura() {
+
+	public function getDataAbertura()
+	{
 		return $this->dataAbertura;
 	}
-	public function setDataAtendimento($dataAtendimento) {
+	public function setDataAtendimento($dataAtendimento)
+	{
 		$this->dataAtendimento = $dataAtendimento;
 	}
-		    
-	public function getDataAtendimento() {
+
+	public function getDataAtendimento()
+	{
 		return $this->dataAtendimento;
 	}
-	public function setDataFechamento($dataFechamento) {
+	public function setDataFechamento($dataFechamento)
+	{
 		$this->dataFechamento = $dataFechamento;
 	}
-		    
-	public function getDataFechamento() {
+
+	public function getDataFechamento()
+	{
 		return $this->dataFechamento;
 	}
-	public function setDataFechamentoConfirmado($dataFechamentoConfirmado) {
+	public function setDataFechamentoConfirmado($dataFechamentoConfirmado)
+	{
 		$this->dataFechamentoConfirmado = $dataFechamentoConfirmado;
 	}
-		    
-	public function getDataFechamentoConfirmado() {
+
+	public function getDataFechamentoConfirmado()
+	{
 		return $this->dataFechamentoConfirmado;
 	}
-	public function __toString(){
-	    return $this->id.' - '.$this->areaResponsavel.' - '.$this->servico.' - '.$this->idLocal.' - '.$this->usuarioCliente.' - '.$this->descricao.' - '.$this->campus.' - '.$this->patrimonio.' - '.$this->ramal.' - '.$this->local.' - '.$this->status.' - '.$this->solucao.' - '.$this->prioridade.' - '.$this->avaliacao.' - '.$this->email.' - '.$this->idUsuarioAtendente.' - '.$this->idUsuarioIndicado.' - '.$this->anexo.' - '.$this->localSala.' - '.'Lista: '.implode(", ", $this->mensagens).' - '.$this->dataAbertura.' - '.$this->dataAtendimento.' - '.$this->dataFechamento.' - '.$this->dataFechamentoConfirmado;
+	public function __toString()
+	{
+		return $this->id . ' - ' . $this->areaResponsavel . ' - ' . $this->servico . ' - ' . $this->idLocal . ' - ' . $this->usuarioCliente . ' - ' . $this->descricao . ' - ' . $this->campus . ' - ' . $this->patrimonio . ' - ' . $this->ramal . ' - ' . $this->local . ' - ' . $this->status . ' - ' . $this->solucao . ' - ' . $this->prioridade . ' - ' . $this->avaliacao . ' - ' . $this->email . ' - ' . $this->idUsuarioAtendente . ' - ' . $this->idUsuarioIndicado . ' - ' . $this->anexo . ' - ' . $this->localSala . ' - ' . 'Lista: ' . implode(", ", $this->mensagens) . ' - ' . $this->dataAbertura . ' - ' . $this->dataAtendimento . ' - ' . $this->dataFechamento . ' - ' . $this->dataFechamentoConfirmado;
 	}
-                
-
 }
-?>

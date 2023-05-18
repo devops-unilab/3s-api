@@ -1,5 +1,5 @@
 <?php
-            
+
 /**
  * Classe de visao para AreaResponsavel
  * @author Jefferson Uchôa Ponte <j.pontee@gmail.com>
@@ -7,12 +7,15 @@
  */
 
 namespace app3s\view;
+
 use app3s\model\AreaResponsavel;
 
 
-class AreaResponsavelView {
-    public function showInsertForm() {
-		echo '
+class AreaResponsavelView
+{
+  public function showInsertForm()
+  {
+    echo '
 <!-- Button trigger modal -->
 <button type="button" class="btn btn-primary m-3" data-toggle="modal" data-target="#modalAddAreaResponsavel">
   Adicionar
@@ -30,7 +33,7 @@ class AreaResponsavelView {
       </div>
       <div class="modal-body">
           <form id="insert_form_area_responsavel" class="user" method="post">
-            <input type="hidden" name="enviar_area_responsavel" value="1">                
+            <input type="hidden" name="enviar_area_responsavel" value="1">
 
 
 
@@ -60,29 +63,30 @@ class AreaResponsavelView {
     </div>
   </div>
 </div>
-            
-            
-			
+
+
+
 ';
-	}
+  }
 
 
 
-                                            
-                                            
-    public function showList($lista){
-           echo '
-                                            
-                                            
-                                            
+
+
+  public function showList($lista)
+  {
+    echo '
+
+
+
 
           <div class="card">
                 <div class="card-header">
                   Lista Area Responsavel
                 </div>
                 <div class="card-body">
-                                            
-                                            
+
+
 		<div class="table-responsive">
 			<table class="table table-bordered" id="dataTable" width="100%"
 				cellspacing="0">
@@ -105,40 +109,41 @@ class AreaResponsavelView {
 					</tr>
 				</tfoot>
 				<tbody>';
-            
-            foreach($lista as $element){
-                echo '<tr>';
-                echo '<td>'.$element->getId().'</td>';
-                echo '<td>'.$element->getNome().'</td>';
-                echo '<td>'.$element->getDescricao().'</td>';
-                echo '<td>'.$element->getEmail().'</td>';
-                echo '<td>
-                        <a href="?page=area_responsavel&edit='.$element->getId().'" class="btn btn-success text-white">Editar</a>
-                        <a href="?page=area_responsavel&delete='.$element->getId().'" class="btn btn-danger text-white">Apagar</a>
+
+    foreach ($lista as $element) {
+      echo '<tr>';
+      echo '<td>' . $element->getId() . '</td>';
+      echo '<td>' . $element->getNome() . '</td>';
+      echo '<td>' . $element->getDescricao() . '</td>';
+      echo '<td>' . $element->getEmail() . '</td>';
+      echo '<td>
+                        <a href="?page=area_responsavel&edit=' . $element->getId() . '" class="btn btn-success text-white">Editar</a>
+                        <a href="?page=area_responsavel&delete=' . $element->getId() . '" class="btn btn-danger text-white">Apagar</a>
                       </td>';
-                echo '</tr>';
-            }
-            
-        echo '
+      echo '</tr>';
+    }
+
+    echo '
 				</tbody>
 			</table>
 		</div>
-            
-            
-            
-            
+
+
+
+
   </div>
 </div>
-            
-';
-    }
-            
 
-            
-	public function showEditForm(AreaResponsavel $selecionado) {
-		echo '
-	    
-	    
+';
+  }
+
+
+
+  public function showEditForm(AreaResponsavel $selecionado)
+  {
+    echo '
+
+
 
 <div class="card o-hidden border-0 shadow-lg mb-4">
     <div class="card">
@@ -149,15 +154,15 @@ class AreaResponsavelView {
             <form class="user" method="post" id="edit_form_area_responsavel">
                                         <div class="form-group">
                                             <label for="nome">Nome</label>
-                                            <input type="text" class="form-control" value="'.$selecionado->getNome().'"  name="nome" id="nome" placeholder="Nome">
+                                            <input type="text" class="form-control" value="' . $selecionado->getNome() . '"  name="nome" id="nome" placeholder="Nome">
                 						</div>
                                         <div class="form-group">
                                             <label for="descricao">Descricao</label>
-                                            <input type="text" class="form-control" value="'.$selecionado->getDescricao().'"  name="descricao" id="descricao" placeholder="Descricao">
+                                            <input type="text" class="form-control" value="' . $selecionado->getDescricao() . '"  name="descricao" id="descricao" placeholder="Descricao">
                 						</div>
                                         <div class="form-group">
                                             <label for="email">Email</label>
-                                            <input type="text" class="form-control" value="'.$selecionado->getEmail().'"  name="email" id="email" placeholder="Email">
+                                            <input type="text" class="form-control" value="' . $selecionado->getEmail() . '"  name="email" id="email" placeholder="Email">
                 						</div>
                 <input type="hidden" value="1" name="edit_area_responsavel">
                 </form>
@@ -169,73 +174,72 @@ class AreaResponsavelView {
     </div>
 </div>
 
-	    
 
-										
+
+
 						              ';
-	}
+  }
 
 
 
 
-            
-        public function showSelected(AreaResponsavel $arearesponsavel){
-            echo '
-            
+
+  public function showSelected(AreaResponsavel $arearesponsavel)
+  {
+    echo '
+
 	<div class="card o-hidden border-0 shadow-lg">
         <div class="card">
             <div class="card-header">
                   Area Responsavel selecionado
             </div>
             <div class="card-body">
-                Id: '.$arearesponsavel->getId().'<br>
-                Nome: '.$arearesponsavel->getNome().'<br>
-                Descricao: '.$arearesponsavel->getDescricao().'<br>
-                Email: '.$arearesponsavel->getEmail().'<br>
-            
+                Id: ' . $arearesponsavel->getId() . '<br>
+                Nome: ' . $arearesponsavel->getNome() . '<br>
+                Descricao: ' . $arearesponsavel->getDescricao() . '<br>
+                Email: ' . $arearesponsavel->getEmail() . '<br>
+
             </div>
         </div>
     </div>
-            
-            
+
+
 ';
-    }
+  }
 
 
-                                            
-    public function confirmDelete(AreaResponsavel $areaResponsavel) {
-		echo '
-        
-        
-        
+
+  public function confirmDelete(AreaResponsavel $areaResponsavel)
+  {
+    echo '
+
+
+
 				<div class="card o-hidden border-0 ">
 					<div class="card-body p-0">
 						<!-- Nested Row within Card Body -->
 						<div class="row d-flex justify-content-center">
-        
+
 							<div class="col-md-6">
 								<div class="p-5">
 									<div class="text-center">
 										<h1 class="h4 text-gray-900 mb-4"> Delete Area Responsavel</h1>
 									</div>
-						              <form class="user" method="post">                    Tem certeza que deseja apagar esta área responsável? 
+						              <form class="user" method="post">                    Tem certeza que deseja apagar esta área responsável?
 
                                         <input type="submit" class="btn btn-primary btn-user btn-block" value="Delete" name="delete_area_responsavel">
                                         <hr>
-                                            
+
 						              </form>
-                                            
+
 								</div>
 							</div>
 						</div>
 					</div>
-                                            
-                                            
-                                            
-                                            
+
+
+
+
 	</div>';
-	}
-                      
-
-
+  }
 }

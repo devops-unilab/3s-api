@@ -58,7 +58,7 @@ class StatusOcorrenciaDAO extends DAO
 		LEFT JOIN usuario as usuario ON usuario.id = status_ocorrencia.id_usuario
             WHERE ocorrencia.id = :id
         ORDER BY status_ocorrencia.id ASC
-            
+
 ";
 
         try {
@@ -127,5 +127,4 @@ class StatusOcorrenciaDAO extends DAO
             echo '{"error":{"text":' . $e->getMessage() . '}}';
         }
     }
- 
 }
