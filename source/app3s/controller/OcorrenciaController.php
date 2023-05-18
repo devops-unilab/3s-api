@@ -188,11 +188,7 @@ class OcorrenciaController
 
 
 		if (!$this->parteInteressada()) {
-			echo '
-            <div class="alert alert-danger" role="alert">
-                Você não é cliente deste chamado, nem técnico para atendê-lo. 
-            </div>
-            ';
+			echo '<div class="alert alert-danger" role="alert">Você não é cliente deste chamado, nem técnico para atendê-lo.</div>';
 			return;
 		}
 
@@ -214,67 +210,13 @@ class OcorrenciaController
 		$status = new Status();
 		$status->setSigla($this->selecionado->getStatus());
 		$statusDao->fillBySigla($status);
-
-
-		echo '
-            <div class="row">
-                <div class="col-md-12 blog-main">';
-		echo '<div class="row">
-                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">';
+		echo '<div class="row"><div class="col-md-12 blog-main"><div class="row"><div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">';
 		$statusController->painelStatus($this->selecionado, $status);
-		echo '
-    
-                </div>
-
-';
-
-
-
-		echo '</div>';
-
-		echo '
-                <div class="row  border-bottom mb-3">
-                    <div class="col-md-6 blog-main">
-                       ';
-
-		echo '
-                    </div>
-                    <div class="col-md-6 blog-main">
-                    <span class="text-right">';
+		echo '</div></div><div class="row  border-bottom mb-3"><div class="col-md-6 blog-main"></div><div class="col-md-6 blog-main"><span class="text-right">';
 		$horaEstimada = $this->calcularHoraSolucao($dataAbertura, $this->selecionado->getServico()->getTempoSla());
-		echo '
-                    </div>   
-                    
-                    </div>
-                </div>
-                <div class="col-md-8">
-                            
-';
-
-
+		echo '</div></div></div><div class="col-md-8">';
 		$this->view->mostrarSelecionado2($this->selecionado, $listaStatus, $dataAbertura, $horaEstimada);
-
-
-
-
-
-
-
-		echo '
-	        
-	        
-                </div>';
-
-		echo '
-                <aside class="col-md-4 blog-sidebar">';
-
-		echo '
-
-	        
-	        
-                    <h4 class="font-italic">Histórico</h4>
-                    <div class="container">';
-
+		echo '</div><aside class="col-md-4 blog-sidebar"><h4 class="font-italic">Histórico</h4><div class="container">';
 		foreach ($listaStatus as $status) {
 			$strCartao = $this->getColorStatus($status->getStatus()->getSigla());
 
