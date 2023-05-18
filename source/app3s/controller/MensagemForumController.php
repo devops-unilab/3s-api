@@ -32,7 +32,8 @@ class MensagemForumController
     }
 
 
-    public function allowed(Ocorrencia $ocorrencia) {
+    public function allowed(Ocorrencia $ocorrencia)
+    {
         $sessao = new Sessao();
         if ($sessao->getNivelAcesso() == SESSAO::NIVEL_COMUM) {
             if ($sessao->getIdUsuario() != $ocorrencia->getUsuarioCliente()->getId()) {
@@ -59,7 +60,6 @@ class MensagemForumController
             return false;
         }
         return $this->allowed($ocorrencia);
-        
     }
 
     public function mainOcorrencia(Ocorrencia $ocorrencia)
@@ -107,16 +107,16 @@ class MensagemForumController
 
 
 <div class="container">
-		<div class="row">
-			<div class="chatbox chatbox22">
-				<div class="chatbox__title">
-					<h5 class="text-white">#<span id="id-ocorrencia">' . $ocorrencia->getId() . '</span></h5>
-					<!--<button class="chatbox__title__tray">
+        <div class="row">
+            <div class="chatbox chatbox22">
+                <div class="chatbox__title">
+                    <h5 class="text-white">#<span id="id-ocorrencia">' . $ocorrencia->getId() . '</span></h5>
+                    <!--<button class="chatbox__title__tray">
             <span></span>
         </button>-->
-					
-				</div>
-				<div id="corpo-chat" class="chatbox__body">';
+                    
+                </div>
+                <div id="corpo-chat" class="chatbox__body">';
 
         $listaForum = $ocorrencia->getMensagens();
         $ultimoId = 0;
@@ -143,12 +143,12 @@ class MensagemForumController
 
 
 
-            			<div class="chatbox__body__message chatbox__body__message--left">
+                        <div class="chatbox__body__message chatbox__body__message--left">
             
-            				<div class="chatbox_timing">
-            					<ul>
-            						<li><a href="#"><i class="fa fa-calendar"></i> ' . date("d/m/Y", strtotime($mensagemForum->getDataEnvio())) . '</a></li>
-            						<li><a href="#"><i class="fa fa-clock-o"></i> ' . date("H:i", strtotime($mensagemForum->getDataEnvio())) . '</a></a></li>';
+                            <div class="chatbox_timing">
+                                <ul>
+                                    <li><a href="#"><i class="fa fa-calendar"></i> ' . date("d/m/Y", strtotime($mensagemForum->getDataEnvio())) . '</a></li>
+                                    <li><a href="#"><i class="fa fa-clock-o"></i> ' . date("H:i", strtotime($mensagemForum->getDataEnvio())) . '</a></a></li>';
             if ($mensagemForum->getUsuario()->getId() == $sessao->getIdUsuario() && $ocorrencia->getStatus() === StatusOcorrenciaController::STATUS_ATENDIMENTO) {
                 echo '
                                         <li><button data-toggle="modal" onclick="changeField(' . $mensagemForum->getId() . ')" data-target="#modalDeleteChat"><i class="fa fa-trash-o"></i> Apagar </a></button></li>';
@@ -156,13 +156,13 @@ class MensagemForumController
 
             echo '
 
-            					</ul>
-            				</div>
-            				<!-- <img src="https://www.gstatic.com/webp/gallery/2.jpg" 
-            					alt="Picture">-->
-            				<div class="clearfix"></div>
-            				<div class="ul_section_full">
-            					<ul class="ul_msg">
+                                </ul>
+                            </div>
+                            <!-- <img src="https://www.gstatic.com/webp/gallery/2.jpg" 
+                                alt="Picture">-->
+                            <div class="clearfix"></div>
+                            <div class="ul_section_full">
+                                <ul class="ul_msg">
                                     <li><strong>' . $nome . '</strong></li>';
             if ($mensagemForum->getTipo() == self::TIPO_ARQUIVO) {
                 echo '<li>Anexo: <a href="uploads/' . $mensagemForum->getMensagem() . '">Clique aqui</a></li>';
@@ -171,20 +171,20 @@ class MensagemForumController
                         <li>' . strip_tags($mensagemForum->getMensagem()) . '</li>';
             }
             echo '
-            						
-            					</ul>
-            					<div class="clearfix"></div>
+                                    
+                                </ul>
+                                <div class="clearfix"></div>
 
-            				</div>
+                            </div>
             
-            			</div>';
+                        </div>';
         }
         echo '<span id="ultimo-id-post" class="escondido">' . $ultimoId . '</span>';
         echo '
-					
+                    
 
-				</div>
-				<div class="panel-footer">';
+                </div>
+                <div class="panel-footer">';
         if ($this->possoEnviarMensagem($ocorrencia)) {
             $this->view->showInsertForm2($ocorrencia);
         }
@@ -193,10 +193,10 @@ class MensagemForumController
                     
 
 
-				</div>
-			</div>
-		</div>
-	</div>
+                </div>
+            </div>
+        </div>
+    </div>
     <script>
     function changeField(id) {
         document.getElementById(\'chatDelete\').value = id;
@@ -429,7 +429,7 @@ class MensagemForumController
             return;
         }
         echo '
-		<div class="row">';
+        <div class="row">';
         echo '<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">';
 
         if (isset($_GET['edit'])) {
