@@ -24,7 +24,8 @@ class MensagemForumView
                 <form id="insert_form_mensagem_forum" class="user" method="post">
                     <input type="hidden" name="enviar_mensagem_forum" value="1">
                     <input type="hidden" name="ocorrencia" value="' . $ocorrencia->getId() . '">
-                    <input type="hidden" id="campo_tipo" name="tipo" value="' . MensagemForumController::TIPO_TEXTO . '">
+                    <input type="hidden" id="campo_tipo" name="tipo" value="'
+                    . MensagemForumController::TIPO_TEXTO . '">
 
                     <div class="custom-control custom-switch">
                       <input type="checkbox" class="custom-control-input" name="muda-tipo" id="muda-tipo">

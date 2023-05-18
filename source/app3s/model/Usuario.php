@@ -118,6 +118,12 @@ class Usuario
     }
     public function __toString()
     {
-        return $this->id . ' - ' . $this->nome . ' - ' . $this->email . ' - ' . $this->login . ' - ' . $this->senha . ' - ' . $this->nivel . ' - ' . $this->idSetor;
+        return $this->id .
+            ' - ' . $this->nome .
+            ' - ' . $this->email .
+            ' - ' . $this->login .
+            ' - ' . $this->senha .
+            ' - ' . $this->nivel .
+            ' - ' . $this->idSetor;
     }
 }

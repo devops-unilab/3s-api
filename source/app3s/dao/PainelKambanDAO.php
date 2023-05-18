@@ -16,47 +16,55 @@ class PainelKambanDAO extends OcorrenciaDAO
     {
         $lista = array('ocorrencias' => array(), 'responsaveis' => array());
         $strWhere = $this->filtroStatus($arrStatus);
-        $sql = "SELECT ocorrencia.id, ocorrencia.id_local,
-            ocorrencia.descricao, ocorrencia.campus, ocorrencia.patrimonio,
-            ocorrencia.ramal, ocorrencia.local, ocorrencia.status,
+        $sql = "SELECT ocorrencia.id,
+            ocorrencia.id_local,
+            ocorrencia.descricao,
+            ocorrencia.campus,
+            ocorrencia.patrimonio,
+            ocorrencia.ramal,
+            ocorrencia.local,
+            ocorrencia.status,
             ocorrencia.solucao,
             ocorrencia.data_abertura,
             ocorrencia.data_atendimento,
             ocorrencia.data_fechamento,
-            ocorrencia.prioridade, ocorrencia.avaliacao, ocorrencia.email,
-            ocorrencia.id_usuario_atendente, ocorrencia.id_usuario_indicado,
-            ocorrencia.anexo, ocorrencia.local_sala,
+            ocorrencia.prioridade,
+            ocorrencia.avaliacao,
+            ocorrencia.email,
+            ocorrencia.id_usuario_atendente,
+            ocorrencia.id_usuario_indicado,
+            ocorrencia.anexo,
+            ocorrencia.local_sala,
             area_responsavel.id as id_area_responsavel_area_responsavel,
             area_responsavel.nome as nome_area_responsavel_area_responsavel,
-            area_responsavel.descricao as descricao_area_responsavel_area_responsavel, area_responsavel.email as email_area_responsavel_area_responsavel, servico.id as id_servico_servico, servico.nome as nome_servico_servico, servico.descricao as descricao_servico_servico, servico.tempo_sla as tempo_sla_servico_servico, servico.visao as visao_servico_servico,
-
+            area_responsavel.descricao as descricao_area_responsavel_area_responsavel,
+            area_responsavel.email as email_area_responsavel_area_responsavel,
+            servico.id as id_servico_servico,
+            servico.nome as nome_servico_servico,
+            servico.descricao as descricao_servico_servico,
+            servico.tempo_sla as tempo_sla_servico_servico,
+            servico.visao as visao_servico_servico,
             usuario_atendente.id as id_usuario_usuario_atendente,
             usuario_atendente.nome as nome_usuario_usuario_atendente,
-
             usuario_indicado.id as id_usuario_usuario_indicado,
             usuario_indicado.nome as nome_usuario_usuario_indicado,
-
             usuario_cliente.id as id_usuario_usuario_cliente,
-            usuario_cliente.nome as nome_usuario_usuario_cliente, usuario_cliente.email as email_usuario_usuario_cliente,
-            usuario_cliente.login as login_usuario_usuario_cliente, usuario_cliente.senha as senha_usuario_usuario_cliente,
+            usuario_cliente.nome as nome_usuario_usuario_cliente,
+            usuario_cliente.email as email_usuario_usuario_cliente,
+            usuario_cliente.login as login_usuario_usuario_cliente,
+            usuario_cliente.senha as senha_usuario_usuario_cliente,
             usuario_cliente.nivel as nivel_usuario_usuario_cliente,
             usuario_cliente.id_setor as id_setor_usuario_usuario_cliente
             FROM ocorrencia
             INNER JOIN area_responsavel as area_responsavel
             ON area_responsavel.id = ocorrencia.id_area_responsavel
             INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico
-
             LEFT JOIN usuario as usuario_cliente
             ON usuario_cliente.id = ocorrencia.id_usuario_cliente
-
             LEFT JOIN usuario as usuario_atendente
             ON usuario_atendente.id = ocorrencia.id_usuario_atendente
-
-
             LEFT JOIN usuario as usuario_indicado
             ON usuario_indicado.id = ocorrencia.id_usuario_indicado
-
-
             WHERE
             $strWhere $filtro
             ORDER BY ocorrencia.id DESC

@@ -67,6 +67,10 @@ class MensagemForum
     }
     public function __toString()
     {
-        return $this->id . ' - ' . $this->tipo . ' - ' . $this->mensagem . ' - ' . $this->usuario . ' - ' . $this->dataEnvio;
+        return $this->id .
+        ' - ' . $this->tipo .
+        ' - ' . $this->mensagem .
+        ' - ' . $this->usuario .
+        ' - ' . $this->dataEnvio;
     }
 }

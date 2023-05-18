@@ -59,7 +59,20 @@ class ServicoDAO extends DAO
 
     public function insert(Servico $servico)
     {
-        $sql = "INSERT INTO servico(nome, descricao, id_tipo_atividade, tempo_sla, visao, id_area_responsavel, id_grupo_servico) VALUES (:nome, :descricao, :tipoAtividade, :tempoSla, :visao, :areaResponsavel, :grupoServico);";
+        $sql = "INSERT INTO servico(nome,
+            descricao,
+            id_tipo_atividade,
+            tempo_sla,
+            visao,
+            id_area_responsavel,
+            id_grupo_servico)
+            VALUES (:nome,
+            :descricao,
+            :tipoAtividade,
+            :tempoSla,
+            :visao,
+            :areaResponsavel,
+            :grupoServico);";
         $nome = $servico->getNome();
         $descricao = $servico->getDescricao();
         $tipoAtividade = $servico->getTipoAtividade()->getId();
@@ -103,7 +116,33 @@ class ServicoDAO extends DAO
     public function fetch()
     {
         $list = array();
-        $sql = "SELECT servico.id, servico.nome, servico.descricao, servico.tempo_sla, servico.visao, tipo_atividade.id as id_tipo_atividade_tipo_atividade, tipo_atividade.nome as nome_tipo_atividade_tipo_atividade, area_responsavel.id as id_area_responsavel_area_responsavel, area_responsavel.nome as nome_area_responsavel_area_responsavel, area_responsavel.descricao as descricao_area_responsavel_area_responsavel, area_responsavel.email as email_area_responsavel_area_responsavel, grupo_servico.id as id_grupo_servico_grupo_servico, grupo_servico.nome as nome_grupo_servico_grupo_servico FROM servico INNER JOIN tipo_atividade as tipo_atividade ON tipo_atividade.id = servico.id_tipo_atividade INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = servico.id_area_responsavel INNER JOIN grupo_servico as grupo_servico ON grupo_servico.id = servico.id_grupo_servico LIMIT 1000";
+        $sql = "SELECT servico.id,
+            servico.nome,
+            servico.descricao,
+            servico.tempo_sla,
+            servico.visao,
+            tipo_atividade.id
+            as id_tipo_atividade_tipo_atividade,
+            tipo_atividade.nome
+            as nome_tipo_atividade_tipo_atividade,
+            area_responsavel.id
+            as id_area_responsavel_area_responsavel,
+            area_responsavel.nome
+            as nome_area_responsavel_area_responsavel,
+            area_responsavel.descricao
+            as descricao_area_responsavel_area_responsavel,
+            area_responsavel.email
+            as email_area_responsavel_area_responsavel,
+            grupo_servico.id
+            as id_grupo_servico_grupo_servico,
+            grupo_servico.nome
+            as nome_grupo_servico_grupo_servico FROM servico
+            INNER JOIN tipo_atividade
+            as tipo_atividade ON tipo_atividade.id = servico.id_tipo_atividade
+            INNER JOIN area_responsavel
+            as area_responsavel ON area_responsavel.id = servico.id_area_responsavel
+            INNER JOIN grupo_servico
+            as grupo_servico ON grupo_servico.id = servico.id_grupo_servico LIMIT 1000";
 
         try {
             $stmt = $this->connection->prepare($sql);
@@ -143,7 +182,25 @@ class ServicoDAO extends DAO
         $lista = array();
         $visao = $servico->getVisao();
 
-        $sql = "SELECT servico.id, servico.nome, servico.descricao, servico.tempo_sla, servico.visao, tipo_atividade.id as id_tipo_atividade_tipo_atividade, tipo_atividade.nome as nome_tipo_atividade_tipo_atividade, area_responsavel.id as id_area_responsavel_area_responsavel, area_responsavel.nome as nome_area_responsavel_area_responsavel, area_responsavel.descricao as descricao_area_responsavel_area_responsavel, area_responsavel.email as email_area_responsavel_area_responsavel, grupo_servico.id as id_grupo_servico_grupo_servico, grupo_servico.nome as nome_grupo_servico_grupo_servico FROM servico INNER JOIN tipo_atividade as tipo_atividade ON tipo_atividade.id = servico.id_tipo_atividade INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = servico.id_area_responsavel INNER JOIN grupo_servico as grupo_servico ON grupo_servico.id = servico.id_grupo_servico
+        $sql = "SELECT servico.id,
+            servico.nome,
+            servico.descricao,
+            servico.tempo_sla,
+            servico.visao,
+            tipo_atividade.id as id_tipo_atividade_tipo_atividade,
+            tipo_atividade.nome as nome_tipo_atividade_tipo_atividade,
+            area_responsavel.id as id_area_responsavel_area_responsavel,
+            area_responsavel.nome as nome_area_responsavel_area_responsavel,
+            area_responsavel.descricao as descricao_area_responsavel_area_responsavel,
+            area_responsavel.email as email_area_responsavel_area_responsavel,
+            grupo_servico.id as id_grupo_servico_grupo_servico,
+            grupo_servico.nome as nome_grupo_servico_grupo_servico FROM servico
+        INNER JOIN tipo_atividade as tipo_atividade
+            ON tipo_atividade.id = servico.id_tipo_atividade
+        INNER JOIN area_responsavel as area_responsavel
+            ON area_responsavel.id = servico.id_area_responsavel
+        INNER JOIN grupo_servico as grupo_servico
+            ON grupo_servico.id = servico.id_grupo_servico
             WHERE servico.visao = :visao";
 
         try {
@@ -179,7 +236,22 @@ class ServicoDAO extends DAO
     {
 
         $id = $servico->getId();
-        $sql = "SELECT servico.id, servico.nome, servico.descricao, servico.tempo_sla, servico.visao, tipo_atividade.id as id_tipo_atividade_tipo_atividade, tipo_atividade.nome as nome_tipo_atividade_tipo_atividade, area_responsavel.id as id_area_responsavel_area_responsavel, area_responsavel.nome as nome_area_responsavel_area_responsavel, area_responsavel.descricao as descricao_area_responsavel_area_responsavel, area_responsavel.email as email_area_responsavel_area_responsavel, grupo_servico.id as id_grupo_servico_grupo_servico, grupo_servico.nome as nome_grupo_servico_grupo_servico FROM servico INNER JOIN tipo_atividade as tipo_atividade ON tipo_atividade.id = servico.id_tipo_atividade INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = servico.id_area_responsavel INNER JOIN grupo_servico as grupo_servico ON grupo_servico.id = servico.id_grupo_servico
+        $sql = "SELECT servico.id,
+            servico.nome,
+            servico.descricao,
+            servico.tempo_sla,
+            servico.visao,
+            tipo_atividade.id as id_tipo_atividade_tipo_atividade,
+            tipo_atividade.nome as nome_tipo_atividade_tipo_atividade,
+            area_responsavel.id as id_area_responsavel_area_responsavel,
+            area_responsavel.nome as nome_area_responsavel_area_responsavel,
+            area_responsavel.descricao as descricao_area_responsavel_area_responsavel,
+            area_responsavel.email as email_area_responsavel_area_responsavel,
+            grupo_servico.id as id_grupo_servico_grupo_servico,
+            grupo_servico.nome as nome_grupo_servico_grupo_servico FROM servico
+        INNER JOIN tipo_atividade as tipo_atividade ON tipo_atividade.id = servico.id_tipo_atividade
+        INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = servico.id_area_responsavel
+        INNER JOIN grupo_servico as grupo_servico ON grupo_servico.id = servico.id_grupo_servico
                 WHERE servico.id = :id
                  LIMIT 1000";
 
