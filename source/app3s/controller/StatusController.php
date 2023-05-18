@@ -76,10 +76,8 @@ class StatusController
 		if (!(isset($_POST['sigla']) && isset($_POST['nome']))) {
 			echo '
                 <div class="alert alert-danger" role="alert">
-                    Failed to register. Some field must be missing. 
-                </div>
-
-                ';
+					Failed to register. Some field must be missing.
+                </div>';
 			return;
 		}
 		$status = new Status();
