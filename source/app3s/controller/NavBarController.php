@@ -54,11 +54,11 @@ class NavBarController
     }
     if (
       $sessao->getNivelAcesso() == Sessao::NIVEL_ADM
-      )
-      {
+    ) {
       echo '
         <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown"
+             role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
               Gerenciamento
             </a>
             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
@@ -74,7 +74,10 @@ class NavBarController
     echo '<form action="" method="get">
         <div class="input-group">
             <input type="hidden" name="page" value="ocorrencia">
-          <input type="text" name="selecionar" class="form-control" placeholder="Número do chamado" aria-label="Número do Chamado" aria-describedby="button-addon2">
+          <input type="text" name="selecionar"
+           class="form-control"
+           placeholder="Número do chamado" aria-label="Número do Chamado"
+            aria-describedby="button-addon2">
           <div class="input-group-append">
             <button class="btn btn-outline-secondary" type="form" id="button-addon2">
                 <i class="fa fa-search"></i>
@@ -97,29 +100,47 @@ class NavBarController
       if ($sessao->getNivelAcesso() == Sessao::NIVEL_ADM) {
         $disabled = "disabled";
       }
-      echo '<hr><button type="button" nivel="' . Sessao::NIVEL_ADM . '"  ' . $disabled . ' class="dropdown-item change-level">Perfil Admin</button>';
+      echo '<hr>
+      <button
+       type="button"
+        nivel="' . Sessao::NIVEL_ADM . '"  ' . $disabled . '
+         class="dropdown-item change-level">Perfil Admin</button>';
       $disabled = "";
       if ($sessao->getNivelAcesso() == Sessao::NIVEL_TECNICO) {
         $disabled = "disabled";
       }
-      echo '<button type="button" nivel="' . Sessao::NIVEL_TECNICO . '"  id="change-to-tec" ' . $disabled . ' class="dropdown-item change-level">Perfil Técnico</button>';
+      echo '<button
+      type="button" nivel="' . Sessao::NIVEL_TECNICO . '"
+        id="change-to-tec" ' . $disabled . ' class="dropdown-item change-level">
+        Perfil Técnico</button>';
       $disabled = "";
       if ($sessao->getNivelAcesso() == Sessao::NIVEL_COMUM) {
         $disabled = "disabled";
       }
-      echo '<button type="button" ' . $disabled . '  nivel="' . Sessao::NIVEL_COMUM . '"  id="change-to-default"  class="dropdown-item change-level">Perfil Comum</button><hr>';
+      echo '<button
+      type="button" ' . $disabled . '  nivel="' . Sessao::NIVEL_COMUM . '"
+        id="change-to-default"  class="dropdown-item change-level">Perfil Comum
+        </button><hr>';
     } elseif ($sessao->getNIvelOriginal() == Sessao::NIVEL_TECNICO) {
       $disabled = "";
       if ($sessao->getNivelAcesso() == Sessao::NIVEL_TECNICO) {
         $disabled = "disabled";
       }
-      echo '<hr><button type="button" id="change-to-tec" nivel="' . Sessao::NIVEL_TECNICO . '" ' . $disabled . ' class="dropdown-item change-level">Perfil Técnico</button>';
+      echo '<hr>
+      <button
+        type="button"
+        id="change-to-tec"
+        nivel="' . Sessao::NIVEL_TECNICO . '" ' . $disabled . '
+        class="dropdown-item change-level">
+          Perfil Técnico
+      </button>';
       $disabled = "";
       if ($sessao->getNivelAcesso() == Sessao::NIVEL_COMUM) {
         $disabled = "disabled";
       }
       echo '<button type="button" ' . $disabled . ' nivel="' . Sessao::NIVEL_COMUM . '" id="change-to-default"  class="dropdown-item change-level">Perfil Comum</button><hr>';
     }
-    echo '<a href="?sair=1" id="botao-avaliar" acao="avaliar"  class="dropdown-item">Sair</a></div></div></div></nav>';
+    echo '<a href="?sair=1" id="botao-avaliar" acao="avaliar"
+      class="dropdown-item">Sair</a></div></div></div></nav>';
   }
 }
