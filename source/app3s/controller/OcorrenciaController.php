@@ -964,12 +964,18 @@ class OcorrenciaController
 		$corpo =  '<p>Prezado(a) ' . $statusOcorrencia->getUsuario()->getNome() . ' ,</p>';
 		$corpo .= '<p>Sua solicitação foi realizada com sucesso, solicitação <a href="https://3s.unilab.edu.br/?page=ocorrencia&selecionar=' . $statusOcorrencia->getOcorrencia()->getId() . '">Nº' . $statusOcorrencia->getOcorrencia()->getId() . '</a></p>';
 		$corpo .= '<ul>
-                        <li>Serviço Solicitado: ' . $statusOcorrencia->getOcorrencia()->getServico()->getNome() . '</li>
-                        <li>Descrição do Problema: ' . $statusOcorrencia->getOcorrencia()->getDescricao() . '</li>
-                        <li>Setor Responsável: ' . $statusOcorrencia->getOcorrencia()->getServico()->getAreaResponsavel()->getNome() . ' -
-                        ' . $statusOcorrencia->getOcorrencia()->getServico()->getAreaResponsavel()->getDescricao() . '</li>
-                </ul><br><p>Mensagem enviada pelo sistema 3S. Favor não responder.</p>';
-
+                        <li>
+							Serviço Solicitado: ' . $statusOcorrencia->getOcorrencia()->getServico()->getNome() .'
+						</li>
+                        <li>
+							Descrição do Problema: ' . $statusOcorrencia->getOcorrencia()->getDescricao() .'
+						</li>
+						<li>Setor Responsável: ' . 
+							$statusOcorrencia->getOcorrencia()->getServico()->getAreaResponsavel()->getNome() . 
+						' - ' . $statusOcorrencia->getOcorrencia()->getServico()->getAreaResponsavel()->getDescricao() .'
+						</li>
+					</ul>
+					<br><p>Mensagem enviada pelo sistema 3S. Favor não responder.</p>';
 		$mail->enviarEmail($destinatario, $nome, $assunto, $corpo);
 	}
 	public function possoPedirAjuda()
