@@ -20,9 +20,8 @@ class StatusOcorrenciaDAO extends DAO
     {
         $lista = array();
         $id = $ocorrencia->getId();
-
         $sql = "
-		SELECT
+        SELECT
         status_ocorrencia.id,
         status_ocorrencia.mensagem,
         status_ocorrencia.data_mudanca,
@@ -52,10 +51,10 @@ class StatusOcorrenciaDAO extends DAO
         usuario.senha as senha_usuario_usuario,
         usuario.nivel as nivel_usuario_usuario,
         usuario.id_setor as id_setor_usuario_usuario
-		FROM status_ocorrencia
-		INNER JOIN ocorrencia as ocorrencia ON ocorrencia.id = status_ocorrencia.id_ocorrencia
-		INNER JOIN status as status ON status.id = status_ocorrencia.id_status
-		LEFT JOIN usuario as usuario ON usuario.id = status_ocorrencia.id_usuario
+        FROM status_ocorrencia
+        INNER JOIN ocorrencia as ocorrencia ON ocorrencia.id = status_ocorrencia.id_ocorrencia
+        INNER JOIN status as status ON status.id = status_ocorrencia.id_status
+        LEFT JOIN usuario as usuario ON usuario.id = status_ocorrencia.id_usuario
             WHERE ocorrencia.id = :id
         ORDER BY status_ocorrencia.id ASC
 
@@ -84,8 +83,10 @@ class StatusOcorrenciaDAO extends DAO
                 $statusOcorrencia->getOcorrencia()->setPrioridade($linha['prioridade_ocorrencia_ocorrencia']);
                 $statusOcorrencia->getOcorrencia()->setAvaliacao($linha['avaliacao_ocorrencia_ocorrencia']);
                 $statusOcorrencia->getOcorrencia()->setEmail($linha['email_ocorrencia_ocorrencia']);
-                $statusOcorrencia->getOcorrencia()->setIdUsuarioAtendente($linha['id_usuario_atendente_ocorrencia_ocorrencia']);
-                $statusOcorrencia->getOcorrencia()->setIdUsuarioIndicado($linha['id_usuario_indicado_ocorrencia_ocorrencia']);
+                $statusOcorrencia->getOcorrencia()
+                    ->setIdUsuarioAtendente($linha['id_usuario_atendente_ocorrencia_ocorrencia']);
+                $statusOcorrencia->getOcorrencia()
+                    ->setIdUsuarioIndicado($linha['id_usuario_indicado_ocorrencia_ocorrencia']);
                 $statusOcorrencia->getOcorrencia()->setAnexo($linha['anexo_ocorrencia_ocorrencia']);
                 $statusOcorrencia->getOcorrencia()->setLocalSala($linha['local_sala_ocorrencia_ocorrencia']);
                 $statusOcorrencia->getStatus()->setId($linha['id_status_status']);
@@ -108,7 +109,9 @@ class StatusOcorrenciaDAO extends DAO
 
     public function insert(StatusOcorrencia $statusOcorrencia)
     {
-        $sql = "INSERT INTO status_ocorrencia(id_ocorrencia, id_status, mensagem, id_usuario, data_mudanca) VALUES (:ocorrencia, :status, :mensagem, :usuario, :dataMudanca);";
+        $sql = "INSERT INTO
+            status_ocorrencia(id_ocorrencia, id_status, mensagem, id_usuario, data_mudanca)
+                VALUES (:ocorrencia, :status, :mensagem, :usuario, :dataMudanca);";
         $ocorrencia = $statusOcorrencia->getOcorrencia()->getId();
         $status = $statusOcorrencia->getStatus()->getId();
         $mensagem = $statusOcorrencia->getMensagem();

@@ -31,7 +31,8 @@ class DAO
 		$port = env('DB_PORT');
 		$user = env('DB_USERNAME');
 		$pass = env('DB_PASSWORD');
-		$this->connection = new PDO('pgsql:host='.$host.' port='.$port.' dbname='.$dbName.' user='.$user.'password='.$pass);
+        $p = 'pgsql:host=' . $host . ' port=' . $port . ' dbname=' . $dbName . ' user=' . $user . 'password=' . $pass;
+		$this->connection = new PDO($p);
 	}
 	public function getConnection()
 	{
