@@ -440,7 +440,7 @@ class OcorrenciaController
 
                             </form>';
 	}
-	public function cardFiltro($requisitantes)
+	public function cardFilter($requisitantes)
 	{
 		$sessao = new Sessao();
 		$usuario = new Usuario();
@@ -543,17 +543,12 @@ class OcorrenciaController
 					$selectedAtt = 'selected';
 				}
 			}
-			echo '
-								<option
-								  	value="' . $tecnico->getId() . '" ' . $selectedAtt . '>
-									' . $tecnico->getNome() . '
-								</option>
-';
+			echo '<option
+					value="' . $tecnico->getId() . '" ' . $selectedAtt . '>
+					' . $tecnico->getNome() . '</option>     ';
 		}
-		echo '
-                                </select>
-                              </div>
-						<div class="form-group">
+		echo '</select></div>
+				<div class="form-group">
 						<label for="select-requisitante">Usuário Requisitante</label>
 						<select id="select-requisitante">
 						  <option value="">Selecione um atendente</option>';
@@ -568,18 +563,10 @@ class OcorrenciaController
 			echo '<option
 					value="' . $userElement->getId() . '" ' . $selectedAtt . '>' . $userElement->getNome() . '</option>  ';
 		}
-
-		echo '
-						</select>
-					  </div>
-				</form>
-
-
-						';
+		echo '</select></div></form>';
 
 		$this->filtroAvancado($listaAreas, $requisitantes);
-		echo '
-                            <form id="form-filtro-campus">
+		echo '<form id="form-filtro-campus">
                          <hr>
                         <label for="filtro-data-1">Campus</label>
                         <div class="form-check">
@@ -588,9 +575,11 @@ class OcorrenciaController
                             Liberdade
                           </label>
                         </div>
-
                         <div class="form-check">
-                          <input class="form-check-input" type="checkbox" value="" id="filtro-campus-palmares" ' . $checkedPalmares . '>
+                          <input
+						  		class="form-check-input"
+						  		type="checkbox" value=""
+								id="filtro-campus-palmares" ' . $checkedPalmares . '>
                           <label class="form-check-label" for="filtro-campus-palmares">
                             Palmares
                           </label>
@@ -602,23 +591,12 @@ class OcorrenciaController
                             Auroras
                           </label>
                         </div>
-
-
                         <div class="form-check">
                           <input class="form-check-input" type="checkbox" value="" id="filtro-campus-males" ' . $checkedMales . '>
                           <label class=""font-weight-normal" for="filtro-campus-males">
                             Malês
                           </label>
-                        </div>
-
-
-                        </form>
-
-
-
-                  </div>
-
-';
+                        </div></form></div>';
 	}
 	public function getArrayFiltros()
 	{
@@ -739,7 +717,7 @@ class OcorrenciaController
 		}
 		echo '</div></div><aside class="col-md-4 blog-sidebar">';
 		if ($sessao->getNivelAcesso() == Sessao::NIVEL_ADM || $sessao->getNivelAcesso() == Sessao::NIVEL_TECNICO) {
-			$this->cardFiltro($requisitantes);
+			$this->cardFilter($requisitantes);
 		}
 
 		echo '
