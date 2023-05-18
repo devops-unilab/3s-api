@@ -177,7 +177,13 @@ class UsuarioDAO extends DAO
     {
 
         $id = $usuario->getId();
-        $sql = "SELECT usuario.id, usuario.nome, usuario.email, usuario.login, usuario.senha, usuario.nivel, usuario.id_setor FROM usuario
+        $sql = "SELECT usuario.id,
+                usuario.nome,
+                usuario.email,
+                usuario.login,
+                usuario.senha,
+                usuario.nivel,
+                usuario.id_setor FROM usuario
                 WHERE usuario.id = :id
                  LIMIT 1000";
 

@@ -559,7 +559,9 @@ class OcorrenciaController
                 $selectedAtt = 'selected';
             }
             echo '<option
-                    value="' . $userElement->getId() . '" ' . $selectedAtt . '>' . $userElement->getNome() . '</option>  ';
+                    value="' . $userElement->getId() . '" ' . $selectedAtt . '>
+                    ' . $userElement->getNome() . '
+                    </option>  ';
         }
         echo '</select></div></form>';
 
@@ -788,7 +790,9 @@ class OcorrenciaController
             $this->view->mostraFormInserir2($listaServico);
         } else {
             echo '
-            <h3 class="pb-4 mb-4 font-italic border-bottom" data-toggle="collapse" data-target="#collapseAberto" href="#collapseAberto" aria-expanded="true">
+            <h3 class="pb-4 mb-4 font-italic border-bottom"
+                data-toggle="collapse"
+                data-target="#collapseAberto" href="#collapseAberto" aria-expanded="true">
                 Para continuar confirme os chamados fechados.
             </h3>'; //public function exibirLista($lista)
             $this->view->exibirLista($listaNaoAvaliados);
@@ -871,9 +875,15 @@ class OcorrenciaController
             $extensao = strtolower(end($extensaoArr));
 
             $extensoes_permitidas = array(
-                'xlsx', 'xlsm', 'xlsb', 'xltx', 'xltm', 'xls', 'xlt', 'xls', 'xml', 'xml', 'xlam', 'xla', 'xlw', 'xlr',
-                'doc', 'docm', 'docx', 'docx', 'dot', 'dotm', 'dotx', 'odt', 'pdf', 'rtf', 'txt', 'wps', 'xml', 'zip', 'rar', 'ovpn',
-                'xml', 'xps', 'jpg', 'gif', 'png', 'pdf', 'jpeg'
+                'xlsx', 'xlsm', 'xlsb', 'xltx',
+                'xltm', 'xls', 'xlt', 'xls',
+                'xml', 'xml', 'xlam', 'xla',
+                'xlw', 'xlr', 'doc', 'docm',
+                'docx', 'docx', 'dot', 'dotm',
+                'dotx', 'odt', 'pdf', 'rtf',
+                'txt', 'wps', 'xml', 'zip',
+                'rar', 'ovpn', 'xml', 'xps',
+                'jpg', 'gif', 'png', 'pdf', 'jpeg'
             );
 
             if (!(in_array($extensao, $extensoes_permitidas))) {
@@ -989,7 +999,11 @@ class OcorrenciaController
         $mail = new Mail();
 
         $assunto = "[3S] - Chamado Nº " . $ocorrencia->getId();
-        $corpo = '<p>A solicitação Nº' . $ocorrencia->getId() . ' está com atraso em relação ao SLA e o cliente solicitou ajuda</p>';
+        $corpo = '<p>
+                        A solicitação Nº' .
+            $ocorrencia->getId() .
+            ' está com atraso em relação ao SLA e o cliente solicitou ajuda
+                    </p>';
         $corpo .= '<ul>
                         <li>Serviço Solicitado: ' . $ocorrencia->getServico()->getNome() . '</li>
                         <li>Descrição do Problema: ' . $ocorrencia->getDescricao() . '</li>
