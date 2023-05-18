@@ -83,7 +83,9 @@ class MensagemForumController
 
 
         <!-- Modal -->
-        <div class="modal fade" id="modalDeleteChat" tabindex="-1" aria-labelledby="modalDeleteChatLabel" aria-hidden="true">
+        <div class="modal fade" id="modalDeleteChat"
+         tabindex="-1" aria-labelledby="modalDeleteChatLabel"
+         aria-hidden="true">
           <div class="modal-dialog">
             <div class="modal-content">
               <div class="modal-header">
@@ -93,7 +95,7 @@ class MensagemForumController
                 </button>
               </div>
               <div class="modal-body">
-                Tem certeza que deseja apagar esta mensagem? 
+                Tem certeza que deseja apagar esta mensagem?
               </div>
               <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
@@ -146,11 +148,20 @@ class MensagemForumController
 
 
                         <div class="chatbox__body__message chatbox__body__message--left">
-            
                             <div class="chatbox_timing">
                                 <ul>
-                                    <li><a href="#"><i class="fa fa-calendar"></i> ' . date("d/m/Y", strtotime($mensagemForum->getDataEnvio())) . '</a></li>
-                                    <li><a href="#"><i class="fa fa-clock-o"></i> ' . date("H:i", strtotime($mensagemForum->getDataEnvio())) . '</a></a></li>';
+                                    <li>
+                                        <a href="#">
+                                            <i class="fa fa-calendar"></i>
+                                            ' . date("d/m/Y", strtotime($mensagemForum->getDataEnvio())). '
+                                        </a>
+                                    </li>
+                                <li>
+                                <a href="#">
+                                    <i class="fa fa-clock-o"></i>
+                                    ' . date("H:i", strtotime($mensagemForum->getDataEnvio())) . '
+                                </a>
+                            </li>';
             if ($mensagemForum->getUsuario()->getId() == $sessao->getIdUsuario() && $ocorrencia->getStatus() === StatusOcorrenciaController::STATUS_ATENDIMENTO) {
                 echo '
                                         <li><button data-toggle="modal" onclick="changeField(' . $mensagemForum->getId() . ')" data-target="#modalDeleteChat"><i class="fa fa-trash-o"></i> Apagar </a></button></li>';
