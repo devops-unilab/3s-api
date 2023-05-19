@@ -1,14 +1,14 @@
 ## Como usar:
 # docker-compose -f docker-compose.build.yml up --build -d
 # docker-compose logs -f
-# docker exec -it 3s-dev /bin/bash
+# docker exec -it 3s-build /bin/bash
 
 ## Copias entre container/local
-# docker cp 3s-dev:/var/www/html/.env .
-# docker cp .env 3s-dev:/var/www/html/
+# docker cp 3s-build:/var/www/html/.env .
+# docker cp .env 3s-build:/var/www/html/
 
 ## Obter vendor/autoload
-# docker exec -it 3s-dev composer update
+# docker exec -it 3s-build composer update
 
 ## full clean
 # docker stop $(docker ps -qa)
@@ -63,8 +63,10 @@ services:
     restart: always
     ports:
       - 5432:5432
-    env_file:
-      - ./source/.env
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=developer
     volumes:
       - postgresql_data:/var/lib/postgresql/data
     networks:

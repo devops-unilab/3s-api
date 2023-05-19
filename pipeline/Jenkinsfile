@@ -159,7 +159,7 @@ pipeline {
               def qualitygate = readJSON text: resp.content
               echo qualitygate.toString()
               if ("ERROR".equals(qualitygate["projectStatus"]["status"])) {
-                error "Pipeline abortada devido a falha em Quality Gate: ${qualitygate.status}"
+                error "Pipeline abortada devido a falha em Quality Gate"
                 waitForQualityGate abortPipeline: true
               }
             }
@@ -324,7 +324,7 @@ pipeline {
               subject: "Aprovar Deploy [${env.JOB_NAME}] ${currentBuild.fullDisplayName}",
               to: "${env.RECIPIENT_LEAD_EMAILS}",
               body: """
-                  <p>Prezado(a) Leader</p>Existe um Continuous Deployment (CD) aguardando aprovação na produção.
+                  <p>Prezado(a) Leader</p>Existe um Continuous Deployment (CD) aguardando aprovação para produção.
                   <h3><a href='${BUILD_URL}input'><strong>Ir para APROVAÇÃO</strong></a></h3>
                   <p>Endpoint da homologação: ${env.APP_URI_STAGING}</p><br /><p>${env.EMAIL_ASSINATURA}</p><hr><p>${env.EMAIL_RODAPE}</p>
               """)
@@ -432,7 +432,6 @@ pipeline {
   post{
     always {
       echo 'Processo de pipeline finalizado.'
-      slackSend(color: "warning", message: "Pipeline #${env.BUILD_NUMBER} finalizada com ${currentBuild.currentResult} em ${env.JOB_NAME} (<${env.BUILD_URL}|Mais info...>)")
     }
 
     success {
@@ -449,7 +448,8 @@ pipeline {
           Detalhes do teste de qualidade: ${env.SONAR_URL}/dashboard?id=${env.SONAR_PROJECT_KEY}<br /></p>
           Endpoint de homologação: ${env.APP_URI_STAGING}<br />
           Endpoint de produção: ${env.APP_URI_PROD}<br />
-          Deploy aprovado por: <strong>${env.APPROVER_NAME}</strong></p><br />
+          Deploy aprovado por: <strong>${env.APPROVER_NAME}</strong></p>
+          <p style="font-size: 0.9em;">&#9729; Os workloads estar&atilde;o completos em aproximadamente 90 segundos.</p><br />
           <p>${env.EMAIL_ASSINATURA}</p><hr><p>${env.EMAIL_RODAPE}</p>
           """,
           to: "${env.RECIPIENT_LEAD_EMAILS}, ${env.RECIPIENT_TEAM_EMAILS}",
@@ -474,11 +474,11 @@ pipeline {
           to: "${env.RECIPIENT_TEAM_EMAILS}",
           recipientProviders: []
       )
-      slackSend(color: "danger", message: "Pipeline #${env.BUILD_NUMBER} ${currentBuild.currentResult} em ${env.JOB_NAME} (<${env.BUILD_URL}|Mais info...>)")
+      slackSend(color: "danger", message: "Pipeline #${env.BUILD_NUMBER} finalizada com ${currentBuild.currentResult} em ${env.JOB_NAME} (<${env.BUILD_URL}|Mais info...>)")
     }
 
     unstable {
-      echo 'Processo de pipeline possui estabilidade.'
+      echo 'Processo de pipeline possui instabilidade.'
     }
 
     changed {
