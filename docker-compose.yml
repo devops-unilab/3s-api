@@ -1,29 +1,12 @@
-## Como usar:
+### Como usar:
+#
+# docker login https://dti-registro.unilab.edu.br
 # docker build -t dti-registro.unilab.edu.br/unilab/app-3s:main .
+# docker push dti-registro.unilab.edu.br/unilab/app-3s:main
 # docker-compose up -d
 # docker-compose logs -f
-# docker exec -it 3s-dev /bin/bash
-
-## Copias entre container/local
-# docker cp 3s-dev:/var/www/html/.env .
-# docker cp .env 3s-dev:/var/www/html/
-
-## Obter vendor/autoload
-# docker exec -it 3s-dev composer update
-
-## full clean
-# docker stop $(docker ps -qa)
-# docker rm -f $(docker ps -qa)
-# docker rmi -f $(docker images -qa)
-# docker volume rm -f $(docker volume ls -q)
-# docker network rm $(docker network ls -q)
-
-### Error response from daemon: Get "https://dti-registro.unilab.edu.br/v2/": x509: certificate signed by unknown authority
-# sudo -i
-# openssl s_client -showcerts -connect dti-registro.unilab.edu.br:443 </dev/null 2>/dev/null|openssl x509 -outform PEM > ./source/ca.pem
-# mkdir -p /etc/docker/certs.d/dti-registro.unilab.edu.br && cp ./source/ca.pem /etc/docker/certs.d/dti-registro.unilab.edu.br/ca.crt
-# service docker restart
-# docker login https://dti-registro.unilab.edu.br
+# docker exec -it 3s-debug /bin/bash
+# docker-compose down
 
 version: '3.9'
 services:
