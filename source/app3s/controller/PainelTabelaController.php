@@ -66,10 +66,10 @@ class PainelTabelaController
             return;
         }
         $arrStrSetores = explode(",", $_GET['setores']);
-        $arrStrSetores = array_map( function($elemento) {
+        $arrStrSetores = array_map(function ($elemento) {
             return "'" . addslashes($elemento) .  "'";
         }, $arrStrSetores);
-        $filtroSetor = ' area_responsavel.nome like '.implode(" OR area_responsavel.nome like ", $arrStrSetores);
+        $filtroSetor = ' area_responsavel.nome like ' . implode(" OR area_responsavel.nome like ", $arrStrSetores);
         $result = $this->dao->getConnection()->query("SELECT id, nome FROM area_responsavel WHERE $filtroSetor");
         $setores = array();
         foreach ($result as $linha) {
