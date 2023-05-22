@@ -66,7 +66,7 @@ class PainelTabelaController
             return;
         }
         $arrStrSetores = explode(",", $_GET['setores']);
-        $arrStrSetores = array_map(function($elemento) {
+        $arrStrSetores = array_map( function($elemento) {
             return "'" . addslashes($elemento) .  "'";
         }, $arrStrSetores);
         $filtroSetor = ' area_responsavel.nome like '.implode(" OR area_responsavel.nome like ", $arrStrSetores);
