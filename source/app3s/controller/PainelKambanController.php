@@ -93,7 +93,7 @@ class PainelKambanController
             return;
         }
         $arrStrSetores = explode(",", $_GET['setores']);
-        if(count($arrStrSetores) === 0) {
+        if (count($arrStrSetores) === 0) {
             echo '<h3>Para ver o painel selecione os setores</h3>';
             return;
         }
