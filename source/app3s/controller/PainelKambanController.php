@@ -88,10 +88,18 @@ class PainelKambanController
             return;
         }
         $filtro = "";
-        if (isset($_GET['setores'])) {
-            $arrStrSetores = explode(",", $_GET['setores']);
-            $filtro = 'AND( area_responsavel.id = ' . implode(" OR area_responsavel.id = ", $arrStrSetores) . ' )';
+        if (!isset($_GET['setores']) || $_GET['setores'] === "") {
+            echo '<h3>Para ver o painel selecione os setores</h3>';
+            return;
         }
+        $arrStrSetores = explode(",", $_GET['setores']);
+        if(count($arrStrSetores) === 0) {
+            echo '<h3>Para ver o painel selecione os setores</h3>';
+            return;
+        }
+        $filtro = 'AND( area_responsavel.id = ' . implode(" OR area_responsavel.id = ", $arrStrSetores) . ' )';
+
+
         $pendentes = $this->dao->pesquisaKamban($this->arrayStatusPendente(), $filtro);
         $finalizados = $this->dao->pesquisaKamban($this->arrayStatusFinalizado(), $filtro);
 
