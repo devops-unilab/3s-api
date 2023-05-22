@@ -138,8 +138,6 @@ class PainelKambanView extends OcorrenciaView
         echo '<div class="col-sm-12 col-md-12 col-xl-6">';
         $bgCard = "";
         $link = "text-light font-weight-bold p-3";
-        $texto = "text-black-50";
-
         switch ($chamado->getStatus()) {
             case StatusOcorrenciaController::STATUS_ABERTO:
                 $bgCard = 'bg-warning';
