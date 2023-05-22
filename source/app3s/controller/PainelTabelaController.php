@@ -61,7 +61,6 @@ class PainelTabelaController
     }
     public function tabelaChamados()
     {
-        $filtro = "";
         if (!isset($_GET['setores'])) {
             echo '<h3>Para ver o painel selecione os setores</h3>';
             return;
