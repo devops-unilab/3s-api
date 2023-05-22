@@ -773,19 +773,17 @@ class OcorrenciaController
 
     public function mainAjax()
     {
-        if (!isset($_POST['enviar_ocorrencia'])) {
-            return;
-        }
-
-
-
-        if (!(isset($_POST['descricao']) &&
-            isset($_POST['campus'])  &&
-            isset($_POST['email']) &&
-            isset($_POST['patrimonio']) &&
-            isset($_POST['ramal']) &&
-            isset($_POST['local_sala']) &&
-            isset($_POST['servico']))) {
+        if (
+            !isset($_POST['enviar_ocorrencia'])
+            || !(isset($_POST['descricao'])
+                &&
+                isset($_POST['campus'])  &&
+                isset($_POST['email']) &&
+                isset($_POST['patrimonio']) &&
+                isset($_POST['ramal']) &&
+                isset($_POST['local_sala']) &&
+                isset($_POST['servico']))
+        ) {
             echo ':incompleto';
             return;
         }
