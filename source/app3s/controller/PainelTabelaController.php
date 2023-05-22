@@ -61,13 +61,12 @@ class PainelTabelaController
     }
     public function tabelaChamados()
     {
-        $filtro = "";
         if (!isset($_GET['setores'])) {
             echo '<h3>Para ver o painel selecione os setores</h3>';
             return;
         }
         $arrStrSetores = explode(",", $_GET['setores']);
-        $arrStrSetores = array_map(function($elemento) {
+        $arrStrSetores = array_map( function($elemento) {
             return "'" . addslashes($elemento) .  "'";
         }, $arrStrSetores);
         $filtroSetor = ' area_responsavel.nome like '.implode(" OR area_responsavel.nome like ", $arrStrSetores);
