@@ -219,7 +219,9 @@ class OcorrenciaView
         $strClass = 'alert-warning';
         foreach ($lista as $elemento) {
 
-            if ($elemento->getStatus() == 'a') {
+            if ($elemento->getStatus() == 'a'
+                || $elemento->getStatus() == 'r'
+                || $elemento->getStatus() == 'b') {//aberto//reaberto//reservado
                 $strClass = 'alert-warning';
             } elseif ($elemento->getStatus() == 'e') { //Em atendimento
                 $strClass = 'alert-info';
@@ -229,10 +231,6 @@ class OcorrenciaView
                 $strClass = 'alert-success';
             } elseif ($elemento->getStatus() == 'h') { //Cancelado
                 $strClass = 'alert-secondary';
-            } elseif ($elemento->getStatus() == 'r') { //reaberto
-                $strClass = 'alert-warning';
-            } elseif ($elemento->getStatus() == 'b') { //reservado
-                $strClass = 'alert-warning';
             } elseif ($elemento->getStatus() == 'c') { //em espera
                 $strClass = 'alert-info';
             } elseif ($elemento->getStatus() == 'd') { //Aguardando usuario
