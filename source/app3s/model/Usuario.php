@@ -91,24 +91,24 @@ class Usuario
     {
         return $this->siglaUnidade;
     }
-	public function getStrNivel() {
-		$strNivel = 'Desconhecido';
-		switch($this->nivel) {
-			case 'a':
-				$strNivel = 'Administrador';
-				break;
-			case 't':
-				$strNivel = 'Técnico';
-				break;
-			case 'c':
-				$strNivel = 'Comum';
-				break;
-			default:
-				$strNivel = 'Desconhecido';
-			break;
-		}
-		return $strNivel;
-	}
+    public function getStrNivel() {
+        $strNivel = 'Desconhecido';
+        switch($this->nivel) {
+            case 'a':
+                $strNivel = 'Administrador';
+                break;
+            case 't':
+                $strNivel = 'Técnico';
+                break;
+            case 'c':
+                $strNivel = 'Comum';
+                break;
+            default:
+                $strNivel = 'Desconhecido';
+            break;
+        }
+        return $strNivel;
+    }
 
     public function getIdSetor()
     {

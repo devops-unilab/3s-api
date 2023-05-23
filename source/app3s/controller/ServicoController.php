@@ -115,7 +115,14 @@ class ServicoController
     public function fetch()
     {
 
-        $list = DB::table('servico')->select('servico.id', 'servico.nome', 'servico.descricao', 'servico.tempo_sla', 'servico.visao', 'area_responsavel.nome as area_responsavel')
+        $list = DB::table('servico')->select(
+            'servico.id',
+            'servico.nome',
+            'servico.descricao',
+            'servico.tempo_sla',
+            'servico.visao',
+            'area_responsavel.nome as area_responsavel'
+        )
             ->join('area_responsavel', 'area_responsavel.id', '=', 'servico.id_area_responsavel')
             ->get();
         foreach ($list as $key => $service) {
