@@ -118,6 +118,9 @@ class ServicoController
         $list = DB::table('servico')->select('servico.id', 'servico.nome', 'servico.descricao', 'servico.tempo_sla', 'servico.visao', 'area_responsavel.nome as area_responsavel')
             ->join('area_responsavel', 'area_responsavel.id', '=', 'servico.id_area_responsavel')
             ->get();
+        foreach ($list as $key => $service) {
+            $list[$key]->visao = $this->toStringVisao($list[$key]->visao);
+        }
         echo view('admin.service.index', ['services' => $list]);
     }
 
