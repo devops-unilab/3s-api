@@ -8,7 +8,6 @@
 
 namespace app3s\controller;
 
-use app3s\dao\AreaResponsavelDAO;
 use app3s\dao\UsuarioDAO;
 use app3s\model\Usuario;
 use app3s\util\Sessao;
@@ -163,8 +162,8 @@ class UsuarioController
         $selected = new Usuario();
         $selected->setId(intval($_GET['edit']));
         $this->dao->fillById($selected);
-        $areaDao = new AreaResponsavelDAO($this->dao->getConnection());
-        $setores = $areaDao->fetch();
+
+        $setores = DB::table('area_responsavel')->get();
 
         if (!isset($_POST['edit_usuario'])) {
             $this->view->showEditForm($selected, $setores);

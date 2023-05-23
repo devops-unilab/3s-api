@@ -169,10 +169,9 @@ class MensagemForumController
         echo '</div>
                 <div class="panel-footer">';
 
-        if(!($ocorrencia->getStatus() == StatusOcorrenciaController::STATUS_FECHADO
-        || $ocorrencia->getStatus() == StatusOcorrenciaController::STATUS_FECHADO_CONFIRMADO
-        || $ocorrencia->getStatus() == StatusOcorrenciaController::STATUS_CANCELADO))
-        {
+        if (!($ocorrencia->getStatus() == StatusOcorrenciaController::STATUS_FECHADO
+            || $ocorrencia->getStatus() == StatusOcorrenciaController::STATUS_FECHADO_CONFIRMADO
+            || $ocorrencia->getStatus() == StatusOcorrenciaController::STATUS_CANCELADO)) {
             $this->view->showInsertForm2($ocorrencia);
         }
         echo '</div>

@@ -10,7 +10,6 @@ namespace app3s\controller;
 
 use app3s\dao\ServicoDAO;
 use app3s\dao\TipoAtividadeDAO;
-use app3s\dao\AreaResponsavelDAO;
 use app3s\dao\GrupoServicoDAO;
 use app3s\model\Servico;
 use app3s\util\Sessao;
@@ -73,8 +72,7 @@ class ServicoController
             $tipoatividadeDao = new TipoAtividadeDAO($this->dao->getConnection());
             $listTipoAtividade = $tipoatividadeDao->fetch();
 
-            $arearesponsavelDao = new AreaResponsavelDAO($this->dao->getConnection());
-            $listAreaResponsavel = $arearesponsavelDao->fetch();
+            $listAreaResponsavel = DB::table('area_responsavel')->get();
 
             $gruposervicoDao = new GrupoServicoDAO($this->dao->getConnection());
             $listGrupoServico = $gruposervicoDao->fetch();
@@ -115,7 +113,14 @@ class ServicoController
     public function fetch()
     {
 
-        $list = DB::table('servico')->select('servico.id', 'servico.nome', 'servico.descricao', 'servico.tempo_sla', 'servico.visao', 'area_responsavel.nome as area_responsavel')
+        $list = DB::table('servico')->select(
+            'servico.id',
+            'servico.nome',
+            'servico.descricao',
+            'servico.tempo_sla',
+            'servico.visao',
+            'area_responsavel.nome as area_responsavel'
+        )
             ->join('area_responsavel', 'area_responsavel.id', '=', 'servico.id_area_responsavel')
             ->get();
         foreach ($list as $key => $service) {
@@ -210,8 +215,7 @@ class ServicoController
             $tipoAtividadeDao = new TipoAtividadeDAO($this->dao->getConnection());
             $listTipoAtividade = $tipoAtividadeDao->fetch();
 
-            $areaResponsavelDao = new AreaResponsavelDAO($this->dao->getConnection());
-            $listAreaResponsavel = $areaResponsavelDao->fetch();
+            $listAreaResponsavel = DB::table('area_responsavel')->get();
 
             $grupoServicoDao = new GrupoServicoDAO($this->dao->getConnection());
             $listGrupoServico = $grupoServicoDao->fetch();

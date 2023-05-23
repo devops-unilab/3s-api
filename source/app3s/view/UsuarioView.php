@@ -194,9 +194,9 @@ class UsuarioView
 
             echo '
                                     <option
-                                        value="' . $area->getId() . '"
-                                        ' . ($selecionado->getIdSetor() === $area->getId() ? 'selected' : '') . '>
-                                        ' . $area->getNome() . '
+                                        value="' . $area->id . '"
+                                        ' . ($selecionado->getIdSetor() === $area->id ? 'selected' : '') . '>
+                                        ' . $area->nome . '
                                     </option>';
         }
         echo '

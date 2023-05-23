@@ -9,12 +9,10 @@
 namespace app3s\controller;
 
 use app3s\dao\OcorrenciaDAO;
-use app3s\dao\AreaResponsavelDAO;
 use app3s\dao\ServicoDAO;
 use app3s\dao\StatusDAO;
 use app3s\dao\StatusOcorrenciaDAO;
 use app3s\dao\UsuarioDAO;
-use app3s\model\AreaResponsavel;
 use app3s\model\Ocorrencia;
 use app3s\model\Servico;
 use app3s\model\Status;

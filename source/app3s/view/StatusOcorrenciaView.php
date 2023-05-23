@@ -175,9 +175,9 @@ class StatusOcorrenciaView
                 <option value="" selected>Selecione um Setor</option>    ';
         foreach ($listaAreas as $area) {
             echo '
-                <option value="' . $area->getId() . '">'
-                . $area->getNome() .
-                ' - ' . $area->getDescricao() . '</option>
+                <option value="' . $area->id . '">'
+                . $area->nome .
+                ' - ' . $area->descricao . '</option>
                 ';
         }
 
