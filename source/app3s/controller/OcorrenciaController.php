@@ -180,7 +180,7 @@ class OcorrenciaController
             <span class="text-right">';
         $horaEstimada = $this->calcularHoraSolucao($dataAbertura, $this->selecionado->getServico()->getTempoSla());
         echo '</div></div></div><div class="col-md-8">';
-        $this->view->mostrarSelecionado2($this->selecionado, $dataAbertura, $horaEstimada);
+        $this->view->mostrarSelecionado2($this->selecionado);
         echo '</div><aside class="col-md-4 blog-sidebar">
                 <h4 class="font-italic">Histórico</h4><div class="container">';
         foreach ($listaStatus as $status) {
@@ -773,19 +773,17 @@ class OcorrenciaController
 
     public function mainAjax()
     {
-        if (!isset($_POST['enviar_ocorrencia'])) {
-            return;
-        }
-
-
-
-        if (!(isset($_POST['descricao']) &&
-            isset($_POST['campus'])  &&
-            isset($_POST['email']) &&
-            isset($_POST['patrimonio']) &&
-            isset($_POST['ramal']) &&
-            isset($_POST['local_sala']) &&
-            isset($_POST['servico']))) {
+        if (
+            !isset($_POST['enviar_ocorrencia'])
+            || !(isset($_POST['descricao'])
+                &&
+                isset($_POST['campus'])  &&
+                isset($_POST['email']) &&
+                isset($_POST['patrimonio']) &&
+                isset($_POST['ramal']) &&
+                isset($_POST['local_sala']) &&
+                isset($_POST['servico']))
+        ) {
             echo ':incompleto';
             return;
         }
