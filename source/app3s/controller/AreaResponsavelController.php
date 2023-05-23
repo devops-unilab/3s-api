@@ -8,22 +8,11 @@
 
 namespace app3s\controller;
 
-use app3s\dao\AreaResponsavelDAO;
 use app3s\model\AreaResponsavel;
-use app3s\view\AreaResponsavelView;
 use Illuminate\Support\Facades\DB;
 
 class AreaResponsavelController
 {
-
-    protected  $view;
-    protected $dao;
-
-    public function __construct()
-    {
-        $this->dao = new AreaResponsavelDAO();
-    }
-
 
     public function delete()
     {
@@ -47,7 +36,7 @@ class AreaResponsavelController
 
     public function add()
     {
-
+        $request = request();
         if (!isset($_POST['enviar_area_responsavel'])) {
             echo view('admin.department.create');
             return;
@@ -56,12 +45,14 @@ class AreaResponsavelController
             echo '<div class="alert alert-danger" role="alert">Failed to register. Some field must be missing.</div>';
             return;
         }
-        $areaResponsavel = new AreaResponsavel();
-        $areaResponsavel->setNome($_POST['nome']);
-        $areaResponsavel->setDescricao($_POST['descricao']);
-        $areaResponsavel->setEmail($_POST['email']);
-
-        if ($this->dao->insert($areaResponsavel)) {
+        $work = DB::table('area_responsavel')->insert(
+            [
+                'nome' => $request['nome'],
+                'descricao' => $request['descricao'],
+                'email' => $request['email']
+            ]
+        );
+        if ($work) {
             echo '<div class="alert alert-success" role="alert">Sucesso ao inserir Area Responsavel</div>';
         } else {
             echo '<div class="alert alert-danger" role="alert">Falha ao tentar Inserir Area Responsavel</div>';

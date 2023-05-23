@@ -23,6 +23,7 @@ use app3s\model\Usuario;
 use app3s\util\Mail;
 use app3s\util\Sessao;
 use app3s\view\StatusOcorrenciaView;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 
 class StatusOcorrenciaController
@@ -1143,7 +1144,12 @@ class StatusOcorrenciaController
         $areaResponsavel = new AreaResponsavel();
         $areaResponsavel->setId($_POST['area_responsavel']);
         $areaResponsavelDao = new AreaResponsavelDAO($this->dao->getConnection());
-        $areaResponsavelDao->fillById($areaResponsavel);
+
+        $area = DB::table('area_responsavel')->where('id', intval($_POST['area_responsavel']))->first();
+
+        $areaResponsavel->setNome($area->nome);
+        $areaResponsavel->setDescricao($area->descricao);
+        $areaResponsavel->setEmail($area->email);
 
         $this->ocorrencia->setAreaResponsavel($areaResponsavel);
 
