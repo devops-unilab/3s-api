@@ -23,6 +23,7 @@ use app3s\model\Usuario;
 use app3s\util\Mail;
 use app3s\util\Sessao;
 use app3s\view\StatusOcorrenciaView;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 
 class StatusOcorrenciaController
@@ -325,9 +326,6 @@ class StatusOcorrenciaController
         $this->ocorrencia = $ocorrencia;
         $this->sessao = new Sessao();
 
-
-
-
         $listaUsuarios = array();
         $listaServicos = array();
         $listaAreas = array();
@@ -346,30 +344,17 @@ class StatusOcorrenciaController
 
         $this->view->modalFormStatus($this->ocorrencia, $listaUsuarios, $listaServicos, $listaAreas);
 
-
-
-
         echo '
                 <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
-
                     <div class="alert  bg-light d-flex justify-content-between align-items-center" role="alert">
-
-
-                ';
-
-        echo '
-<div class="btn-group">
-  <button
-    class="btn btn-light btn-lg dropdown-toggle p-2" type="button"
-    data-toggle="dropdown"
-    aria-haspopup="true" aria-expanded="false">
-   Chamado ' . $this->ocorrencia->getId() . '
-  </button>
-  <div class="dropdown-menu">
-
-
-
-';
+                    <div class="btn-group">
+                    <button
+                        class="btn btn-light btn-lg dropdown-toggle p-2" type="button"
+                        data-toggle="dropdown"
+                        aria-haspopup="true" aria-expanded="false">
+                    Chamado ' . $this->ocorrencia->getId() . '
+                    </button>
+                    <div class="dropdown-menu">';
 
 
         $possoCancelar = $this->possoCancelar();
@@ -382,10 +367,19 @@ class StatusOcorrenciaController
             $possoAtender = $this->possoAtender();
             $this->view->botaoAtender($possoAtender);
         }
+        $strDisable = '';
+        if(!$this->possoFechar()) {
 
+            $strDisable = 'disabled';
 
-        $possoFechar = $this->possoFechar();
-        $this->view->botaoFechar($possoFechar);
+        }
+
+        echo '<button type="button"
+        ' . $strDisable . '  acao="fechar"
+           class="dropdown-item  botao-status"
+           data-toggle="modal" data-target="#modalStatus">
+            Fechar
+            </button>';
 
         $possoAvaliar = $this->possoAvaliar();
         $this->view->botaoAvaliar($possoAvaliar);
@@ -395,20 +389,43 @@ class StatusOcorrenciaController
         $this->view->botaoReabrir($possoAvaliar);
 
         if ($this->possoReservar()) {
-            $this->view->botaoReservar();
+            echo '<button type="button"
+     acao="reservar"
+     id="botao-reservar"
+     class="dropdown-item"
+     data-toggle="modal" data-target="#modalStatus">
+  Reservar
+</button>';
         }
 
         if ($this->possoLiberar()) {
-            $this->view->botaoLiberar();
+            echo '
+                    <button type="button"
+                        acao="liberar_atendimento"
+                        class="dropdown-item  botao-status"
+                        data-toggle="modal" data-target="#modalStatus">
+                    Liberar Ocorrência
+                    </button>';
         }
 
         $possoAguardarAtivo = $this->possoAguardarAtivos();
         $possoAguardarUsuario = $this->possoAguardarUsuario();
 
         if ($possoAguardarAtivo || $possoAguardarUsuario) {
-            echo '<div class="dropdown-divider"></div>';
-            $this->view->botaoAguardarUsuario();
-            $this->view->botaoAguardarAtivos();
+            echo '<div class="dropdown-divider"></div>
+            <button type="button"
+            acao="aguardar_usuario"
+               class="dropdown-item  botao-status"
+               data-toggle="modal" data-target="#modalStatus">
+                Aguardar Usuário
+            </button>
+            <button type="button" acao="aguardar_ativos"
+                class="dropdown-item  botao-status"
+                data-toggle="modal" data-target="#modalStatus">
+                Aguardar Ativos de TI
+            </button>
+
+       ';
         }
 
 
@@ -1143,7 +1160,12 @@ class StatusOcorrenciaController
         $areaResponsavel = new AreaResponsavel();
         $areaResponsavel->setId($_POST['area_responsavel']);
         $areaResponsavelDao = new AreaResponsavelDAO($this->dao->getConnection());
-        $areaResponsavelDao->fillById($areaResponsavel);
+
+        $area = DB::table('area_responsavel')->where('id', intval($_POST['area_responsavel']))->first();
+
+        $areaResponsavel->setNome($area->nome);
+        $areaResponsavel->setDescricao($area->descricao);
+        $areaResponsavel->setEmail($area->email);
 
         $this->ocorrencia->setAreaResponsavel($areaResponsavel);
 

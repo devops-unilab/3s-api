@@ -23,7 +23,7 @@ use app3s\model\Usuario;
 use app3s\util\Mail;
 use app3s\util\Sessao;
 use app3s\view\OcorrenciaView;
-
+use Illuminate\Support\Facades\DB;
 
 class OcorrenciaController
 {
@@ -369,8 +369,8 @@ class OcorrenciaController
                                 <select id="select-setores-filtro2">
                                   <option value="">Selecione o Solicitante</option>';
         foreach ($listaAreas as $area) {
-            echo ' <option value="' . trim($area->getId()) . '">
-                    ' . trim($area->getNome()) . '
+            echo ' <option value="' . trim($area->id) . '">
+                    ' . trim($area->nome) . '
                 </option>';
         }
         echo '
@@ -412,10 +412,10 @@ class OcorrenciaController
         $usuario->setId($sessao->getIdUsuario());
         $usuarioDao = new UsuarioDAO();
         $usuarioDao->fillById($usuario);
-        $setor = new AreaResponsavel();
-        $setor->setId($usuario->getIdSetor());
-        $areaResponsavelDao = new AreaResponsavelDAO();
-        $areaResponsavelDao->fillById($setor);
+
+        $setor = DB::table('area_responsavel')->where('id', $usuario->getIdSetor())->first();
+
+
         $usuario = new Usuario();
         $usuario->setNivel(Sessao::NIVEL_TECNICO);
         $listaTecnicos = $usuarioDao->fetchByNivel($usuario);
@@ -423,7 +423,9 @@ class OcorrenciaController
         $listaTecnicos2 = $usuarioDao->fetchByNivel($usuario);
         $listaTecnicos = array_merge($listaTecnicos, $listaTecnicos2);
         $allUsers = $usuarioDao->fetch();
-        $listaAreas = $areaResponsavelDao->fetch();
+
+        $listaAreas = DB::table('area_responsavel')->get();
+
         $checkedSetor = "";
         if (isset($_GET['setor'])) {
             $checkedSetor = 'checked';
@@ -465,13 +467,13 @@ class OcorrenciaController
                 <div class="p-4 mb-3 bg-light rounded">
                     <h4 class="font-italic">Filtros</h4>
                         <form id="form-filtro-basico">
-                            <input type="hidden" value="' . $setor->getId() . '"
+                            <input type="hidden" value="' . $setor->id . '"
                                 id="meu-setor" name="meu-setor">
                             <div class="custom-control custom-switch">
                               <input type="checkbox" class="custom-control-input"
                                 id="filtro-meu-setor" ' . $checkedSetor . '>
                                   <label class="custom-control-label" for="filtro-meu-setor">
-                                  Demandas (' . $setor->getNome() . ')
+                                  Demandas (' . $setor->nome . ')
                                  </label>
                             </div>
                             <div class="custom-control custom-switch">
