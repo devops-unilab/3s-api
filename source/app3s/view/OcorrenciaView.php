@@ -323,7 +323,6 @@ class OcorrenciaView
      */
     public function mostrarSelecionado2(Ocorrencia $ocorrencia)
     {
-        $statusView = new StatusOcorrenciaView();
         $controller = new StatusOcorrenciaController();
 
         echo '
@@ -333,13 +332,6 @@ class OcorrenciaView
                 <div class="card mb-4">
                     <div class="card-body">
                     <b> Descricao: </b>' . strip_tags($ocorrencia->getDescricao()) . '<br>';
-
-
-
-
-
-
-
 
         if (trim($ocorrencia->getAnexo()) != "") {
             echo '<b>Anexo: </b>
@@ -396,8 +388,6 @@ class OcorrenciaView
                 </div>
                 </div>
                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
-                    ';
-        echo '
                 <div class="card mb-4">
                     <div class="card-body">
                         <b>Classificação do Chamado: </b>' . $ocorrencia->getServico()->getNome() . '<br>';
@@ -413,10 +403,6 @@ class OcorrenciaView
         echo '
                     </div>
                 </div>
-
-';
-        echo '
-
             <div class="card mb-4">
                 <div class="card-body">
                     <b>Requisitante: </b>' . $ocorrencia->getUsuarioCliente()->getNome() . ' <br>';
@@ -437,11 +423,7 @@ class OcorrenciaView
 
         echo '
                 </div>
-            </div>';
-
-
-        echo '
-
+            </div>
         <div class="card mb-4">
             <div class="card-body">';
         echo '<b>Setor Responsável: </b>' . $ocorrencia->getAreaResponsavel()->getNome() .
@@ -477,19 +459,7 @@ class OcorrenciaView
             </button>';
         }
 
-        echo '
-
-
-
-            </div>
-        </div>
-
-
-
-';
-        echo '
-                </div>
-';
-        echo '</div>';
+        echo '</div>
+        </div></div></div>';
     }
 }
