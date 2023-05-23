@@ -100,7 +100,7 @@ class ServicoView
                                             <option value="">Selecione o Tipo Atividade</option>  ';
 
         foreach ($listaTipoAtividade as $element) {
-            echo '<option value="' . $element->getId() . '">' . $element . '</option>   ';
+            echo '<option value="' . $element->getId() . '">' . $element->getNome() . '</option>   ';
         }
 
         echo '
@@ -112,7 +112,7 @@ class ServicoView
                                             <option value="">Selecione o Area Responsavel</option>    ';
 
         foreach ($listaAreaResponsavel as $element) {
-            echo '<option value="' . $element->getId() . '">' . $element . '</option>     ';
+            echo '<option value="' . $element->getId() . '">' . $element->getNome() . '</option>     ';
         }
 
         echo '
@@ -124,7 +124,7 @@ class ServicoView
                                             <option value="">Selecione o Grupo Servico</option>     ';
 
         foreach ($listaGrupoServico as $element) {
-            echo '<option value="' . $element->getId() . '">' . $element . '</option>
+            echo '<option value="' . $element->getId() . '">' . $element->getNome() . '</option>
             ';
         }
 
@@ -148,95 +148,6 @@ class ServicoView
 
 ';
     }
-
-
-
-
-
-    public function showList($lista)
-    {
-        echo '
-
-
-
-
-          <div class="card">
-                <div class="card-header">
-                  Lista Servico
-                </div>
-                <div class="card-body">
-
-
-        <div class="table-responsive">
-            <table class="table table-bordered" id="dataTable" width="100%"
-                cellspacing="0">
-                <thead>
-                    <tr>
-                        <th>Id</th>
-                        <th>Nome</th>
-                        <th>Descricao</th>
-                        <th>Tempo Sla</th>
-                        <th>Tipo Atividade</th>
-                        <th>Area Responsavel</th>
-                        <th>Grupo Servico</th>
-                        <th>Visão</th>
-                        <th>Ações</th>
-                    </tr>
-                </thead>
-                <tfoot>
-                    <tr>
-                        <th>Id</th>
-                        <th>Nome</th>
-                        <th>Descricao</th>
-                        <th>Tempo Sla</th>
-                        <th>Tipo Atividade</th>
-                        <th>Area Responsavel</th>
-                        <th>Grupo Servico</th>
-                        <th>Visão</th>
-                        <th>Ações</th>
-                    </tr>
-                </tfoot>
-                <tbody>';
-
-        foreach ($lista as $element) {
-            echo '<tr>
-            <td>' . $element->getId() . '</td>
-            <td>' . $element->getNome() . '</td>
-            <td>' . $element->getDescricao() . '</td>
-            <td>' . $element->getTempoSla() . '</td>
-            <td>' . $element->getTipoAtividade()->getNome() . '</td>
-            <td>' . $element->getAreaResponsavel()->getNome() . '</td>
-            <td>' . $element->getGrupoServico()->getNome() . '</td>
-            <td>' . ServicoController::toStringVisao($element->getVisao()) . '</td>
-            <td>
-
-<a href="?page=servico&edit=' . $element->getId() . '" class="btn btn-success btn-circle btn-lg">
-    <i class="fa fa-pencil icone-maior"></i>
-</a>
-<a href="?page=servico&delete=' . $element->getId() . '" class="btn btn-danger btn-circle btn-lg">
-    <i class="fa fa-trash icone-maior"></i>
-</a>
-
-                      </td></tr>';
-        }
-
-        echo '
-                </tbody>
-            </table>
-        </div>
-
-
-
-
-  </div>
-</div>
-
-';
-    }
-
-
-
-
 
     public function showEditForm($listaTipoAtividade, $listaAreaResponsavel, $listaGrupoServico, Servico $selecionado)
     {

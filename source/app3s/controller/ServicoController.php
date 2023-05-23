@@ -188,7 +188,7 @@ class ServicoController
             $grupoServicoDao = new GrupoServicoDAO($this->dao->getConnection());
             $listGrupoServico = $grupoServicoDao->fetch();
 
-            // $this->view->showInsertForm($listTipoAtividade, $listAreaResponsavel, $listGrupoServico);
+            $this->view->showInsertForm($listTipoAtividade, $listAreaResponsavel, $listGrupoServico);
             return;
         }
         if (!(isset($_POST['nome'])
