@@ -15,37 +15,6 @@ use app3s\model\AreaResponsavel;
 class AreaResponsavelDAO extends DAO
 {
 
-    public function update(AreaResponsavel $areaResponsavel)
-    {
-        $id = $areaResponsavel->getId();
-
-
-        $sql = "UPDATE area_responsavel
-                SET
-                nome = :nome,
-                descricao = :descricao,
-                email = :email
-                WHERE area_responsavel.id = :id;";
-        $nome = $areaResponsavel->getNome();
-        $descricao = $areaResponsavel->getDescricao();
-        $email = $areaResponsavel->getEmail();
-
-        try {
-
-            $stmt = $this->getConnection()->prepare($sql);
-            $stmt->bindParam(":id", $id, PDO::PARAM_INT);
-            $stmt->bindParam(":nome", $nome, PDO::PARAM_STR);
-            $stmt->bindParam(":descricao", $descricao, PDO::PARAM_STR);
-            $stmt->bindParam(":email", $email, PDO::PARAM_STR);
-
-            return $stmt->execute();
-        } catch (PDOException $e) {
-            echo $e->getMessage();
-        }
-    }
-
-
-
     public function insert(AreaResponsavel $areaResponsavel)
     {
         $sql = "INSERT INTO area_responsavel(nome, descricao, email)
@@ -59,21 +28,6 @@ class AreaResponsavelDAO extends DAO
             $stmt->bindParam(":nome", $nome, PDO::PARAM_STR);
             $stmt->bindParam(":descricao", $descricao, PDO::PARAM_STR);
             $stmt->bindParam(":email", $email, PDO::PARAM_STR);
-            return $stmt->execute();
-        } catch (PDOException $e) {
-            echo '{"error":{"text":' . $e->getMessage() . '}}';
-        }
-    }
-
-    public function delete(AreaResponsavel $areaResponsavel)
-    {
-        $id = $areaResponsavel->getId();
-        $sql = "DELETE FROM area_responsavel WHERE id = :id";
-
-        try {
-            $db = $this->getConnection();
-            $stmt = $db->prepare($sql);
-            $stmt->bindParam(":id", $id, PDO::PARAM_INT);
             return $stmt->execute();
         } catch (PDOException $e) {
             echo '{"error":{"text":' . $e->getMessage() . '}}';

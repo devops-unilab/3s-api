@@ -11,7 +11,7 @@ namespace app3s\controller;
 use app3s\dao\AreaResponsavelDAO;
 use app3s\model\AreaResponsavel;
 use app3s\view\AreaResponsavelView;
-
+use Illuminate\Support\Facades\DB;
 
 class AreaResponsavelController
 {
@@ -22,7 +22,6 @@ class AreaResponsavelController
     public function __construct()
     {
         $this->dao = new AreaResponsavelDAO();
-        $this->view = new AreaResponsavelView();
     }
 
 
@@ -34,10 +33,11 @@ class AreaResponsavelController
         $selected = new AreaResponsavel();
         $selected->setId($_GET['delete']);
         if (!isset($_POST['delete_area_responsavel'])) {
-            $this->view->confirmDelete();
+            echo view('admin.department.confirm-delete');
             return;
         }
-        if ($this->dao->delete($selected)) {
+
+        if (DB::table('area_responsavel')->delete($_GET['delete'])) {
             echo '<div class="alert alert-success" role="alert">Sucesso ao excluir Area Responsavel</div>';
         } else {
             echo '<div class="alert alert-danger" role="alert">Falha ao tentar excluir Area Responsavel</div>';
@@ -45,20 +45,11 @@ class AreaResponsavelController
         echo '<META HTTP-EQUIV="REFRESH" CONTENT="2; URL=?page=area_responsavel">';
     }
 
-
-
-    public function fetch()
-    {
-        $list = $this->dao->fetch();
-        $this->view->showList($list);
-    }
-
-
     public function add()
     {
 
         if (!isset($_POST['enviar_area_responsavel'])) {
-            $this->view->showInsertForm();
+            echo view('admin.department.create');
             return;
         }
         if (!(isset($_POST['nome']) && isset($_POST['descricao']) && isset($_POST['email']))) {
@@ -87,12 +78,11 @@ class AreaResponsavelController
         if (!isset($_GET['edit'])) {
             return;
         }
-        $selected = new AreaResponsavel();
-        $selected->setId($_GET['edit']);
-        $this->dao->fillById($selected);
+
+        $selected2 = DB::table('area_responsavel')->where('id', intval($_GET['edit']))->first();
 
         if (!isset($_POST['edit_area_responsavel'])) {
-            $this->view->showEditForm($selected);
+            echo view('admin.department.edit', ['department' => $selected2]);
             return;
         }
 
@@ -101,11 +91,16 @@ class AreaResponsavelController
             return;
         }
 
-        $selected->setNome($_POST['nome']);
-        $selected->setDescricao($_POST['descricao']);
-        $selected->setEmail($_POST['email']);
-
-        if ($this->dao->update($selected)) {
+        $afected = DB::table('area_responsavel')
+            ->where('id', intval($_GET['edit']))
+            ->update(
+                [
+                    'nome' => $_POST['nome'],
+                    'descricao' => $_POST['descricao'],
+                    'email' => $_POST['email']
+                ]
+            );
+        if ($afected) {
             echo '<div class="alert alert-success" role="alert">Sucesso</div>';
         } else {
             echo '<div class="alert alert-danger" role="alert">Falha</div>';
@@ -117,12 +112,7 @@ class AreaResponsavelController
     public function main()
     {
 
-        if (isset($_GET['select'])) {
-            echo '<div class="row">';
-            $this->select();
-            echo '</div>';
-            return;
-        }
+
         echo '<div class="card mb-4"><div class="card-body">';
         echo '<div class="row"><div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">';
 
@@ -133,23 +123,9 @@ class AreaResponsavelController
         } else {
             $this->add();
         }
-        $this->fetch();
+        $list = DB::table('area_responsavel')->get();
+        echo view('admin.department.index', ['departments' => $list]);
 
         echo '</div></div></div></div>';
-    }
-
-    public function select()
-    {
-        if (!isset($_GET['select'])) {
-            return;
-        }
-        $selected = new AreaResponsavel();
-        $selected->setId($_GET['select']);
-
-        $this->dao->fillById($selected);
-
-        echo '<div class="col-xl-7 col-lg-7 col-md-12 col-sm-12">';
-        $this->view->showSelected($selected);
-        echo '</div>';
     }
 }
