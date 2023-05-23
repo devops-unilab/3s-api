@@ -52,18 +52,6 @@ class MensagemForumController
         }
         return true;
     }
-    public function possoEnviarMensagem(Ocorrencia $ocorrencia)
-    {
-
-        if (
-            $ocorrencia->getStatus() == StatusOcorrenciaController::STATUS_FECHADO
-            || $ocorrencia->getStatus() == StatusOcorrenciaController::STATUS_FECHADO_CONFIRMADO
-            || $ocorrencia->getStatus() == StatusOcorrenciaController::STATUS_CANCELADO
-        ) {
-            return false;
-        }
-        return $this->allowed($ocorrencia);
-    }
 
     public function mainOcorrencia(Ocorrencia $ocorrencia)
     {
@@ -180,7 +168,11 @@ class MensagemForumController
         echo '<span id="ultimo-id-post" class="escondido">' . $ultimoId . '</span>';
         echo '</div>
                 <div class="panel-footer">';
-        if ($this->possoEnviarMensagem($ocorrencia)) {
+
+        if(!($ocorrencia->getStatus() == StatusOcorrenciaController::STATUS_FECHADO
+        || $ocorrencia->getStatus() == StatusOcorrenciaController::STATUS_FECHADO_CONFIRMADO
+        || $ocorrencia->getStatus() == StatusOcorrenciaController::STATUS_CANCELADO))
+        {
             $this->view->showInsertForm2($ocorrencia);
         }
         echo '</div>
