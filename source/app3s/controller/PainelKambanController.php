@@ -7,7 +7,7 @@ use app3s\view\PainelKambanView;
 use app3s\model\Ocorrencia;
 use app3s\util\Sessao;
 use app3s\dao\PainelKambanDAO;
-use app3s\dao\AreaResponsavelDAO;
+use Illuminate\Support\Facades\DB;
 
 class PainelKambanController
 {
@@ -23,8 +23,7 @@ class PainelKambanController
 
     public function main()
     {
-        $areaDao = new AreaResponsavelDAO($this->dao->getConnection());
-        $listaAreas = $areaDao->fetch();
+        $listaAreas = DB::table('area_responsavel')->get();
 
 
         echo '

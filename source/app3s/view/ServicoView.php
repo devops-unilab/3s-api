@@ -112,7 +112,7 @@ class ServicoView
                                             <option value="">Selecione o Area Responsavel</option>    ';
 
         foreach ($listaAreaResponsavel as $element) {
-            echo '<option value="' . $element->getId() . '">' . $element->getNome() . '</option>     ';
+            echo '<option value="' . $element->id . '">' . $element->nome . '</option>     ';
         }
 
         echo '
@@ -245,10 +245,10 @@ class ServicoView
 
         foreach ($listaAreaResponsavel as $element) {
             $strAtribut = "";
-            if ($element->getId() == $selecionado->getAreaResponsavel()->getId()) {
+            if ($element->id == $selecionado->getAreaResponsavel()->getId()) {
                 $strAtribut = "selected";
             }
-            echo '<option value="' . $element->getId() . '" ' . $strAtribut . ' >' . $element->getNome() . '</option>
+            echo '<option value="' . $element->id . '" ' . $strAtribut . ' >' . $element->nome . '</option>
 
 
 

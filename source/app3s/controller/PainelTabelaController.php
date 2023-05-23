@@ -4,8 +4,8 @@
 namespace app3s\controller;
 
 use app3s\model\AreaResponsavel;
-use app3s\dao\AreaResponsavelDAO;
 use app3s\dao\OcorrenciaDAO;
+use Illuminate\Support\Facades\DB;
 
 class PainelTabelaController
 {
@@ -47,14 +47,14 @@ class PainelTabelaController
 
     public function formFiltro()
     {
-        $areaDao = new AreaResponsavelDAO($this->dao->getConnection());
-        $lista = $areaDao->fetch();
+
+        $lista = DB::table('area_responsavel')->get();
 
         echo '
                 <select name="setor" id="select-setores">
                     <option value="">Filtrar por Setor</option>';
         foreach ($lista as $areaResponsavel) {
-            echo '<option value="' . $areaResponsavel->getNome() . '">' . $areaResponsavel->getNome() . '</option>';
+            echo '<option value="' . $areaResponsavel->nome . '">' . $areaResponsavel->nome . '</option>';
         }
         echo '
                 </select>';

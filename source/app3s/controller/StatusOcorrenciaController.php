@@ -8,7 +8,6 @@
 
 namespace app3s\controller;
 
-use app3s\dao\AreaResponsavelDAO;
 use app3s\dao\StatusOcorrenciaDAO;
 use app3s\dao\OcorrenciaDAO;
 use app3s\dao\ServicoDAO;
@@ -337,8 +336,7 @@ class StatusOcorrenciaController
         }
 
         if ($this->possoEditarAreaResponsavel($this->ocorrencia)) {
-            $areaDao = new AreaResponsavelDAO($this->dao->getConnection());
-            $listaAreas = $areaDao->fetch();
+            $listaAreas = DB::table('area_responsavel')->get();
         }
 
 
@@ -1159,7 +1157,6 @@ class StatusOcorrenciaController
         }
         $areaResponsavel = new AreaResponsavel();
         $areaResponsavel->setId($_POST['area_responsavel']);
-        $areaResponsavelDao = new AreaResponsavelDAO($this->dao->getConnection());
 
         $area = DB::table('area_responsavel')->where('id', intval($_POST['area_responsavel']))->first();
 
