@@ -415,7 +415,8 @@ class OcorrenciaController
 
 
         $listaTecnicos = DB::table('usuario')->where(
-            'nivel', Sessao::NIVEL_TECNICO
+            'nivel',
+            Sessao::NIVEL_TECNICO
         )->orWhere('nivel', Sessao::NIVEL_ADM)->get();
         $allUsers = DB::table('usuario')->get();
 
@@ -715,55 +716,24 @@ class OcorrenciaController
     public function telaCadastro()
     {
         $this->sessao = new Sessao();
-
-        $ocorrencia = new Ocorrencia();
-        $ocorrencia->getUsuarioCliente()->setId($this->sessao->getIdUsuario());
-        $listaNaoAvaliados = $this->dao->fetchByUsuarioClienteNaoAvaliados($ocorrencia);
-
-
-        echo '
-            <div class="row">
-                <div class="col-md-12 blog-main">
-
-
-';
-        $servicoDao = new ServicoDAO($this->dao->getConnection());
-        $servico = new Servico();
-        $servico->setVisao(1);
-
-        $listaServico = $servicoDao->fetchByVisao($servico);
-
+        $listaNaoAvaliados = DB::table('ocorrencia')
+            ->where('status', StatusOcorrenciaController::STATUS_FECHADO)
+            ->where('id_usuario_cliente', $this->sessao->getIdUsuario())->get();
+        $queryService = DB::table('servico');
         if (
             $this->sessao->getNivelAcesso() == Sessao::NIVEL_ADM
             || $this->sessao->getNivelAcesso() == Sessao::NIVEL_TECNICO
         ) {
-            $servico->setVisao(2);
-            $lista2 = $servicoDao->fetchByVisao($servico);
-            $listaServico = array_merge($listaServico, $lista2);
-        }
-        if (count($listaNaoAvaliados) == 0) {
-            echo '
-            <h3 class="pb-4 mb-4 font-italic border-bottom">
-                        Cadastrar Ocorrência
-                    </h3>
-            ';
-            $this->view->mostraFormInserir2($listaServico);
+            $queryService->where('visao', 2)->orWhere('visao', 1);
         } else {
-            echo '
-            <h3 class="pb-4 mb-4 font-italic border-bottom"
-                data-toggle="collapse"
-                data-target="#collapseAberto" href="#collapseAberto" aria-expanded="true">
-                Para continuar confirme os chamados fechados.
-            </h3>'; //public function exibirLista($lista)
-            $this->view->exibirLista($listaNaoAvaliados);
+            $queryService->where('visao', 1);
         }
-
-
-
-
-        echo '
-                </div>
-            </div>';
+        $listaServico = $queryService->get();
+        if (count($listaNaoAvaliados) == 0) {
+            echo view('request.create', ['services' => $listaServico, 'email' => $this->sessao->getEmail()]);
+        } else {
+            echo view('request.pending-review', ['requests' => $listaNaoAvaliados]);
+        }
     }
 
 

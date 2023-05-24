@@ -172,7 +172,8 @@ class MensagemForumController
         if (!($ocorrencia->getStatus() == StatusOcorrenciaController::STATUS_FECHADO
             || $ocorrencia->getStatus() == StatusOcorrenciaController::STATUS_FECHADO_CONFIRMADO
             || $ocorrencia->getStatus() == StatusOcorrenciaController::STATUS_CANCELADO)) {
-            $this->view->showInsertForm2($ocorrencia);
+
+                echo view('request.message-box', ['idRequest' => $ocorrencia->getId()]);
         }
         echo '</div>
             </div>
