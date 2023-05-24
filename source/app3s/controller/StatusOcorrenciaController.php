@@ -293,15 +293,6 @@ class StatusOcorrenciaController
         echo ':sucesso:' . $this->ocorrencia->getId() . ':Chamado cancelado com sucesso!';
         return true;
     }
-    public function getTecnicos()
-    {
-        $usuarioDao = new UsuarioDAO($this->dao->getConnection());
-        $usuario = new Usuario();
-        $usuario->setNivel(Sessao::NIVEL_TECNICO);
-        $listaUsuarios = $usuarioDao->fetchByNivel($usuario);
-        $usuario->setNivel(Sessao::NIVEL_ADM);
-        return array_merge($listaUsuarios, $usuarioDao->fetchByNivel($usuario));
-    }
     public function getServicos()
     {
         $listaServicos = array();
@@ -332,7 +323,11 @@ class StatusOcorrenciaController
             $listaServicos = $this->getServicos();
         }
         if ($this->possoReservar()) {
-            $listaUsuarios = $this->getTecnicos();
+            $listaUsuarios = DB::table('usuario')->where(
+                'nivel',
+                Sessao::NIVEL_TECNICO
+            )->orWhere('nivel', Sessao::NIVEL_ADM)->get();
+
         }
 
         if ($this->possoEditarAreaResponsavel($this->ocorrencia)) {
@@ -366,10 +361,9 @@ class StatusOcorrenciaController
             $this->view->botaoAtender($possoAtender);
         }
         $strDisable = '';
-        if(!$this->possoFechar()) {
+        if (!$this->possoFechar()) {
 
             $strDisable = 'disabled';
-
         }
 
         echo '<button type="button"

@@ -414,13 +414,10 @@ class OcorrenciaController
         $setor = DB::table('area_responsavel')->where('id', $usuario->getIdSetor())->first();
 
 
-        $usuario = new Usuario();
-        $usuario->setNivel(Sessao::NIVEL_TECNICO);
-        $listaTecnicos = $usuarioDao->fetchByNivel($usuario);
-        $usuario->setNivel(Sessao::NIVEL_ADM);
-        $listaTecnicos2 = $usuarioDao->fetchByNivel($usuario);
-        $listaTecnicos = array_merge($listaTecnicos, $listaTecnicos2);
-        $allUsers = $usuarioDao->fetch();
+        $listaTecnicos = DB::table('usuario')->where(
+            'nivel', Sessao::NIVEL_TECNICO
+        )->orWhere('nivel', Sessao::NIVEL_ADM)->get();
+        $allUsers = DB::table('usuario')->get();
 
         $listaAreas = DB::table('area_responsavel')->get();
 
@@ -496,14 +493,14 @@ class OcorrenciaController
             $selectedAtt = '';
             if (
                 isset($_GET['tecnico'])
-                && $tecnico->getId() == $_GET['tecnico']
+                && $tecnico->id == $_GET['tecnico']
             ) {
 
                 $selectedAtt = 'selected';
             }
             echo '<option
-                    value="' . $tecnico->getId() . '" ' . $selectedAtt . '>
-                    ' . $tecnico->getNome() . '</option>     ';
+                    value="' . $tecnico->id . '" ' . $selectedAtt . '>
+                    ' . $tecnico->nome . '</option>     ';
         }
         echo '</select></div>
                 <div class="form-group">
@@ -513,12 +510,11 @@ class OcorrenciaController
 
         foreach ($allUsers as $userElement) {
             $selectedAtt = '';
-            if (isset($_GET['requisitante']) && $userElement->getId() == $_GET['requisitante']) {
+            if (isset($_GET['requisitante']) && $userElement->id == $_GET['requisitante']) {
                 $selectedAtt = 'selected';
             }
-            echo '<option
-                    value="' . $userElement->getId() . '" ' . $selectedAtt . '>
-                    ' . $userElement->getNome() . '
+            echo '<option value="' . $userElement->id . '" ' . $selectedAtt . '>
+                    ' . $userElement->nome . '
                     </option>  ';
         }
         echo '</select></div></form>';
