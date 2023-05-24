@@ -134,45 +134,6 @@ class UsuarioDAO extends DAO
         return $lista;
     }
 
-    public function fetchByIdSetor(Usuario $usuario)
-    {
-        $lista = array();
-        $idSetor = $usuario->getIdSetor();
-
-        $sql = "SELECT
-            usuario.id,
-            usuario.nome,
-            usuario.email,
-            usuario.login,
-            usuario.senha,
-            usuario.nivel,
-            usuario.id_setor
-            FROM usuario
-            WHERE usuario.id_setor = :idSetor";
-
-        try {
-
-            $stmt = $this->connection->prepare($sql);
-            $stmt->bindParam(":idSetor", $idSetor, PDO::PARAM_INT);
-            $stmt->execute();
-            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            foreach ($result as $row) {
-                $usuario = new Usuario();
-                $usuario->setId($row['id']);
-                $usuario->setNome($row['nome']);
-                $usuario->setEmail($row['email']);
-                $usuario->setLogin($row['login']);
-                $usuario->setSenha($row['senha']);
-                $usuario->setNivel($row['nivel']);
-                $usuario->setIdSetor($row['id_setor']);
-                $lista[] = $usuario;
-            }
-        } catch (PDOException $e) {
-            echo $e->getMessage();
-        }
-        return $lista;
-    }
-
     public function fillById(Usuario $usuario)
     {
 

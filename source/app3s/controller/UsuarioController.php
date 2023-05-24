@@ -11,20 +11,17 @@ namespace app3s\controller;
 use app3s\dao\UsuarioDAO;
 use app3s\model\Usuario;
 use app3s\util\Sessao;
-use app3s\view\UsuarioView;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 
 class UsuarioController
 {
 
-    protected  $view;
     protected $dao;
 
     public function __construct()
     {
         $this->dao = new UsuarioDAO();
-        $this->view = new UsuarioView();
     }
 
 
@@ -132,25 +129,35 @@ class UsuarioController
 
     public function telaLogin()
     {
-        echo '
-<div class="container">
-    <div class="row">
-        <div class="card mb-4">
-            <div class="card-body">';
-        $this->view->formLogin();
-        echo '
-            </div>
-        </div>
 
-    </div>
-</div>
-';
+        echo view('auth.login');
+
     }
-
+    public function getStrNivel($nivel) {
+        $strNivel = 'Desconhecido';
+        switch($nivel) {
+            case 'a':
+                $strNivel = 'Administrador';
+                break;
+            case 't':
+                $strNivel = 'Técnico';
+                break;
+            case 'c':
+                $strNivel = 'Comum';
+                break;
+            default:
+                $strNivel = 'Desconhecido';
+            break;
+        }
+        return $strNivel;
+    }
     public function fetch()
     {
-        $list = $this->dao->fetch();
-        $this->view->showList($list);
+        $list = DB::table('usuario')->get();
+        foreach($list as $user) {
+            $user->str_nivel = $this->getStrNivel($user->nivel);
+        }
+        echo view('admin.user.index', ['list' => $list]);
     }
 
 
@@ -166,7 +173,8 @@ class UsuarioController
         $setores = DB::table('area_responsavel')->get();
 
         if (!isset($_POST['edit_usuario'])) {
-            $this->view->showEditForm($selected, $setores);
+            $user = DB::table('usuario')->where('id', intval($_GET['edit']))->first();
+            echo view('admin.user.edit', ['user' => $user, 'departments' => $setores]);
             return;
         }
 
