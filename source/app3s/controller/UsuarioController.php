@@ -131,30 +131,19 @@ class UsuarioController
     {
 
         echo view('auth.login');
-
     }
-    public function getStrNivel($nivel) {
+    public function getStrNivel($nivel)
+    {
         $strNivel = 'Desconhecido';
-        switch($nivel) {
-            case 'a':
-                $strNivel = 'Administrador';
-                break;
-            case 't':
-                $strNivel = 'Técnico';
-                break;
-            case 'c':
-                $strNivel = 'Comum';
-                break;
-            default:
-                $strNivel = 'Desconhecido';
-            break;
-        }
+        $strNivel = ($nivel === 'a') ? ( 'Administrador') : ('');
+        $strNivel = ($nivel === 't') ? ( 'Técnico') : ('');
+        $strNivel = ($nivel === 'c') ? ( 'Comum') : ('');
         return $strNivel;
     }
     public function fetch()
     {
         $list = DB::table('usuario')->get();
-        foreach($list as $user) {
+        foreach ($list as $user) {
             $user->str_nivel = $this->getStrNivel($user->nivel);
         }
         echo view('admin.user.index', ['list' => $list]);
