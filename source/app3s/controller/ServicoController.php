@@ -143,16 +143,16 @@ class ServicoController
     {
         $str = "";
         switch ($visao) {
-            case self::VISAO_INATIVO:
+            case 0:
                 $str = "Inativo";
                 break;
-            case self::VISAO_COMUM:
+            case 1:
                 $str = "Comum";
                 break;
-            case self::VISAO_TECNICO:
+            case 2:
                 $str = "Técnico";
                 break;
-            case self::VISAO_ADMIN:
+            case 3:
                 $str = "Administrador";
                 break;
             default:
@@ -212,15 +212,8 @@ class ServicoController
     {
 
         if (!isset($_POST['enviar_servico'])) {
-            $tipoAtividadeDao = new TipoAtividadeDAO($this->dao->getConnection());
-            $listTipoAtividade = $tipoAtividadeDao->fetch();
-
             $listAreaResponsavel = DB::table('area_responsavel')->get();
-
-            $grupoServicoDao = new GrupoServicoDAO($this->dao->getConnection());
-            $listGrupoServico = $grupoServicoDao->fetch();
-
-            $this->view->showInsertForm($listTipoAtividade, $listAreaResponsavel, $listGrupoServico);
+            echo view('admin.service.create', ['departments' => $listAreaResponsavel]);
             return;
         }
         if (!(isset($_POST['nome'])
