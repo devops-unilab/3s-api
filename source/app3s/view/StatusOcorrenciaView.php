@@ -101,7 +101,7 @@ class StatusOcorrenciaView
 
     public function modalFormStatus(
         Ocorrencia $ocorrencia,
-        $listaTecnicos = array(),
+        $listaTecnicos,
         $listaServicos = array(),
         $listaAreas = array()
     ) {
@@ -159,7 +159,7 @@ class StatusOcorrenciaView
                 <option value="" selected>Selecione um Técnico</option>';
         foreach ($listaTecnicos as $tecnico) {
             echo '
-                <option value="' . $tecnico->getId() . '">' . $tecnico->getNome() . '</option>  ';
+                <option value="' . $tecnico->id . '">' . $tecnico->nome . '</option>  ';
         }
 
         echo '
