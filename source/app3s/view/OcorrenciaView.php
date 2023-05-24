@@ -16,65 +16,6 @@ use app3s\model\Usuario;
 class OcorrenciaView
 {
 
-
-    public function exibirLista($lista)
-    {
-
-        echo '
-
-
-                   <div class="alert-group">';
-
-        $strClass = 'alert-warning';
-        foreach ($lista as $elemento) {
-
-            if ($elemento->status == 'a') {
-                $strClass = 'alert-warning';
-            } elseif ($elemento->status == 'e') { //Em atendimento
-                $strClass = 'alert-info';
-            } elseif ($elemento->status == 'f') { //Fechado
-                $strClass = 'alert-success';
-            } elseif ($elemento->status == 'g') { //Fechado confirmado
-                $strClass = 'alert-success';
-            } elseif ($elemento->status == 'h') { //Cancelado
-                $strClass = 'alert-secondary';
-            } elseif ($elemento->status == 'r') { //reaberto
-                $strClass = 'alert-warning';
-            } elseif ($elemento->status == 'b') { //reservado
-                $strClass = 'alert-warning';
-            } elseif ($elemento->status == 'c') { //em espera
-                $strClass = 'alert-info';
-            } elseif ($elemento->status == 'd') { //Aguardando usuario
-                $strClass = 'alert-danger';
-            } elseif ($elemento->status == 'i') { //Aguardando ativo
-                $strClass = 'alert-danger';
-            }
-
-            echo '
-
-            <div class="alert ' . $strClass . ' alert-dismissable">
-                <a href="?page=ocorrencia&selecionar=' . $elemento->id . '"
-                    class="close"><i class="fa fa-search icone-maior"></i></a>
-
-                <strong>#' . $elemento->id . '</strong>
-                 ' . substr($elemento->descricao, 0, 80) . '...
-            </div>
-                  ';
-        }
-
-        if (count($lista) == 0) {
-            echo '
-
-            <div class="alert alert-light alert-dismissable text-center">
-                <strong>Nenhuma Ocorrência</strong>
-
-            </div>
-                  ';
-        }
-        echo '
-                    </div>';
-    }
-
     public function exibirListaPaginada($lista, $id = '')
     {
         $strId = "";

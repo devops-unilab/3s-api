@@ -716,19 +716,9 @@ class OcorrenciaController
     public function telaCadastro()
     {
         $this->sessao = new Sessao();
-
-
         $listaNaoAvaliados = DB::table('ocorrencia')
             ->where('status', StatusOcorrenciaController::STATUS_FECHADO)
             ->where('id_usuario_cliente', $this->sessao->getIdUsuario())->get();
-
-
-        echo '
-            <div class="row">
-                <div class="col-md-12 blog-main">
-
-
-';
         $queryService = DB::table('servico');
         if (
             $this->sessao->getNivelAcesso() == Sessao::NIVEL_ADM
@@ -740,25 +730,9 @@ class OcorrenciaController
         }
         $listaServico = $queryService->get();
         if (count($listaNaoAvaliados) == 0) {
-            echo '
-
-            ';
-
             echo view('request.create', ['services' => $listaServico, 'email' => $this->sessao->getEmail()]);
         } else {
-
-            echo '
-            <h3 class="pb-4 mb-4 font-italic border-bottom">
-                        Cadastrar Ocorrência
-                    </h3>
-            <h3 class="pb-4 mb-4 font-italic border-bottom"
-                data-toggle="collapse"
-                data-target="#collapseAberto" href="#collapseAberto" aria-expanded="true">
-                Para continuar confirme os chamados fechados.
-            </h3>'; //public function exibirLista($lista)
-            $this->view->exibirLista($listaNaoAvaliados);
-            echo '</div>
-            </div>';
+            echo view('request.pending-review', ['requests' => $listaNaoAvaliados]);
         }
     }
 

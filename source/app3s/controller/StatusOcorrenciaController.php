@@ -21,14 +21,12 @@ use app3s\model\StatusOcorrencia;
 use app3s\model\Usuario;
 use app3s\util\Mail;
 use app3s\util\Sessao;
-use app3s\view\StatusOcorrenciaView;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 
 class StatusOcorrenciaController
 {
 
-    protected  $view;
     protected $dao;
 
     private $ocorrencia;
@@ -38,7 +36,6 @@ class StatusOcorrenciaController
     public function __construct()
     {
         $this->dao = new StatusOcorrenciaDAO();
-        $this->view = new StatusOcorrenciaView();
     }
 
 
@@ -293,23 +290,6 @@ class StatusOcorrenciaController
         echo ':sucesso:' . $this->ocorrencia->getId() . ':Chamado cancelado com sucesso!';
         return true;
     }
-    public function getServicos()
-    {
-        $listaServicos = array();
-
-        $servicoDao = new ServicoDAO($this->dao->getConnection());
-        $servico = new Servico();
-        $servico->setVisao(1);
-
-        $listaServicos = $servicoDao->fetchByVisao($servico);
-        $servico->setVisao(2);
-        $lista2 = $servicoDao->fetchByVisao($servico);
-        $listaServicos = array_merge($listaServicos, $lista2);
-
-
-        return $listaServicos;
-    }
-
     public function painelStatus(Ocorrencia $ocorrencia, Status $status)
     {
 
@@ -320,22 +300,30 @@ class StatusOcorrenciaController
         $listaServicos = array();
         $listaAreas = array();
         if ($this->possoEditarServico($this->ocorrencia)) {
-            $listaServicos = $this->getServicos();
+            $listaServicos = DB::table('servico')->where('visao', 1)->orWhere('visao', 2)->get();
         }
         if ($this->possoReservar()) {
             $listaUsuarios = DB::table('usuario')->where(
                 'nivel',
                 Sessao::NIVEL_TECNICO
             )->orWhere('nivel', Sessao::NIVEL_ADM)->get();
-
         }
 
         if ($this->possoEditarAreaResponsavel($this->ocorrencia)) {
             $listaAreas = DB::table('area_responsavel')->get();
         }
 
-
-        $this->view->modalFormStatus($this->ocorrencia, $listaUsuarios, $listaServicos, $listaAreas);
+        $request = DB::table('ocorrencia')->where('id', intval($_GET['selecionar']))->first();
+        // dd($listaServicos);
+        echo view(
+            'request.modal-form-status',
+            [
+                'request' => $request,
+                'users' => $listaUsuarios,
+                'services' => $listaServicos,
+                'departments' => $listaAreas
+            ]
+        );
 
         echo '
                 <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
@@ -347,38 +335,57 @@ class StatusOcorrenciaController
                         aria-haspopup="true" aria-expanded="false">
                     Chamado ' . $this->ocorrencia->getId() . '
                     </button>
-                    <div class="dropdown-menu">';
+                    <div class="dropdown-menu">
 
-
-        $possoCancelar = $this->possoCancelar();
-        $this->view->botaoCancelar($possoCancelar);
+        <button type="button"
+        acao="cancelar" ' . ($this->possoCancelar() ? '' : 'disabled') . '
+        class="dropdown-item  botao-status"
+        data-toggle="modal"
+        data-target="#modalStatus">
+        Cancelar
+        </button>';
 
         if (
             $this->sessao->getNivelAcesso() == Sessao::NIVEL_ADM
             || $this->sessao->getNivelAcesso() == Sessao::NIVEL_TECNICO
         ) {
-            $possoAtender = $this->possoAtender();
-            $this->view->botaoAtender($possoAtender);
+            echo '<button type="button"
+            '
+                . ($this->possoAtender() ? '' : 'disabled') . '
+                  acao="atender"
+                  class="dropdown-item  botao-status"
+                  data-toggle="modal"
+                  data-target="#modalStatus">
+                    Atender
+                </button>';
         }
-        $strDisable = '';
-        if (!$this->possoFechar()) {
 
-            $strDisable = 'disabled';
-        }
 
         echo '<button type="button"
-        ' . $strDisable . '  acao="fechar"
+        ' . ($this->possoFechar() ? '' : 'disabled') . '  acao="fechar"
            class="dropdown-item  botao-status"
            data-toggle="modal" data-target="#modalStatus">
             Fechar
-            </button>';
+            </button>
 
-        $possoAvaliar = $this->possoAvaliar();
-        $this->view->botaoAvaliar($possoAvaliar);
+        <button type="button"
+             ' . ($this->possoAvaliar() ? '' : 'disabled') . '  id="avaliar-btn"
+             acao="avaliar"
+             class="dropdown-item"
+             data-toggle="modal"
+             data-target="#modalStatus">
+          Confirmar
+        </button>';
 
 
-        $possoAvaliar = $this->possoReabrir();
-        $this->view->botaoReabrir($possoAvaliar);
+        echo '<button id="botao-reabrir"
+        type="button"
+        ' . ($this->possoReabrir() ? '' : 'disabled') . '  acao="reabrir"
+        class="dropdown-item"
+        data-toggle="modal"
+        data-target="#modalStatus">
+      Reabrir
+    </button>';
 
         if ($this->possoReservar()) {
             echo '<button type="button"
@@ -420,22 +427,13 @@ class StatusOcorrenciaController
        ';
         }
 
-
-
-
         echo '
 
   </div>
 </div>
-
-
 <button class="btn btn-light btn-lg p-2" type="button" disabled>
     Status:  ' . $status->getNome() . '
 </button>
-
-
-
-
 </div>
 </div>
 ';
