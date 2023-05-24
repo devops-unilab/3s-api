@@ -9,7 +9,6 @@
 namespace app3s\view;
 
 use app3s\model\Ocorrencia;
-use app3s\model\StatusOcorrencia;
 
 
 class StatusOcorrenciaView
