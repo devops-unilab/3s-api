@@ -9,11 +9,8 @@
 namespace app3s\controller;
 
 use app3s\dao\ServicoDAO;
-use app3s\dao\TipoAtividadeDAO;
-use app3s\dao\GrupoServicoDAO;
 use app3s\model\Servico;
 use app3s\util\Sessao;
-use app3s\view\ServicoView;
 use Illuminate\Support\Facades\DB;
 
 class ServicoController
@@ -25,10 +22,8 @@ class ServicoController
     public function __construct()
     {
         $this->dao = new ServicoDAO();
-        $this->view = new ServicoView();
+
     }
-
-
 
     public function main()
     {
@@ -64,20 +59,16 @@ class ServicoController
         if (!isset($_GET['edit'])) {
             return;
         }
-        $selected = new Servico();
-        $selected->setId($_GET['edit']);
-        $this->dao->fillById($selected);
+
+        $selected = DB::table('servico')
+            ->select('servico.id', 'servico.nome', 'servico.descricao', 'servico.visao',  'servico.tempo_sla', 'area_responsavel.id as id_area_responsavel')
+            ->join('area_responsavel', 'servico.id_area_responsavel', '=', 'area_responsavel.id')
+            ->where('servico.id', intval($_GET['edit']))->first();
 
         if (!isset($_POST['edit_servico'])) {
-            $tipoatividadeDao = new TipoAtividadeDAO($this->dao->getConnection());
-            $listTipoAtividade = $tipoatividadeDao->fetch();
 
-            $listAreaResponsavel = DB::table('area_responsavel')->get();
-
-            $gruposervicoDao = new GrupoServicoDAO($this->dao->getConnection());
-            $listGrupoServico = $gruposervicoDao->fetch();
-
-            $this->view->showEditForm($listTipoAtividade, $listAreaResponsavel, $listGrupoServico, $selected);
+            $departments = DB::table('area_responsavel')->get();
+            echo view('admin.service.edit', ['departments' => $departments, 'selected' => $selected]);
             return;
         }
 
@@ -85,20 +76,18 @@ class ServicoController
             && isset($_POST['descricao'])
             && isset($_POST['tempo_sla'])
             && isset($_POST['visao'])
-            &&  isset($_POST['tipo_atividade'])
             &&  isset($_POST['area_responsavel'])
-            &&  isset($_POST['grupo_servico']))) {
+        )) {
             echo "Incompleto";
             return;
         }
 
         $selected->setNome($_POST['nome']);
         $selected->setDescricao($_POST['descricao']);
-        $selected->getTipoAtividade()->setId($_POST['tipo_atividade']);
         $selected->setTempoSla($_POST['tempo_sla']);
         $selected->setVisao($_POST['visao']);
         $selected->getAreaResponsavel()->setId($_POST['area_responsavel']);
-        $selected->getGrupoServico()->setId($_POST['grupo_servico']);
+
 
 
         if ($this->dao->update($selected)) {
