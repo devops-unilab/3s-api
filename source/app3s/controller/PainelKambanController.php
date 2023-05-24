@@ -4,7 +4,6 @@ namespace app3s\controller;
 
 
 use app3s\view\PainelKambanView;
-use app3s\model\Ocorrencia;
 use app3s\util\Sessao;
 use app3s\dao\PainelKambanDAO;
 use Illuminate\Support\Facades\DB;
@@ -24,7 +23,7 @@ class PainelKambanController
     public function main()
     {
         $listaAreas = DB::table('area_responsavel')->get();
-        echo view('admin.kamban-panel-filter', ['departments' =>  $listaAreas]);
+        echo view('admin.kamban-panel.filter', ['departments' =>  $listaAreas]);
         echo '
         <div class="card mb-4">
             <div class="card-body" id="quadro-kamban">';
