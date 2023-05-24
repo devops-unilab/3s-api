@@ -10,32 +10,16 @@ namespace app3s\view;
 
 use app3s\controller\StatusOcorrenciaController;
 use app3s\model\Ocorrencia;
-use app3s\dao\UsuarioDAO;
 use app3s\view\OcorrenciaView;
 
 class PainelKambanView extends OcorrenciaView
 {
 
     private $matrixStatus;
-    private $dao;
 
-    public function formFiltro($listaAreas)
-    {
-
-
-        echo '
-                <select name="setor" id="select-setores">
-                    <option value="">Filtrar por Setor</option>';
-        foreach ($listaAreas as $areaResponsavel) {
-            echo '<option value="' . $areaResponsavel->id . '">' . $areaResponsavel->nome . '</option>';
-        }
-        echo '
-                </select>';
-    }
 
     public function mostrarQuadro($listaDeChamados, $atendentes = array())
     {
-        $this->dao = new UsuarioDAO();
         $this->matrixStatus = array();
 
         echo '
