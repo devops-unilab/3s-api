@@ -9,11 +9,8 @@
 namespace app3s\controller;
 
 use app3s\dao\ServicoDAO;
-use app3s\dao\TipoAtividadeDAO;
-use app3s\dao\GrupoServicoDAO;
 use app3s\model\Servico;
 use app3s\util\Sessao;
-use app3s\view\ServicoView;
 use Illuminate\Support\Facades\DB;
 
 class ServicoController
@@ -25,10 +22,8 @@ class ServicoController
     public function __construct()
     {
         $this->dao = new ServicoDAO();
-        $this->view = new ServicoView();
+
     }
-
-
 
     public function main()
     {
