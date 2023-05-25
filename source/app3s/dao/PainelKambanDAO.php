@@ -53,17 +53,17 @@ class PainelKambanDAO extends OcorrenciaDAO
             usuario_cliente.email as email_usuario_usuario_cliente,
             usuario_cliente.login as login_usuario_usuario_cliente,
             usuario_cliente.senha as senha_usuario_usuario_cliente,
-            usuario_cliente.nivel as nivel_usuario_usuario_cliente,
-            usuario_cliente.id_setor as id_setor_usuario_usuario_cliente
+            usuario_cliente.role as nivel_usuario_usuario_cliente,
+            usuario_cliente.division_id as id_setor_usuario_usuario_cliente
             FROM ocorrencia
             INNER JOIN area_responsavel as area_responsavel
             ON area_responsavel.id = ocorrencia.id_area_responsavel
             INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico
-            LEFT JOIN usuario as usuario_cliente
+            LEFT JOIN users as usuario_cliente
             ON usuario_cliente.id = ocorrencia.id_usuario_cliente
-            LEFT JOIN usuario as usuario_atendente
+            LEFT JOIN users as usuario_atendente
             ON usuario_atendente.id = ocorrencia.id_usuario_atendente
-            LEFT JOIN usuario as usuario_indicado
+            LEFT JOIN users as usuario_indicado
             ON usuario_indicado.id = ocorrencia.id_usuario_indicado
             WHERE
             $strWhere $filtro

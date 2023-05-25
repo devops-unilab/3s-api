@@ -14,7 +14,6 @@ use app3s\dao\StatusDAO;
 use app3s\dao\StatusOcorrenciaDAO;
 use app3s\dao\UsuarioDAO;
 use app3s\model\Ocorrencia;
-use app3s\model\Servico;
 use app3s\model\Status;
 use app3s\model\StatusOcorrencia;
 use app3s\model\Usuario;
@@ -414,11 +413,11 @@ class OcorrenciaController
         $setor = DB::table('area_responsavel')->where('id', $usuario->getIdSetor())->first();
 
 
-        $listaTecnicos = DB::table('usuario')->where(
+        $listaTecnicos = DB::table('users')->where(
             'nivel',
             Sessao::NIVEL_TECNICO
         )->orWhere('nivel', Sessao::NIVEL_ADM)->get();
-        $allUsers = DB::table('usuario')->get();
+        $allUsers = DB::table('users')->get();
 
         $listaAreas = DB::table('area_responsavel')->get();
 
@@ -501,7 +500,7 @@ class OcorrenciaController
             }
             echo '<option
                     value="' . $tecnico->id . '" ' . $selectedAtt . '>
-                    ' . $tecnico->nome . '</option>     ';
+                    ' . $tecnico->name . '</option>     ';
         }
         echo '</select></div>
                 <div class="form-group">
@@ -515,7 +514,7 @@ class OcorrenciaController
                 $selectedAtt = 'selected';
             }
             echo '<option value="' . $userElement->id . '" ' . $selectedAtt . '>
-                    ' . $userElement->nome . '
+                    ' . $userElement->name . '
                     </option>  ';
         }
         echo '</select></div></form>';

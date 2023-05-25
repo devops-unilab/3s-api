@@ -303,7 +303,7 @@ class StatusOcorrenciaController
             $listaServicos = DB::table('servico')->where('visao', 1)->orWhere('visao', 2)->get();
         }
         if ($this->possoReservar()) {
-            $listaUsuarios = DB::table('usuario')->where(
+            $listaUsuarios = DB::table('users')->where(
                 'nivel',
                 Sessao::NIVEL_TECNICO
             )->orWhere('nivel', Sessao::NIVEL_ADM)->get();

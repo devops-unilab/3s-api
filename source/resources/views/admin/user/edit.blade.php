@@ -1,6 +1,6 @@
 <div class="card">
     <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-        <h6 class="m-0 font-weight-bold text-primary">Editar Usuário: {{ $user->nome }}</h6>
+        <h6 class="m-0 font-weight-bold text-primary">Editar Usuário: {{ $user->name }}</h6>
     </div>
     <div class="card-body">
         <form class="user" method="post" id="edit_form_usuario">
@@ -31,7 +31,7 @@
                 <select name="id_setor" id="select-unidade">
                     <option value="">Selecione a Unidade</option>';
                     @foreach ($departments as $department)
-                        <option value="{{ $department->id }}" {{ $user->id_setor === $department->id ? 'selected' : '' }}>
+                        <option value="{{ $department->id }}" {{ $user->division_id === $department->id ? 'selected' : '' }}>
                             {{ $department->nome }}
                         </option>
                     @endforeach

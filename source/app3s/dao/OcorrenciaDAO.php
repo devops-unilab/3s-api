@@ -238,21 +238,21 @@ class OcorrenciaDAO extends DAO
             as visao_servico_servico,
             usuario_cliente.id
             as id_usuario_usuario_cliente,
-             usuario_cliente.nome
+             usuario_cliente.name
             as nome_usuario_usuario_cliente, usuario_cliente.email
             as email_usuario_usuario_cliente,
             usuario_cliente.login
-            as login_usuario_usuario_cliente, usuario_cliente.senha
+            as login_usuario_usuario_cliente, usuario_cliente.password
             as senha_usuario_usuario_cliente,
-            usuario_cliente.nivel
+            usuario_cliente.role
             as nivel_usuario_usuario_cliente,
-            usuario_cliente.id_setor
+            usuario_cliente.division_id
             as id_setor_usuario_usuario_cliente
             FROM ocorrencia
             INNER JOIN area_responsavel as area_responsavel
             ON area_responsavel.id = ocorrencia.id_area_responsavel
             INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico
-            LEFT JOIN usuario as usuario_cliente
+            LEFT JOIN users as usuario_cliente
             ON usuario_cliente.id = ocorrencia.id_usuario_cliente
             WHERE
             (ocorrencia.id_usuario_cliente  = :idUsuarioIndicado)
@@ -358,15 +358,15 @@ class OcorrenciaDAO extends DAO
             servico.tempo_sla as tempo_sla_servico_servico,
             servico.visao as visao_servico_servico,
             usuario_cliente.id as id_usuario_usuario_cliente,
-            usuario_cliente.nome as nome_usuario_usuario_cliente,
+            usuario_cliente.name as nome_usuario_usuario_cliente,
             usuario_cliente.email as email_usuario_usuario_cliente,
             usuario_cliente.login as login_usuario_usuario_cliente,
-            usuario_cliente.senha as senha_usuario_usuario_cliente,
-            usuario_cliente.nivel as nivel_usuario_usuario_cliente,
-            usuario_cliente.id_setor as id_setor_usuario_usuario_cliente FROM ocorrencia
+            usuario_cliente.password as senha_usuario_usuario_cliente,
+            usuario_cliente.role as nivel_usuario_usuario_cliente,
+            usuario_cliente.division_id as id_setor_usuario_usuario_cliente FROM ocorrencia
             INNER JOIN area_responsavel as area_responsavel ON area_responsavel.id = ocorrencia.id_area_responsavel
             INNER JOIN servico as servico ON servico.id = ocorrencia.id_servico
-            LEFT JOIN usuario as usuario_cliente ON usuario_cliente.id = ocorrencia.id_usuario_cliente
+            LEFT JOIN users as usuario_cliente ON usuario_cliente.id = ocorrencia.id_usuario_cliente
                 WHERE ocorrencia.id = :id
                  LIMIT 1000";
 
@@ -478,17 +478,17 @@ class OcorrenciaDAO extends DAO
                 AS visao_servico_servico,
                 usuario_cliente.id
                 AS id_usuario_usuario_cliente,
-                usuario_cliente.nome
+                usuario_cliente.name
                 AS nome_usuario_usuario_cliente,
                 usuario_cliente.email
                 AS email_usuario_usuario_cliente,
                 usuario_cliente.login
                 AS login_usuario_usuario_cliente,
-                usuario_cliente.senha
+                usuario_cliente.password
                 AS senha_usuario_usuario_cliente,
-                usuario_cliente.nivel
+                usuario_cliente.role
                 AS nivel_usuario_usuario_cliente,
-                usuario_cliente.id_setor
+                usuario_cliente.division_id
                 AS id_setor_usuario_usuario_cliente
             FROM ocorrencia
 
@@ -498,7 +498,7 @@ class OcorrenciaDAO extends DAO
 
             INNER JOIN servico
             AS servico ON servico.id = ocorrencia.id_servico
-            LEFT JOIN usuario
+            LEFT JOIN users
             AS usuario_cliente
             ON usuario_cliente.id = ocorrencia.id_usuario_cliente
             $strWhere
@@ -666,14 +666,14 @@ class OcorrenciaDAO extends DAO
             mensagem_forum.mensagem,
             mensagem_forum.data_envio,
             usuario.id
-            AS id_usuario_usuario, usuario.nome
+            AS id_usuario_usuario, usuario.name
             AS nome_usuario_usuario, usuario.email
             AS email_usuario_usuario, usuario.login
             AS login_usuario_usuario, usuario.senha
-            AS senha_usuario_usuario, usuario.nivel
-            AS nivel_usuario_usuario, usuario.id_setor
-            AS id_setor_usuario_usuario FROM mensagem_forum LEFT JOIN usuario
-            AS usuario ON usuario.id = mensagem_forum.id_usuario
+            AS senha_usuario_usuario, usuario.role
+            AS nivel_usuario_usuario, usuario.division_id
+            AS id_setor_usuario_usuario FROM mensagem_forum LEFT JOIN users
+            AS users as usuario ON usuario.id = mensagem_forum.id_usuario
             WHERE id_ocorrencia = :id ORDER BY mensagem_forum.id ASC;";
         try {
 
@@ -715,14 +715,14 @@ class OcorrenciaDAO extends DAO
             mensagem_forum.mensagem,
             mensagem_forum.data_envio,
             usuario.id as id_usuario_usuario,
-            usuario.nome as nome_usuario_usuario,
+            usuario.name as nome_usuario_usuario,
             usuario.email as email_usuario_usuario,
             usuario.login as login_usuario_usuario,
-            usuario.senha as senha_usuario_usuario,
-            usuario.nivel as nivel_usuario_usuario,
-            usuario.id_setor as id_setor_usuario_usuario
+            usuario.password as senha_usuario_usuario,
+            usuario.role as nivel_usuario_usuario,
+            usuario.division_id as id_setor_usuario_usuario
             FROM mensagem_forum
-            LEFT JOIN usuario as usuario
+            LEFT JOIN users as usuario
                 ON usuario.id = mensagem_forum.id_usuario
             WHERE id_ocorrencia = :id
             AND mensagem_forum.id > $idMinimo

@@ -19,15 +19,15 @@ class UsuarioDAO extends DAO
         $id = $usuario->getId();
 
 
-        $sql = "UPDATE usuario
+        $sql = "UPDATE users
                 SET
-                nome = :nome,
+                name = :nome,
                 email = :email,
                 login = :login,
-                senha = :senha,
-                nivel = :nivel,
-                id_setor = :idSetor
-                WHERE usuario.id = :id;";
+                password = :senha,
+                role = :nivel,
+                division_id = :idSetor
+                WHERE users.id = :id;";
         $nome = $usuario->getNome();
         $email = $usuario->getEmail();
         $login = $usuario->getLogin();
@@ -57,14 +57,14 @@ class UsuarioDAO extends DAO
     {
 
         $id = $usuario->getId();
-        $sql = "SELECT usuario.id,
-                usuario.nome,
-                usuario.email,
-                usuario.login,
-                usuario.senha,
-                usuario.nivel,
-                usuario.id_setor FROM usuario
-                WHERE usuario.id = :id
+        $sql = "SELECT users.id,
+                users.name,
+                users.email,
+                users.login,
+                users.password,
+                users.role,
+                users.division_id FROM users
+                WHERE users.id = :id
                  LIMIT 1000";
 
         try {
@@ -78,10 +78,10 @@ class UsuarioDAO extends DAO
             $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
             foreach ($result as $row) {
                 $usuario->setId($row['id']);
-                $usuario->setNome($row['nome']);
+                $usuario->setNome($row['name']);
                 $usuario->setEmail($row['email']);
                 $usuario->setLogin($row['login']);
-                $usuario->setSenha($row['senha']);
+                $usuario->setSenha($row['password']);
                 $usuario->setNivel($row['nivel']);
                 $usuario->setIdSetor($row['id_setor']);
             }

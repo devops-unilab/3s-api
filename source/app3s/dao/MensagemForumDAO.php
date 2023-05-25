@@ -63,15 +63,15 @@ class MensagemForumDAO extends DAO
                 mensagem_forum.tipo,
                 mensagem_forum.mensagem,
                 mensagem_forum.data_envio,
-                usuario.id as id_usuario_usuario,
-                usuario.nome as nome_usuario_usuario,
-                usuario.email as email_usuario_usuario,
-                usuario.login as login_usuario_usuario,
-                usuario.senha as senha_usuario_usuario,
-                usuario.nivel as nivel_usuario_usuario,
-                usuario.id_setor as id_setor_usuario_usuario
+                users.id as id_usuario_usuario,
+                users.name as nome_usuario_usuario,
+                users.email as email_usuario_usuario,
+                users.login as login_usuario_usuario,
+                users.password as senha_usuario_usuario,
+                users.role as nivel_usuario_usuario,
+                users.division_id as id_setor_usuario_usuario
                 FROM mensagem_forum
-                INNER JOIN usuario as usuario
+                INNER JOIN users as usuario
                 ON usuario.id = mensagem_forum.id_usuario
                 WHERE mensagem_forum.id = :id
                  LIMIT 1000";

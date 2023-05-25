@@ -28,7 +28,7 @@
                     @foreach ($list as $user)
                         <tr>
                             <td>{{ $user->id }}</td>
-                            <td>{{ $user->nome }}</td>
+                            <td>{{ $user->name }}</td>
                             <td>{{ $user->str_nivel }}</td>
                             <td>
                                 <a href="{{ env('APP_URL') }}?page=usuario&edit={{ $user->id }}" class="btn btn-success text-white">

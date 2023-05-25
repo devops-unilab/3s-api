@@ -22,7 +22,6 @@ class ServicoController
     public function __construct()
     {
         $this->dao = new ServicoDAO();
-
     }
 
     public function main()
@@ -61,7 +60,10 @@ class ServicoController
         }
 
         $selected = DB::table('servico')
-            ->select('servico.id', 'servico.nome', 'servico.descricao', 'servico.visao',  'servico.tempo_sla', 'area_responsavel.id as id_area_responsavel')
+            ->select(
+                'servico.id', 'servico.nome', 'servico.descricao',
+                'servico.visao',  'servico.tempo_sla',
+                'area_responsavel.id as id_area_responsavel')
             ->join('area_responsavel', 'servico.id_area_responsavel', '=', 'area_responsavel.id')
             ->where('servico.id', intval($_GET['edit']))->first();
 
@@ -221,9 +223,7 @@ class ServicoController
         $servico->setDescricao($_POST['descricao']);
         $servico->setTempoSla($_POST['tempo_sla']);
         $servico->setVisao($_POST['visao']);
-        $servico->getTipoAtividade()->setId($_POST['tipo_atividade']);
         $servico->getAreaResponsavel()->setId($_POST['area_responsavel']);
-        $servico->getGrupoServico()->setId($_POST['grupo_servico']);
 
         if ($this->dao->insert($servico)) {
             echo '

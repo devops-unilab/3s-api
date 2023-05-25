@@ -55,15 +55,15 @@ class UsuarioController
             $nivel = 'd';
         }
 
-        $data = DB::table('usuario')->where("id", $idUsuario)->first();
+        $data = DB::table('users')->where("id", $idUsuario)->first();
         if ($data === null) {
-            DB::table('usuario')->insert(
+            DB::table('users')->insert(
                 [
                     'id' => $idUsuario,
-                    'nome' => $responseJ2->nome,
+                    'name' => $responseJ2->name,
                     'email' => $responseJ2->email,
                     'login' => $responseJ2->login,
-                    'nivel' => $nivel
+                    'role' => $nivel
                 ]
             );
         } else {
@@ -135,7 +135,7 @@ class UsuarioController
 
     public function fetch()
     {
-        $list = DB::table('usuario')->get();
+        $list = DB::table('users')->get();
         foreach ($list as $user) {
             $user->str_nivel = 'Desconhecido';
             if($user->nivel === 'a'){
@@ -164,7 +164,7 @@ class UsuarioController
         $setores = DB::table('area_responsavel')->get();
 
         if (!isset($_POST['edit_usuario'])) {
-            $user = DB::table('usuario')->where('id', intval($_GET['edit']))->first();
+            $user = DB::table('users')->where('id', intval($_GET['edit']))->first();
             echo view('admin.user.edit', ['user' => $user, 'departments' => $setores]);
             return;
         }
