@@ -44,17 +44,17 @@ class StatusOcorrenciaDAO extends DAO
         status.id as id_status_status,
         status.sigla as sigla_status_status,
         status.nome as nome_status_status,
-        usuario.id as id_usuario_usuario,
-        usuario.nome as nome_usuario_usuario,
-        usuario.email as email_usuario_usuario,
-        usuario.login as login_usuario_usuario,
-        usuario.senha as senha_usuario_usuario,
-        usuario.nivel as nivel_usuario_usuario,
-        usuario.id_setor as id_setor_usuario_usuario
+        users.id as id_usuario_usuario,
+        users.name as nome_usuario_usuario,
+        users.email as email_usuario_usuario,
+        users.login as login_usuario_usuario,
+        users.password as senha_usuario_usuario,
+        users.role as nivel_usuario_usuario,
+        users.division_id as id_setor_usuario_usuario
         FROM status_ocorrencia
         INNER JOIN ocorrencia as ocorrencia ON ocorrencia.id = status_ocorrencia.id_ocorrencia
         INNER JOIN status as status ON status.id = status_ocorrencia.id_status
-        LEFT JOIN usuario as usuario ON usuario.id = status_ocorrencia.id_usuario
+        LEFT JOIN users as usuario ON usuario.id = status_ocorrencia.id_usuario
             WHERE ocorrencia.id = :id
         ORDER BY status_ocorrencia.id ASC
 

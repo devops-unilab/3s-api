@@ -13,17 +13,13 @@ class Servico
     private $id;
     private $nome;
     private $descricao;
-    private $tipoAtividade;
     private $tempoSla;
     private $visao;
     private $areaResponsavel;
-    private $grupoServico;
     public function __construct()
     {
 
-        $this->tipoAtividade = new TipoAtividade();
         $this->areaResponsavel = new AreaResponsavel();
-        $this->grupoServico = new GrupoServico();
     }
     public function setId($id)
     {
@@ -52,15 +48,8 @@ class Servico
     {
         return $this->descricao;
     }
-    public function setTipoAtividade(TipoAtividade $tipoAtividade)
-    {
-        $this->tipoAtividade = $tipoAtividade;
-    }
 
-    public function getTipoAtividade()
-    {
-        return $this->tipoAtividade;
-    }
+
     public function setTempoSla($tempoSla)
     {
         $this->tempoSla = $tempoSla;
@@ -88,13 +77,5 @@ class Servico
     {
         return $this->areaResponsavel;
     }
-    public function setGrupoServico(GrupoServico $grupoServico)
-    {
-        $this->grupoServico = $grupoServico;
-    }
 
-    public function getGrupoServico()
-    {
-        return $this->grupoServico;
-    }
 }
