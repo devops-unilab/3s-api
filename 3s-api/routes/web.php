@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\AutheticationController;
+use App\Http\Controllers\HomePage;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -12,7 +14,15 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
+Route::group(['middleware' => 'auth'], function () {
+    Route::get('/home', HomePage::class)->name('home');
+    Route::post('/logout', [AutheticationController::class, 'logout'])->name('logout');
+});
 
 Route::get('/', function () {
     return view('welcome');
+});
+Route::group(['middleware' => 'guest'], function () {
+    Route::get('/login', [AutheticationController::class, 'loginForm'])->name('login.form');
+    Route::post('/login', [AutheticationController::class, 'login'])->name('login');
 });

@@ -1,6 +1,7 @@
 {
     "Name": "Nome",
     "E-Mail Address": "E-mail",
+    "Login SIG": "Login do SIG",
     "Password": "Senha",
     "Confirm": "Confirmar",
     "Confirm Password": "Confirmação de senha",
