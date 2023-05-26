@@ -29,58 +29,63 @@ class AutheticationController extends Controller
     public function login(Request $request)
     {
 
-        $data = $request->validate([
-            'login' => ['required'],
+        // $data = $request->validate([
+        //     'login' => ['required'],
+        //     'password' => ['required']
+        // ]);
+
+        // $dataAPI = ['login' =>  $data['login'], 'senha' => $data['password']];
+        // $response = Http::post(env('UNILAB_API_ORIGIN') . '/authenticate', $dataAPI);
+        // $responseJ = json_decode($response->body());
+
+        // $userId  = 0;
+
+        // if (isset($responseJ->id)) {
+        //     $userId = intval($responseJ->id);
+        // }
+        // if ($userId === 0) {
+        //     return back()->withErrors([
+        //         'email' => 'O email e/ou senha não são invalidos'
+        //     ]);
+        // }
+
+        // $headers = [
+        //     'Authorization' => 'Bearer ' . $responseJ->access_token,
+        // ];
+        // $response = Http::withHeaders($headers)->get(env('UNILAB_API_ORIGIN') . '/user', $headers);
+        // $responseJ2 = json_decode($response->body());
+
+        // $response = Http::withHeaders($headers)->get(env('UNILAB_API_ORIGIN') . '/bond', $headers);
+        // $responseJ3 = json_decode($response->body());
+
+
+        // $user = User::updateOrCreate(
+        //     ['id' => $userId],
+        //     [
+        //         'id' => $userId,
+        //         'name' => $responseJ2->nome,
+        //         'email' => $responseJ2->email,
+        //         'login' => $responseJ2->login,
+        //         'division_sig' => $responseJ3[0]->sigla_unidade,
+        //         'password' => '123'
+        //     ]
+        // );
+
+        // if($user->role === null) {
+        //     $user->role = $responseJ2->id_status_servidor != 1 ? 'disabled' : 'customer';
+        //     $user->save();
+        // }
+
+
+
+        $dados = $request->validate([
+            'email' => ['required', 'email'],
             'password' => ['required']
         ]);
 
-        $dataAPI = ['login' =>  $data['login'], 'senha' => $data['password']];
-        $response = Http::post(env('UNILAB_API_ORIGIN') . '/authenticate', $dataAPI);
-        $responseJ = json_decode($response->body());
-
-        $userId  = 0;
-
-        if (isset($responseJ->id)) {
-            $userId = intval($responseJ->id);
-        }
-        if ($userId === 0) {
-            return back()->withErrors([
-                'email' => 'O email e/ou senha não são invalidos'
-            ]);
-        }
-
-        $headers = [
-            'Authorization' => 'Bearer ' . $responseJ->access_token,
-        ];
-        $response = Http::withHeaders($headers)->get(env('UNILAB_API_ORIGIN') . '/user', $headers);
-        $responseJ2 = json_decode($response->body());
-
-        $response = Http::withHeaders($headers)->get(env('UNILAB_API_ORIGIN') . '/bond', $headers);
-        $responseJ3 = json_decode($response->body());
-
-
-        $user = User::updateOrCreate(
-            ['id' => $userId],
-            [
-                'id' => $userId,
-                'name' => $responseJ2->nome,
-                'email' => $responseJ2->email,
-                'login' => $responseJ2->login,
-                'division_sig' => $responseJ3[0]->sigla_unidade,
-                'password' => '123'
-            ]
-        );
-
-        if($user->role === null) {
-            $user->role = $responseJ2->id_status_servidor != 1 ? 'disabled' : 'customer';
-            $user->save();
-        }
-
-
-
-
-        if (Auth::attempt($data, $request->filled('remember'))) {
+        if (Auth::attempt($dados, $request->filled('remember'))) {
             $request->session()->regenerate();
+
             return redirect()->intended('home');
         }
 
