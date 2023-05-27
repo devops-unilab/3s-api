@@ -14,10 +14,11 @@ return new class extends Migration
     public function up()
     {
         Schema::table('usuario', function (Blueprint $table) {
-            $table->renameColumn('senha', 'password');
+            $table->renameColumn('senha', 'password')->nullable();
             $table->renameColumn('nome', 'name');
-            $table->renameColumn('id_setor', 'division_id');
-            $table->renameColumn('nivel', 'role');
+            $table->renameColumn('id_setor', 'division_id')->nullable();;
+            $table->string('division_sig')->nullable();
+            $table->renameColumn('nivel', 'role')->nullable();;
             $table->timestamp('email_verified_at')->nullable();
             $table->string('remember_token', 100)->nullable();
             $table->timestamps();
@@ -32,11 +33,11 @@ return new class extends Migration
     public function down()
     {
         Schema::table('usuario', function (Blueprint $table) {
-            $table->renameColumn('password', 'senha');
-            $table->renameColumn('name', 'nome');
-            $table->renameColumn('division_id', 'id_setor');
-            $table->renameColumn('role', 'nivel');
-            $table->dropColumn(['email_verified_at', 'remember_token']);
+            $table->renameColumn('password', 'senha')->nullable();;
+            $table->renameColumn('name', 'nome')->nullable();
+            $table->renameColumn('division_id', 'id_setor')->nullable();
+            $table->renameColumn('role', 'nivel')->nullable();
+            $table->dropColumn(['email_verified_at', 'remember_token', 'division_sig']);
             $table->dropTimestamps();
         });
     }

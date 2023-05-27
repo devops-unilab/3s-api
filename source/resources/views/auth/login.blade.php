@@ -1,56 +1,47 @@
-<div class="container">
-    <div class="row">
-        <div class="card mb-4">
-            <div class="card-body">
+<x-guest-layout>
+    <!-- Session Status -->
+    <x-auth-session-status class="mb-4" :status="session('status')" />
 
-                <br><br>
+    <form method="POST" action="{{ route('login') }}">
+        @csrf
 
-                <div class="container forget-password">
-                    <div class="row justify-content-center">
-                        <div class="col-xl-4 col-lg-4 col-md-7 col-sm-12">
-                            <div class="panel-body p-3 m-3">
-                                <div class="text-center">
-
-
-                                    <div class="panel">
-                                        <h3>Entrar no sistema 3s</h3>
-
-                                    </div>
-                                    <form id="login-form" class="form" method="post" action=".">
-
-                                        <div class="form-group">
-                                            <input type="text" size="350" name="usuario" class="form-control"
-                                                id="usuario" placeholder="Usuario do SIG" autofocus="autofocus">
-                                        </div>
-
-                                        <div class="form-group">
-                                            <input type="password" class="form-control" name="senha" size="100"
-                                                id="senha" placeholder="Senha do SIG">
-                                        </div>
-                                        <div class="forgot">
-                                            <a href="https://sigadmin.unilab.edu.br/admin/public/recuperar_senha.jsf">
-                                                Esqueceu a senha?
-                                            </a>
-                                        </div>
-                                        <button type="submit" id="botao-login" class="btn-primary btn-lg btn-block">
-                                            <span id="spinner-submit" class="escondido spinner-border spinner-border-sm"
-                                                role="status" aria-hidden="true">
-                                            </span>
-                                            Entrar
-                                        </button>
-
-                                        <input type="hidden" class="btn btn-info btn-md" name="logar" value="Entrar">
-                                    </form>
-
-
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <br><br><br><br><br><br><br><br>
-            </div>
+        <!-- Email Address -->
+        <div>
+            <x-input-label for="email" :value="__('Email')" />
+            <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autofocus autocomplete="username" />
+            <x-input-error :messages="$errors->get('email')" class="mt-2" />
         </div>
 
-    </div>
-</div>
+        <!-- Password -->
+        <div class="mt-4">
+            <x-input-label for="password" :value="__('Password')" />
+
+            <x-text-input id="password" class="block mt-1 w-full"
+                            type="password"
+                            name="password"
+                            required autocomplete="current-password" />
+
+            <x-input-error :messages="$errors->get('password')" class="mt-2" />
+        </div>
+
+        <!-- Remember Me -->
+        <div class="block mt-4">
+            <label for="remember_me" class="inline-flex items-center">
+                <input id="remember_me" type="checkbox" class="rounded dark:bg-gray-900 border-gray-300 dark:border-gray-700 text-indigo-600 shadow-sm focus:ring-indigo-500 dark:focus:ring-indigo-600 dark:focus:ring-offset-gray-800" name="remember">
+                <span class="ml-2 text-sm text-gray-600 dark:text-gray-400">{{ __('Remember me') }}</span>
+            </label>
+        </div>
+
+        <div class="flex items-center justify-end mt-4">
+            @if (Route::has('password.request'))
+                <a class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800" href="{{ route('password.request') }}">
+                    {{ __('Forgot your password?') }}
+                </a>
+            @endif
+
+            <x-primary-button class="ml-3">
+                {{ __('Log in') }}
+            </x-primary-button>
+        </div>
+    </form>
+</x-guest-layout>
