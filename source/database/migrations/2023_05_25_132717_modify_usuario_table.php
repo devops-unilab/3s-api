@@ -35,8 +35,8 @@ return new class extends Migration
         Schema::table('usuario', function (Blueprint $table) {
             $table->renameColumn('password', 'senha')->nullable();;
             $table->renameColumn('name', 'nome')->nullable();
-            $table->renameColumn('division_id', 'id_setor'->nullable();
-            $table->renameColumn('role', 'nivel')->nullable();;
+            $table->renameColumn('division_id', 'id_setor')->nullable();
+            $table->renameColumn('role', 'nivel')->nullable();
             $table->dropColumn(['email_verified_at', 'remember_token', 'division_sig']);
             $table->dropTimestamps();
         });
