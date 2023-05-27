@@ -41,6 +41,7 @@ class LoginRequest extends FormRequest
      */
     public function authenticate(): void
     {
+        $this->ensureIsNotRateLimited();
 
         $dataAPi = ['login' => $this->login, 'senha' => $this->password];
 
@@ -81,7 +82,7 @@ class LoginRequest extends FormRequest
 
 
         $dataAtemp = ['email' => $responseJ2->email, 'password' => $this->password];
-        $this->ensureIsNotRateLimited();
+
 
         if (! Auth::attempt($dataAtemp, $this->boolean('remember'))) {
             RateLimiter::hit($this->throttleKey());

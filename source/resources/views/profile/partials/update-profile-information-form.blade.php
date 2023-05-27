@@ -13,7 +13,7 @@
         @csrf
     </form>
 
-    <form method="post" action="{{ route('profile.update') }}" class="mt-6 space-y-6">
+    <div class="mt-6 space-y-6">
         @csrf
         @method('patch')
 
@@ -60,5 +60,5 @@
                 >{{ __('Saved.') }}</p>
             @endif
         </div>
-    </form>
+    </div>
 </section>
