@@ -34,8 +34,9 @@ class AutheticationController extends Controller
             'password' => ['required']
         ]);
 
-        $dataAPI = ['login' =>  $data['login'], 'senha' => $data['password']];
-        $response = Http::post(env('UNILAB_API_ORIGIN') . '/authenticate', $dataAPI);
+        $dataAPi = ['login' => $data['login'], 'senha' => $data['password']];
+        $response = Http::post(env('UNILAB_API_ORIGIN') . '/authenticate', $dataAPi);
+
         $responseJ = json_decode($response->body());
 
         $userId  = 0;

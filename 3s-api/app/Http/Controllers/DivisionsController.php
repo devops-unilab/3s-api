@@ -10,6 +10,10 @@ use Illuminate\Http\Request;
 
 class DivisionsController extends Controller
 {
+
+    public function __construct() {
+        $this->authorizeResource(Division::class, 'division');
+    }
     /**
      * Display a listing of the resource.
      *
@@ -57,7 +61,7 @@ class DivisionsController extends Controller
 			'email' => 'required|max:10'
 		]);
         $requestData = $request->all();
-        
+
         Division::create($requestData);
 
         return redirect('divisions')->with('flash_message', 'Division added!');
@@ -70,9 +74,8 @@ class DivisionsController extends Controller
      *
      * @return \Illuminate\View\View
      */
-    public function show($id)
+    public function show(Division $division)
     {
-        $division = Division::findOrFail($id);
 
         return view('divisions.show', compact('division'));
     }
@@ -84,9 +87,8 @@ class DivisionsController extends Controller
      *
      * @return \Illuminate\View\View
      */
-    public function edit($id)
+    public function edit(Division $division)
     {
-        $division = Division::findOrFail($id);
 
         return view('divisions.edit', compact('division'));
     }
@@ -99,7 +101,7 @@ class DivisionsController extends Controller
      *
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Division $division)
     {
         $this->validate($request, [
 			'name' => 'required|max:10',
@@ -107,8 +109,7 @@ class DivisionsController extends Controller
 			'email' => 'required|max:10'
 		]);
         $requestData = $request->all();
-        
-        $division = Division::findOrFail($id);
+
         $division->update($requestData);
 
         return redirect('divisions')->with('flash_message', 'Division updated!');

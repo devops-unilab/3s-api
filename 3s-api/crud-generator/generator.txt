@@ -5,4 +5,4 @@ Passo a passo pra criar police
 
 1. Criar a police
 
-php artisan make:policy DivisionPolicy --model=Divisoin
+php artisan make:policy DivisionPolicy --model=Division

@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\Route;
 Route::group(['middleware' => 'auth'], function () {
     Route::get('/home', HomePage::class)->name('home');
     Route::post('/logout', [AutheticationController::class, 'logout'])->name('logout');
+    Route::resource('divisions', DivisionsController::class);
 });
 
 Route::get('/', function () {
