@@ -139,9 +139,8 @@ pipeline {
           script {
             def branchName = env.BRANCH_NAME
             def scannerHome = tool 'SonarScanner'
-            def projectKey = env.SONAR_PROJECT_KEY
             withSonarQubeEnv('SonarQube') {
-              sh "${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=${projectKey} -Dsonar.sources=source -Dsonar.exclusions=vendor/** -Dsonar.language=php -Dsonar.sourceEncoding=UTF-8"
+              sh "${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=app-3s -Dsonar.sources=source/app3s -Dsonar.exclusions=vendor/** -Dsonar.language=php -Dsonar.sourceEncoding=UTF-8"
               def props = readProperties  file: '.scannerwork/report-task.txt'
               def sonarServerUrl=props['serverUrl']
               def ceTaskUrl= props['ceTaskUrl']
@@ -159,7 +158,7 @@ pipeline {
               def qualitygate = readJSON text: resp.content
               echo qualitygate.toString()
               if ("ERROR".equals(qualitygate["projectStatus"]["status"])) {
-                error "Pipeline abortada devido a falha em Quality Gate"
+                error "Pipeline abortada devido a falha em Quality Gate: ${qualitygate.status}"
                 waitForQualityGate abortPipeline: true
               }
             }
@@ -167,6 +166,25 @@ pipeline {
         }
       }
     }
+
+    stage('Testes') {
+      steps {
+        sh 'cd source/ && php artisan key:generate && php artisan make:test tests/BasicTest && composer dump-autoload'
+        sh 'source/vendor/bin/phpunit --no-extensions source/tests/'
+      }
+    }
+
+    stage('Build') {
+      steps {
+        container('docker') {
+          milestone(ordinal: null, label: "Milestone: Docker Build")
+          timeout(time: 60, unit: 'MINUTES') {
+            sh "docker build -f ./Dockerfile --target production -t '$DOCKER_IMAGE:$DOCKER_TAG' --build-arg 'VERSION=$APP_VERSION COMMIT_SHA=$GIT_COMMIT BUILDKIT_INLINE_CACHE=1' --no-cache ."
+          }
+        }
+      }
+    }
+
 
     stage('Testes') {
       steps {
