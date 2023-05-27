@@ -1,0 +1,8 @@
+
+php artisan crud:generate Divisions --fields_from_file="crud-generator/divisions.json" --controller-namespace=App\Http\Controllers --form-helper=html
+
+Passo a passo pra criar police
+
+1. Criar a police
+
+php artisan make:policy DivisionPolicy --model=Divisoin

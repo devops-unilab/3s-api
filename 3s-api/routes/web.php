@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AutheticationController;
+use App\Http\Controllers\DivisionsController;
 use App\Http\Controllers\HomePage;
 use Illuminate\Support\Facades\Route;
 
