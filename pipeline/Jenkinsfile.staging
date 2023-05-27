@@ -1,14 +1,14 @@
 #!/usr/bin/env groovy
 
 def configuration = [
-  vaultUrl: 'https://dti-vault.unilab.edu.br', 
-  vaultCredentialId: 'id-3s-role', 
+  vaultUrl: 'https://dti-vault.unilab.edu.br',
+  vaultCredentialId: 'id-3s-role',
   engineVersion: 2
 ]
 
 def secrets = [
   [path: 'secret/3s/config', engineVersion: 2, secretValues: [
-    [envVar: 'PG_USER', vaultKey: 'pg_user'], 
+    [envVar: 'PG_USER', vaultKey: 'pg_user'],
     [envVar: 'PG_PASSWORD', vaultKey: 'pg_password'],
     [envVar: 'PG_USER_ROOT', vaultKey: 'pg_user_root'],
     [envVar: 'PG_ROOT_PASSWORD', vaultKey: 'pg_root_password'],
@@ -87,18 +87,18 @@ pipeline {
           currentBuild.displayName = "$BUILD_DISPLAY_NAME (${GIT_COMMIT.take(8)})"
           workspace = "$env.WORKSPACE"
         }
-        
+
         // executar alguns comandos shell para configurar outros detalhes.
         sh '''
           # Instala pacotes
-          apt-get update && apt-get upgrade -y 
+          apt-get update && apt-get upgrade -y
           apt-get install -y locales sudo curl wget postgresql-client unzip rsync procps
-          
+
           # Instala Node.JS
           curl -fsSLk https://deb.nodesource.com/setup_20.x | bash - && apt-get install -y nodejs
 
           # Setup locale
-          DEBIAN_FRONTEND=noninteractive dpkg-reconfigure locales 
+          DEBIAN_FRONTEND=noninteractive dpkg-reconfigure locales
           sed -i 's/# pt_BR.UTF-8 UTF-8/pt_BR.UTF-8 UTF-8/' /etc/locale.gen
           locale-gen pt_BR.UTF-8
           echo LANG=pt_BR.UTF-8 | tee /etc/default/locale
@@ -107,7 +107,7 @@ pipeline {
           echo LANGUAGE=pt_BR:pt:en | tee -a /etc/default/locale
 
           # Instala kubectl
-          curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl" 
+          curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
           curl -LO "https://dl.k8s.io/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl.sha256"
           echo "$(cat kubectl.sha256)  kubectl" | sha256sum --check
           chmod u+x ./kubectl
@@ -118,9 +118,9 @@ pipeline {
           curl -o vault.zip -k https://releases.hashicorp.com/vault/1.12.1/vault_1.12.1_linux_amd64.zip; yes | unzip vault.zip
 
           # Instala compose
-          curl -sS https://getcomposer.org/installer -o composer-setup.php 
-          php composer-setup.php --install-dir=/usr/local/bin --filename=composer 
-          chown -R www-data:www-data /usr/local/bin/composer 
+          curl -sS https://getcomposer.org/installer -o composer-setup.php
+          php composer-setup.php --install-dir=/usr/local/bin --filename=composer
+          chown -R www-data:www-data /usr/local/bin/composer
 
           # Obtem o vendor
           cd source/
@@ -141,7 +141,7 @@ pipeline {
             def scannerHome = tool 'SonarScanner'
             def projectKey = env.SONAR_PROJECT_KEY
             withSonarQubeEnv('SonarQube') {
-              sh "${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=${projectKey} -Dsonar.sources=source/app3s -Dsonar.exclusions=vendor/** -Dsonar.language=php -Dsonar.sourceEncoding=UTF-8"
+              sh "${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=${projectKey} -Dsonar.sources=source -Dsonar.exclusions=vendor/** -Dsonar.language=php -Dsonar.sourceEncoding=UTF-8"
               def props = readProperties  file: '.scannerwork/report-task.txt'
               def sonarServerUrl=props['serverUrl']
               def ceTaskUrl= props['ceTaskUrl']
@@ -164,7 +164,7 @@ pipeline {
               }
             }
           }
-        } 
+        }
       }
     }
 
@@ -189,7 +189,7 @@ pipeline {
     stage('Push Image Container') {
       steps {
         script {
-          container('docker') { 
+          container('docker') {
             env.VAULT_ADDR = "https://dti-vault.unilab.edu.br"
             withCredentials([
             string(credentialsId: 'role-harbor', variable: 'ROLE_ID'),
@@ -227,7 +227,7 @@ pipeline {
               kubectl get all,sa,ing,pvc -n postgres-3s -o wide
             '''
           }
-        
+
           withVault([configuration: configuration, vaultSecrets: secrets]) {
             withEnv([
               "PG_USER=${env.PG_USER}",
@@ -245,7 +245,7 @@ pipeline {
                 cat '${env.PGPASSFILE}'
 
                 chmod +x source/bash/database/setup-databases.sh
-                ./source/bash/database/setup-databases.sh 
+                ./source/bash/database/setup-databases.sh
               """
             }
           }
@@ -268,7 +268,7 @@ pipeline {
               "DB_PASSWORD_DUMP=${env.DB_PASSWORD_DUMP}"
             ]) {
 
-              sh ''' #!/bin/bash 
+              sh ''' #!/bin/bash
                 chmod +x source/bash/database/dump-database.sh
                 chmod +x source/bash/database/restore-database.sh
                 ./source/bash/database/dump-database.sh
@@ -298,7 +298,7 @@ pipeline {
               (kubectl get pods -l $APP_NAME -n $APP_NAMESPACE --no-headers | wc -l) > 0 && \
               kubectl delete pods -l app=$APP_NAME -n $APP_NAMESPACE --force --grace-period=0; \
               kubectl delete deployment $APP_NAME -n $APP_NAMESPACE || echo 'DEPLOYMENT INEXISTENTE!'
-              
+
               echo 'Aplica deploy.'
               kubectl apply -f ./kubernetes/deployment-3s.yaml --record
 
@@ -323,7 +323,7 @@ pipeline {
     success {
       echo 'Processo de pipeline BEM-SUCEDIDO.'
       emailext (
-          attachLog: false, 
+          attachLog: false,
           attachmentsPattern: 'build.log',
           mimeType: 'text/html',
           subject: "Pipeline #${env.BUILD_NUMBER} ${currentBuild.currentResult} Job ${env.JOB_NAME}",
@@ -345,7 +345,7 @@ pipeline {
     failure {
       echo 'Processo de pipeline executado com falha.'
       emailext (
-          attachLog: true, 
+          attachLog: true,
           attachmentsPattern: 'build.log',
           mimeType: 'text/html',
           subject: "Pipeline #${env.BUILD_NUMBER} ${currentBuild.currentResult} Job ${env.JOB_NAME}",
