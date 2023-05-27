@@ -24,7 +24,7 @@ return new class extends Migration
     public function down()
     {
         Schema::table('order_status_logs', function (Blueprint $table) {
-            $table->integer('status')->change();
+            $table->string('status', 255)->change();
         });
     }
 };
