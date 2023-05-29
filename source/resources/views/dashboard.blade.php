@@ -1,177 +1,9 @@
-<!doctype html>
-<html lang="pt-br">
+@extends('layouts.app')
 
-<head>
-
-    <meta http-equiv="cache-control" content="max-age=0" />
-    <meta http-equiv="cache-control" content="no-cache" />
-    <meta http-equiv="expires" content="0" />
-    <meta http-equiv="expires" content="Tue, 01 Jan 1980 1:00:00 GMT" />
-    <meta http-equiv="pragma" content="no-cache" />
-    <meta charset="utf-8">
-    <title>3s | Sistema de Solicitação de Ocorrências</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
-    <meta http-equiv="Cache-control" content="no-cache">
-    <!-- Scripts -->
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
-</head>
-
-<body>
+@section('content')
+    @include('admin.navbar')
 
 
-
-
-    <div id="cabecalho" class="container">
-
-
-
-        <header>
-
-            <div class="row">
-                <div class="col-xl-4 col-lg-12 col-md-12 col-sm-12  d-flex justify-content-center">
-
-                    <a class="text-muted" href="#"><img src="{{ asset('images/logo-header.png') }}"
-                            alt="Logo 3s" /></a>
-                </div>
-                <div class="col-xl-4 col-lg-12 col-md-12 col-sm-12 d-flex align-items-end  justify-content-center">
-                    <p class="blog-header-logo text-white font-weight-bold"></p>
-                </div>
-                <div class="col-xl-4 col-lg-12 col-md-12 col-sm-12 d-flex justify-content-center">
-                    <a class="text-muted" href="#"><img src="{{ asset('images/logo-unilab-branco.png') }}"
-                            alt="Logo Unilab" /></a>
-                    <button class="btn m-4 btn-contraste" href="#altocontraste" id="altocontraste" accesskey="3"
-                        onclick="window.toggleContrast()" onkeydown="window.toggleContrast()" class=" text-white ">
-                        <i class="fa fa-adjust text-white"></i>
-                    </button>
-
-                </div>
-            </div>
-        </header>
-
-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
-
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav mr-auto">
-                    <li class="nav-item active">
-                        <a class="nav-link" href=".">Início<span class="sr-only">(current)</span></a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="?page=ocorrencia&cadastrar=1">Abrir Chamado</a>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
-                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Paineis
-                        </a>
-                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item" href="?page=painel_kamban">Kanban</a>
-                            <a class="dropdown-item" href="?page=painel_tabela">Tabela</a>
-                            <!--
-              <div class="dropdown-divider"></div>
-              <a class="dropdown-item" href="#">Something else here</a> -->
-                        </div>
-                    </li>
-
-
-
-
-
-
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
-                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Gerenciamento
-                        </a>
-                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item" href="?page=servico">Serviços</a>
-
-
-                            <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="?page=area_responsavel">Unidades</a>
-                            <a class="dropdown-item" href="?page=usuario">Usuários</a>
-                        </div>
-                    </li>
-
-
-                </ul>
-
-                <form action="" method="get">
-
-                    <div class="input-group">
-                        <input type="hidden" name="page" value="ocorrencia">
-                        <input type="text" name="selecionar" class="form-control" placeholder="Número do chamado"
-                            aria-label="Número do Chamado" aria-describedby="button-addon2">
-                        <div class="input-group-append">
-                            <button class="btn btn-outline-secondary" type="form" id="button-addon2">
-                                <i class="fa fa-search"></i>
-                            </button>
-                        </div>
-                    </div>
-                </form>
-
-                <div class="btn-group">
-                    <button class="btn btn-light dropdown-toggle" type="button" data-toggle="dropdown"
-                        aria-haspopup="true" aria-expanded="false">
-                        <i class="fa fa-user"></i> Olá, Jefferson
-                    </button>
-
-                    <div class="dropdown-menu dropright">
-                        <button type="button" disabled class="dropdown-item">
-                            Setor: DTI
-                        </button>
-
-
-
-
-                        <hr>
-                        <button type="button" nivel="a" disabled class="dropdown-item change-level">
-                            Perfil Admin
-                        </button>
-
-                        <button type="button" nivel="t" id="change-to-tec" class="dropdown-item change-level">
-                            Perfil Técnico
-                        </button>
-                        <button type="button" nivel="c" id="change-to-default"
-                            class="dropdown-item change-level">
-                            Perfil Comum
-                        </button>
-                        <hr>
-
-
-
-
-                        <a class="dropdown-item" href="{{ route('logout') }}"
-                        onclick="event.preventDefault();
-                    document.getElementById('logout-form').submit();">
-                        {{ __('Logout') }}
-                    </a>
-
-                    <form id="logout-form" action="{{ route('logout') }}" method="post" class="d-none">
-                        @csrf
-                    </form>
-                    </div>
-                </div>
-
-            </div>
-        </nav>
-
-
-
-
-
-    </div>
-
-    <main role="main" class="container">
-
-
-
-        <div class="card mb-4">
             <div class="card-body">
                 <div class="row">
                     <div class="col-md-8 blog-main">
@@ -12593,71 +12425,15 @@
 
 
 
-                        <div class="p-4 mb-3 bg-light rounded">
-                            <h4 class="font-italic">Sobre o Novíssimo 3s</h4>
-                            <p class="mb-0">
-                                Esta é uma aplicação completamente nova desenvolvida pela DTI do zero.
-                                Tudo foi refeito, desde o design até a estrutura de banco de dados.
-                                Os chamados antigos foram preservados em uma nova estrutura de banco de dados.
 
-                            </p>
-                        </div>
                     </aside><!-- /.blog-sidebar -->
                 </div>
 
 
             </div>
-        </div>
+
+@endsection
 
 
 
 
-
-
-
-
-    </main><!-- /.container -->
-
-    <footer class="blog-footer">
-        <p>Desenvolvido pela <a href="https://dti.unilab.edu.br/"> Diretoria de Tecnologia da Informação DTI </a> / <a
-                href="http://unilab.edu.br">Unilab</a></p>
-
-    </footer>
-
-
-
-    <!-- Modal -->
-    <div class="modal fade" id="modalResposta" tabindex="-1" role="dialog"
-        aria-labelledby="labelModalResposta" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="labelModalResposta">Resposta</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <span id="textoModalResposta"></span>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" id="botao-modal-resposta" class="btn btn-primary"
-                        data-dismiss="modal">Continuar</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    {{--
-
-<script src="js/ocorrencia_selectize.js?a=1"></script>
-
-<script src="js/status_ocorrencia.js?a=1"></script>
-<script src="js/jquery.easyPaginate.js?a=1"></script>
-<script src="js/ocorrencia.js?a=14"></script> --}}
-
-
-
-</body>
-
-</html>
