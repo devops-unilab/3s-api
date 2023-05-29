@@ -7,25 +7,25 @@
         },
         {
             "name": "description",
-            "type": "text"
+            "type": "string"
         },
         {
             "name": "email",
-            "type": "text"
+            "type": "string"
         }
     ],
     "validations": [
         {
             "field": "name",
-            "rules": "required|max:10"
+            "rules": "required|max:255"
         },
         {
             "field": "description",
-            "rules": "required|max:100"
+            "rules": "required|max:255"
         },
         {
             "field": "email",
-            "rules": "required|max:10"
+            "rules": "required|max:255"
         }
     ]
 }

@@ -21,10 +21,6 @@
           "provider": "Técnico",
           "disabled": "Desativado"
         }
-      },
-      {
-          "name": "division_id",
-          "type": "integer#unsigned"
       }
   ],
   "foreign_keys": [
