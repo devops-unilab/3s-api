@@ -56,7 +56,7 @@
             </div>
         </header>
 
-        <main class="card mb-4">
+        <main class="card">
             @yield('content')
         </main>
     </div>
