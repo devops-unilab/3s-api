@@ -16,4 +16,5 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 import '../../node_modules/jquery/dist/jquery';
 import '../../node_modules/popper.js/dist/umd/popper';
 import '../../node_modules/bootstrap/dist/js/bootstrap';
+import '../js/barra_2.0';
 import '../js/change-contraste';
