@@ -26,4 +26,4 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
 });
 
-require __DIR__.'/auth.php';
+require_once __DIR__.'/auth.php';
