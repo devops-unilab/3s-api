@@ -27,10 +27,12 @@
     },
     {
       "name": "role",
-      "type": "string",
-      "validations": {
-        "required": true,
-        "maxLength": 255
+      "type": "select",
+      "options": {
+        "adm": "Administrador",
+        "customer": "Cliente",
+        "provider": "Técnico",
+        "disabled": "Desativado"
       }
     },
     {

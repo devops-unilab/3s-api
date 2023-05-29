@@ -21,16 +21,11 @@ class UsersController extends Controller
         $perPage = 25;
 
         if (!empty($keyword)) {
-            $users = User::where('id', 'LIKE', "%$keyword%")
-                ->orWhere('name', 'LIKE', "%$keyword%")
+            $users = User::where('name', 'LIKE', "%$keyword%")
                 ->orWhere('email', 'LIKE', "%$keyword%")
                 ->orWhere('login', 'LIKE', "%$keyword%")
-                ->orWhere('password', 'LIKE', "%$keyword%")
                 ->orWhere('role', 'LIKE', "%$keyword%")
-                ->orWhere('division_id', 'LIKE', "%$keyword%")
                 ->orWhere('division_sig', 'LIKE', "%$keyword%")
-                ->orWhere('email_verified_at', 'LIKE', "%$keyword%")
-                ->orWhere('remember_token', 'LIKE', "%$keyword%")
                 ->latest()->paginate($perPage);
         } else {
             $users = User::latest()->paginate($perPage);
@@ -58,7 +53,9 @@ class UsersController extends Controller
      */
     public function store(Request $request)
     {
-        
+        $this->validate($request, [
+			'name' => 'required|max:255'
+		]);
         $requestData = $request->all();
         
         User::create($requestData);
@@ -104,7 +101,9 @@ class UsersController extends Controller
      */
     public function update(Request $request, $id)
     {
-        
+        $this->validate($request, [
+			'name' => 'required|max:255'
+		]);
         $requestData = $request->all();
         
         $user = User::findOrFail($id);
