@@ -1,0 +1,46 @@
+{
+    "fields": [
+        {
+            "name": "title",
+            "type": "string"
+        },
+        {
+            "name": "content",
+            "type": "text"
+        },
+        {
+            "name": "category",
+            "type": "select",
+            "options": {
+                "technology": "Technology",
+                "tips": "Tips",
+                "health": "Health"
+            }
+        },
+        {
+            "name": "user_id",
+            "type": "integer#unsigned"
+        }
+    ],
+    "foreign_keys": [
+        {
+            "column": "division_id",
+            "references": "id",
+            "on": "divisions",
+            "onDelete": "cascade"
+        }
+    ],
+    "relationships": [
+        {
+            "name": "division",
+            "type": "belongsTo",
+            "class": "App\\Models\\Division"
+        }
+    ],
+    "validations": [
+        {
+            "field": "title",
+            "rules": "required|max:10"
+        }
+    ]
+}
