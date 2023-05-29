@@ -59,7 +59,7 @@
   "validations": [
     {
       "field": "name",
-      "rules": "required|max:10"
+      "rules": "required|max:255"
     }
   ]
 }
