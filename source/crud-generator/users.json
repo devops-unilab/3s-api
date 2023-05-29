@@ -2,13 +2,6 @@
   "model": "User",
   "fields": [
     {
-      "name": "id",
-      "type": "bigint",
-      "validations": {
-        "required": true
-      }
-    },
-    {
       "name": "name",
       "type": "string",
       "validations": {
@@ -26,14 +19,6 @@
     },
     {
       "name": "login",
-      "type": "string",
-      "validations": {
-        "required": true,
-        "maxLength": 255
-      }
-    },
-    {
-      "name": "password",
       "type": "string",
       "validations": {
         "required": true,

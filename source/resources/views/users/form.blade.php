@@ -1,8 +1,3 @@
-<div class="form-group {{ $errors->has('id') ? 'has-error' : ''}}">
-    {!! Form::label('id', 'Id', ['class' => 'control-label']) !!}
-    {!! Form::number('id', null, ('' == 'required') ? ['class' => 'form-control', 'required' => 'required'] : ['class' => 'form-control']) !!}
-    {!! $errors->first('id', '<p class="help-block">:message</p>') !!}
-</div>
 <div class="form-group {{ $errors->has('name') ? 'has-error' : ''}}">
     {!! Form::label('name', 'Name', ['class' => 'control-label']) !!}
     {!! Form::text('name', null, ('required' == 'required') ? ['class' => 'form-control', 'required' => 'required'] : ['class' => 'form-control']) !!}
@@ -17,11 +12,6 @@
     {!! Form::label('login', 'Login', ['class' => 'control-label']) !!}
     {!! Form::text('login', null, ('' == 'required') ? ['class' => 'form-control', 'required' => 'required'] : ['class' => 'form-control']) !!}
     {!! $errors->first('login', '<p class="help-block">:message</p>') !!}
-</div>
-<div class="form-group {{ $errors->has('password') ? 'has-error' : ''}}">
-    {!! Form::label('password', 'Password', ['class' => 'control-label']) !!}
-    {!! Form::text('password', null, ('' == 'required') ? ['class' => 'form-control', 'required' => 'required'] : ['class' => 'form-control']) !!}
-    {!! $errors->first('password', '<p class="help-block">:message</p>') !!}
 </div>
 <div class="form-group {{ $errors->has('role') ? 'has-error' : ''}}">
     {!! Form::label('role', 'Role', ['class' => 'control-label']) !!}
