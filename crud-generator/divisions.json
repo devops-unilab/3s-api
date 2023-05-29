@@ -1,0 +1,31 @@
+
+{
+    "fields": [
+        {
+            "name": "name",
+            "type": "string"
+        },
+        {
+            "name": "description",
+            "type": "text"
+        },
+        {
+            "name": "email",
+            "type": "text"
+        }
+    ],
+    "validations": [
+        {
+            "field": "name",
+            "rules": "required|max:10"
+        },
+        {
+            "field": "description",
+            "rules": "required|max:100"
+        },
+        {
+            "field": "email",
+            "rules": "required|max:10"
+        }
+    ]
+}

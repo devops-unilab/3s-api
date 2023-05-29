@@ -1,0 +1,12 @@
+
+php artisan crud:generate Divisions --fields_from_file="D:\web\dti-unilab\3s_cicd\crud-generator\divisions.json" --controller-namespace=App\Http\Controllers --form-helper=html
+
+Passo a passo pra criar police
+
+php artisan route:clear
+php artisan config:clear
+php artisan view:clear
+
+1. Criar a police
+
+php artisan make:policy DivisionPolicy --model=Division
