@@ -1,75 +1,80 @@
 {
-    "model": "User",
-    "fields": [
-      {
-        "name": "id",
-        "type": "bigint",
-        "validations": {
-          "required": true
-        }
-      },
-      {
-        "name": "name",
-        "type": "string",
-        "validations": {
-          "required": true,
-          "maxLength": 255
-        }
-      },
-      {
-        "name": "email",
-        "type": "string",
-        "validations": {
-          "required": true,
-          "maxLength": 255
-        }
-      },
-      {
-        "name": "login",
-        "type": "string",
-        "validations": {
-          "required": true,
-          "maxLength": 255
-        }
-      },
-      {
-        "name": "password",
-        "type": "string",
-        "validations": {
-          "required": true,
-          "maxLength": 255
-        }
-      },
-      {
-        "name": "role",
-        "type": "string",
-        "validations": {
-          "required": true,
-          "maxLength": 255
-        }
-      },
-      {
-        "name": "division_id",
-        "type": "bigint"
-      },
-      {
-        "name": "division_sig",
-        "type": "string",
-        "validations": {
-          "maxLength": 255
-        }
-      },
-      {
-        "name": "email_verified_at",
-        "type": "timestamp"
-      },
-      {
-        "name": "remember_token",
-        "type": "string",
-        "validations": {
-          "maxLength": 100
-        }
+  "model": "User",
+  "fields": [
+    {
+      "name": "id",
+      "type": "bigint",
+      "validations": {
+        "required": true
       }
-    ],
-    "primaryKey": "id"
-  }
+    },
+    {
+      "name": "name",
+      "type": "string",
+      "validations": {
+        "required": true,
+        "maxLength": 255
+      }
+    },
+    {
+      "name": "email",
+      "type": "string",
+      "validations": {
+        "required": true,
+        "maxLength": 255
+      }
+    },
+    {
+      "name": "login",
+      "type": "string",
+      "validations": {
+        "required": true,
+        "maxLength": 255
+      }
+    },
+    {
+      "name": "password",
+      "type": "string",
+      "validations": {
+        "required": true,
+        "maxLength": 255
+      }
+    },
+    {
+      "name": "role",
+      "type": "string",
+      "validations": {
+        "required": true,
+        "maxLength": 255
+      }
+    },
+    {
+      "name": "division_sig",
+      "type": "string",
+      "validations": {
+        "maxLength": 255
+      }
+    }
+  ],
+  "foreign_keys": [
+    {
+      "column": "division_id",
+      "references": "id",
+      "on": "divisoins",
+      "onDelete": "cascade"
+    }
+  ],
+  "relationships": [
+    {
+      "name": "division",
+      "type": "hasOne",
+      "class": "App\\Models\\Division"
+    }
+  ],
+  "validations": [
+    {
+      "field": "name",
+      "rules": "required|max:10"
+    }
+  ]
+}

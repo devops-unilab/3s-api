@@ -12,7 +12,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/', function () {
         return view('dashboard');
     })->middleware(['auth'])->name('dashboard');
-    Route::resource('divisions', DivisionsController::class);
+    // Route::resource('divisions', DivisionsController::class);
     Route::resource('users', UsersController::class);
 });
 
