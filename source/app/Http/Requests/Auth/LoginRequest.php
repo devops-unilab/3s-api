@@ -66,16 +66,19 @@ class LoginRequest extends FormRequest
         $response = Http::withHeaders($headers)->get(env('UNILAB_API_ORIGIN') . '/user', $headers);
         $responseJ2 = json_decode($response->body());
 
-        // $response = Http::withHeaders($headers)->get(env('UNILAB_API_ORIGIN') . '/bond', $headers);
-        // $responseJ3 = json_decode($response->body());
+        $response = Http::withHeaders($headers)->get(env('UNILAB_API_ORIGIN') . '/bond', $headers);
+        $responseJ3 = json_decode($response->body());
 
 
         $user = User::firstOrNew(['id' => $userId]);
         $user->id = $userId;
         $user->name = $responseJ2->nome;
         $user->email = $responseJ2->email;
-        // $user->login = $responseJ2->login;
-        // $user->division_sig = $responseJ3[0]->sigla_unidade;
+        $user->login = $responseJ2->login;
+        $user->division_sig = $responseJ3[0]->sigla_unidade;
+        if($user->role == null) {
+            $user->role = $responseJ2->id_status_servidor != 1 ? 'disabled' : 'customer';
+        }
         $user->password = $this->password;
 
         $user->save();
