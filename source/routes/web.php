@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware('auth')->group(function () {
 
-    Route::get('/', OrdersController::class);
+    Route::get('/',[ OrdersController::class, 'index']);
     Route::resource('divisions', DivisionsController::class);
     Route::resource('users', UsersController::class);
     Route::resource('services', ServicesController::class);

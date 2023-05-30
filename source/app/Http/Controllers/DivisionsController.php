@@ -52,9 +52,9 @@ class DivisionsController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-			'name' => 'required|max:10',
-			'description' => 'required|max:100',
-			'email' => 'required|max:10'
+			'name' => 'required|max:255',
+			'description' => 'required|max:255',
+			'email' => 'required|max:255'
 		]);
         $requestData = $request->all();
         
@@ -102,9 +102,9 @@ class DivisionsController extends Controller
     public function update(Request $request, $id)
     {
         $this->validate($request, [
-			'name' => 'required|max:10',
-			'description' => 'required|max:100',
-			'email' => 'required|max:10'
+			'name' => 'required|max:255',
+			'description' => 'required|max:255',
+			'email' => 'required|max:255'
 		]);
         $requestData = $request->all();
         
