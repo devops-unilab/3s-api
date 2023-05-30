@@ -1,3 +1,9 @@
+
+php artisan route:clear
+php artisan config:clear
+php artisan cache:clear
+
+
 1. Comment all routes;
 2. Delete all files
 
