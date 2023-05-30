@@ -12,9 +12,9 @@
                 <a class="nav-link" href=".">Início<span class="sr-only">(current)</span></a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="?page=ocorrencia&cadastrar=1">Abrir Chamado</a>
+                <a class="nav-link" href="{{route('orders.create')}}">Abrir Chamado</a>
             </li>
-            <li class="nav-item dropdown">
+            {{-- <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
                     data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     Paineis
@@ -23,7 +23,7 @@
                     <a class="dropdown-item" href="?page=painel_kamban">Kanban</a>
                     <a class="dropdown-item" href="?page=painel_tabela">Tabela</a>
                 </div>
-            </li>
+            </li> --}}
 
 
 
