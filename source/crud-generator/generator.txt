@@ -1,4 +1,5 @@
-1. Delete old files
+1. Comment all routes;
+2. Delete all files
 
 del ./app/Http/Controllers/DivisionsController.php
 del ./app/Models/Division.php
@@ -8,9 +9,16 @@ del ./resources/views/divisions/form.blade.php
 del ./resources/views/divisions/index.blade.php
 del ./resources/views/divisions/show.blade.php
 
-
-
 php artisan crud:generate Divisions --fields_from_file="D:\web\dti-unilab\3s_cicd\source\crud-generator\divisions.json" --controller-namespace=App\Http\Controllers --form-helper=laravelcollective
+
+del ./app/Http/Controllers/UsersController.php
+del ./app/Models/User.php
+del ./resources/views/users/create.blade.php
+del ./resources/views/users/edit.blade.php
+del ./resources/views/users/form.blade.php
+del ./resources/views/users/index.blade.php
+del ./resources/views/users/show.blade.php
+
 php artisan crud:generate Users --fields_from_file="D:\web\dti-unilab\3s_cicd\source\crud-generator\users.json" --controller-namespace=App\Http\Controllers --form-helper=laravelcollective
 php artisan crud:generate Services --fields_from_file="D:\web\dti-unilab\3s_cicd\source\crud-generator\services.json" --controller-namespace=App\Http\Controllers --form-helper=laravelcollective
 php artisan crud:generate Orders --fields_from_file="D:\web\dti-unilab\3s_cicd\source\crud-generator\orders.json" --controller-namespace=App\Http\Controllers --form-helper=laravelcollectiv

@@ -87,10 +87,6 @@
         }
       },
       {
-        "name": "created_at",
-        "type": "timestamp"
-      },
-      {
         "name": "service_at",
         "type": "timestamp"
       },
@@ -120,10 +116,6 @@
         "validations": {
           "maxLength": 255
         }
-      },
-      {
-        "name": "updated_at",
-        "type": "timestamp"
       }
     ],
     "primaryKey": "id"
