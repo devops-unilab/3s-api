@@ -21,8 +21,7 @@ class OrdersController extends Controller
         $perPage = 25;
 
         if (!empty($keyword)) {
-            $orders = Order::where('id', 'LIKE', "%$keyword%")
-                ->orWhere('division_id', 'LIKE', "%$keyword%")
+            $orders = Order::where('division_id', 'LIKE', "%$keyword%")
                 ->orWhere('service_id', 'LIKE', "%$keyword%")
                 ->orWhere('client_user_id', 'LIKE', "%$keyword%")
                 ->orWhere('description', 'LIKE', "%$keyword%")

@@ -1,8 +1,3 @@
-<div class="form-group {{ $errors->has('id') ? 'has-error' : ''}}">
-    {!! Form::label('id', 'Id', ['class' => 'control-label']) !!}
-    {!! Form::number('id', null, ('' == 'required') ? ['class' => 'form-control', 'required' => 'required'] : ['class' => 'form-control']) !!}
-    {!! $errors->first('id', '<p class="help-block">:message</p>') !!}
-</div>
 <div class="form-group {{ $errors->has('division_id') ? 'has-error' : ''}}">
     {!! Form::label('division_id', 'Division Id', ['class' => 'control-label']) !!}
     {!! Form::number('division_id', null, ('' == 'required') ? ['class' => 'form-control', 'required' => 'required'] : ['class' => 'form-control']) !!}

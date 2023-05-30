@@ -25,7 +25,7 @@ class Order extends Model
      *
      * @var array
      */
-    protected $fillable = ['id', 'division_id', 'service_id', 'client_user_id', 'description', 'campus', 'tag', 'phone_number', 'division', 'status', 'solution', 'rating', 'email', 'service_at', 'finished_at', 'confirmed_at', 'provider_user_id', 'assigned_user_id', 'attachment', 'place'];
+    protected $fillable = ['division_id', 'service_id', 'client_user_id', 'description', 'campus', 'tag', 'phone_number', 'division', 'status', 'solution', 'rating', 'email', 'service_at', 'finished_at', 'confirmed_at', 'provider_user_id', 'assigned_user_id', 'attachment', 'place'];
 
     
 }

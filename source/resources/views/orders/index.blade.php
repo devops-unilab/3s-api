@@ -1,7 +1,6 @@
 @extends('layouts.app')
 
 @section('content')
-    @include('admin.navbar')
     <div class="card">
         <div class="card-header">Orders</div>
         <div class="card-body">
@@ -26,14 +25,14 @@
                 <table class="table table-borderless">
                     <thead>
                         <tr>
-                            <th>#</th><th>Id</th><th>Division Id</th><th>Service Id</th><th>Actions</th>
+                            <th>#</th><th>Division Id</th><th>Service Id</th><th>Client User Id</th><th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
                     @foreach($orders as $item)
                         <tr>
                             <td>{{ $loop->iteration }}</td>
-                            <td>{{ $item->id }}</td><td>{{ $item->division_id }}</td><td>{{ $item->service_id }}</td>
+                            <td>{{ $item->division_id }}</td><td>{{ $item->service_id }}</td><td>{{ $item->client_user_id }}</td>
                             <td>
                                 <a href="{{ url('/orders/' . $item->id) }}" title="View Order"><button class="btn btn-info btn-sm"><i class="fa fa-eye" aria-hidden="true"></i> View</button></a>
                                 <a href="{{ url('/orders/' . $item->id . '/edit') }}" title="Edit Order"><button class="btn btn-primary btn-sm"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Edit</button></a>

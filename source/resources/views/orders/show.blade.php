@@ -1,7 +1,6 @@
 @extends('layouts.app')
 
 @section('content')
-    @include('admin.navbar')
     <div class="card">
         <div class="card-header">Order {{ $order->id }}</div>
         <div class="card-body">
@@ -29,7 +28,7 @@
                         <tr>
                             <th>ID</th><td>{{ $order->id }}</td>
                         </tr>
-                        <tr><th> Id </th><td> {{ $order->id }} </td></tr><tr><th> Division Id </th><td> {{ $order->division_id }} </td></tr><tr><th> Service Id </th><td> {{ $order->service_id }} </td></tr>
+                        <tr><th> Division Id </th><td> {{ $order->division_id }} </td></tr><tr><th> Service Id </th><td> {{ $order->service_id }} </td></tr><tr><th> Client User Id </th><td> {{ $order->client_user_id }} </td></tr>
                     </tbody>
                 </table>
             </div>

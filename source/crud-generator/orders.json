@@ -2,13 +2,6 @@
     "model": "Order",
     "fields": [
       {
-        "name": "id",
-        "type": "integer",
-        "validations": {
-          "required": true
-        }
-      },
-      {
         "name": "division_id",
         "type": "bigint",
         "validations": {
@@ -117,6 +110,5 @@
           "maxLength": 255
         }
       }
-    ],
-    "primaryKey": "id"
+    ]
   }

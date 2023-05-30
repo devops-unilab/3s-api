@@ -55,8 +55,9 @@
                 </div>
             </div>
         </header>
-
-        <main>
+        @include('admin.navbar')
+        <main class="card container pb-2">
+            <br>
             @yield('content')
         </main>
     </div>

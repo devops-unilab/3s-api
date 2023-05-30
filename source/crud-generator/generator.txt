@@ -28,8 +28,13 @@ del ./resources/views/users/show.blade.php
 php artisan crud:generate Users --fields_from_file="D:\web\dti-unilab\3s_cicd\source\crud-generator\users.json" --controller-namespace=App\Http\Controllers --form-helper=laravelcollective
 
 
-
-
+del ./app/Http/Controllers/Services.php
+del ./app/Models/Service.php
+del ./resources/views/services/create.blade.php
+del ./resources/views/services/edit.blade.php
+del ./resources/views/services/form.blade.php
+del ./resources/views/services/index.blade.php
+del ./resources/views/services/show.blade.php
 
 php artisan crud:generate Services --fields_from_file="D:\web\dti-unilab\3s_cicd\source\crud-generator\services.json" --controller-namespace=App\Http\Controllers --form-helper=laravelcollective
 
@@ -42,8 +47,17 @@ del ./resources/views/orders/form.blade.php
 del ./resources/views/orders/index.blade.php
 del ./resources/views/orders/show.blade.php
 
-php artisan crud:generate Orders --fields_from_file="D:\web\dti-unilab\3s_cicd\source\crud-generator\orders.json" --controller-namespace=App\Http\Controllers --form-helper=laravelcollectiv
-php artisan crud:generate OrderMessages --fields_from_file="D:\web\dti-unilab\3s_cicd\source\crud-generator\order_messages.json" --controller-namespace=App\Http\Controllers --form-helper=laravelcollectiv
+php artisan crud:generate Orders --fields_from_file="D:\web\dti-unilab\3s_cicd\source\crud-generator\orders.json" --controller-namespace=App\Http\Controllers --form-helper=laravelcollective
+
+del ./app/Http/Controllers/OrderMessages.php
+del ./app/Models/OrderMessage.php
+del ./resources/views/order-messages/create.blade.php
+del ./resources/views/order-messages/edit.blade.php
+del ./resources/views/order-messages/form.blade.php
+del ./resources/views/order-messages/index.blade.php
+del ./resources/views/order-messages/show.blade.php
+
+php artisan crud:generate OrderMessages --fields_from_file="D:\web\dti-unilab\3s_cicd\source\crud-generator\order_messages.json" --controller-namespace=App\Http\Controllers --form-helper=laravelcollective
 php artisan crud:generate OrderStatusLogs --fields_from_file="D:\web\dti-unilab\3s_cicd\source\crud-generator\order_status_logs.json" --controller-namespace=App\Http\Controllers --form-helper=laravelcollectiv
 
 
