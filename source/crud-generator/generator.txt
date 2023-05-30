@@ -1,10 +1,16 @@
+1. Delete old files
 
-php artisan crud:generate Divisions --fields_from_file="D:\web\dti-unilab\3s_cicd\source\crud-generator\divisions.json" --controller-namespace=App\Http\Controllers --form-helper=laravelcollective
-php artisan crud:generate Users --fields_from_file="D:\web\dti-unilab\3s_cicd\source\crud-generator\users.json" --controller-namespace=App\Http\Controllers --form-helper=laravelcollective
-php artisan crud:generate Services --fields_from_file="D:\web\dti-unilab\3s_cicd\source\crud-generator\services.json" --controller-namespace=App\Http\Controllers --form-helper=laravelcollective
-php artisan crud:generate Orders --fields_from_file="D:\web\dti-unilab\3s_cicd\source\crud-generator\orders.json" --controller-namespace=App\Http\Controllers --form-helper=laravelcollective
-php artisan crud:generate OrderMessages --fields_from_file="D:\web\dti-unilab\3s_cicd\source\crud-generator\order_messages.json" --controller-namespace=App\Http\Controllers --form-helper=laravelcollective
-php artisan crud:generate OrderStatusLogs --fields_from_file="D:\web\dti-unilab\3s_cicd\source\crud-generator\order_status_logs.json" --controller-namespace=App\Http\Controllers --form-helper=laravelcollective
+del
+
+
+
+
+php artisan crud:generate Divisions --fields_from_file="D:\web\dti-unilab\3s_cicd\source\crud-generator\divisions.json" --controller-namespace=App\Http\Controllers --form-helper=laravelcollective  --skip-migration
+php artisan crud:generate Users --fields_from_file="D:\web\dti-unilab\3s_cicd\source\crud-generator\users.json" --controller-namespace=App\Http\Controllers --form-helper=laravelcollective  --skip-migration
+php artisan crud:generate Services --fields_from_file="D:\web\dti-unilab\3s_cicd\source\crud-generator\services.json" --controller-namespace=App\Http\Controllers --form-helper=laravelcollective  --skip-migration
+php artisan crud:generate Orders --fields_from_file="D:\web\dti-unilab\3s_cicd\source\crud-generator\orders.json" --controller-namespace=App\Http\Controllers --form-helper=laravelcollective --skip-migration
+php artisan crud:generate OrderMessages --fields_from_file="D:\web\dti-unilab\3s_cicd\source\crud-generator\order_messages.json" --controller-namespace=App\Http\Controllers --form-helper=laravelcollective --skip-migration
+php artisan crud:generate OrderStatusLogs --fields_from_file="D:\web\dti-unilab\3s_cicd\source\crud-generator\order_status_logs.json" --controller-namespace=App\Http\Controllers --form-helper=laravelcollective --skip-migration
 
 
 php artisan crud:api Divisions --fields_from_file="D:\web\dti-unilab\3s_cicd\source\crud-generator\divisions.json"  --controller-namespace=Api
