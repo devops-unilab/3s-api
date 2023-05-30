@@ -1,7 +1,6 @@
 @extends('layouts.app')
 
 @section('content')
-    @include('admin.navbar')
     <div class="card">
         <div class="card-header">User {{ $user->id }}</div>
         <div class="card-body">

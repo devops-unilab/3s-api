@@ -18,7 +18,6 @@ del ./resources/views/divisions/show.blade.php
 php artisan crud:generate Divisions --fields_from_file="D:\web\dti-unilab\3s_cicd\source\crud-generator\divisions.json" --controller-namespace=App\Http\Controllers --form-helper=laravelcollective
 
 del ./app/Http/Controllers/UsersController.php
-del ./app/Models/User.php
 del ./resources/views/users/create.blade.php
 del ./resources/views/users/edit.blade.php
 del ./resources/views/users/form.blade.php
@@ -28,7 +27,7 @@ del ./resources/views/users/show.blade.php
 php artisan crud:generate Users --fields_from_file="D:\web\dti-unilab\3s_cicd\source\crud-generator\users.json" --controller-namespace=App\Http\Controllers --form-helper=laravelcollective
 
 
-del ./app/Http/Controllers/Services.php
+del ./app/Http/Controllers/ServicesController.php
 del ./app/Models/Service.php
 del ./resources/views/services/create.blade.php
 del ./resources/views/services/edit.blade.php
