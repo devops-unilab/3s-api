@@ -38,14 +38,14 @@
 
             <div class="row">
                 <div class="col-xl-4 col-lg-12 col-md-12 col-sm-12  d-flex justify-content-center">
-                    <a class="text-muted" href="#"><img src="https://3s.unilab.edu.br/img/logo-header.png"
+                    <a class="text-muted" href="#"><img src="{{asset("images/logo-header.png")}}"
                             alt="Logo 3s" /></a>
                 </div>
                 <div class="col-xl-4 col-lg-12 col-md-12 col-sm-12 d-flex align-items-end  justify-content-center">
                     <p class="blog-header-logo text-white font-weight-bold"></p>
                 </div>
                 <div class="col-xl-4 col-lg-12 col-md-12 col-sm-12 d-flex justify-content-center">
-                    <a class="text-muted" href="#"><img src="https://3s.unilab.edu.br/img/logo-unilab-branco.png"
+                    <a class="text-muted" href="#"><img src="{{asset("images/logo-unilab-branco.png")}}"
                             alt="Logo Unilab" /></a>
                     <button class="btn m-4 btn-contraste" href="#altocontraste" id="altocontraste" accesskey="3"
                         onclick="window.toggleContrast()" onkeydown="window.toggleContrast()" class=" text-white ">

@@ -1,8 +1,8 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="container">
-        <br><br>
+
+        <div class="card p-5">
 
         <div class="container forget-password">
             <div class="row justify-content-center">
@@ -61,7 +61,7 @@
         </div>
         <br><br><br><br><br><br>
 
-
-
     </div>
+
+
 @endsection
