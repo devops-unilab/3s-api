@@ -34,7 +34,6 @@ class OrdersController extends Controller
                 ->orWhere('solution', 'LIKE', "%$keyword%")
                 ->orWhere('rating', 'LIKE', "%$keyword%")
                 ->orWhere('email', 'LIKE', "%$keyword%")
-                ->orWhere('created_at', 'LIKE', "%$keyword%")
                 ->orWhere('service_at', 'LIKE', "%$keyword%")
                 ->orWhere('finished_at', 'LIKE', "%$keyword%")
                 ->orWhere('confirmed_at', 'LIKE', "%$keyword%")
@@ -42,7 +41,6 @@ class OrdersController extends Controller
                 ->orWhere('assigned_user_id', 'LIKE', "%$keyword%")
                 ->orWhere('attachment', 'LIKE', "%$keyword%")
                 ->orWhere('place', 'LIKE', "%$keyword%")
-                ->orWhere('updated_at', 'LIKE', "%$keyword%")
                 ->latest()->paginate($perPage);
         } else {
             $orders = Order::latest()->paginate($perPage);

@@ -63,11 +63,6 @@
     {!! Form::text('email', null, ('' == 'required') ? ['class' => 'form-control', 'required' => 'required'] : ['class' => 'form-control']) !!}
     {!! $errors->first('email', '<p class="help-block">:message</p>') !!}
 </div>
-<div class="form-group {{ $errors->has('created_at') ? 'has-error' : ''}}">
-    {!! Form::label('created_at', 'Created At', ['class' => 'control-label']) !!}
-    {!! Form::input('datetime-local', 'created_at', null, ('' == 'required') ? ['class' => 'form-control', 'required' => 'required'] : ['class' => 'form-control']) !!}
-    {!! $errors->first('created_at', '<p class="help-block">:message</p>') !!}
-</div>
 <div class="form-group {{ $errors->has('service_at') ? 'has-error' : ''}}">
     {!! Form::label('service_at', 'Service At', ['class' => 'control-label']) !!}
     {!! Form::input('datetime-local', 'service_at', null, ('' == 'required') ? ['class' => 'form-control', 'required' => 'required'] : ['class' => 'form-control']) !!}
@@ -102,11 +97,6 @@
     {!! Form::label('place', 'Place', ['class' => 'control-label']) !!}
     {!! Form::text('place', null, ('' == 'required') ? ['class' => 'form-control', 'required' => 'required'] : ['class' => 'form-control']) !!}
     {!! $errors->first('place', '<p class="help-block">:message</p>') !!}
-</div>
-<div class="form-group {{ $errors->has('updated_at') ? 'has-error' : ''}}">
-    {!! Form::label('updated_at', 'Updated At', ['class' => 'control-label']) !!}
-    {!! Form::input('datetime-local', 'updated_at', null, ('' == 'required') ? ['class' => 'form-control', 'required' => 'required'] : ['class' => 'form-control']) !!}
-    {!! $errors->first('updated_at', '<p class="help-block">:message</p>') !!}
 </div>
 
 
