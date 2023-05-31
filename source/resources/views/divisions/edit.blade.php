@@ -5,7 +5,6 @@
         {{__("Edit")}} {{__("Division")}}
     </h3>
     <div class="card">
-        <div class="card-header">Edit Division #{{ $division->id }}</div>
         <div class="card-body">
             <a href="{{ url('/divisions') }}" title="Back"><button class="btn btn-warning btn-sm"><i class="fa fa-arrow-left" aria-hidden="true"></i> Back</button></a>
             <br />
