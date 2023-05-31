@@ -2,7 +2,7 @@
 
 @section('content')
 
-        <div class="card p-5">
+        <div>
 
         <div class="container forget-password">
             <div class="row justify-content-center">
