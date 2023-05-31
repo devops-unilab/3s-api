@@ -124,8 +124,14 @@
     "Show Recovery Codes" : "Mostrar os códigos de recuperação" ,
     "Disable" : "Desabilitar",
     "Add New": "Adicionar",
-    "Order": "Chamado",
     "Back": "Voltar",
     "Edit": "Editar",
-    "Service": "Serviço"
+    "Divisions": "Divisões",
+    "Orders": "Chamados",
+    "Order": "Chamado",
+    "Service": "Serviço",
+    "Services": "Serviços",
+    "Users": "Usuários",
+    "Search": "Procurar",
+    "Actions" : "Ações"
 }

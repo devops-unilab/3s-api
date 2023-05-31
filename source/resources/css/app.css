@@ -1,10 +1,10 @@
-@import "../../node_modules/bootstrap/dist/css/bootstrap.min.css";
 @import "../../node_modules/font-awesome/css/font-awesome.min.css";
 @import "../../node_modules/selectize/dist/css/selectize.default.css";
 @import "./3s-kamban.css";
 @import "./3s-chat.css";
 @import "./3s-list.css";
 @import "./3s-style.css";
+@import "../../node_modules/bootstrap/dist/css/bootstrap.min.css";
 /* @tailwind base;
 @tailwind components;
 @tailwind utilities; */

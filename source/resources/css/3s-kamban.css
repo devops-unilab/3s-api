@@ -13,15 +13,6 @@
 	display: block;
 
 }
-
-
-a, a:visited {
-	color: #3fabff;
-	text-decoration: none;
-}
-a:hover {
-	color: #008af5;
-}
 h1 {
 	margin: 0;
 	font-weight: 300;
