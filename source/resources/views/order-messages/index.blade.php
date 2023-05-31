@@ -1,11 +1,13 @@
 @extends('layouts.app')
 
 @section('content')
+    <h3 class="pb-4 mb-4 font-italic border-bottom">
+        Ordermessages
+    </h3>
     <div class="card">
-        <div class="card-header">Ordermessages</div>
         <div class="card-body">
             <a href="{{ url('/order-messages/create') }}" class="btn btn-success btn-sm" title="Add New OrderMessage">
-                <i class="fa fa-plus" aria-hidden="true"></i> Add New
+                <i class="fa fa-plus" aria-hidden="true"></i> {{ __('Add New') }}
             </a>
 
             {!! Form::open(['method' => 'GET', 'url' => '/order-messages', 'class' => 'form-inline my-2 my-lg-0 float-right', 'role' => 'search'])  !!}

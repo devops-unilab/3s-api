@@ -1,6 +1,9 @@
 @extends('layouts.app')
 
 @section('content')
+    <h3 class="pb-4 mb-4 font-italic border-bottom">
+        {{__("Edit")}} {{__("Division")}}
+    </h3>
     <div class="card">
         <div class="card-header">Edit Division #{{ $division->id }}</div>
         <div class="card-body">

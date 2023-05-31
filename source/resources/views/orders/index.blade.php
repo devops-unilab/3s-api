@@ -1,8 +1,10 @@
 @extends('layouts.app')
 
 @section('content')
+    <h3 class="pb-4 mb-4 font-italic border-bottom">
+        Orders
+    </h3>
     <div class="card">
-        <div class="card-header">Orders</div>
         <div class="card-body">
             <a href="{{ url('/orders/create') }}" class="btn btn-success btn-sm" title="Add New Order">
                 <i class="fa fa-plus" aria-hidden="true"></i> {{ __('Add New') }}

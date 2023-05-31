@@ -1,8 +1,10 @@
 @extends('layouts.app')
 
 @section('content')
+    <h3 class="pb-4 mb-4 font-italic border-bottom">
+        {{__("Order")}} {{ $order->id }}
+    </h3>
     <div class="card">
-        <div class="card-header">Order {{ $order->id }}</div>
         <div class="card-body">
 
             <a href="{{ url('/orders') }}" title="Back"><button class="btn btn-warning btn-sm"><i class="fa fa-arrow-left" aria-hidden="true"></i> Back</button></a>

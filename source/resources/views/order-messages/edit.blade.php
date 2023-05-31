@@ -1,6 +1,9 @@
 @extends('layouts.app')
 
 @section('content')
+    <h3 class="pb-4 mb-4 font-italic border-bottom">
+        {{__("Edit")}} {{__("OrderMessage")}}
+    </h3>
     <div class="card">
         <div class="card-header">Edit OrderMessage #{{ $ordermessage->id }}</div>
         <div class="card-body">

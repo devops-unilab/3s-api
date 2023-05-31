@@ -1,11 +1,13 @@
 @extends('layouts.app')
 
 @section('content')
+    <h3 class="pb-4 mb-4 font-italic border-bottom">
+        Services
+    </h3>
     <div class="card">
-        <div class="card-header">Services</div>
         <div class="card-body">
             <a href="{{ url('/services/create') }}" class="btn btn-success btn-sm" title="Add New Service">
-                <i class="fa fa-plus" aria-hidden="true"></i> Add New
+                <i class="fa fa-plus" aria-hidden="true"></i> {{ __('Add New') }}
             </a>
 
             {!! Form::open(['method' => 'GET', 'url' => '/services', 'class' => 'form-inline my-2 my-lg-0 float-right', 'role' => 'search'])  !!}
