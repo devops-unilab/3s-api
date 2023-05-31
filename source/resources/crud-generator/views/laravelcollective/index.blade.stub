@@ -5,7 +5,7 @@
         <div class="card-header">%%crudNameCap%%</div>
         <div class="card-body">
             <a href="{{ url('/%%routeGroup%%%%viewName%%/create') }}" class="btn btn-success btn-sm" title="Add New %%modelName%%">
-                <i class="fa fa-plus" aria-hidden="true"></i> Add New
+                <i class="fa fa-plus" aria-hidden="true"></i> {{ __('Add New') }}
             </a>
 
             {!! Form::open(['method' => 'GET', 'url' => '/%%routeGroup%%%%viewName%%', 'class' => 'form-inline my-2 my-lg-0 float-right', 'role' => 'search'])  !!}

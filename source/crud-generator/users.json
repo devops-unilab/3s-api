@@ -18,14 +18,6 @@
       }
     },
     {
-      "name": "login",
-      "type": "string",
-      "validations": {
-        "required": true,
-        "maxLength": 255
-      }
-    },
-    {
       "name": "role",
       "type": "select",
       "options": {
@@ -33,6 +25,14 @@
         "customer": "Cliente",
         "provider": "Técnico",
         "disabled": "Desativado"
+      }
+    },
+    {
+      "name": "login",
+      "type": "string",
+      "validations": {
+        "required": true,
+        "maxLength": 255
       }
     },
     {

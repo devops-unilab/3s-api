@@ -28,7 +28,7 @@
                         <tr>
                             <th>ID</th><td>{{ $order->id }}</td>
                         </tr>
-                        <tr><th> Division Id </th><td> {{ $order->division_id }} </td></tr><tr><th> Service Id </th><td> {{ $order->service_id }} </td></tr><tr><th> Client User Id </th><td> {{ $order->client_user_id }} </td></tr>
+                        <tr><th> Service Id </th><td> {{ $order->service_id }} </td></tr><tr><th> Description </th><td> {{ $order->description }} </td></tr><tr><th> Attachment </th><td> {{ $order->attachment }} </td></tr>
                     </tbody>
                 </table>
             </div>

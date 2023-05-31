@@ -1,3 +1,23 @@
+<div class="form-group {{ $errors->has('service_id') ? 'has-error' : ''}}">
+    {!! Form::label('service_id', 'Service Id', ['class' => 'control-label']) !!}
+    {!! Form::number('service_id', null, ('' == 'required') ? ['class' => 'form-control', 'required' => 'required'] : ['class' => 'form-control']) !!}
+    {!! $errors->first('service_id', '<p class="help-block">:message</p>') !!}
+</div>
+<div class="form-group {{ $errors->has('description') ? 'has-error' : ''}}">
+    {!! Form::label('description', 'Description', ['class' => 'control-label']) !!}
+    {!! Form::textarea('description', null, ('' == 'required') ? ['class' => 'form-control', 'required' => 'required'] : ['class' => 'form-control']) !!}
+    {!! $errors->first('description', '<p class="help-block">:message</p>') !!}
+</div>
+<div class="form-group {{ $errors->has('attachment') ? 'has-error' : ''}}">
+    {!! Form::label('attachment', 'Attachment', ['class' => 'control-label']) !!}
+    {!! Form::textarea('attachment', null, ('' == 'required') ? ['class' => 'form-control', 'required' => 'required'] : ['class' => 'form-control']) !!}
+    {!! $errors->first('attachment', '<p class="help-block">:message</p>') !!}
+</div>
+<div class="form-group {{ $errors->has('campus') ? 'has-error' : ''}}">
+    {!! Form::label('campus', 'Campus', ['class' => 'control-label']) !!}
+    {!! Form::select('campus', json_decode('{"Campus de Liberdade":"Campus de Liberdade","Campus dos Mal\u00eas":"Campus dos Mal\u00eas","Campus Auroras":"Campus Auroras","Campus Palmares":"Campus Palmares"}', true), null, ('' == 'required') ? ['class' => 'form-control', 'required' => 'required'] : ['class' => 'form-control']) !!}
+    {!! $errors->first('campus', '<p class="help-block">:message</p>') !!}
+</div>
 <div class="form-group {{ $errors->has('division_id') ? 'has-error' : ''}}">
     {!! Form::label('division_id', 'Division Id', ['class' => 'control-label']) !!}
     {!! Form::number('division_id', null, ('' == 'required') ? ['class' => 'form-control', 'required' => 'required'] : ['class' => 'form-control']) !!}
@@ -12,16 +32,6 @@
     {!! Form::label('client_user_id', 'Client User Id', ['class' => 'control-label']) !!}
     {!! Form::number('client_user_id', null, ('' == 'required') ? ['class' => 'form-control', 'required' => 'required'] : ['class' => 'form-control']) !!}
     {!! $errors->first('client_user_id', '<p class="help-block">:message</p>') !!}
-</div>
-<div class="form-group {{ $errors->has('description') ? 'has-error' : ''}}">
-    {!! Form::label('description', 'Description', ['class' => 'control-label']) !!}
-    {!! Form::textarea('description', null, ('' == 'required') ? ['class' => 'form-control', 'required' => 'required'] : ['class' => 'form-control']) !!}
-    {!! $errors->first('description', '<p class="help-block">:message</p>') !!}
-</div>
-<div class="form-group {{ $errors->has('campus') ? 'has-error' : ''}}">
-    {!! Form::label('campus', 'Campus', ['class' => 'control-label']) !!}
-    {!! Form::text('campus', null, ('' == 'required') ? ['class' => 'form-control', 'required' => 'required'] : ['class' => 'form-control']) !!}
-    {!! $errors->first('campus', '<p class="help-block">:message</p>') !!}
 </div>
 <div class="form-group {{ $errors->has('tag') ? 'has-error' : ''}}">
     {!! Form::label('tag', 'Tag', ['class' => 'control-label']) !!}
@@ -82,11 +92,6 @@
     {!! Form::label('assigned_user_id', 'Assigned User Id', ['class' => 'control-label']) !!}
     {!! Form::number('assigned_user_id', null, ('' == 'required') ? ['class' => 'form-control', 'required' => 'required'] : ['class' => 'form-control']) !!}
     {!! $errors->first('assigned_user_id', '<p class="help-block">:message</p>') !!}
-</div>
-<div class="form-group {{ $errors->has('attachment') ? 'has-error' : ''}}">
-    {!! Form::label('attachment', 'Attachment', ['class' => 'control-label']) !!}
-    {!! Form::textarea('attachment', null, ('' == 'required') ? ['class' => 'form-control', 'required' => 'required'] : ['class' => 'form-control']) !!}
-    {!! $errors->first('attachment', '<p class="help-block">:message</p>') !!}
 </div>
 <div class="form-group {{ $errors->has('place') ? 'has-error' : ''}}">
     {!! Form::label('place', 'Place', ['class' => 'control-label']) !!}

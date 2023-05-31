@@ -45,7 +45,10 @@ class LoginRequest extends FormRequest
 
         $dataAPi = ['login' => $this->login, 'senha' => $this->password];
 
-        $response = Http::post(env('UNILAB_API_ORIGIN') . '/authenticate', $dataAPi);
+        $apiOrigin = env('UNILAB_API_ORIGIN') === null ? "https://api.unilab.edu.br/api" :  env('UNILAB_API_ORIGIN');
+
+
+        $response = Http::post($apiOrigin . '/authenticate', $dataAPi);
 
         $responseJ = json_decode($response->body());
 
@@ -63,10 +66,10 @@ class LoginRequest extends FormRequest
         $headers = [
             'Authorization' => 'Bearer ' . $responseJ->access_token,
         ];
-        $response = Http::withHeaders($headers)->get(env('UNILAB_API_ORIGIN') . '/user', $headers);
+        $response = Http::withHeaders($headers)->get($apiOrigin . '/user', $headers);
         $responseJ2 = json_decode($response->body());
 
-        $response = Http::withHeaders($headers)->get(env('UNILAB_API_ORIGIN') . '/bond', $headers);
+        $response = Http::withHeaders($headers)->get($apiOrigin . '/bond', $headers);
         $responseJ3 = json_decode($response->body());
 
 

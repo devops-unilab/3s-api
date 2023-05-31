@@ -5,7 +5,7 @@
         <div class="card-header">Users</div>
         <div class="card-body">
             <a href="{{ url('/users/create') }}" class="btn btn-success btn-sm" title="Add New User">
-                <i class="fa fa-plus" aria-hidden="true"></i> Add New
+                <i class="fa fa-plus" aria-hidden="true"></i> {{ __('Add New') }}
             </a>
 
             {!! Form::open(['method' => 'GET', 'url' => '/users', 'class' => 'form-inline my-2 my-lg-0 float-right', 'role' => 'search'])  !!}
@@ -25,14 +25,14 @@
                 <table class="table table-borderless">
                     <thead>
                         <tr>
-                            <th>#</th><th>Name</th><th>Email</th><th>Login</th><th>Actions</th>
+                            <th>#</th><th>Name</th><th>Email</th><th>Role</th><th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
                     @foreach($users as $item)
                         <tr>
                             <td>{{ $loop->iteration }}</td>
-                            <td>{{ $item->name }}</td><td>{{ $item->email }}</td><td>{{ $item->login }}</td>
+                            <td>{{ $item->name }}</td><td>{{ $item->email }}</td><td>{{ $item->role }}</td>
                             <td>
                                 <a href="{{ url('/users/' . $item->id) }}" title="View User"><button class="btn btn-info btn-sm"><i class="fa fa-eye" aria-hidden="true"></i> View</button></a>
                                 <a href="{{ url('/users/' . $item->id . '/edit') }}" title="Edit User"><button class="btn btn-primary btn-sm"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Edit</button></a>

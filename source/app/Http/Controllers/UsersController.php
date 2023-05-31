@@ -23,8 +23,8 @@ class UsersController extends Controller
         if (!empty($keyword)) {
             $users = User::where('name', 'LIKE', "%$keyword%")
                 ->orWhere('email', 'LIKE', "%$keyword%")
-                ->orWhere('login', 'LIKE', "%$keyword%")
                 ->orWhere('role', 'LIKE', "%$keyword%")
+                ->orWhere('login', 'LIKE', "%$keyword%")
                 ->orWhere('division_sig', 'LIKE', "%$keyword%")
                 ->latest()->paginate($perPage);
         } else {

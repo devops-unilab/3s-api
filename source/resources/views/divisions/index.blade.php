@@ -5,7 +5,7 @@
         <div class="card-header">Divisions</div>
         <div class="card-body">
             <a href="{{ url('/divisions/create') }}" class="btn btn-success btn-sm" title="Add New Division">
-                <i class="fa fa-plus" aria-hidden="true"></i> Add New
+                <i class="fa fa-plus" aria-hidden="true"></i> {{ __('Add New') }}
             </a>
 
             {!! Form::open(['method' => 'GET', 'url' => '/divisions', 'class' => 'form-inline my-2 my-lg-0 float-right', 'role' => 'search'])  !!}

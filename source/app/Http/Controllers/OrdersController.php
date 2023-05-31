@@ -21,11 +21,13 @@ class OrdersController extends Controller
         $perPage = 25;
 
         if (!empty($keyword)) {
-            $orders = Order::where('division_id', 'LIKE', "%$keyword%")
+            $orders = Order::where('service_id', 'LIKE', "%$keyword%")
+                ->orWhere('description', 'LIKE', "%$keyword%")
+                ->orWhere('attachment', 'LIKE', "%$keyword%")
+                ->orWhere('campus', 'LIKE', "%$keyword%")
+                ->orWhere('division_id', 'LIKE', "%$keyword%")
                 ->orWhere('service_id', 'LIKE', "%$keyword%")
                 ->orWhere('client_user_id', 'LIKE', "%$keyword%")
-                ->orWhere('description', 'LIKE', "%$keyword%")
-                ->orWhere('campus', 'LIKE', "%$keyword%")
                 ->orWhere('tag', 'LIKE', "%$keyword%")
                 ->orWhere('phone_number', 'LIKE', "%$keyword%")
                 ->orWhere('division', 'LIKE', "%$keyword%")
@@ -38,7 +40,6 @@ class OrdersController extends Controller
                 ->orWhere('confirmed_at', 'LIKE', "%$keyword%")
                 ->orWhere('provider_user_id', 'LIKE', "%$keyword%")
                 ->orWhere('assigned_user_id', 'LIKE', "%$keyword%")
-                ->orWhere('attachment', 'LIKE', "%$keyword%")
                 ->orWhere('place', 'LIKE', "%$keyword%")
                 ->latest()->paginate($perPage);
         } else {

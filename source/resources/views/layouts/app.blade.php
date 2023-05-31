@@ -55,7 +55,9 @@
                 </div>
             </div>
         </header>
-        @include('admin.navbar')
+        @if (auth()->check())
+            @include('admin.navbar')
+        @endif
         <main class="card container pb-2">
             <br>
             @yield('content')
