@@ -7,6 +7,16 @@ php artisan cache:clear
 1. Comment all routes;
 2. Delete all files
 
+del ./app/Http/Controllers/UsersController.php
+del ./resources/views/users/create.blade.php
+del ./resources/views/users/edit.blade.php
+del ./resources/views/users/form.blade.php
+del ./resources/views/users/index.blade.php
+del ./resources/views/users/show.blade.php
+
+php artisan crud:generate Users --fields_from_file="D:\web\dti-unilab\3s_cicd\source\crud-generator\users.json" --controller-namespace=App\Http\Controllers --form-helper=laravelcollective
+
+
 del ./app/Http/Controllers/DivisionsController.php
 del ./app/Models/Division.php
 del ./resources/views/divisions/create.blade.php
@@ -17,14 +27,6 @@ del ./resources/views/divisions/show.blade.php
 
 php artisan crud:generate Divisions --fields_from_file="D:\web\dti-unilab\3s_cicd\source\crud-generator\divisions.json" --controller-namespace=App\Http\Controllers --form-helper=laravelcollective
 
-del ./app/Http/Controllers/UsersController.php
-del ./resources/views/users/create.blade.php
-del ./resources/views/users/edit.blade.php
-del ./resources/views/users/form.blade.php
-del ./resources/views/users/index.blade.php
-del ./resources/views/users/show.blade.php
-
-php artisan crud:generate Users --fields_from_file="D:\web\dti-unilab\3s_cicd\source\crud-generator\users.json" --controller-namespace=App\Http\Controllers --form-helper=laravelcollective
 
 
 del ./app/Http/Controllers/ServicesController.php
@@ -48,7 +50,7 @@ del ./resources/views/orders/show.blade.php
 
 php artisan crud:generate Orders --fields_from_file="D:\web\dti-unilab\3s_cicd\source\crud-generator\orders.json" --controller-namespace=App\Http\Controllers --form-helper=laravelcollective
 
-del ./app/Http/Controllers/OrderMessages.php
+del ./app/Http/Controllers/OrderMessagesController.php
 del ./app/Models/OrderMessage.php
 del ./resources/views/order-messages/create.blade.php
 del ./resources/views/order-messages/edit.blade.php
@@ -57,7 +59,17 @@ del ./resources/views/order-messages/index.blade.php
 del ./resources/views/order-messages/show.blade.php
 
 php artisan crud:generate OrderMessages --fields_from_file="D:\web\dti-unilab\3s_cicd\source\crud-generator\order_messages.json" --controller-namespace=App\Http\Controllers --form-helper=laravelcollective
-php artisan crud:generate OrderStatusLogs --fields_from_file="D:\web\dti-unilab\3s_cicd\source\crud-generator\order_status_logs.json" --controller-namespace=App\Http\Controllers --form-helper=laravelcollectiv
+
+
+del ./app/Http/Controllers/OrderStatusLogsController.php
+del ./app/Models/OrderStatusLog.php
+del ./resources/views/order-status-logs/create.blade.php
+del ./resources/views/order-status-logs/edit.blade.php
+del ./resources/views/order-status-logs/form.blade.php
+del ./resources/views/order-status-logs/index.blade.php
+del ./resources/views/order-status-logs/show.blade.php
+
+php artisan crud:generate OrderStatusLogs --fields_from_file="D:\web\dti-unilab\3s_cicd\source\crud-generator\order_status_logs.json" --controller-namespace=App\Http\Controllers --form-helper=laravelcollective
 
 
 

@@ -123,5 +123,8 @@
     "Regenerate Recovery Codes" : "Gerar novamente os códigos de recuperação" ,
     "Show Recovery Codes" : "Mostrar os códigos de recuperação" ,
     "Disable" : "Desabilitar",
-    "Add New": "Adicionar"
+    "Add New": "Adicionar",
+    "Order": "Chamado",
+    "Back": "Voltar",
+    "Edit": "Editar"
 }
