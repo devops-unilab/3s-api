@@ -1,0 +1,71 @@
+{
+  "model": "User",
+  "fields": [
+    {
+      "name": "name",
+      "type": "string",
+      "validations": {
+        "required": true,
+        "maxLength": 255
+      }
+    },
+    {
+      "name": "email",
+      "type": "string",
+      "validations": {
+        "required": true,
+        "maxLength": 255
+      }
+    },
+    {
+      "name": "role",
+      "type": "select",
+      "options": {
+        "adm": "Administrador",
+        "customer": "Cliente",
+        "provider": "Técnico",
+        "disabled": "Desativado"
+      }
+    },
+    {
+      "name": "login",
+      "type": "string",
+      "validations": {
+        "required": true,
+        "maxLength": 255
+      }
+    },
+    {
+      "name": "division_sig",
+      "type": "string",
+      "validations": {
+        "maxLength": 255
+      }
+    },
+    {
+      "name": "division_id",
+      "type": "integer#unsigned"
+    }
+  ],
+  "foreign_keys": [
+    {
+      "column": "division_id",
+      "references": "id",
+      "on": "divisions",
+      "onDelete": "cascade"
+    }
+  ],
+  "relationships": [
+    {
+      "name": "division",
+      "type": "belongsTo",
+      "class": "App\\Models\\Division"
+    }
+  ],
+  "validations": [
+    {
+      "field": "name",
+      "rules": "required|max:255"
+    }
+  ]
+}

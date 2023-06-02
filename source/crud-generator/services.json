@@ -1,0 +1,51 @@
+{
+    "fields": [
+        {
+            "name": "name",
+            "type": "string"
+        },
+        {
+            "name": "description",
+            "type": "text"
+        },
+        {
+            "name": "sla_duration",
+            "type": "number"
+        },
+        {
+            "name": "role",
+            "type": "select",
+            "options": {
+                "adm": "Administrador",
+                "customer": "Cliente",
+                "provider": "Técnico",
+                "disabled": "Desativado"
+            }
+        },
+        {
+            "name": "division_id",
+            "type": "integer#unsigned"
+        }
+    ],
+    "foreign_keys": [
+        {
+            "column": "division_id",
+            "references": "id",
+            "on": "divisions",
+            "onDelete": "cascade"
+        }
+    ],
+    "relationships": [
+        {
+            "name": "division",
+            "type": "belongsTo",
+            "class": "App\\Models\\Division"
+        }
+    ],
+    "validations": [
+        {
+            "field": "name",
+            "rules": "required|max:255"
+        }
+    ]
+}
