@@ -26,6 +26,7 @@
 
             <div class="table-responsive">
                 <table class="table table-borderless">
+                    <caption>This is a table</caption>
                     <tbody>
                         <tr>
                             <th>ID</th><td>{{ $user->id }}</td>

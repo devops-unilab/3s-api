@@ -25,6 +25,7 @@ class ServicesController extends Controller
                 ->orWhere('description', 'LIKE', "%$keyword%")
                 ->orWhere('sla_duration', 'LIKE', "%$keyword%")
                 ->orWhere('role', 'LIKE', "%$keyword%")
+                ->orWhere('division_id', 'LIKE', "%$keyword%")
                 ->latest()->paginate($perPage);
         } else {
             $services = Service::latest()->paginate($perPage);

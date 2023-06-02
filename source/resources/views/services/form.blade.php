@@ -18,6 +18,11 @@
     {!! Form::select('role', json_decode('{"adm":"Administrador","customer":"Cliente","provider":"T\u00e9cnico","disabled":"Desativado"}', true), null, ('' == 'required') ? ['class' => 'form-control', 'required' => 'required'] : ['class' => 'form-control']) !!}
     {!! $errors->first('role', '<p class="help-block">:message</p>') !!}
 </div>
+<div class="form-group {{ $errors->has('division_id') ? 'has-error' : ''}}">
+    {!! Form::label('division_id', 'Division Id', ['class' => 'control-label']) !!}
+    {!! Form::number('division_id', null, ('' == 'required') ? ['class' => 'form-control', 'required' => 'required'] : ['class' => 'form-control']) !!}
+    {!! $errors->first('division_id', '<p class="help-block">:message</p>') !!}
+</div>
 
 
 <div class="form-group">
