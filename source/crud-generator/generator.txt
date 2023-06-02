@@ -7,7 +7,9 @@ php artisan cache:clear
 1. Comment all routes;
 2. Delete all files
 
+
 del ./app/Http/Controllers/UsersController.php
+del ./app/Models/User.php
 del ./resources/views/users/create.blade.php
 del ./resources/views/users/edit.blade.php
 del ./resources/views/users/form.blade.php

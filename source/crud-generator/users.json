@@ -41,20 +41,24 @@
       "validations": {
         "maxLength": 255
       }
+    },
+    {
+      "name": "division_id",
+      "type": "integer#unsigned"
     }
   ],
   "foreign_keys": [
     {
       "column": "division_id",
       "references": "id",
-      "on": "divisoins",
+      "on": "divisions",
       "onDelete": "cascade"
     }
   ],
   "relationships": [
     {
       "name": "division",
-      "type": "hasOne",
+      "type": "belongsTo",
       "class": "App\\Models\\Division"
     }
   ],
