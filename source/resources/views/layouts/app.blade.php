@@ -69,7 +69,6 @@
 
     </footer>
 
-    <script src="https://3s.unilab.edu.br/js/change-contraste.js?a=1"></script>
 </body>
 
 </html>
