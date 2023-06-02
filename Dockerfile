@@ -65,17 +65,17 @@ RUN rm -f /lib/systemd/system/multi-user.target.wants/* \
   /lib/systemd/system/sysinit.target.wants/systemd-tmpfiles-setup* \
   /lib/systemd/system/systemd-update-utmp*
 
-RUN docker-php-ext-install pdo pdo_pgsql pgsql 
+RUN docker-php-ext-install pdo pdo_pgsql pgsql
 RUN docker-php-ext-configure opcache --enable-opcache
 
 ARG COMMIT_SHA
 ARG VERSION
 ENV TZ America/Fortaleza
-ENV LANG pt_BR.UTF-8 
-ENV LC_CTYPE pt_BR.UTF-8 
+ENV LANG pt_BR.UTF-8
+ENV LC_CTYPE pt_BR.UTF-8
 ENV LC_ALL C
 ENV LANGUAGE pt_BR:pt:en
-RUN locale-gen pt_BR.UTF-8 
+RUN locale-gen pt_BR.UTF-8
 RUN dpkg-reconfigure locales tzdata -f noninteractive
 
 ENV APACHE_RUN_USER www-data
@@ -88,12 +88,12 @@ RUN cd /tmp \
 
 COPY source/ /var/www/html
 RUN mkdir -p ./public/uploads/ocorrencia/anexo
- 
+
 RUN composer install --ignore-platform-reqs --no-interaction --no-progress --no-scripts --optimize-autoloader
 
 RUN sed -i "s/'default' => env('DB_CONNECTION', 'mysql'),/'default' => env('DB_CONNECTION', 'pgsql'),/g" config/database.php
 RUN sed -i "s/        \/\//        '*',/g" app/Http/Middleware/VerifyCsrfToken.php
-RUN cp bash/apache/000-default.conf /etc/apache2/sites-available/000-default.conf \
+RUN cp source/bash/apache/000-default.conf /etc/apache2/sites-available/000-default.conf \
   && apachectl configtest
 
 RUN adduser --no-create-home --disabled-password --shell /bin/bash --gecos "" --force-badname 3s \
@@ -117,7 +117,7 @@ FROM dev as production
 ENV APP_ENV=production
 ENV APP_DEBUG=false
 
-RUN cp bash/php/conf.d/opcache.ini /usr/local/etc/php/conf.d/opcache.ini \
+RUN cp source/bash/php/conf.d/opcache.ini /usr/local/etc/php/conf.d/opcache.ini \
   && ln -s /etc/apache2/sites-available/000-default.conf /etc/apache2/sites-enabled/default.conf
 RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf
 
