@@ -94,9 +94,6 @@ pipeline {
           apt-get update && apt-get upgrade -y
           apt-get install -y locales sudo curl wget postgresql-client unzip rsync procps
 
-          # Instala Node.JS
-          curl -fsSLk https://deb.nodesource.com/setup_20.x | bash - && apt-get install -y nodejs
-
           # Setup locale
           DEBIAN_FRONTEND=noninteractive dpkg-reconfigure locales
           sed -i 's/# pt_BR.UTF-8 UTF-8/pt_BR.UTF-8 UTF-8/' /etc/locale.gen
@@ -137,6 +134,7 @@ pipeline {
       steps {
         container('maven') {
           script {
+            sh 'curl -fsSLk https://deb.nodesource.com/setup_18.x | bash - && apt-get install -y nodejs'
             def branchName = env.BRANCH_NAME
             def scannerHome = tool 'SonarScanner'
             def projectKey = env.SONAR_PROJECT_KEY
@@ -150,18 +148,16 @@ pipeline {
                   waitUntil {
                       def response = httpRequest(url: ceTaskUrl, authentication: 'sonar-admin')
                       ceTask = readJSON text: response.content
-                      echo ceTask.toString()
                       return "SUCCESS".equals(ceTask["task"]["status"])
                   }
               }
               /* Quality Gate */
               def resp = httpRequest(url : sonarServerUrl + "/api/qualitygates/project_status?analysisId=" + ceTask["task"]["analysisId"], authentication: 'sonar-admin')
               def qualitygate = readJSON text: resp.content
-              echo qualitygate.toString()
-              // if ("ERROR".equals(qualitygate["projectStatus"]["status"])) {
-              //   error "Pipeline abortada devido a falha em Quality Gate"
-              //   waitForQualityGate abortPipeline: true
-              // }
+              if ("ERROR".equals(qualitygate["projectStatus"]["status"])) {
+                error "Pipeline abortada devido a falha em Quality Gate"
+                waitForQualityGate abortPipeline: true
+              }
             }
           }
         }
