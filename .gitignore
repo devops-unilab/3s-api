@@ -494,7 +494,6 @@ composer.phar
 /**/.vscode
 
 ##### OTHERS
-*.ini
 *.sqlite3
 *.db
 !/source/.env.example
