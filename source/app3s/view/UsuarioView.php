@@ -18,7 +18,7 @@ class UsuarioView
   public function formLogin()
   {
     echo '
-        
+
 <br><br>
 
 <div class="container forget-password">
@@ -27,17 +27,17 @@ class UsuarioView
             <div class="panel-body p-3 m-3">
                 <div class="text-center">
 
-                            
+
                             <div class="panel">
                                 <h3>Entrar no sistema 3s</h3>
-                               
+
                             </div>
                             <form id="login-form" class="form" method="post" action=".">
-                    
+
                                 <div class="form-group">
                                     <input type="text" size="350" name="usuario" class="form-control" id="usuario" placeholder="Usuario do SIG" autofocus="autofocus">
                                 </div>
-                    
+
                                 <div class="form-group">
                                     <input type="password" class="form-control" name="senha" size="100" id="senha" placeholder="Senha do SIG">
                                 </div>
@@ -48,7 +48,7 @@ class UsuarioView
                                     <span id="spinner-submit" class="escondido spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                                     Entrar
                                 </button>
-                                
+
                                 <input type="hidden" class="btn btn-info btn-md" name="logar" value="Entrar">
                             </form>
 
@@ -64,77 +64,6 @@ class UsuarioView
 ';
   }
 
-  public function showInsertForm()
-  {
-    echo '
-<!-- Button trigger modal -->
-<button type="button" class="btn btn-primary m-3" data-toggle="modal" data-target="#modalAddUsuario">
-  Adicionar
-</button>
-
-<!-- Modal -->
-<div class="modal fade" id="modalAddUsuario" tabindex="-1" role="dialog" aria-labelledby="labelAddUsuario" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="labelAddUsuario">Adicionar Usuario</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-          <form id="insert_form_usuario" class="user" method="post">
-            <input type="hidden" name="enviar_usuario" value="1">                
-
-
-
-                                        <div class="form-group">
-                                            <label for="nome">Nome</label>
-                                            <input type="text" class="form-control"  name="nome" id="nome" placeholder="Nome">
-                                        </div>
-
-                                        <div class="form-group">
-                                            <label for="email">Email</label>
-                                            <input type="text" class="form-control"  name="email" id="email" placeholder="Email">
-                                        </div>
-
-                                        <div class="form-group">
-                                            <label for="login">Login</label>
-                                            <input type="text" class="form-control"  name="login" id="login" placeholder="Login">
-                                        </div>
-
-                                        <div class="form-group">
-                                            <label for="senha">Senha</label>
-                                            <input type="text" class="form-control"  name="senha" id="senha" placeholder="Senha">
-                                        </div>
-
-                                        <div class="form-group">
-                                            <label for="nivel">Nivel</label>
-                                            <input type="text" class="form-control"  name="nivel" id="nivel" placeholder="Nivel">
-                                        </div>
-
-                                        <div class="form-group">
-                                            <label for="id_setor">Id Setor</label>
-                                            <input type="number" class="form-control"  name="id_setor" id="id_setor" placeholder="Id Setor">
-                                        </div>
-
-						              </form>
-
-
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
-        <button form="insert_form_usuario" type="submit" class="btn btn-primary">Cadastrar</button>
-      </div>
-    </div>
-  </div>
-</div>
-            
-            
-			
-';
-  }
-
 
 
 
@@ -143,17 +72,17 @@ class UsuarioView
   public function showList($lista)
   {
     echo '
-                                            
-                                            
-                                            
+
+
+
 
           <div class="card">
                 <div class="card-header">
                   Lista Usuario
                 </div>
                 <div class="card-body">
-                                            
-                                            
+
+
 		<div class="table-responsive">
 			<table class="table table-bordered" id="dataTable" width="100%"
 				cellspacing="0">
@@ -190,13 +119,13 @@ class UsuarioView
 				</tbody>
 			</table>
 		</div>
-            
-            
-            
-            
+
+
+
+
   </div>
 </div>
-            
+
 ';
   }
 
@@ -205,8 +134,8 @@ class UsuarioView
   public function showEditForm(Usuario $selecionado, $setores)
   {
     echo '
-	    
-	    
+
+
 
     <div class="card">
         <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
@@ -214,10 +143,10 @@ class UsuarioView
         </div>
         <div class="card-body">
             <form class="user" method="post" id="edit_form_usuario">
-                                        
+
                     <div class="form-group">
                         <label for="select-nivel">Nivel</label>
-                        
+
                         <select id="select-nivel" required name="nivel">
                             <option value="">Nível de Acesso</option>
                             <option value="c" ' . ($selecionado->getNivel() == 'c' ? 'selected' : '') . '>Comum</option>
@@ -241,12 +170,12 @@ class UsuarioView
                                     <option value="' . $area->getId() . '" ' . ($selecionado->getIdSetor() === $area->getId() ? 'selected' : '') . '>' . $area->getNome() . '</option>';
     }
     echo '
-	        
+
                                 </select>
                               </div>';
     echo '
 
-                    
+
                 <input type="hidden" value="1" name="edit_usuario">
                 </form>
 
@@ -256,9 +185,9 @@ class UsuarioView
         </div>
     </div>
 
-	    
 
-										
+
+
 						              ';
   }
 }
