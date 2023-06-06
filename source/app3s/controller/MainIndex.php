@@ -1,34 +1,37 @@
-<?php 
+<?php
 
 namespace app3s\controller;
 
 use app3s\util\Sessao;
 
-class MainIndex{
-    
-    public function main(){
-        $sessao = new Sessao();
-        if(isset($_GET['ajax'])){
-            $mainAjax = new MainAjax();
-            $mainAjax->main();
-            exit(0);
-        }
-        if(isset($_REQUEST['api'])){
-            $mainApi = new MainApi();
-            $mainApi->main();
-            exit(0);
-        }
-        if (isset($_GET["sair"])) {
-            $sessao->mataSessao();
-            echo '<META HTTP-EQUIV="REFRESH" CONTENT="0; URL=.">';
-        }
-        
-        $this->pagina();
+class MainIndex
+{
+
+  public function main()
+  {
+    $sessao = new Sessao();
+    if (isset($_GET['ajax'])) {
+      $mainAjax = new MainAjax();
+      $mainAjax->main();
+      exit(0);
+    }
+    if (isset($_REQUEST['api'])) {
+      $mainApi = new MainApi();
+      $mainApi->main();
+      exit(0);
+    }
+    if (isset($_GET["sair"])) {
+      $sessao->mataSessao();
+      echo '<META HTTP-EQUIV="REFRESH" CONTENT="0; URL=.">';
     }
 
-    public function pagina(){
-        
-        echo '<!doctype html>
+    $this->pagina();
+  }
+
+  public function pagina()
+  {
+
+    echo '<!doctype html>
 <html lang="pt-br">
 <head>
 
@@ -94,12 +97,12 @@ class MainIndex{
       </div>
     </div>
   </header>';
-        
-NavBarController::main();
 
-echo '  
+    NavBarController::main();
 
-  
+    echo '
+
+
 </div>
 
 <main role="main" class="container">
@@ -110,10 +113,10 @@ echo '
 
 
 
-$principal = new MainContent();
-$principal->main();
+    $principal = new MainContent();
+    $principal->main();
 
-echo '
+    echo '
 
 
 
@@ -123,9 +126,9 @@ echo '
   <p>Desenvolvido pela <a href="https://dti.unilab.edu.br/"> Diretoria de Tecnologia da Informação DTI </a> / <a href="http://unilab.edu.br">Unilab</a></p>
 
 </footer>
-            
-            
-            
+
+
+
 <!-- Modal -->
 <div class="modal fade" id="modalResposta" tabindex="-1" role="dialog" aria-labelledby="labelModalResposta" aria-hidden="true">
   <div class="modal-dialog" role="document">
@@ -146,8 +149,8 @@ echo '
   </div>
 </div>';
     $this->mainJS();
-    
-echo '
+
+    echo '
 
 
 
@@ -155,10 +158,11 @@ echo '
 </html>
 
 ';
-    }
-    
-    public function mainJS(){
-        echo '
+  }
+
+  public function mainJS()
+  {
+    echo '
 <script src="js/barra_2.0.js"></script>
 <script src="js/jquery-3.5.1.min.js"></script>
 <script src="vendor/popper.min.js"></script>
@@ -172,54 +176,48 @@ echo '
 <script src="js/change-contraste.js?a=1"></script>
 <script src="js/ocorrencia_selectize.js?a=1"></script>
 ';
-        $this->pageJS();
-        
-    }
-    
-    public function pageJS(){
-        if(isset($_GET['page'])){
-            switch ($_GET['page'])
-            {
-                case 'ocorrencia':
-                    
-                    echo '
+    $this->pageJS();
+  }
+
+  public function pageJS()
+  {
+    if (isset($_GET['page'])) {
+      switch ($_GET['page']) {
+        case 'ocorrencia':
+
+          echo '
 <script src="js/status_ocorrencia.js?a=1"></script>
 <script src="js/jquery.easyPaginate.js?a=1"></script>
 <script src="js/ocorrencia.js?a=145"></script>';
-                    if(isset($_GET['selecionar'])){
-                        echo '
+          if (isset($_GET['selecionar'])) {
+            echo '
 <script src="js/contador.js"></script>
 <script src="js/mensagem_forum.js?a=17"></script>';
-                    }
-                    
-                    break;
-                case 'painel_kamban':
-                    echo '
+          }
+
+          break;
+        case 'painel_kamban':
+          echo '
 <script src="js/painel_kamban.js?123=a"></script>';
-                    break;
-                case 'painel_tabela':
-                    echo '
+          break;
+        case 'painel_tabela':
+          echo '
 <script src="js/painel_tabela.js"></script>';
-                    break;
-                default:
-                    break;
-            }
-        }else{
-            echo '
+          break;
+        default:
+          break;
+      }
+    } else {
+      echo '
 <script src="js/status_ocorrencia.js?a=1"></script>
 <script src="js/jquery.easyPaginate.js?a=1"></script>
 <script src="js/ocorrencia.js?a=1467"></script>';
-            
-            if(isset($_GET['selecionar'])){
-                echo '
+
+      if (isset($_GET['selecionar'])) {
+        echo '
 <script src="js/contador.js"></script>
 <script src="js/mensagem_forum.js?a=15"></script>';
-            }
-            
-        }
+      }
     }
-    
-    
+  }
 }
-
-?>

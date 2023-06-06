@@ -1,5 +1,5 @@
 <?php
-            
+
 /**
  * Classe feita para manipulação do objeto UsuarioController
  * feita automaticamente com programa gerador de software inventado por
@@ -16,24 +16,26 @@ use app3s\view\UsuarioView;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 
-class UsuarioController {
+class UsuarioController
+{
 
 	protected  $view;
-    protected $dao;
+	protected $dao;
 
-	public function __construct(){
+	public function __construct()
+	{
 		$this->dao = new UsuarioDAO();
 		$this->view = new UsuarioView();
 	}
 
-	
+
 	public function autenticar(Usuario $usuario)
 	{
 
 		$login = $usuario->getLogin();
 		$senha = $usuario->getSenha();
 		$data = ['login' =>  $login, 'senha' => $senha];
-		$response = Http::post(env('UNILAB_API_ORIGIN').'/authenticate', $data);
+		$response = Http::post(env('UNILAB_API_ORIGIN') . '/authenticate', $data);
 		$responseJ = json_decode($response->body());
 
 		$idUsuario  = 0;
@@ -45,12 +47,12 @@ class UsuarioController {
 			return false;
 		}
 		$headers = [
-			'Authorization' => 'Bearer ' .$responseJ->access_token,
+			'Authorization' => 'Bearer ' . $responseJ->access_token,
 		];
-		$response = Http::withHeaders($headers)->get(env('UNILAB_API_ORIGIN').'/user', $headers);
+		$response = Http::withHeaders($headers)->get(env('UNILAB_API_ORIGIN') . '/user', $headers);
 		$responseJ2 = json_decode($response->body());
-		
-		$response = Http::withHeaders($headers)->get(env('UNILAB_API_ORIGIN').'/bond', $headers);
+
+		$response = Http::withHeaders($headers)->get(env('UNILAB_API_ORIGIN') . '/bond', $headers);
 		$responseJ3 = json_decode($response->body());
 		$nivel = 'c';
 		if ($responseJ2->id_status_servidor != 1) {
@@ -68,9 +70,8 @@ class UsuarioController {
 					'nivel' => $nivel
 				]
 			);
-			
 		} else {
-			$nivel = $data->nivel; 
+			$nivel = $data->nivel;
 		}
 		$usuario->setId($idUsuario);
 		$usuario->setNome($responseJ2->nome);
@@ -81,18 +82,19 @@ class UsuarioController {
 		$usuario->siglaUnidade = $responseJ3[0]->sigla_unidade;
 		return true;
 	}
-	public function mudarNivel(){
-		
+	public function mudarNivel()
+	{
+
 		$sessao = new Sessao();
-		if($sessao->getNIvelOriginal() == Sessao::NIVEL_ADM){
+		if ($sessao->getNIvelOriginal() == Sessao::NIVEL_ADM) {
 			$sessao->setNivelDeAcesso($_POST['nivel']);
-			echo ':sucess:'.$sessao->getNivelAcesso();
+			echo ':sucess:' . $sessao->getNivelAcesso();
 			return;
 		}
-		if($sessao->getNIvelOriginal() == Sessao::NIVEL_TECNICO){
-			if($_POST['nivel'] != Sessao::NIVEL_ADM){
+		if ($sessao->getNIvelOriginal() == Sessao::NIVEL_TECNICO) {
+			if ($_POST['nivel'] != Sessao::NIVEL_ADM) {
 				$sessao->setNivelDeAcesso($_POST['nivel']);
-				echo ':sucess:'.$sessao->getNivelAcesso();
+				echo ':sucess:' . $sessao->getNivelAcesso();
 				return;
 			}
 			echo ':falha:';
@@ -100,39 +102,41 @@ class UsuarioController {
 		}
 		echo ':falha:';
 	}
-	
-	public function ajaxLogin(){
-	    if (!isset($_POST['logar'])) {
-	        return ":falha";
-	    }
-	    $usuario = new Usuario();
-	    $usuario->setLogin($_POST['usuario']);
-	    $usuario->setSenha($_POST['senha']);
-	    
-	    if ($this->autenticar($usuario)) {
-	        
-	        $sessao = new Sessao();
-	        $sessao->criaSessao($usuario->getId(), $usuario->getNivel(), $usuario->getLogin(), $usuario->getNome(), $usuario->getEmail());
-			
-			
+
+	public function ajaxLogin()
+	{
+		if (!isset($_POST['logar'])) {
+			return ":falha";
+		}
+		$usuario = new Usuario();
+		$usuario->setLogin($_POST['usuario']);
+		$usuario->setSenha($_POST['senha']);
+
+		if ($this->autenticar($usuario)) {
+
+			$sessao = new Sessao();
+			$sessao->criaSessao($usuario->getId(), $usuario->getNivel(), $usuario->getLogin(), $usuario->getNome(), $usuario->getEmail());
+
+
 
 			$sessao->setIDUnidade($usuario->idUnidade);
 			$sessao->setUnidade($usuario->siglaUnidade);
-	        echo ":sucesso:".$sessao->getNivelAcesso();
-	    }else{
-	        echo ":falha";
-	    }
+			echo ":sucesso:" . $sessao->getNivelAcesso();
+		} else {
+			echo ":falha";
+		}
 	}
-	
-	
-	public function telaLogin(){
-	    echo '
+
+
+	public function telaLogin()
+	{
+		echo '
 <div class="container">
     <div class="row">
         <div class="card mb-4">
             <div class="card-body">';
-	    $this->view->formLogin();
-	    echo '
+		$this->view->formLogin();
+		echo '
             </div>
         </div>
 
@@ -141,125 +145,46 @@ class UsuarioController {
 ';
 	}
 
-	public function fetch() 
-    {
+	public function fetch()
+	{
 		$list = $this->dao->fetch();
 		$this->view->showList($list);
 	}
 
 
-	public function add() {
-            
-        if(!isset($_POST['enviar_usuario'])){
-            $this->view->showInsertForm();
-		    return;
-		}
-		if (! ( isset ( $_POST ['nome'] ) && isset ( $_POST ['email'] ) && isset ( $_POST ['login'] ) && isset ( $_POST ['senha'] ) && isset ( $_POST ['nivel'] ) && isset ( $_POST ['id_setor'] ))) {
-			echo '
-                <div class="alert alert-danger" role="alert">
-                    Failed to register. Some field must be missing. 
-                </div>
 
-                ';
+
+	public function edit()
+	{
+		if (!isset($_GET['edit'])) {
 			return;
 		}
-		$usuario = new Usuario ();
-		$usuario->setNome ( $_POST ['nome'] );
-		$usuario->setEmail ( $_POST ['email'] );
-		$usuario->setLogin ( $_POST ['login'] );
-		$usuario->setSenha ( $_POST ['senha'] );
-		$usuario->setNivel ( $_POST ['nivel'] );
-		$usuario->setIdSetor ( $_POST ['id_setor'] );
-            
-		if ($this->dao->insert ($usuario ))
-        {
-			echo '
-
-<div class="alert alert-success" role="alert">
-  Sucesso ao inserir Usuario
-</div>
-
-';
-		} else {
-			echo '
-
-<div class="alert alert-danger" role="alert">
-  Falha ao tentar Inserir Usuario
-</div>
-
-';
-		}
-        echo '<META HTTP-EQUIV="REFRESH" CONTENT="3; URL=?page=usuario">';
-	}
-
-
-
-            
-	public function addAjax() {
-            
-        if(!isset($_POST['enviar_usuario'])){
-            return;    
-        }
-        
-		    
-		
-		if (! ( isset ( $_POST ['nome'] ) && isset ( $_POST ['email'] ) && isset ( $_POST ['login'] ) && isset ( $_POST ['senha'] ) && isset ( $_POST ['nivel'] ) && isset ( $_POST ['id_setor'] ))) {
-			echo ':incompleto';
-			return;
-		}
-            
-		$usuario = new Usuario ();
-		$usuario->setNome ( $_POST ['nome'] );
-		$usuario->setEmail ( $_POST ['email'] );
-		$usuario->setLogin ( $_POST ['login'] );
-		$usuario->setSenha ( $_POST ['senha'] );
-		$usuario->setNivel ( $_POST ['nivel'] );
-		$usuario->setIdSetor ( $_POST ['id_setor'] );
-            
-		if ($this->dao->insert ( $usuario ))
-        {
-			$id = $this->dao->getConnection()->lastInsertId();
-            echo ':sucesso:'.$id;
-            
-		} else {
-			 echo ':falha';
-		}
-	}
-            
-            
-
-            
-    public function edit(){
-	    if(!isset($_GET['edit'])){
-	        return;
-	    }
-        $selected = new Usuario();
-	    $selected->setId(intval($_GET['edit']));
-	    $this->dao->fillById($selected);
-	    $areaDao = new AreaResponsavelDAO($this->dao->getConnection());
+		$selected = new Usuario();
+		$selected->setId(intval($_GET['edit']));
+		$this->dao->fillById($selected);
+		$areaDao = new AreaResponsavelDAO($this->dao->getConnection());
 		$setores = $areaDao->fetch();
-		
-        if(!isset($_POST['edit_usuario'])){
-            $this->view->showEditForm($selected, $setores);
-            return;
-        }
 
-		if (! ( isset ( $_POST ['nivel'] ) && isset ( $_POST ['id_setor'] ))) {
+		if (!isset($_POST['edit_usuario'])) {
+			$this->view->showEditForm($selected, $setores);
+			return;
+		}
+
+		if (!(isset($_POST['nivel']) && isset($_POST['id_setor']))) {
 			echo '
 
 			<div class="alert alert-danger" role="alert">
 			  Formulário incompleto
 			</div>
-			
+
 			';
 			return;
 		}
 
-		$selected->setNivel ( $_POST ['nivel'] );
-		$selected->setIdSetor ( $_POST ['id_setor'] );
-            
-		if ($this->dao->update ($selected ))
-        {
+		$selected->setNivel($_POST['nivel']);
+		$selected->setIdSetor($_POST['id_setor']);
+
+		if ($this->dao->update($selected)) {
 			echo '
 
 <div class="alert alert-success" role="alert">
@@ -276,42 +201,31 @@ class UsuarioController {
 
 ';
 		}
-        echo '<META HTTP-EQUIV="REFRESH" CONTENT="3; URL=?page=usuario">';
-            
-    }
-        
+		echo '<META HTTP-EQUIV="REFRESH" CONTENT="3; URL=?page=usuario">';
+	}
 
-    public function main(){
-        
+
+	public function main()
+	{
+
 		echo '
-	        
+
         <div class="card mb-4">
             <div class="card-body">
 
 ';
-        echo '
+		echo '
 		<div class="row">';
-        echo '<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">';
-        
-        if(isset($_GET['edit'])){
-            $this->edit();
-        }
-        $this->fetch();
-        
-        echo '</div>';
-        echo '</div>';
+		echo '<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">';
+
+		if (isset($_GET['edit'])) {
+			$this->edit();
+		}
+		$this->fetch();
+
 		echo '</div>';
-        echo '</div>';
-            
-    }
-    public function mainAjax(){
-
-        $this->addAjax();
-        
-            
-    }
-
-
-            
+		echo '</div>';
+		echo '</div>';
+		echo '</div>';
+	}
 }
-?>
