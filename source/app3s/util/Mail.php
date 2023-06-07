@@ -5,7 +5,6 @@
 namespace app3s\util;
 
 use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\Exception;
 
 
 class Mail
@@ -27,15 +26,7 @@ class Mail
     public function enviarEmail($destinatario, $nome, $assunto, $corpo)
     {
 
-        $this->addLog("Tentar enviar e-mail");
-        $textLog =  'MAIL_HOST: '.
-                    env('MAIL_HOST').'; MAIL_PORT: '.
-                    env('MAIL_PORT').'; MAIL_USERNAME: '.
-                    "String Vazia Manual".'; MAIL_PASSWORD: '.
-                    "String Vazia Manual".'; MAIL_FROM_ADDRESS: '.
-                    env('MAIL_FROM_ADDRESS').'; MAIL_FROM_NAME: '.
-                    env('MAIL_FROM_NAME');
-        $this->addLog($textLog);
+
 
         $retorno = false;
         $mail = new PHPMailer();
@@ -47,10 +38,10 @@ class Mail
             $mail->SMTPAuth = true;
             $mail->Host = env('MAIL_HOST');
             $mail->Port =  env('MAIL_PORT');
-            $mail->Username = "";
-            $mail->Password = "";
+            $mail->Username = env('MAIL_USERNAME');
+            $mail->Password = env('MAIL_PASSWORD');
             $mail->From = env('MAIL_FROM_ADDRESS');
-            $mail->FromName = env('MAIL_FROM_NAME');
+            $mail->FromName = "3s-homologacao";
 
             $mail->AddAddress($destinatario, $nome);
             $mail->IsHTML(true);
