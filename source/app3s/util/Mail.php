@@ -5,7 +5,7 @@
 namespace app3s\util;
 
 use PHPMailer\PHPMailer\PHPMailer;
-
+use PHPMailer\PHpMailer\Exception;
 
 class Mail
 {
