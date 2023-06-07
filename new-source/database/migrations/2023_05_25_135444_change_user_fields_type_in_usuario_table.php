@@ -13,11 +13,11 @@ return new class extends Migration
     {
         Schema::table('usuario', function (Blueprint $table) {
             $table->unsignedBigInteger('id')->change();
-            $table->unsignedBigInteger('division_id')->nullable()->change();
-            $table->string('name', 255)->change();
-            $table->string('email', 255)->change();
-            $table->string('password', 255)->change();
-            $table->string('role', 255)->nullable()->change();
+            $table->unsignedBigInteger('division_id')->change()->nullable();
+            $table->string('name', 255)->change()->nullable();
+            $table->string('email', 255)->change()->nullable();
+            $table->string('password', 255)->change()->nullable();
+            $table->string('role', 255)->nullable()->change()->nullable();
 
         });
     }
@@ -29,11 +29,11 @@ return new class extends Migration
     {
         Schema::table('usuario', function (Blueprint $table) {
             $table->unsignedInteger('id')->change();
-            $table->unsignedInteger('division_id')->nullable()->change();
-            $table->char('name', 255)->change();
-            $table->char('email', 255)->change();
-            $table->char('password', 255)->change();
-            $table->char('role', 1)->nullable()->change();
+            $table->unsignedInteger('division_id')->nullable()->change()->nullable();
+            $table->char('name', 255)->change()->nullable();
+            $table->char('email', 255)->change()->nullable();
+            $table->char('password', 255)->change()->nullable();
+            $table->char('role', 1)->nullable()->change()->nullable();
 
         });
     }

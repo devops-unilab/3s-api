@@ -1,27 +1,25 @@
-<?php 
+<?php
 
 namespace app3s\controller;
 
 use app3s\util\Sessao;
-use app3s\dao\DAO;
 
 
 class MainContent
 {
-    
-    
+
+
     public function main()
     {
-        
+
         $sessao = new Sessao();
-        if($sessao->getNivelAcesso() == Sessao::NIVEL_DESLOGADO)
-        {
+        if ($sessao->getNivelAcesso() == Sessao::NIVEL_DESLOGADO) {
             $usuarioController = new UsuarioController();
             $usuarioController->telaLogin();
             return;
         }
-        
-        switch ($sessao->getNivelAcesso()){
+
+        switch ($sessao->getNivelAcesso()) {
             case Sessao::NIVEL_TECNICO:
                 $this->contentTec();
                 break;
@@ -41,18 +39,17 @@ class MainContent
                     </div>';
                 break;
             default:
-            
+
                 $usuarioController = new UsuarioController();
                 $usuarioController->telaLogin();
                 break;
         }
-        
     }
 
-    public function contentComum(){
-        if(isset($_GET['page'])){
-            switch ($_GET['page'])
-            {
+    public function contentComum()
+    {
+        if (isset($_GET['page'])) {
+            switch ($_GET['page']) {
                 case 'ocorrencia':
                     $controller = new OcorrenciaController();
                     $controller->main();
@@ -61,18 +58,17 @@ class MainContent
                     echo '<p>Página solicitada não encontrada.</p>';
                     break;
             }
-        }else{
+        } else {
             $controller = new OcorrenciaController();
             $controller->main();
-            
         }
     }
 
-    
-    public function contentAdmin(){
-        if(isset($_GET['page'])){
-            switch ($_GET['page'])
-            {
+
+    public function contentAdmin()
+    {
+        if (isset($_GET['page'])) {
+            switch ($_GET['page']) {
                 case 'ocorrencia':
                     $controller = new OcorrenciaController();
                     $controller->main();
@@ -101,18 +97,17 @@ class MainContent
                     echo '<p>Página solicitada não encontrada.</p>';
                     break;
             }
-        }else{
+        } else {
             $controller = new OcorrenciaController();
             $controller->main();
-            
         }
     }
-    
-    
-    public function contentTec(){
-        if(isset($_GET['page'])){
-            switch ($_GET['page'])
-            {
+
+
+    public function contentTec()
+    {
+        if (isset($_GET['page'])) {
+            switch ($_GET['page']) {
                 case 'ocorrencia':
                     $controller = new OcorrenciaController();
                     $controller->main();
@@ -129,17 +124,9 @@ class MainContent
                     echo '<p>Página solicitada não encontrada.</p>';
                     break;
             }
-        }else{
+        } else {
             $controller = new OcorrenciaController();
             $controller->main();
-            
         }
     }
-    
-    
-    
 }
-
-
-
-?>
