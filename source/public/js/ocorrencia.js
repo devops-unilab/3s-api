@@ -4,53 +4,53 @@ function filtroBasico(){
 	var partes = query.split('&');
 	var data = {};
 	if(partes.length > 1){
-		
+
 		partes.forEach(function (parte) {
 		    var chaveValor = parte.split('=');
 		    var chave = chaveValor[0];
 		    var valor = chaveValor[1];
 		    data[chave] = valor;
-		});	
+		});
 	}
-	
+
 
 
 	if($("#filtro-meu-setor").is(':checked')){
 		data['setor'] = $("#meu-setor").val();
 	}else{
-		delete data['setor']; 
+		delete data['setor'];
 	}
 	if($("#filtro-minhas-demandas").is(':checked')){
 		data['demanda'] = '1';
 	}else{
-		delete data['demanda']; 
+		delete data['demanda'];
 	}
 	if($("#filtro-minhas-solicitacoes").is(':checked')){
 		data['solicitacao'] = '1';
 	}else{
-		delete data['solicitacao']; 
+		delete data['solicitacao'];
 	}
-	
+
 	if($("#select-tecnico").val() != ""){
 		data['tecnico'] = $("#select-tecnico").val();
 	}else{
-		delete data['tecnico']; 
+		delete data['tecnico'];
 	}
-	
+
 	if($("#select-requisitante").val() != ""){
 		data['requisitante'] = $("#select-requisitante").val();
 	}else{
-		delete data['requisitante']; 
+		delete data['requisitante'];
 	}
-	
-	
+
+
 	if($('#select-setores-filtro').val()){
 		data['setores_requisitantes'] = $('#select-setores-filtro').val();
 	}else{
-		delete data['setores_requisitantes']; 
+		delete data['setores_requisitantes'];
 	}
-	
-	
+
+
 	if($('#select-setores-filtro2').val() != ""){
 		data['setores_responsaveis'] = $('#select-setores-filtro2').val();
 	}else{
@@ -66,7 +66,7 @@ function filtroBasico(){
 	}else{
 		delete data['data_abertura2'];
 	}
-	
+
 	data['campus'] = [];
 	if($('#filtro-campus-males').is(':checked')){
 		data['campus'].push('males');
@@ -81,15 +81,15 @@ function filtroBasico(){
 		data['campus'].push('liberdade');
 	}
 
-	
+
 	var novaUrl = '';
 	var i = 0;
-	
+
 	Object.keys(data).forEach(function (key) {
-		
+
 		if(data[key] != ""){
-			
-		
+
+
 			if(i != 0){
 				novaUrl += '&';
 			}
@@ -97,22 +97,22 @@ function filtroBasico(){
 			i++;
 		}
 	});
-	
+
 	if(novaUrl == ""){
 		window.location.href = ".";
-		
+
 	}else{
-		window.location.href = "?"+novaUrl;	
+		window.location.href = "?"+novaUrl;
 	}
-	
+
 }
 $(document).ready(
 	function(){
 		$('#form-filtro-basico').change(filtroBasico);
 		$('#form-filtro-avancado').focusout(filtroBasico);
 		$('#form-filtro-campus').change(filtroBasico);
-		
-		
+
+
 	}
 );
 
@@ -142,69 +142,67 @@ $(document).ready(function(e) {
 	$("#form_pedir_ajuda").on('submit', function(e) {
 		e.preventDefault();
         $('#modalPedirAjuda').modal('hide');
-        
+
 		var dados = jQuery( this ).serialize();
-        
+
 		jQuery.ajax({
             type: "POST",
             url: "?ajax=pedir_ajuda",
             data: dados,
             success: function( data )
             {
-				
+
             	if(data.split(":")[1] == 'sucesso')
 				{
 					$("#botao-modal-resposta").click(function(){
 						$("#botao-pedir-ajuda").attr("disabled", true);
             			$('#botao-pedir-ajuda').text("Ajuda Solicitada");
             		});
-            		$("#textoModalResposta").text("Um e-mail foi enviado ao chefe do setor solicitando ajuda com o chamado. ");                	
+            		$("#textoModalResposta").text("Um e-mail foi enviado ao chefe do setor solicitando ajuda com o chamado. ");
             		$("#modalResposta").modal("show");
-            		
+
             	}
             	else
             	{
-                	$("#textoModalResposta").text("Falha ao tentar pedir ajuda. ");                	
+                	$("#textoModalResposta").text("Falha ao tentar pedir ajuda. ");
             		$("#modalResposta").modal("show");
             	}
 
             }
         });
-		
-		
+
+
 	});
-	
-	
+
+
 	$("#insert_form_ocorrencia").on('submit', function(e) {
 		e.preventDefault();
         $('#modalAddOcorrencia').modal('hide');
-        
+
         var dados = new FormData(this);
         //
-        $('#btn-inserir-ocorrencia').attr('disabled', true);		
+        $('#btn-inserir-ocorrencia').attr('disabled', true);
 		$('#btn-inserir-ocorrencia').text("Aguarde...");
-		console.log("Debugando");
 		jQuery.ajax({
             type: "POST",
             url: "?ajax=ocorrencia",
             data: dados,
             success: function( data )
             {
-				console.log("VAMOS VERIFICAR O QUE VEM do servidor");
-				console.log(data);
+
             	if(data.split(":")[1] == 'sucesso'){
-            		
+
             		$("#botao-modal-resposta").click(function(){
             			window.location.href='?page=ocorrencia&selecionar='+data.split(":")[2];
             		});
-            		$("#textoModalResposta").text("Ocorrencia enviado com sucesso! ");                	
+            		$("#textoModalResposta").text("Ocorrencia enviado com sucesso! ");
             		$("#modalResposta").modal("show");
-            		
+
             	}
             	else
             	{
-            		
-                	$("#textoModalResposta").text("Falha ao inserir Ocorrencia, fale com o suporte. ");                	
+
+                	$("#textoModalResposta").text("Falha ao inserir Ocorrencia, fale com o suporte. ");
             		$("#modalResposta").modal("show");
             	}
 
@@ -222,10 +220,10 @@ $(document).ready(function(e) {
                 return myXhr;
             }
         });
-		
-		
+
+
 	});
-	
-	
+
+
 });
-   
+
