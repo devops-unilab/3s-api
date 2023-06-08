@@ -469,7 +469,6 @@ composer.phar
 
 ##### SASS
 .sass-cache/
-*.css.map
 *.sass.map
 *.scss.map
 
@@ -494,7 +493,6 @@ composer.phar
 /**/.vscode
 
 ##### OTHERS
-*.ini
 *.sqlite3
 *.db
 !/source/.env.example

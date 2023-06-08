@@ -53,7 +53,7 @@ pipeline {
     THREAD_COUNT = 6
     SEMGREP_TIMEOUT = "300"
     JENKINS_URL = "https://dti-jenkins.unilab.edu.br"
-    RECIPIENT_LEAD_EMAILS = "erivandoramos@unilab.edu.br, michel.machado@unilab.edu.br"
+    RECIPIENT_LEAD_EMAILS = "giancarlo@unilab.edu.br"
     RECIPIENT_TEAM_EMAILS = "erivandosena@gmail.com, jefponte@unilab.edu.br"
     K8S_CLUSTER = "c1"
     VAULT_ADDR = "https://dti-vault.unilab.edu.br"
@@ -79,7 +79,7 @@ pipeline {
     USER_OWNER_DATABASE_DUMP = "ocorrencias_user"
     USERS_DUMP = '"cicero_robson" "luansidney" "manoeljr" "rafael" "tiago17" "admindti" "3s"'
     PGPASSFILE = "/home/jenkins/agent/workspace/.pgpass"
-    APROVADORES = "admin, erivandosena, michel, jefponte"
+    APROVADORES = "admin, erivandosena, jefponte"
   }
 
   stages {
@@ -142,7 +142,7 @@ pipeline {
             def scannerHome = tool 'SonarScanner'
             def projectKey = env.SONAR_PROJECT_KEY
             withSonarQubeEnv('SonarQube') {
-              sh "${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=${projectKey} -Dsonar.sources=source -Dsonar.exclusions=vendor/** -Dsonar.language=php -Dsonar.sourceEncoding=UTF-8"
+              sh "${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=${projectKey} -Dsonar.sources=new-source -Dsonar.exclusions=vendor/** -Dsonar.language=php -Dsonar.sourceEncoding=UTF-8"
               def props = readProperties  file: '.scannerwork/report-task.txt'
               def sonarServerUrl=props['serverUrl']
               def ceTaskUrl= props['ceTaskUrl']
