@@ -69,7 +69,7 @@ class Mail
             $this->addLog('Erro ao enviar o e-mail: ' . $mail->ErrorInfo);
 
         }
-
+        $this->addLog("Com o SMTPAuth igual a false");
         return $retorno;
     }
 }
