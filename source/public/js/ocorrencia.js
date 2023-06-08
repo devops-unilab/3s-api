@@ -189,7 +189,6 @@ $(document).ready(function(e) {
             data: dados,
             success: function( data )
             {
-				console.log(data);
             	if(data.split(":")[1] == 'sucesso'){
 
             		$("#botao-modal-resposta").click(function(){
