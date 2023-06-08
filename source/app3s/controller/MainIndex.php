@@ -186,9 +186,9 @@ class MainIndex
         case 'ocorrencia':
 
           echo '
-<script src="js/status_ocorrencia.js?a=1"></script>
+<script src="js/status_ocorrencia.js?a=11"></script>
 <script src="js/jquery.easyPaginate.js?a=1"></script>
-<script src="js/ocorrencia.js?a=145"></script>';
+<script src="js/ocorrencia.js?a=1451"></script>';
           if (isset($_GET['selecionar'])) {
             echo '
 <script src="js/contador.js"></script>
