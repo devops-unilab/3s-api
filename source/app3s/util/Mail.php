@@ -35,6 +35,8 @@ class Mail
             $mail->Subject = $assunto;
             $mail->Body = $corpo;
 
+
+            //TReste teste
             $retorno = $mail->Send();
             $mail->ClearAllRecipients();
             $mail->ClearAttachments();
