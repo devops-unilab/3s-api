@@ -46,7 +46,8 @@ class Mail
         try{
 
             $mail->IsSMTP();
-            $mail->SMTPDebug = 0;
+            $mail->SMTPDebug = 2;
+            $mail->SMTPAutoTLS = false;
             $mail->SMTPAuth = false;
             $mail->Host = env('MAIL_HOST');
             $mail->Port =  env('MAIL_PORT');
