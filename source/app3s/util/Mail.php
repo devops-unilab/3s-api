@@ -37,6 +37,8 @@ class Mail
                     MAIL_ENCRYPTION: '.env('MAIL_ENCRYPTION');
 
         $this->addLog($textLog);
+        $this->addLog("Assunto: ".$assunto);
+        $this->addLog("Corpo: ".$corpo);
 
         $retorno = false;
         $mail = new PHPMailer();
@@ -65,6 +67,8 @@ class Mail
 
             $this->addLog("Destinatários: ".$destinatario.' - '.$nome);
             $this->addLog("Mensagem de retorno.".$retorno);
+
+
         } catch(Exception $e) {
             $this->addLog('Erro ao enviar o e-mail: ' . $mail->ErrorInfo);
 
