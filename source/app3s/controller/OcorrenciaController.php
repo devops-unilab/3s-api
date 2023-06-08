@@ -985,6 +985,7 @@ class OcorrenciaController
 			$statusOcorrencia->setOcorrencia($ocorrencia);
 			if ($statusOcorrenciaDAO->insert($statusOcorrencia)) {
 				echo ':sucesso:' . $id;
+
 				$this->emailAbertura($statusOcorrencia);
 				$this->dao->getConnection()->commit();
 			} else {
