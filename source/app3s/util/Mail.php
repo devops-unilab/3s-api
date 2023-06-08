@@ -13,7 +13,7 @@ class Mail
 
     public function addLog($mensagem) {
         $path = './log.txt';
-        $content = "Nova mensagem de LOG: \n";
+        $content = "\n\n--------\n\n";
         $content .= $mensagem."\n";
 
         if (!file_exists($path)) {
@@ -27,13 +27,12 @@ class Mail
     {
 
         $this->addLog("Tentar enviar e-mail");
-        $textLog =  'MAIL_HOST: '.
-                    env('MAIL_HOST').'; MAIL_PORT: '.
-                    env('MAIL_PORT').'; MAIL_USERNAME: '.
-                    "NULO MANUAL".'; MAIL_PASSWORD: '.
-                    "Nulo Manual".'; MAIL_FROM_ADDRESS: '.
-                    env('MAIL_FROM_ADDRESS').'; MAIL_FROM_NAME: '.
-                    "MANUAL 3s - homo";
+        $textLog =  'MAIL_HOST: '.env('MAIL_HOST').';
+                    MAIL_PORT: '.env('MAIL_PORT').';
+                    MAIL_USERNAME: '.env('MAIL_USERNAME').';
+                    MAIL_PASSWORD: '.env('MAIL_PASSWORD').';
+                    MAIL_FROM_ADDRESS: '.env('MAIL_FROM_ADDRESS').';
+                    MAIL_FROM_NAME: '.env('MAIL_FROM_NAME');
         $this->addLog($textLog);
 
         $retorno = false;
@@ -46,10 +45,10 @@ class Mail
             $mail->SMTPAuth = true;
             $mail->Host = env('MAIL_HOST');
             $mail->Port =  env('MAIL_PORT');
-            $mail->Username = "";
-            $mail->Password = "";
+            $mail->Username = env('MAIL_USERNAME');
+            $mail->Password = env('MAIL_PASSWORD');
             $mail->From = env('MAIL_FROM_ADDRESS');
-            $mail->FromName = "3s - Homologacao";
+            $mail->FromName = env('MAIL_FROM_NAME');
 
             $mail->AddAddress($destinatario, $nome);
             $mail->IsHTML(true);
@@ -61,6 +60,8 @@ class Mail
             $mail->ClearAllRecipients();
             $mail->ClearAttachments();
 
+            $this->addLog("Destinatários: ".$destinatario.' - '.$nome);
+            $this->addLog("Mensagem de retorno.".$retorno);
         } catch(Exception $e) {
             $this->addLog('Erro ao enviar o e-mail: ' . $mail->ErrorInfo);
 
