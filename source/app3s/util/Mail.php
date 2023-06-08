@@ -30,10 +30,10 @@ class Mail
         $textLog =  'MAIL_HOST: '.
                     env('MAIL_HOST').'; MAIL_PORT: '.
                     env('MAIL_PORT').'; MAIL_USERNAME: '.
-                    env('MAIL_USERNAME').'; MAIL_PASSWORD: '.
-                    env('MAIL_PASSWORD').'; MAIL_FROM_ADDRESS: '.
+                    "NULO MANUAL".'; MAIL_PASSWORD: '.
+                    "Nulo Manual".'; MAIL_FROM_ADDRESS: '.
                     env('MAIL_FROM_ADDRESS').'; MAIL_FROM_NAME: '.
-                    env('MAIL_FROM_NAME');
+                    "MANUAL 3s - homo";
         $this->addLog($textLog);
 
         $retorno = false;
@@ -46,10 +46,10 @@ class Mail
             $mail->SMTPAuth = true;
             $mail->Host = env('MAIL_HOST');
             $mail->Port =  env('MAIL_PORT');
-            $mail->Username = env('MAIL_USERNAME');
-            $mail->Password = env('MAIL_PASSWORD');
+            $mail->Username = "";
+            $mail->Password = "";
             $mail->From = env('MAIL_FROM_ADDRESS');
-            $mail->FromName = env('MAIL_FROM_NAME');
+            $mail->FromName = "3s - Homologacao";
 
             $mail->AddAddress($destinatario, $nome);
             $mail->IsHTML(true);
