@@ -324,7 +324,7 @@ pipeline {
           attachLog: false,
           attachmentsPattern: 'build.log',
           mimeType: 'text/html',
-          subject: '<img data-emoji="🟢" alt="🟢" aria-label="🟢" src="https://fonts.gstatic.com/s/e/notoemoji/15.0/1f7e2/32.png" loading="lazy"> Pipeline #${env.BUILD_NUMBER} ${currentBuild.currentResult} Job ${env.JOB_NAME}',
+          subject: "🟢 Pipeline #${env.BUILD_NUMBER} ${currentBuild.currentResult} Job ${env.JOB_NAME}",
           body: """
           Parabéns! Team
           <p>Pipeline completada com: ${currentBuild.currentResult}<br />
@@ -346,7 +346,7 @@ pipeline {
           attachLog: true,
           attachmentsPattern: 'build.log',
           mimeType: 'text/html',
-          subject: '<img data-emoji="🔴" alt="🔴" aria-label="🔴" src="https://fonts.gstatic.com/s/e/notoemoji/15.0/1f534/32.png" loading="lazy"> Pipeline #${env.BUILD_NUMBER} ${currentBuild.currentResult} Job ${env.JOB_NAME}',
+          subject: "🔴 Pipeline #${env.BUILD_NUMBER} ${currentBuild.currentResult} Job ${env.JOB_NAME}",
           body: """
           Prezados Stakeholders
           <p>Pipeline completada com: ${currentBuild.currentResult}<br />
