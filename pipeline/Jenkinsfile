@@ -322,7 +322,7 @@ pipeline {
           try {
             emailext (
               mimeType: 'text/html',
-              subject: "Aprovar Deploy [${env.JOB_NAME}] ${currentBuild.fullDisplayName}",
+              subject: '<img data-emoji="🚀" alt="🚀" aria-label="🚀" src="https://fonts.gstatic.com/s/e/notoemoji/15.0/1f680/32.png" loading="lazy"> Aprovar Deploy [${env.JOB_NAME}] ${currentBuild.fullDisplayName}',
               to: "${env.RECIPIENT_LEAD_EMAILS}",
               body: """
                   <p>Prezado(a) Leader</p>Existe um Continuous Deployment (CD) aguardando aprovação para produção.
@@ -443,7 +443,7 @@ pipeline {
           attachLog: false,
           attachmentsPattern: 'build.log',
           mimeType: 'text/html',
-          subject: "Pipeline #${env.BUILD_NUMBER} ${currentBuild.currentResult} Job ${env.JOB_NAME}",
+          subject: '<img data-emoji="🟢" alt="🟢" aria-label="🟢" src="https://fonts.gstatic.com/s/e/notoemoji/15.0/1f7e2/32.png" loading="lazy"> Pipeline #${env.BUILD_NUMBER} ${currentBuild.currentResult} Job ${env.JOB_NAME}',
           body: """
           Parabéns! Team
           <p>Pipeline completada com: ${currentBuild.currentResult}</p>
@@ -467,7 +467,7 @@ pipeline {
           attachLog: true,
           attachmentsPattern: 'build.log',
           mimeType: 'text/html',
-          subject: "Pipeline #${env.BUILD_NUMBER} ${currentBuild.currentResult} Job ${env.JOB_NAME}",
+          subject: '<img data-emoji="🔴" alt="🔴" aria-label="🔴" src="https://fonts.gstatic.com/s/e/notoemoji/15.0/1f534/32.png" loading="lazy"> Pipeline #${env.BUILD_NUMBER} ${currentBuild.currentResult} Job ${env.JOB_NAME}',
           body: """
           Prezados Stakeholders
           <p>Pipeline completada com: ${currentBuild.currentResult}<br />
