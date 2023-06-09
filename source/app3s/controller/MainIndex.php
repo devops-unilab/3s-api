@@ -192,7 +192,7 @@ class MainIndex
           if (isset($_GET['selecionar'])) {
             echo '
 <script src="js/contador.js"></script>
-<script src="js/mensagem_forum.js?a=17"></script>';
+<script src="js/mensagem_forum.js?a=172"></script>';
           }
 
           break;
@@ -216,7 +216,7 @@ class MainIndex
       if (isset($_GET['selecionar'])) {
         echo '
 <script src="js/contador.js"></script>
-<script src="js/mensagem_forum.js?a=15"></script>';
+<script src="js/mensagem_forum.js?a=12"></script>';
       }
     }
   }

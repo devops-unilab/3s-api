@@ -17,8 +17,7 @@ use app3s\model\MensagemForum;
 use app3s\model\Usuario;
 use app3s\util\Mail;
 use app3s\util\Sessao;
-
-
+use Illuminate\Support\Facades\DB;
 
 class MensagemForumController
 {
@@ -27,7 +26,6 @@ class MensagemForumController
     public function __construct()
     {
         $this->dao = new MensagemForumDAO();
-
     }
 
 
@@ -336,26 +334,21 @@ class MensagemForumController
         $mensagemForum->getUsuario()->setId($sessao->getIdUsuario());
         $ocorrencia = new Ocorrencia();
         $ocorrencia->setId($_POST['ocorrencia']);
+        $order = DB::table('ocorrencia')->where('id', $ocorrencia->getId())->first();
+
+        if ($order->status == 'f' || $order->status == 'g') {
+            echo ':falha:O chamado já foi fechado.';
+            return;
+        }
 
 
         if ($this->dao->insert($mensagemForum, $ocorrencia)) {
-            echo ':sucesso:' . $ocorrencia->getId();
+            echo ':sucesso:' . $ocorrencia->getId() . ':';
             $this->enviaEmail($mensagemForum, $ocorrencia);
         } else {
             echo ':falha';
         }
     }
-
-
-
-
-
-    public function mainAjax()
-    {
-
-        $this->addAjax();
-    }
-
 
 
     const TIPO_ARQUIVO = 2;
