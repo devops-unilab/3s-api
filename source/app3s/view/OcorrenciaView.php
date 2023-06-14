@@ -96,7 +96,7 @@ class OcorrenciaView
                 </div>
                 <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12">
                     <label for="patrimonio">Patrimônio</label>
-                    <input class="form-control" type="text" name="patrimonio" id="patrimonio" value="" />
+                    <input class="form-control" type="number" name="patrimonio" id="patrimonio" value="" />
                 </div>
             </div>
             <div class="row">

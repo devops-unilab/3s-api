@@ -322,7 +322,7 @@ pipeline {
           try {
             emailext (
               mimeType: 'text/html',
-              subject: "Aprovar Deploy [${env.JOB_NAME}] ${currentBuild.fullDisplayName}",
+              subject: "🚀 Aprovar Deploy [${env.JOB_NAME}] ${currentBuild.fullDisplayName}",
               to: "${env.RECIPIENT_LEAD_EMAILS}",
               body: """
                   <p>Prezado(a) Leader</p>Existe um Continuous Deployment (CD) aguardando aprovação para produção.
@@ -392,8 +392,8 @@ pipeline {
               '''
 
               sh """
-                sed -i 's/3s-staging@noreply.unilab.edu.br/3s@noreply.unilab.edu.br/' ./kubernetes/deployment-3s.yaml
-                sed -i 's/[STAGING] 3S - Sistema de Solicitacao de Ocorrencias/3S - Sistema de Solicitacao de Ocorrencias/' ./kubernetes/deployment-3s.yaml
+                sed -i 's/3s-staging@noreply\\.unilab\\.edu\\.br/3s@noreply.unilab.edu.br/' ./kubernetes/deployment-3s.yaml
+                sed -i 's/\\[HOMOLOGAÇÃO\\] 3S - Sistema de Solicitacao de Ocorrencias/3S - Sistema de Solicitação de Ocorrências/' ./kubernetes/deployment-3s.yaml
                 sed -i 's/${env.APP_EP_STAG}/${env.APP_EP_PROD}/g' ./kubernetes/deployment-3s.yaml
                 sed -i 's/APP_DEBUG: "true"/APP_DEBUG: "false"/' ./kubernetes/deployment-3s.yaml
                 sed -i 's/LOG_LEVEL: "debug"/LOG_LEVEL: "error"/' ./kubernetes/deployment-3s.yaml
@@ -443,7 +443,7 @@ pipeline {
           attachLog: false,
           attachmentsPattern: 'build.log',
           mimeType: 'text/html',
-          subject: "Pipeline #${env.BUILD_NUMBER} ${currentBuild.currentResult} Job ${env.JOB_NAME}",
+          subject: "🟢 Pipeline #${env.BUILD_NUMBER} ${currentBuild.currentResult} Job ${env.JOB_NAME}",
           body: """
           Parabéns! Team
           <p>Pipeline completada com: ${currentBuild.currentResult}</p>
@@ -467,7 +467,7 @@ pipeline {
           attachLog: true,
           attachmentsPattern: 'build.log',
           mimeType: 'text/html',
-          subject: "Pipeline #${env.BUILD_NUMBER} ${currentBuild.currentResult} Job ${env.JOB_NAME}",
+          subject: "🔴 Pipeline #${env.BUILD_NUMBER} ${currentBuild.currentResult} Job ${env.JOB_NAME}",
           body: """
           Prezados Stakeholders
           <p>Pipeline completada com: ${currentBuild.currentResult}<br />

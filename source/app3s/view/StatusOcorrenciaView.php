@@ -221,7 +221,7 @@ class StatusOcorrenciaView
         </div>
         <div id="container-editar-patrimonio" class="form-group escondido">
             <label for="solucao">Patrimônio</label>
-            <input class="form-control" id="patrimonio" name="patrimonio" value=""/>
+            <input class="form-control" id="patrimonio" type="number" name="patrimonio" value=""/>
         </div>
         <div id="container-mensagem-status" class="form-group escondido">
             <label for="mensagem-status">Mensagem</label>

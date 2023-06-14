@@ -273,7 +273,7 @@ pipeline {
 
               sh """
                 sed -i 's/3s@noreply.unilab.edu.br/3s-staging@noreply.unilab.edu.br/' ./kubernetes/deployment-3s.yaml
-                sed -i 's/3S - Sistema de Solicitacao de Ocorrencias/[STAGING] 3S - Sistema de Solicitacao de Ocorrencias/' ./kubernetes/deployment-3s.yaml
+                sed -i 's/3S - Sistema de Solicitacao de Ocorrencias/[HOMOLOGAÇÃO] 3S - Sistema de Solicitacao de Ocorrencias/' ./kubernetes/deployment-3s.yaml
                 sed -i 's/devops.unilab.edu.br/${env.APP_EP_STAG}/g' ./kubernetes/deployment-3s.yaml
                 sed -i 's/APP_DEBUG: "false"/APP_DEBUG: "true"/' ./kubernetes/deployment-3s.yaml
                 sed -i 's/LOG_LEVEL: "error"/LOG_LEVEL: "debug"/' ./kubernetes/deployment-3s.yaml
@@ -324,7 +324,7 @@ pipeline {
           attachLog: false,
           attachmentsPattern: 'build.log',
           mimeType: 'text/html',
-          subject: "Pipeline #${env.BUILD_NUMBER} ${currentBuild.currentResult} Job ${env.JOB_NAME}",
+          subject: "🟢 Pipeline #${env.BUILD_NUMBER} ${currentBuild.currentResult} Job ${env.JOB_NAME}",
           body: """
           Parabéns! Team
           <p>Pipeline completada com: ${currentBuild.currentResult}<br />
@@ -346,7 +346,7 @@ pipeline {
           attachLog: true,
           attachmentsPattern: 'build.log',
           mimeType: 'text/html',
-          subject: "Pipeline #${env.BUILD_NUMBER} ${currentBuild.currentResult} Job ${env.JOB_NAME}",
+          subject: "🔴 Pipeline #${env.BUILD_NUMBER} ${currentBuild.currentResult} Job ${env.JOB_NAME}",
           body: """
           Prezados Stakeholders
           <p>Pipeline completada com: ${currentBuild.currentResult}<br />
