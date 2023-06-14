@@ -392,8 +392,8 @@ pipeline {
               '''
 
               sh """
-                sed -i 's/3s-staging@noreply.unilab.edu.br/3s@noreply.unilab.edu.br/' ./kubernetes/deployment-3s.yaml
-                sed -i 's/[STAGING] 3S - Sistema de Solicitacao de Ocorrencias/3S - Sistema de Solicitacao de Ocorrencias/' ./kubernetes/deployment-3s.yaml
+                sed -i 's/3s-staging@noreply\.unilab\.edu\.br/3s@noreply.unilab.edu.br/' ./kubernetes/deployment-3s.yaml
+                sed -i 's/\[HOMOLOGAÇÃO\] 3S - Sistema de Solicitacao de Ocorrencias/3S - Sistema de Solicitação de Ocorrências/' ./kubernetes/deployment-3s.yaml
                 sed -i 's/${env.APP_EP_STAG}/${env.APP_EP_PROD}/g' ./kubernetes/deployment-3s.yaml
                 sed -i 's/APP_DEBUG: "true"/APP_DEBUG: "false"/' ./kubernetes/deployment-3s.yaml
                 sed -i 's/LOG_LEVEL: "debug"/LOG_LEVEL: "error"/' ./kubernetes/deployment-3s.yaml
