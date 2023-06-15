@@ -322,29 +322,15 @@ class OcorrenciaController
 	}
 	public function painel($lista, $strTitulo, $id, $strShow = "")
 	{
-		echo '
-    <div class="panel panel-default" id="panel1">
-        <div class="panel-heading">
-            <h3 class="pb-4 mb-4 font-italic border-bottom"
-            data-toggle="collapse" data-target="#' . $id . '" href="#' . $id . '">
-                ' . $strTitulo . '
-
-            <button type="button" class="float-right btn ml-3
-                btn-warning btn-circle btn-lg"  data-toggle="collapse" href="#' . $id . '" role="button" aria-expanded="false"
-                aria-controls="' . $id . '"><i class="fa fa-expand icone-maior"></i></button>
-            </h3>
-
-        </div>
-        <div id="' . $id . '" class="panel-collapse collapse in ' . $strShow . '">
-            <div class="panel-body">';
-
-		echo view('partials.index-orders', ['orders' => $lista, 'id' => 'easyPaginate' . $id]);
-
-		echo '
-
-            </div>
-        </div>
-    </div>';
+		echo view(
+			'partials.index-orders',
+			[
+				'orders' => $lista,
+				'id' => $id,
+				'title' => $strTitulo,
+				'strShow' => $strShow
+			]
+		);
 	}
 
 	public function arrayStatusPendente()
@@ -379,7 +365,8 @@ class OcorrenciaController
 		return $timeHoje > $timeSolucaoEstimada;
 	}
 
-	public function applyFilters($query) {
+	public function applyFilters($query)
+	{
 		if (isset($_GET['setor'])) {
 			$divisionId = intval($_GET['setor']);
 			$query = $query->where('id_area_responsavel', $divisionId);
@@ -392,8 +379,7 @@ class OcorrenciaController
 		if (isset($_GET['solicitacao'])) {
 			$query = $query->where('id_usuario_cliente', $this->sessao->getIdUsuario());
 		}
-		if (isset($_GET['tecnico']))
-		{
+		if (isset($_GET['tecnico'])) {
 			$query = $query->where(function ($query) {
 				$query->where('id_usuario_indicado', intval($_GET['tecnico']))->orWhere('id_usuario_atendente', intval($_GET['tecnico']));
 			});
@@ -412,7 +398,6 @@ class OcorrenciaController
 		if (isset($_GET['campus'])) {
 			$campusArr = explode(",", $_GET['campus']);
 			$query = $query->whereIn('campus', $campusArr);
-
 		}
 		if (isset($_GET['setores_responsaveis'])) {
 			$divisions = explode(",", $_GET['setores_responsaveis']);
@@ -436,15 +421,23 @@ class OcorrenciaController
 		$lista = array();
 
 		$queryPendding = DB::table('ocorrencia')
-			->select('ocorrencia.id as id', 'ocorrencia.descricao as descricao',
-			'servico.tempo_sla as tempo_sla',
-			'ocorrencia.data_abertura as data_abertura', 'ocorrencia.status as status')
+			->select(
+				'ocorrencia.id as id',
+				'ocorrencia.descricao as descricao',
+				'servico.tempo_sla as tempo_sla',
+				'ocorrencia.data_abertura as data_abertura',
+				'ocorrencia.status as status'
+			)
 			->join('servico', 'ocorrencia.id_servico', '=', 'servico.id')
 			->whereIn('status', ['a', 'i', 'd', 'e', 'r', 'b']);
 		$queryFinished = DB::table('ocorrencia')
-			->select('ocorrencia.id as id', 'ocorrencia.descricao as descricao',
-			'servico.tempo_sla as tempo_sla',
-			'ocorrencia.data_abertura as data_abertura', 'ocorrencia.status as status')
+			->select(
+				'ocorrencia.id as id',
+				'ocorrencia.descricao as descricao',
+				'servico.tempo_sla as tempo_sla',
+				'ocorrencia.data_abertura as data_abertura',
+				'ocorrencia.status as status'
+			)
 			->join('servico', 'ocorrencia.id_servico', '=', 'servico.id')
 			->whereIn('status', ['f', 'g', 'h']);
 
@@ -474,7 +467,16 @@ class OcorrenciaController
 		}
 
 		if (count($listaAtrasados) > 0) {
-			$this->painel($listaAtrasados, 'Ocorrências Em Atraso (' . count($listaAtrasados) . ')', 'collapseAtraso', "show");
+
+			echo view(
+				'partials.index-orders',
+				[
+					'orders' => $listaAtrasados,
+					'id' => 'collapseAtraso',
+					'title' => 'Ocorrências Em Atraso (' . count($listaAtrasados) . ')',
+					'strShow' => "show"
+				]
+			);
 		}
 		$this->painel($lista, 'Ocorrências Em Aberto(' . count($lista) . ')', 'collapseAberto', 'show');
 		$this->painel($lista2, "Ocorrências Encerradas", 'collapseEncerrada');
@@ -536,11 +538,16 @@ class OcorrenciaController
 			echo '<h3 class="pb-4 mb-4 font-italic border-bottom">Cadastrar Ocorrência</h3>';
 			$this->view->mostraFormInserir2($listaServico);
 		} else {
-			echo '
-			<h3 class="pb-4 mb-4 font-italic border-bottom" data-toggle="collapse" data-target="#collapseAberto" href="#collapseAberto" aria-expanded="true">
-				Para continuar confirme os chamados fechados.
-            </h3>';
-			echo view('partials.index-orders', ['orders' => $listaNaoAvaliados]);
+
+			echo view(
+				'partials.index-orders',
+				[
+					'orders' => $listaNaoAvaliados,
+					'title' => 'Para continuar confirme os chamados fechados.',
+					'id' => 'collapseToConfirm',
+					'strShow' => 'show'
+				]
+			);
 		}
 		echo '
                 </div>
