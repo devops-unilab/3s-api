@@ -1,3 +1,8 @@
+<div class="container">
+    <div class="row">
+        <div class="card mb-4">
+            <div class="card-body">
+
 <br><br>
 
 <div class="container forget-password">
@@ -42,3 +47,8 @@
     </div>
 </div>
 <br><br><br><br><br><br><br><br>
+</div>
+</div>
+
+</div>
+</div>

@@ -14,8 +14,7 @@ class MainContent
 
         $sessao = new Sessao();
         if ($sessao->getNivelAcesso() == Sessao::NIVEL_DESLOGADO) {
-            $usuarioController = new UsuarioController();
-            $usuarioController->telaLogin();
+            echo view('partials.form-login');
             return;
         }
 
@@ -30,18 +29,10 @@ class MainContent
                 $this->contentComum();
                 break;
             case Sessao::NIVEL_DISABLED:
-                echo '<div class="card mb-4">
-                        <div class="container">
-                            <div class="row m-5">
-                                <h1>Seu acesso está desabilitado. É necessário solicitar seu acesso à DTI. </h1>
-                            </div>
-                        </div>
-                    </div>';
+                echo view('partials.diabled');
                 break;
             default:
-
-                $usuarioController = new UsuarioController();
-                $usuarioController->telaLogin();
+                echo view('partials.form-login');
                 break;
         }
     }

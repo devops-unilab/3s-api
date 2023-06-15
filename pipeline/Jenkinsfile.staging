@@ -69,7 +69,7 @@ pipeline {
     PG_PORT = "5432"
 
     /* Database Migrations */
-    DB_MIGRATE_STATUS = "NAO-MIGRADO" // MIGRADO | NAO-MIGRADO (default)
+    DB_MIGRATE_STATUS = "MIGRADO" // MIGRADO | NAO-MIGRADO (default)
     DB_USER_DUMP = "*"
     DB_PASSWORD_DUMP = "*"
     DB_DATABASE_DUMP = "ocorrencias"
@@ -216,7 +216,7 @@ pipeline {
       steps {
         script {
           if (env.DB_MIGRATE_STATUS != "MIGRADO") {
-       
+
             withKubeConfig([credentialsId: 'kubeconfig-c1', serverUrl: 'https://dti-k8s-c1.unilab.edu.br:6443']) {
               sh '''
                 if ! kubectl get statefulset postgres -n postgres-3s >/dev/null 2>&1; then
@@ -248,7 +248,7 @@ pipeline {
                 """
               }
             }
-            
+
           }
         }
       }
