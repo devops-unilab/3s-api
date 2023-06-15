@@ -38,7 +38,7 @@ pipeline {
   }
 
   environment {
-    /* Gerais */
+    /* 3S */
     APP_NAME = "app-3s"
     APP_NAMESPACE = "app-3s"
     APP_EP_PROD = "dti-app-test-c1.unilab.edu.br"
@@ -48,6 +48,25 @@ pipeline {
     DOCKER_TAG = "${env.GIT_BRANCH.split('/')[-1]}"
     DOCKER_IMAGE = "dti-registro.unilab.edu.br/unilab/${APP_NAME}"
     BUILD_NUMBER = "${env.BUILD_NUMBER}"
+    /* Database 3S */
+    PG_USER = "*"
+    PG_PASSWORD = "*"
+    PG_USER_ROOT = "*"
+    PG_ROOT_PASSWORD = "*"
+    PG_DATABASE = "3s-ocorrencias"
+    PG_DATABASE_HOMOLOGACAO = "3s-homologacao"
+    PG_HOST = "10.130.0.154"
+    PG_PORT = "5432"
+    /* Database Migrations */
+    DB_USER_DUMP = "*"
+    DB_PASSWORD_DUMP = "*"
+    DB_DATABASE_DUMP = "ocorrencias"
+    HOST_DUMP = "200.129.19.134"
+    PORT_DUMP = "5432"
+    USER_OWNER_DATABASE_DUMP = "ocorrencias_user"
+    USERS_DUMP = '"cicero_robson" "luansidney" "manoeljr" "rafael" "tiago17" "admindti" "3s"'
+    PGPASSFILE = "/home/jenkins/agent/workspace/.pgpass"
+    /* Gerais */
     DOCKER_BUILDKIT = 1
     TF_IN_AUTOMATION = 1
     THREAD_COUNT = 6
@@ -59,26 +78,6 @@ pipeline {
     VAULT_ADDR = "https://dti-vault.unilab.edu.br"
     SONAR_URL = "https://dti-sonar.unilab.edu.br"
     SONAR_PROJECT_KEY = "app-3s-prod"
-
-    /* Database 3S */
-    PG_USER = "*"
-    PG_PASSWORD = "*"
-    PG_USER_ROOT = "*"
-    PG_ROOT_PASSWORD = "*"
-    PG_DATABASE = "3s-ocorrencias"
-    PG_DATABASE_HOMOLOGACAO = "3s-homologacao"
-    PG_HOST = "10.130.0.154"
-    PG_PORT = "5432"
-
-    /* Database Migrations */
-    DB_USER_DUMP = "*"
-    DB_PASSWORD_DUMP = "*"
-    DB_DATABASE_DUMP = "ocorrencias"
-    HOST_DUMP = "200.129.19.134"
-    PORT_DUMP = "5432"
-    USER_OWNER_DATABASE_DUMP = "ocorrencias_user"
-    USERS_DUMP = '"cicero_robson" "luansidney" "manoeljr" "rafael" "tiago17" "admindti" "3s"'
-    PGPASSFILE = "/home/jenkins/agent/workspace/.pgpass"
     APROVADORES = "admin, erivandosena, jefponte"
   }
 
@@ -445,17 +444,18 @@ pipeline {
           mimeType: 'text/html',
           subject: "🟢 Pipeline #${env.BUILD_NUMBER} ${currentBuild.currentResult} Job ${env.JOB_NAME}",
           body: """
-          Parabéns! Team
+          Parabéns! &#127881; <strong>Team</strong>
           <p>Pipeline completada com: ${currentBuild.currentResult}</p>
-          Detalhes da execução da pipeline: ${env.BUILD_URL}<br />
-          Detalhes do teste de qualidade: ${env.SONAR_URL}/dashboard?id=${env.SONAR_PROJECT_KEY}<br /></p>
-          Endpoint de homologação: ${env.APP_URI_STAGING}<br />
-          Endpoint de produção: ${env.APP_URI_PROD}<br />
-          Deploy aprovado por: <strong>${env.APPROVER_NAME}</strong></p>
-          <p style="font-size: 0.9em;">&#9729; Os workloads estar&atilde;o completos em aproximadamente 90 segundos.</p><br />
+          &#x2699; Detalhes da execução da pipeline: ${env.BUILD_URL}<br />
+          &#128269; Detalhes do teste de qualidade: ${env.SONAR_URL}/dashboard?id=${env.SONAR_PROJECT_KEY}<br />
+          <p>&#129351; Endpoint de homologação: ${env.APP_URI_STAGING}<br />
+          &#127757; Endpoint de produção: ${env.APP_URI_PROD}<br /></p>
+          Deploy aprovado por: <strong>${env.APPROVER_NAME}</strong><br />
+          &#9729;<span style="font-size: 0.9em;">Os workloads estar&atilde;o completos em aproximadamente 120 segundos.</span>
           <p>${env.EMAIL_ASSINATURA}</p><hr><p>${env.EMAIL_RODAPE}</p>
           """,
           to: "${env.RECIPIENT_LEAD_EMAILS}, ${env.RECIPIENT_TEAM_EMAILS}",
+          bcc: "sau@unilab.edu.br",
           recipientProviders: []
         )
       slackSend(color: "good", message: "Pipeline #${env.BUILD_NUMBER} completada com ${currentBuild.currentResult} em ${env.JOB_NAME} (<${env.BUILD_URL}|Mais info...>)")
@@ -478,14 +478,6 @@ pipeline {
           recipientProviders: []
       )
       slackSend(color: "danger", message: "Pipeline #${env.BUILD_NUMBER} finalizada com ${currentBuild.currentResult} em ${env.JOB_NAME} (<${env.BUILD_URL}|Mais info...>)")
-    }
-
-    unstable {
-      echo 'Processo de pipeline possui instabilidade.'
-    }
-
-    changed {
-      echo 'SUCESSO no processo de pipeline anteriormente falhado.'
     }
   }
 }
