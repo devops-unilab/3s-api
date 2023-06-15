@@ -463,7 +463,6 @@ pipeline {
           <p>${env.EMAIL_ASSINATURA}</p><hr><p>${env.EMAIL_RODAPE}</p>
           """,
           to: "${env.RECIPIENT_LEAD_EMAILS}, ${env.RECIPIENT_TEAM_EMAILS}",
-          bcc: "sau@unilab.edu.br",
           recipientProviders: []
         )
       slackSend(color: "good", message: "Pipeline #${env.BUILD_NUMBER} completada com ${currentBuild.currentResult} em ${env.JOB_NAME} (<${env.BUILD_URL}|Mais info...>)")
