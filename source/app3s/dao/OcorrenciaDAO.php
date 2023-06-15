@@ -98,8 +98,6 @@ class OcorrenciaDAO extends DAO
         }
     }
 
-
-
     public function insert(Ocorrencia $ocorrencia)
     {
         $sql = "INSERT INTO ocorrencia(id_area_responsavel, id_servico, id_local, id_usuario_cliente, descricao, campus, patrimonio, ramal, local, status, solucao, prioridade, avaliacao, email, id_usuario_atendente, id_usuario_indicado, anexo, local_sala, data_abertura, data_atendimento, data_fechamento, data_fechamento_confirmado) VALUES (:areaResponsavel, :servico, :idLocal, :usuarioCliente, :descricao, :campus, :patrimonio, :ramal, :local, :status, :solucao, :prioridade, :avaliacao, :email, :idUsuarioAtendente, :idUsuarioIndicado, :anexo, :localSala, :dataAbertura, :dataAtendimento, :dataFechamento, :dataFechamentoConfirmado);";
@@ -154,22 +152,6 @@ class OcorrenciaDAO extends DAO
         } catch (PDOException $e) {
             echo '{"error":{"text":' . $e->getMessage() . '}}';
         }
-    }
-
-    public function filtroStatus($arrStatus = array('a'))
-    {
-        if (count($arrStatus) == 0) {
-            return "";
-        }
-        $arrPices = array();
-        $strWhere = "(";
-        foreach ($arrStatus as $status) {
-
-            $arrPices[] =  "status = '$status'";
-        }
-        $strWhere .= implode(" OR ", $arrPices);
-        $strWhere .= ") ";
-        return $strWhere;
     }
 
 

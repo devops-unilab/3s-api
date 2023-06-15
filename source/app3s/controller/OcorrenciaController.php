@@ -523,20 +523,20 @@ class OcorrenciaController
 		echo '
             <div class="row">
                 <div class="col-md-12 blog-main">';
-		$servicoDao = new ServicoDAO($this->dao->getConnection());
-		$servico = new Servico();
-		$servico->setVisao(1);
 
-		$listaServico = $servicoDao->fetchByVisao($servico);
 
-		if ($this->sessao->getNivelAcesso() == Sessao::NIVEL_ADM || $this->sessao->getNivelAcesso() == Sessao::NIVEL_TECNICO) {
-			$servico->setVisao(2);
-			$lista2 = $servicoDao->fetchByVisao($servico);
-			$listaServico = array_merge($listaServico, $lista2);
+		$queryService = DB::table('servico');
+		if($this->sessao->getNivelAcesso() == Sessao::NIVEL_COMUM) {
+			$queryService->where('visao', 1);
 		}
+		if ($this->sessao->getNivelAcesso() == Sessao::NIVEL_ADM || $this->sessao->getNivelAcesso() == Sessao::NIVEL_TECNICO) {
+			$queryService->whereIn('visao', [1, 2]);
+		}
+		$services = $queryService->get();
+
 		if (count($listaNaoAvaliados) == 0) {
 			echo '<h3 class="pb-4 mb-4 font-italic border-bottom">Cadastrar Ocorrência</h3>';
-			$this->view->mostraFormInserir2($listaServico);
+			echo view('partials.form-insert-order', ['services' => $services]);
 		} else {
 
 			echo view(

@@ -12,6 +12,23 @@ use app3s\model\Usuario;
 class PainelKambanDAO extends OcorrenciaDAO
 {
 
+
+    public function filtroStatus($arrStatus = array('a'))
+    {
+        if (count($arrStatus) == 0) {
+            return "";
+        }
+        $arrPices = array();
+        $strWhere = "(";
+        foreach ($arrStatus as $status) {
+
+            $arrPices[] =  "status = '$status'";
+        }
+        $strWhere .= implode(" OR ", $arrPices);
+        $strWhere .= ") ";
+        return $strWhere;
+    }
+
     public function pesquisaKamban(Ocorrencia $ocorrencia, $arrStatus = array('a'), $matrix = array(), $filtro = '')
     {
         $lista = array('ocorrencias' => array(), 'responsaveis' => array());
