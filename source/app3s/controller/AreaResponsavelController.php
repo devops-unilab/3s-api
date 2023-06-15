@@ -11,7 +11,7 @@ namespace app3s\controller;
 use app3s\dao\AreaResponsavelDAO;
 use app3s\model\AreaResponsavel;
 use app3s\view\AreaResponsavelView;
-
+use Illuminate\Support\Facades\DB;
 
 class AreaResponsavelController
 {
@@ -59,18 +59,11 @@ class AreaResponsavelController
 
 
 
-	public function fetch()
-	{
-		$list = $this->dao->fetch();
-		$this->view->showList($list);
-	}
-
-
 	public function add()
 	{
 
 		if (!isset($_POST['enviar_area_responsavel'])) {
-			$this->view->showInsertForm();
+			echo view('partials.form-insert-division');
 			return;
 		}
 		if (!(isset($_POST['nome']) && isset($_POST['descricao']) && isset($_POST['email']))) {
@@ -179,7 +172,8 @@ class AreaResponsavelController
 		} else {
 			$this->add();
 		}
-		$this->fetch();
+		$list = DB::table('area_responsavel')->get();
+		echo view('partials.index-division', ['list' => $list]);
 
 		echo '</div>';
 		echo '</div>';

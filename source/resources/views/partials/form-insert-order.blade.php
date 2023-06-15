@@ -71,7 +71,7 @@
                     <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12">
                         <label for="email">E-mail*</label>
                         <input class="form-control" type="email" name="email" id="email"
-                            value="' . trim($sessao->getEmail()) . '" required>
+                            value="{{ $email }}" required>
                     </div>
 
                 </div>

@@ -536,7 +536,7 @@ class OcorrenciaController
 
 		if (count($listaNaoAvaliados) == 0) {
 			echo '<h3 class="pb-4 mb-4 font-italic border-bottom">Cadastrar Ocorrência</h3>';
-			echo view('partials.form-insert-order', ['services' => $services]);
+			echo view('partials.form-insert-order', ['services' => $services, 'email' => $this->sessao->getEmail()]);
 		} else {
 
 			echo view(
