@@ -369,7 +369,7 @@ class OcorrenciaController
 	{
 		if (isset($_GET['setor'])) {
 			$divisionId = intval($_GET['setor']);
-			$query = $query->where('id_area_responsavel', $divisionId);
+			$query = $query->where('ocorrencia.id_area_responsavel', $divisionId);
 		}
 		if (isset($_GET['demanda'])) {
 			$query = $query->where(function ($query) {
@@ -401,7 +401,7 @@ class OcorrenciaController
 		}
 		if (isset($_GET['setores_responsaveis'])) {
 			$divisions = explode(",", $_GET['setores_responsaveis']);
-			$query = $query->whereIn('id_area_responsavel', $divisions);
+			$query = $query->whereIn('ocorrencia.id_area_responsavel', $divisions);
 		}
 		if (isset($_GET['setores_requisitantes'])) {
 			$divisionsSig = explode(",", $_GET['setores_requisitantes']);
