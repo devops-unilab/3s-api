@@ -167,7 +167,7 @@ class ServicoController
 		$selected = new Servico();
 		$selected->setId($_GET['delete']);
 		if (!isset($_POST['delete_servico'])) {
-			$this->view->confirmDelete($selected);
+			echo view('partials.confirm-delete', ['message' => 'Tem certeza que deseja apagar este serviço?']);
 			return;
 		}
 		if ($this->dao->delete($selected)) {

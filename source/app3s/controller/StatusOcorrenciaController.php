@@ -1303,24 +1303,6 @@ class StatusOcorrenciaController {
 
 
 
-    public function select(){
-	    if(!isset($_GET['select'])){
-	        return;
-	    }
-        $selected = new StatusOcorrencia();
-	    $selected->setId($_GET['select']);
-
-        $this->dao->fillById($selected);
-
-        echo '<div class="col-xl-7 col-lg-7 col-md-12 col-sm-12">';
-	    $this->view->showSelected($selected);
-        echo '</div>';
-
-
-
-    }
-
-
 	const STATUS_ABERTO = 'a';
 	const STATUS_RESERVADO = 'b';
 	const STATUS_EM_ESPERA = 'c';

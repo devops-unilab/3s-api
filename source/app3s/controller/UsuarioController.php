@@ -135,7 +135,7 @@ class UsuarioController
     <div class="row">
         <div class="card mb-4">
             <div class="card-body">';
-		$this->view->formLogin();
+		echo view('partials.form-login');
 		echo '
             </div>
         </div>
