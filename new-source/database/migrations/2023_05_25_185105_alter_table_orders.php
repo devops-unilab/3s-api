@@ -18,11 +18,11 @@ return new class extends Migration
             $table->renameColumn('id_usuario_cliente', 'client_user_id');
             $table->renameColumn('id_usuario_atendente', 'provider_user_id');
             $table->renameColumn('id_usuario_indicado', 'assigned_user_id');
-            $table->dropColumn('id_local');
+            $table->renameColumn('id_local', 'division_sig_id');
             $table->dropColumn('prioridade');
             $table->renameColumn('descricao', 'description');
             $table->renameColumn('patrimonio', 'tag');
-            $table->renameColumn('local', 'division');
+            $table->renameColumn('local', 'division_sig');
             $table->renameColumn('solucao', 'solution');
             $table->renameColumn('data_abertura', 'created_at');
             $table->renameColumn('data_atendimento', 'service_at');
@@ -48,7 +48,7 @@ return new class extends Migration
             $table->renameColumn('division_id', 'id_area_responsavel');
             $table->renameColumn('service_id', 'id_servico');
             $table->renameColumn('client_user_id', 'id_usuario_cliente');
-            $table->integer('id_local')->after('id')->nullable();
+            $table->renameColumn('division_sig_id', 'id_local');
             $table->char('prioridade', 1)->after('solucao')->nullable();
             $table->renameColumn('description', 'descricao');
             $table->renameColumn('tag', 'patrimonio');

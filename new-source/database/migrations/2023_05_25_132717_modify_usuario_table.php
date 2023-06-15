@@ -18,6 +18,7 @@ return new class extends Migration
             $table->renameColumn('nome', 'name');
             $table->renameColumn('id_setor', 'division_id')->nullable();
             $table->string('division_sig')->nullable();
+            $table->string('division_sig_id')->nullable();
             $table->renameColumn('nivel', 'role')->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('remember_token', 100)->nullable();
@@ -37,7 +38,7 @@ return new class extends Migration
             $table->renameColumn('name', 'nome')->nullable();
             $table->renameColumn('division_id', 'id_setor')->nullable();
             $table->renameColumn('role', 'nivel')->nullable();
-            $table->dropColumn(['email_verified_at', 'remember_token', 'division_sig']);
+            $table->dropColumn(['email_verified_at', 'remember_token', 'division_sig', 'division_sig_id']);
             $table->dropTimestamps();
         });
     }
