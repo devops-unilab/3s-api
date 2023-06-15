@@ -41,12 +41,8 @@ class ServicoController
 
         <div class="card mb-4">
             <div class="card-body">
-
-';
-
-		echo '
-		<div class="row">';
-		echo '<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">';
+				<div class="row">
+					<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">';
 
 		if (isset($_GET['edit'])) {
 			$this->edit();
@@ -57,10 +53,10 @@ class ServicoController
 		}
 		$this->fetch();
 
-		echo '</div>';
-		echo '</div>';
-
-		echo '</div></div>';
+		echo '		</div>
+				</div>
+			</div>
+		</div>';
 	}
 
 	public function edit()
