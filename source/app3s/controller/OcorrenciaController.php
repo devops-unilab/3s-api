@@ -9,12 +9,10 @@
 namespace app3s\controller;
 
 use app3s\dao\OcorrenciaDAO;
-use app3s\dao\AreaResponsavelDAO;
 use app3s\dao\ServicoDAO;
 use app3s\dao\StatusDAO;
 use app3s\dao\StatusOcorrenciaDAO;
 use app3s\dao\UsuarioDAO;
-use app3s\model\AreaResponsavel;
 use app3s\model\Ocorrencia;
 use app3s\model\Servico;
 use app3s\model\Status;
@@ -23,7 +21,7 @@ use app3s\model\Usuario;
 use app3s\util\Mail;
 use app3s\util\Sessao;
 use app3s\view\OcorrenciaView;
-
+use Illuminate\Support\Facades\DB;
 
 class OcorrenciaController
 {
@@ -72,25 +70,15 @@ class OcorrenciaController
 		if ($dataAbertura == null) {
 			return "Indefinido";
 		}
-
-
-
 		while ($this->fimDeSemana($dataAbertura)) {
 			$dataAbertura = date("Y-m-d 08:00:00", strtotime('+1 day', strtotime($dataAbertura)));
 		}
-
-
-
-
 		while ($this->foraDoExpediente($dataAbertura)) {
 			$dataAbertura = date("Y-m-d H:00:00", strtotime('+1 hour', strtotime($dataAbertura)));
 		}
-
-
 		$timeEstimado = strtotime($dataAbertura);
 		$tempoSla++;
 		for ($i = 0; $i < $tempoSla; $i++) {
-
 			$timeEstimado = strtotime('+' . $i . ' hour', strtotime($dataAbertura));
 			$horaEstimada = date("Y-m-d H:i:s", $timeEstimado);
 			while ($this->fimDeSemana($horaEstimada)) {
@@ -334,44 +322,17 @@ class OcorrenciaController
 	}
 	public function painel($lista, $strTitulo, $id, $strShow = "")
 	{
-		echo '
-    <div class="panel panel-default" id="panel1">
-        <div class="panel-heading">
-            <h3 class="pb-4 mb-4 font-italic border-bottom"
-            data-toggle="collapse" data-target="#' . $id . '" href="#' . $id . '">
-                ' . $strTitulo . '
-
-            <button type="button" class="float-right btn ml-3
-                btn-warning btn-circle btn-lg"  data-toggle="collapse" href="#' . $id . '" role="button" aria-expanded="false"
-                aria-controls="' . $id . '"><i class="fa fa-expand icone-maior"></i></button>
-            </h3>
-
-        </div>
-        <div id="' . $id . '" class="panel-collapse collapse in ' . $strShow . '">
-            <div class="panel-body">';
-		$this->view->exibirListaPaginada($lista, 'easyPaginate' . $id);
-
-
-
-		echo '
-
-            </div>
-        </div>
-    </div>';
+		echo view(
+			'partials.index-orders',
+			[
+				'orders' => $lista,
+				'id' => $id,
+				'title' => $strTitulo,
+				'strShow' => $strShow
+			]
+		);
 	}
 
-	public function exibirListagem($lista1, $lista2, $listaAtrasados = array())
-	{
-
-		if (count($listaAtrasados) > 0) {
-			$nChamados = count($listaAtrasados);
-			$this->painel($listaAtrasados, "Ocorrências Em Atraso ($nChamados)", 'collapseAtraso', "show");
-		}
-		$nChamados = count($lista1);
-		$this->painel($lista1, "Ocorrências Em Aberto($nChamados)", 'collapseAberto', 'show');
-		$nChamados = count($lista2);
-		$this->painel($lista2, "Ocorrências Encerradas", 'collapseEncerrada');
-	}
 	public function arrayStatusPendente()
 	{
 		$arrStatus = array();
@@ -393,437 +354,160 @@ class OcorrenciaController
 		return $arrStatus;
 	}
 
-	public function atrasado(Ocorrencia $ocorrencia)
+	public function atrasado($ocorrencia)
 	{
-
-		$statusDao = new StatusOcorrenciaDAO($this->dao->getConnection());
-		$listaStatus = $statusDao->pesquisaPorIdOcorrencia($ocorrencia);
-		$dataAbertura = null;
-		if ($ocorrencia->getServico()->getTempoSla() < 1) {
+		if ($ocorrencia->tempo_sla < 1) {
 			return false;
 		}
-
-		foreach ($listaStatus as $statusOcorrencia) {
-			if ($statusOcorrencia->getStatus()->getSigla() == StatusOcorrenciaController::STATUS_ABERTO || $statusOcorrencia->getStatus()->getSigla() == StatusOcorrenciaController::STATUS_RESERVADO) {
-				$dataAbertura = $statusOcorrencia->getDataMudanca();
-				break;
-			} else {
-				$dataAbertura = $statusOcorrencia->getDataMudanca();
-				break;
-			}
-		}
-		if ($dataAbertura == null) {
-			return false;
-		} else {
-			$horaEstimada = $this->calcularHoraSolucao($dataAbertura, $ocorrencia->getServico()->getTempoSla());
-		}
-
-
+		$horaEstimada = $this->calcularHoraSolucao($ocorrencia->data_abertura, $ocorrencia->tempo_sla);
 		$timeHoje = time();
 		$timeSolucaoEstimada = strtotime($horaEstimada);
-
-		if ($timeHoje > $timeSolucaoEstimada) {
-			return true;
-		} else {
-			return false;
-		}
-	}
-	public function filtroAvancado($listaAreas, $listaRequisitantes)
-	{
-
-		$dataAbertura1 = "";
-		$dataAbertura2 = "";
-
-		if (isset($_GET['data_abertura1'])) {
-			$dataAbertura1 = $_GET['data_abertura1'];
-		}
-		if (isset($_GET['data_abertura2'])) {
-			$dataAbertura2 = $_GET['data_abertura2'];
-		}
-		echo '
-                        <hr/>
-                        <form id="form-filtro-avancado">';
-
-		echo '
-                            <div class="form-group">
-                                <label for="filtro-data-1">Setor Requisitante</label>
-                                <select id="select-setores-filtro">
-                                  <option value="">Selecione o Setor</option>';
-		foreach ($listaRequisitantes as $chave => $area) {
-
-			echo '
-                                    <option value="' . $chave . '">' . $area . '</option>';
-		}
-		echo '
-
-                                </select>
-                              </div>';
-		echo '
-
-
-                            <div class="form-group">
-                                <label for="filtro-data-1">Setor Responsável</label>
-                                <select id="select-setores-filtro2">
-                                  <option value="">Selecione o Solicitante</option>';
-		foreach ($listaAreas as $area) {
-			echo '
-                                    <option value="' . trim($area->getId()) . '">' . trim($area->getNome()) . '</option>';
-		}
-		echo '
-
-                                </select>
-                              </div>
-
-<hr>
-                            <label for="filtro-data-1">Data de Abertura</label>
-                            <div class="form-row">
-                                <div class="col-md-6 mb-3">
-                                  <label for="filtro-data-1">Data Inicial</label>
-                                  <input type="date" class="form-control" id="filtro-data-1" name="filtro-data-1" value="' . $dataAbertura1 . '">
-
-                                </div>
-                                <div class="col-md-6 mb-3">
-                                  <label for="filtro-data-2">Data Final</label>
-                                  <input type="date" class="form-control" id="filtro-data-2" name="filtro-data-2" value="' . $dataAbertura2 . '">
-
-                                </div>
-                              </div>
-
-                            </form>';
+		return $timeHoje > $timeSolucaoEstimada;
 	}
 
-	public function cardFiltro($requisitantes)
+	public function applyFilters($query)
 	{
-		$sessao = new Sessao();
-
-		$usuario = new Usuario();
-		$usuario->setId($sessao->getIdUsuario());
-		$usuarioDao = new UsuarioDAO();
-		$usuarioDao->fillById($usuario);
-
-		$setor = new AreaResponsavel();
-		$setor->setId($usuario->getIdSetor());
-		$areaResponsavelDao = new AreaResponsavelDAO();
-		$areaResponsavelDao->fillById($setor);
-
-
-		$usuario = new Usuario();
-		$usuario->setNivel(Sessao::NIVEL_TECNICO);
-		$listaTecnicos = $usuarioDao->fetchByNivel($usuario);
-		$usuario->setNivel(Sessao::NIVEL_ADM);
-		$listaTecnicos2 = $usuarioDao->fetchByNivel($usuario);
-		$listaTecnicos = array_merge($listaTecnicos, $listaTecnicos2);
-		$allUsers = $usuarioDao->fetch();
-
-		$listaAreas = $areaResponsavelDao->fetch();
-
-		$checkedSetor = "";
 		if (isset($_GET['setor'])) {
-			$checkedSetor = 'checked';
+			$divisionId = intval($_GET['setor']);
+			$query = $query->where('id_area_responsavel', $divisionId);
 		}
-		$checkedDemanda = "";
 		if (isset($_GET['demanda'])) {
-			$checkedDemanda = 'checked';
-		}
-		$checkedSolicitacao = "";
-		if (isset($_GET['solicitacao'])) {
-			$checkedSolicitacao = 'checked';
-		}
-
-
-		$checkedLiberdade = "";
-		$checkedAuroras = "";
-		$checkedPalmares = "";
-		$checkedMales = "";
-		if (isset($_GET['campus'])) {
-			$listaCampus = explode(",", $_GET['campus']);
-			foreach ($listaCampus as $campus) {
-				switch ($campus) {
-					case 'liberdade':
-						$checkedLiberdade = "checked";
-						break;
-					case 'auroras':
-						$checkedAuroras = "checked";
-						break;
-					case 'palmares':
-						$checkedPalmares = "checked";
-						break;
-					case 'males':
-						$checkedMales = "checked";
-						break;
-				}
-			}
-		}
-
-
-		echo '
-                <div class="p-4 mb-3 bg-light rounded">
-                    <h4 class="font-italic">Filtros</h4>
-                        <form id="form-filtro-basico">
-
-                            <input type="hidden" value="' . $setor->getId() . '" id="meu-setor" name="meu-setor">
-                            <div class="custom-control custom-switch">
-                              <input type="checkbox" class="custom-control-input" id="filtro-meu-setor" ' . $checkedSetor . '>
-                              <label class="custom-control-label" for="filtro-meu-setor">Demandas (' . $setor->getNome() . ') </label>
-                            </div>
-
-
-                            <div class="custom-control custom-switch">
-                              <input type="checkbox" class="custom-control-input" id="filtro-minhas-demandas" ' . $checkedDemanda . '>
-                              <label class="custom-control-label" for="filtro-minhas-demandas">Meus Atendimentos</label>
-                            </div>
-
-
-
-                            <div class="custom-control custom-switch mb-3">
-                              <input type="checkbox" class="custom-control-input" id="filtro-minhas-solicitacoes" ' . $checkedSolicitacao . '>
-                              <label class="custom-control-label" for="filtro-minhas-solicitacoes">Minhas Solicitações</label>
-                            </div>
-
-
-                            <div class="form-group">
-                                <label for="select-tecnico">Técnico Responsável</label>
-                                <select id="select-tecnico">
-                                  <option value="">Selecione um atendente</option>';
-		foreach ($listaTecnicos as $tecnico) {
-			$selectedAtt = '';
-			if (isset($_GET['tecnico'])) {
-				if ($tecnico->getId() == $_GET['tecnico']) {
-					$selectedAtt = 'selected';
-				}
-			}
-			echo '
-                                  <option value="' . $tecnico->getId() . '" ' . $selectedAtt . '>' . $tecnico->getNome() . '</option>';
-		}
-
-		echo '
-                                </select>
-                              </div>
-
-
-						<div class="form-group">
-						<label for="select-requisitante">Usuário Requisitante</label>
-						<select id="select-requisitante">
-						  <option value="">Selecione um atendente</option>';
-
-		foreach ($allUsers as $userElement) {
-			$selectedAtt = '';
-			if (isset($_GET['requisitante'])) {
-				if ($userElement->getId() == $_GET['requisitante']) {
-					$selectedAtt = 'selected';
-				}
-			}
-			echo '
-									<option value="' . $userElement->getId() . '" ' . $selectedAtt . '>' . $userElement->getNome() . '</option>';
-		}
-
-		echo '
-						</select>
-					  </div>
-				</form>
-
-
-						';
-
-		$this->filtroAvancado($listaAreas, $requisitantes);
-		echo '
-                            <form id="form-filtro-campus">
-                         <hr>
-                        <label for="filtro-data-1">Campus</label>
-                        <div class="form-check">
-                          <input class="form-check-input" type="checkbox" value="" id="filtro-campus-liberdade" ' . $checkedLiberdade . '>
-                          <label class="form-check-label" for="filtro-campus-liberdade">
-                            Liberdade
-                          </label>
-                        </div>
-
-                        <div class="form-check">
-                          <input class="form-check-input" type="checkbox" value="" id="filtro-campus-palmares" ' . $checkedPalmares . '>
-                          <label class="form-check-label" for="filtro-campus-palmares">
-                            Palmares
-                          </label>
-                        </div>
-
-                        <div class="form-check">
-                          <input class="form-check-input" type="checkbox" value="" id="filtro-campus-auroras" ' . $checkedAuroras . '>
-                          <label class="form-check-label" for="filtro-campus-auroras">
-                            Auroras
-                          </label>
-                        </div>
-
-
-                        <div class="form-check">
-                          <input class="form-check-input" type="checkbox" value="" id="filtro-campus-males" ' . $checkedMales . '>
-                          <label class=""font-weight-normal" for="filtro-campus-males">
-                            Malês
-                          </label>
-                        </div>
-
-
-                        </form>
-
-
-
-                  </div>
-
-';
-	}
-	public function getArrayFiltros()
-	{
-		$arrayFiltros = array();
-		if (isset($_GET['setor'])) {
-			$arrayFiltros['setor'] = intval($_GET['setor']);
-		}
-
-		if (isset($_GET['demanda'])) {
-			$arrayFiltros['demanda'] = 1;
+			$query = $query->where(function ($query) {
+				$query->where('id_usuario_indicado', $this->sessao->getIdUsuario())->orWhere('id_usuario_atendente', $this->sessao->getIdUsuario());
+			});
 		}
 		if (isset($_GET['solicitacao'])) {
-			$arrayFiltros['solicitacao'] = 1;
+			$query = $query->where('id_usuario_cliente', $this->sessao->getIdUsuario());
 		}
 		if (isset($_GET['tecnico'])) {
-			$arrayFiltros['tecnico'] = intval($_GET['tecnico']);
+			$query = $query->where(function ($query) {
+				$query->where('id_usuario_indicado', intval($_GET['tecnico']))->orWhere('id_usuario_atendente', intval($_GET['tecnico']));
+			});
 		}
 		if (isset($_GET['requisitante'])) {
-			$arrayFiltros['requisitante'] = intval($_GET['requisitante']);
+			$query = $query->where('id_usuario_cliente', intval($_GET['requisitante']));
 		}
 		if (isset($_GET['data_abertura1'])) {
-			$arrayFiltros['data_abertura1'] = date("Y-m-d 01:01:01", strtotime($_GET['data_abertura1']));
+			$data1 = date("Y-m-d", strtotime($_GET['data_abertura1']));
+			$query = $query->where('data_abertura', '>=', $data1);
 		}
 		if (isset($_GET['data_abertura2'])) {
-			$arrayFiltros['data_abertura2'] = date("Y-m-d 23:59:59", strtotime($_GET['data_abertura2']));
+			$data2 = date("Y-m-d", strtotime($_GET['data_abertura2']));
+			$query = $query->where('data_abertura', '<=', $data2);
 		}
 		if (isset($_GET['campus'])) {
-			$arrayFiltros['campus'] = $_GET['campus'];
+			$campusArr = explode(",", $_GET['campus']);
+			$query = $query->whereIn('campus', $campusArr);
 		}
 		if (isset($_GET['setores_responsaveis'])) {
-			$arrayFiltros['setores_responsaveis'] = $_GET['setores_responsaveis'];
+			$divisions = explode(",", $_GET['setores_responsaveis']);
+			$query = $query->whereIn('id_area_responsavel', $divisions);
 		}
 		if (isset($_GET['setores_requisitantes'])) {
-			$arrayFiltros['setores_requisitantes'] = $_GET['setores_requisitantes'];
+			$divisionsSig = explode(",", $_GET['setores_requisitantes']);
+			$query = $query->whereIn('id_local', $divisionsSig);
 		}
 
-		return $arrayFiltros;
+		return $query;
 	}
 	public function listar()
 	{
 
 		$sessao = new Sessao();
 
-		$ocorrencia = new Ocorrencia();
 		$this->sessao = new Sessao();
 		$listaAtrasados = array();
 
 		$lista = array();
 
+		$queryPendding = DB::table('ocorrencia')
+			->select(
+				'ocorrencia.id as id',
+				'ocorrencia.descricao as descricao',
+				'servico.tempo_sla as tempo_sla',
+				'ocorrencia.data_abertura as data_abertura',
+				'ocorrencia.status as status'
+			)
+			->join('servico', 'ocorrencia.id_servico', '=', 'servico.id')
+			->whereIn('status', ['a', 'i', 'd', 'e', 'r', 'b']);
+		$queryFinished = DB::table('ocorrencia')
+			->select(
+				'ocorrencia.id as id',
+				'ocorrencia.descricao as descricao',
+				'servico.tempo_sla as tempo_sla',
+				'ocorrencia.data_abertura as data_abertura',
+				'ocorrencia.status as status'
+			)
+			->join('servico', 'ocorrencia.id_servico', '=', 'servico.id')
+			->whereIn('status', ['f', 'g', 'h']);
 
+		$queryPendding = $this->applyFilters($queryPendding);
+		$queryFinished = $this->applyFilters($queryFinished);
 
 		if ($this->sessao->getNivelAcesso() == Sessao::NIVEL_COMUM) {
-			$ocorrencia->getUsuarioCliente()->setId($this->sessao->getIdUsuario());
-			$lista = $this->dao->pesquisaPorCliente($ocorrencia, $this->arrayStatusPendente());
-			$lista2 = $this->dao->pesquisaPorCliente($ocorrencia, $this->arrayStatusFinalizado());
-		} else if ($this->sessao->getNivelAcesso() == Sessao::NIVEL_TECNICO) {
+			$queryPendding = $queryPendding->where('id_usuario_cliente', $this->sessao->getIdUsuario());
+			$queryFinished = $queryFinished->where('id_usuario_cliente', $this->sessao->getIdUsuario());
+		}
+		$lista = $queryPendding->get();
+		$lista2 = $queryFinished->get();
 
+		//Painel principal
+		echo '
 
-			$ocorrencia->getUsuarioCliente()->setId($this->sessao->getIdUsuario());
-			$ocorrencia->setIdUsuarioAtendente($this->sessao->getIdUsuario());
-			$ocorrencia->setIdUsuarioIndicado($this->sessao->getIdUsuario());
-
-			$usuario = new Usuario();
-			$usuario->setId($this->sessao->getIdUsuario());
-			$usuarioDao = new UsuarioDAO($this->dao->getConnection());
-			$usuarioDao->fillById($usuario);
-			$ocorrencia->getAreaResponsavel()->setId($usuario->getIdSetor());
-
-			$arrayFiltros = array();
-			$arrayFiltros = $this->getArrayFiltros();
-
-			$lista = $this->dao->pesquisaParaTec($ocorrencia, $this->arrayStatusPendente(), $arrayFiltros);
-			$lista2 = $this->dao->pesquisaParaTec($ocorrencia, $this->arrayStatusFinalizado(), $arrayFiltros);
-		} else if ($this->sessao->getNivelAcesso() == Sessao::NIVEL_ADM) {
-
-			$arrayFiltros = array();
-			$arrayFiltros = $this->getArrayFiltros();
-
-			$listaPendentes = $this->dao->pesquisaParaTec($ocorrencia, $this->arrayStatusPendente(), $arrayFiltros);
-			$lista2 = $this->dao->pesquisaParaTec($ocorrencia, $this->arrayStatusFinalizado(), $arrayFiltros);
-
-
-			foreach ($listaPendentes as $ocorrencia) {
-				if ($this->atrasado($ocorrencia)) {
-					$listaAtrasados[] = $ocorrencia;
-				} else {
-					$lista[] = $ocorrencia;
-				}
+		<div class="row">
+			<div class="col-md-8 blog-main">
+				<div class="panel-group" id="accordion">';
+		$listaAtrasados = array();
+		foreach ($lista as $ocorrencia) {
+			if ($this->atrasado($ocorrencia)) {
+				$listaAtrasados[] = $ocorrencia;
+			} else {
+				$lista[] = $ocorrencia;
 			}
 		}
 
+		if (count($listaAtrasados) > 0) {
 
-
-
-		echo '
-            <div class="row">
-                <div class="col-md-8 blog-main">';
-		echo '
-                    <div class="panel-group" id="accordion">';
-
-
-		$this->exibirListagem($lista, $lista2, $listaAtrasados);
-		$requisitantes = array();
-		foreach ($lista as $ocorrencia) {
-			$requisitantes[$ocorrencia->getIdLocal()] = $ocorrencia->getLocal();
+			echo view(
+				'partials.index-orders',
+				[
+					'orders' => $listaAtrasados,
+					'id' => 'collapseAtraso',
+					'title' => 'Ocorrências Em Atraso (' . count($listaAtrasados) . ')',
+					'strShow' => "show"
+				]
+			);
 		}
-
-		foreach ($lista2 as $ocorrencia) {
-			$requisitantes[$ocorrencia->getIdLocal()] = $ocorrencia->getLocal();
-		}
-
-		$requisitantes = array();
-		foreach ($lista as $ocorrencia) {
-			$requisitantes[$ocorrencia->getIdLocal()] = $ocorrencia->getLocal();
-		}
-		foreach ($listaAtrasados as $ocorrencia) {
-			$requisitantes[$ocorrencia->getIdLocal()] = $ocorrencia->getLocal();
-		}
-
-
-
+		$this->painel($lista, 'Ocorrências Em Aberto(' . count($lista) . ')', 'collapseAberto', 'show');
+		$this->painel($lista2, "Ocorrências Encerradas", 'collapseEncerrada');
 		echo '
-                    </div>'; //Fecha panel-group
-		echo '</div>'; //fecha col-md-8
+			</div>
+		</div>';
 
+		//Painel Lateral
 		echo '
-
-
-
-
-            <aside class="col-md-4 blog-sidebar">';
+		<aside class="col-md-4 blog-sidebar">';
 		if ($sessao->getNivelAcesso() == Sessao::NIVEL_ADM || $sessao->getNivelAcesso() == Sessao::NIVEL_TECNICO) {
-			$this->cardFiltro($requisitantes);
+			$sessao = new Sessao();
+			$currentUser = DB::table('usuario')->where('id', $sessao->getIdUsuario())->first();
+			$userDivision = DB::table('area_responsavel')->where('id', $currentUser->id_setor)->first();
+			$attendents = DB::table('usuario')->where('nivel', 'a')->orWhere('nivel', 't')->get();
+			$allUsers = DB::table('usuario')->get();
+			$applicants = DB::table('ocorrencia')->select('local as division_sig', 'id_local as division_sig_id')->distinct()->limit(400)->get();
+			$divisions = DB::table('area_responsavel')->select('id', 'nome as name')->get();
+
+			echo '
+                <div class="p-4 mb-3 bg-light rounded">
+                    <h4 class="font-italic">Filtros</h4>';
+			echo view('partials.form-basic-filter', ['userDivision' => $userDivision, 'attendents' => $attendents, 'allUsers' => $allUsers]);
+			echo view('partials.form-advanced-filter', ['divisions' => $divisions, 'applicants' => $applicants]);
+			echo view('partials.form-campus-filter');
+			echo '</div>';
 		}
-
-		echo '
-
-
-
-
-                  <div class="p-4 mb-3 bg-light rounded">
-                    <h4 class="font-italic">Sobre o Novíssimo 3s</h4>
-                    <p class="mb-0">
-                        Esta é uma aplicação completamente nova desenvolvida pela DTI do zero.
-                        Tudo foi refeito, desde o design até a estrutura de banco de dados.
-                        Os chamados antigos foram preservados em uma nova estrutura de banco de dados.
-
-                    </p>
-                  </div>
-                </aside><!-- /.blog-sidebar -->
-            </div>'; //Fecha row
-
-
-
-
-
-
+		echo view('partials.card-info');
+		echo '</aside>
+		</div>
+		';
 	}
 
 	public function telaCadastro()
@@ -832,44 +516,39 @@ class OcorrenciaController
 
 		$ocorrencia = new Ocorrencia();
 		$ocorrencia->getUsuarioCliente()->setId($this->sessao->getIdUsuario());
-		$listaNaoAvaliados = $this->dao->fetchByUsuarioClienteNaoAvaliados($ocorrencia);
 
+
+		$listaNaoAvaliados = DB::table('ocorrencia')->where('id_usuario_cliente', $this->sessao->getIdUsuario())->where('status', StatusOcorrenciaController::STATUS_FECHADO)->get();
 
 		echo '
             <div class="row">
-                <div class="col-md-12 blog-main">
+                <div class="col-md-12 blog-main">';
 
 
-';
-		$servicoDao = new ServicoDAO($this->dao->getConnection());
-		$servico = new Servico();
-		$servico->setVisao(1);
-
-		$listaServico = $servicoDao->fetchByVisao($servico);
-
+		$queryService = DB::table('servico');
+		if($this->sessao->getNivelAcesso() == Sessao::NIVEL_COMUM) {
+			$queryService->where('visao', 1);
+		}
 		if ($this->sessao->getNivelAcesso() == Sessao::NIVEL_ADM || $this->sessao->getNivelAcesso() == Sessao::NIVEL_TECNICO) {
-			$servico->setVisao(2);
-			$lista2 = $servicoDao->fetchByVisao($servico);
-			$listaServico = array_merge($listaServico, $lista2);
+			$queryService->whereIn('visao', [1, 2]);
 		}
+		$services = $queryService->get();
+
 		if (count($listaNaoAvaliados) == 0) {
-			echo '
-			<h3 class="pb-4 mb-4 font-italic border-bottom">
-                        Cadastrar Ocorrência
-                    </h3>
-			';
-			$this->view->mostraFormInserir2($listaServico);
+			echo '<h3 class="pb-4 mb-4 font-italic border-bottom">Cadastrar Ocorrência</h3>';
+			echo view('partials.form-insert-order', ['services' => $services]);
 		} else {
-			echo '
-			<h3 class="pb-4 mb-4 font-italic border-bottom" data-toggle="collapse" data-target="#collapseAberto" href="#collapseAberto" aria-expanded="true">
-				Para continuar confirme os chamados fechados.
-            </h3>'; //public function exibirLista($lista)
-			$this->view->exibirLista($listaNaoAvaliados);
+
+			echo view(
+				'partials.index-orders',
+				[
+					'orders' => $listaNaoAvaliados,
+					'title' => 'Para continuar confirme os chamados fechados.',
+					'id' => 'collapseToConfirm',
+					'strShow' => 'show'
+				]
+			);
 		}
-
-
-
-
 		echo '
                 </div>
             </div>';
@@ -984,7 +663,7 @@ class OcorrenciaController
 			$ocorrencia->setId($id);
 			$statusOcorrencia->setOcorrencia($ocorrencia);
 			if ($statusOcorrenciaDAO->insert($statusOcorrencia)) {
-				echo ':sucesso:' . $id.':';
+				echo ':sucesso:' . $id . ':';
 
 				$this->emailAbertura($statusOcorrencia);
 				$this->dao->getConnection()->commit();

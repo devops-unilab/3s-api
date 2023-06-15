@@ -14,241 +14,10 @@ use app3s\dao\UsuarioDAO;
 use app3s\model\Ocorrencia;
 use app3s\model\Usuario;
 use app3s\util\Sessao;
+use Illuminate\Support\Facades\DB;
 
 class OcorrenciaView
 {
-
-
-    public function mostraFormInserir2($listaServico)
-    {
-
-        $sessao = new Sessao();
-
-        echo '
-
-
-
-  <div class="card card-body">
-
-
-<form  id="insert_form_ocorrencia"  method="post" action="" enctype="multipart/form-data">
-    <span class="titulo medio">Informe os dados para cadastro</span><br>
-    <div class="row">
-        <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12">
-            <div class="row">
-                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
-                    <label for="select-demanda">Serviço*</label>
-                </div>
-                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
-                    <select id="select-servicos" name="servico" required>
-                        <option value="" selected="selected">Selecione um serviço</option>';
-        foreach ($listaServico as $servico) {
-            echo '
-                        <option value="' . $servico->getId() . '">' . $servico->getNome();
-            if ($servico->getDescricao() != "") {
-                echo ' - (' . $servico->getDescricao() . ') ';
-            }
-            echo '</option>';
-        }
-        echo '
-
-
-
-                    </select>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
-                    <label for="descricao">Descrição*</label>
-                    <textarea class="form-control" rows="3" name="descricao" id="descricao" required></textarea>
-                </div>
-            </div>
-            <br>
-
-            <div class="row">
-                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
-                    <div class="custom-file">
-                      <input type="file" class="custom-file-input" name="anexo" id="anexo" accept="application/msword, application/vnd.ms-excel, application/vnd.ms-powerpoint, text/plain, application/pdf, image/*, application/zip,application/rar, .ovpn, .xlsx">
-                      <label class="custom-file-label" for="anexo" data-browse="Anexar">Anexar um Arquivo</label>
-                    </div>
-
-                </div>
-            </div>
-
-        </div>
-        <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12">
-            <div class="row"><!--Campus Local Sala Contato(Ramal e email)-->
-                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
-                    <label for="campus">Campus*</label>
-                    <select name="campus" id="select-campus" required>
-                        <option value="" selected>Selecione um Campus</option>
-                        <option value="liberdade">Campus Liberdade</option>
-                        <option value="auroras">Campus Auroras</option>
-                        <option value="palmares">Campus Palmares</option>
-                        <option value="males">Campus dos Malês</option>
-                    </select>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12">
-                    <label for="local_sala">Local/Sala</label>
-                    <input class="form-control" type="text" name="local_sala" id="local_sala" value="" >
-                </div>
-                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12">
-                    <label for="patrimonio">Patrimônio</label>
-                    <input class="form-control" type="number" name="patrimonio" id="patrimonio" value="" />
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12">
-                    <label for="ramal" >Ramal</label>
-                    <input class="form-control" type="number" name="ramal" id="ramal" value="">
-                </div>
-
-                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12">
-                    <label for="email" >E-mail*</label>
-                    <input class="form-control" type="email" name="email" id="email" value="' . trim($sessao->getEmail()) . '" required>
-                </div>
-
-            </div>
-        </div>
-    </div>
-    <input type="hidden" name="enviar_ocorrencia" value="1">
-
-</form>
-
-
-  </div><br><br>
-<div class="d-flex justify-content-center m-3">
-        <button id="btn-inserir-ocorrencia" form="insert_form_ocorrencia" type="submit" class="btn btn-primary">Cadastrar Ocorrência</button>
-
-</div><br><br>
-
-
-';
-    }
-
-    public function exibirLista($lista)
-    {
-
-        echo '
-
-
-                   <div class="alert-group">';
-
-        $strClass = 'alert-warning';
-        foreach ($lista as $elemento) {
-
-            if ($elemento->getStatus() == 'a') {
-                $strClass = 'alert-warning';
-            } else if ($elemento->getStatus() == 'e') { //Em atendimento
-                $strClass = 'alert-info';
-            } else if ($elemento->getStatus() == 'f') { //Fechado
-                $strClass = 'alert-success';
-            } else if ($elemento->getStatus() == 'g') { //Fechado confirmado
-                $strClass = 'alert-success';
-            } else if ($elemento->getStatus() == 'h') { //Cancelado
-                $strClass = 'alert-secondary';
-            } else if ($elemento->getStatus() == 'r') { //reaberto
-                $strClass = 'alert-warning';
-            } else if ($elemento->getStatus() == 'b') { //reservado
-                $strClass = 'alert-warning';
-            } else if ($elemento->getStatus() == 'c') { //em espera
-                $strClass = 'alert-info';
-            } else if ($elemento->getStatus() == 'd') { //Aguardando usuario
-                $strClass = 'alert-danger';
-            } else if ($elemento->getStatus() == 'i') { //Aguardando ativo
-                $strClass = 'alert-danger';
-            }
-
-            echo '
-
-            <div class="alert ' . $strClass . ' alert-dismissable">
-                <a href="?page=ocorrencia&selecionar=' . $elemento->getId() . '" class="close"><i class="fa fa-search icone-maior"></i></a>
-
-                <strong>#' . $elemento->getId() . '</strong>
-                 ' . substr($elemento->getDescricao(), 0, 80) . '...
-            </div>
-                  ';
-        }
-
-        if (count($lista) == 0) {
-            echo '
-
-            <div class="alert alert-light alert-dismissable text-center">
-                <strong>Nenhuma Ocorrência</strong>
-
-            </div>
-                  ';
-        }
-        echo '
-                    </div>';
-    }
-
-    public function exibirListaPaginada($lista, $id = '')
-    {
-        $strId = "";
-        if ($id != '') {
-            $strId = " id = " . $id;
-        }
-        echo '
-
-
-                   <div ' . $strId . ' class="alert-group">';
-
-        $strClass = 'alert-warning';
-        foreach ($lista as $elemento) {
-
-            if ($elemento->getStatus() == 'a') {
-                $strClass = 'alert-warning';
-            } else if ($elemento->getStatus() == 'e') { //Em atendimento
-                $strClass = 'alert-info';
-            } else if ($elemento->getStatus() == 'f') { //Fechado
-                $strClass = 'alert-success';
-            } else if ($elemento->getStatus() == 'g') { //Fechado confirmado
-                $strClass = 'alert-success';
-            } else if ($elemento->getStatus() == 'h') { //Cancelado
-                $strClass = 'alert-secondary';
-            } else if ($elemento->getStatus() == 'r') { //reaberto
-                $strClass = 'alert-warning';
-            } else if ($elemento->getStatus() == 'b') { //reservado
-                $strClass = 'alert-warning';
-            } else if ($elemento->getStatus() == 'c') { //em espera
-                $strClass = 'alert-info';
-            } else if ($elemento->getStatus() == 'd') { //Aguardando usuario
-                $strClass = ' alert-secondary';
-            } else if ($elemento->getStatus() == 'i') { //Aguardando ativo
-                $strClass = 'alert-danger';
-            }
-
-            $descricao = "";
-            $descricao = htmlspecialchars($elemento->getDescricao());
-            if (strlen($descricao) > 200) {
-                $descricao = substr($descricao, 0, 200) . '...';
-            }
-            echo '
-
-            <div class="alert ' . $strClass . ' alert-dismissable">
-                <a href="?page=ocorrencia&selecionar=' . $elemento->getId() . '" class="close"><i class="fa fa-search icone-maior"></i></a>
-
-                <strong>#' . $elemento->getId() . ' </strong>';
-            echo $descricao;
-            echo '</div>
-                  ';
-        }
-
-        if (count($lista) == 0) {
-            echo '
-
-            <div class="alert alert-light alert-dismissable text-center">
-                <strong>Nenhuma Ocorrência</strong>
-
-            </div>
-                  ';
-        }
-        echo '
-                    </div>';
-    }
 
 
     /**
@@ -399,8 +168,8 @@ class OcorrenciaView
             $statusView->botaoEditarServico();
         }
         echo '<hr>';
-
-        $this->painelSLA($ocorrencia, $listaStatus, $dataAbertura, $dataSolucao);
+        $order = DB::table('ocorrencia')->where('id', $ocorrencia->getId())->first();
+        $this->painelSLA($ocorrencia, $dataAbertura, $dataSolucao, $order);
 
         echo '
                     </div>
@@ -480,7 +249,7 @@ class OcorrenciaView
         echo '</div>';
     }
 
-    public function painelSLA(Ocorrencia $ocorrencia, $listaStatus, $dataAbertura, $dataSolucao)
+    public function painelSLA(Ocorrencia $ocorrencia, $dataAbertura, $dataSolucao, $order)
     {
 
 
@@ -499,18 +268,16 @@ class OcorrenciaView
 
         echo '
 
-            <b>Data de Abertura: </b>' . date("d/m/Y", strtotime($dataAbertura)) . ' ' . date("H", strtotime($dataAbertura)) . 'h' . date("i", strtotime($dataAbertura)) . ' min <br>';
+            <b>Data de Abertura: </b>' . date("d/m/Y", strtotime($order->data_abertura)) . ' '
+            . date("H", strtotime($order->data_abertura)) . 'h'
+            . date("i", strtotime($order->data_abertura)) . ' min <br>';
 
+        if ($order->status == StatusOcorrenciaController::STATUS_FECHADO ||
+            $order->status == StatusOcorrenciaController::STATUS_FECHADO_CONFIRMADO ||
+            $order->status == StatusOcorrenciaController::STATUS_FECHADO) {
+            return;
+        }
 
-        if ($ocorrencia->getStatus() == StatusOcorrenciaController::STATUS_FECHADO) {
-            return;
-        }
-        if ($ocorrencia->getStatus() == StatusOcorrenciaController::STATUS_FECHADO_CONFIRMADO) {
-            return;
-        }
-        if ($ocorrencia->getStatus() == StatusOcorrenciaController::STATUS_FECHADO) {
-            return;
-        }
 
         $timeHoje = time();
         $timeSolucaoEstimada = strtotime($dataSolucao);
@@ -539,9 +306,10 @@ class OcorrenciaView
             echo '<span class="escondido" id="tempo-total">' . str_pad($hours, 2, '0', STR_PAD_LEFT) . ':' . str_pad($minutos, 2, '0', STR_PAD_LEFT) . ':' . str_pad($segundos, 2, '0', STR_PAD_LEFT) . '</span>';
 
             $sessao = new Sessao();
+
             if ($ocorrencia->getUsuarioCliente()->getId() == $sessao->getIdUsuario()) {
                 if (!isset($_SESSION['pediu_ajuda'])) {
-                    $this->modalPedirAjuda($ocorrencia);
+                    echo view('partials.modal-order-help', ['order' => $order]);
                 } else {
                     echo '<br>Você solicitou ajuda, aguarde a resposta.';
                 }
@@ -581,46 +349,5 @@ class OcorrenciaView
 ';
         }
     }
-    public function modalPedirAjuda(Ocorrencia $ocorrencia)
-    {
-        echo '
 
-<!-- Button trigger modal -->
-<button type="button" id="botao-pedir-ajuda" class="dropdown-item text-right" data-toggle="modal" data-target="#modalPedirAjuda">
-  Pedir Ajuda
-</button>
-
-<!-- Modal -->
-<div class="modal fade" id="modalPedirAjuda" tabindex="-1" role="dialog" aria-labelledby="labelPedirAjuda" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="labelPedirAjuda">Pedir Ajuda</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-          <form id="form_pedir_ajuda" class="user" method="post">
-            <input type="hidden" name="pedir_ajuda" value="1">
-            <input type="hidden" name="ocorrencia" value="' . $ocorrencia->getId() . '">
-
-            <span>Clique em solicitar ajuda para enviar um e-mail aos responsáveis pelo setor</span>
-
-		</form>
-
-
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
-        <button form="form_pedir_ajuda" type="submit" class="btn btn-primary">Solicitar Ajuda</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-
-
-';
-    }
 }

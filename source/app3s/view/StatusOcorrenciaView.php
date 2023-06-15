@@ -9,8 +9,6 @@
 namespace app3s\view;
 
 use app3s\model\Ocorrencia;
-use app3s\model\StatusOcorrencia;
-
 
 class StatusOcorrenciaView
 {
@@ -294,34 +292,4 @@ class StatusOcorrenciaView
             ';
   }
 
-
-
-
-
-
-
-  public function showSelected(StatusOcorrencia $statusocorrencia)
-  {
-    echo '
-
-	<div class="card o-hidden border-0 shadow-lg">
-        <div class="card">
-            <div class="card-header">
-                  Status Ocorrencia selecionado
-            </div>
-            <div class="card-body">
-                Id: ' . $statusocorrencia->getId() . '<br>
-                Mensagem: ' . $statusocorrencia->getMensagem() . '<br>
-                Data Mudanca: ' . $statusocorrencia->getDataMudanca() . '<br>
-                Ocorrencia: ' . $statusocorrencia->getOcorrencia() . '<br>
-                Status: ' . $statusocorrencia->getStatus() . '<br>
-                Usuario: ' . $statusocorrencia->getUsuario() . '<br>
-
-            </div>
-        </div>
-    </div>
-
-
-';
-  }
 }
