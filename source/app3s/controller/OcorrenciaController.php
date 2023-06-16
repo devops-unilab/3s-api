@@ -2,7 +2,6 @@
 
 /**
  * Classe feita para manipulação do objeto OcorrenciaController
- * feita automaticamente com programa gerador de software inventado por
  * @author Jefferson Uchôa Ponte <j.pontee@gmail.com>
  */
 
@@ -42,12 +41,8 @@ class OcorrenciaController
 
 	public function fimDeSemana($data)
 	{
-		$diaDaSemana = date('w', strtotime($data));
-		$diaDaSemana = intval($diaDaSemana);
-		if ($diaDaSemana == 6 || $diaDaSemana == 0) {
-			return true;
-		}
-		return false;
+		$diaDaSemana = intval(date('w', strtotime($data)));
+		return ($diaDaSemana == 6 || $diaDaSemana == 0) ;
 	}
 
 	public function foraDoExpediente($data)
@@ -148,7 +143,7 @@ class OcorrenciaController
 		$this->selecionado = new Ocorrencia();
 		$this->selecionado->setId($_GET['selecionar']);
 		$this->dao->fillById($this->selecionado);
-
+		$selected = DB::table('ocorrencia')->where('id', $_GET['selecionar'])->first();
 
 		if (!$this->parteInteressada()) {
 			echo '
@@ -173,34 +168,20 @@ class OcorrenciaController
 			return;
 		}
 		$statusController = new StatusOcorrenciaController();
-		$statusDao = new StatusDAO($this->dao->getConnection());
-		$status = new Status();
-		$status->setSigla($this->selecionado->getStatus());
-		$statusDao->fillBySigla($status);
-
+		$status = DB::table('status')->where('sigla', $this->selecionado->getStatus())->first();
 
 		echo '
             <div class="row">
-                <div class="col-md-12 blog-main">';
-		echo '<div class="row">
-                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">';
-		$statusController->painelStatus($this->selecionado, $status);
+                <div class="col-md-12 blog-main">
+					<div class="row">
+                		<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">';
+		$statusController->painelStatus($this->selecionado, $status, $selected);
 		echo '
 
-                </div>
-
-';
-
-
-
-		echo '</div>';
-
-		echo '
+                </div></div>
                 <div class="row  border-bottom mb-3">
                     <div class="col-md-6 blog-main">
-                       ';
 
-		echo '
                     </div>
                     <div class="col-md-6 blog-main">
                     <span class="text-right">';
@@ -215,7 +196,7 @@ class OcorrenciaController
 ';
 
 
-		$this->view->mostrarSelecionado2($this->selecionado, $listaStatus, $dataAbertura, $horaEstimada);
+		$this->view->mostrarSelecionado2($this->selecionado, $dataAbertura, $horaEstimada);
 
 
 
@@ -724,12 +705,7 @@ class OcorrenciaController
 			return;
 		}
 
-		$usuarioDao = new UsuarioDAO($this->dao->getConnection());
-		$usuario = new Usuario();
-		$usuario->setIdSetor($ocorrencia->getAreaResponsavel()->getId());
-
-		$lista = $usuarioDao->fetchByIdSetor($usuario);
-
+		$usersList = DB::table('usuario')->where('id_setor', $ocorrencia->getAreaResponsavel()->getId())->get();
 
 		$mail = new Mail();
 
@@ -743,10 +719,10 @@ class OcorrenciaController
                 </ul><br><p>Mensagem enviada pelo sistema 3S. Favor não responder.</p>';
 
 
-		foreach ($lista as $adm) {
-			if ($adm->getNivel() == Sessao::NIVEL_ADM) {
-				$saudacao =  '<p>Prezado(a) ' . $adm->getNome() . ' ,</p>';
-				$mail->enviarEmail($adm->getEmail(), $adm->getNome(), $assunto, $saudacao . $corpo);
+		foreach ($usersList as $adm) {
+			if ($usersList->nivel == Sessao::NIVEL_ADM) {
+				$saudacao =  '<p>Prezado(a) ' . $adm->nome . ' ,</p>';
+				$mail->enviarEmail($adm->email, $adm->nome, $assunto, $saudacao . $corpo);
 			}
 		}
 		$_SESSION['pediu_ajuda'] = 1;

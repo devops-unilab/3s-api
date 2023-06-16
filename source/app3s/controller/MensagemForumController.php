@@ -2,7 +2,6 @@
 
 /**
  * Classe feita para manipulação do objeto MensagemForumController
- * feita automaticamente com programa gerador de software inventado por
  * @author Jefferson Uchôa Ponte <j.pontee@gmail.com>
  */
 
@@ -342,7 +341,7 @@ class MensagemForumController
         }
 
 
-        if ($this->dao->insert($mensagemForum, $ocorrencia)) {
+        if ($this->dao->insert($mensagemForum, $order)) {
             echo ':sucesso:' . $ocorrencia->getId() . ':';
             $this->enviaEmail($mensagemForum, $ocorrencia);
         } else {

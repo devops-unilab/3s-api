@@ -69,33 +69,20 @@ class OcorrenciaView
      * @param Ocorrencia $ocorrencia
      * @param array:StatusOcorrencia $listaStatus
      */
-    public function mostrarSelecionado2(Ocorrencia $ocorrencia, $listaStatus, $dataAbertura, $dataSolucao)
+    public function mostrarSelecionado2(Ocorrencia $ocorrencia, $dataAbertura, $dataSolucao)
     {
-        $statusView = new StatusOcorrenciaView();
         $controller = new StatusOcorrenciaController();
 
         echo '
 
 
 
-            <div class="row">';
-        echo '
+            <div class="row">
                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
-                    ';
 
-        echo '
                 <div class="card mb-4">
-                    <div class="card-body">';
-        echo '
+                    <div class="card-body">
                    <b> Descricao: </b>' . strip_tags($ocorrencia->getDescricao()) . '<br>';
-
-
-
-
-
-
-
-
         if (trim($ocorrencia->getAnexo()) != "") {
             echo '<b>Anexo: </b><a target="_blank" href="uploads/' . $ocorrencia->getAnexo() . '"> Clique aqui</a> <br>';
         }
@@ -105,43 +92,29 @@ class OcorrenciaView
 
                     </div>
                 </div>
-
-
-';
-
-        echo '
                 <div class="card mb-4">
-                    <div class="card-body">';
-
-        echo '<b>Patrimônio: </b>' . strip_tags($ocorrencia->getPatrimonio()) . '<br>';
+                    <div class="card-body">
+                    <b>Patrimônio: </b>' . strip_tags($ocorrencia->getPatrimonio()) . '<br>';
 
 
 
 
         if ($controller->possoEditarPatrimonio($ocorrencia)) {
-            $statusView->botaoEditarPatrimonio();
+            echo '<button id="botao-editar-patrimonio" type="button" acao="editar_patrimonio"  class="dropdown-item text-right"   data-toggle="modal" data-target="#modalStatus">
+                Editar Patrimônio
+                </button>';
         }
 
-        echo '
+        echo '</div></div>
 
-                    </div>
-                </div>
-
-
-';
-
-
-        echo '
-                <div class="card mb-4">
+        <div class="card mb-4">
                     <div class="card-body">';
 
         echo '<b>Solucao: </b>' . strip_tags($ocorrencia->getSolucao()) . '<br>';
-
-
-
-
         if ($controller->possoEditarSolucao($ocorrencia)) {
-            $statusView->botaoEditarSolucao();
+            echo '<button id="botao-editar-solucao" type="button" acao="editar_solucao"  class="dropdown-item text-right"   data-toggle="modal" data-target="#modalStatus">
+  Editar Solução
+</button>';
         }
 
         echo '
@@ -150,22 +123,15 @@ class OcorrenciaView
 
                     </div>
                 </div>
-
-
-';
-
-
-
-        echo '
                 </div>
                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
-                    ';
-        echo '
                 <div class="card mb-4">
                     <div class="card-body">
                         <b>Classificação do Chamado: </b>' . $ocorrencia->getServico()->getNome() . '<br>';
         if ($controller->possoEditarServico($ocorrencia)) {
-            $statusView->botaoEditarServico();
+            echo '<button type="button" id="botao-editar-servico" acao="editar_servico"  class="dropdown-item text-right"  data-toggle="modal" data-target="#modalStatus">
+  Editar Serviço
+</button>';
         }
         echo '<hr>';
         $order = DB::table('ocorrencia')->where('id', $ocorrencia->getId())->first();
@@ -198,15 +164,11 @@ class OcorrenciaView
 
         echo '
                 </div>
-            </div>';
-
-
-        echo '
+            </div>
 
         <div class="card mb-4">
-            <div class="card-body">';
-        echo '<b>Setor Responsável: </b>' . $ocorrencia->getAreaResponsavel()->getNome() .
-            ' - ' . $ocorrencia->getAreaResponsavel()->getDescricao() . '<br>';
+            <div class="card-body">
+            <b>Setor Responsável: </b>' . $ocorrencia->getAreaResponsavel()->getNome() . ' - ' . $ocorrencia->getAreaResponsavel()->getDescricao() . '<br>';
 
         $usuarioDao = new UsuarioDAO();
 
@@ -230,23 +192,13 @@ class OcorrenciaView
         }
 
         if ($controller->possoEditarAreaResponsavel($ocorrencia)) {
-            $statusView->botaoEditarAreaResponsavel();
+            echo '<!-- Button trigger modal -->
+<button id="botao-editar-area" type="button" acao="editar_area"  class="dropdown-item text-right"   data-toggle="modal" data-target="#modalStatus">
+  Editar Setor Responsável
+</button>';
         }
 
-        echo '
-
-
-
-            </div>
-        </div>
-
-
-
-';
-        echo '
-                </div>
-';
-        echo '</div>';
+        echo '</div></div></div></div>';
     }
 
     public function painelSLA(Ocorrencia $ocorrencia, $dataAbertura, $dataSolucao, $order)

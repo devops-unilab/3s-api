@@ -12,7 +12,7 @@
             {{ $title }}
             <button type="button" class="float-right btn ml-3
             btn-warning btn-circle btn-lg"
-                data-toggle="collapse" href="#{{ $id }}" role="button" aria-expanded="false"
+                data-toggle="collapse" href="# {{ $id }}" role="button" aria-expanded="false"
                 aria-controls="{{ $id }}"><i class="fa fa-expand icone-maior"></i></button>
         </h3>
 
@@ -57,7 +57,7 @@
                     <div class="alert {{ $strClass }} alert-dismissable">
                         <a href="?page=ocorrencia&selecionar={{ $order->id }}" class="close"><i
                                 class="fa fa-search icone-maior"></i></a>
-                        <strong>#{{ $order->id }}</strong>{{ substr($order->descricao, 0, 200) }}...
+                        <strong>#{{ $order->id }}</strong> {{ substr($order->descricao, 0, 200) }}...
                     </div>
                 @empty
                     <div class="alert alert-light alert-dismissable text-center">
