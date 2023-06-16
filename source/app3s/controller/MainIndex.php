@@ -98,6 +98,7 @@ class MainIndex
     </div>
   </header>';
 
+    // self::navBar();
     NavBarController::main();
 
     echo '
@@ -160,6 +161,34 @@ class MainIndex
 ';
   }
 
+
+  public static function navBar()
+  {
+
+    $sessao = new Sessao();
+    if ($sessao->getNivelAcesso() == Sessao::NIVEL_DESLOGADO) {
+      return;
+    }
+    $primeiroNome = $sessao->getNome();
+    $arr = explode(" ", $sessao->getNome());
+    if (isset($arr[0])) {
+      $primeiroNome = $arr[0];
+    }
+    $primeiroNome = ucfirst(strtolower($primeiroNome));
+
+    if ($sessao->getNivelOriginal() == Sessao::NIVEL_COMUM) {
+      echo view('client.partials.navbar', ['userFirstName' => $primeiroNome, 'divisionSig' => $sessao->getUnidade()]);
+      return;
+    }
+    if ($sessao->getNivelOriginal() == Sessao::NIVEL_ADM) {
+      echo view('admin.partials.navbar', ['userFirstName' => $primeiroNome, 'divisionSig' => $sessao->getUnidade()]);
+      return;
+    }
+    if ($sessao->getNivelOriginal() == Sessao::NIVEL_TECNICO) {
+      echo view('provider.partials.navbar', ['userFirstName' => $primeiroNome, 'divisionSig' => $sessao->getUnidade()]);
+      return;
+    }
+  }
   public function mainJS()
   {
     echo '

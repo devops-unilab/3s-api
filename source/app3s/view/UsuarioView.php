@@ -14,66 +14,6 @@ use app3s\model\Usuario;
 class UsuarioView
 {
 
-  public function showList($lista)
-  {
-    echo '
-
-
-
-
-          <div class="card">
-                <div class="card-header">
-                  Lista Usuario
-                </div>
-                <div class="card-body">
-
-
-		<div class="table-responsive">
-			<table class="table table-bordered" id="dataTable" width="100%"
-				cellspacing="0">
-				<thead>
-					<tr>
-						<th>Id</th>
-						<th>Nome</th>
-						<th>Nível de Acesso</th>
-                        <th>Actions</th>
-					</tr>
-				</thead>
-				<tfoot>
-					<tr>
-                        <th>Id</th>
-                        <th>Nome</th>
-                        <th>Nível de Acesso</th>
-                        <th>Actions</th>
-					</tr>
-				</tfoot>
-				<tbody>';
-
-    foreach ($lista as $element) {
-      echo '<tr>';
-      echo '<td>' . $element->getId() . '</td>';
-      echo '<td>' . $element->getNome() . '</td>';
-      echo '<td>' . $element->getStrNivel() . '</td>';
-      echo '<td>
-                        <a href="?page=usuario&edit=' . $element->getId() . '" class="btn btn-success text-white">Editar</a>
-                      </td>';
-      echo '</tr>';
-    }
-
-    echo '
-				</tbody>
-			</table>
-		</div>
-
-
-
-
-  </div>
-</div>
-
-';
-  }
-
 
 
   public function showEditForm(Usuario $selecionado, $setores)
