@@ -41,7 +41,7 @@
         <div class="btn-group">
             <button class="btn btn-light dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true"
                 aria-expanded="false">
-                <i class="fa fa-user"></i> Olá, ' . $primeiroNome . '
+                <i class="fa fa-user"></i> Olá, {{$userFirstName}}
             </button>
             <div class="dropdown-menu dropright">
                 <button type="button" disabled class="dropdown-item">
@@ -49,8 +49,19 @@
                 </button>
                 <hr>
                 <button type="button" disabled class="dropdown-item change-level">
+                    Perfil Técnico
+                </button>
+                @if($originalLevel === 'a')
+                <button type="button" nivel="a" class="dropdown-item change-level">
                     Perfil Admin
                 </button>
+                @endif
+                @if($originalLevel === 'a' || $originalLevel === 't')
+                <button type="button" nivel="c" id="change-to-tec" ' . $disabled . '
+                    class="dropdown-item change-level">
+                    Perfil Cliente
+                </button>
+                @endif
                 <hr>
                 <a href="?sair=1" id="botao-avaliar" acao="avaliar" class="dropdown-item">
                     Sair
