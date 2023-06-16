@@ -71,7 +71,6 @@ class OcorrenciaView
      */
     public function mostrarSelecionado2(Ocorrencia $ocorrencia, $listaStatus, $dataAbertura, $dataSolucao)
     {
-        $statusView = new StatusOcorrenciaView();
         $controller = new StatusOcorrenciaController();
 
         echo '
@@ -119,7 +118,9 @@ class OcorrenciaView
 
 
         if ($controller->possoEditarPatrimonio($ocorrencia)) {
-            $statusView->botaoEditarPatrimonio();
+            echo '<button id="botao-editar-patrimonio" type="button" acao="editar_patrimonio"  class="dropdown-item text-right"   data-toggle="modal" data-target="#modalStatus">
+  Editar Patrimônio
+</button>';
         }
 
         echo '
@@ -141,7 +142,9 @@ class OcorrenciaView
 
 
         if ($controller->possoEditarSolucao($ocorrencia)) {
-            $statusView->botaoEditarSolucao();
+            echo '<button id="botao-editar-solucao" type="button" acao="editar_solucao"  class="dropdown-item text-right"   data-toggle="modal" data-target="#modalStatus">
+  Editar Solução
+</button>';
         }
 
         echo '
@@ -165,7 +168,9 @@ class OcorrenciaView
                     <div class="card-body">
                         <b>Classificação do Chamado: </b>' . $ocorrencia->getServico()->getNome() . '<br>';
         if ($controller->possoEditarServico($ocorrencia)) {
-            $statusView->botaoEditarServico();
+            echo '<button type="button" id="botao-editar-servico" acao="editar_servico"  class="dropdown-item text-right"  data-toggle="modal" data-target="#modalStatus">
+  Editar Serviço
+</button>';
         }
         echo '<hr>';
         $order = DB::table('ocorrencia')->where('id', $ocorrencia->getId())->first();
@@ -230,7 +235,10 @@ class OcorrenciaView
         }
 
         if ($controller->possoEditarAreaResponsavel($ocorrencia)) {
-            $statusView->botaoEditarAreaResponsavel();
+            echo '<!-- Button trigger modal -->
+<button id="botao-editar-area" type="button" acao="editar_area"  class="dropdown-item text-right"   data-toggle="modal" data-target="#modalStatus">
+  Editar Setor Responsável
+</button>';
         }
 
         echo '
