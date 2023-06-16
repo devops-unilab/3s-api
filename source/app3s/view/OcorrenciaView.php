@@ -69,7 +69,7 @@ class OcorrenciaView
      * @param Ocorrencia $ocorrencia
      * @param array:StatusOcorrencia $listaStatus
      */
-    public function mostrarSelecionado2(Ocorrencia $ocorrencia, $listaStatus, $dataAbertura, $dataSolucao)
+    public function mostrarSelecionado2(Ocorrencia $ocorrencia, $dataAbertura, $dataSolucao)
     {
         $controller = new StatusOcorrenciaController();
 
@@ -77,24 +77,12 @@ class OcorrenciaView
 
 
 
-            <div class="row">';
-        echo '
+            <div class="row">
                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
-                    ';
 
-        echo '
                 <div class="card mb-4">
-                    <div class="card-body">';
-        echo '
+                    <div class="card-body">
                    <b> Descricao: </b>' . strip_tags($ocorrencia->getDescricao()) . '<br>';
-
-
-
-
-
-
-
-
         if (trim($ocorrencia->getAnexo()) != "") {
             echo '<b>Anexo: </b><a target="_blank" href="uploads/' . $ocorrencia->getAnexo() . '"> Clique aqui</a> <br>';
         }
@@ -104,43 +92,25 @@ class OcorrenciaView
 
                     </div>
                 </div>
-
-
-';
-
-        echo '
                 <div class="card mb-4">
-                    <div class="card-body">';
-
-        echo '<b>Patrimônio: </b>' . strip_tags($ocorrencia->getPatrimonio()) . '<br>';
+                    <div class="card-body">
+                    <b>Patrimônio: </b>' . strip_tags($ocorrencia->getPatrimonio()) . '<br>';
 
 
 
 
         if ($controller->possoEditarPatrimonio($ocorrencia)) {
             echo '<button id="botao-editar-patrimonio" type="button" acao="editar_patrimonio"  class="dropdown-item text-right"   data-toggle="modal" data-target="#modalStatus">
-  Editar Patrimônio
-</button>';
+                Editar Patrimônio
+                </button>';
         }
 
-        echo '
+        echo '</div></div>
 
-                    </div>
-                </div>
-
-
-';
-
-
-        echo '
-                <div class="card mb-4">
+        <div class="card mb-4">
                     <div class="card-body">';
 
         echo '<b>Solucao: </b>' . strip_tags($ocorrencia->getSolucao()) . '<br>';
-
-
-
-
         if ($controller->possoEditarSolucao($ocorrencia)) {
             echo '<button id="botao-editar-solucao" type="button" acao="editar_solucao"  class="dropdown-item text-right"   data-toggle="modal" data-target="#modalStatus">
   Editar Solução
@@ -153,17 +123,8 @@ class OcorrenciaView
 
                     </div>
                 </div>
-
-
-';
-
-
-
-        echo '
                 </div>
                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
-                    ';
-        echo '
                 <div class="card mb-4">
                     <div class="card-body">
                         <b>Classificação do Chamado: </b>' . $ocorrencia->getServico()->getNome() . '<br>';
@@ -203,15 +164,11 @@ class OcorrenciaView
 
         echo '
                 </div>
-            </div>';
-
-
-        echo '
+            </div>
 
         <div class="card mb-4">
-            <div class="card-body">';
-        echo '<b>Setor Responsável: </b>' . $ocorrencia->getAreaResponsavel()->getNome() .
-            ' - ' . $ocorrencia->getAreaResponsavel()->getDescricao() . '<br>';
+            <div class="card-body">
+            <b>Setor Responsável: </b>' . $ocorrencia->getAreaResponsavel()->getNome() . ' - ' . $ocorrencia->getAreaResponsavel()->getDescricao() . '<br>';
 
         $usuarioDao = new UsuarioDAO();
 
@@ -241,20 +198,7 @@ class OcorrenciaView
 </button>';
         }
 
-        echo '
-
-
-
-            </div>
-        </div>
-
-
-
-';
-        echo '
-                </div>
-';
-        echo '</div>';
+        echo '</div></div></div></div>';
     }
 
     public function painelSLA(Ocorrencia $ocorrencia, $dataAbertura, $dataSolucao, $order)

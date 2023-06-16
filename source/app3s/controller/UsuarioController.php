@@ -11,7 +11,6 @@ use app3s\dao\AreaResponsavelDAO;
 use app3s\dao\UsuarioDAO;
 use app3s\model\Usuario;
 use app3s\util\Sessao;
-use app3s\view\UsuarioView;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 
@@ -24,7 +23,6 @@ class UsuarioController
 	public function __construct()
 	{
 		$this->dao = new UsuarioDAO();
-		$this->view = new UsuarioView();
 	}
 
 
@@ -165,11 +163,11 @@ class UsuarioController
 		$selected = new Usuario();
 		$selected->setId(intval($_GET['edit']));
 		$this->dao->fillById($selected);
-		$areaDao = new AreaResponsavelDAO($this->dao->getConnection());
-		$setores = $areaDao->fetch();
 
+		$setores = DB::table('area_responsavel')->get();
+		$user = DB::table('usuario')->where('id', $_GET['edit'])->first();
 		if (!isset($_POST['edit_usuario'])) {
-			$this->view->showEditForm($selected, $setores);
+			echo view('partials.form-edit-user', ['user' => $user, 'divisions' => $setores]);
 			return;
 		}
 

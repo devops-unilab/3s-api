@@ -41,12 +41,8 @@ class OcorrenciaController
 
 	public function fimDeSemana($data)
 	{
-		$diaDaSemana = date('w', strtotime($data));
-		$diaDaSemana = intval($diaDaSemana);
-		if ($diaDaSemana == 6 || $diaDaSemana == 0) {
-			return true;
-		}
-		return false;
+		$diaDaSemana = intval(date('w', strtotime($data)));
+		return ($diaDaSemana == 6 || $diaDaSemana == 0) ;
 	}
 
 	public function foraDoExpediente($data)
@@ -172,34 +168,20 @@ class OcorrenciaController
 			return;
 		}
 		$statusController = new StatusOcorrenciaController();
-		$statusDao = new StatusDAO($this->dao->getConnection());
-		$status = new Status();
-		$status->setSigla($this->selecionado->getStatus());
-		$statusDao->fillBySigla($status);
-
+		$status = DB::table('status')->where('sigla', $this->selecionado->getStatus())->first();
 
 		echo '
             <div class="row">
-                <div class="col-md-12 blog-main">';
-		echo '<div class="row">
-                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">';
+                <div class="col-md-12 blog-main">
+					<div class="row">
+                		<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">';
 		$statusController->painelStatus($this->selecionado, $status, $selected);
 		echo '
 
-                </div>
-
-';
-
-
-
-		echo '</div>';
-
-		echo '
+                </div></div>
                 <div class="row  border-bottom mb-3">
                     <div class="col-md-6 blog-main">
-                       ';
 
-		echo '
                     </div>
                     <div class="col-md-6 blog-main">
                     <span class="text-right">';
@@ -214,7 +196,7 @@ class OcorrenciaController
 ';
 
 
-		$this->view->mostrarSelecionado2($this->selecionado, $listaStatus, $dataAbertura, $horaEstimada);
+		$this->view->mostrarSelecionado2($this->selecionado, $dataAbertura, $horaEstimada);
 
 
 

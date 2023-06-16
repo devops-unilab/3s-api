@@ -111,7 +111,7 @@ class StatusOcorrenciaController
 		return true;
 	}
 
-	public function verificarSenha()
+	public function passwordVerify()
 	{
 		$this->sessao = new Sessao();
 		if (!isset($_POST['senha'])) {
@@ -282,7 +282,7 @@ class StatusOcorrenciaController
 	}
 
 
-	public function painelStatus(Ocorrencia $ocorrencia, Status $status, $selected)
+	public function painelStatus(Ocorrencia $ocorrencia, $status, $selected)
 	{
 
 		$this->ocorrencia = $ocorrencia;
@@ -291,18 +291,11 @@ class StatusOcorrenciaController
 		$listaUsuarios = array();
 		$listaServicos = array();
 		$listaAreas = array();
-		if ($this->possoEditarServico($this->ocorrencia)) {
 
-			$listaServicos = DB::table('servico')->whereIn('visao', [1, 2])->get();
-		}
-		if ($this->possoReservar()) {
+		$listaUsuarios = DB::table('usuario')->whereIn('nivel', ['t', 'a'])->get();
+		$listaServicos = DB::table('servico')->whereIn('visao', [1, 2])->get();
+		$listaAreas = DB::table('area_responsavel')->get();
 
-			$listaUsuarios = DB::table('usuario')->whereIn('nivel', ['t', 'a'])->get();
-		}
-
-		if ($this->possoEditarAreaResponsavel($this->ocorrencia)) {
-			$listaAreas = DB::table('area_responsavel')->get();
-		}
 
 		echo view('partials.modal-form-status', ['services' => $listaServicos, 'providers' => $listaUsuarios, 'divisions' => $listaAreas, 'order' => $selected]);
 		echo '
@@ -378,7 +371,7 @@ class StatusOcorrenciaController
   </div>
 </div>
 <button class="btn btn-light btn-lg p-2" type="button" disabled>
-    Status:  ' . $status->getNome() . '
+    Status:  ' . $status->nome . '
 </button>
 </div>
 </div>
@@ -770,7 +763,7 @@ class StatusOcorrenciaController
 			echo ':falha:Ação não especificada';
 			return;
 		}
-		if (!$this->verificarSenha()) {
+		if (!$this->passwordVerify()) {
 			echo ':falha:Senha incorreta';
 			return;
 		}
