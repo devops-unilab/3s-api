@@ -127,12 +127,32 @@ class UsuarioController
 		}
 	}
 
-
+	public function getStrNivel($nivel) {
+		$strNivel = 'Desconhecido';
+		switch($nivel) {
+			case 'a':
+				$strNivel = 'Administrador';
+				break;
+			case 't':
+				$strNivel = 'Técnico';
+				break;
+			case 'c':
+				$strNivel = 'Comum';
+				break;
+			default:
+				$strNivel = 'Desconhecido';
+			break;
+		}
+		return $strNivel;
+	}
 
 	public function fetch()
 	{
-		$list = $this->dao->fetch();
-		$this->view->showList($list);
+		$users = DB::table('usuario')->get();
+		foreach($users as $user) {
+			$user->strNivel = $this->getStrNivel($user->nivel);
+		}
+		echo view('partials.index-users', ['users' => $users]);
 	}
 
 

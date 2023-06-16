@@ -10,7 +10,6 @@ namespace app3s\controller;
 
 use app3s\dao\AreaResponsavelDAO;
 use app3s\model\AreaResponsavel;
-use app3s\view\AreaResponsavelView;
 use Illuminate\Support\Facades\DB;
 
 class AreaResponsavelController
@@ -22,7 +21,6 @@ class AreaResponsavelController
 	public function __construct()
 	{
 		$this->dao = new AreaResponsavelDAO();
-		$this->view = new AreaResponsavelView();
 	}
 
 
@@ -34,7 +32,7 @@ class AreaResponsavelController
 		$selected = new AreaResponsavel();
 		$selected->setId($_GET['delete']);
 		if (!isset($_POST['delete_area_responsavel'])) {
-			$this->view->confirmDelete($selected);
+			echo view('partials.confirm-delete', ['message' => 'Tem certeza que deseja deletar esta divisão?']);
 			return;
 		}
 		if ($this->dao->delete($selected)) {
@@ -106,12 +104,12 @@ class AreaResponsavelController
 		if (!isset($_GET['edit'])) {
 			return;
 		}
-		$selected = new AreaResponsavel();
-		$selected->setId($_GET['edit']);
-		$this->dao->fillById($selected);
+
+		$selected = DB::table("area_responsavel")->where('id', $_GET['edit'])->first();
 
 		if (!isset($_POST['edit_area_responsavel'])) {
-			$this->view->showEditForm($selected);
+
+			echo view('partials.form-edit-division', ['division' => $selected]);
 			return;
 		}
 
@@ -149,21 +147,11 @@ class AreaResponsavelController
 	{
 
 		if (isset($_GET['select'])) {
-			echo '<div class="row">';
+
 			$this->select();
-			echo '</div>';
+
 			return;
 		}
-		echo '
-
-        <div class="card mb-4">
-            <div class="card-body">
-
-';
-		echo '
-
-		<div class="row">';
-		echo '<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">';
 
 		if (isset($_GET['edit'])) {
 			$this->edit();
@@ -174,12 +162,6 @@ class AreaResponsavelController
 		}
 		$list = DB::table('area_responsavel')->get();
 		echo view('partials.index-division', ['list' => $list]);
-
-		echo '</div>';
-		echo '</div>';
-
-		echo '</div>';
-		echo '</div>';
 	}
 
 
@@ -189,13 +171,7 @@ class AreaResponsavelController
 		if (!isset($_GET['select'])) {
 			return;
 		}
-		$selected = new AreaResponsavel();
-		$selected->setId($_GET['select']);
-
-		$this->dao->fillById($selected);
-
-		echo '<div class="col-xl-7 col-lg-7 col-md-12 col-sm-12">';
-		$this->view->showSelected($selected);
-		echo '</div>';
+		$selected = DB::table("area_responsavel")->where('id', $_GET['select'])->first();
+		echo view('partials.show-division', ['division' => $selected]);
 	}
 }
