@@ -145,6 +145,10 @@ class AreaResponsavelController
 
 	public function main()
 	{
+		echo '<div class="card mb-4">
+		<div class="card-body">
+			<div class="row">
+				<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">';
 
 		if (isset($_GET['select'])) {
 
@@ -158,10 +162,13 @@ class AreaResponsavelController
 		} else if (isset($_GET['delete'])) {
 			$this->delete();
 		} else {
+
 			$this->add();
+			$list = DB::table('area_responsavel')->get();
+			echo view('partials.index-division', ['list' => $list]);
+
 		}
-		$list = DB::table('area_responsavel')->get();
-		echo view('partials.index-division', ['list' => $list]);
+		echo '</div></div></div></div>';
 	}
 
 
