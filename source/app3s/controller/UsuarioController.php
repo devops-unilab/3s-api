@@ -2,7 +2,6 @@
 
 /**
  * Classe feita para manipulação do objeto UsuarioController
- * feita automaticamente com programa gerador de software inventado por
  * @author Jefferson Uchôa Ponte <j.pontee@gmail.com>
  */
 

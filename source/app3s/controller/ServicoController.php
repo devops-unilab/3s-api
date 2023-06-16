@@ -2,16 +2,13 @@
 
 /**
  * Classe feita para manipulação do objeto ServicoController
- * feita automaticamente com programa gerador de software inventado por
  * @author Jefferson Uchôa Ponte <j.pontee@gmail.com>
  */
 
 namespace app3s\controller;
 
 use app3s\dao\ServicoDAO;
-use app3s\dao\TipoAtividadeDAO;
 use app3s\dao\AreaResponsavelDAO;
-use app3s\dao\GrupoServicoDAO;
 use app3s\model\Servico;
 use app3s\util\Sessao;
 use app3s\view\ServicoView;
@@ -87,15 +84,12 @@ class ServicoController
 		$this->dao->fillById($selected);
 
 		if (!isset($_POST['edit_servico'])) {
-			$tipoatividadeDao = new TipoAtividadeDAO($this->dao->getConnection());
-			$listTipoAtividade = $tipoatividadeDao->fetch();
+
+			$listTipoAtividade = DB::table('tipo_atividade')->get();
 
 			$arearesponsavelDao = new AreaResponsavelDAO($this->dao->getConnection());
 			$listAreaResponsavel = $arearesponsavelDao->fetch();
-
-			$gruposervicoDao = new GrupoServicoDAO($this->dao->getConnection());
-			$listGrupoServico = $gruposervicoDao->fetch();
-
+			$listGrupoServico = DB::table('grupo_servico')->get();
 			$this->view->showEditForm($listTipoAtividade, $listAreaResponsavel, $listGrupoServico, $selected);
 			return;
 		}
@@ -208,14 +202,12 @@ class ServicoController
 	{
 
 		if (!isset($_POST['enviar_servico'])) {
-			$tipoAtividadeDao = new TipoAtividadeDAO($this->dao->getConnection());
-			$listTipoAtividade = $tipoAtividadeDao->fetch();
+			$listTipoAtividade = DB::table('tipo_atividade')->get();
 
 			$areaResponsavelDao = new AreaResponsavelDAO($this->dao->getConnection());
 			$listAreaResponsavel = $areaResponsavelDao->fetch();
 
-			$grupoServicoDao = new GrupoServicoDAO($this->dao->getConnection());
-			$listGrupoServico = $grupoServicoDao->fetch();
+			$listGrupoServico = DB::table('grupo_servico')->get();
 
 			$this->view->showInsertForm($listTipoAtividade, $listAreaResponsavel, $listGrupoServico);
 			return;

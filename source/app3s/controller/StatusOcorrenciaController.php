@@ -2,7 +2,6 @@
 
 /**
  * Classe feita para manipulação do objeto StatusOcorrenciaController
- * feita automaticamente com programa gerador de software inventado por
  * @author Jefferson Uchôa Ponte <j.pontee@gmail.com>
  */
 
@@ -282,22 +281,6 @@ class StatusOcorrenciaController
 		return true;
 	}
 
-	public function getServicos()
-	{
-		$listaServicos = array();
-
-		$servicoDao = new ServicoDAO($this->dao->getConnection());
-		$servico = new Servico();
-		$servico->setVisao(1);
-
-		$listaServicos = $servicoDao->fetchByVisao($servico);
-		$servico->setVisao(2);
-		$lista2 = $servicoDao->fetchByVisao($servico);
-		$listaServicos = array_merge($listaServicos, $lista2);
-
-
-		return $listaServicos;
-	}
 
 	public function painelStatus(Ocorrencia $ocorrencia, Status $status, $selected)
 	{

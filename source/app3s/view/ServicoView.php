@@ -78,7 +78,7 @@ class ServicoView
                                             <option value="">Selecione o Tipo Atividade</option>';
 
         foreach ($listaTipoAtividade as $element) {
-            echo '<option value="' . $element->getId() . '">' . $element . '</option>';
+            echo '<option value="' . $element->id . '">' . $element->nome . '</option>';
         }
 
         echo '
@@ -102,7 +102,7 @@ class ServicoView
                                             <option value="">Selecione o Grupo Servico</option>';
 
         foreach ($listaGrupoServico as $element) {
-            echo '<option value="' . $element->getId() . '">' . $element . '</option>';
+            echo '<option value="' . $element->id . '">' . $element->nome . '</option>';
         }
 
         echo '
@@ -189,10 +189,10 @@ class ServicoView
 
         foreach ($listaTipoAtividade as $element) {
             $strAtribut = "";
-            if ($element->getId() == $selecionado->getTipoAtividade()->getId()) {
+            if ($element->id == $selecionado->getTipoAtividade()->getId()) {
                 $strAtribut = "selected";
             }
-            echo '<option value="' . $element->getId() . '" ' . $strAtribut . ' >' . $element->getNome() . '</option>';
+            echo '<option value="' . $element->id . '" ' . $strAtribut . ' >' . $element->nome . '</option>';
         }
 
         echo '
@@ -221,10 +221,10 @@ class ServicoView
 
         foreach ($listaGrupoServico as $element) {
             $strAtribut = "";
-            if ($element->getId() == $selecionado->getGrupoServico()->getId()) {
+            if ($element->id == $selecionado->getGrupoServico()->getId()) {
                 $strAtribut = "selected";
             }
-            echo '<option value="' . $element->getId() . '" ' . $strAtribut . ' >' . $element->getNome() . '</option>';
+            echo '<option value="' . $element->id . '" ' . $strAtribut . ' >' . $element->nome . '</option>';
         }
 
         echo '
