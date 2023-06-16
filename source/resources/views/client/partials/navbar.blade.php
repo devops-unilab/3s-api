@@ -38,9 +38,22 @@
                     Setor: {{ $divisionSig }}
                 </button>
                 <hr>
+
                 <button type="button" disabled class="dropdown-item change-level">
                     Perfil Cliente
                 </button>
+
+                @if($originalLevel === 'a')
+                <button type="button" nivel="a" class="dropdown-item change-level">
+                    Perfil Admin
+                </button>
+                @endif
+                @if($originalLevel === 'a' || $originalLevel === 't')
+                <button type="button" nivel="t" id="change-to-tec" ' . $disabled . '
+                    class="dropdown-item change-level">
+                    Perfil Técnico
+                </button>
+                @endif
                 <hr>
                 <a href="?sair=1" id="botao-avaliar" acao="avaliar" class="dropdown-item">
                     Sair
