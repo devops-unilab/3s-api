@@ -13,8 +13,6 @@ use app3s\dao\StatusDAO;
 use app3s\dao\StatusOcorrenciaDAO;
 use app3s\dao\UsuarioDAO;
 use app3s\model\Ocorrencia;
-use app3s\model\Servico;
-use app3s\model\Status;
 use app3s\model\StatusOcorrencia;
 use app3s\model\Usuario;
 use app3s\util\Mail;
@@ -143,7 +141,12 @@ class OcorrenciaController
 		$this->selecionado = new Ocorrencia();
 		$this->selecionado->setId($_GET['selecionar']);
 		$this->dao->fillById($this->selecionado);
+
+
+
 		$selected = DB::table('ocorrencia')->where('id', $_GET['selecionar'])->first();
+
+
 
 		if (!$this->parteInteressada()) {
 			echo '
@@ -154,19 +157,13 @@ class OcorrenciaController
 			return;
 		}
 
+
+		$horaEstimada = $this->calcularHoraSolucao($selected->data_abertura, $this->selecionado->getServico()->getTempoSla());
 		$statusDao = new StatusOcorrenciaDAO($this->dao->getConnection());
 		$listaStatus = $statusDao->pesquisaPorIdOcorrencia($this->selecionado);
-		$dataAbertura = null;
-		foreach ($listaStatus as $statusOcorrencia) {
-			$dataAbertura = $statusOcorrencia->getDataMudanca();
-			break;
-		}
 
 
-		if ($dataAbertura == null) {
-			echo  "Data de abertura não localizada<br>";
-			return;
-		}
+
 		$statusController = new StatusOcorrenciaController();
 		$status = DB::table('status')->where('sigla', $this->selecionado->getStatus())->first();
 
@@ -178,44 +175,21 @@ class OcorrenciaController
 		$statusController->painelStatus($this->selecionado, $status, $selected);
 		echo '
 
-                </div></div>
-                <div class="row  border-bottom mb-3">
-                    <div class="col-md-6 blog-main">
-
-                    </div>
-                    <div class="col-md-6 blog-main">
-                    <span class="text-right">';
-		$horaEstimada = $this->calcularHoraSolucao($dataAbertura, $this->selecionado->getServico()->getTempoSla());
-		echo '
-                    </div>
-
-                    </div>
+                		</div>
+					</div>
+                	<div class="row  border-bottom mb-3"></div>
                 </div>
                 <div class="col-md-8">
 
 ';
 
 
-		$this->view->mostrarSelecionado2($this->selecionado, $dataAbertura, $horaEstimada);
-
-
-
-
-
-
-
+		$this->view->mostrarSelecionado2($this->selecionado, $selected->data_abertura, $horaEstimada, $selected);
 		echo '
 
 
-                </div>';
-
-		echo '
-                <aside class="col-md-4 blog-sidebar">';
-
-		echo '
-
-
-
+                </div>
+                <aside class="col-md-4 blog-sidebar">
                     <h4 class="font-italic">Histórico</h4>
                     <div class="container">';
 
@@ -257,7 +231,6 @@ class OcorrenciaController
 ';
 
 		$mensagemController = new MensagemForumController();
-
 		$this->dao->fetchMensagens($this->selecionado);
 		$mensagemController->mainOcorrencia($this->selecionado);
 
@@ -410,7 +383,7 @@ class OcorrenciaController
 				'ocorrencia.status as status'
 			)
 			->join('servico', 'ocorrencia.id_servico', '=', 'servico.id')
-			->whereIn('status', ['a', 'i', 'd', 'e', 'r', 'b']);
+			->whereIn('status', ['a', 'i', 'd', 'e', 'r', 'b'])->orderByDesc('ocorrencia.id');;
 		$queryFinished = DB::table('ocorrencia')
 			->select(
 				'ocorrencia.id as id',
@@ -420,7 +393,7 @@ class OcorrenciaController
 				'ocorrencia.status as status'
 			)
 			->join('servico', 'ocorrencia.id_servico', '=', 'servico.id')
-			->whereIn('status', ['f', 'g', 'h']);
+			->whereIn('status', ['f', 'g', 'h'])->orderByDesc('ocorrencia.id');
 
 		$queryPendding = $this->applyFilters($queryPendding);
 		$queryFinished = $this->applyFilters($queryFinished);

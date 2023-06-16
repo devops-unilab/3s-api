@@ -69,10 +69,10 @@ class OcorrenciaView
      * @param Ocorrencia $ocorrencia
      * @param array:StatusOcorrencia $listaStatus
      */
-    public function mostrarSelecionado2(Ocorrencia $ocorrencia, $dataAbertura, $dataSolucao)
+    public function mostrarSelecionado2(Ocorrencia $ocorrencia, $dataAbertura, $dataSolucao, $order)
     {
         $controller = new StatusOcorrenciaController();
-
+        echo view('partials.show-order', ['order' => $order]);
         echo '
 
 
@@ -82,9 +82,9 @@ class OcorrenciaView
 
                 <div class="card mb-4">
                     <div class="card-body">
-                   <b> Descricao: </b>' . strip_tags($ocorrencia->getDescricao()) . '<br>';
-        if (trim($ocorrencia->getAnexo()) != "") {
-            echo '<b>Anexo: </b><a target="_blank" href="uploads/' . $ocorrencia->getAnexo() . '"> Clique aqui</a> <br>';
+                   <b> Descricao: </b>' . strip_tags($order->descricao) . '<br>';
+        if (trim($order->anexo) != "") {
+            echo '<b>Anexo: </b><a target="_blank" href="uploads/' . $order->anexo . '"> Clique aqui</a> <br>';
         }
 
         echo '
@@ -105,12 +105,13 @@ class OcorrenciaView
                 </button>';
         }
 
-        echo '</div></div>
+        echo '
 
-        <div class="card mb-4">
-                    <div class="card-body">';
-
-        echo '<b>Solucao: </b>' . strip_tags($ocorrencia->getSolucao()) . '<br>';
+                </div>
+            </div>
+            <div class="card mb-4">
+                    <div class="card-body">
+                    <b>Solucao: </b>' . strip_tags($ocorrencia->getSolucao()) . '<br>';
         if ($controller->possoEditarSolucao($ocorrencia)) {
             echo '<button id="botao-editar-solucao" type="button" acao="editar_solucao"  class="dropdown-item text-right"   data-toggle="modal" data-target="#modalStatus">
   Editar Solução
