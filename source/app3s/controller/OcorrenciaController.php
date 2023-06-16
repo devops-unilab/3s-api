@@ -442,8 +442,6 @@ class OcorrenciaController
 		foreach ($lista as $ocorrencia) {
 			if ($this->atrasado($ocorrencia)) {
 				$listaAtrasados[] = $ocorrencia;
-			} else {
-				$lista[] = $ocorrencia;
 			}
 		}
 
