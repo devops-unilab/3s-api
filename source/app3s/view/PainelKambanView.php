@@ -11,9 +11,9 @@ namespace app3s\view;
 use app3s\controller\StatusOcorrenciaController;
 use app3s\model\Ocorrencia;
 use app3s\dao\UsuarioDAO;
-use app3s\view\OcorrenciaView;
 
-class PainelKambanView extends OcorrenciaView
+
+class PainelKambanView
 {
 
     private $matrixStatus;
@@ -219,8 +219,7 @@ class PainelKambanView extends OcorrenciaView
 
 
         echo ' </small><br>';
-        $ocorrenciaView = new OcorrenciaView();
-        echo '<small  class="' . $texto . '">' . $ocorrenciaView->getStrStatus($chamado->getStatus()) . '</small>';
+        echo '<small  class="' . $texto . '">' . $this->getStrStatus($chamado->getStatus()) . '</small>';
 
 
 
@@ -254,5 +253,42 @@ class PainelKambanView extends OcorrenciaView
                         </div>
                         ';
         echo '</div>';
+    }
+    public function getStrStatus($status)
+    {
+        $strStatus = "Aberto";
+        switch ($status) {
+            case StatusOcorrenciaController::STATUS_ABERTO:
+                $strStatus = "Aberto";
+                break;
+            case StatusOcorrenciaController::STATUS_ATENDIMENTO:
+                $strStatus = "Em atendimento";
+                break;
+            case StatusOcorrenciaController::STATUS_FECHADO:
+                $strStatus = "Fechado";
+                break;
+            case StatusOcorrenciaController::STATUS_FECHADO_CONFIRMADO:
+                $strStatus = "Fechado Confirmado";
+                break;
+            case StatusOcorrenciaController::STATUS_CANCELADO:
+                $strStatus = "Cancelado";
+                break;
+            case StatusOcorrenciaController::STATUS_REABERTO:
+                $strStatus = "Reaberto";
+                break;
+            case StatusOcorrenciaController::STATUS_RESERVADO:
+                $strStatus = "Reservado";
+                break;
+            case StatusOcorrenciaController::STATUS_EM_ESPERA:
+                $strStatus = "Em espera";
+                break;
+            case StatusOcorrenciaController::STATUS_AGUARDANDO_USUARIO:
+                $strStatus = "Aguardando Usuário";
+                break;
+            case StatusOcorrenciaController::STATUS_AGUARDANDO_ATIVO:
+                $strStatus = "Aguardando ativo da DTI";
+                break;
+        }
+        return $strStatus;
     }
 }
