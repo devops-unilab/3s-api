@@ -254,52 +254,7 @@ class StatusOcorrenciaController
 	}
 
 
-	public function painelStatus(Ocorrencia $ocorrencia, $selected)
-	{
 
-		$this->ocorrencia = $ocorrencia;
-		$this->sessao = new Sessao();
-
-
-
-		if ($this->sessao->getNivelAcesso() == Sessao::NIVEL_ADM || $this->sessao->getNivelAcesso() == Sessao::NIVEL_TECNICO) {
-			echo '
-			<button type="button"  ' . ($this->possoAtender() ? '' : 'disabled') . '  acao="atender" class="dropdown-item  botao-status"  data-toggle="modal" data-target="#modalStatus">
-			  Atender
-			</button>
-
-			';
-		}
-
-		echo '
-
-		<button type="button" ' . ($this->possoFechar() ? '' : 'disabled') . '  acao="fechar"  class="dropdown-item  botao-status"  data-toggle="modal" data-target="#modalStatus">
-  			Fechar
-		</button>
-		<button type="button" ' . ($this->possoAvaliar() ? '' : 'disabled') . '  id="avaliar-btn" acao="avaliar"  class="dropdown-item"  data-toggle="modal" data-target="#modalStatus">
-			Confirmar
-	  	</button>
-
-		  <button id="botao-reabrir" type="button" ' . ($this->possoReabrir() ? '' : 'disabled') . '  acao="reabrir"  class="dropdown-item"  data-toggle="modal" data-target="#modalStatus">
-		  Reabrir
-		</button>
-
-		';
-
-		if ($this->possoReservar()) {
-			echo '<button type="button" acao="reservar" id="botao-reservar" class="dropdown-item"  data-toggle="modal" data-target="#modalStatus">
-			Reservar
-		  </button>';
-		}
-
-		if ($this->possoLiberar()) {
-			echo '<button type="button" acao="liberar_atendimento"  class="dropdown-item  botao-status"  data-toggle="modal" data-target="#modalStatus">
-			Liberar Ocorrência
-		  </button>';
-		}
-
-
-	}
 	public function possoEditarServico(Ocorrencia $ocorrencia)
 	{
 		$this->ocorrencia = $ocorrencia;
@@ -1154,10 +1109,6 @@ class StatusOcorrenciaController
 
 		return true;
 	}
-
-
-
-
 
 
 	const STATUS_ABERTO = 'a';

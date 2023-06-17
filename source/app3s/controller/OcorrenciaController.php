@@ -132,9 +132,9 @@ class OcorrenciaController
 	{
 		return $this->sessao->getIdUsuario() == $order->id_usuario_cliente && ($order->status == self::STATUS_REABERTO ||  $order->status == self::STATUS_ABERTO);
 	}
-	public function canWait($currentStatus)
+	public function canWait($order)
 	{
-		return $this->sessao->getNivelAcesso() != Sessao::NIVEL_COMUM && $currentStatus == 'e' && $this->sessao->getIdUsuario() != $this->selecionado->getIdUsuarioAtendente();
+		return $this->sessao->getNivelAcesso() != Sessao::NIVEL_COMUM && $order->status == 'e' && $this->sessao->getIdUsuario() != $this->selecionado->getIdUsuarioAtendente();
 	}
 	public function selecionar()
 	{
@@ -168,16 +168,12 @@ class OcorrenciaController
 			->get();
 
 
-		$statusController = new StatusOcorrenciaController();
 		$currentStatus = DB::table('status')->where('sigla', $this->selecionado->getStatus())->first();
 
 
 		$listaUsuarios = DB::table('usuario')->whereIn('nivel', ['t', 'a'])->get();
 		$listaServicos = DB::table('servico')->whereIn('visao', [1, 2])->get();
 		$listaAreas = DB::table('area_responsavel')->get();
-
-		echo view('partials.modal-form-status', ['services' => $listaServicos, 'providers' => $listaUsuarios, 'divisions' => $listaAreas, 'order' => $selected]);
-
 
 		$dataSolucao = $this->calcularHoraSolucao($selected->data_abertura, $this->selecionado->getServico()->getTempoSla());
 		$controller = new StatusOcorrenciaController();
@@ -186,6 +182,7 @@ class OcorrenciaController
 		$selected->service_name = $this->selecionado->getServico()->getNome();
 		$canEditService = $controller->possoEditarServico($this->selecionado);
 		$isClient = ($sessao->getNivelAcesso() == Sessao::NIVEL_COMUM);
+		$canWait = $this->canWait($selected);
 
 		$selected->tempo_sla = $this->selecionado->getServico()->getTempoSla();
 		$timeNow = time();
@@ -221,28 +218,12 @@ class OcorrenciaController
 
 		foreach ($orderStatusLog as $status) {
 			$status->color = $this->getColorStatus($status->sigla);
-		}
 
-		echo '
-            <div class="row">
-                <div class="col-md-12 blog-main">
-					<div class="row">
-                		<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
 
-						<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
-			<div class="alert  bg-light d-flex justify-content-between align-items-center" role="alert">
-				<div class="btn-group">
-					<button class="btn btn-light btn-lg dropdown-toggle p-2" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-					Chamado ' . $selected->id . '
-					</button>
-					<div class="dropdown-menu">
+		echo view('partials.modal-form-status', ['services' => $listaServicos, 'providers' => $listaUsuarios, 'divisions' => $listaAreas, 'order' => $selected]);
 
-					<button type="button" acao="cancelar" ' . ($this->canCancel($selected) ? '' : 'disabled') . ' class="dropdown-item  botao-status"  data-toggle="modal" data-target="#modalStatus">
-						Cancelar
-						</button>
 
-						';
-		$statusController->painelStatus($this->selecionado, $selected);
+}
 
 		echo view('partials.show-order', [
 			'order' => $selected,
@@ -257,7 +238,8 @@ class OcorrenciaController
 			'providerName' => $providerName,
 			'canEditDivision' => $canEditDivision,
 			'orderStatusLog' => $orderStatusLog,
-			'currentStatus' => $currentStatus
+			'currentStatus' => $currentStatus,
+			'canWait' => $canWait
 		]);
 
 
