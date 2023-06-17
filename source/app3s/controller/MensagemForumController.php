@@ -32,13 +32,13 @@ class MensagemForumController
     public function possoEnviarMensagem(Ocorrencia $ocorrencia)
     {
 
-        if ($ocorrencia->getStatus() == StatusOcorrenciaController::STATUS_FECHADO) {
+        if ($ocorrencia->getStatus() == OcorrenciaController::STATUS_FECHADO) {
             return false;
         }
-        if ($ocorrencia->getStatus() == StatusOcorrenciaController::STATUS_FECHADO_CONFIRMADO) {
+        if ($ocorrencia->getStatus() == OcorrenciaController::STATUS_FECHADO_CONFIRMADO) {
             return false;
         }
-        if ($ocorrencia->getStatus() == StatusOcorrenciaController::STATUS_CANCELADO) {
+        if ($ocorrencia->getStatus() == OcorrenciaController::STATUS_CANCELADO) {
             return false;
         }
         $sessao = new Sessao();
@@ -67,7 +67,7 @@ class MensagemForumController
             $mensagemForum->setId($idChat);
             $mensagemForumDao = new MensagemForumDAO();
             $mensagemForumDao->fillById($mensagemForum);
-            if ($sessao->getIdUsuario() === $mensagemForum->getUsuario()->getId() && $ocorrencia->getStatus() === StatusOcorrenciaController::STATUS_ATENDIMENTO) {
+            if ($sessao->getIdUsuario() === $mensagemForum->getUsuario()->getId() && $ocorrencia->getStatus() === OcorrenciaController::STATUS_ATENDIMENTO) {
                 $mensagemForumDao->delete($mensagemForum);
                 echo '<meta http-equiv = "refresh" content = "0 ; url =?page=ocorrencia&selecionar=' . $_GET['selecionar'] . '"/>';
             }
@@ -144,7 +144,7 @@ class MensagemForumController
             					<ul>
             						<li><a href="#"><i class="fa fa-calendar"></i> ' . date("d/m/Y", strtotime($mensagemForum->getDataEnvio())) . '</a></li>
             						<li><a href="#"><i class="fa fa-clock-o"></i> ' . date("H:i", strtotime($mensagemForum->getDataEnvio())) . '</a></a></li>';
-            if ($mensagemForum->getUsuario()->getId() == $sessao->getIdUsuario() && $ocorrencia->getStatus() === StatusOcorrenciaController::STATUS_ATENDIMENTO) {
+            if ($mensagemForum->getUsuario()->getId() == $sessao->getIdUsuario() && $ocorrencia->getStatus() === OcorrenciaController::STATUS_ATENDIMENTO) {
                 echo '
                                         <li><button data-toggle="modal" onclick="changeField(' . $mensagemForum->getId() . ')" data-target="#modalDeleteChat"><i class="fa fa-trash-o"></i> Apagar </a></button></li>';
             }

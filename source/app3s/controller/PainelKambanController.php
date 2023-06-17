@@ -53,12 +53,12 @@ class PainelKambanController
     public function arrayStatusPendente()
     {
         $arrStatus = array();
-        $arrStatus[] = StatusOcorrenciaController::STATUS_ABERTO;
-        $arrStatus[] = StatusOcorrenciaController::STATUS_AGUARDANDO_ATIVO;
-        $arrStatus[] = StatusOcorrenciaController::STATUS_AGUARDANDO_USUARIO;
-        $arrStatus[] = StatusOcorrenciaController::STATUS_ATENDIMENTO;
-        $arrStatus[] = StatusOcorrenciaController::STATUS_REABERTO;
-        $arrStatus[] = StatusOcorrenciaController::STATUS_RESERVADO;
+        $arrStatus[] = OcorrenciaController::STATUS_ABERTO;
+        $arrStatus[] = OcorrenciaController::STATUS_AGUARDANDO_ATIVO;
+        $arrStatus[] = OcorrenciaController::STATUS_AGUARDANDO_USUARIO;
+        $arrStatus[] = OcorrenciaController::STATUS_ATENDIMENTO;
+        $arrStatus[] = OcorrenciaController::STATUS_REABERTO;
+        $arrStatus[] = OcorrenciaController::STATUS_RESERVADO;
         return $arrStatus;
     }
 
@@ -66,9 +66,9 @@ class PainelKambanController
     {
 
         $arrStatus = array();
-        $arrStatus[] = StatusOcorrenciaController::STATUS_FECHADO;
-        $arrStatus[] = StatusOcorrenciaController::STATUS_FECHADO_CONFIRMADO;
-        $arrStatus[] = StatusOcorrenciaController::STATUS_CANCELADO;
+        $arrStatus[] = OcorrenciaController::STATUS_FECHADO;
+        $arrStatus[] = OcorrenciaController::STATUS_FECHADO_CONFIRMADO;
+        $arrStatus[] = OcorrenciaController::STATUS_CANCELADO;
         return $arrStatus;
     }
     public function quadroKamban()

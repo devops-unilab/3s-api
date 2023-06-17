@@ -8,7 +8,7 @@
 
 namespace app3s\view;
 
-use app3s\controller\StatusOcorrenciaController;
+use app3s\controller\OcorrenciaController;
 use app3s\model\Ocorrencia;
 use app3s\dao\UsuarioDAO;
 
@@ -57,9 +57,9 @@ class PainelKambanView
 
         foreach ($listaDeChamados as $chamado) {
             if (
-                $chamado->getStatus() == StatusOcorrenciaController::STATUS_ABERTO
-                || $chamado->getStatus() == StatusOcorrenciaController::STATUS_REABERTO
-                || $chamado->getStatus() == StatusOcorrenciaController::STATUS_RESERVADO
+                $chamado->getStatus() == OcorrenciaController::STATUS_ABERTO
+                || $chamado->getStatus() == OcorrenciaController::STATUS_REABERTO
+                || $chamado->getStatus() == OcorrenciaController::STATUS_RESERVADO
             ) {
                 $this->exibirCartao($chamado, null, $atendentes);
             }
@@ -87,10 +87,10 @@ class PainelKambanView
 
         foreach ($listaDeChamados as $chamado) {
             if (
-                $chamado->getStatus() == StatusOcorrenciaController::STATUS_ATENDIMENTO
-                || $chamado->getStatus() == StatusOcorrenciaController::STATUS_EM_ESPERA
-                ||  $chamado->getStatus() == StatusOcorrenciaController::STATUS_AGUARDANDO_ATIVO
-                ||  $chamado->getStatus() == StatusOcorrenciaController::STATUS_AGUARDANDO_USUARIO
+                $chamado->getStatus() == OcorrenciaController::STATUS_ATENDIMENTO
+                || $chamado->getStatus() == OcorrenciaController::STATUS_EM_ESPERA
+                ||  $chamado->getStatus() == OcorrenciaController::STATUS_AGUARDANDO_ATIVO
+                ||  $chamado->getStatus() == OcorrenciaController::STATUS_AGUARDANDO_USUARIO
             ) {
                 $this->exibirCartao($chamado, null, $atendentes);
             }
@@ -120,8 +120,8 @@ class PainelKambanView
 
         foreach ($listaDeChamados as $chamado) {
             if (
-                $chamado->getStatus() == StatusOcorrenciaController::STATUS_FECHADO
-                || $chamado->getStatus() == StatusOcorrenciaController::STATUS_FECHADO_CONFIRMADO
+                $chamado->getStatus() == OcorrenciaController::STATUS_FECHADO
+                || $chamado->getStatus() == OcorrenciaController::STATUS_FECHADO_CONFIRMADO
             ) {
                 $this->exibirCartao($chamado, null,  $atendentes);
             }
@@ -150,39 +150,39 @@ class PainelKambanView
         $texto = "text-black-50";
 
         switch ($chamado->getStatus()) {
-            case StatusOcorrenciaController::STATUS_ABERTO:
+            case OcorrenciaController::STATUS_ABERTO:
                 $bgCard = 'bg-warning';
                 $texto = "text-light";
                 break;
-            case StatusOcorrenciaController::STATUS_ATENDIMENTO:
+            case OcorrenciaController::STATUS_ATENDIMENTO:
                 $bgCard = 'bg-info';
                 $texto = "text-light";
                 break;
-            case StatusOcorrenciaController::STATUS_FECHADO:
+            case OcorrenciaController::STATUS_FECHADO:
                 $bgCard = 'bg-success';
                 $texto = "text-light";
                 break;
-            case StatusOcorrenciaController::STATUS_FECHADO_CONFIRMADO:
+            case OcorrenciaController::STATUS_FECHADO_CONFIRMADO:
                 $bgCard = 'bg-success';
                 $texto = "text-light";
                 break;
-            case StatusOcorrenciaController::STATUS_CANCELADO:
+            case OcorrenciaController::STATUS_CANCELADO:
                 $bgCard = 'bg-light';
                 $texto = "text-light";
                 break;
-            case StatusOcorrenciaController::STATUS_RESERVADO:
+            case OcorrenciaController::STATUS_RESERVADO:
                 $bgCard = 'bg-secondary';
                 $texto = "text-light";
                 break;
-            case StatusOcorrenciaController::STATUS_EM_ESPERA:
+            case OcorrenciaController::STATUS_EM_ESPERA:
                 $bgCard = 'bg-secondary';
                 $texto = "text-light";
                 break;
-            case StatusOcorrenciaController::STATUS_AGUARDANDO_USUARIO:
+            case OcorrenciaController::STATUS_AGUARDANDO_USUARIO:
                 $bgCard = 'bg-secondary';
                 $texto = "text-light";
                 break;
-            case StatusOcorrenciaController::STATUS_AGUARDANDO_ATIVO:
+            case OcorrenciaController::STATUS_AGUARDANDO_ATIVO:
                 $bgCard = 'bg-danger';
                 $texto = "text-light";
                 break;
@@ -223,13 +223,13 @@ class PainelKambanView
 
 
 
-        if ($chamado->getStatus() == StatusOcorrenciaController::STATUS_RESERVADO) {
+        if ($chamado->getStatus() == OcorrenciaController::STATUS_RESERVADO) {
             if ($chamado->getIdUsuarioIndicado() != null) {
                 $nome = $atendentes[$chamado->getIdUsuarioIndicado()]->getNome();
                 $nome = explode(" ", $nome);
                 echo '<br><small class="' . $texto . '">Responsável: ' . ucfirst(strtolower($nome[0])) . ' ' . ucfirst(strtolower($nome[1])) . '</small>';
             }
-        } else if ($chamado->getStatus() != StatusOcorrenciaController::STATUS_ABERTO) {
+        } else if ($chamado->getStatus() != OcorrenciaController::STATUS_ABERTO) {
             if ($chamado->getIdUsuarioAtendente() != null) {
                 $nome = $atendentes[$chamado->getIdUsuarioAtendente()]->getNome();
                 $nome = explode(" ", $nome);
@@ -258,34 +258,34 @@ class PainelKambanView
     {
         $strStatus = "Aberto";
         switch ($status) {
-            case StatusOcorrenciaController::STATUS_ABERTO:
+            case OcorrenciaController::STATUS_ABERTO:
                 $strStatus = "Aberto";
                 break;
-            case StatusOcorrenciaController::STATUS_ATENDIMENTO:
+            case OcorrenciaController::STATUS_ATENDIMENTO:
                 $strStatus = "Em atendimento";
                 break;
-            case StatusOcorrenciaController::STATUS_FECHADO:
+            case OcorrenciaController::STATUS_FECHADO:
                 $strStatus = "Fechado";
                 break;
-            case StatusOcorrenciaController::STATUS_FECHADO_CONFIRMADO:
+            case OcorrenciaController::STATUS_FECHADO_CONFIRMADO:
                 $strStatus = "Fechado Confirmado";
                 break;
-            case StatusOcorrenciaController::STATUS_CANCELADO:
+            case OcorrenciaController::STATUS_CANCELADO:
                 $strStatus = "Cancelado";
                 break;
-            case StatusOcorrenciaController::STATUS_REABERTO:
+            case OcorrenciaController::STATUS_REABERTO:
                 $strStatus = "Reaberto";
                 break;
-            case StatusOcorrenciaController::STATUS_RESERVADO:
+            case OcorrenciaController::STATUS_RESERVADO:
                 $strStatus = "Reservado";
                 break;
-            case StatusOcorrenciaController::STATUS_EM_ESPERA:
+            case OcorrenciaController::STATUS_EM_ESPERA:
                 $strStatus = "Em espera";
                 break;
-            case StatusOcorrenciaController::STATUS_AGUARDANDO_USUARIO:
+            case OcorrenciaController::STATUS_AGUARDANDO_USUARIO:
                 $strStatus = "Aguardando Usuário";
                 break;
-            case StatusOcorrenciaController::STATUS_AGUARDANDO_ATIVO:
+            case OcorrenciaController::STATUS_AGUARDANDO_ATIVO:
                 $strStatus = "Aguardando ativo da DTI";
                 break;
         }
