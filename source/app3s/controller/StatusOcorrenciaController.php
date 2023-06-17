@@ -78,37 +78,9 @@ class StatusOcorrenciaController
 	}
 	public function possoCancelar()
 	{
-		if ($this->sessao == null) {
-			$this->sessao = new Sessao();
-		}
-		if ($this->sessao->getIdUsuario() != $this->ocorrencia->getUsuarioCliente()->getId()) {
-			return false;
-		}
-		if ($this->ocorrencia->getStatus() == self::STATUS_FECHADO) {
-			return false;
-		}
-		if ($this->ocorrencia->getStatus() == self::STATUS_CANCELADO) {
-			return false;
-		}
-		if ($this->ocorrencia->getStatus() == self::STATUS_FECHADO_CONFIRMADO) {
-			return false;
-		}
-		if ($this->ocorrencia->getStatus() == self::STATUS_ATENDIMENTO) {
-			return false;
-		}
-		if ($this->ocorrencia->getStatus() == self::STATUS_RESERVADO) {
-			return false;
-		}
-		if ($this->ocorrencia->getStatus() == self::STATUS_AGUARDANDO_ATIVO) {
-			return false;
-		}
-		if ($this->ocorrencia->getStatus() == self::STATUS_AGUARDANDO_USUARIO) {
-			return false;
-		}
-		if ($this->ocorrencia->getStatus() == self::STATUS_REABERTO) {
-			return false;
-		}
-		return true;
+		return $this->sessao->getIdUsuario() === $this->ocorrencia->getUsuarioCliente()->getId()
+		&&
+		($this->ocorrencia->getStatus() == self::STATUS_REABERTO || $this->ocorrencia->getStatus() == self::STATUS_ABERTO);
 	}
 
 	public function passwordVerify()
@@ -282,35 +254,13 @@ class StatusOcorrenciaController
 	}
 
 
-	public function painelStatus(Ocorrencia $ocorrencia, $status, $selected)
+	public function painelStatus(Ocorrencia $ocorrencia, $selected)
 	{
 
 		$this->ocorrencia = $ocorrencia;
 		$this->sessao = new Sessao();
 
-		$listaUsuarios = array();
-		$listaServicos = array();
-		$listaAreas = array();
 
-		$listaUsuarios = DB::table('usuario')->whereIn('nivel', ['t', 'a'])->get();
-		$listaServicos = DB::table('servico')->whereIn('visao', [1, 2])->get();
-		$listaAreas = DB::table('area_responsavel')->get();
-
-
-		echo view('partials.modal-form-status', ['services' => $listaServicos, 'providers' => $listaUsuarios, 'divisions' => $listaAreas, 'order' => $selected]);
-		echo '
-
-		<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
-			<div class="alert  bg-light d-flex justify-content-between align-items-center" role="alert">
-				<div class="btn-group">
-					<button class="btn btn-light btn-lg dropdown-toggle p-2" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-					Chamado ' . $selected->id . '
-					</button>
-					<div class="dropdown-menu">
-
-						<button type="button" acao="cancelar" ' . ($this->possoCancelar() ? '' : 'disabled') . ' class="dropdown-item  botao-status"  data-toggle="modal" data-target="#modalStatus">
-						Cancelar
-						</button>';
 
 		if ($this->sessao->getNivelAcesso() == Sessao::NIVEL_ADM || $this->sessao->getNivelAcesso() == Sessao::NIVEL_TECNICO) {
 			echo '
@@ -348,61 +298,7 @@ class StatusOcorrenciaController
 		  </button>';
 		}
 
-		$possoAguardarAtivo = $this->possoAguardarAtivos();
-		$possoAguardarUsuario = $this->possoAguardarUsuario();
 
-		if ($possoAguardarAtivo || $possoAguardarUsuario) {
-			echo '<div class="dropdown-divider"></div>';
-			echo '
-			<button type="button" acao="aguardar_usuario"  class="dropdown-item  botao-status"  data-toggle="modal" data-target="#modalStatus">
-				Aguardar Usuário
-		  	</button>
-		  	<button type="button" acao="aguardar_ativos"  class="dropdown-item  botao-status"  data-toggle="modal" data-target="#modalStatus">
-		  		Aguardar Ativos de TI
-			</button>
-		  ';
-		}
-
-
-
-
-		echo '
-
-  </div>
-</div>
-<button class="btn btn-light btn-lg p-2" type="button" disabled>
-    Status:  ' . $status->nome . '
-</button>
-</div>
-</div>
-';
-	}
-	public function possoAguardarUsuario()
-	{
-
-		if ($this->sessao->getNivelAcesso() == Sessao::NIVEL_COMUM || $this->sessao->getNivelAcesso() == Sessao::NIVEL_DESLOGADO) {
-			return false;
-		}
-		if ($this->ocorrencia->getStatus() != self::STATUS_ATENDIMENTO) {
-			return false;
-		}
-		if ($this->sessao->getIdUsuario() != $this->ocorrencia->getIdUsuarioAtendente()) {
-			return false;
-		}
-		return true;
-	}
-	public function possoAguardarAtivos()
-	{
-		if ($this->sessao->getNivelAcesso() == Sessao::NIVEL_COMUM || $this->sessao->getNivelAcesso() == Sessao::NIVEL_DESLOGADO) {
-			return false;
-		}
-		if ($this->ocorrencia->getStatus() != self::STATUS_ATENDIMENTO) {
-			return false;
-		}
-		if ($this->sessao->getIdUsuario() != $this->ocorrencia->getIdUsuarioAtendente()) {
-			return false;
-		}
-		return true;
 	}
 	public function possoEditarServico(Ocorrencia $ocorrencia)
 	{

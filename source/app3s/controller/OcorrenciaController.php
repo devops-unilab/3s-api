@@ -9,7 +9,6 @@ namespace app3s\controller;
 
 use app3s\dao\OcorrenciaDAO;
 use app3s\dao\ServicoDAO;
-use app3s\dao\StatusDAO;
 use app3s\dao\StatusOcorrenciaDAO;
 use app3s\dao\UsuarioDAO;
 use app3s\model\Ocorrencia;
@@ -17,7 +16,7 @@ use app3s\model\StatusOcorrencia;
 use app3s\model\Usuario;
 use app3s\util\Mail;
 use app3s\util\Sessao;
-use app3s\view\OcorrenciaView;
+use DateTime;
 use Illuminate\Support\Facades\DB;
 
 class OcorrenciaController
@@ -31,7 +30,6 @@ class OcorrenciaController
 	public function __construct()
 	{
 		$this->dao = new OcorrenciaDAO();
-		$this->view = new OcorrenciaView();
 	}
 
 
@@ -40,7 +38,7 @@ class OcorrenciaController
 	public function fimDeSemana($data)
 	{
 		$diaDaSemana = intval(date('w', strtotime($data)));
-		return ($diaDaSemana == 6 || $diaDaSemana == 0) ;
+		return ($diaDaSemana == 6 || $diaDaSemana == 0);
 	}
 
 	public function foraDoExpediente($data)
@@ -130,20 +128,25 @@ class OcorrenciaController
 		}
 		return $strCartao;
 	}
+	public function canCancel($order)
+	{
+		return $this->sessao->getIdUsuario() == $order->id_usuario_cliente && ($order->status == self::STATUS_REABERTO ||  $order->status == self::STATUS_ABERTO);
+	}
+	public function canWait($currentStatus)
+	{
+		return $this->sessao->getNivelAcesso() != Sessao::NIVEL_COMUM && $currentStatus == 'e' && $this->sessao->getIdUsuario() != $this->selecionado->getIdUsuarioAtendente();
+	}
 	public function selecionar()
 	{
 
 		if (!isset($_GET['selecionar'])) {
 			return;
 		}
-
+		$sessao = new Sessao();
 		$this->sessao = new Sessao();
 		$this->selecionado = new Ocorrencia();
 		$this->selecionado->setId($_GET['selecionar']);
 		$this->dao->fillById($this->selecionado);
-
-
-
 		$selected = DB::table('ocorrencia')->where('id', $_GET['selecionar'])->first();
 
 
@@ -157,94 +160,123 @@ class OcorrenciaController
 			return;
 		}
 
-
-		$horaEstimada = $this->calcularHoraSolucao($selected->data_abertura, $this->selecionado->getServico()->getTempoSla());
-		$statusDao = new StatusOcorrenciaDAO($this->dao->getConnection());
-		$listaStatus = $statusDao->pesquisaPorIdOcorrencia($this->selecionado);
-
+		$orderStatusLog = DB::table('status_ocorrencia')
+			->join('usuario', 'status_ocorrencia.id_usuario', '=', 'usuario.id')
+			->join('status', 'status_ocorrencia.id_status', '=', 'status.id')
+			->select('status.sigla', 'status.nome', 'status_ocorrencia.mensagem', 'usuario.nome as nome_usuario', 'status_ocorrencia.data_mudanca')
+			->where('status_ocorrencia.id_ocorrencia', $selected->id)
+			->get();
 
 
 		$statusController = new StatusOcorrenciaController();
-		$status = DB::table('status')->where('sigla', $this->selecionado->getStatus())->first();
+		$currentStatus = DB::table('status')->where('sigla', $this->selecionado->getStatus())->first();
+
+
+		$listaUsuarios = DB::table('usuario')->whereIn('nivel', ['t', 'a'])->get();
+		$listaServicos = DB::table('servico')->whereIn('visao', [1, 2])->get();
+		$listaAreas = DB::table('area_responsavel')->get();
+
+		echo view('partials.modal-form-status', ['services' => $listaServicos, 'providers' => $listaUsuarios, 'divisions' => $listaAreas, 'order' => $selected]);
+
+
+		$dataSolucao = $this->calcularHoraSolucao($selected->data_abertura, $this->selecionado->getServico()->getTempoSla());
+		$controller = new StatusOcorrenciaController();
+		$canEditTag = $controller->possoEditarPatrimonio($this->selecionado);
+		$canEditSolution = $controller->possoEditarSolucao($this->selecionado);
+		$selected->service_name = $this->selecionado->getServico()->getNome();
+		$canEditService = $controller->possoEditarServico($this->selecionado);
+		$isClient = ($sessao->getNivelAcesso() == Sessao::NIVEL_COMUM);
+
+		$selected->tempo_sla = $this->selecionado->getServico()->getTempoSla();
+		$timeNow = time();
+		$timeSolucaoEstimada = strtotime($dataSolucao);
+		$isLate = $timeNow > $timeSolucaoEstimada;
+
+		$canRequestHelp = ($this->selecionado->getUsuarioCliente()->getId() == $sessao->getIdUsuario() && !isset($_SESSION['pediu_ajuda']));
+		$selected->client_name =  $this->selecionado->getUsuarioCliente()->getNome();
+
+
+		$canEditDivision = $controller->possoEditarAreaResponsavel($this->selecionado);
+
+		$usuarioDao = new UsuarioDAO();
+
+		$providerName = '';
+
+		if ($this->selecionado->getStatus() == StatusOcorrenciaController::STATUS_RESERVADO) {
+			if ($this->selecionado->getIdUsuarioIndicado() != null) {
+				$indicado = new Usuario();
+				$indicado->setId($this->selecionado->getIdUsuarioIndicado());
+				$usuarioDao->fillById($indicado);
+				$providerName = $indicado->getNome();
+			}
+		} else {
+			if ($this->selecionado->getIdUsuarioAtendente() != null) {
+
+				$atendente = new Usuario();
+				$atendente->setId($this->selecionado->getIdUsuarioAtendente());
+				$usuarioDao->fillById($atendente);
+				$providerName = $atendente->getNome();
+			}
+		}
+
+		foreach ($orderStatusLog as $status) {
+			$status->color = $this->getColorStatus($status->sigla);
+		}
 
 		echo '
             <div class="row">
                 <div class="col-md-12 blog-main">
 					<div class="row">
-                		<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">';
-		$statusController->painelStatus($this->selecionado, $status, $selected);
-		echo '
+                		<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
 
-                		</div>
-					</div>
-                	<div class="row  border-bottom mb-3"></div>
-                </div>
-                <div class="col-md-8">
+						<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+			<div class="alert  bg-light d-flex justify-content-between align-items-center" role="alert">
+				<div class="btn-group">
+					<button class="btn btn-light btn-lg dropdown-toggle p-2" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+					Chamado ' . $selected->id . '
+					</button>
+					<div class="dropdown-menu">
 
-';
+					<button type="button" acao="cancelar" ' . ($this->canCancel($selected) ? '' : 'disabled') . ' class="dropdown-item  botao-status"  data-toggle="modal" data-target="#modalStatus">
+						Cancelar
+						</button>
 
+						';
+		$statusController->painelStatus($this->selecionado, $selected);
 
-		$this->view->mostrarSelecionado2($this->selecionado, $selected->data_abertura, $horaEstimada, $selected);
-		echo '
+		echo view('partials.show-order', [
+			'order' => $selected,
+			'canEditTag' => $canEditTag,
+			'canEditSolution' => $canEditSolution,
+			'canEditService' => $canEditService,
+			'isLevelClient' => $isClient,
+			'isLate' => $isLate,
+			'dataSolucao' => $dataSolucao,
+			'canRequestHelp' => $canRequestHelp,
+			'providerDivision' => $this->selecionado->getAreaResponsavel()->getNome() . ' - ' . $this->selecionado->getAreaResponsavel()->getDescricao(),
+			'providerName' => $providerName,
+			'canEditDivision' => $canEditDivision,
+			'orderStatusLog' => $orderStatusLog,
+			'currentStatus' => $currentStatus
+		]);
 
-
-                </div>
-                <aside class="col-md-4 blog-sidebar">
-                    <h4 class="font-italic">Histórico</h4>
-                    <div class="container">';
-
-		foreach ($listaStatus as $status) {
-			$strCartao = $this->getColorStatus($status->getStatus()->getSigla());
-
-
-			echo '
-
-
-                    <div class="notice ' . $strCartao . '">
-            	       <strong>' . $status->getStatus()->getNome() . '</strong><br>';
-
-			if ($status->getStatus()->getSigla() == StatusOcorrenciaController::STATUS_FECHADO_CONFIRMADO) {
-
-				$avaliacao = intval($this->selecionado->getAvaliacao());
-
-				echo '<br>';
-				for ($i = 0; $i < $avaliacao; $i++) {
-					echo '<img class="m-2 estrela-1" nota="1" src="img/star1.png" alt="1">';
-				}
-			}
-			echo '<br>
-
-
-                        ' . $status->getMensagem() . '<br>
-                        <strong>' . $status->getUsuario()->getNome() . '<br>' . date('d/m/Y - H:i', strtotime($status->getDataMudanca())) . '</strong>
-            	    </div>
-
-
-
-';
-		}
-		echo '
-
-</div>
-
-
-';
 
 		$mensagemController = new MensagemForumController();
 		$this->dao->fetchMensagens($this->selecionado);
 		$mensagemController->mainOcorrencia($this->selecionado);
-
-
-
-
-
-		echo '
-
-
-
-                </aside>
-            </div>';
 	}
+
+
+	const STATUS_ABERTO = 'a';
+	const STATUS_RESERVADO = 'b';
+	const STATUS_EM_ESPERA = 'c';
+	const STATUS_AGUARDANDO_USUARIO = 'd';
+	const STATUS_ATENDIMENTO = 'e';
+	const STATUS_FECHADO = 'f';
+	const STATUS_FECHADO_CONFIRMADO = 'g';
+	const STATUS_CANCELADO = 'h';
+	const STATUS_AGUARDANDO_ATIVO = 'i';
+	const STATUS_REABERTO = 'r';
 	public function main()
 	{
 
@@ -478,7 +510,7 @@ class OcorrenciaController
 
 
 		$queryService = DB::table('servico');
-		if($this->sessao->getNivelAcesso() == Sessao::NIVEL_COMUM) {
+		if ($this->sessao->getNivelAcesso() == Sessao::NIVEL_COMUM) {
 			$queryService->where('visao', 1);
 		}
 		if ($this->sessao->getNivelAcesso() == Sessao::NIVEL_ADM || $this->sessao->getNivelAcesso() == Sessao::NIVEL_TECNICO) {
