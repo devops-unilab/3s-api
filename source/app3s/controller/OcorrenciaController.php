@@ -13,6 +13,7 @@ use app3s\dao\ServicoDAO;
 use app3s\dao\StatusDAO;
 use app3s\dao\UsuarioDAO;
 use app3s\model\AreaResponsavel;
+use app3s\model\MensagemForum;
 use app3s\model\Ocorrencia;
 use app3s\model\Servico;
 use app3s\model\Status;
@@ -48,18 +49,8 @@ class OcorrenciaController
 
 	public function foraDoExpediente($data)
 	{
-		$hora = date('H', strtotime($data));
-		$hora = intval($hora);
-		if ($hora >= 17) {
-			return true;
-		}
-		if ($hora < 8) {
-			return true;
-		}
-		if ($hora == 11) {
-			return true;
-		}
-		return false;
+		$hora = intval(date('H', strtotime($data)));
+		return ($hora >= 17 || $hora < 8 || $hora == 11);
 	}
 	public function calcularHoraSolucao($dataAbertura, $tempoSla)
 	{
@@ -152,7 +143,7 @@ class OcorrenciaController
 		$this->selecionado = new Ocorrencia();
 		$this->selecionado->setId($_GET['selecionar']);
 		$this->dao->fillById($this->selecionado);
-		$selected = DB::table('ocorrencia')->where('id', $_GET['selecionar'])->first();
+		$order = DB::table('ocorrencia')->where('id', $_GET['selecionar'])->first();
 
 
 
@@ -169,7 +160,7 @@ class OcorrenciaController
 			->join('usuario', 'status_ocorrencia.id_usuario', '=', 'usuario.id')
 			->join('status', 'status_ocorrencia.id_status', '=', 'status.id')
 			->select('status.sigla', 'status.nome', 'status_ocorrencia.mensagem', 'usuario.nome as nome_usuario', 'status_ocorrencia.data_mudanca')
-			->where('status_ocorrencia.id_ocorrencia', $selected->id)
+			->where('status_ocorrencia.id_ocorrencia', $order->id)
 			->get();
 
 
@@ -180,22 +171,22 @@ class OcorrenciaController
 		$listaServicos = DB::table('servico')->whereIn('visao', [1, 2])->get();
 		$listaAreas = DB::table('area_responsavel')->get();
 
-		$dataSolucao = $this->calcularHoraSolucao($selected->data_abertura, $this->selecionado->getServico()->getTempoSla());
+		$dataSolucao = $this->calcularHoraSolucao($order->data_abertura, $this->selecionado->getServico()->getTempoSla());
 		$controller = new OcorrenciaController();
 		$canEditTag = $controller->possoEditarPatrimonio($this->selecionado);
 		$canEditSolution = $controller->possoEditarSolucao($this->selecionado);
-		$selected->service_name = $this->selecionado->getServico()->getNome();
+		$order->service_name = $this->selecionado->getServico()->getNome();
 		$canEditService = $controller->possoEditarServico($this->selecionado);
 		$isClient = ($sessao->getNivelAcesso() == Sessao::NIVEL_COMUM);
-		$canWait = $this->canWait($selected);
+		$canWait = $this->canWait($order);
 
-		$selected->tempo_sla = $this->selecionado->getServico()->getTempoSla();
+		$order->tempo_sla = $this->selecionado->getServico()->getTempoSla();
 		$timeNow = time();
 		$timeSolucaoEstimada = strtotime($dataSolucao);
 		$isLate = $timeNow > $timeSolucaoEstimada;
 
 		$canRequestHelp = ($this->selecionado->getUsuarioCliente()->getId() == $sessao->getIdUsuario() && !isset($_SESSION['pediu_ajuda']));
-		$selected->client_name =  $this->selecionado->getUsuarioCliente()->getNome();
+		$order->client_name =  $this->selecionado->getUsuarioCliente()->getNome();
 
 
 		$canEditDivision = $controller->possoEditarAreaResponsavel($this->selecionado);
@@ -225,13 +216,13 @@ class OcorrenciaController
 			$status->color = $this->getColorStatus($status->sigla);
 
 
-		echo view('partials.modal-form-status', ['services' => $listaServicos, 'providers' => $listaUsuarios, 'divisions' => $listaAreas, 'order' => $selected]);
+		echo view('partials.modal-form-status', ['services' => $listaServicos, 'providers' => $listaUsuarios, 'divisions' => $listaAreas, 'order' => $order]);
 
 
 }
 
 		echo view('partials.show-order', [
-			'order' => $selected,
+			'order' => $order,
 			'canEditTag' => $canEditTag,
 			'canEditSolution' => $canEditSolution,
 			'canEditService' => $canEditService,
@@ -248,9 +239,7 @@ class OcorrenciaController
 		]);
 
 
-		$mensagemController = new MensagemForumController();
-		$this->dao->fetchMensagens($this->selecionado);
-		$mensagemController->mainOcorrencia($this->selecionado);
+		$this->indexMessages($order);
 	}
 
 
@@ -1782,6 +1771,347 @@ class OcorrenciaController
 	}
 
 
+    public function possoEnviarMensagem($order)
+    {
+
+        if ($order->status == OcorrenciaController::STATUS_FECHADO) {
+            return false;
+        }
+        if ($order->status == OcorrenciaController::STATUS_FECHADO_CONFIRMADO) {
+            return false;
+        }
+        if ($order->status == OcorrenciaController::STATUS_CANCELADO) {
+            return false;
+        }
+        $sessao = new Sessao();
+        if ($sessao->getNivelAcesso() == SESSAO::NIVEL_COMUM) {
+            if ($sessao->getIdUsuario() != $order->id_usuario_cliente) {
+                return false;
+            }
+        }
+        if ($sessao->getNivelAcesso() == Sessao::NIVEL_TECNICO) {
+            if ($order->id_usuario_atendente != $sessao->getIdUsuario()) {
+                if ($sessao->getIdUsuario() != $order->id_usuario_cliente) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    public function indexMessages($order)
+    {
+        $sessao = new Sessao();
+
+        if (isset($_POST['chatDelete'])) {
+
+            $idChat = intval($_POST['chatDelete']);
+
+            $message = DB::table('mensagem_forum')
+            ->join('usuario', 'mensagem_forum.id_usuario', '=', 'usuario.id')
+            ->join('ocorrencia', 'mensagem_forum.id_ocorrencia', '=', 'ocorrencia.id')
+            ->select(
+                'mensagem_forum.id as id',
+                'usuario.id as user_id',
+                'ocorrencia.status as order_status'
+            )
+            ->where('mensagem_forum.id', $idChat)
+            ->first();
+
+            if ($sessao->getIdUsuario() === $message->user_id && $order->status === 'e') {
+
+                DB::table('mensagem_forum')->where('id', $idChat)->delete();
+                echo '<meta http-equiv = "refresh" content = "0 ; url =?page=ocorrencia&selecionar=' . $_GET['selecionar'] . '"/>';
+            }
+        }
+        echo '
+
+
+        <!-- Modal -->
+        <div class="modal fade" id="modalDeleteChat" tabindex="-1" aria-labelledby="modalDeleteChatLabel" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="modalDeleteChatLabel">Apagar Mensagem</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                Tem certeza que deseja apagar esta mensagem?
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                <form action="" method="post">
+                    <input type="hidden" id="chatDelete" name="chatDelete" value=""/>
+                    <button type="submit" class="btn btn-primary">Confirmar</button>
+                </form>
+
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+<div class="container">
+		<div class="row">
+			<div class="chatbox chatbox22">
+				<div class="chatbox__title">
+					<h5 class="text-white">#<span id="id-ocorrencia">' . $order->id . '</span></h5>
+					<!--<button class="chatbox__title__tray">
+            <span></span>
+        </button>-->
+
+				</div>
+				<div id="corpo-chat" class="chatbox__body">';
+
+            $messageList = DB::table('mensagem_forum')
+            ->join('usuario', 'mensagem_forum.id_usuario', '=', 'usuario.id')
+            ->join('ocorrencia', 'mensagem_forum.id_ocorrencia', '=', 'ocorrencia.id')
+            ->select(
+                'mensagem_forum.id as id',
+                'usuario.id as user_id',
+                'usuario.nome as user_name',
+                'mensagem_forum.tipo as message_type',
+                'mensagem_forum.mensagem as message_content',
+                'mensagem_forum.data_envio as created_at',
+                'ocorrencia.status as order_status'
+            )
+            ->where('mensagem_forum.id_ocorrencia', $order->id)
+            ->orderBy('mensagem_forum.id')
+            ->get();
+
+
+        $ultimoId = 0;
+        foreach ($messageList as $mensagemForum) {
+            $ultimoId = $mensagemForum->id;
+            $name = $mensagemForum->user_name;
+            $name = substr(ucwords(mb_strtolower($name, 'UTF-8')), 0, 14).(strlen($name) > 14 ? "..." : "");
+
+            echo '
+
+
+
+            			<div class="chatbox__body__message chatbox__body__message--left">
+
+            				<div class="chatbox_timing">
+            					<ul>
+            						<li><a href="#"><i class="fa fa-calendar"></i> ' . date("d/m/Y", strtotime($mensagemForum->created_at)) . '</a></li>
+            						<li><a href="#"><i class="fa fa-clock-o"></i> ' . date("H:i", strtotime($mensagemForum->created_at)) . '</a></a></li>';
+            if ($mensagemForum->user_id == $sessao->getIdUsuario() && $mensagemForum->order_status === 'e') {
+                echo '<li><button data-toggle="modal" onclick="changeField(' . $mensagemForum->id . ')" data-target="#modalDeleteChat"><i class="fa fa-trash-o"></i> Apagar </a></button></li>';
+            }
+
+            echo '
+
+            					</ul>
+            				</div>
+            				<!-- <img src="https://www.gstatic.com/webp/gallery/2.jpg"
+            					alt="Picture">-->
+            				<div class="clearfix"></div>
+            				<div class="ul_section_full">
+            					<ul class="ul_msg">
+                                    <li><strong>' .$name . '</strong></li>';
+            if ($mensagemForum->message_type == self::TIPO_ARQUIVO) {
+                echo '<li>Anexo: <a href="uploads/' . $mensagemForum->message_content . '">Clique aqui</a></li>';
+            } else {
+                echo '
+                        <li>' . strip_tags($mensagemForum->message_content) . '</li>';
+            }
+            echo '
+
+            					</ul>
+            					<div class="clearfix"></div>
+
+            				</div>
+
+            			</div>';
+        }
+        echo '<span id="ultimo-id-post" class="escondido">' . $ultimoId . '</span>';
+        echo '
+
+
+				</div>
+				<div class="panel-footer">';
+        if ($this->possoEnviarMensagem($order)) {
+            echo '<form id="insert_form_mensagem_forum" class="user" method="post">
+            <input type="hidden" name="enviar_mensagem_forum" value="1">
+            <input type="hidden" name="ocorrencia" value="' . $order->id . '">
+            <input type="hidden" id="campo_tipo" name="tipo" value="' . self::TIPO_TEXTO . '">
+
+            <div class="custom-control custom-switch">
+              <input type="checkbox" class="custom-control-input" name="muda-tipo" id="muda-tipo">
+              <label class="custom-control-label" for="muda-tipo">Enviar Arquivo</label>
+            </div>
+            <div class="custom-file mb-3 escondido" id="campo-anexo">
+                  <input type="file" class="custom-file-input" name="anexo" id="anexo" accept="application/msword, application/vnd.ms-excel, application/vnd.ms-powerpoint, text/plain, application/pdf, image/*, application/zip,application/rar, .ovpn, .xlsx">
+                  <label class="custom-file-label" for="anexo" data-browse="Anexar">Anexar um Arquivo</label>
+            </div>
+  <div class="input-group">
+    <input name="mensagem" id="campo-texto" type="text" class="form-control input-sm chat_set_height" placeholder="Digite sua mensagem aqui..." tabindex="0" dir="ltr" spellcheck="false" autocomplete="off" autocorrect="off" autocapitalize="off" contenteditable="true" />
+                <span class="input-group-btn"> <button class="btn bt_bg btn-sm" id="botao-enviar-mensagem">Enviar</button></span>
+  </div>
+        </form>';
+        }
+
+        echo '
+
+
+
+				</div>
+			</div>
+		</div>
+	</div>
+    <script>
+    function changeField(id) {
+        document.getElementById(\'chatDelete\').value = id;
+    }
+    </script>
+
+';
+    }
+
+
+
+    public function sendMailNotifyMessage(MensagemForum $mensagemForum, Ocorrencia $ocorrencia)
+    {
+        $mail = new Mail();
+
+        $ocorrenciaDao = new OcorrenciaDAO();
+        $ocorrenciaDao->fillById($ocorrencia);
+
+        $assunto = "[3S] - Chamado Nº " . $ocorrencia->getId();
+
+
+
+        $saldacao =  '<p>Prezado(a) ' . $ocorrencia->getUsuarioCliente()->getNome() . ' ,</p>';
+        $corpo = '<p>Avisamos que houve uma mensagem nova na solicitação <a href="https://3s.unilab.edu.br/?page=ocorrencia&selecionar=' . $ocorrencia->getId() . '">Nº' . $ocorrencia->getId() . '</a></p>';
+
+        $corpo .= '<ul>
+
+                        <li>Corpo: ' . $mensagemForum->getMensagem() . '</li>
+                        <li>Serviço Solicitado: ' . $ocorrencia->getServico()->getNome() . '</li>
+                        <li>Descrição do Problema: ' . $ocorrencia->getDescricao() . '</li>
+                        <li>Setor Responsável: ' . $ocorrencia->getServico()->getAreaResponsavel()->getNome() . ' -
+                        ' . $ocorrencia->getServico()->getAreaResponsavel()->getDescricao() . '</li>
+                        <li>Cliente: ' . $ocorrencia->getUsuarioCliente()->getNome() . '</li>
+                </ul><br><p>Mensagem enviada pelo sistema 3S. Favor não responder.</p>';
+
+
+        $destinatario = $ocorrencia->getEmail();
+        $nome = $ocorrencia->getUsuarioCliente()->getNome();
+        $mail->enviarEmail($destinatario, $nome, $assunto, $saldacao . $corpo);
+
+
+        $usuarioDao = new UsuarioDAO();
+        if ($ocorrencia->getIdUsuarioAtendente() != null) {
+
+            $atendente = new Usuario();
+            $atendente->setId($ocorrencia->getIdUsuarioAtendente());
+            $usuarioDao->fillById($atendente);
+            $destinatario = $atendente->getEmail();
+            $nome = $atendente->getNome();
+
+            $saldacao =  '<p>Prezado(a) ' . $nome . ' ,</p>';
+            $mail->enviarEmail($destinatario, $nome, $assunto, $saldacao . $corpo);
+        } else if ($ocorrencia->getIdUsuarioIndicado() != null) {
+
+            $indicado = new Usuario();
+            $indicado->setId($ocorrencia->getIdUsuarioIndicado());
+            $usuarioDao->fillById($indicado);
+            $destinatario = $indicado->getEmail();
+            $nome = $indicado->getNome();
+
+            $saldacao =  '<p>Prezado(a) ' . $nome . ' ,</p>';
+            $mail->enviarEmail($destinatario, $nome, $assunto, $saldacao . $corpo);
+        }
+    }
+
+    public function ajaxAddMessage()
+    {
+
+        $sessao = new Sessao();
+        if (!isset($_POST['enviar_mensagem_forum'])) {
+            return;
+        }
+        if (!(isset($_POST['tipo'])
+            && isset($_POST['mensagem'])
+            && isset($_POST['ocorrencia']))) {
+            echo ':incompleto';
+            return;
+        }
+
+        $mensagemForum = new MensagemForum();
+        $mensagemForum->setTipo($_POST['tipo']);
+
+        if ($_POST['tipo'] == self::TIPO_TEXTO) {
+            $mensagemForum->setMensagem($_POST['mensagem']);
+        } else {
+            if ($_FILES['anexo']['name'] != null) {
+                if (!file_exists('uploads/')) {
+                    mkdir('uploads/', 0777, true);
+                }
+                $novoNome = $_FILES['anexo']['name'];
+
+                if (file_exists('uploads/' . $_FILES['anexo']['name'])) {
+                    $novoNome = uniqid() . '_' . $novoNome;
+                }
+
+                $extensaoArr = explode('.', $novoNome);
+                $extensao = strtolower(end($extensaoArr));
+
+                $extensoes_permitidas = array(
+                    'xlsx', 'xlsm', 'xlsb', 'xltx', 'xltm', 'xls', 'xlt', 'xls', 'xml', 'xml', 'xlam', 'xla', 'xlw', 'xlr',
+                    'doc', 'docm', 'docx', 'docx', 'dot', 'dotm', 'dotx', 'odt', 'pdf', 'rtf', 'txt', 'wps', 'xml', 'zip', 'rar', 'ovpn',
+                    'xml', 'xps', 'jpg', 'gif', 'png', 'pdf', 'jpeg'
+                );
+
+                if (!(in_array($extensao, $extensoes_permitidas))) {
+                    echo ':falha:Extensão não permitida. Lista de extensões permitidas a seguir. ';
+                    echo '(' . implode(", ", $extensoes_permitidas) . ')';
+                    return;
+                }
+
+                if (!move_uploaded_file($_FILES['anexo']['tmp_name'], 'uploads/' . $novoNome)) {
+                    echo ':falha:Falha na tentativa de enviar arquivo';
+                    return;
+                }
+                $mensagemForum->setMensagem($novoNome);
+            }
+        }
+
+
+        $mensagemForum->setDataEnvio(date("Y-m-d G:i:s"));
+
+        $mensagemForum->getUsuario()->setId($sessao->getIdUsuario());
+        $ocorrencia = new Ocorrencia();
+        $ocorrencia->setId($_POST['ocorrencia']);
+        $order = DB::table('ocorrencia')->where('id', $ocorrencia->getId())->first();
+
+        if ($order->status == 'f' || $order->status == 'g') {
+            echo ':falha:O chamado já foi fechado.';
+            return;
+        }
+
+        $result = DB::table('mensagem_forum')->insert([
+            'tipo' => $_POST['tipo'],
+            'mensagem' => $_POST['mensagem'],
+            'id_usuario' => $sessao->getIdUsuario(),
+            'data_envio' => date("Y-m-d G:i:s"),
+            'id_ocorrencia' => $order->id
+        ]);
+
+        if ($result) {
+            echo ':sucesso:' . $ocorrencia->getId() . ':';
+            $this->sendMailNotifyMessage($mensagemForum, $ocorrencia);
+        } else {
+            echo ':falha';
+        }
+    }
+
+
+    const TIPO_ARQUIVO = 2;
+    const TIPO_TEXTO = 1;
 	const STATUS_ABERTO = 'a';
 	const STATUS_RESERVADO = 'b';
 	const STATUS_EM_ESPERA = 'c';

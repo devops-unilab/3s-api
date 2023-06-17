@@ -15,8 +15,8 @@ class MainAjax
                 $controller->mainAjax();
                 break;
             case 'mensagem_forum':
-                $controller = new MensagemForumController();
-                $controller->addAjax();
+                $controller = new OcorrenciaController();
+                $controller->ajaxAddMessage();
                 break;
             case 'status_ocorrencia':
                 $controller = new OcorrenciaController();
