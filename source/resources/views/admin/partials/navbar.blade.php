@@ -24,7 +24,7 @@
                     <a class="dropdown-item" href="?page=painel_kamban">Kanban</a>
                     <a class="dropdown-item" href="?page=painel_tabela">Tabela</a>
                 </div>
-            </li>';
+            </li>
 
 
             <li class="nav-item dropdown">
