@@ -34,7 +34,11 @@ class AreaResponsavelController
 			echo view('partials.confirm-delete', ['message' => 'Tem certeza que deseja deletar esta divisão?']);
 			return;
 		}
-		if ($this->dao->delete($selected)) {
+		$deletedRows = DB::table('area_responsavel')
+		->where('id', $_GET['delete'])
+		->delete();
+
+		if ($deletedRows > 0) {
 			echo '
 
 <div class="alert alert-success" role="alert">
@@ -72,12 +76,14 @@ class AreaResponsavelController
                 ';
 			return;
 		}
-		$areaResponsavel = new AreaResponsavel();
-		$areaResponsavel->setNome($_POST['nome']);
-		$areaResponsavel->setDescricao($_POST['descricao']);
-		$areaResponsavel->setEmail($_POST['email']);
 
-		if ($this->dao->insert($areaResponsavel)) {
+		$inserted = DB::table('area_responsavel')->insert([
+			'nome' => $_POST['nome'],
+			'descricao' => $_POST['descricao'],
+			'email' => $_POST['email']
+		]);
+
+		if ($inserted) {
 			echo '
 
 <div class="alert alert-success" role="alert">
@@ -117,11 +123,15 @@ class AreaResponsavelController
 			return;
 		}
 
-		$selected->setNome($_POST['nome']);
-		$selected->setDescricao($_POST['descricao']);
-		$selected->setEmail($_POST['email']);
 
-		if ($this->dao->update($selected)) {
+		$affectedRows = DB::table('area_responsavel')
+		->where('id', $_GET['edit'])
+		->update([
+			'nome' => $_POST['nome'],
+			'descricao' => $_POST['descricao'],
+			'email' => $_POST['email']
+		]);
+		if ($affectedRows > 0) {
 			echo '
 
 <div class="alert alert-success" role="alert">

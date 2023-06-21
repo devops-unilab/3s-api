@@ -107,8 +107,29 @@ class ServicoController
 		$selected->getAreaResponsavel()->setId($_POST['area_responsavel']);
 		$selected->getGrupoServico()->setId($_POST['grupo_servico']);
 
+		$id = $_GET['edit'];
+		$nome = $_POST['nome'];
+		$descricao = $_POST['descricao'];
+		$idTipo = $_POST['tipo_atividade'];
+		$tempoSla = $_POST['tempo_sla'];
+		$visao = $_POST['visao'];
+		$idArea = $_POST['area_responsavel'];
+		$grupo = $_POST['grupo_servico'];
 
-		if ($this->dao->update($selected)) {
+
+		$affectedRows = DB::table('servico')
+			->where('id', $id)
+			->update([
+				'nome' => $nome,
+				'descricao' => $descricao,
+				'id_tipo_atividade' => $idTipo,
+				'tempo_sla' => $tempoSla,
+				'visao' => $visao,
+				'id_area_responsavel' => $idArea,
+				'id_grupo_servico' => $grupo
+			]);
+
+		if ($affectedRows) {
 			echo '
 
 <div class="alert alert-success" role="alert">
