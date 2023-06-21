@@ -7,7 +7,6 @@
 
 namespace app3s\controller;
 
-use app3s\dao\AreaResponsavelDAO;
 use app3s\dao\OcorrenciaDAO;
 use app3s\dao\ServicoDAO;
 use app3s\dao\UsuarioDAO;
@@ -193,28 +192,22 @@ class OcorrenciaController
 		$usuarioDao = new UsuarioDAO();
 
 		$providerName = '';
+		$providerId = null;
 
 		if ($this->selecionado->getStatus() == OcorrenciaController::STATUS_RESERVADO) {
 			if ($this->selecionado->getIdUsuarioIndicado() != null) {
-				$indicado = new Usuario();
-				$indicado->setId($this->selecionado->getIdUsuarioIndicado());
-				$usuarioDao->fillById($indicado);
-				$providerName = $indicado->getNome();
+				$providerId = $this->selecionado->getIdUsuarioIndicado();
 			}
 		} else {
 			if ($this->selecionado->getIdUsuarioAtendente() != null) {
-
-				$atendente = new Usuario();
-				$atendente->setId($this->selecionado->getIdUsuarioAtendente());
-				$usuarioDao->fillById($atendente);
-				$providerName = $atendente->getNome();
+				$providerId = $this->selecionado->getIdUsuarioAtendente();
 			}
 		}
-
+		if($providerId != null) {
+			$providerName = DB::table('usuario')->where('id', $providerId)->first()->nome;
+		}
 		foreach ($orderStatusLog as $status) {
 			$status->color = $this->getColorStatus($status->sigla);
-
-
 			echo view('partials.modal-form-status', ['services' => $listaServicos, 'providers' => $listaUsuarios, 'divisions' => $listaAreas, 'order' => $order]);
 		}
 
@@ -1634,12 +1627,11 @@ class OcorrenciaController
 			echo ':falha:Selecione um serviço.';
 			return false;
 		}
-		$areaResponsavel = new AreaResponsavel();
-		$areaResponsavel->setId($_POST['area_responsavel']);
-		$areaResponsavelDao = new AreaResponsavelDAO($this->dao->getConnection());
-		$areaResponsavelDao->fillById($areaResponsavel);
 
-		$this->selecionado->setAreaResponsavel($areaResponsavel);
+		$division = DB::table('area_responsavel')
+			->where('id', $_POST['area_responsavel'])
+			->first();
+		$this->selecionado->getAreaResponsavel()->setId($division->id);
 
 		$ocorrenciaDao = new OcorrenciaDAO($this->dao->getConnection());
 
@@ -1653,7 +1645,7 @@ class OcorrenciaController
 		$this->statusOcorrencia->setStatus($status);
 		$this->statusOcorrencia->setDataMudanca(date("Y-m-d G:i:s"));
 		$this->statusOcorrencia->getUsuario()->setId($this->sessao->getIdUsuario());
-		$this->statusOcorrencia->setMensagem('Chamado encaminhado para setor: ' . $areaResponsavel->getNome());
+		$this->statusOcorrencia->setMensagem('Chamado encaminhado para setor: ' . $division->nome);
 
 		$ocorrenciaDao->getConnection()->beginTransaction();
 

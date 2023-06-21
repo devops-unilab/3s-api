@@ -7,7 +7,6 @@
 
 namespace app3s\controller;
 
-use app3s\dao\AreaResponsavelDAO;
 use app3s\dao\UsuarioDAO;
 use app3s\model\Usuario;
 use app3s\util\Sessao;
@@ -161,10 +160,6 @@ class UsuarioController
 		if (!isset($_GET['edit'])) {
 			return;
 		}
-		$selected = new Usuario();
-		$selected->setId(intval($_GET['edit']));
-		$this->dao->fillById($selected);
-
 		$setores = DB::table('area_responsavel')->get();
 		$user = DB::table('usuario')->where('id', $_GET['edit'])->first();
 		if (!isset($_POST['edit_usuario'])) {

@@ -8,7 +8,6 @@
 namespace app3s\controller;
 
 use app3s\dao\ServicoDAO;
-use app3s\dao\AreaResponsavelDAO;
 use app3s\model\Servico;
 use app3s\util\Sessao;
 use Illuminate\Support\Facades\DB;
