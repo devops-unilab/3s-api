@@ -16,8 +16,8 @@ class MainIndex
       exit(0);
     }
     if (isset($_REQUEST['api'])) {
-      $mainApi = new MainApi();
-      $mainApi->main();
+        $controller = new MensagemForumApiRestController();
+        $controller->main();
       exit(0);
     }
     if (isset($_GET["sair"])) {

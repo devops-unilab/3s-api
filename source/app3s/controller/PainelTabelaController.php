@@ -6,6 +6,7 @@ namespace app3s\controller;
 use app3s\model\AreaResponsavel;
 use app3s\dao\AreaResponsavelDAO;
 use app3s\dao\OcorrenciaDAO;
+use Illuminate\Support\Facades\DB;
 
 class PainelTabelaController
 {
@@ -22,8 +23,9 @@ class PainelTabelaController
 <div class="card mb-4">
         <div class="card-header pb-4 mb-4 font-italic">
                     Painel Kamban';
+        $divisions = DB::table('area_responsavel')->get();
+        echo view('partials', ['divisions' => $divisions]);
 
-        $this->formFiltro();
 
         echo '
                 <button id="btn-expandir-tela" type="button" class="float-right btn ml-3 btn-warning btn-circle btn-lg collapsed"><i class="fa fa-expand icone-maior"></i></button>
@@ -38,21 +40,6 @@ class PainelTabelaController
 
 
 ';
-    }
-
-    public function formFiltro()
-    {
-        $areaDao = new AreaResponsavelDAO($this->dao->getConnection());
-        $lista = $areaDao->fetch();
-
-        echo '
-                <select name="setor" id="select-setores">
-                    <option value="">Filtrar por Setor</option>';
-        foreach ($lista as $areaResponsavel) {
-            echo '<option value="' . $areaResponsavel->getNome() . '">' . $areaResponsavel->getNome() . '</option>';
-        }
-        echo '
-                </select>';
     }
     public function tabelaChamados()
     {

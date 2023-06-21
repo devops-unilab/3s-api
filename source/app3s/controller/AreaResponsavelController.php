@@ -7,21 +7,11 @@
 
 namespace app3s\controller;
 
-use app3s\dao\AreaResponsavelDAO;
 use app3s\model\AreaResponsavel;
 use Illuminate\Support\Facades\DB;
 
 class AreaResponsavelController
 {
-
-	protected  $view;
-	protected $dao;
-
-	public function __construct()
-	{
-		$this->dao = new AreaResponsavelDAO();
-	}
-
 
 	public function delete()
 	{

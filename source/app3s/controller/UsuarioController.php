@@ -124,9 +124,10 @@ class UsuarioController
 		}
 	}
 
-	public function getStrNivel($nivel) {
+	public function getStrNivel($nivel)
+	{
 		$strNivel = 'Desconhecido';
-		switch($nivel) {
+		switch ($nivel) {
 			case 'a':
 				$strNivel = 'Administrador';
 				break;
@@ -138,7 +139,7 @@ class UsuarioController
 				break;
 			default:
 				$strNivel = 'Desconhecido';
-			break;
+				break;
 		}
 		return $strNivel;
 	}
@@ -146,7 +147,7 @@ class UsuarioController
 	public function fetch()
 	{
 		$users = DB::table('usuario')->get();
-		foreach($users as $user) {
+		foreach ($users as $user) {
 			$user->strNivel = $this->getStrNivel($user->nivel);
 		}
 		echo view('partials.index-users', ['users' => $users]);
@@ -182,10 +183,16 @@ class UsuarioController
 			return;
 		}
 
-		$selected->setNivel($_POST['nivel']);
-		$selected->setIdSetor($_POST['id_setor']);
+		$nivel = $_POST['nivel'];
+		$idSetor = $_POST['id_setor'];
 
-		if ($this->dao->update($selected)) {
+		$affectedRows = DB::table('usuario')
+			->where('id', $_GET['edit'])
+			->update([
+				'nivel' => $nivel,
+				'id_setor' => $idSetor
+			]);
+		if ($affectedRows > 0) {
 			echo '
 
 <div class="alert alert-success" role="alert">

@@ -8,6 +8,7 @@ use app3s\model\Ocorrencia;
 use app3s\util\Sessao;
 use app3s\dao\PainelKambanDAO;
 use app3s\dao\AreaResponsavelDAO;
+use Illuminate\Support\Facades\DB;
 
 class PainelKambanController
 {
@@ -23,22 +24,15 @@ class PainelKambanController
 
     public function main()
     {
-        $areaDao = new AreaResponsavelDAO($this->dao->getConnection());
-        $listaAreas = $areaDao->fetch();
+        $divisions = DB::table('area_responsavel')->get();
+
+        echo '<div class="card mb-4">';
 
 
+        echo view('partials.form-filter-kamban', ['divisions' => $divisions]);
         echo '
 
-<div class="card mb-4">
-        <div class="card-header pb-4 mb-4 font-italic">
-                    Painel Kamban';
-
-        $this->view->formFiltro($listaAreas);
-
-        echo '
-                <button id="btn-expandir-tela" type="button" class="float-right btn ml-3 btn-warning btn-circle btn-lg collapsed"><i class="fa fa-expand icone-maior"></i></button>
-            </div>
-            <div class="card-body" id="quadro-kamban">';
+        <div class="card-body" id="quadro-kamban">';
         $this->quadroKamban();
         echo '
 	</div>

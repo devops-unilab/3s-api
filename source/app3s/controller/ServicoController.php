@@ -11,19 +11,16 @@ use app3s\dao\ServicoDAO;
 use app3s\dao\AreaResponsavelDAO;
 use app3s\model\Servico;
 use app3s\util\Sessao;
-use app3s\view\ServicoView;
 use Illuminate\Support\Facades\DB;
 
 class ServicoController
 {
 
-	protected  $view;
 	protected $dao;
 
 	public function __construct()
 	{
 		$this->dao = new ServicoDAO();
-		$this->view = new ServicoView();
 	}
 
 
@@ -79,18 +76,22 @@ class ServicoController
 		if (!isset($_GET['edit'])) {
 			return;
 		}
-		$selected = new Servico();
-		$selected->setId($_GET['edit']);
-		$this->dao->fillById($selected);
 
+		$selected = DB::table('servico')->find($_GET['edit']);
 		if (!isset($_POST['edit_servico'])) {
 
 			$listTipoAtividade = DB::table('tipo_atividade')->get();
-
-			$arearesponsavelDao = new AreaResponsavelDAO($this->dao->getConnection());
-			$listAreaResponsavel = $arearesponsavelDao->fetch();
+			$listAreaResponsavel = DB::table('area_responsavel')->get();
 			$listGrupoServico = DB::table('grupo_servico')->get();
-			$this->view->showEditForm($listTipoAtividade, $listAreaResponsavel, $listGrupoServico, $selected);
+			echo view(
+				'partials.form-edit-service',
+				[
+					'listaTipoAtividade' => $listTipoAtividade,
+					'listaAreaResponsavel' => $listAreaResponsavel,
+					'listaGrupoServico' => $listGrupoServico,
+					'selected' => $selected
+				]
+			);
 			return;
 		}
 
@@ -99,13 +100,7 @@ class ServicoController
 			return;
 		}
 
-		$selected->setNome($_POST['nome']);
-		$selected->setDescricao($_POST['descricao']);
-		$selected->getTipoAtividade()->setId($_POST['tipo_atividade']);
-		$selected->setTempoSla($_POST['tempo_sla']);
-		$selected->setVisao($_POST['visao']);
-		$selected->getAreaResponsavel()->setId($_POST['area_responsavel']);
-		$selected->getGrupoServico()->setId($_POST['grupo_servico']);
+
 
 		$id = $_GET['edit'];
 		$nome = $_POST['nome'];
@@ -221,12 +216,16 @@ class ServicoController
 		if (!isset($_POST['enviar_servico'])) {
 			$listTipoAtividade = DB::table('tipo_atividade')->get();
 
-			$areaResponsavelDao = new AreaResponsavelDAO($this->dao->getConnection());
-			$listAreaResponsavel = $areaResponsavelDao->fetch();
 
+			$listAreaResponsavel = DB::table('area_responsavel')->get();
 			$listGrupoServico = DB::table('grupo_servico')->get();
 
-			$this->view->showInsertForm($listTipoAtividade, $listAreaResponsavel, $listGrupoServico);
+			echo view('partials.form-insert-service', [
+				'listaTipoAtividade' => $listTipoAtividade,
+				'listaAreaResponsavel' => $listAreaResponsavel,
+				'listaGrupoServico' => $listGrupoServico
+			]);
+
 			return;
 		}
 		if (!(isset($_POST['nome']) && isset($_POST['descricao']) && isset($_POST['tempo_sla']) && isset($_POST['visao']) &&  isset($_POST['tipo_atividade']) &&  isset($_POST['area_responsavel']) &&  isset($_POST['grupo_servico']))) {

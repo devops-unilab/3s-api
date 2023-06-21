@@ -18,44 +18,6 @@ class UsuarioDAO extends DAO
 
 
 
-    public function update(Usuario $usuario)
-    {
-        $id = $usuario->getId();
-
-
-        $sql = "UPDATE usuario
-                SET
-                nome = :nome,
-                email = :email,
-                login = :login,
-                senha = :senha,
-                nivel = :nivel,
-                id_setor = :idSetor
-                WHERE usuario.id = :id;";
-        $nome = $usuario->getNome();
-        $email = $usuario->getEmail();
-        $login = $usuario->getLogin();
-        $senha = $usuario->getSenha();
-        $nivel = $usuario->getNivel();
-        $idSetor = $usuario->getIdSetor();
-
-        try {
-
-            $stmt = $this->getConnection()->prepare($sql);
-            $stmt->bindParam(":id", $id, PDO::PARAM_INT);
-            $stmt->bindParam(":nome", $nome, PDO::PARAM_STR);
-            $stmt->bindParam(":email", $email, PDO::PARAM_STR);
-            $stmt->bindParam(":login", $login, PDO::PARAM_STR);
-            $stmt->bindParam(":senha", $senha, PDO::PARAM_STR);
-            $stmt->bindParam(":nivel", $nivel, PDO::PARAM_STR);
-            $stmt->bindParam(":idSetor", $idSetor, PDO::PARAM_INT);
-
-            return $stmt->execute();
-        } catch (PDOException $e) {
-            echo $e->getMessage();
-        }
-    }
-
     public function fillById(Usuario $usuario)
     {
 

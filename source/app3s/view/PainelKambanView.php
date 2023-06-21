@@ -19,20 +19,6 @@ class PainelKambanView
     private $matrixStatus;
     private $dao;
 
-    public function formFiltro($listaAreas)
-    {
-
-
-        echo '
-                <select name="setor" id="select-setores">
-                    <option value="">Filtrar por Setor</option>';
-        foreach ($listaAreas as $areaResponsavel) {
-            echo '<option value="' . $areaResponsavel->getId() . '">' . $areaResponsavel->getNome() . '</option>';
-        }
-        echo '
-                </select>';
-    }
-
     public function mostrarQuadro($listaDeChamados, $atendentes = array())
     {
         $this->dao = new UsuarioDAO();
