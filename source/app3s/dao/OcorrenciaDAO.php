@@ -11,6 +11,7 @@ use PDO;
 use PDOException;
 use app3s\model\Ocorrencia;
 use app3s\model\MensagemForum;
+use app3s\model\Status;
 use app3s\model\StatusOcorrencia;
 
 class OcorrenciaDAO extends DAO
@@ -175,6 +176,33 @@ class OcorrenciaDAO extends DAO
     }
 
 
+    public function fillStatusBySigla(Status $status)
+    {
+
+        $sigla = $status->getSigla();
+        $sql = "SELECT status.id, status.sigla, status.nome FROM status
+                WHERE status.sigla = :sigla
+                 LIMIT 1000";
+
+        try {
+            $stmt = $this->connection->prepare($sql);
+
+            if (!$stmt) {
+                echo "<br>Mensagem de erro retornada: " . $this->connection->errorInfo()[2] . "<br>";
+            }
+            $stmt->bindParam(":sigla", $sigla, PDO::PARAM_STR);
+            $stmt->execute();
+            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            foreach ($result as $row) {
+                $status->setId($row['id']);
+                $status->setSigla($row['sigla']);
+                $status->setNome($row['nome']);
+            }
+        } catch (PDOException $e) {
+            echo $e->getMessage();
+        }
+        return $status;
+    }
 
     public function fillById(Ocorrencia $ocorrencia)
     {

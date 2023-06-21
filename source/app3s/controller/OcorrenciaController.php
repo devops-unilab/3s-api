@@ -10,7 +10,6 @@ namespace app3s\controller;
 use app3s\dao\AreaResponsavelDAO;
 use app3s\dao\OcorrenciaDAO;
 use app3s\dao\ServicoDAO;
-use app3s\dao\StatusDAO;
 use app3s\dao\UsuarioDAO;
 use app3s\model\AreaResponsavel;
 use app3s\model\MensagemForum;
@@ -861,8 +860,7 @@ class OcorrenciaController
 		$status = new Status();
 		$status->setSigla(self::STATUS_ATENDIMENTO);
 
-		$statusDao = new StatusDAO($this->dao->getConnection());
-		$statusDao->fillBySigla($status);
+		$this->dao->fillStatusBySigla($status);
 
 		$this->statusOcorrencia = new StatusOcorrencia();
 		$this->statusOcorrencia->setOcorrencia($this->selecionado);
@@ -932,8 +930,8 @@ class OcorrenciaController
 		$status = new Status();
 		$status->setSigla(self::STATUS_CANCELADO);
 
-		$statusDao = new StatusDAO($this->dao->getConnection());
-		$statusDao->fillBySigla($status);
+		$this->dao->fillStatusBySigla($status);
+
 
 		$this->statusOcorrencia = new StatusOcorrencia();
 		$this->statusOcorrencia->setOcorrencia($this->selecionado);
@@ -1131,8 +1129,7 @@ class OcorrenciaController
 		$status = new Status();
 		$status->setSigla(self::STATUS_FECHADO);
 
-		$statusDao = new StatusDAO($this->dao->getConnection());
-		$statusDao->fillBySigla($status);
+		$this->dao->fillStatusBySigla($status);
 
 		$this->statusOcorrencia = new StatusOcorrencia();
 		$this->statusOcorrencia->setOcorrencia($this->selecionado);
@@ -1178,8 +1175,7 @@ class OcorrenciaController
 		$status = new Status();
 		$status->setSigla(self::STATUS_FECHADO_CONFIRMADO);
 
-		$statusDao = new StatusDAO($this->dao->getConnection());
-		$statusDao->fillBySigla($status);
+		$this->dao->fillStatusBySigla($status);
 
 		$this->statusOcorrencia = new StatusOcorrencia();
 		$this->statusOcorrencia->setOcorrencia($this->selecionado);
@@ -1222,8 +1218,7 @@ class OcorrenciaController
 		$status = new Status();
 		$status->setSigla(self::STATUS_REABERTO);
 
-		$statusDao = new StatusDAO($this->dao->getConnection());
-		$statusDao->fillBySigla($status);
+		$this->dao->fillStatusBySigla($status);
 
 		$this->statusOcorrencia = new StatusOcorrencia();
 		$this->statusOcorrencia->setOcorrencia($this->selecionado);
@@ -1282,8 +1277,7 @@ class OcorrenciaController
 		$status = new Status();
 		$status->setSigla(self::STATUS_RESERVADO);
 
-		$statusDao = new StatusDAO($this->dao->getConnection());
-		$statusDao->fillBySigla($status);
+		$this->dao->fillStatusBySigla($status);
 
 		$this->statusOcorrencia = new StatusOcorrencia();
 		$this->statusOcorrencia->setOcorrencia($this->selecionado);
@@ -1416,8 +1410,7 @@ class OcorrenciaController
 		$status = new Status();
 		$status->setSigla($this->selecionado->getStatus());
 
-		$statusDao = new StatusDAO($this->dao->getConnection());
-		$statusDao->fillBySigla($status);
+		$this->dao->fillStatusBySigla($status);
 
 		$this->statusOcorrencia = new StatusOcorrencia();
 		$this->statusOcorrencia->setOcorrencia($this->selecionado);
@@ -1516,8 +1509,7 @@ class OcorrenciaController
 		$status = new Status();
 		$status->setSigla(self::STATUS_AGUARDANDO_ATIVO);
 
-		$statusDao = new StatusDAO($this->dao->getConnection());
-		$statusDao->fillBySigla($status);
+		$this->dao->fillStatusBySigla($status);
 
 		$this->statusOcorrencia = new StatusOcorrencia();
 		$this->statusOcorrencia->setOcorrencia($this->selecionado);
@@ -1555,8 +1547,7 @@ class OcorrenciaController
 		$status = new Status();
 		$status->setSigla(self::STATUS_AGUARDANDO_USUARIO);
 
-		$statusDao = new StatusDAO($this->dao->getConnection());
-		$statusDao->fillBySigla($status);
+		$this->dao->fillStatusBySigla($status);
 
 		$this->statusOcorrencia = new StatusOcorrencia();
 		$this->statusOcorrencia->setOcorrencia($this->selecionado);
@@ -1604,8 +1595,7 @@ class OcorrenciaController
 		$status = new Status();
 		$status->setSigla($this->selecionado->getStatus());
 
-		$statusDao = new StatusDAO($this->dao->getConnection());
-		$statusDao->fillBySigla($status);
+		$this->dao->fillStatusBySigla($status);
 
 		$this->statusOcorrencia = new StatusOcorrencia();
 		$this->statusOcorrencia->setOcorrencia($this->selecionado);
@@ -1656,8 +1646,7 @@ class OcorrenciaController
 		$status = new Status();
 		$status->setSigla(self::STATUS_ABERTO);
 
-		$statusDao = new StatusDAO($this->dao->getConnection());
-		$statusDao->fillBySigla($status);
+		$this->dao->fillStatusBySigla($status);
 
 		$this->statusOcorrencia = new StatusOcorrencia();
 		$this->statusOcorrencia->setOcorrencia($this->selecionado);
@@ -1709,8 +1698,7 @@ class OcorrenciaController
 		$status = new Status();
 		$status->setSigla($this->selecionado->getStatus());
 
-		$statusDao = new StatusDAO($this->dao->getConnection());
-		$statusDao->fillBySigla($status);
+		$this->dao->fillStatusBySigla($status);
 
 		$this->statusOcorrencia = new StatusOcorrencia();
 		$this->statusOcorrencia->setOcorrencia($this->selecionado);
@@ -1779,8 +1767,7 @@ class OcorrenciaController
 		$status = new Status();
 		$status->setSigla(self::STATUS_ABERTO);
 
-		$statusDao = new StatusDAO($this->dao->getConnection());
-		$statusDao->fillBySigla($status);
+		$this->dao->fillStatusBySigla($status);
 
 		$this->statusOcorrencia = new StatusOcorrencia();
 		$this->statusOcorrencia->setOcorrencia($this->selecionado);
