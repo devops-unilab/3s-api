@@ -58,51 +58,6 @@ class ServicoDAO extends DAO
     }
 
 
-
-    public function insert(Servico $servico)
-    {
-        $sql = "INSERT INTO servico(nome, descricao, id_tipo_atividade, tempo_sla, visao, id_area_responsavel, id_grupo_servico) VALUES (:nome, :descricao, :tipoAtividade, :tempoSla, :visao, :areaResponsavel, :grupoServico);";
-        $nome = $servico->getNome();
-        $descricao = $servico->getDescricao();
-        $tipoAtividade = $servico->getTipoAtividade()->getId();
-        $tempoSla = $servico->getTempoSla();
-        $visao = $servico->getVisao();
-        $areaResponsavel = $servico->getAreaResponsavel()->getId();
-        $grupoServico = $servico->getGrupoServico()->getId();
-        try {
-            $db = $this->getConnection();
-            $stmt = $db->prepare($sql);
-            $stmt->bindParam(":nome", $nome, PDO::PARAM_STR);
-            $stmt->bindParam(":descricao", $descricao, PDO::PARAM_STR);
-            $stmt->bindParam(":tipoAtividade", $tipoAtividade, PDO::PARAM_INT);
-            $stmt->bindParam(":tempoSla", $tempoSla, PDO::PARAM_INT);
-            $stmt->bindParam(":visao", $visao, PDO::PARAM_INT);
-            $stmt->bindParam(":areaResponsavel", $areaResponsavel, PDO::PARAM_INT);
-            $stmt->bindParam(":grupoServico", $grupoServico, PDO::PARAM_INT);
-            return $stmt->execute();
-        } catch (PDOException $e) {
-            echo '{"error":{"text":' . $e->getMessage() . '}}';
-        }
-    }
-    public function delete(Servico $servico)
-    {
-        $id = $servico->getId();
-        $sql = "DELETE FROM servico WHERE id = :id";
-
-        try {
-            $db = $this->getConnection();
-            $stmt = $db->prepare($sql);
-            $stmt->bindParam(":id", $id, PDO::PARAM_INT);
-            return $stmt->execute();
-        } catch (PDOException $e) {
-            echo '{"error":{"text":' . $e->getMessage() . '}}';
-        }
-    }
-
-
-
-
-
     public function fillById(Servico $servico)
     {
 

@@ -76,11 +76,8 @@ function alocaMensagem(item, index) {
 	div += '</div>';
 	div += '<div class="clearfix"></div>';
 	div += '<div class="ul_section_full"><ul class="ul_msg">';
-	var nome = item.nome_usuario;
 
-	nome = item.nome_usuario.split(" ");
-
-	div += '<li><strong>' + nome[0] + ' ' + nome[1] + '</strong></li>';
+	div += '<li><strong>' + item.nome_usuario+ '</strong></li>';
 	if (item.tipo == 1) {
 		div += '<li>' + item.mensagem + '</li>';
 	} else {
@@ -117,7 +114,7 @@ function carregarDados(url2) {
 
 setInterval(function () {
 	carregarDados(url1);
-}, 1000);
+}, 5000);
 
 
 

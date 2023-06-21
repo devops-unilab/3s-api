@@ -7,17 +7,22 @@
 
 namespace app3s\controller;
 
+use app3s\dao\AreaResponsavelDAO;
 use app3s\dao\OcorrenciaDAO;
 use app3s\dao\ServicoDAO;
-use app3s\dao\StatusOcorrenciaDAO;
+use app3s\dao\StatusDAO;
 use app3s\dao\UsuarioDAO;
+use app3s\model\AreaResponsavel;
+use app3s\model\MensagemForum;
 use app3s\model\Ocorrencia;
+use app3s\model\Servico;
+use app3s\model\Status;
 use app3s\model\StatusOcorrencia;
 use app3s\model\Usuario;
 use app3s\util\Mail;
 use app3s\util\Sessao;
-use DateTime;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Http;
 
 class OcorrenciaController
 {
@@ -26,6 +31,7 @@ class OcorrenciaController
 	protected $sessao;
 	protected  $view;
 	protected $dao;
+	private $statusOcorrencia;
 
 	public function __construct()
 	{
@@ -43,18 +49,8 @@ class OcorrenciaController
 
 	public function foraDoExpediente($data)
 	{
-		$hora = date('H', strtotime($data));
-		$hora = intval($hora);
-		if ($hora >= 17) {
-			return true;
-		}
-		if ($hora < 8) {
-			return true;
-		}
-		if ($hora == 11) {
-			return true;
-		}
-		return false;
+		$hora = intval(date('H', strtotime($data)));
+		return ($hora >= 17 || $hora < 8 || $hora == 11);
 	}
 	public function calcularHoraSolucao($dataAbertura, $tempoSla)
 	{
@@ -132,9 +128,9 @@ class OcorrenciaController
 	{
 		return $this->sessao->getIdUsuario() == $order->id_usuario_cliente && ($order->status == self::STATUS_REABERTO ||  $order->status == self::STATUS_ABERTO);
 	}
-	public function canWait($currentStatus)
+	public function canWait($order)
 	{
-		return $this->sessao->getNivelAcesso() != Sessao::NIVEL_COMUM && $currentStatus == 'e' && $this->sessao->getIdUsuario() != $this->selecionado->getIdUsuarioAtendente();
+		return $this->sessao->getNivelAcesso() != Sessao::NIVEL_COMUM && $order->status == 'e' && $this->sessao->getIdUsuario() != $this->selecionado->getIdUsuarioAtendente();
 	}
 	public function selecionar()
 	{
@@ -147,7 +143,7 @@ class OcorrenciaController
 		$this->selecionado = new Ocorrencia();
 		$this->selecionado->setId($_GET['selecionar']);
 		$this->dao->fillById($this->selecionado);
-		$selected = DB::table('ocorrencia')->where('id', $_GET['selecionar'])->first();
+		$order = DB::table('ocorrencia')->where('id', $_GET['selecionar'])->first();
 
 
 
@@ -164,11 +160,10 @@ class OcorrenciaController
 			->join('usuario', 'status_ocorrencia.id_usuario', '=', 'usuario.id')
 			->join('status', 'status_ocorrencia.id_status', '=', 'status.id')
 			->select('status.sigla', 'status.nome', 'status_ocorrencia.mensagem', 'usuario.nome as nome_usuario', 'status_ocorrencia.data_mudanca')
-			->where('status_ocorrencia.id_ocorrencia', $selected->id)
+			->where('status_ocorrencia.id_ocorrencia', $order->id)
 			->get();
 
 
-		$statusController = new StatusOcorrenciaController();
 		$currentStatus = DB::table('status')->where('sigla', $this->selecionado->getStatus())->first();
 
 
@@ -176,24 +171,22 @@ class OcorrenciaController
 		$listaServicos = DB::table('servico')->whereIn('visao', [1, 2])->get();
 		$listaAreas = DB::table('area_responsavel')->get();
 
-		echo view('partials.modal-form-status', ['services' => $listaServicos, 'providers' => $listaUsuarios, 'divisions' => $listaAreas, 'order' => $selected]);
-
-
-		$dataSolucao = $this->calcularHoraSolucao($selected->data_abertura, $this->selecionado->getServico()->getTempoSla());
-		$controller = new StatusOcorrenciaController();
+		$dataSolucao = $this->calcularHoraSolucao($order->data_abertura, $this->selecionado->getServico()->getTempoSla());
+		$controller = new OcorrenciaController();
 		$canEditTag = $controller->possoEditarPatrimonio($this->selecionado);
 		$canEditSolution = $controller->possoEditarSolucao($this->selecionado);
-		$selected->service_name = $this->selecionado->getServico()->getNome();
+		$order->service_name = $this->selecionado->getServico()->getNome();
 		$canEditService = $controller->possoEditarServico($this->selecionado);
 		$isClient = ($sessao->getNivelAcesso() == Sessao::NIVEL_COMUM);
+		$canWait = $this->canWait($order);
 
-		$selected->tempo_sla = $this->selecionado->getServico()->getTempoSla();
+		$order->tempo_sla = $this->selecionado->getServico()->getTempoSla();
 		$timeNow = time();
 		$timeSolucaoEstimada = strtotime($dataSolucao);
 		$isLate = $timeNow > $timeSolucaoEstimada;
 
 		$canRequestHelp = ($this->selecionado->getUsuarioCliente()->getId() == $sessao->getIdUsuario() && !isset($_SESSION['pediu_ajuda']));
-		$selected->client_name =  $this->selecionado->getUsuarioCliente()->getNome();
+		$order->client_name =  $this->selecionado->getUsuarioCliente()->getNome();
 
 
 		$canEditDivision = $controller->possoEditarAreaResponsavel($this->selecionado);
@@ -202,7 +195,7 @@ class OcorrenciaController
 
 		$providerName = '';
 
-		if ($this->selecionado->getStatus() == StatusOcorrenciaController::STATUS_RESERVADO) {
+		if ($this->selecionado->getStatus() == OcorrenciaController::STATUS_RESERVADO) {
 			if ($this->selecionado->getIdUsuarioIndicado() != null) {
 				$indicado = new Usuario();
 				$indicado->setId($this->selecionado->getIdUsuarioIndicado());
@@ -221,31 +214,13 @@ class OcorrenciaController
 
 		foreach ($orderStatusLog as $status) {
 			$status->color = $this->getColorStatus($status->sigla);
+
+
+			echo view('partials.modal-form-status', ['services' => $listaServicos, 'providers' => $listaUsuarios, 'divisions' => $listaAreas, 'order' => $order]);
 		}
 
-		echo '
-            <div class="row">
-                <div class="col-md-12 blog-main">
-					<div class="row">
-                		<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
-
-						<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
-			<div class="alert  bg-light d-flex justify-content-between align-items-center" role="alert">
-				<div class="btn-group">
-					<button class="btn btn-light btn-lg dropdown-toggle p-2" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-					Chamado ' . $selected->id . '
-					</button>
-					<div class="dropdown-menu">
-
-					<button type="button" acao="cancelar" ' . ($this->canCancel($selected) ? '' : 'disabled') . ' class="dropdown-item  botao-status"  data-toggle="modal" data-target="#modalStatus">
-						Cancelar
-						</button>
-
-						';
-		$statusController->painelStatus($this->selecionado, $selected);
-
 		echo view('partials.show-order', [
-			'order' => $selected,
+			'order' => $order,
 			'canEditTag' => $canEditTag,
 			'canEditSolution' => $canEditSolution,
 			'canEditService' => $canEditService,
@@ -257,26 +232,64 @@ class OcorrenciaController
 			'providerName' => $providerName,
 			'canEditDivision' => $canEditDivision,
 			'orderStatusLog' => $orderStatusLog,
-			'currentStatus' => $currentStatus
+			'currentStatus' => $currentStatus,
+			'canWait' => $canWait
 		]);
 
 
-		$mensagemController = new MensagemForumController();
-		$this->dao->fetchMensagens($this->selecionado);
-		$mensagemController->mainOcorrencia($this->selecionado);
+		if (isset($_POST['chatDelete'])) {
+
+			$idChat = intval($_POST['chatDelete']);
+
+			$message = DB::table('mensagem_forum')
+				->join('usuario', 'mensagem_forum.id_usuario', '=', 'usuario.id')
+				->join('ocorrencia', 'mensagem_forum.id_ocorrencia', '=', 'ocorrencia.id')
+				->select(
+					'mensagem_forum.id as id',
+					'usuario.id as user_id',
+					'ocorrencia.status as order_status'
+				)
+				->where('mensagem_forum.id', $idChat)
+				->first();
+
+			if ($sessao->getIdUsuario() === $message->user_id && $order->status === 'e') {
+
+				DB::table('mensagem_forum')->where('id', $idChat)->delete();
+				echo '<meta http-equiv = "refresh" content = "0 ; url =?page=ocorrencia&selecionar=' . $_GET['selecionar'] . '"/>';
+			}
+		}
+
+		// INDEX MESSAAGE
+		//DAqui pra baixo só usa $order
+		$canSendMessage = $this->possoEnviarMensagem($order);
+
+
+		$messageList = DB::table('mensagem_forum')
+			->join('usuario', 'mensagem_forum.id_usuario', '=', 'usuario.id')
+			->join('ocorrencia', 'mensagem_forum.id_ocorrencia', '=', 'ocorrencia.id')
+			->select(
+				'mensagem_forum.id as id',
+				'usuario.id as user_id',
+				'usuario.nome as user_name',
+				'mensagem_forum.tipo as message_type',
+				'mensagem_forum.mensagem as message_content',
+				'mensagem_forum.data_envio as created_at',
+				'ocorrencia.status as order_status'
+			)
+			->where('mensagem_forum.id_ocorrencia', $order->id)
+			->orderBy('mensagem_forum.id')
+			->get();
+
+
+		echo view('partials.index-messages-order', [
+			'order' => $order,
+			'messageList' => $messageList,
+			'canSendMessage' => $canSendMessage,
+			'userId' => $sessao->getIdUsuario()
+		]);
 	}
 
 
-	const STATUS_ABERTO = 'a';
-	const STATUS_RESERVADO = 'b';
-	const STATUS_EM_ESPERA = 'c';
-	const STATUS_AGUARDANDO_USUARIO = 'd';
-	const STATUS_ATENDIMENTO = 'e';
-	const STATUS_FECHADO = 'f';
-	const STATUS_FECHADO_CONFIRMADO = 'g';
-	const STATUS_CANCELADO = 'h';
-	const STATUS_AGUARDANDO_ATIVO = 'i';
-	const STATUS_REABERTO = 'r';
 	public function main()
 	{
 
@@ -322,21 +335,21 @@ class OcorrenciaController
 	public function arrayStatusPendente()
 	{
 		$arrStatus = array();
-		$arrStatus[] = StatusOcorrenciaController::STATUS_ABERTO;
-		$arrStatus[] = StatusOcorrenciaController::STATUS_AGUARDANDO_ATIVO;
-		$arrStatus[] = StatusOcorrenciaController::STATUS_AGUARDANDO_USUARIO;
-		$arrStatus[] = StatusOcorrenciaController::STATUS_ATENDIMENTO;
-		$arrStatus[] = StatusOcorrenciaController::STATUS_REABERTO;
-		$arrStatus[] = StatusOcorrenciaController::STATUS_RESERVADO;
+		$arrStatus[] = OcorrenciaController::STATUS_ABERTO;
+		$arrStatus[] = OcorrenciaController::STATUS_AGUARDANDO_ATIVO;
+		$arrStatus[] = OcorrenciaController::STATUS_AGUARDANDO_USUARIO;
+		$arrStatus[] = OcorrenciaController::STATUS_ATENDIMENTO;
+		$arrStatus[] = OcorrenciaController::STATUS_REABERTO;
+		$arrStatus[] = OcorrenciaController::STATUS_RESERVADO;
 		return $arrStatus;
 	}
 	public function arrayStatusFinalizado()
 	{
 
 		$arrStatus = array();
-		$arrStatus[] = StatusOcorrenciaController::STATUS_FECHADO;
-		$arrStatus[] = StatusOcorrenciaController::STATUS_FECHADO_CONFIRMADO;
-		$arrStatus[] = StatusOcorrenciaController::STATUS_CANCELADO;
+		$arrStatus[] = OcorrenciaController::STATUS_FECHADO;
+		$arrStatus[] = OcorrenciaController::STATUS_FECHADO_CONFIRMADO;
+		$arrStatus[] = OcorrenciaController::STATUS_CANCELADO;
 		return $arrStatus;
 	}
 
@@ -502,7 +515,7 @@ class OcorrenciaController
 		$ocorrencia->getUsuarioCliente()->setId($this->sessao->getIdUsuario());
 
 
-		$listaNaoAvaliados = DB::table('ocorrencia')->where('id_usuario_cliente', $this->sessao->getIdUsuario())->where('status', StatusOcorrenciaController::STATUS_FECHADO)->get();
+		$listaNaoAvaliados = DB::table('ocorrencia')->where('id_usuario_cliente', $this->sessao->getIdUsuario())->where('status', OcorrenciaController::STATUS_FECHADO)->get();
 
 		echo '
             <div class="row">
@@ -578,7 +591,7 @@ class OcorrenciaController
 			$ocorrencia->setIdLocal(1);
 		}
 
-		$ocorrencia->setStatus(StatusOcorrenciaController::STATUS_ABERTO);
+		$ocorrencia->setStatus(OcorrenciaController::STATUS_ABERTO);
 
 		$ocorrencia->getServico()->setId($_POST['servico']);
 		$servicoDao = new ServicoDAO($this->dao->getConnection());
@@ -632,7 +645,7 @@ class OcorrenciaController
 
 		$ocorrencia->getUsuarioCliente()->setId($sessao->getIdUsuario());
 
-		$statusOcorrenciaDAO = new StatusOcorrenciaDAO($this->dao->getConnection());
+
 
 		$statusOcorrencia = new StatusOcorrencia();
 		$statusOcorrencia->setDataMudanca(date("Y-m-d H:i:s"));
@@ -646,7 +659,7 @@ class OcorrenciaController
 			$id = $this->dao->getConnection()->lastInsertId();
 			$ocorrencia->setId($id);
 			$statusOcorrencia->setOcorrencia($ocorrencia);
-			if ($statusOcorrenciaDAO->insert($statusOcorrencia)) {
+			if ($this->dao->insertStatus($statusOcorrencia)) {
 				echo ':sucesso:' . $id . ':';
 
 				$this->emailAbertura($statusOcorrencia);
@@ -731,4 +744,1257 @@ class OcorrenciaController
 		$_SESSION['pediu_ajuda'] = 1;
 		echo ':sucesso:UM e-mail foi enviado aos chefes:';
 	}
+
+
+	public function possoAtender()
+	{
+		if (
+			$this->sessao->getNivelAcesso() == Sessao::NIVEL_DESLOGADO
+			|| $this->sessao->getNivelAcesso() == Sessao::NIVEL_COMUM
+		) {
+			return false;
+		}
+		if ($this->selecionado->getStatus() == self::STATUS_ATENDIMENTO) {
+			return false;
+		}
+		if ($this->selecionado->getStatus() == self::STATUS_CANCELADO) {
+			return false;
+		}
+		if ($this->selecionado->getStatus() == self::STATUS_FECHADO || $this->selecionado->getStatus() == self::STATUS_FECHADO_CONFIRMADO) {
+			return false;
+		}
+		if ($this->selecionado->getStatus() == self::STATUS_RESERVADO) {
+			if ($this->sessao->getIdUsuario() != $this->selecionado->getIdUsuarioIndicado()) {
+				return false;
+			}
+		}
+		if (
+			$this->selecionado->getStatus() == self::STATUS_AGUARDANDO_ATIVO
+			|| $this->selecionado->getStatus() == self::STATUS_AGUARDANDO_USUARIO
+			|| $this->selecionado->getStatus() == self::STATUS_EM_ESPERA
+		) {
+			if ($this->sessao->getIdUsuario() != $this->selecionado->getIdUsuarioAtendente()) {
+				return false;
+			}
+		}
+		if ($this->selecionado->getStatus() == self::STATUS_ABERTO || $this->selecionado->getStatus() == self::STATUS_REABERTO) {
+			return true;
+		}
+
+		return true;
+	}
+	public function possoCancelar()
+	{
+		return $this->sessao->getIdUsuario() === $this->selecionado->getUsuarioCliente()->getId()
+			&&
+			($this->selecionado->getStatus() == self::STATUS_REABERTO || $this->selecionado->getStatus() == self::STATUS_ABERTO);
+	}
+
+	public function passwordVerify()
+	{
+		$this->sessao = new Sessao();
+		if (!isset($_POST['senha'])) {
+			return false;
+		}
+		$login = $this->sessao->getLoginUsuario();
+		$senha = $_POST['senha'];
+		$data = ['login' =>  $login, 'senha' => $senha];
+		$response = Http::post(env('UNILAB_API_ORIGIN') . '/authenticate', $data);
+		$responseJ = json_decode($response->body());
+
+		$idUsuario  = 0;
+
+		if (isset($responseJ->id)) {
+			$idUsuario = intval($responseJ->id);
+		}
+		if ($idUsuario === 0) {
+			return false;
+		}
+		if ($responseJ->id != $this->sessao->getIdUsuario()) {
+			echo ":falha:Senha Incorreta.";
+			return false;
+		}
+		return true;
+	}
+	public function ajaxAtender()
+	{
+		if (!isset($_POST['status_acao'])) {
+			return false;
+		}
+		if ($_POST['status_acao'] != 'atender') {
+			return false;
+		}
+		if (!isset($_POST['id_ocorrencia'])) {
+			return false;
+		}
+		if (!isset($_POST['senha'])) {
+			return false;
+		}
+
+		if (!$this->possoAtender()) {
+			echo ':falha:Não é possível atender este chamado.';
+			return false;
+		}
+
+		$this->sessao = new Sessao();
+		$this->selecionado = new Ocorrencia();
+		$this->selecionado->setId($_POST['id_ocorrencia']);
+
+
+
+		$ocorrenciaDao = new OcorrenciaDAO($this->dao->getConnection());
+		$ocorrenciaDao->fillById($this->selecionado);
+
+
+		$usuario = new Usuario();
+		$usuario->setId($this->sessao->getIdUsuario());
+
+		$usuarioDao = new UsuarioDAO($this->dao->getConnection());
+		$usuarioDao->fillById($usuario);
+		$this->selecionado->getAreaResponsavel()->setId($usuario->getIdSetor());
+
+		$this->selecionado->setIdUsuarioAtendente($this->sessao->getIdUsuario());
+
+
+		$this->selecionado->setStatus(self::STATUS_ATENDIMENTO);
+
+		$status = new Status();
+		$status->setSigla(self::STATUS_ATENDIMENTO);
+
+		$statusDao = new StatusDAO($this->dao->getConnection());
+		$statusDao->fillBySigla($status);
+
+		$this->statusOcorrencia = new StatusOcorrencia();
+		$this->statusOcorrencia->setOcorrencia($this->selecionado);
+		$this->statusOcorrencia->setStatus($status);
+		$this->statusOcorrencia->setDataMudanca(date("Y-m-d G:i:s"));
+		$this->statusOcorrencia->getUsuario()->setId($this->sessao->getIdUsuario());
+		$this->statusOcorrencia->setMensagem("Ocorrência em atendimento");
+
+
+		$usuarioDao = new UsuarioDAO($this->dao->getConnection());
+		$usuario = new Usuario();
+		$usuario->setId($this->sessao->getIdUsuario());
+		$usuarioDao->fillById($usuario);
+
+		$this->selecionado->getAreaResponsavel()->setId($usuario->getIdSetor());
+
+		if ($this->selecionado->getDataAtendimento() == null) {
+			$this->selecionado->setDataAtendimento(date("Y-m-d H:i:s"));
+		}
+
+
+
+		$ocorrenciaDao->getConnection()->beginTransaction();
+
+		if (!$ocorrenciaDao->update($this->selecionado)) {
+			echo ':falha:Falha na alteração do status da ocorrência.';
+			$ocorrenciaDao->getConnection()->rollBack();
+			return false;
+		}
+
+		if (!$this->dao->insertStatus($this->statusOcorrencia)) {
+			echo ':falha:Falha ao tentar inserir histórico.';
+			return false;
+		}
+
+		$ocorrenciaDao->getConnection()->commit();
+		echo ':sucesso:' . $this->selecionado->getId() . ':Chamado am atendimento!';
+		return true;
+	}
+
+	public function ajaxCancelar()
+	{
+		if (!isset($_POST['status_acao'])) {
+			return false;
+		}
+		if ($_POST['status_acao'] != 'cancelar') {
+			return false;
+		}
+		if (!isset($_POST['id_ocorrencia'])) {
+			return false;
+		}
+		if (!isset($_POST['senha'])) {
+			return false;
+		}
+
+
+
+		if (!$this->possoCancelar()) {
+			echo ":falha:Este chamado não pode ser cancelado.";
+			return false;
+		}
+
+
+		$ocorrenciaDao = new OcorrenciaDAO($this->dao->getConnection());
+		$this->selecionado->setStatus(self::STATUS_CANCELADO);
+
+		$status = new Status();
+		$status->setSigla(self::STATUS_CANCELADO);
+
+		$statusDao = new StatusDAO($this->dao->getConnection());
+		$statusDao->fillBySigla($status);
+
+		$this->statusOcorrencia = new StatusOcorrencia();
+		$this->statusOcorrencia->setOcorrencia($this->selecionado);
+		$this->statusOcorrencia->setStatus($status);
+		$this->statusOcorrencia->setDataMudanca(date("Y-m-d G:i:s"));
+		$this->statusOcorrencia->getUsuario()->setId($this->sessao->getIdUsuario());
+		$this->statusOcorrencia->setMensagem("Ocorrência cancelada pelo usuário");
+
+
+		$ocorrenciaDao->getConnection()->beginTransaction();
+
+		if (!$ocorrenciaDao->update($this->selecionado)) {
+			echo ':falha:Falha na alteração do status da ocorrência.';
+			$ocorrenciaDao->getConnection()->rollBack();
+			return false;
+		}
+
+		if (!$this->dao->insertStatus($this->statusOcorrencia)) {
+			echo ':falha:Falha ao tentar inserir histórico.';
+			return false;
+		}
+		$ocorrenciaDao->getConnection()->commit();
+		echo ':sucesso:' . $this->selecionado->getId() . ':Chamado cancelado com sucesso!';
+		return true;
+	}
+
+
+
+	public function possoEditarServico(Ocorrencia $ocorrencia)
+	{
+		$this->selecionado = $ocorrencia;
+		$this->sessao = new Sessao();
+		if ($this->sessao->getNivelAcesso() == Sessao::NIVEL_COMUM || $this->sessao->getNivelAcesso() == Sessao::NIVEL_DESLOGADO) {
+			return false;
+		}
+		if ($this->selecionado->getStatus() == self::STATUS_FECHADO) {
+			return false;
+		}
+		if ($this->selecionado->getStatus() == self::STATUS_FECHADO_CONFIRMADO) {
+			return false;
+		}
+		if ($this->selecionado->getStatus() == self::STATUS_CANCELADO) {
+			return false;
+		}
+		if ($this->sessao->getNivelAcesso() == Sessao::NIVEL_ADM) {
+			return true;
+		}
+		if ($this->selecionado->getStatus() != self::STATUS_ATENDIMENTO) {
+			return false;
+		}
+
+		if ($this->sessao->getIdUsuario() != $this->selecionado->getIdUsuarioAtendente()) {
+			return false;
+		}
+		return true;
+	}
+	public function possoEditarAreaResponsavel(Ocorrencia $ocorrencia)
+	{
+
+
+
+		$this->selecionado = $ocorrencia;
+		$this->sessao = new Sessao();
+		if ($this->sessao->getNivelAcesso() != Sessao::NIVEL_ADM) {
+			return false;
+		}
+
+		if ($this->selecionado->getStatus() == self::STATUS_ABERTO) {
+			return true;
+		}
+		if ($this->selecionado->getStatus() == self::STATUS_REABERTO) {
+			return true;
+		}
+		return false;
+	}
+
+
+	public function possoEditarSolucao(Ocorrencia $ocorrencia)
+	{
+		$this->selecionado = $ocorrencia;
+		$this->sessao = new Sessao();
+		if ($this->sessao->getNivelAcesso() == Sessao::NIVEL_COMUM || $this->sessao->getNivelAcesso() == Sessao::NIVEL_DESLOGADO) {
+			return false;
+		}
+		if ($this->selecionado->getStatus() != self::STATUS_ATENDIMENTO) {
+			return false;
+		}
+		if ($this->sessao->getIdUsuario() != $this->selecionado->getIdUsuarioAtendente()) {
+			return false;
+		}
+		return true;
+	}
+
+	public function possoEditarPatrimonio(Ocorrencia $ocorrencia)
+	{
+		$this->selecionado = $ocorrencia;
+		$this->sessao = new Sessao();
+
+		if ($this->selecionado->getStatus() == self::STATUS_FECHADO) {
+			return false;
+		}
+		if ($this->selecionado->getStatus() == self::STATUS_CANCELADO) {
+			return false;
+		}
+		if ($this->selecionado->getStatus() == self::STATUS_FECHADO_CONFIRMADO) {
+			return false;
+		}
+		if ($this->sessao->getIdUsuario() == $this->selecionado->getUsuarioCliente()->getId()) {
+			return true;
+		}
+		if ($this->sessao->getIdUsuario() == $this->selecionado->getIdUsuarioAtendente()) {
+			return true;
+		}
+	}
+	public function possoAvaliar()
+	{
+		//Só permitir isso se o usuário for cliente do chamado
+		//O chamado deve estar fechado.
+		if ($this->sessao->getIdUsuario() != $this->selecionado->getUsuarioCliente()->getId()) {
+			return false;
+		}
+		if ($this->selecionado->getStatus() != self::STATUS_FECHADO) {
+			return false;
+		}
+		return true;
+	}
+	public function possoReabrir()
+	{
+		//Só permitir isso se o usuário for cliente do chamado
+		//O chamado deve estar fechado.
+		if ($this->sessao->getIdUsuario() != $this->selecionado->getUsuarioCliente()->getId()) {
+			return false;
+		}
+		if ($this->selecionado->getStatus() != self::STATUS_FECHADO) {
+			return false;
+		}
+		return true;
+	}
+
+	public function possoFechar()
+	{
+		if (trim($this->selecionado->getSolucao()) == "") {
+			return false;
+		}
+		if ($this->sessao->getNivelAcesso() == Sessao::NIVEL_COMUM) {
+			return false;
+		}
+		if ($this->sessao->getNivelAcesso() == Sessao::NIVEL_DESLOGADO) {
+			return false;
+		}
+
+		if ($this->selecionado->getStatus() == Self::STATUS_ATENDIMENTO) {
+			if ($this->sessao->getIdUsuario() == $this->selecionado->getIdUsuarioAtendente()) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+	public function possoReservar()
+	{
+		if ($this->sessao->getNivelAcesso() != Sessao::NIVEL_ADM) {
+			return false;
+		}
+		if ($this->selecionado->getStatus() == Self::STATUS_FECHADO) {
+			return false;
+		}
+		if ($this->selecionado->getStatus() == Self::STATUS_FECHADO_CONFIRMADO) {
+			return false;
+		}
+		if ($this->selecionado->getStatus() == Self::STATUS_CANCELADO) {
+			return false;
+		}
+
+		return true;
+	}
+	public function ajaxFechar()
+	{
+		if (!$this->possoFechar()) {
+			echo ':falha:Não é possível fechar este chamado.';
+			return false;
+		}
+
+		$usuario = new Usuario();
+		$usuario->setId($this->sessao->getIdUsuario());
+
+		$usuarioDao = new UsuarioDAO($this->dao->getConnection());
+		$usuarioDao->fillById($usuario);
+		$this->selecionado->getAreaResponsavel()->setId($usuario->getIdSetor());
+
+
+		$ocorrenciaDao = new OcorrenciaDAO($this->dao->getConnection());
+		$this->selecionado->setStatus(self::STATUS_FECHADO);
+
+		$status = new Status();
+		$status->setSigla(self::STATUS_FECHADO);
+
+		$statusDao = new StatusDAO($this->dao->getConnection());
+		$statusDao->fillBySigla($status);
+
+		$this->statusOcorrencia = new StatusOcorrencia();
+		$this->statusOcorrencia->setOcorrencia($this->selecionado);
+		$this->statusOcorrencia->setStatus($status);
+		$this->statusOcorrencia->setDataMudanca(date("Y-m-d G:i:s"));
+		$this->statusOcorrencia->getUsuario()->setId($this->sessao->getIdUsuario());
+		$this->statusOcorrencia->setMensagem("Ocorrência fechada pelo atendente");
+
+
+		$this->selecionado->setDataFechamento(date("Y-m-d H:i:s"));
+
+
+		$ocorrenciaDao->getConnection()->beginTransaction();
+
+		if (!$ocorrenciaDao->update($this->selecionado)) {
+			echo ':falha:Falha na alteração do status da ocorrência.';
+			$ocorrenciaDao->getConnection()->rollBack();
+			return false;
+		}
+
+		if (!$this->dao->insertStatus($this->statusOcorrencia)) {
+			echo ':falha:Falha ao tentar inserir histórico.';
+			return false;
+		}
+		$ocorrenciaDao->getConnection()->commit();
+		echo ':sucesso:' . $this->selecionado->getId() . ':Chamado fechado com sucesso!';
+
+		return true;
+	}
+	public function ajaxAvaliar()
+	{
+		if (!isset($_POST['avaliacao'])) {
+			echo ':falha:Faça uma avaliação';
+			return false;
+		}
+		if (!$this->possoAvaliar()) {
+			return false;
+		}
+
+		$ocorrenciaDao = new OcorrenciaDAO($this->dao->getConnection());
+		$this->selecionado->setStatus(self::STATUS_FECHADO_CONFIRMADO);
+
+		$status = new Status();
+		$status->setSigla(self::STATUS_FECHADO_CONFIRMADO);
+
+		$statusDao = new StatusDAO($this->dao->getConnection());
+		$statusDao->fillBySigla($status);
+
+		$this->statusOcorrencia = new StatusOcorrencia();
+		$this->statusOcorrencia->setOcorrencia($this->selecionado);
+		$this->statusOcorrencia->setStatus($status);
+		$this->statusOcorrencia->setDataMudanca(date("Y-m-d G:i:s"));
+		$this->statusOcorrencia->getUsuario()->setId($this->sessao->getIdUsuario());
+		$this->statusOcorrencia->setMensagem("Atendimento avaliado pelo cliente");
+
+		$this->selecionado->setDataFechamentoConfirmado(date("Y-m-d H:i:s"));
+		$this->selecionado->setAvaliacao($_POST['avaliacao']);
+
+		$ocorrenciaDao->getConnection()->beginTransaction();
+
+
+
+		if (!$ocorrenciaDao->update($this->selecionado)) {
+			echo ':falha:Falha na alteração do status da ocorrência.';
+			$ocorrenciaDao->getConnection()->rollBack();
+			return false;
+		}
+
+		if (!$this->dao->insertStatus($this->statusOcorrencia)) {
+			echo ':falha:Falha ao tentar inserir histórico.';
+			return false;
+		}
+		$ocorrenciaDao->getConnection()->commit();
+
+		echo ':sucesso:' . $this->selecionado->getId() . ':Atendimento avaliado com sucesso!';
+		return true;
+	}
+	public function ajaxReabrir()
+	{
+		if (!$this->possoReabrir()) {
+			return false;
+		}
+
+		$ocorrenciaDao = new OcorrenciaDAO($this->dao->getConnection());
+		$this->selecionado->setStatus(self::STATUS_REABERTO);
+
+		$status = new Status();
+		$status->setSigla(self::STATUS_REABERTO);
+
+		$statusDao = new StatusDAO($this->dao->getConnection());
+		$statusDao->fillBySigla($status);
+
+		$this->statusOcorrencia = new StatusOcorrencia();
+		$this->statusOcorrencia->setOcorrencia($this->selecionado);
+		$this->statusOcorrencia->setStatus($status);
+		$this->statusOcorrencia->setDataMudanca(date("Y-m-d G:i:s"));
+		$this->statusOcorrencia->getUsuario()->setId($this->sessao->getIdUsuario());
+		$this->statusOcorrencia->setMensagem("Ocorrência Reaberta pelo cliente");
+		if (isset($_POST['mensagem-status'])) {
+			$this->statusOcorrencia->setMensagem($_POST['mensagem-status']);
+		}
+
+
+		$ocorrenciaDao->getConnection()->beginTransaction();
+
+
+
+		if (!$ocorrenciaDao->update($this->selecionado)) {
+			echo ':falha:Falha na alteração do status da ocorrência.';
+			$ocorrenciaDao->getConnection()->rollBack();
+			return false;
+		}
+
+		if (!$this->dao->insertStatus($this->statusOcorrencia)) {
+			echo ':falha:Falha ao tentar inserir histórico.';
+			return false;
+		}
+		$ocorrenciaDao->getConnection()->commit();
+
+		echo ':sucesso:' . $this->selecionado->getId() . ':Atendimento reaberto com sucesso!';
+		return true;
+	}
+
+	public function ajaxReservar()
+	{
+		if (!isset($_POST['tecnico'])) {
+			echo ':falha:Técnico especificado';
+			return false;
+		}
+		if (!$this->possoReservar()) {
+			echo ':falha:Você não pode reservar esse chamado.';
+			return false;
+		}
+
+		$ocorrenciaDao = new OcorrenciaDAO($this->dao->getConnection());
+		$ocorrenciaDao->fillById($this->selecionado);
+
+		$usuario = new Usuario();
+		$usuario->setId($_POST['tecnico']);
+
+		$usuarioDao = new UsuarioDAO($this->dao->getConnection());
+		$usuarioDao->fillById($usuario);
+
+		$this->selecionado->getAreaResponsavel()->setId($usuario->getIdSetor());
+		$this->selecionado->setStatus(self::STATUS_RESERVADO);
+
+		$status = new Status();
+		$status->setSigla(self::STATUS_RESERVADO);
+
+		$statusDao = new StatusDAO($this->dao->getConnection());
+		$statusDao->fillBySigla($status);
+
+		$this->statusOcorrencia = new StatusOcorrencia();
+		$this->statusOcorrencia->setOcorrencia($this->selecionado);
+		$this->statusOcorrencia->setStatus($status);
+		$this->statusOcorrencia->setDataMudanca(date("Y-m-d G:i:s"));
+		$this->statusOcorrencia->getUsuario()->setId($this->sessao->getIdUsuario());
+		$this->statusOcorrencia->setMensagem('Atendimento reservado para ' . $usuario->getNome());
+
+
+		$ocorrenciaDao->getConnection()->beginTransaction();
+		$this->selecionado->setIdUsuarioIndicado($usuario->getId());
+		$this->selecionado->getAreaResponsavel()->setId($usuario->getIdSetor());
+
+
+		if (!$ocorrenciaDao->update($this->selecionado)) {
+			echo ':falha:Falha na alteração do status da ocorrência.';
+			$ocorrenciaDao->getConnection()->rollBack();
+			return false;
+		}
+
+		if (!$this->dao->insertStatus($this->statusOcorrencia)) {
+			echo ':falha:Falha ao tentar inserir histórico.';
+			return false;
+		}
+		$ocorrenciaDao->getConnection()->commit();
+
+		echo ':sucesso:' . $this->selecionado->getId() . ':Reservado com sucesso!';
+		return true;
+	}
+	public function mainAjaxStatus()
+	{
+		//Verifica-se qual o form que foi submetido.
+
+		if (!isset($_POST['status_acao'])) {
+			echo ':falha:Ação não especificada';
+			return;
+		}
+		if (!$this->passwordVerify()) {
+			echo ':falha:Senha incorreta';
+			return;
+		}
+
+		$this->sessao = new Sessao();
+		$this->selecionado = new Ocorrencia();
+		$this->selecionado->setId($_POST['id_ocorrencia']);
+		$ocorrenciaDao = new OcorrenciaDAO($this->dao->getConnection());
+		$ocorrenciaDao->fillById($this->selecionado);
+		$status = false;
+		$mensagem = "";
+		switch ($_POST['status_acao']) {
+			case 'cancelar':
+				$status = $this->ajaxCancelar();
+				$mensagem = '<p>Chamado cancelado</p>';
+				break;
+			case 'atender':
+				$status = $this->ajaxAtender();
+				$mensagem = '<p>Chamado em atendimento</p>';
+				break;
+			case 'fechar':
+				$status = $this->ajaxFechar();
+				$mensagem = '<p>Chamado fechado</p>';
+				break;
+			case 'reservar':
+				$status = $this->ajaxReservar();
+				$mensagem = '<p>Chamado reservado</p>';
+				break;
+			case 'liberar_atendimento':
+				$status = $this->ajaxLiberar();
+				$mensagem = '<p>Chamado Liberado para atendimento</p>';
+				break;
+			case 'avaliar':
+				$status = $this->ajaxAvaliar();
+				$mensagem = '<p>Chamado avaliado</p>';
+				break;
+			case 'reabrir':
+				$status = $this->ajaxReabrir();
+				$mensagem = '<p>Chamado reaberto</p>';
+				break;
+			case 'editar_servico':
+				$status = $this->ajaxEditarServico();
+				$mensagem = '<p>Serviço alterado</p>';
+				break;
+			case 'editar_solucao':
+				$status = $this->ajaxEditarSolucao();
+				$mensagem = '<p>Solução editada</p>';
+				break;
+			case 'editar_area':
+				$status = $this->ajaxEditarArea();
+				$mensagem = '<p>Área Editada Com Sucesso</p>';
+				break;
+			case 'aguardar_ativos':
+				$status = $this->ajaxAguardandoAtivo();
+				$mensagem = '<p>Aguardando ativo de TI</p>';
+				break;
+			case 'aguardar_usuario':
+				$status = $this->ajaxAguardandoUsuario();
+				$mensagem = '<p>Aguardando resposta do cliente</p>';
+				break;
+			case 'editar_patrimonio':
+				$status = $this->ajaxEditarPatrimonio();
+				$mensagem = '<p>Patrimônio editado.</p>';
+				break;
+			default:
+				echo ':falha:Ação não encontrada';
+
+				break;
+		}
+		if ($status) {
+			$this->sendNotfyChange($mensagem);
+		}
+	}
+	public function ajaxEditarPatrimonio()
+	{
+		if (!$this->possoEditarPatrimonio($this->selecionado)) {
+			echo ':falha:Este patrimônio não pode ser editado.';
+			return false;
+		}
+		if (!isset($_POST['patrimonio'])) {
+			echo ':falha:Digite um patrimônio.';
+			return false;
+		}
+		if (trim($_POST['patrimonio']) == "") {
+			echo ':falha:Digite um patrimônio.';
+			return false;
+		}
+
+
+
+		$ocorrenciaDao = new OcorrenciaDAO($this->dao->getConnection());
+		$status = new Status();
+		$status->setSigla($this->selecionado->getStatus());
+
+		$statusDao = new StatusDAO($this->dao->getConnection());
+		$statusDao->fillBySigla($status);
+
+		$this->statusOcorrencia = new StatusOcorrencia();
+		$this->statusOcorrencia->setOcorrencia($this->selecionado);
+		$this->statusOcorrencia->setStatus($status);
+		$this->statusOcorrencia->setDataMudanca(date("Y-m-d G:i:s"));
+		$this->statusOcorrencia->getUsuario()->setId($this->sessao->getIdUsuario());
+		$this->statusOcorrencia->setMensagem('Técnico editou o Patrimônio para: ' . $_POST['patrimonio'] . '.');
+
+		$this->selecionado->setPatrimonio(strip_tags($_POST['patrimonio']));
+		$ocorrenciaDao->getConnection()->beginTransaction();
+
+
+		if (!$ocorrenciaDao->update($this->selecionado)) {
+			echo ':falha:Falha na alteração do patrimonio da ocorrência.';
+			$ocorrenciaDao->getConnection()->rollBack();
+			return false;
+		}
+
+		if (!$this->dao->insertStatus($this->statusOcorrencia)) {
+			echo ':falha:Falha ao tentar inserir histórico.';
+			return false;
+		}
+		$ocorrenciaDao->getConnection()->commit();
+
+		echo ':sucesso:' . $this->selecionado->getId() . ':Patrimonio editado com sucesso!';
+		return true;
+	}
+
+	public function sendNotfyChange($mensagem = "")
+	{
+		$mail = new Mail();
+		$assunto = "[3S] - Chamado Nº " . $this->statusOcorrencia->getOcorrencia()->getId();
+
+
+
+		$saldacao =  '<p>Prezado(a) ' . $this->statusOcorrencia->getUsuario()->getNome() . ' ,</p>';
+
+		$corpo = '<p>Avisamos que houve uma mudança no status da solicitação <a href="https://3s.unilab.edu.br/?page=ocorrencia&selecionar=' . $this->statusOcorrencia->getOcorrencia()->getId() . '">Nº' . $this->statusOcorrencia->getOcorrencia()->getId() . '</a></p>';
+		$corpo .= $mensagem;
+		$corpo .= '<ul>
+                        <li>Serviço Solicitado: ' . $this->statusOcorrencia->getOcorrencia()->getServico()->getNome() . '</li>
+                        <li>Descrição do Problema: ' . $this->statusOcorrencia->getOcorrencia()->getDescricao() . '</li>
+                        <li>Setor Responsável: ' . $this->statusOcorrencia->getOcorrencia()->getAreaResponsavel()->getNome() . ' -
+                        ' . $this->statusOcorrencia->getOcorrencia()->getAreaResponsavel()->getDescricao() . '</li>
+                        <li>Cliente: ' . $this->selecionado->getUsuarioCliente()->getNome() . '</li>
+                </ul><br><p>Mensagem enviada pelo sistema 3S. Favor não responder.</p>';
+
+
+		$destinatario = $this->statusOcorrencia->getOcorrencia()->getEmail();
+		$nome = $this->statusOcorrencia->getOcorrencia()->getUsuarioCliente()->getNome();
+		//Cliente do chamado
+		$mail->enviarEmail($destinatario, $nome, $assunto, $saldacao . $corpo);
+
+		$usuarioDao = new UsuarioDAO($this->dao->getConnection());
+
+
+		$destinatario = $this->statusOcorrencia->getOcorrencia()->getAreaResponsavel()->getEmail();
+		$nome = $this->statusOcorrencia->getOcorrencia()->getAreaResponsavel()->getNome();
+		$mail->enviarEmail($destinatario, $nome, $assunto, $saldacao . $corpo); //Email para area responsavel
+
+
+		if ($this->statusOcorrencia->getOcorrencia()->getIdUsuarioAtendente() != null) {
+
+			$atendente = new Usuario();
+			$atendente->setId($this->statusOcorrencia->getOcorrencia()->getIdUsuarioAtendente());
+			$usuarioDao->fillById($atendente);
+			$destinatario = $atendente->getEmail();
+			$nome = $atendente->getNome();
+
+			$saldacao =  '<p>Prezado(a) ' . $nome . ' ,</p>';
+			$mail->enviarEmail($destinatario, $nome, $assunto, $saldacao . $corpo);
+		} else if ($this->statusOcorrencia->getOcorrencia()->getIdUsuarioIndicado() != null) {
+
+			$indicado = new Usuario();
+			$indicado->setId($this->statusOcorrencia->getOcorrencia()->getIdUsuarioIndicado());
+			$usuarioDao->fillById($indicado);
+			$destinatario = $indicado->getEmail();
+			$nome = $indicado->getNome();
+
+			$saldacao =  '<p>Prezado(a) ' . $nome . ' ,</p>';
+			$mail->enviarEmail($destinatario, $nome, $assunto, $saldacao . $corpo);
+		}
+	}
+
+	public function ajaxAguardandoAtivo()
+	{
+
+		if (!$this->possoEditarSolucao($this->selecionado)) {
+			echo ':falha:Esta solução não pode ser editada.';
+			return false;
+		}
+
+		$ocorrenciaDao = new OcorrenciaDAO($this->dao->getConnection());
+		$this->selecionado->setStatus(self::STATUS_AGUARDANDO_ATIVO);
+
+		$status = new Status();
+		$status->setSigla(self::STATUS_AGUARDANDO_ATIVO);
+
+		$statusDao = new StatusDAO($this->dao->getConnection());
+		$statusDao->fillBySigla($status);
+
+		$this->statusOcorrencia = new StatusOcorrencia();
+		$this->statusOcorrencia->setOcorrencia($this->selecionado);
+		$this->statusOcorrencia->setStatus($status);
+		$this->statusOcorrencia->setDataMudanca(date("Y-m-d G:i:s"));
+		$this->statusOcorrencia->getUsuario()->setId($this->sessao->getIdUsuario());
+		$this->statusOcorrencia->setMensagem("Aguardando ativo de TI");
+
+
+		$ocorrenciaDao->getConnection()->beginTransaction();
+
+		if (!$ocorrenciaDao->update($this->selecionado)) {
+			echo ':falha:Falha na alteração do status da ocorrência.';
+			$ocorrenciaDao->getConnection()->rollBack();
+			return false;
+		}
+
+		if (!$this->dao->insertStatus($this->statusOcorrencia)) {
+			echo ':falha:Falha ao tentar inserir histórico.';
+			return false;
+		}
+		$ocorrenciaDao->getConnection()->commit();
+		echo ':sucesso:' . $this->selecionado->getId() . ':Alterado para aguardando ativo de ti!';
+		return true;
+	}
+	public function ajaxAguardandoUsuario()
+	{
+		if (!$this->possoEditarSolucao($this->selecionado)) {
+			echo ':falha:Esta solução não pode ser editada.';
+			return false;
+		}
+		$ocorrenciaDao = new OcorrenciaDAO($this->dao->getConnection());
+		$this->selecionado->setStatus(self::STATUS_AGUARDANDO_USUARIO);
+
+		$status = new Status();
+		$status->setSigla(self::STATUS_AGUARDANDO_USUARIO);
+
+		$statusDao = new StatusDAO($this->dao->getConnection());
+		$statusDao->fillBySigla($status);
+
+		$this->statusOcorrencia = new StatusOcorrencia();
+		$this->statusOcorrencia->setOcorrencia($this->selecionado);
+		$this->statusOcorrencia->setStatus($status);
+		$this->statusOcorrencia->setDataMudanca(date("Y-m-d G:i:s"));
+		$this->statusOcorrencia->getUsuario()->setId($this->sessao->getIdUsuario());
+		$this->statusOcorrencia->setMensagem("Aguardando Usuário");
+
+
+		$ocorrenciaDao->getConnection()->beginTransaction();
+
+		if (!$ocorrenciaDao->update($this->selecionado)) {
+			echo ':falha:Falha na alteração do status da ocorrência.';
+			$ocorrenciaDao->getConnection()->rollBack();
+			return false;
+		}
+
+		if (!$this->dao->insertStatus($this->statusOcorrencia)) {
+			echo ':falha:Falha ao tentar inserir histórico.';
+			return false;
+		}
+		$ocorrenciaDao->getConnection()->commit();
+		echo ':sucesso:' . $this->selecionado->getId() . ':Alterado para aguardando usuário!';
+		return true;
+	}
+
+	public function ajaxEditarSolucao()
+	{
+		if (!$this->possoEditarSolucao($this->selecionado)) {
+			echo ':falha:Esta solução não pode ser editada.';
+			return false;
+		}
+		if (!isset($_POST['solucao'])) {
+			echo ':falha:Digite uma solução.';
+			return false;
+		}
+		if (trim($_POST['solucao']) == "") {
+			echo ':falha:Digite uma solução.';
+			return false;
+		}
+
+
+
+		$ocorrenciaDao = new OcorrenciaDAO($this->dao->getConnection());
+		$status = new Status();
+		$status->setSigla($this->selecionado->getStatus());
+
+		$statusDao = new StatusDAO($this->dao->getConnection());
+		$statusDao->fillBySigla($status);
+
+		$this->statusOcorrencia = new StatusOcorrencia();
+		$this->statusOcorrencia->setOcorrencia($this->selecionado);
+		$this->statusOcorrencia->setStatus($status);
+		$this->statusOcorrencia->setDataMudanca(date("Y-m-d G:i:s"));
+		$this->statusOcorrencia->getUsuario()->setId($this->sessao->getIdUsuario());
+		$this->statusOcorrencia->setMensagem('Técnico editou a solução. ');
+
+		$this->selecionado->setSolucao(strip_tags($_POST['solucao']));
+		$ocorrenciaDao->getConnection()->beginTransaction();
+
+
+		if (!$ocorrenciaDao->update($this->selecionado)) {
+			echo ':falha:Falha na alteração do status da ocorrência.';
+			$ocorrenciaDao->getConnection()->rollBack();
+			return false;
+		}
+
+		if (!$this->dao->insertStatus($this->statusOcorrencia)) {
+			echo ':falha:Falha ao tentar inserir histórico.';
+			return false;
+		}
+		$ocorrenciaDao->getConnection()->commit();
+
+		echo ':sucesso:' . $this->selecionado->getId() . ':Solução editada com sucesso!';
+		return true;
+	}
+	public function ajaxEditarArea()
+	{
+		if (!$this->possoEditarAreaResponsavel($this->selecionado)) {
+			echo ':falha:Você não pode editar a área responsável.';
+			return false;
+		}
+
+		if (!isset($_POST['area_responsavel'])) {
+			echo ':falha:Selecione um serviço.';
+			return false;
+		}
+		$areaResponsavel = new AreaResponsavel();
+		$areaResponsavel->setId($_POST['area_responsavel']);
+		$areaResponsavelDao = new AreaResponsavelDAO($this->dao->getConnection());
+		$areaResponsavelDao->fillById($areaResponsavel);
+
+		$this->selecionado->setAreaResponsavel($areaResponsavel);
+
+		$ocorrenciaDao = new OcorrenciaDAO($this->dao->getConnection());
+
+		$status = new Status();
+		$status->setSigla(self::STATUS_ABERTO);
+
+		$statusDao = new StatusDAO($this->dao->getConnection());
+		$statusDao->fillBySigla($status);
+
+		$this->statusOcorrencia = new StatusOcorrencia();
+		$this->statusOcorrencia->setOcorrencia($this->selecionado);
+		$this->statusOcorrencia->setStatus($status);
+		$this->statusOcorrencia->setDataMudanca(date("Y-m-d G:i:s"));
+		$this->statusOcorrencia->getUsuario()->setId($this->sessao->getIdUsuario());
+		$this->statusOcorrencia->setMensagem('Chamado encaminhado para setor: ' . $areaResponsavel->getNome());
+
+		$ocorrenciaDao->getConnection()->beginTransaction();
+
+		if (!$ocorrenciaDao->update($this->selecionado)) {
+			echo ':falha:Falha na alteração do status da ocorrência.';
+			$ocorrenciaDao->getConnection()->rollBack();
+			return false;
+		}
+
+		if (!$this->dao->insertStatus($this->statusOcorrencia)) {
+			echo ':falha:Falha ao tentar inserir histórico.';
+			return false;
+		}
+		$ocorrenciaDao->getConnection()->commit();
+
+		echo ':sucesso:' . $this->selecionado->getId() . ':Área Responsável Editada Com Sucesso!';
+		return true;
+	}
+	public function ajaxEditarServico()
+	{
+		if (!$this->possoEditarServico($this->selecionado)) {
+			echo ':falha:Este serviço não pode ser editado.';
+			return false;
+		}
+
+		if (!isset($_POST['id_servico'])) {
+			echo ':falha:Selecione um serviço.';
+			return false;
+		}
+
+
+		$servico = new Servico();
+		$servico->setId($_POST['id_servico']);
+
+		$servicoDao = new ServicoDAO($this->dao->getConnection());
+		$servicoDao->fillById($servico);
+
+
+		$ocorrenciaDao = new OcorrenciaDAO($this->dao->getConnection());
+
+
+		$status = new Status();
+		$status->setSigla($this->selecionado->getStatus());
+
+		$statusDao = new StatusDAO($this->dao->getConnection());
+		$statusDao->fillBySigla($status);
+
+		$this->statusOcorrencia = new StatusOcorrencia();
+		$this->statusOcorrencia->setOcorrencia($this->selecionado);
+		$this->statusOcorrencia->setStatus($status);
+		$this->statusOcorrencia->setDataMudanca(date("Y-m-d G:i:s"));
+		$this->statusOcorrencia->getUsuario()->setId($this->sessao->getIdUsuario());
+		$this->statusOcorrencia->setMensagem('Técnico editou o serviço ');
+
+		$this->selecionado->getAreaResponsavel()->setId($servico->getAreaResponsavel()->getId());
+		$this->selecionado->getServico()->setId($servico->getId());
+
+
+
+		$ocorrenciaDao->getConnection()->beginTransaction();
+
+
+
+
+		if (!$ocorrenciaDao->update($this->selecionado)) {
+			echo ':falha:Falha na alteração do status da ocorrência.';
+			$ocorrenciaDao->getConnection()->rollBack();
+			return false;
+		}
+
+		if (!$this->dao->insertStatus($this->statusOcorrencia)) {
+			echo ':falha:Falha ao tentar inserir histórico.';
+			return false;
+		}
+		$ocorrenciaDao->getConnection()->commit();
+
+		echo ':sucesso:' . $this->selecionado->getId() . ':Serviço editado com sucesso!';
+		return true;
+	}
+	public function possoLiberar()
+	{
+		if ($this->sessao->getNivelAcesso() != Sessao::NIVEL_ADM) {
+			return false;
+		}
+		if ($this->selecionado->getStatus() == self::STATUS_REABERTO) {
+			return false;
+		}
+		if ($this->selecionado->getStatus() == self::STATUS_FECHADO) {
+			return false;
+		}
+		if ($this->selecionado->getStatus() == self::STATUS_CANCELADO) {
+			return false;
+		}
+		if ($this->selecionado->getStatus() == self::STATUS_FECHADO_CONFIRMADO) {
+			return false;
+		}
+		if ($this->selecionado->getStatus() == self::STATUS_ABERTO) {
+			return false;
+		}
+		return true;
+	}
+	public function ajaxLiberar()
+	{
+		if (!$this->possoLiberar()) {
+			echo ':falha:Não é possível liberar esse atendimento.';
+			return false;
+		}
+
+		$ocorrenciaDao = new OcorrenciaDAO($this->dao->getConnection());
+		$this->selecionado->setStatus(self::STATUS_ABERTO);
+
+		$status = new Status();
+		$status->setSigla(self::STATUS_ABERTO);
+
+		$statusDao = new StatusDAO($this->dao->getConnection());
+		$statusDao->fillBySigla($status);
+
+		$this->statusOcorrencia = new StatusOcorrencia();
+		$this->statusOcorrencia->setOcorrencia($this->selecionado);
+		$this->statusOcorrencia->setStatus($status);
+		$this->statusOcorrencia->setDataMudanca(date("Y-m-d G:i:s"));
+		$this->statusOcorrencia->getUsuario()->setId($this->sessao->getIdUsuario());
+		$this->statusOcorrencia->setMensagem('Liberado para atendimento');
+
+
+		$ocorrenciaDao->getConnection()->beginTransaction();
+		$this->selecionado->setIdUsuarioIndicado(null);
+		$this->selecionado->setIdUsuarioAtendente(null);
+
+		$servicoDao = new ServicoDAO($this->dao->getConnection());
+		$servicoDao->fillById($this->selecionado->getServico());
+
+
+		$this->selecionado->getAreaResponsavel()->setId($this->selecionado->getServico()->getAreaResponsavel()->getId());
+
+		if (!$ocorrenciaDao->update($this->selecionado)) {
+			echo ':falha:Falha na alteração do status da ocorrência.';
+			$ocorrenciaDao->getConnection()->rollBack();
+			return false;
+		}
+
+		if (!$this->dao->insertStatus($this->statusOcorrencia)) {
+			echo ':falha:Falha ao tentar inserir histórico.';
+			return false;
+		}
+		$ocorrenciaDao->getConnection()->commit();
+
+		echo ':sucesso:' . $this->selecionado->getId() . ':Liberado com sucesso!';
+
+		return true;
+	}
+
+
+	public function possoEnviarMensagem($order)
+	{
+
+		if ($order->status == OcorrenciaController::STATUS_FECHADO) {
+			return false;
+		}
+		if ($order->status == OcorrenciaController::STATUS_FECHADO_CONFIRMADO) {
+			return false;
+		}
+		if ($order->status == OcorrenciaController::STATUS_CANCELADO) {
+			return false;
+		}
+		$sessao = new Sessao();
+		if ($sessao->getNivelAcesso() == SESSAO::NIVEL_COMUM) {
+			if ($sessao->getIdUsuario() != $order->id_usuario_cliente) {
+				return false;
+			}
+		}
+		if ($sessao->getNivelAcesso() == Sessao::NIVEL_TECNICO) {
+			if ($order->id_usuario_atendente != $sessao->getIdUsuario()) {
+				if ($sessao->getIdUsuario() != $order->id_usuario_cliente) {
+					return false;
+				}
+			}
+		}
+		return true;
+	}
+
+
+	public function sendMailNotifyMessage(MensagemForum $mensagemForum, Ocorrencia $ocorrencia, $order)
+	{
+		$mail = new Mail();
+
+		$ocorrenciaDao = new OcorrenciaDAO();
+		$ocorrenciaDao->fillById($ocorrencia);
+
+		$assunto = "[3S] - Chamado Nº " . $order->id;
+
+
+
+		$saldacao =  '<p>Prezado(a) ' . $ocorrencia->getUsuarioCliente()->getNome() . ' ,</p>';
+		$corpo = '<p>Avisamos que houve uma mensagem nova na solicitação <a href="https://3s.unilab.edu.br/?page=ocorrencia&selecionar=' . $ocorrencia->getId() . '">Nº' . $ocorrencia->getId() . '</a></p>';
+
+		$corpo .= '<ul>
+
+                        <li>Corpo: ' . $mensagemForum->getMensagem() . '</li>
+                        <li>Serviço Solicitado: ' . $ocorrencia->getServico()->getNome() . '</li>
+                        <li>Descrição do Problema: ' . $ocorrencia->getDescricao() . '</li>
+                        <li>Setor Responsável: ' . $ocorrencia->getServico()->getAreaResponsavel()->getNome() . ' -
+                        ' . $ocorrencia->getServico()->getAreaResponsavel()->getDescricao() . '</li>
+                        <li>Cliente: ' . $ocorrencia->getUsuarioCliente()->getNome() . '</li>
+                </ul><br><p>Mensagem enviada pelo sistema 3S. Favor não responder.</p>';
+
+
+		$destinatario = $ocorrencia->getEmail();
+		$nome = $ocorrencia->getUsuarioCliente()->getNome();
+		$mail->enviarEmail($destinatario, $nome, $assunto, $saldacao . $corpo);
+
+
+		$usuarioDao = new UsuarioDAO();
+		if ($ocorrencia->getIdUsuarioAtendente() != null) {
+
+			$atendente = new Usuario();
+			$atendente->setId($ocorrencia->getIdUsuarioAtendente());
+			$usuarioDao->fillById($atendente);
+			$destinatario = $atendente->getEmail();
+			$nome = $atendente->getNome();
+
+			$saldacao =  '<p>Prezado(a) ' . $nome . ' ,</p>';
+			$mail->enviarEmail($destinatario, $nome, $assunto, $saldacao . $corpo);
+		} else if ($ocorrencia->getIdUsuarioIndicado() != null) {
+
+			$indicado = new Usuario();
+			$indicado->setId($ocorrencia->getIdUsuarioIndicado());
+			$usuarioDao->fillById($indicado);
+			$destinatario = $indicado->getEmail();
+			$nome = $indicado->getNome();
+
+			$saldacao =  '<p>Prezado(a) ' . $nome . ' ,</p>';
+			$mail->enviarEmail($destinatario, $nome, $assunto, $saldacao . $corpo);
+		}
+	}
+
+	public function ajaxAddMessage()
+	{
+
+		$sessao = new Sessao();
+		if (!isset($_POST['enviar_mensagem_forum'])) {
+			return;
+		}
+		if (!(isset($_POST['tipo'])
+			&& isset($_POST['mensagem'])
+			&& isset($_POST['ocorrencia']))) {
+			echo ':incompleto';
+			return;
+		}
+
+		$mensagemForum = new MensagemForum();
+		$mensagemForum->setTipo($_POST['tipo']);
+
+		if ($_POST['tipo'] == self::TIPO_TEXTO) {
+			$mensagemForum->setMensagem($_POST['mensagem']);
+		} else {
+			if ($_FILES['anexo']['name'] != null) {
+				if (!file_exists('uploads/')) {
+					mkdir('uploads/', 0777, true);
+				}
+				$novoNome = $_FILES['anexo']['name'];
+
+				if (file_exists('uploads/' . $_FILES['anexo']['name'])) {
+					$novoNome = uniqid() . '_' . $novoNome;
+				}
+
+				$extensaoArr = explode('.', $novoNome);
+				$extensao = strtolower(end($extensaoArr));
+
+				$extensoes_permitidas = array(
+					'xlsx', 'xlsm', 'xlsb', 'xltx', 'xltm', 'xls', 'xlt', 'xls', 'xml', 'xml', 'xlam', 'xla', 'xlw', 'xlr',
+					'doc', 'docm', 'docx', 'docx', 'dot', 'dotm', 'dotx', 'odt', 'pdf', 'rtf', 'txt', 'wps', 'xml', 'zip', 'rar', 'ovpn',
+					'xml', 'xps', 'jpg', 'gif', 'png', 'pdf', 'jpeg'
+				);
+
+				if (!(in_array($extensao, $extensoes_permitidas))) {
+					echo ':falha:Extensão não permitida. Lista de extensões permitidas a seguir. ';
+					echo '(' . implode(", ", $extensoes_permitidas) . ')';
+					return;
+				}
+
+				if (!move_uploaded_file($_FILES['anexo']['tmp_name'], 'uploads/' . $novoNome)) {
+					echo ':falha:Falha na tentativa de enviar arquivo';
+					return;
+				}
+				$mensagemForum->setMensagem($novoNome);
+			}
+		}
+
+
+		$mensagemForum->setDataEnvio(date("Y-m-d G:i:s"));
+
+		$mensagemForum->getUsuario()->setId($sessao->getIdUsuario());
+		$ocorrencia = new Ocorrencia();
+		$ocorrencia->setId($_POST['ocorrencia']);
+		$order = DB::table('ocorrencia')->where('id', $ocorrencia->getId())->first();
+
+
+		if ($order->status == 'f' || $order->status == 'g') {
+			echo ':falha:O chamado já foi fechado.';
+			return;
+		}
+
+		$result = DB::table('mensagem_forum')->insert([
+			'tipo' => $_POST['tipo'],
+			'mensagem' => $_POST['mensagem'],
+			'id_usuario' => $sessao->getIdUsuario(),
+			'data_envio' => date("Y-m-d G:i:s"),
+			'id_ocorrencia' => $order->id
+		]);
+
+		if ($result) {
+			echo ':sucesso:' . $order->id . ':';
+			$this->sendMailNotifyMessage($mensagemForum, $ocorrencia, $order);
+		} else {
+			echo ':falha';
+		}
+	}
+
+
+	const TIPO_ARQUIVO = 2;
+	const TIPO_TEXTO = 1;
+	const STATUS_ABERTO = 'a';
+	const STATUS_RESERVADO = 'b';
+	const STATUS_EM_ESPERA = 'c';
+	const STATUS_AGUARDANDO_USUARIO = 'd';
+	const STATUS_ATENDIMENTO = 'e';
+	const STATUS_FECHADO = 'f';
+	const STATUS_FECHADO_CONFIRMADO = 'g';
+	const STATUS_CANCELADO = 'h';
+	const STATUS_AGUARDANDO_ATIVO = 'i';
+	const STATUS_REABERTO = 'r';
 }

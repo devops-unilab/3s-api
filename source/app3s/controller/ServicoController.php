@@ -41,33 +41,33 @@ class ServicoController
 		} else if (isset($_GET['delete'])) {
 			$this->delete();
 		} else {
-		echo '
+			echo '
 
         <div class="card mb-4">
             <div class="card-body">
 				<div class="row">
 					<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">';
-					$this->add();
-					$services = DB::table('servico')
-					->join('area_responsavel', 'servico.id_area_responsavel', '=', 'area_responsavel.id')
-					->join('grupo_servico', 'servico.id_grupo_servico', '=', 'grupo_servico.id')
-					->join('tipo_atividade', 'servico.id_tipo_atividade', '=', 'tipo_atividade.id')
-					->select(
-						'servico.id',
-						'servico.tempo_sla',
-						'servico.visao',
-						'servico.nome AS nome',
-						'servico.descricao AS descricao',
-						'area_responsavel.nome AS area_responsavel',
-						'grupo_servico.nome AS grupo_servico',
-						'tipo_atividade.nome AS tipo_atividade'
-					)
-					->get();
-				foreach($services as $service) {
-					$service->visao = $this->toStringVisao($service->visao);
-				}
-				echo view('partials.index-service', ['services' => $services]);
-		echo '		</div>
+			$this->add();
+			$services = DB::table('servico')
+				->join('area_responsavel', 'servico.id_area_responsavel', '=', 'area_responsavel.id')
+				->join('grupo_servico', 'servico.id_grupo_servico', '=', 'grupo_servico.id')
+				->join('tipo_atividade', 'servico.id_tipo_atividade', '=', 'tipo_atividade.id')
+				->select(
+					'servico.id',
+					'servico.tempo_sla',
+					'servico.visao',
+					'servico.nome AS nome',
+					'servico.descricao AS descricao',
+					'area_responsavel.nome AS area_responsavel',
+					'grupo_servico.nome AS grupo_servico',
+					'tipo_atividade.nome AS tipo_atividade'
+				)
+				->get();
+			foreach ($services as $service) {
+				$service->visao = $this->toStringVisao($service->visao);
+			}
+			echo view('partials.index-service', ['services' => $services]);
+			echo '		</div>
 				</div>
 			</div>
 		</div>';
@@ -173,22 +173,18 @@ class ServicoController
 			echo view('partials.confirm-delete', ['message' => 'Tem certeza que deseja apagar este serviço?']);
 			return;
 		}
-		if ($this->dao->delete($selected)) {
+
+		try {
+			DB::table('servico')->where('id', $_GET['delete'])->delete();
 			echo '
-
-<div class="alert alert-success" role="alert">
-  Sucesso ao excluir Servico
-</div>
-
-';
-		} else {
+			<div class="alert alert-success" role="alert">
+			  Sucesso ao excluir Servico
+			</div>';
+		} catch (\Exception $e) {
 			echo '
-
-<div class="alert alert-danger" role="alert">
-  Falha ao tentar excluir Servico
-</div>
-
-';
+				<div class="alert alert-danger" role="alert">
+				Falha ao tentar excluir Servico
+				</div>';
 		}
 		echo '<META HTTP-EQUIV="REFRESH" CONTENT="2; URL=?page=servico">';
 	}
@@ -221,16 +217,24 @@ class ServicoController
                 ';
 			return;
 		}
-		$servico = new Servico();
-		$servico->setNome($_POST['nome']);
-		$servico->setDescricao($_POST['descricao']);
-		$servico->setTempoSla($_POST['tempo_sla']);
-		$servico->setVisao($_POST['visao']);
-		$servico->getTipoAtividade()->setId($_POST['tipo_atividade']);
-		$servico->getAreaResponsavel()->setId($_POST['area_responsavel']);
-		$servico->getGrupoServico()->setId($_POST['grupo_servico']);
 
-		if ($this->dao->insert($servico)) {
+		$nome = $_POST['nome'];
+		$descricao = $_POST['descricao'];
+		$tempoSla = $_POST['tempo_sla'];
+		$visao = $_POST['visao'];
+		$tipoAtividade = $_POST['tipo_atividade'];
+		$areaResponsavel = $_POST['area_responsavel'];
+		$grupoServico = $_POST['grupo_servico'];
+		$result = DB::table('servico')->insert([
+			'nome' => $nome,
+			'descricao' => $descricao,
+			'id_tipo_atividade' => $tipoAtividade,
+			'tempo_sla' => $tempoSla,
+			'visao' => $visao,
+			'id_area_responsavel' => $areaResponsavel,
+			'id_grupo_servico' => $grupoServico
+		]);
+		if ($result) {
 			echo '
 
 <div class="alert alert-success" role="alert">

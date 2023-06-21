@@ -1,0 +1,3 @@
+O painel de status deve ser refeito.
+Faça um fluxograma dos status, envios de mensagens, mudanças de solução e patrimonio.
+Desenvolva as policies. Muito trabalho pela frente, valerá a pena.

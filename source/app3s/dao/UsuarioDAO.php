@@ -11,7 +11,6 @@ namespace app3s\dao;
 use PDO;
 use PDOException;
 use app3s\model\Usuario;
-use app3s\util\Sessao;
 
 class UsuarioDAO extends DAO
 {
@@ -56,10 +55,6 @@ class UsuarioDAO extends DAO
             echo $e->getMessage();
         }
     }
-
-
-
-
 
     public function fillById(Usuario $usuario)
     {

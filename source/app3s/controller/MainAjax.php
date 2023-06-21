@@ -2,7 +2,7 @@
 
 namespace app3s\controller;
 
-
+use app3s\model\Ocorrencia;
 
 class MainAjax
 {
@@ -15,12 +15,12 @@ class MainAjax
                 $controller->mainAjax();
                 break;
             case 'mensagem_forum':
-                $controller = new MensagemForumController();
-                $controller->addAjax();
+                $controller = new OcorrenciaController();
+                $controller->ajaxAddMessage();
                 break;
             case 'status_ocorrencia':
-                $controller = new StatusOcorrenciaController();
-                $controller->mainAjax();
+                $controller = new OcorrenciaController();
+                $controller->mainAjaxStatus();
                 break;
             case 'pedir_ajuda':
                 $controller = new OcorrenciaController();

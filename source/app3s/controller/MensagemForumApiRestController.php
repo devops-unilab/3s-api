@@ -7,21 +7,13 @@
 
 namespace app3s\controller;
 
-use app3s\dao\MensagemForumDAO;
 use app3s\util\Sessao;
 use app3s\dao\OcorrenciaDAO;
 use app3s\model\Ocorrencia;
+use Illuminate\Support\Facades\DB;
 
 class MensagemForumApiRestController
 {
-
-
-    protected $dao;
-
-    public function __construct()
-    {
-        $this->dao = new MensagemForumDAO();
-    }
 
     public function main()
     {
@@ -79,7 +71,7 @@ class MensagemForumApiRestController
 
         $ocorrencia = new Ocorrencia();
         $ocorrencia->setId($id);
-        $ocorrenciaDao = new OcorrenciaDAO($this->dao->getConnection());
+        $ocorrenciaDao = new OcorrenciaDAO();
         $ocorrenciaDao->fillById($ocorrencia);
 
         if (!$this->parteInteressada($ocorrencia)) {
@@ -87,30 +79,41 @@ class MensagemForumApiRestController
             return;
         }
 
+        $messageQuery = DB::table('mensagem_forum')
+            ->join('usuario', 'mensagem_forum.id_usuario', '=', 'usuario.id')
+            ->join('ocorrencia', 'mensagem_forum.id_ocorrencia', '=', 'ocorrencia.id')
+            ->select(
+                'mensagem_forum.id as id',
+                'usuario.id as user_id',
+                'usuario.nome as user_name',
+                'mensagem_forum.tipo as message_type',
+                'mensagem_forum.mensagem as message_content',
+                'mensagem_forum.data_envio as created_at',
+                'ocorrencia.status as order_status'
+            )
+            ->where('mensagem_forum.id_ocorrencia', $id)
+            ->orderBy('mensagem_forum.id');
+
 
         if (isset($url[3]) && $url[3] != '') {
             $idM = intval($url[3]);
-            $ocorrenciaDao->fetchMensagensPag($ocorrencia, $idM);
-        } else {
-            $ocorrenciaDao->fetchMensagens($ocorrencia);
+            $messageQuery = $messageQuery->where('mensagem_forum.id', '>', $idM);
         }
-
-        $list = $ocorrencia->getMensagens();
+        $list = $messageQuery->get();
 
         if (count($list) == 0) {
             echo "{}";
             return;
         }
 
-
         $listagem = array();
         foreach ($list as $linha) {
             $listagem[] = array(
-                'id' => $linha->getId(),
-                'tipo' => $linha->getTipo(),
-                'mensagem' => strip_tags($linha->getMensagem()),
-                'data_envio' => $linha->getDataEnvio(),
-                'nome_usuario' => $linha->getUsuario()->getNome()
+                'id' => $linha->id,
+                'tipo' => $linha->message_type,
+                'mensagem' => strip_tags($linha->message_content),
+                'data_envio' => $linha->created_at,
+                'nome_usuario' => $linha->user_name
             );
         }
         echo json_encode($listagem);

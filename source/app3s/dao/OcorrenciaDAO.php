@@ -7,16 +7,36 @@
  */
 
 namespace app3s\dao;
-
-use app3s\controller\StatusOcorrenciaController;
 use PDO;
 use PDOException;
 use app3s\model\Ocorrencia;
 use app3s\model\MensagemForum;
-use app3s\util\Sessao;
+use app3s\model\StatusOcorrencia;
 
 class OcorrenciaDAO extends DAO
 {
+    public function insertStatus(StatusOcorrencia $statusOcorrencia)
+    {
+        $sql = "INSERT INTO status_ocorrencia(id_ocorrencia, id_status, mensagem, id_usuario, data_mudanca) VALUES (:ocorrencia, :status, :mensagem, :usuario, :dataMudanca);";
+        $ocorrencia = $statusOcorrencia->getOcorrencia()->getId();
+        $status = $statusOcorrencia->getStatus()->getId();
+        $mensagem = $statusOcorrencia->getMensagem();
+        $usuario = $statusOcorrencia->getUsuario()->getId();
+        $dataMudanca = $statusOcorrencia->getDataMudanca();
+        try {
+            $db = $this->getConnection();
+            $stmt = $db->prepare($sql);
+            $stmt->bindParam(":ocorrencia", $ocorrencia, PDO::PARAM_INT);
+            $stmt->bindParam(":status", $status, PDO::PARAM_INT);
+            $stmt->bindParam(":mensagem", $mensagem, PDO::PARAM_STR);
+            $stmt->bindParam(":usuario", $usuario, PDO::PARAM_INT);
+            $stmt->bindParam(":dataMudanca", $dataMudanca, PDO::PARAM_STR);
+            return $stmt->execute();
+        } catch (PDOException $e) {
+            echo '{"error":{"text":' . $e->getMessage() . '}}';
+        }
+    }
+
 
     public function update(Ocorrencia $ocorrencia)
     {
@@ -220,78 +240,4 @@ class OcorrenciaDAO extends DAO
     }
 
 
-
-    public function fetchMensagens(Ocorrencia $ocorrencia)
-    {
-        $id = $ocorrencia->getId();
-        $sql = "SELECT mensagem_forum.id, mensagem_forum.tipo, mensagem_forum.mensagem, mensagem_forum.data_envio, usuario.id as id_usuario_usuario, usuario.nome as nome_usuario_usuario, usuario.email as email_usuario_usuario, usuario.login as login_usuario_usuario, usuario.senha as senha_usuario_usuario, usuario.nivel as nivel_usuario_usuario, usuario.id_setor as id_setor_usuario_usuario FROM mensagem_forum LEFT JOIN usuario as usuario ON usuario.id = mensagem_forum.id_usuario
-            WHERE id_ocorrencia = :id ORDER BY mensagem_forum.id ASC;";
-        try {
-
-            $stmt = $this->connection->prepare($sql);
-            $stmt->bindParam(":id", $id, PDO::PARAM_INT);
-            $stmt->execute();
-            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            foreach ($result as $row) {
-
-                $mensagemForum = new MensagemForum();
-
-                $mensagemForum->setId($row['id']);
-                $mensagemForum->setTipo($row['tipo']);
-                $mensagemForum->setMensagem($row['mensagem']);
-                $mensagemForum->getUsuario()->setId($row['id_usuario_usuario']);
-                $mensagemForum->getUsuario()->setNome($row['nome_usuario_usuario']);
-                $mensagemForum->getUsuario()->setEmail($row['email_usuario_usuario']);
-                $mensagemForum->getUsuario()->setLogin($row['login_usuario_usuario']);
-                $mensagemForum->getUsuario()->setSenha($row['senha_usuario_usuario']);
-                $mensagemForum->getUsuario()->setNivel($row['nivel_usuario_usuario']);
-                $mensagemForum->getUsuario()->setIdSetor($row['id_setor_usuario_usuario']);
-                $mensagemForum->setDataEnvio($row['data_envio']);
-                $ocorrencia->addMensagemForum($mensagemForum);
-            }
-        } catch (PDOException $e) {
-            echo $e->getMessage();
-        }
-    }
-
-    /**
-     * Traz as mensagens a partir de um id pra frente.
-     *
-     * @param Ocorrencia $ocorrencia
-     * @param int $idMinimo
-     */
-    public function fetchMensagensPag(Ocorrencia $ocorrencia, $idMinimo)
-    {
-        $id = $ocorrencia->getId();
-        $sql = "SELECT mensagem_forum.id, mensagem_forum.tipo, mensagem_forum.mensagem, mensagem_forum.data_envio, usuario.id as id_usuario_usuario, usuario.nome as nome_usuario_usuario, usuario.email as email_usuario_usuario, usuario.login as login_usuario_usuario, usuario.senha as senha_usuario_usuario, usuario.nivel as nivel_usuario_usuario, usuario.id_setor as id_setor_usuario_usuario FROM mensagem_forum LEFT JOIN usuario as usuario ON usuario.id = mensagem_forum.id_usuario
-            WHERE id_ocorrencia = :id
-            AND mensagem_forum.id > $idMinimo
-            ORDER BY mensagem_forum.id ASC;";
-        try {
-
-            $stmt = $this->connection->prepare($sql);
-            $stmt->bindParam(":id", $id, PDO::PARAM_INT);
-            $stmt->execute();
-            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            foreach ($result as $row) {
-
-                $mensagemForum = new MensagemForum();
-
-                $mensagemForum->setId($row['id']);
-                $mensagemForum->setTipo($row['tipo']);
-                $mensagemForum->setMensagem($row['mensagem']);
-                $mensagemForum->getUsuario()->setId($row['id_usuario_usuario']);
-                $mensagemForum->getUsuario()->setNome($row['nome_usuario_usuario']);
-                $mensagemForum->getUsuario()->setEmail($row['email_usuario_usuario']);
-                $mensagemForum->getUsuario()->setLogin($row['login_usuario_usuario']);
-                $mensagemForum->getUsuario()->setSenha($row['senha_usuario_usuario']);
-                $mensagemForum->getUsuario()->setNivel($row['nivel_usuario_usuario']);
-                $mensagemForum->getUsuario()->setIdSetor($row['id_setor_usuario_usuario']);
-                $mensagemForum->setDataEnvio($row['data_envio']);
-                $ocorrencia->addMensagemForum($mensagemForum);
-            }
-        } catch (PDOException $e) {
-            echo $e->getMessage();
-        }
-    }
 }
