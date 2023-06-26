@@ -415,7 +415,7 @@ class OcorrenciaController
 				'ocorrencia.status as status'
 			)
 			->join('servico', 'ocorrencia.id_servico', '=', 'servico.id')
-			->whereIn('status', ['a', 'i', 'd', 'e', 'r', 'b'])->orderByDesc('ocorrencia.id');;
+			->whereIn('status', ['a', 'i', 'd', 'e', 'r', 'b'])->orderByDesc('ocorrencia.id');
 		$queryFinished = DB::table('ocorrencia')
 			->select(
 				'ocorrencia.id as id',
@@ -434,8 +434,8 @@ class OcorrenciaController
 			$queryPendding = $queryPendding->where('id_usuario_cliente', $this->sessao->getIdUsuario());
 			$queryFinished = $queryFinished->where('id_usuario_cliente', $this->sessao->getIdUsuario());
 		}
-		$lista = $queryPendding->get();
-		$lista2 = $queryFinished->get();
+		$lista = $queryPendding->limit(300)->get();
+		$lista2 = $queryFinished->limit(300)->get();
 
 		//Painel principal
 		echo '
