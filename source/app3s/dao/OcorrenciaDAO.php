@@ -10,7 +10,6 @@ namespace app3s\dao;
 use PDO;
 use PDOException;
 use app3s\model\Ocorrencia;
-use app3s\model\MensagemForum;
 use app3s\model\Status;
 use app3s\model\StatusOcorrencia;
 
@@ -118,63 +117,6 @@ class OcorrenciaDAO extends DAO
             echo $e->getMessage();
         }
     }
-
-    public function insert(Ocorrencia $ocorrencia)
-    {
-        $sql = "INSERT INTO ocorrencia(id_area_responsavel, id_servico, id_local, id_usuario_cliente, descricao, campus, patrimonio, ramal, local, status, solucao, prioridade, avaliacao, email, id_usuario_atendente, id_usuario_indicado, anexo, local_sala, data_abertura, data_atendimento, data_fechamento, data_fechamento_confirmado) VALUES (:areaResponsavel, :servico, :idLocal, :usuarioCliente, :descricao, :campus, :patrimonio, :ramal, :local, :status, :solucao, :prioridade, :avaliacao, :email, :idUsuarioAtendente, :idUsuarioIndicado, :anexo, :localSala, :dataAbertura, :dataAtendimento, :dataFechamento, :dataFechamentoConfirmado);";
-        $areaResponsavel = $ocorrencia->getAreaResponsavel()->getId();
-        $servico = $ocorrencia->getServico()->getId();
-        $idLocal = $ocorrencia->getIdLocal();
-        $usuarioCliente = $ocorrencia->getUsuarioCliente()->getId();
-        $descricao = $ocorrencia->getDescricao();
-        $campus = $ocorrencia->getCampus();
-        $patrimonio = $ocorrencia->getPatrimonio();
-        $ramal = $ocorrencia->getRamal();
-        $local = $ocorrencia->getLocal();
-        $status = $ocorrencia->getStatus();
-        $solucao = $ocorrencia->getSolucao();
-        $prioridade = $ocorrencia->getPrioridade();
-        $avaliacao = $ocorrencia->getAvaliacao();
-        $email = $ocorrencia->getEmail();
-        $idUsuarioAtendente = $ocorrencia->getIdUsuarioAtendente();
-        $idUsuarioIndicado = $ocorrencia->getIdUsuarioIndicado();
-        $anexo = $ocorrencia->getAnexo();
-        $localSala = $ocorrencia->getLocalSala();
-        $dataAbertura = $ocorrencia->getDataAbertura();
-        $dataAtendimento = $ocorrencia->getDataAtendimento();
-        $dataFechamento = $ocorrencia->getDataFechamento();
-        $dataFechamentoConfirmado = $ocorrencia->getDataFechamentoConfirmado();
-        try {
-            $db = $this->getConnection();
-            $stmt = $db->prepare($sql);
-            $stmt->bindParam(":areaResponsavel", $areaResponsavel, PDO::PARAM_INT);
-            $stmt->bindParam(":servico", $servico, PDO::PARAM_INT);
-            $stmt->bindParam(":idLocal", $idLocal, PDO::PARAM_INT);
-            $stmt->bindParam(":usuarioCliente", $usuarioCliente, PDO::PARAM_INT);
-            $stmt->bindParam(":descricao", $descricao, PDO::PARAM_STR);
-            $stmt->bindParam(":campus", $campus, PDO::PARAM_STR);
-            $stmt->bindParam(":patrimonio", $patrimonio, PDO::PARAM_STR);
-            $stmt->bindParam(":ramal", $ramal, PDO::PARAM_STR);
-            $stmt->bindParam(":local", $local, PDO::PARAM_STR);
-            $stmt->bindParam(":status", $status, PDO::PARAM_STR);
-            $stmt->bindParam(":solucao", $solucao, PDO::PARAM_STR);
-            $stmt->bindParam(":prioridade", $prioridade, PDO::PARAM_STR);
-            $stmt->bindParam(":avaliacao", $avaliacao, PDO::PARAM_STR);
-            $stmt->bindParam(":email", $email, PDO::PARAM_STR);
-            $stmt->bindParam(":idUsuarioAtendente", $idUsuarioAtendente, PDO::PARAM_INT);
-            $stmt->bindParam(":idUsuarioIndicado", $idUsuarioIndicado, PDO::PARAM_INT);
-            $stmt->bindParam(":anexo", $anexo, PDO::PARAM_STR);
-            $stmt->bindParam(":localSala", $localSala, PDO::PARAM_STR);
-            $stmt->bindParam(":dataAbertura", $dataAbertura, PDO::PARAM_STR);
-            $stmt->bindParam(":dataAtendimento", $dataAtendimento, PDO::PARAM_STR);
-            $stmt->bindParam(":dataFechamento", $dataFechamento, PDO::PARAM_STR);
-            $stmt->bindParam(":dataFechamentoConfirmado", $dataFechamentoConfirmado, PDO::PARAM_STR);
-            return $stmt->execute();
-        } catch (PDOException $e) {
-            echo '{"error":{"text":' . $e->getMessage() . '}}';
-        }
-    }
-
 
     public function fillStatusBySigla(Status $status)
     {

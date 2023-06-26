@@ -2,18 +2,12 @@
 
 namespace app3s\controller;
 
-use app3s\model\Ocorrencia;
-
 class MainAjax
 {
 
     public function main()
     {
         switch ($_GET['ajax']) {
-            case 'ocorrencia':
-                $controller = new OcorrenciaController();
-                $controller->mainAjax();
-                break;
             case 'mensagem_forum':
                 $controller = new OcorrenciaController();
                 $controller->ajaxAddMessage();

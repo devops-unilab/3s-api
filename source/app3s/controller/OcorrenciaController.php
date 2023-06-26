@@ -10,7 +10,6 @@ namespace app3s\controller;
 use app3s\dao\OcorrenciaDAO;
 use app3s\dao\ServicoDAO;
 use app3s\dao\UsuarioDAO;
-use app3s\model\AreaResponsavel;
 use app3s\model\MensagemForum;
 use app3s\model\Ocorrencia;
 use app3s\model\Servico;
@@ -21,6 +20,7 @@ use app3s\util\Mail;
 use app3s\util\Sessao;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Storage;
 
 class OcorrenciaController
 {
@@ -35,9 +35,6 @@ class OcorrenciaController
 	{
 		$this->dao = new OcorrenciaDAO();
 	}
-
-
-
 
 	public function fimDeSemana($data)
 	{
@@ -186,10 +183,7 @@ class OcorrenciaController
 		$canRequestHelp = ($this->selecionado->getUsuarioCliente()->getId() == $sessao->getIdUsuario() && !isset($_SESSION['pediu_ajuda']));
 		$order->client_name =  $this->selecionado->getUsuarioCliente()->getNome();
 
-
 		$canEditDivision = $controller->possoEditarAreaResponsavel($this->selecionado);
-
-		$usuarioDao = new UsuarioDAO();
 
 		$providerName = '';
 		$providerId = null;
@@ -203,7 +197,7 @@ class OcorrenciaController
 				$providerId = $this->selecionado->getIdUsuarioAtendente();
 			}
 		}
-		if($providerId != null) {
+		if ($providerId != null) {
 			$providerName = DB::table('usuario')->where('id', $providerId)->first()->nome;
 		}
 		foreach ($orderStatusLog as $status) {
@@ -250,12 +244,7 @@ class OcorrenciaController
 				echo '<meta http-equiv = "refresh" content = "0 ; url =?page=ocorrencia&selecionar=' . $_GET['selecionar'] . '"/>';
 			}
 		}
-
-		// INDEX MESSAAGE
-		//DAqui pra baixo só usa $order
 		$canSendMessage = $this->possoEnviarMensagem($order);
-
-
 		$messageList = DB::table('mensagem_forum')
 			->join('usuario', 'mensagem_forum.id_usuario', '=', 'usuario.id')
 			->join('ocorrencia', 'mensagem_forum.id_ocorrencia', '=', 'ocorrencia.id')
@@ -293,6 +282,7 @@ class OcorrenciaController
 		if (isset($_GET['selecionar'])) {
 			$this->selecionar();
 		} else if (isset($_GET['cadastrar'])) {
+			$this->addOrder();
 			$this->telaCadastro();
 		} else {
 			$this->listar();
@@ -407,7 +397,8 @@ class OcorrenciaController
 		$sessao = new Sessao();
 
 		$this->sessao = new Sessao();
-		$listaAtrasados = array();
+
+
 
 		$lista = array();
 
@@ -449,9 +440,12 @@ class OcorrenciaController
 			<div class="col-md-8 blog-main">
 				<div class="panel-group" id="accordion">';
 		$listaAtrasados = array();
+		$notLate = array();
 		foreach ($lista as $ocorrencia) {
 			if ($this->atrasado($ocorrencia)) {
 				$listaAtrasados[] = $ocorrencia;
+			} else {
+				$notLate[] = $ocorrencia;
 			}
 		}
 
@@ -467,14 +461,11 @@ class OcorrenciaController
 				]
 			);
 		}
-		$this->painel($lista, 'Ocorrências Em Aberto(' . count($lista) . ')', 'collapseAberto', 'show');
+		$this->painel($notLate, 'Ocorrências Em Aberto(' . count($notLate) . ')', 'collapseAberto', 'show');
 		$this->painel($lista2, "Ocorrências Encerradas", 'collapseEncerrada');
 		echo '
 			</div>
-		</div>';
-
-		//Painel Lateral
-		echo '
+		</div>
 		<aside class="col-md-4 blog-sidebar">';
 		if ($sessao->getNivelAcesso() == Sessao::NIVEL_ADM || $sessao->getNivelAcesso() == Sessao::NIVEL_TECNICO) {
 			$sessao = new Sessao();
@@ -523,11 +514,7 @@ class OcorrenciaController
 		}
 		$services = $queryService->get();
 
-		if (count($listaNaoAvaliados) == 0) {
-			echo '<h3 class="pb-4 mb-4 font-italic border-bottom">Cadastrar Ocorrência</h3>';
-			echo view('partials.form-insert-order', ['services' => $services, 'email' => $this->sessao->getEmail()]);
-		} else {
-
+		if (count($listaNaoAvaliados) > 0) {
 			echo view(
 				'partials.index-orders',
 				[
@@ -537,6 +524,9 @@ class OcorrenciaController
 					'strShow' => 'show'
 				]
 			);
+		} else {
+			echo '<h3 class="pb-4 mb-4 font-italic border-bottom">Cadastrar Ocorrência</h3>';
+			echo view('partials.form-insert-order', ['services' => $services, 'email' => $this->sessao->getEmail()]);
 		}
 		echo '
                 </div>
@@ -544,13 +534,13 @@ class OcorrenciaController
 	}
 
 
-	public function mainAjax()
+	public function addOrder()
 	{
+
 		if (!isset($_POST['enviar_ocorrencia'])) {
 			return;
 		}
-
-
+		$request = request();
 
 		if (!(isset($_POST['descricao']) &&
 			isset($_POST['campus'])  &&
@@ -563,126 +553,123 @@ class OcorrenciaController
 			return;
 		}
 
-		$ocorrencia = new Ocorrencia();
-		$usuario = new Usuario();
 		$sessao = new Sessao();
-		$usuario->setId($sessao->getIdUsuario());
 
-
-		$usuarioDao = new UsuarioDAO($this->dao->getConnection());
-
-		$usuarioDao->fillById($usuario);
-		$sessao = new Sessao();
-		$ocorrencia->setIdLocal($sessao->getIdUnidade());
-		$ocorrencia->setLocal($sessao->getUnidade());
-
-		if (trim($ocorrencia->getLocal()) == "") {
-			$ocorrencia->setLocal('Não Informado');
-		}
-		if (trim($ocorrencia->getIdLocal()) == "") {
-			$ocorrencia->setIdLocal(1);
-		}
-
-		$ocorrencia->setStatus(OcorrenciaController::STATUS_ABERTO);
-
-		$ocorrencia->getServico()->setId($_POST['servico']);
-		$servicoDao = new ServicoDAO($this->dao->getConnection());
-		$servicoDao->fillById($ocorrencia->getServico());
-		$ocorrencia->getAreaResponsavel()->setId($ocorrencia->getServico()->getAreaResponsavel()->getId());
-
-		$ocorrencia->setDescricao($_POST['descricao']);
-		$ocorrencia->setCampus($_POST['campus']);
-		$ocorrencia->setPatrimonio($_POST['patrimonio']);
-		$ocorrencia->setRamal($_POST['ramal']);
-		$ocorrencia->setEmail($_POST['email']);
-		$ocorrencia->setDataAbertura(date("Y-m-d H:i:s"));
-		if (!file_exists('uploads/ocorrencia/anexo/')) {
-			mkdir('uploads/ocorrencia/anexo/', 0777, true);
-		}
-
-		if ($_FILES['anexo']['name'] != null) {
-			if (!file_exists('uploads/')) {
-				mkdir('uploads/', 0777, true);
+		$novoNome = "";
+		if ($request->hasFile('anexo')) {
+			$anexo = $request->file('anexo');
+			if (!Storage::exists('public/uploads')) {
+				Storage::makeDirectory('public/uploads');
 			}
-			$novoNome = $_FILES['anexo']['name'];
 
-			if (file_exists('uploads/' . $_FILES['anexo']['name'])) {
+			$novoNome = $anexo->getClientOriginalName();
+
+			if (Storage::exists('public/uploads/' . $anexo->getClientOriginalName())) {
 				$novoNome = uniqid() . '_' . $novoNome;
 			}
 
 			$extensaoArr = explode('.', $novoNome);
 			$extensao = strtolower(end($extensaoArr));
 
-			$extensoes_permitidas = array(
+			$extensoes_permitidas = [
 				'xlsx', 'xlsm', 'xlsb', 'xltx', 'xltm', 'xls', 'xlt', 'xls', 'xml', 'xml', 'xlam', 'xla', 'xlw', 'xlr',
 				'doc', 'docm', 'docx', 'docx', 'dot', 'dotm', 'dotx', 'odt', 'pdf', 'rtf', 'txt', 'wps', 'xml', 'zip', 'rar', 'ovpn',
 				'xml', 'xps', 'jpg', 'gif', 'png', 'pdf', 'jpeg'
-			);
+			];
 
-			if (!(in_array($extensao, $extensoes_permitidas))) {
+			if (!in_array($extensao, $extensoes_permitidas)) {
 				echo ':falha:Extensão não permitida. Lista de extensões permitidas a seguir. ';
 				echo '(' . implode(", ", $extensoes_permitidas) . ')';
 				return;
 			}
 
 
-			if (!move_uploaded_file($_FILES['anexo']['tmp_name'], 'uploads/' . $novoNome)) {
+			if (!$anexo->storeAs('public/uploads/', $novoNome)) {
 				echo ':falha:arquivo não pode ser enviado';
 				return;
 			}
-			$ocorrencia->setAnexo($novoNome);
 		}
 
-		$ocorrencia->setLocalSala($_POST['local_sala']);
+		$user = DB::table('usuario')->where('id', $sessao->getIdUsuario())->first();
 
-		$ocorrencia->getUsuarioCliente()->setId($sessao->getIdUsuario());
+		$service = DB::table('servico')
+			->select(
+				'servico.*',
+				'area_responsavel.nome as area_responsavel_nome',
+				'area_responsavel.descricao as area_responsavel_descricao'
+			)->join(
+				'area_responsavel',
+				'servico.id_area_responsavel',
+				'=',
+				'area_responsavel.id'
+			)
+			->where('servico.id', '=', $_POST['servico'])
+			->first();
 
 
+		try {
+			DB::beginTransaction();
 
-		$statusOcorrencia = new StatusOcorrencia();
-		$statusOcorrencia->setDataMudanca(date("Y-m-d H:i:s"));
-		$statusOcorrencia->getStatus()->setId(2);
-		$statusOcorrencia->setUsuario($usuario);
-		$statusOcorrencia->setMensagem("Ocorrência liberada para que qualquer técnico possa atender.");
+			$data =
+				[
+					'id_area_responsavel' =>  $service->id_area_responsavel,
+					'id_servico' => $service->id,
+					'id_local' => $sessao->getIDUnidade(),
+					'id_usuario_cliente' => $sessao->getIdUsuario(),
+					'descricao' => $request->descricao,
+					'campus' => $request->campus,
+					'patrimonio' => $request->patrimonio,
+					'ramal' => $request->ramal,
+					'local' => $request->local,
+					'status' => 'a',
+					'email' => $request->email,
+					'anexo' => $novoNome,
+					'local_sala' => $request->local_sala,
+					'data_abertura' => date("Y-m-d H:i:s")
+				];
 
-		$this->dao->getConnection()->beginTransaction();
 
-		if ($this->dao->insert($ocorrencia)) {
-			$id = $this->dao->getConnection()->lastInsertId();
-			$ocorrencia->setId($id);
-			$statusOcorrencia->setOcorrencia($ocorrencia);
-			if ($this->dao->insertStatus($statusOcorrencia)) {
-				echo ':sucesso:' . $id . ':';
+			$ocorrenciaInsertedId = DB::table('ocorrencia')->insertGetId($data);
 
-				$this->emailAbertura($statusOcorrencia);
-				$this->dao->getConnection()->commit();
+			DB::table('status_ocorrencia')->insert([
+				'id_ocorrencia' => $ocorrenciaInsertedId,
+				'id_status' => 2,
+				'mensagem' => "Ocorrência liberada para que qualquer técnico possa atender.",
+				'id_usuario' => $user->id,
+				'data_mudanca' => date("Y-m-d H:i:s"),
+			]);
+
+			$mail = new Mail();
+
+			$assunto = "[3S] - Chamado Nº " . $ocorrenciaInsertedId;
+			$corpo =  '<p>Prezado(a) ' . $user->nome . ' ,</p>';
+			$corpo .= '<p>Sua solicitação foi realizada com sucesso, solicitação
+			<a href="https://3s.unilab.edu.br/?page=ocorrencia&selecionar='
+				. $ocorrenciaInsertedId . '">Nº' . $ocorrenciaInsertedId . '</a></p>';
+			$corpo .= '<ul>
+							<li>Serviço Solicitado: ' . $service->nome . '</li>
+							<li>Descrição do Problema: ' . $request->descricao . '</li>
+							<li>Setor Responsável: ' . $service->area_responsavel_nome .
+				' - ' . $service->area_responsavel_descricao . '</li>
+					</ul><br><p>Mensagem enviada pelo sistema 3S. Favor não responder.</p>';
+
+			$send = $mail->enviarEmail($user->email, $user->nome, $assunto, $corpo);
+
+			if ($send) {
+				echo ':sucesso:' . $ocorrenciaInsertedId . ':';
+				DB::commit();
 			} else {
-				echo ':falha';
-				$this->dao->getConnection()->rollBack();
+				DB::rollBack();
+				echo ':falha:emailNotSent';
 			}
-		} else {
-			echo ':falha';
-			$this->dao->getConnection()->rollBack();
+		} catch (\Exception $e) {
+			DB::rollBack();
+			echo $e->getMessage();
+			echo ':falha:dbException';
 		}
 	}
 
-	public function emailAbertura(StatusOcorrencia $statusOcorrencia)
-	{
-		$mail = new Mail();
-		$destinatario = $statusOcorrencia->getOcorrencia()->getEmail();
-		$nome = $statusOcorrencia->getUsuario()->getNome();
-		$assunto = "[3S] - Chamado Nº " . $statusOcorrencia->getOcorrencia()->getId();
-		$corpo =  '<p>Prezado(a) ' . $statusOcorrencia->getUsuario()->getNome() . ' ,</p>';
-		$corpo .= '<p>Sua solicitação foi realizada com sucesso, solicitação <a href="https://3s.unilab.edu.br/?page=ocorrencia&selecionar=' . $statusOcorrencia->getOcorrencia()->getId() . '">Nº' . $statusOcorrencia->getOcorrencia()->getId() . '</a></p>';
-		$corpo .= '<ul>
-                        <li>Serviço Solicitado: ' . $statusOcorrencia->getOcorrencia()->getServico()->getNome() . '</li>
-                        <li>Descrição do Problema: ' . $statusOcorrencia->getOcorrencia()->getDescricao() . '</li>
-                        <li>Setor Responsável: ' . $statusOcorrencia->getOcorrencia()->getServico()->getAreaResponsavel()->getNome() . ' -
-                        ' . $statusOcorrencia->getOcorrencia()->getServico()->getAreaResponsavel()->getDescricao() . '</li>
-                </ul><br><p>Mensagem enviada pelo sistema 3S. Favor não responder.</p>';
 
-		$mail->enviarEmail($destinatario, $nome, $assunto, $corpo);
-	}
 	public function possoPedirAjuda()
 	{
 		if ($this->sessao == Sessao::NIVEL_DESLOGADO) {

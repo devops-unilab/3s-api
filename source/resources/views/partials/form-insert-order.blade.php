@@ -1,5 +1,5 @@
 <div class="card card-body">
-    <form id="insert_form_ocorrencia" method="post" action="" enctype="multipart/form-data">
+    <form method="post" action="" enctype="multipart/form-data">
         <span class="titulo medio">Informe os dados para cadastro</span><br>
         <div class="row">
             <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12">
@@ -40,7 +40,6 @@
             </div>
             <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12">
                 <div class="row">
-                    <!--Campus Local Sala Contato(Ramal e email)-->
                     <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
                         <label for="campus">Campus*</label>
                         <select name="campus" id="select-campus" required>
@@ -79,12 +78,12 @@
         </div>
         <input type="hidden" name="enviar_ocorrencia" value="1">
 
-    </form>
+
 
 
 </div><br><br>
 <div class="d-flex justify-content-center m-3">
-    <button id="btn-inserir-ocorrencia" form="insert_form_ocorrencia" type="submit" class="btn btn-primary">Cadastrar
-        Ocorrência</button>
-
+    <button type="submit" class="btn btn-primary">
+        Cadastrar Ocorrência</button>
+    </form>
 </div><br><br>
