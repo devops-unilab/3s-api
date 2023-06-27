@@ -1,0 +1,25 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: app3s-laravel
+  name: app3s-laravel
+  annotations:
+    prometheus.io/scrape: 'true'
+    prometheus.io/path: /
+    prometheus.io/port: '8080'
+    metallb.universe.tf/address-pool: int-pool
+spec:
+  type: LoadBalancer
+  externalTrafficPolicy: Local
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 80
+    name: http
+  - protocol: TCP
+    port: 37389
+    targetPort: 22
+    name: ssh
+  selector:
+    app: app3s-laravel

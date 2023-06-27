@@ -500,3 +500,5 @@ composer.phar
 /source/public/uploads
 /source/vendor
 /vault
+**/development
+/kubernetes/kustomize/*.yaml

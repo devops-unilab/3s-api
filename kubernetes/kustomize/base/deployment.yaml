@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app3s-laravel
+  namespace: app3s
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: app3s-laravel
+  template:
+    metadata:
+      labels:
+        app: app3s-laravel
+    spec:
+      containers:
+      - name: app3s-laravel
+        image: dti-registro.unilab.edu.br/unilab/app-3s:main
+        resources: {}
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 80
+          name: http
+        - containerPort: 22
+          name: ssh
+        envFrom:
+        - configMapRef:
+            name: app3s-config
+        volumeMounts:
+        - name: tz-america
+          mountPath: /etc/localtime
+        - name: app3s-uploads
+          mountPath: /var/www/html/public/uploads
+      volumes:
+      - name: tz-america
+        hostPath:
+          path: /usr/share/zoneinfo/America/Fortaleza
+          type: File
+      - name: app3s-uploads
+        persistentVolumeClaim:
+          claimName: pvc-3s-laravel
+      imagePullSecrets:
+      - name: harbor-regcred

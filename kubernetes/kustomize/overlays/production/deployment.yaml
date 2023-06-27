@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app3s-laravel
+  namespace: app3s
+spec:
+  selector:
+    matchLabels:
+      app: app3s-laravel
+  template:
+    metadata:
+      labels:
+        app: app3s-laravel
+      annotations:
+        vault.hashicorp.com/agent-inject: "true"
+        vault.hashicorp.com/agent-inject-status: 'update'
+        vault.hashicorp.com/tls-skip-verify: "true"
+        vault.hashicorp.com/agent-inject-secret-config: 'secret/data/3s/config'
+        vault.hashicorp.com/agent-inject-template-config: |
+          {{ with secret "secret/data/3s/config" -}}
+           export DB_PASSWORD='{{ .Data.data.pg_password }}'
+           export DB_USERNAME='{{ .Data.data.pg_user }}'
+           export DB_DATABASE_SIGAA='{{ .Data.data.db_database_sigaa }}'
+           export DB_USERNAME_SIGAA='{{ .Data.data.db_username_sigaa }}'
+           export DB_PASSWORD_SIGAA='{{ .Data.data.db_password_sigaa }}'
+           export DB_HOST='{{ .Data.data.db_host }}'
+           export DB_HOST_SIGAA='{{ .Data.data.db_host_sigaa }}'
+          {{- end }}
+        vault.hashicorp.com/role: "3s-role"
+        vault.hashicorp.com/auth-path: auth/kubernetes/c1
+    spec:
+      serviceAccountName: "sa-3s"
+      containers:
+      - name: app3s-laravel
+        command:
+        - /bin/bash
+        - -cp
+        - |
+          source /vault/secrets/config
+          php artisan config:clear
+          apache2-foreground
+        resources:
+          requests:
+            cpu: 200m
+            memory: 256Mi
+          limits:
+            cpu: 2
+            memory: 3Gi
+
