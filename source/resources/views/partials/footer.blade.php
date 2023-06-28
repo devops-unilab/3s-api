@@ -50,11 +50,11 @@
     <script src="js/mensagem_forum.js?a=174"></script>
 @endif
 @if (isset($_GET['page']) && $_GET['page'] == 'painel_kamban')
-    <script src="js/painel_kamban.js?123=a"></script>
+    <script src="js/painel_kamban.js?123=123"></script>
 @endif
 @if (isset($_GET['page']) && $_GET['page'] == 'painel_tabela')
-    <script src="js/painel_tabela.js"></script>
+    <script src="js/painel_tabela.js?a=12"></script>
 @endif
-<script src="js/status_ocorrencia.js?a=1"></script>
+<script src="js/status_ocorrencia.js"></script>
 
 </html>

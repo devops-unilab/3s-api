@@ -1,5 +1,5 @@
 $(document).ready(function(e){
-	
+
 	var urlTabela = '?ajax=painel_tabela';
 	var urlSelecionada = urlTabela;
 	$("#select-setores").change(function(){
@@ -8,18 +8,18 @@ $(document).ready(function(e){
 		var setores = '&setores=';
 		setores += dados.join(',');
 		urlSelecionada = urlTabela+setores;
-		
+
 	});
-	
+
 	$('#select-setores').selectize({
     	maxItems: 50
 	});
 	$("#btn-expandir-tela").on('click', function(e){
 		$( "main" ).toggleClass("container");
 		$( "#cabecalho" ).toggleClass("escondido");
-		$("#tabela-quadro").toggleClass("display-3");	
+		$("#tabela-quadro").toggleClass("display-3");
 	});
-	
+
 
 	function carregarDados(url2){
 		$.ajax({
@@ -29,11 +29,11 @@ $(document).ready(function(e){
 				$('#quadro-tabela').html(response);
 			}
 		});
-	}	
+	}
 	setInterval (function () {
 		carregarDados(urlSelecionada);
-	}, 1000); 
-	
+	}, 60000);
+
 });
 
 
