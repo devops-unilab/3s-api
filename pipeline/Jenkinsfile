@@ -126,10 +126,9 @@ pipeline {
             # Obtem o vendor
             cd source/
             composer install --ignore-platform-reqs --no-interaction --no-progress --no-scripts --optimize-autoloader
-            cd ..
-            mv source/.env.example source/.env
-            ls -la source/
-            ls -la source/public
+            mv .env.example .env
+            ls -la .
+            ls -la public
           '''
         }
       }
