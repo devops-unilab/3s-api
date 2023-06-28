@@ -77,7 +77,7 @@
                         <b> Descricao: </b>{{ $order->descricao }}<br>
 
                     @if (trim($order->anexo) != '')
-                        <b>Anexo: </b><a target="_blank" href="uploads/{{$order->anexo}}"> Clique aqui</a> <br>
+                        <b>Anexo: </b><a target="_blank" href="{{asset('storage/uploads/'.$order->anexo)}}">Clique aqui</a><br>
                     @endif
                     </div>
                 </div>

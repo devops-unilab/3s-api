@@ -45,7 +45,7 @@
 <script src="js/change-contraste.js?a=1"></script>
 <script src="js/ocorrencia_selectize.js?a=1"></script>
 <script src="js/jquery.easyPaginate.js?a=1"></script>
-<script src="js/ocorrencia.js?a=1451"></script>
+<script src="js/ocorrencia.js?a=14513"></script>
 @if (isset($_GET['page']) && $_GET['page'] == 'ocorrencia' && isset($_GET['selecionar']))
     <script src="js/mensagem_forum.js?a=172"></script>
 @endif

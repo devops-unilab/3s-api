@@ -656,16 +656,28 @@ class OcorrenciaController
 			$send = $mail->enviarEmail($user->email, $user->nome, $assunto, $corpo);
 
 			if ($send) {
-				echo ':sucesso:' . $ocorrenciaInsertedId . ':';
 				DB::commit();
+				echo '<div class="alert alert-success" role="alert">
+						Ocorrência adicionada com sucesso!
+			  			</div>';
+				echo '<META HTTP-EQUIV="REFRESH" CONTENT="1; URL=?page=ocorrencia&selecionar=' . $ocorrenciaInsertedId . '">';
 			} else {
+				echo '
+				<div class="alert alert-danger" role="alert">
+  					Falha ao tentar cadastrar ocorrência.
+				</div>
+				';
 				DB::rollBack();
-				echo ':falha:emailNotSent';
+				echo '<META HTTP-EQUIV="REFRESH" CONTENT="1; URL=?page=ocorrencia&cadastrar=1">';
 			}
 		} catch (\Exception $e) {
+			echo '
+				<div class="alert alert-danger" role="alert">
+  					Falha ao tentar cadastrar ocorrência.
+				</div>
+				';
 			DB::rollBack();
-			echo $e->getMessage();
-			echo ':falha:dbException';
+			echo '<META HTTP-EQUIV="REFRESH" CONTENT="1; URL=?page=ocorrencia&cadastrar=1">';
 		}
 	}
 
