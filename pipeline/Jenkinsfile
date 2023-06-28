@@ -13,7 +13,8 @@ def secrets = [
     [envVar: 'PG_USER_ROOT', vaultKey: 'pg_user_root'],
     [envVar: 'PG_ROOT_PASSWORD', vaultKey: 'pg_root_password'],
     [envVar: 'DB_USER_DUMP', vaultKey: 'db_user_dump'],
-    [envVar: 'DB_PASSWORD_DUMP', vaultKey: 'db_password_dump']
+    [envVar: 'DB_PASSWORD_DUMP', vaultKey: 'db_password_dump'],
+    [envVar: 'HARBOR_REGCRED', isRequired: false, vaultKey: 'regcred']
   ]],
 ]
 
@@ -38,15 +39,17 @@ pipeline {
   }
 
   environment {
-    /* 3S */
-    APP_NAME = "app-3s"
-    APP_NAMESPACE = "app-3s"
+    /* Application */
+    APP_NAMESPACE_PROD = "app3s-prod"
+    APP_NAMESPACE_STAG = "app3s-stag"
+    INGRESS_NAME = "app3s-laravel"
+    IMAGE_PREFIX_NAME = "app-3s"
     APP_EP_PROD = "3s.unilab.edu.br"
     APP_EP_STAG = "3shomologacao.unilab.edu.br"
     TAG = sh(returnStdout: true, script: "git describe --tags --abbrev=0").trim()
     APP_VERSION = "${env.TAG}"
+    DOCKER_IMAGE = "dti-registro.unilab.edu.br/unilab/${IMAGE_PREFIX_NAME}"
     DOCKER_TAG = "${env.GIT_BRANCH.split('/')[-1]}"
-    DOCKER_IMAGE = "dti-registro.unilab.edu.br/unilab/${APP_NAME}"
     BUILD_NUMBER = "${env.BUILD_NUMBER}"
     /* Database 3S */
     PG_USER = "*"
@@ -58,7 +61,6 @@ pipeline {
     PG_HOST = "10.130.0.154"
     PG_PORT = "5432"
     /* Database Migrations */
-    DB_MIGRATE_STATUS = "MIGRADO" // MIGRADO | NAO-MIGRADO (default)
     DB_USER_DUMP = "*"
     DB_PASSWORD_DUMP = "*"
     DB_DATABASE_DUMP = "ocorrencias"
@@ -73,63 +75,99 @@ pipeline {
     THREAD_COUNT = 6
     SEMGREP_TIMEOUT = "300"
     JENKINS_URL = "https://dti-jenkins.unilab.edu.br"
-    RECIPIENT_LEAD_EMAILS = "giancarlo@unilab.edu.br"
-    RECIPIENT_TEAM_EMAILS = "erivandosena@gmail.com, jefponte@unilab.edu.br"
+    RECIPIENT_TEAM_EMAILS = "j.pontee@gmail.com, erivandosena@gmail.com"
+    RECIPIENT_APPROVAL_EMAILS = "giancarlo@unilab.edu.br, jefponte@unilab.edu.br"
+    RECIPIENT_LEAD_EMAILS = "dti-l@unilab.edu.br"
     K8S_CLUSTER = "c1"
     VAULT_ADDR = "https://dti-vault.unilab.edu.br"
     SONAR_URL = "https://dti-sonar.unilab.edu.br"
     SONAR_PROJECT_KEY = "app-3s-prod"
-    APROVADORES = "admin, erivandosena, jefponte"
+    APROVADORES = "admin, erivandosena, jefponte, giancarlo"
   }
 
   stages {
     stage('Iniciando CI/CD') {
       steps {
-        milestone(ordinal: null, label: "Milestone: Setup")
         script {
-          currentBuild.displayName = "$BUILD_DISPLAY_NAME (${GIT_COMMIT.take(8)})"
-          workspace = "$env.WORKSPACE"
+          // executar alguns comandos shell para configurar outros detalhes.
+          sh '''
+            # Instala pacotes
+            apt-get update && apt-get upgrade -y
+            apt-get install -y locales sudo curl wget postgresql-client unzip rsync procps git
+
+            # Setup locale
+            DEBIAN_FRONTEND=noninteractive dpkg-reconfigure locales
+            sed -i 's/# pt_BR.UTF-8 UTF-8/pt_BR.UTF-8 UTF-8/' /etc/locale.gen
+            locale-gen pt_BR.UTF-8
+            echo LANG=pt_BR.UTF-8 | tee /etc/default/locale
+            echo LC_CTYPE=pt_BR.UTF-8 | tee -a /etc/default/locale
+            echo LC_ALL=pt_BR.UTF-8 | tee -a /etc/default/locale
+            echo LANGUAGE=pt_BR:pt:en | tee -a /etc/default/locale
+
+            # Instala kubectl
+            curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+            curl -LO "https://dl.k8s.io/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl.sha256"
+            echo "$(cat kubectl.sha256)  kubectl" | sha256sum --check
+            chmod u+x ./kubectl
+            install -o root -g root -m 0755 kubectl /usr/bin/kubectl
+            kubectl version --client -ojson
+
+            # Instala Vault
+            curl -o vault.zip -k https://releases.hashicorp.com/vault/1.12.1/vault_1.12.1_linux_amd64.zip; yes | unzip vault.zip
+          '''
+
+          // Ler cofre (Vault)
+          withVault(configuration: [
+            engineVersion: 2,
+            skipSslVerification: true,
+            timeout: 60,
+            vaultCredentialId: 'token-admin-vault-plugin',
+            vaultUrl: 'https://dti-vault.unilab.edu.br'],
+            vaultSecrets: getSecretsHarborConfig()) {
+              sh 'touch .env'
+              sh "echo 'HARBOR_USERNAME:${env.HARBOR_USERNAME}' > .env"
+              sh "echo 'HARBOR_PASSWORD:${env.HARBOR_PASSWORD}' >> .env" 
+              sh "echo 'HARBOR_REGCRED:${env.HARBOR_REGCRED}' >> .env"
+            }
+              
+          def envFile = readFile('.env').trim()
+          def envLines = envFile.tokenize('\n')
+          envLines.each { line ->
+            def parts = line.tokenize(':')
+            def key = parts[0].trim()
+            def value = parts[1]
+            env."${key}" = "${value}"
+          } 
+
         }
+      }
+    }
 
-        // executar alguns comandos shell para configurar outros detalhes.
-        sh '''
-          # Instala pacotes
-          apt-get update && apt-get upgrade -y
-          apt-get install -y locales sudo curl wget postgresql-client unzip rsync procps git
+    stage('Build Application') {
+      steps {
+        script {
+          sh '''
+            # Instala compose
+            curl -sS https://getcomposer.org/installer -o composer-setup.php
+            php composer-setup.php --install-dir=/usr/local/bin --filename=composer
+            chown -R www-data:www-data /usr/local/bin/composer
 
-          # Setup locale
-          DEBIAN_FRONTEND=noninteractive dpkg-reconfigure locales
-          sed -i 's/# pt_BR.UTF-8 UTF-8/pt_BR.UTF-8 UTF-8/' /etc/locale.gen
-          locale-gen pt_BR.UTF-8
-          echo LANG=pt_BR.UTF-8 | tee /etc/default/locale
-          echo LC_CTYPE=pt_BR.UTF-8 | tee -a /etc/default/locale
-          echo LC_ALL=pt_BR.UTF-8 | tee -a /etc/default/locale
-          echo LANGUAGE=pt_BR:pt:en | tee -a /etc/default/locale
+            # Obtem o vendor
+            cd source/
+            composer install --ignore-platform-reqs --no-interaction --no-progress --no-scripts --optimize-autoloader
+            cd ..
+            mv source/.env.example source/.env
+            ls -la source/
+            ls -la source/public
+          '''
+        }
+      }
+    }
 
-          # Instala kubectl
-          curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
-          curl -LO "https://dl.k8s.io/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl.sha256"
-          echo "$(cat kubectl.sha256)  kubectl" | sha256sum --check
-          chmod u+x ./kubectl
-          install -o root -g root -m 0755 kubectl /usr/bin/kubectl
-          kubectl version --client -ojson
-
-          # Instala Vault
-          curl -o vault.zip -k https://releases.hashicorp.com/vault/1.12.1/vault_1.12.1_linux_amd64.zip; yes | unzip vault.zip
-
-          # Instala compose
-          curl -sS https://getcomposer.org/installer -o composer-setup.php
-          php composer-setup.php --install-dir=/usr/local/bin --filename=composer
-          chown -R www-data:www-data /usr/local/bin/composer
-
-          # Obtem o vendor
-          cd source/
-          composer install --ignore-platform-reqs --no-interaction --no-progress --no-scripts --optimize-autoloader
-          cd ..
-          mv source/.env.example source/.env
-          ls -la source/
-          ls -la source/public
-        '''
+    stage('Testes') {
+      steps {
+        sh 'cd source/ && php artisan key:generate'
+        sh 'source/vendor/bin/phpunit --no-configuration --no-extensions source/tests/'
       }
     }
 
@@ -167,28 +205,15 @@ pipeline {
       }
     }
 
-    stage('Testes') {
-      steps {
-        sh 'cd source/ && php artisan key:generate'
-        sh 'source/vendor/bin/phpunit --no-configuration --no-extensions source/tests/'
-      }
-    }
-
-    stage('Build') {
-      steps {
-        container('docker') {
-          milestone(ordinal: null, label: "Milestone: Docker Build")
-          timeout(time: 60, unit: 'MINUTES') {
-            sh "docker build -f ./Dockerfile --target production -t '$DOCKER_IMAGE:$DOCKER_TAG' --build-arg 'VERSION=$APP_VERSION COMMIT_SHA=$GIT_COMMIT BUILDKIT_INLINE_CACHE=1' --no-cache ."
-          }
-        }
-      }
-    }
-
-    stage('Push Image Container') {
+    stage('Docker Container') {
       steps {
         script {
           container('docker') {
+
+            timeout(time: 60, unit: 'MINUTES') {
+              sh "docker build -f ./Dockerfile --target production -t '$DOCKER_IMAGE:$DOCKER_TAG' --build-arg 'VERSION=$APP_VERSION COMMIT_SHA=$GIT_COMMIT BUILDKIT_INLINE_CACHE=1' --no-cache ."
+            }
+
             env.VAULT_ADDR = "https://dti-vault.unilab.edu.br"
             withCredentials([
             string(credentialsId: 'role-harbor', variable: 'ROLE_ID'),
@@ -199,59 +224,17 @@ pipeline {
               env.HARBOR_USERNAME = sh(script: './vault kv get -tls-skip-verify -field=usuario secret/harbor/config', returnStdout: true).trim()
               env.HARBOR_PASSWORD = sh(script: './vault kv get -tls-skip-verify -field=senha secret/harbor/config', returnStdout: true).trim()
 
-              milestone(ordinal: null, label: "Milestone: Docker Push")
               timeout(time: 15, unit: 'MINUTES') {
 
               sh """
                 echo \${HARBOR_PASSWORD} | docker login --username \${HARBOR_USERNAME} --password-stdin https://dti-registro.unilab.edu.br
                 unset HARBOR_PASSWORD
                 docker tag \${DOCKER_IMAGE}:\${DOCKER_TAG} \${DOCKER_IMAGE}:\${TAG}
+                docker push \${DOCKER_IMAGE}:\${DOCKER_TAG}
                 docker push \${DOCKER_IMAGE}:\${TAG}
               """
               }
             }
-          }
-        }
-      }
-    }
-
-    stage('Database Migrate') {
-      steps {
-        script {
-          if (env.DB_MIGRATE_STATUS != "MIGRADO") {
-
-            withKubeConfig([credentialsId: 'kubeconfig-c1', serverUrl: 'https://dti-k8s-c1.unilab.edu.br:6443']) {
-              sh '''
-                if ! kubectl get statefulset postgres -n postgres-3s >/dev/null 2>&1; then
-                  kubectl apply -f ./kubernetes/statefulSet-postgres-3s.yaml --record
-                fi
-                echo "Lista de recursos."
-                kubectl get all,sa,ing,pvc -n postgres-3s -o wide
-              '''
-            }
-
-            withVault([configuration: configuration, vaultSecrets: secrets]) {
-              withEnv([
-                "PG_USER=${env.PG_USER}",
-                "PG_PASSWORD=${env.PG_PASSWORD}",
-                "PG_USER_ROOT=${env.PG_USER_ROOT}",
-                "PG_ROOT_PASSWORD=${env.PG_ROOT_PASSWORD}",
-                "DB_USER_DUMP=${env.DB_USER_DUMP}",
-                "DB_PASSWORD_DUMP=${env.DB_PASSWORD_DUMP}"
-              ]) {
-                sh """
-                  echo '${env.PG_HOST}:${env.PG_PORT}:*:${env.PG_USER_ROOT}:${env.PG_ROOT_PASSWORD}' > '${env.PGPASSFILE}'
-                  echo '${env.PG_HOST}:${env.PG_PORT}:*:${env.PG_USER}:${env.PG_PASSWORD}' >> '${env.PGPASSFILE}'
-                  echo '${env.HOST_DUMP}:${env.PORT_DUMP}:*:${env.DB_USER_DUMP}:${env.DB_PASSWORD_DUMP}' >> '${env.PGPASSFILE}'
-                  chmod 0600 '${env.PGPASSFILE}'
-                  cat '${env.PGPASSFILE}'
-
-                  chmod +x source/bash/database/setup-databases.sh
-                  ./source/bash/database/setup-databases.sh
-                """
-              }
-            }
-
           }
         }
       }
@@ -271,48 +254,25 @@ pipeline {
               "DB_PASSWORD_DUMP=${env.DB_PASSWORD_DUMP}"
             ]) {
 
-              if (env.DB_MIGRATE_STATUS != "MIGRADO") {
-                sh ''' #!/bin/bash
-                  chmod +x source/bash/database/dump-database.sh
-                  chmod +x source/bash/database/restore-database.sh
-                  ./source/bash/database/dump-database.sh
-                  ./source/bash/database/restore-database.sh restore_postgres_homolog
-                '''
-              }
-
-              sh """
-                sed -i 's/3s@noreply.unilab.edu.br/3s-staging@noreply.unilab.edu.br/' ./kubernetes/deployment-3s.yaml
-                sed -i 's/3S - Sistema de Solicitacao de Ocorrencias/[HOMOLOGAÇÃO] 3S - Sistema de Solicitacao de Ocorrencias/' ./kubernetes/deployment-3s.yaml
-                sed -i 's/devops.unilab.edu.br/${env.APP_EP_STAG}/g' ./kubernetes/deployment-3s.yaml
-                sed -i 's/APP_DEBUG: "false"/APP_DEBUG: "true"/' ./kubernetes/deployment-3s.yaml
-                sed -i 's/LOG_LEVEL: "error"/LOG_LEVEL: "debug"/' ./kubernetes/deployment-3s.yaml
-                sed -i 's/postgres.postgres-3s.svc.cluster.local/10.130.0.154/' ./kubernetes/deployment-3s.yaml
-                sed -i 's/3s-ocorrencias/3s-homologacao/' ./kubernetes/deployment-3s.yaml
-                sed -i 's/.db_password_sigaa/.db_password_sigaa_holog/' ./kubernetes/deployment-3s.yaml
-                sed -i 's/.db_host_sigaa/.db_host_sigaa_holog/' ./kubernetes/deployment-3s.yaml
-                sed -i 's/:latest/:${env.DOCKER_TAG}/' ./kubernetes/deployment-3s.yaml
-                sed -i 's/auth\\/kubernetes\\/c1/auth\\/kubernetes\\/c3/' ./kubernetes/deployment-3s.yaml
-                sed -i 's/10.130.0.153/10.130.2.153/' ./kubernetes/deployment-3s.yaml
-                cat ./kubernetes/deployment-3s.yaml
-              """
+              sh '''
+                sed -i "s/aGFyYm9y/${HARBOR_REGCRED}/" ./kubernetes/kustomize/base/secret-regcred.yaml
+                sed -i "s/: latest/: ${DOCKER_TAG}/" ./kubernetes/kustomize/overlays/staging/kustomization.yaml
+                # sed -i "s/1.0.0-alfa1/${DOCKER_TAG}-alfa1/" ./kubernetes/kustomize/overlays/staging/configmap.yaml
+                kubectl kustomize ./kubernetes/kustomize/overlays/staging > /tmp/temp-staging.yaml
+                cat /tmp/temp-staging.yaml
+              '''
             }
           }
 
           withKubeConfig([credentialsId: 'kubeconfig-c3', serverUrl: 'https://dti-k8s-c3.unilab.edu.br:6443']) {
-            sh """
-              echo 'Verifica deploy ativo e exclui.'
-              kubectl get deployment $APP_NAME -n $APP_NAMESPACE >/dev/null 2>&1 && \
-              (kubectl get pods -l $APP_NAME -n $APP_NAMESPACE --no-headers | wc -l) > 0 && \
-              kubectl delete pods -l app=$APP_NAME -n $APP_NAMESPACE --force --grace-period=0; \
-              kubectl delete deployment $APP_NAME -n $APP_NAMESPACE || echo 'DEPLOYMENT INEXISTENTE!'
-
-              echo 'Aplica deploy.'
-              kubectl apply -f ./kubernetes/deployment-3s.yaml --record
-
-              echo 'Lista de recursos.'
-              kubectl get all,sa,ing,pvc -n $APP_NAMESPACE -o wide
-            """
-            env.APP_URI_STAGING = sh(script: 'kubectl get ingress app-3s -n app-3s -o jsonpath="{.spec.rules[0].host}" | sed "s/^/http:\\/\\//"', returnStdout: true).trim()
+            sh 'kubectl create namespace $APP_NAMESPACE_STAG --dry-run=client -o yaml | kubectl apply -f -'
+            def status = sh(script: 'kubectl get pods -n ${APP_NAMESPACE_STAG} --field-selector=status.phase=Running --no-headers 2>/dev/null | wc -l', returnStdout: true).trim()
+            if (Integer.parseInt(status) > 0) { sh 'kubectl delete -k ./kubernetes/kustomize/overlays/staging/ --ignore-not-found' }
+            sh '''
+              kubectl apply -k ./kubernetes/kustomize/overlays/staging/ --record
+              kubectl get all,ing,pvc,sa,secret -n $APP_NAMESPACE_STAG -o wide
+            '''
+            env.APP_URI_STAGING = sh(script: 'kubectl get ingress $INGRESS_NAME -n $APP_NAMESPACE_STAG -o jsonpath="{.spec.rules[0].host}" | sed "s/^/http:\\/\\//"', returnStdout: true).trim()
             withEnv(["APP_URI=${env.APP_URI_STAGING}"]) {
               sh 'echo Endpoint: $APP_URI_STAGING'
             }
@@ -328,7 +288,7 @@ pipeline {
             emailext (
               mimeType: 'text/html',
               subject: "🚀 Aprovar Deploy [${env.JOB_NAME}] ${currentBuild.fullDisplayName}",
-              to: "${env.RECIPIENT_LEAD_EMAILS}",
+              to: "${env.RECIPIENT_APPROVAL_EMAILS}",
               body: """
                   <p>Prezado(a) Leader</p>Existe um Continuous Deployment (CD) aguardando aprovação para produção.
                   <h3><a href='${BUILD_URL}input'><strong>Ir para APROVAÇÃO</strong></a></h3>
@@ -389,46 +349,24 @@ pipeline {
               "DB_PASSWORD_DUMP=${env.DB_PASSWORD_DUMP}"
             ]) {
 
-              if (env.DB_MIGRATE_STATUS != "MIGRADO") {
-                sh ''' #!/bin/bash
-                  chmod +x source/bash/database/dump-database.sh
-                  chmod +x source/bash/database/restore-database.sh
-                  ./source/bash/database/dump-database.sh
-                  ./source/bash/database/restore-database.sh restore_postgres_prod
-                '''
-              }
-
-              sh """
-                sed -i 's/3s-staging@noreply\\.unilab\\.edu\\.br/3s@noreply.unilab.edu.br/' ./kubernetes/deployment-3s.yaml
-                sed -i 's/\\[HOMOLOGAÇÃO\\] 3S - Sistema de Solicitacao de Ocorrencias/3S - Sistema de Solicitação de Ocorrências/' ./kubernetes/deployment-3s.yaml
-                sed -i 's/${env.APP_EP_STAG}/${env.APP_EP_PROD}/g' ./kubernetes/deployment-3s.yaml
-                sed -i 's/APP_DEBUG: "true"/APP_DEBUG: "false"/' ./kubernetes/deployment-3s.yaml
-                sed -i 's/LOG_LEVEL: "debug"/LOG_LEVEL: "error"/' ./kubernetes/deployment-3s.yaml
-                sed -i 's/10.130.0.154/postgres.postgres-3s.svc.cluster.local/' ./kubernetes/deployment-3s.yaml
-                sed -i 's/3s-homologacao/3s-ocorrencias/' ./kubernetes/deployment-3s.yaml
-                sed -i 's/.db_password_sigaa_holog/.db_password_sigaa/' ./kubernetes/deployment-3s.yaml
-                sed -i 's/.db_host_sigaa_holog/.db_host_sigaa/' ./kubernetes/deployment-3s.yaml
-                sed -i 's/:${env.DOCKER_TAG}/:${env.TAG}/' ./kubernetes/deployment-3s.yaml
-                sed -i 's/auth\\/kubernetes\\/c3/auth\\/kubernetes\\/c1/' ./kubernetes/deployment-3s.yaml
-                sed -i 's/10.130.2.153/10.130.0.153/' ./kubernetes/deployment-3s.yaml
-                cat ./kubernetes/deployment-3s.yaml
-              """
+              sh '''
+                sed -i "s/: latest/: ${TAG}/" ./kubernetes/kustomize/overlays/production/kustomization.yaml
+                sed -i "s/: 1.0.0-beta1/: ${TAG}/" ./kubernetes/kustomize/overlays/production/configmap.yaml
+                kubectl kustomize ./kubernetes/kustomize/overlays/production > /tmp/temp-production.yaml
+                cat /tmp/temp-production.yaml
+              '''
             }
           }
 
           withKubeConfig([credentialsId: "kubeconfig-${env.K8S_CLUSTER}", serverUrl: "https://dti-k8s-${env.K8S_CLUSTER}.unilab.edu.br:6443"]) {
-            sh """
-              set -x
-              echo "Verifica deploy ativo e exclui."
-              kubectl get deployment $APP_NAME -n $APP_NAMESPACE >/dev/null 2>&1 && \
-              (kubectl get pods -l $APP_NAME -n $APP_NAMESPACE --no-headers | wc -l) > 0 && \
-              kubectl delete pods -l app=$APP_NAME -n $APP_NAMESPACE --force --grace-period=0; \
-              kubectl delete deployment $APP_NAME -n $APP_NAMESPACE || echo 'DEPLOYMENT INEXISTENTE!'
-
-              kubectl apply -f ./kubernetes/deployment-3s.yaml --record
-              kubectl get all,sa,ing,pvc -n $APP_NAMESPACE -o wide
-            """
-            env.APP_URI_PROD = sh(script: 'kubectl get ingress app-3s -n app-3s -o jsonpath="{.spec.rules[0].host}" | sed "s/^/http:\\/\\//"', returnStdout: true).trim()
+            sh 'kubectl create namespace $APP_NAMESPACE_PROD --dry-run=client -o yaml | kubectl apply -f -'
+            def status = sh(script: 'kubectl get pods -n ${APP_NAMESPACE_PROD} --field-selector=status.phase=Running --no-headers 2>/dev/null | wc -l', returnStdout: true).trim()
+            if (Integer.parseInt(status) > 0) { sh 'kubectl delete -k ./kubernetes/kustomize/overlays/production/ --ignore-not-found' }
+            sh '''
+              kubectl apply -k ./kubernetes/kustomize/overlays/production/ --record
+              kubectl get all,ing,pvc,sa,secret -n $APP_NAMESPACE_PROD -o wide
+            '''
+            env.APP_URI_PROD = sh(script: 'kubectl get ingress $INGRESS_NAME -n $APP_NAMESPACE_PROD -o jsonpath="{.spec.rules[0].host}" | sed "s/^/http:\\/\\//"', returnStdout: true).trim()
             withEnv(["APP_URI_PROD=${env.APP_URI_PROD}"]) {
               sh 'echo Endpoint: $APP_URI_PROD'
             }
@@ -462,7 +400,7 @@ pipeline {
           &#9729;<span style="font-size: 0.9em;">Os workloads estar&atilde;o completos em aproximadamente 120 segundos.</span>
           <p>${env.EMAIL_ASSINATURA}</p><hr><p>${env.EMAIL_RODAPE}</p>
           """,
-          to: "${env.RECIPIENT_LEAD_EMAILS}, ${env.RECIPIENT_TEAM_EMAILS}",
+          to: "${env.RECIPIENT_LEAD_EMAILS}",
           recipientProviders: []
         )
       slackSend(color: "good", message: "Pipeline #${env.BUILD_NUMBER} completada com ${currentBuild.currentResult} em ${env.JOB_NAME} (<${env.BUILD_URL}|Mais info...>)")
