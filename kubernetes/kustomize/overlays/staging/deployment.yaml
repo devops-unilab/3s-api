@@ -41,8 +41,8 @@ spec:
           apache2-foreground
         resources:
           requests:
-            cpu: 50m
+            cpu: 100m
             memory: 128Mi
           limits:
-            cpu: 990m
-            memory: 1024Mi
+            cpu: 500m
+            memory: 512Mi

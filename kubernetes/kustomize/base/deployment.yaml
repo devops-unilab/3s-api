@@ -26,6 +26,30 @@ spec:
         envFrom:
         - configMapRef:
             name: app3s-config
+
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 80
+          periodSeconds: 20
+          failureThreshold: 10
+          initialDelaySeconds: 30
+
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 80
+          periodSeconds: 20
+          failureThreshold: 10
+          initialDelaySeconds: 30
+
+        startupProbe:
+          httpGet:
+            path: /
+            port: 80
+          failureThreshold: 40
+          periodSeconds: 15
+
         volumeMounts:
         - name: tz-america
           mountPath: /etc/localtime
