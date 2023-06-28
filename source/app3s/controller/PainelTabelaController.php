@@ -23,7 +23,7 @@ class PainelTabelaController
         <div class="card-header pb-4 mb-4 font-italic">
                     Painel Kamban';
         $divisions = DB::table('area_responsavel')->get();
-        echo view('partials', ['divisions' => $divisions]);
+        echo view('partials.form-filter-panel-table', ['divisions' => $divisions]);
 
 
         echo '
