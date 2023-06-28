@@ -122,13 +122,13 @@ pipeline {
             curl -sS https://getcomposer.org/installer -o composer-setup.php
             php composer-setup.php --install-dir=/usr/local/bin --filename=composer
             chown -R www-data:www-data /usr/local/bin/composer
-
+            
             # Obtem o vendor
             cd source/
             composer install --ignore-platform-reqs --no-interaction --no-progress --no-scripts --optimize-autoloader
             mv .env.example .env
             ls -la .
-            ls -la public
+            ls -la public/
           '''
         }
       }
@@ -136,11 +136,14 @@ pipeline {
 
     stage('Testes') {
       steps {
-        sh '''
-          cd source/ && php artisan key:generate
-          source/vendor/bin/phpunit --no-configuration --no-extensions source/tests/
-          cd ..
-        '''
+        script {
+          sh '''
+            cd source
+            ls -la .
+            php artisan key:generate
+            vendor/bin/phpunit --no-configuration --no-extensions tests/
+          '''
+        }
       }
     }
 
@@ -183,8 +186,8 @@ pipeline {
         container('docker') {
           script {
             timeout(time: 30, unit: 'MINUTES') {
-              sh "docker build -f ./Dockerfile -t '$DOCKER_IMAGE:$DOCKER_TAG' --build-arg VERSION=$APP_VERSION --build-arg COMMIT_SHA=$GIT_COMMIT --no-cache ./source/"
               sh """
+                docker build -f ./Dockerfile -t '$DOCKER_IMAGE:$DOCKER_TAG' --build-arg VERSION=$APP_VERSION --build-arg COMMIT_SHA=$GIT_COMMIT --no-cache .
                 echo \${HARBOR_PASSWORD} | docker login --username \${HARBOR_USERNAME} --password-stdin https://dti-registro.unilab.edu.br
                 docker tag \${DOCKER_IMAGE}:\${DOCKER_TAG} \${DOCKER_IMAGE}:\${TAG}
                 docker push \${DOCKER_IMAGE}:\${DOCKER_TAG}
