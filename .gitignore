@@ -502,3 +502,4 @@ composer.phar
 /vault
 **/development
 /kubernetes/kustomize/*.yaml
+stress.sh
