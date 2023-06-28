@@ -47,7 +47,7 @@
 <script src="js/jquery.easyPaginate.js?a=1"></script>
 <script src="js/ocorrencia.js?a=1451"></script>
 @if (isset($_GET['page']) && $_GET['page'] == 'ocorrencia' && isset($_GET['selecionar']))
-    <script src="js/mensagem_forum.js?a=172"></script>
+    <script src="js/mensagem_forum.js?a=174"></script>
 @endif
 @if (isset($_GET['page']) && $_GET['page'] == 'painel_kamban')
     <script src="js/painel_kamban.js?123=a"></script>

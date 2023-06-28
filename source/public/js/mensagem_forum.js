@@ -117,7 +117,7 @@ function carregarDados(url2) {
 
 setInterval(function () {
 	carregarDados(url1);
-}, 1000);
+}, 40000);
 
 
 
