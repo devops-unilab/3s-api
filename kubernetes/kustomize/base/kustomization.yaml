@@ -12,4 +12,4 @@ resources:
 - service.yaml
 - ingress.yaml
 # - hpa.yaml
-# - vpa.yaml
+- vpa.yaml

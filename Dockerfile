@@ -86,7 +86,7 @@ RUN cd /tmp \
   && php composer-setup.php --install-dir=/usr/local/bin --filename=composer \
   && composer
 
-COPY source/ /var/www/html
+COPY . /var/www/html
 RUN mkdir -p ./public/uploads/ocorrencia/anexo
 
 RUN composer install --ignore-platform-reqs --no-interaction --no-progress --no-scripts --optimize-autoloader

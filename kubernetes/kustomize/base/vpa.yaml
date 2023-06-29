@@ -9,4 +9,4 @@ spec:
     kind: Deployment
     name: app3s-laravel
   updatePolicy:
-    updateMode: "Auto"
+    updateMode: "Off"
