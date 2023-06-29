@@ -11,5 +11,5 @@ resources:
 - deployment.yaml
 - service.yaml
 - ingress.yaml
-- hpa.yaml
-- vpa.yaml
+# - hpa.yaml
+# - vpa.yaml
