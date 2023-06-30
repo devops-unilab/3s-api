@@ -27,28 +27,28 @@ spec:
         - configMapRef:
             name: app3s-config
 
-        livenessProbe:
-          httpGet:
-            path: /
-            port: 80
-          periodSeconds: 10
-          failureThreshold: 3
-          initialDelaySeconds: 20
+        # livenessProbe:
+        #   httpGet:
+        #     path: /
+        #     port: 80
+        #   periodSeconds: 10
+        #   failureThreshold: 3
+        #   initialDelaySeconds: 20
 
-        readinessProbe:
-          httpGet:
-            path: /
-            port: 80
-          periodSeconds: 10
-          failureThreshold: 5
-          initialDelaySeconds: 3
+        # readinessProbe:
+        #   httpGet:
+        #     path: /
+        #     port: 80
+        #   periodSeconds: 10
+        #   failureThreshold: 5
+        #   initialDelaySeconds: 3
 
-        startupProbe:
-          httpGet:
-            path: /
-            port: 80
-          failureThreshold: 30
-          periodSeconds: 10
+        # startupProbe:
+        #   httpGet:
+        #     path: /
+        #     port: 80
+        #   failureThreshold: 30
+        #   periodSeconds: 10
 
         volumeMounts:
         - name: tz-america

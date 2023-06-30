@@ -187,7 +187,7 @@ pipeline {
           script {
             timeout(time: 30, unit: 'MINUTES') {
               sh """
-                docker build -f ./Dockerfile -t '$DOCKER_IMAGE:$DOCKER_TAG' --build-arg VERSION=$APP_VERSION --build-arg COMMIT_SHA=$GIT_COMMIT --no-cache .
+                docker build -f ./Dockerfile -t '$DOCKER_IMAGE:$DOCKER_TAG' --build-arg VERSION=$APP_VERSION --build-arg COMMIT_SHA=$GIT_COMMIT --no-cache ./source/
                 echo \${HARBOR_PASSWORD} | docker login --username \${HARBOR_USERNAME} --password-stdin https://dti-registro.unilab.edu.br
                 docker tag \${DOCKER_IMAGE}:\${DOCKER_TAG} \${DOCKER_IMAGE}:\${TAG}
                 docker push \${DOCKER_IMAGE}:\${DOCKER_TAG}
@@ -206,8 +206,8 @@ pipeline {
 
           sh '''
             sed -i "s/aGFyYm9y/${HARBOR_REGCRED}/" ./kubernetes/kustomize/base/secret-regcred.yaml
-            sed -i "s/: latest/: ${DOCKER_TAG}/" ./kubernetes/kustomize/overlays/staging/kustomization.yaml
-            # sed -i "s/1.0.0-alfa1/${DOCKER_TAG}-alfa1/" ./kubernetes/kustomize/overlays/staging/configmap.yaml
+            sed -i "s/latest/${DOCKER_TAG}/" ./kubernetes/kustomize/overlays/staging/kustomization.yaml
+            # sed -i "s/alfa1/${TAG}-beta/" ./kubernetes/kustomize/overlays/staging/configmap.yaml
             kubectl kustomize ./kubernetes/kustomize/overlays/staging > /tmp/temp-staging.yaml
             cat /tmp/temp-staging.yaml
           '''
@@ -288,8 +288,8 @@ pipeline {
         script {
 
           sh '''
-            sed -i "s/: latest/: ${TAG}/" ./kubernetes/kustomize/overlays/production/kustomization.yaml
-            sed -i "s/: 1.0.0-beta1/: ${TAG}/" ./kubernetes/kustomize/overlays/production/configmap.yaml
+            sed -i "s/latest/${TAG}/" ./kubernetes/kustomize/overlays/production/kustomization.yaml
+            sed -i "s/beta1/${TAG}/" ./kubernetes/kustomize/overlays/production/configmap.yaml
             kubectl kustomize ./kubernetes/kustomize/overlays/production > /tmp/temp-production.yaml
             cat /tmp/temp-production.yaml
           '''

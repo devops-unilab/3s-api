@@ -86,7 +86,7 @@ RUN cd /tmp \
   && php composer-setup.php --install-dir=/usr/local/bin --filename=composer \
   && composer
 
-COPY source/ /var/www/html
+COPY . /var/www/html
 RUN mkdir -p ./public/uploads/ocorrencia/anexo
 
 RUN composer install --ignore-platform-reqs --no-interaction --no-progress --no-scripts --optimize-autoloader
@@ -137,6 +137,7 @@ RUN php artisan config:cache && \
 RUN chown -R www-data:www-data /var/www/html/public/uploads && chmod -R 644 /var/www/html/public/uploads
 
 VOLUME ["/var/www/html/public/uploads"]
+VOLUME ["/var/www/html/storage"]
 
 EXPOSE 80 22
 
