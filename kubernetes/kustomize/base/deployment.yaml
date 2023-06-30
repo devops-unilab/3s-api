@@ -50,6 +50,27 @@ spec:
         #   failureThreshold: 30
         #   periodSeconds: 10
 
+        livenessProbe:
+          exec:
+            command:
+            - /bin/bash
+            - -c
+            - /health-check.sh
+          failureThreshold: 3
+          initialDelaySeconds: 10
+          periodSeconds: 15
+          timeoutSeconds: 5
+
+        readinessProbe:
+          exec:
+            command:
+            - /bin/bash
+            - -c
+            - /health-check.sh
+          failureThreshold: 3
+          initialDelaySeconds: 5
+          periodSeconds: 10
+
         volumeMounts:
         - name: tz-america
           mountPath: /etc/localtime

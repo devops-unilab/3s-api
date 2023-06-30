@@ -51,6 +51,11 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   postgresql-client \
   && rm -rf /var/lib/apt/lists/*
 
+RUN curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl" && \
+  curl -LO "https://dl.k8s.io/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl.sha256" && \
+  chmod u+x ./kubectl && \
+  install -o root -g root -m 0755 kubectl /usr/bin/kubectl
+
 RUN apt-get dist-upgrade -y && \
   apt-get upgrade -y && \
   apt-get clean && \
@@ -120,6 +125,8 @@ ENV APP_DEBUG=false
 RUN cp bash/php/conf.d/opcache.ini /usr/local/etc/php/conf.d/opcache.ini \
   && ln -s /etc/apache2/sites-available/000-default.conf /etc/apache2/sites-enabled/default.conf
 RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf
+
+RUN cp bash/k8s/health-check.sh / && chmod +x /health-check.sh
 
 COPY --from=dev /var/www/html /var/www/html
 

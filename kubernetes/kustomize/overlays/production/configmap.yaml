@@ -11,3 +11,4 @@ data:
   APP_URL: 'https://3s.unilab.edu.br'
   LOG_LEVEL: 'error'
   APP_DEBUG: 'false'
+  APP_NAMESPACE: 'app3s-prod'
