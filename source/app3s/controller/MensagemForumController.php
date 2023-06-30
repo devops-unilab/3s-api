@@ -17,6 +17,7 @@ use app3s\model\Usuario;
 use app3s\util\Mail;
 use app3s\util\Sessao;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class MensagemForumController
 {
@@ -290,44 +291,48 @@ class MensagemForumController
 
         $mensagemForum = new MensagemForum();
         $mensagemForum->setTipo($_POST['tipo']);
+        $novoNome = "";
 
         if ($_POST['tipo'] == self::TIPO_TEXTO) {
             $mensagemForum->setMensagem($_POST['mensagem']);
         } else {
-            if ($_FILES['anexo']['name'] != null) {
-                if (!file_exists('uploads/')) {
-                    mkdir('uploads/', 0777, true);
-                }
-                $novoNome = $_FILES['anexo']['name'];
 
-                if (file_exists('uploads/' . $_FILES['anexo']['name'])) {
+            if (request()->hasFile('anexo')) {
+                $anexo = request()->file('anexo');
+                if (!Storage::exists('public/uploads')) {
+                    Storage::makeDirectory('public/uploads');
+                }
+
+                $novoNome = $anexo->getClientOriginalName();
+
+                if (Storage::exists('public/uploads/' . $anexo->getClientOriginalName())) {
                     $novoNome = uniqid() . '_' . $novoNome;
                 }
 
                 $extensaoArr = explode('.', $novoNome);
                 $extensao = strtolower(end($extensaoArr));
 
-                $extensoes_permitidas = array(
+                $extensoes_permitidas = [
                     'xlsx', 'xlsm', 'xlsb', 'xltx', 'xltm', 'xls', 'xlt', 'xls', 'xml', 'xml', 'xlam', 'xla', 'xlw', 'xlr',
                     'doc', 'docm', 'docx', 'docx', 'dot', 'dotm', 'dotx', 'odt', 'pdf', 'rtf', 'txt', 'wps', 'xml', 'zip', 'rar', 'ovpn',
                     'xml', 'xps', 'jpg', 'gif', 'png', 'pdf', 'jpeg'
-                );
+                ];
 
-                if (!(in_array($extensao, $extensoes_permitidas))) {
+                if (!in_array($extensao, $extensoes_permitidas)) {
                     echo ':falha:Extensão não permitida. Lista de extensões permitidas a seguir. ';
                     echo '(' . implode(", ", $extensoes_permitidas) . ')';
                     return;
                 }
 
-                if (!move_uploaded_file($_FILES['anexo']['tmp_name'], 'uploads/' . $novoNome)) {
-                    echo ':falha:Falha na tentativa de enviar arquivo';
+
+                if (!$anexo->storeAs('public/uploads/', $novoNome)) {
+                    echo ':falha:arquivo não pode ser enviado';
                     return;
                 }
-                $mensagemForum->setMensagem($novoNome);
             }
         }
 
-
+        $mensagemForum->setMensagem($novoNome);
         $mensagemForum->setDataEnvio(date("Y-m-d G:i:s"));
 
         $mensagemForum->getUsuario()->setId($sessao->getIdUsuario());
