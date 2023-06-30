@@ -18,6 +18,7 @@ use app3s\util\Mail;
 use app3s\util\Sessao;
 use DateTime;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class OcorrenciaController
 {
@@ -591,43 +592,43 @@ class OcorrenciaController
 		$ocorrencia->setRamal($_POST['ramal']);
 		$ocorrencia->setEmail($_POST['email']);
 		$ocorrencia->setDataAbertura(date("Y-m-d H:i:s"));
-		if (!file_exists('uploads/ocorrencia/anexo/')) {
-			mkdir('uploads/ocorrencia/anexo/', 0777, true);
-		}
 
-		if ($_FILES['anexo']['name'] != null) {
-			if (!file_exists('uploads/')) {
-				mkdir('uploads/', 0777, true);
+		$novoNome = "";
+		if (request()->hasFile('anexo')) {
+			$anexo = request()->file('anexo');
+			if (!Storage::exists('public/uploads')) {
+				Storage::makeDirectory('public/uploads');
 			}
-			$novoNome = $_FILES['anexo']['name'];
 
-			if (file_exists('uploads/' . $_FILES['anexo']['name'])) {
+			$novoNome = $anexo->getClientOriginalName();
+
+			if (Storage::exists('public/uploads/' . $anexo->getClientOriginalName())) {
 				$novoNome = uniqid() . '_' . $novoNome;
 			}
 
 			$extensaoArr = explode('.', $novoNome);
 			$extensao = strtolower(end($extensaoArr));
 
-			$extensoes_permitidas = array(
+			$extensoes_permitidas = [
 				'xlsx', 'xlsm', 'xlsb', 'xltx', 'xltm', 'xls', 'xlt', 'xls', 'xml', 'xml', 'xlam', 'xla', 'xlw', 'xlr',
 				'doc', 'docm', 'docx', 'docx', 'dot', 'dotm', 'dotx', 'odt', 'pdf', 'rtf', 'txt', 'wps', 'xml', 'zip', 'rar', 'ovpn',
 				'xml', 'xps', 'jpg', 'gif', 'png', 'pdf', 'jpeg'
-			);
+			];
 
-			if (!(in_array($extensao, $extensoes_permitidas))) {
+			if (!in_array($extensao, $extensoes_permitidas)) {
 				echo ':falha:Extensão não permitida. Lista de extensões permitidas a seguir. ';
 				echo '(' . implode(", ", $extensoes_permitidas) . ')';
 				return;
 			}
 
 
-			if (!move_uploaded_file($_FILES['anexo']['tmp_name'], 'uploads/' . $novoNome)) {
+			if (!$anexo->storeAs('public/uploads/', $novoNome)) {
 				echo ':falha:arquivo não pode ser enviado';
 				return;
 			}
-			$ocorrencia->setAnexo($novoNome);
 		}
 
+		$ocorrencia->setAnexo($novoNome);
 		$ocorrencia->setLocalSala($_POST['local_sala']);
 
 		$ocorrencia->getUsuarioCliente()->setId($sessao->getIdUsuario());
