@@ -137,6 +137,7 @@ RUN php artisan config:cache && \
 RUN chown -R www-data:www-data /var/www/html/public/uploads && chmod -R 644 /var/www/html/public/uploads
 
 VOLUME ["/var/www/html/public/uploads"]
+VOLUME ["/var/www/html/storage"]
 
 EXPOSE 80 22
 
