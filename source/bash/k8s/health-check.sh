@@ -22,9 +22,6 @@ check_vault_init_containers() {
 }
 
 check_vault_secrets() {
-    # Lógica para verificar se os secrets do Vault existem no container principal
-    # Retorne um código de saída 0 se os secrets existirem, caso contrário, retorne um código de saída diferente de 0
-    # Exemplo: Verificar se o arquivo /vault/secrets/config existe
     if [ -f /vault/secrets/config ]; then
         return 0
     else
