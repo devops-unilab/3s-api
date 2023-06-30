@@ -135,7 +135,7 @@ RUN php artisan config:cache && \
   chown -Rf www-data:www-data /var/www/ && \
   a2enmod rewrite
 
-RUN chown -R www-data:www-data /var/www/html/storage && chmod -R 644 /var/www/html/storage
+RUN chown -R www-data:www-data /var/www/html/storage && chmod -R 777 /var/www/html/storage
 
 VOLUME ["/var/www/html/storage"]
 

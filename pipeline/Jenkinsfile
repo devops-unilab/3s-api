@@ -2,10 +2,10 @@
 
 def getSecretsHarborConfig(){
   return [[
-    engineVersion: 2, 
-    path: 'secret/harbor/config', 
+    engineVersion: 2,
+    path: 'secret/harbor/config',
     secretValues: [
-    [envVar: 'HARBOR_USERNAME', isRequired: false, vaultKey: 'usuario'], 
+    [envVar: 'HARBOR_USERNAME', isRequired: false, vaultKey: 'usuario'],
     [envVar: 'HARBOR_PASSWORD', isRequired: false, vaultKey: 'senha'],
     [envVar: 'HARBOR_REGCRED', isRequired: false, vaultKey: 'regcred'],
     ]
@@ -97,10 +97,10 @@ pipeline {
             vaultSecrets: getSecretsHarborConfig()) {
               sh 'touch .env'
               sh "echo 'HARBOR_USERNAME:${env.HARBOR_USERNAME}' > .env"
-              sh "echo 'HARBOR_PASSWORD:${env.HARBOR_PASSWORD}' >> .env" 
+              sh "echo 'HARBOR_PASSWORD:${env.HARBOR_PASSWORD}' >> .env"
               sh "echo 'HARBOR_REGCRED:${env.HARBOR_REGCRED}' >> .env"
             }
-              
+
           def envFile = readFile('.env').trim()
           def envLines = envFile.tokenize('\n')
           envLines.each { line ->
@@ -108,7 +108,7 @@ pipeline {
             def key = parts[0].trim()
             def value = parts[1]
             env."${key}" = "${value}"
-          } 
+          }
 
         }
       }
@@ -122,13 +122,14 @@ pipeline {
             curl -sS https://getcomposer.org/installer -o composer-setup.php
             php composer-setup.php --install-dir=/usr/local/bin --filename=composer
             chown -R www-data:www-data /usr/local/bin/composer
-            
+
             # Obtem o vendor
             cd source/
             composer install --ignore-platform-reqs --no-interaction --no-progress --no-scripts --optimize-autoloader
             mv .env.example .env
             ls -la .
             ls -la public/
+            ls -la storage/
           '''
         }
       }
@@ -139,7 +140,6 @@ pipeline {
         script {
           sh '''
             cd source
-            ls -la .
             php artisan key:generate
             vendor/bin/phpunit --no-configuration --no-extensions tests/
           '''
