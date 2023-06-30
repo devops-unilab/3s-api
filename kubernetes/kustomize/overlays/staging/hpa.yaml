@@ -8,4 +8,11 @@ spec:
     kind: Deployment
     name: app3s-laravel
   minReplicas: 1
-  maxReplicas: 1
+  maxReplicas: 10
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 80

@@ -6,10 +6,11 @@ resources:
 - namespace.yaml
 - secret-regcred.yaml
 - sa.yaml
+- rbac.yaml
 - configmap.yaml
 - pvc.yaml
 - deployment.yaml
 - service.yaml
 - ingress.yaml
-# - hpa.yaml
 - vpa.yaml
+- hpa.yaml

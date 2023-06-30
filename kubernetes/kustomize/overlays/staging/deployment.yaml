@@ -36,10 +36,6 @@ spec:
         - /bin/bash
         - -cp
         - |
-          [ ! -d "/var/www/html/storage/framework/" ] && mkdir -p /var/www/html/storage/framework/
-          [ ! -d "/var/www/html/storage/framework/sessions/" ] && mkdir -p /var/www/html/storage/framework/sessions/
-          [ ! -d "/var/www/html/storage/framework/cache/data/" ] && mkdir -p /var/www/html/storage/framework/cache/data/
-          [ ! -d "/var/www/html/storage/framework/views/" ] && mkdir -p /var/www/html/storage/framework/views/
           source /vault/secrets/config
           php artisan config:clear
           apache2-foreground
@@ -50,3 +46,4 @@ spec:
           limits:
             cpu: 500m
             memory: 512Mi
+            

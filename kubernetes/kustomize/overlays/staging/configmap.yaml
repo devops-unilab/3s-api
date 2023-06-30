@@ -11,3 +11,4 @@ data:
   APP_URL: 'https://3shomologacao.unilab.edu.br'
   LOG_LEVEL: 'debug'
   APP_DEBUG: 'true'
+  APP_NAMESPACE: 'app3s-stag'
