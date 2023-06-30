@@ -106,7 +106,6 @@ RUN update-rc.d ssh enable
 RUN php artisan config:clear && \
   php artisan config:cache && \
   php artisan route:cache && \
-  php artisan storage:link && \
   chmod 777 -R /var/www/html/storage/ && \
   chown -Rf www-data:www-data /var/www/ && \
   a2enmod rewrite
@@ -130,12 +129,11 @@ RUN composer install --prefer-dist --no-interaction --no-dev
 RUN php artisan config:cache && \
   php artisan route:cache && \
   php artisan key:generate && \
-  php artisan storage:link && \
   chmod 777 -R /var/www/html/storage/ && \
   chown -Rf www-data:www-data /var/www/ && \
   a2enmod rewrite
 
-RUN chown -R www-data:www-data /var/www/html/sotrage && chmod -R 644 /var/www/html/sotrage
+RUN chown -R www-data:www-data /var/www/html/storage && chmod -R 644 /var/www/html/storage
 
 VOLUME ["/var/www/html/storage"]
 
