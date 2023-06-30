@@ -13,7 +13,7 @@
 #######################################################
 
 check_vault_init_containers() {
-    status=$(kubectl get pods -n app3s-stag -o jsonpath='{.status.initContainerStatuses[*].ready}' | grep -q false && echo "false" || echo "true")
+    status=$(kubectl get pods -n $APP_NAMESPACE -o jsonpath='{.status.initContainerStatuses[*].ready}' | grep -q false && echo "false" || echo "true")
     if [[ $status == "false" ]]; then
         return 1
     else
