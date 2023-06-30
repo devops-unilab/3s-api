@@ -106,6 +106,7 @@ RUN update-rc.d ssh enable
 RUN php artisan config:clear && \
   php artisan config:cache && \
   php artisan route:cache && \
+  php artisan cache:clear && \
   chmod 777 -R /var/www/html/storage/ && \
   chown -Rf www-data:www-data /var/www/ && \
   a2enmod rewrite
@@ -128,6 +129,7 @@ RUN composer install --prefer-dist --no-interaction --no-dev
 
 RUN php artisan config:cache && \
   php artisan route:cache && \
+  php artisan cache:clear && \
   php artisan key:generate && \
   chmod 777 -R /var/www/html/storage/ && \
   chown -Rf www-data:www-data /var/www/ && \
