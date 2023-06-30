@@ -36,6 +36,10 @@ spec:
         - /bin/bash
         - -cp
         - |
+          [ ! -d "storage/framework/" ] && mkdir -p storage/framework/
+          [ ! -d "storage/framework/sessions/" ] && mkdir -p storage/framework/sessions/
+          [ ! -d "storage/framework/cache/data/" ] && mkdir -p storage/framework/cache/data/
+          [ ! -d "storage/framework/views/" ] && mkdir -p storage/framework/views/
           source /vault/secrets/config
           php artisan config:clear
           apache2-foreground
