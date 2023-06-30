@@ -1676,11 +1676,21 @@ class OcorrenciaController
 		}
 
 
-		$servico = new Servico();
-		$servico->setId($_POST['id_servico']);
 
-		$servicoDao = new ServicoDAO($this->dao->getConnection());
-		$servicoDao->fillById($servico);
+
+		$servico = DB::table('servico')
+		->join(
+			'area_responsavel', 'area_responsavel.id', '=', 'servico.id_area_responsavel as division_id')
+		->select(
+			'servico.id as id',
+			'area_responsavel.nome as nome_area',
+			'servico.nome as nome_servico',
+			'servico.descricao as descricao_servico')
+		->where('servico.id', $_POST['id_servico'])->first();
+
+
+		dd($servico);
+
 
 
 		$ocorrenciaDao = new OcorrenciaDAO($this->dao->getConnection());
@@ -1696,10 +1706,10 @@ class OcorrenciaController
 		$this->statusOcorrencia->setStatus($status);
 		$this->statusOcorrencia->setDataMudanca(date("Y-m-d G:i:s"));
 		$this->statusOcorrencia->getUsuario()->setId($this->sessao->getIdUsuario());
-		$this->statusOcorrencia->setMensagem('Técnico editou o serviço ');
+		$this->statusOcorrencia->setMensagem('Alteração do Serviço');
 
-		$this->selecionado->getAreaResponsavel()->setId($servico->getAreaResponsavel()->getId());
-		$this->selecionado->getServico()->setId($servico->getId());
+		$this->selecionado->getAreaResponsavel()->setId($servico->division_id);
+		$this->selecionado->getServico()->setId($servico->id);
 
 
 
