@@ -10,7 +10,7 @@
 #
 # Usage:
 #
-#   docker run -it --rm -d -p 8088:80 -v /tmp:/var/www/public/uploads --name 3s dti-registro.unilab.edu.br/unilab/app-3s:latest
+#   docker run -it --rm -d -p 8088:80 -v /tmp:/var/www/html/storage --name 3s dti-registro.unilab.edu.br/unilab/app-3s:latest
 #   docker logs -f --tail --until=2s 3s
 #   docker exec -it 3s bash
 #
@@ -87,7 +87,6 @@ RUN cd /tmp \
   && composer
 
 COPY . /var/www/html
-RUN mkdir -p ./public/uploads/ocorrencia/anexo
 
 RUN composer install --ignore-platform-reqs --no-interaction --no-progress --no-scripts --optimize-autoloader
 
@@ -107,6 +106,7 @@ RUN update-rc.d ssh enable
 RUN php artisan config:clear && \
   php artisan config:cache && \
   php artisan route:cache && \
+  php artisan storage:link && \
   chmod 777 -R /var/www/html/storage/ && \
   chown -Rf www-data:www-data /var/www/ && \
   a2enmod rewrite
@@ -130,13 +130,13 @@ RUN composer install --prefer-dist --no-interaction --no-dev
 RUN php artisan config:cache && \
   php artisan route:cache && \
   php artisan key:generate && \
+  php artisan storage:link && \
   chmod 777 -R /var/www/html/storage/ && \
   chown -Rf www-data:www-data /var/www/ && \
   a2enmod rewrite
 
-RUN chown -R www-data:www-data /var/www/html/public/uploads && chmod -R 644 /var/www/html/public/uploads
+RUN chown -R www-data:www-data /var/www/html/sotrage && chmod -R 644 /var/www/html/sotrage
 
-VOLUME ["/var/www/html/public/uploads"]
 VOLUME ["/var/www/html/storage"]
 
 EXPOSE 80 22

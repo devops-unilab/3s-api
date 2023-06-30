@@ -53,14 +53,14 @@ spec:
         volumeMounts:
         - name: tz-america
           mountPath: /etc/localtime
-        - name: app3s-uploads
-          mountPath: /var/www/html/public/uploads
+        - name: app3s-storage
+          mountPath: /var/www/html/storage
       volumes:
       - name: tz-america
         hostPath:
           path: /usr/share/zoneinfo/America/Fortaleza
           type: File
-      - name: app3s-uploads
+      - name: app3s-storage
         persistentVolumeClaim:
           claimName: pvc-3s-laravel
       imagePullSecrets:
