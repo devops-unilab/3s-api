@@ -134,15 +134,13 @@ WORKDIR /var/www/html
 
 RUN composer install --prefer-dist --no-interaction --no-dev
 
+RUN chown -R www-data:www-data /var/www/html/storage && chmod -R 775 /var/www/html/storage
+
 RUN php artisan config:cache && \
   php artisan route:cache && \
   php artisan cache:clear && \
   php artisan key:generate && \
-  chmod 777 -R /var/www/html/storage/ && \
-  chown -Rf www-data:www-data /var/www/ && \
   a2enmod rewrite
-
-RUN chown -R www-data:www-data /var/www/html/storage && chmod -R 777 /var/www/html/storage
 
 VOLUME ["/var/www/html/storage"]
 
