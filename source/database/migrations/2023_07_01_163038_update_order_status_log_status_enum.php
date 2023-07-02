@@ -30,10 +30,10 @@ return new class extends Migration
                 WHEN status_temp = '8' THEN 'opened'
                 WHEN status_temp = '10' THEN 'pending customer response'
                 WHEN status_temp = '1' THEN 'reserved'
-                WHEN status_temp = '5' THEN 'closed'
+                WHEN status_temp = '4' THEN 'closed'
                 WHEN status_temp = '9' THEN 'pending it resource'
                 WHEN status_temp = '6' THEN 'canceled'
-                WHEN status_temp = '4' THEN 'committed'
+                WHEN status_temp = '5' THEN 'committed'
                 WHEN status_temp = '3' THEN 'in progress'
             END"),
         ]);
