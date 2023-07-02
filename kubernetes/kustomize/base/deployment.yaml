@@ -32,7 +32,6 @@ spec:
       containers:
       - name: app3s-laravel
         image: dti-registro.unilab.edu.br/unilab/app-3s:main
-        resources: {}
         imagePullPolicy: Always
         command:
         - /bin/bash
@@ -50,7 +49,7 @@ spec:
         envFrom:
         - configMapRef:
             name: app3s-config
-            
+
         livenessProbe:
           exec:
             command:
@@ -77,6 +76,7 @@ spec:
           mountPath: /etc/localtime
         - name: app3s-storage
           mountPath: /var/www/html/storage
+          readOnly: false
       volumes:
       - name: tz-america
         hostPath:
@@ -84,6 +84,6 @@ spec:
           type: File
       - name: app3s-storage
         persistentVolumeClaim:
-          claimName: pvc-3s-laravel
+          claimName: pvc-3s-storage
       imagePullSecrets:
       - name: harbor-regcred
