@@ -10,29 +10,22 @@ class MainIndex
   public function main()
   {
     $sessao = new Sessao();
+    $user = request()->user();
+
+
     if (isset($_GET['ajax'])) {
       $mainAjax = new MainAjax();
       $mainAjax->main();
       exit(0);
     }
     if (isset($_REQUEST['api'])) {
-        $controller = new MensagemForumApiRestController();
-        $controller->main();
+      $controller = new MensagemForumApiRestController();
+      $controller->main();
       exit(0);
     }
-    if (isset($_GET["sair"])) {
-      $sessao->mataSessao();
-      echo '<META HTTP-EQUIV="REFRESH" CONTENT="0; URL=.">';
-    }
-
-    $this->pagina();
-  }
-
-  public function pagina()
-  {
 
     echo view('partials.header');
-    $sessao = new Sessao();
+
     $primeiroNome = $sessao->getNome();
     $arr = explode(" ", $sessao->getNome());
     if (isset($arr[0])) {
@@ -49,12 +42,6 @@ class MainIndex
     if ($sessao->getNivelAcesso() == Sessao::NIVEL_ADM) {
       echo view('admin.partials.navbar', ['userFirstName' => $primeiroNome, 'divisionSig' => $sessao->getUnidade()]);
     }
-
-    $this->mainContent();
-    echo view('partials.footer');
-  }
-  public function mainContent()
-  {
 
     $sessao = new Sessao();
     if ($sessao->getNivelAcesso() == Sessao::NIVEL_DESLOGADO) {
@@ -75,11 +62,11 @@ class MainIndex
       case Sessao::NIVEL_DISABLED:
         echo view('partials.diabled');
         break;
-      default:
-        echo view('partials.form-login');
-        break;
+
     }
+    echo view('partials.footer');
   }
+
 
   public function contentComum()
   {

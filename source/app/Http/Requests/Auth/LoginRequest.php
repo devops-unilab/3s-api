@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Auth;
 
+use app3s\util\Sessao;
 use App\Models\User;
 use Illuminate\Auth\Events\Lockout;
 use Illuminate\Foundation\Http\FormRequest;
@@ -97,6 +98,12 @@ class LoginRequest extends FormRequest
                 'email' => trans('auth.failed'),
             ]);
         }
+        // Isto é só enquanto usa Sessao, quando tirar de tudo apaga
+        $sessao = new Sessao();
+        $sessao->criaSessao($user->id, $user->role, $user->login, $user->name, $user->email);
+        $sessao->setIDUnidade($user->division_sig_id);
+        $sessao->setUnidade($user->division_sig);
+        //Apaga até aqui
 
         RateLimiter::clear($this->throttleKey());
     }

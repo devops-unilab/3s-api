@@ -24,10 +24,6 @@ class MainAjax
                 $controller = new PainelTabelaController();
                 $controller->tabelaChamados();
                 break;
-            case 'login':
-                $controller = new UsuarioController();
-                $controller->ajaxLogin();
-                break;
             case 'mudar_nivel':
                 $controller = new UsuarioController();
                 $controller->mudarNivel();
