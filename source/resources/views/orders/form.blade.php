@@ -43,10 +43,10 @@
     {!! Form::text('phone_number', null, ('' == 'required') ? ['class' => 'form-control', 'required' => 'required'] : ['class' => 'form-control']) !!}
     {!! $errors->first('phone_number', '<p class="help-block">:message</p>') !!}
 </div>
-<div class="form-group {{ $errors->has('division') ? 'has-error' : ''}}">
-    {!! Form::label('division', 'Division', ['class' => 'control-label']) !!}
-    {!! Form::text('division', null, ('' == 'required') ? ['class' => 'form-control', 'required' => 'required'] : ['class' => 'form-control']) !!}
-    {!! $errors->first('division', '<p class="help-block">:message</p>') !!}
+<div class="form-group {{ $errors->has('division_sig') ? 'has-error' : ''}}">
+    {!! Form::label('division_sig', 'Division Sig', ['class' => 'control-label']) !!}
+    {!! Form::text('division_sig', null, ('' == 'required') ? ['class' => 'form-control', 'required' => 'required'] : ['class' => 'form-control']) !!}
+    {!! $errors->first('division_sig', '<p class="help-block">:message</p>') !!}
 </div>
 <div class="form-group {{ $errors->has('status') ? 'has-error' : ''}}">
     {!! Form::label('status', 'Status', ['class' => 'control-label']) !!}
