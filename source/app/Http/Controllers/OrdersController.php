@@ -68,9 +68,9 @@ class OrdersController extends Controller
      */
     public function store(Request $request)
     {
-        
+
         $requestData = $request->all();
-        
+
         Order::create($requestData);
 
         return redirect('orders')->with('flash_message', 'Order added!');
@@ -114,9 +114,9 @@ class OrdersController extends Controller
      */
     public function update(Request $request, $id)
     {
-        
+
         $requestData = $request->all();
-        
+
         $order = Order::findOrFail($id);
         $order->update($requestData);
 

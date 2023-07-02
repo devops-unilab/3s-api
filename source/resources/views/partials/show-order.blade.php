@@ -212,7 +212,7 @@
         <div class="container">
             @foreach ($orderStatusLog as $status)
                 <div class="notice {{ $status->color }}">
-                    <strong>{{ $status->status }}</strong><br>
+                    <strong>{{__($status->status)}} </strong><br>
                     @if ($status->status == 'commited')
                         <br>
                         @for ($i = 0; $i < intval($order->avaliacao); $i++)

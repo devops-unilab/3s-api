@@ -133,5 +133,14 @@
     "Services": "Serviços",
     "Users": "Usuários",
     "Search": "Procurar",
-    "Actions" : "Ações"
+    "Actions" : "Ações",
+
+    "opened" : "Aberto",
+    "reserved" : "Reservado",
+    "in progress" : "Em Atendimento",
+    "pending customer response" : "Aguardando Usuário",
+    "pending it resource" : "Aguardando Ativo de TI",
+    "closed" : "Fechado",
+    "committed" : "Confirmado"
+
 }

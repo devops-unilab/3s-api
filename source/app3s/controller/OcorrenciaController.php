@@ -334,13 +334,13 @@ class OcorrenciaController
 			$query = $query->where('provider_user_id', $this->sessao->getIdUsuario());
 		}
 		if (isset($_GET['solicitacao'])) {
-			$query = $query->where('client_user_id', $this->sessao->getIdUsuario());
+			$query = $query->where('customer_user_id', $this->sessao->getIdUsuario());
 		}
 		if (isset($_GET['tecnico'])) {
 			$query = $query->where('provider_user_id', intval($_GET['tecnico']));
 		}
 		if (isset($_GET['requisitante'])) {
-			$query = $query->where('client_user_id', intval($_GET['requisitante']));
+			$query = $query->where('customer_user_id', intval($_GET['requisitante']));
 		}
 		if (isset($_GET['data_abertura1'])) {
 			$data1 = date("Y-m-d", strtotime($_GET['data_abertura1']));
