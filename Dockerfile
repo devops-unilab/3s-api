@@ -136,13 +136,13 @@ RUN composer install --prefer-dist --no-interaction --no-dev
 
 RUN chown -R www-data:www-data /var/www/html/storage && chmod -R 775 /var/www/html/storage
 
-RUN php artisan config:cache && \
-  php artisan route:cache && \
+RUN php artisan route:cache && \
   php artisan cache:clear && \
+  php artisan config:clear && \
+  php artisan view:clear && \
+  php artisan storage:link && \
   php artisan key:generate && \
   a2enmod rewrite
-
-VOLUME ["/var/www/html/storage"]
 
 EXPOSE 80 22
 

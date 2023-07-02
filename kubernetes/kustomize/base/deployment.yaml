@@ -13,6 +13,22 @@ spec:
       labels:
         app: app3s-laravel
     spec:
+      initContainers:
+      - name: config-init
+        image: debian:stable-slim
+        command:
+        - /bin/bash
+        - -c
+        - |
+          mkdir -p /var/www/html/storage/framework/{sessions,views,cache}
+          chown -R www-data:www-data /var/www/html/storage
+        resources: {}
+        volumeMounts:
+        - name: app3s-storage
+          mountPath: /var/www/html/storage
+        securityContext:
+          privileged: true
+          runAsUser: 33
       containers:
       - name: app3s-laravel
         image: dti-registro.unilab.edu.br/unilab/app-3s:main

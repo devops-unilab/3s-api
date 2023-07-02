@@ -13,4 +13,5 @@ resources:
 - service.yaml
 - ingress.yaml
 - vpa.yaml
-- hpa.yaml
+# - hpa.yaml
+# - job.yaml

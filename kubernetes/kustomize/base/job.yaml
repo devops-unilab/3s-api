@@ -1,0 +1,32 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: create-dirs-laravel
+spec:
+  template:
+    metadata:
+      labels:
+        app: app3s-laravel
+    spec:
+      containers:
+      - name: config-init
+        image: debian:stable-slim
+        command:
+        - /bin/bash
+        - -c
+        - |
+          mkdir -p /var/www/html/storage/framework/{sessions,views,cache}
+          chown -R www-data:www-data /var/www/html/storage
+        resources: {}
+        volumeMounts:
+        - name: app3s-storage
+          mountPath: /var/www/html/storage
+        securityContext:
+          privileged: true
+          runAsUser: 33
+      restartPolicy: Never
+      volumes:
+      - name: app3s-storage
+        persistentVolumeClaim:
+          claimName: pvc-3s-storage
+  backoffLimit: 0
