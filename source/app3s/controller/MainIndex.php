@@ -40,8 +40,6 @@ class MainIndex
       $primeiroNome = $arr[0];
     }
     $primeiroNome = ucfirst(strtolower($primeiroNome));
-    // dd($sessao->getNivelAcesso());
-    // dd(request());
     echo view('partials.navbar', [
       'role' => $sessao->getNivelAcesso(),
       'originalRole' => $user->role,

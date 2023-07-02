@@ -491,15 +491,14 @@ class OcorrenciaController
                 <div class="col-md-12 blog-main">';
 
 
-		$queryService = DB::table('servico');
+		$services = [];
 		if ($this->sessao->getNivelAcesso() == Sessao::NIVEL_COMUM) {
-			$queryService->where('visao', 1);
+			$filterServices = ['customer'];
 		}
 		if ($this->sessao->getNivelAcesso() == Sessao::NIVEL_ADM || $this->sessao->getNivelAcesso() == Sessao::NIVEL_TECNICO) {
-			$queryService->whereIn('visao', [1, 2]);
+			$filterServices = ['customer', 'provider'];
 		}
-		$services = $queryService->get();
-
+		$services = Service::whereIn('role', $filterServices)->get();
 		if (count($listaNaoAvaliados) > 0) {
 			echo view(
 				'partials.index-orders',
