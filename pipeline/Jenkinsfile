@@ -215,7 +215,7 @@ pipeline {
           withKubeConfig([credentialsId: 'kubeconfig-c3', serverUrl: 'https://dti-k8s-c3.unilab.edu.br:6443']) {
             sh 'kubectl create namespace $APP_NAMESPACE_STAG --dry-run=client -o yaml | kubectl apply -f -'
             def status = sh(script: 'kubectl get pods -n ${APP_NAMESPACE_STAG} --field-selector=status.phase=Running --no-headers 2>/dev/null | wc -l', returnStdout: true).trim()
-            if (Integer.parseInt(status) > 0) { sh 'kubectl delete -k ./kubernetes/kustomize/overlays/staging/ --ignore-not-found' }
+            if (Integer.parseInt(status) > 0) { sh 'kubectl delete -k ./kubernetes/kustomize/overlays/staging/ --ignore-not-found --cascade=orphan' }
             sh '''
               kubectl apply -k ./kubernetes/kustomize/overlays/staging/ --record
               kubectl get all,ing,pvc,sa,secret -n $APP_NAMESPACE_STAG -o wide
@@ -297,7 +297,7 @@ pipeline {
           withKubeConfig([credentialsId: "kubeconfig-${env.K8S_CLUSTER}", serverUrl: "https://dti-k8s-${env.K8S_CLUSTER}.unilab.edu.br:6443"]) {
             sh 'kubectl create namespace $APP_NAMESPACE_PROD --dry-run=client -o yaml | kubectl apply -f -'
             def status = sh(script: 'kubectl get pods -n ${APP_NAMESPACE_PROD} --field-selector=status.phase=Running --no-headers 2>/dev/null | wc -l', returnStdout: true).trim()
-            if (Integer.parseInt(status) > 0) { sh 'kubectl delete -k ./kubernetes/kustomize/overlays/production/ --ignore-not-found' }
+            if (Integer.parseInt(status) > 0) { sh 'kubectl delete -k ./kubernetes/kustomize/overlays/production/ --ignore-not-found --cascade=orphan' }
             sh '''
               kubectl apply -k ./kubernetes/kustomize/overlays/production/ --record
               kubectl get all,ing,pvc,sa,secret -n $APP_NAMESPACE_PROD -o wide
