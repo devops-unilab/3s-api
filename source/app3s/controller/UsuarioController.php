@@ -24,40 +24,22 @@ class UsuarioController
 	{
 		$this->dao = new UsuarioDAO();
 	}
-	public function mudarNivel()
-	{
-
-		$sessao = new Sessao();
-		if ($sessao->getNIvelOriginal() == Sessao::NIVEL_ADM) {
-			$sessao->setNivelDeAcesso($_POST['nivel']);
-			echo ':sucess:' . $sessao->getNivelAcesso();
-			return;
-		}
-		if ($sessao->getNIvelOriginal() == Sessao::NIVEL_TECNICO) {
-			if ($_POST['nivel'] != Sessao::NIVEL_ADM) {
-				$sessao->setNivelDeAcesso($_POST['nivel']);
-				echo ':sucess:' . $sessao->getNivelAcesso();
-				return;
-			}
-			echo ':falha:';
-			return;
-		}
-		echo ':falha:';
-	}
-
 
 	public function getStrNivel($nivel)
 	{
 		$strNivel = 'Desconhecido';
 		switch ($nivel) {
-			case 'a':
+			case 'administrator':
 				$strNivel = 'Administrador';
 				break;
-			case 't':
-				$strNivel = 'Técnico';
+			case 'provider':
+				$strNivel = 'Atendente';
 				break;
-			case 'c':
-				$strNivel = 'Comum';
+			case 'customer':
+				$strNivel = 'Cliente';
+				break;
+			case 'disabled':
+				$strNivel = 'Desabilitado';
 				break;
 			default:
 				$strNivel = 'Desconhecido';

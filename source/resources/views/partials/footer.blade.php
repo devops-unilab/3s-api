@@ -41,7 +41,6 @@
 <script src="js/demo/datatables-demo.js"></script>
 <script src="js/selectize.js"></script>
 <script src="js/login_load.js?a=12"></script>
-<script src="js/mudar_nivel.js?a=12"></script>
 <script src="js/change-contraste.js?a=1"></script>
 <script src="js/ocorrencia_selectize.js?a=1"></script>
 <script src="js/jquery.easyPaginate.js?a=1"></script>

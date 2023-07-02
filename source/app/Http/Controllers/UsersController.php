@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use app3s\util\Sessao;
 use App\Http\Controllers\Controller;
 use App\Http\Requests;
 
@@ -58,7 +59,7 @@ class UsersController extends Controller
 			'name' => 'required|max:255'
 		]);
         $requestData = $request->all();
-        
+
         User::create($requestData);
 
         return redirect('users')->with('flash_message', 'User added!');
@@ -106,7 +107,7 @@ class UsersController extends Controller
 			'name' => 'required|max:255'
 		]);
         $requestData = $request->all();
-        
+
         $user = User::findOrFail($id);
         $user->update($requestData);
 
@@ -126,4 +127,19 @@ class UsersController extends Controller
 
         return redirect('users')->with('flash_message', 'User deleted!');
     }
+
+    public function changeRole(Request $request) {
+        $this->validate($request, [
+			'role' => 'required|max:255'
+		]);
+        $sessao = new Sessao();
+
+		if ($sessao->getNivelOriginal() == Sessao::NIVEL_ADM || $sessao->getNivelOriginal() == Sessao::NIVEL_TECNICO)
+        {
+			$sessao->setNivelDeAcesso($request->role);
+			return redirect('/');
+		}
+        return redirect('/');
+    }
+
 }

@@ -24,10 +24,6 @@ class MainAjax
                 $controller = new PainelTabelaController();
                 $controller->tabelaChamados();
                 break;
-            case 'mudar_nivel':
-                $controller = new UsuarioController();
-                $controller->mudarNivel();
-                break;
             default:
                 echo ':falha';
                 break;

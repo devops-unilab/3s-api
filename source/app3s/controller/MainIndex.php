@@ -12,6 +12,14 @@ class MainIndex
     $sessao = new Sessao();
     $user = request()->user();
 
+    if($sessao->getNivelAcesso() === null) {
+      $sessao = new Sessao();
+      $sessao->criaSessao($user->id, $user->role, $user->login, $user->name, $user->email);
+      $sessao->setIDUnidade($user->division_sig_id);
+      $sessao->setUnidade($user->division_sig);
+      redirect('/');
+    }
+    // dd($sessao->getNivelAcesso());
 
     if (isset($_GET['ajax'])) {
       $mainAjax = new MainAjax();
@@ -32,19 +40,16 @@ class MainIndex
       $primeiroNome = $arr[0];
     }
     $primeiroNome = ucfirst(strtolower($primeiroNome));
-
-    if ($user->role == Sessao::NIVEL_COMUM) {
-      echo view('client.partials.navbar', ['originalLevel' => $sessao->getNivelOriginal(), 'userFirstName' => $primeiroNome, 'divisionSig' => $sessao->getUnidade()]);
-    }
-    if ($user->role == Sessao::NIVEL_TECNICO) {
-      echo view('provider.partials.navbar', ['originalLevel' => $sessao->getNivelOriginal(), 'userFirstName' => $primeiroNome, 'divisionSig' => $sessao->getUnidade()]);
-    }
-    if ($user->role == Sessao::NIVEL_ADM) {
-      echo view('admin.partials.navbar', ['userFirstName' => $primeiroNome, 'divisionSig' => $sessao->getUnidade()]);
-    }
+    // dd($sessao->getNivelAcesso());
+    // dd(request());
+    echo view('partials.navbar', [
+      'role' => $sessao->getNivelAcesso(),
+      'originalRole' => $user->role,
+      'userFirstName' => $primeiroNome,
+      'divisionSig' => $sessao->getUnidade()]);
 
     $sessao = new Sessao();
-    if ($user->role == Sessao::NIVEL_DESLOGADO) {
+    if ($sessao->getNivelAcesso() == Sessao::NIVEL_DESLOGADO) {
       echo view('partials.form-login');
       return;
     }
