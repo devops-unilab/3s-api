@@ -14,9 +14,8 @@ return new class extends Migration
         Schema::table('orders', function (Blueprint $table) {
             $table->unsignedBigInteger('division_id')->nullable()->change();
             $table->unsignedBigInteger('service_id')->nullable()->change();
-            $table->unsignedBigInteger('client_user_id')->nullable()->change();
+            $table->unsignedBigInteger('customer_user_id')->nullable()->change();
             $table->unsignedBigInteger('provider_user_id')->nullable()->change();
-            $table->unsignedBigInteger('assigned_user_id')->nullable()->change();
             $table->string('status', 255)->nullable()->change();
         });
     }
@@ -29,9 +28,8 @@ return new class extends Migration
         Schema::table('orders', function (Blueprint $table) {
             $table->unsignedInteger('division_id')->nullable()->change();
             $table->unsignedInteger('service_id')->nullable()->change();
-            $table->unsignedInteger('client_user_id')->nullable()->change();
+            $table->unsignedInteger('customer_user_id')->nullable()->change();
             $table->unsignedInteger('provider_user_id')->nullable()->change();
-            $table->unsignedInteger('assigned_user_id')->nullable()->change();
             $table->string('status', 1)->change();
 
         });

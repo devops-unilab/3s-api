@@ -20,8 +20,7 @@ return new class extends Migration
             $table->renameColumn('descricao', 'description');
             $table->renameColumn('tempo_sla', 'sla_duration');
             $table->renameColumn('id_area_responsavel', 'division_id');
-            $table->dropColumn('visao');
-            $table->string('role', 255)->nullable();
+            $table->renameColumn('visao', 'role');
             $table->timestamps();
         });
     }
@@ -38,8 +37,7 @@ return new class extends Migration
             $table->renameColumn('description', 'descricao');
             $table->renameColumn('sla_duration', 'tempo_sla');
             $table->renameColumn('division_id', 'id_area_responsavel');
-            $table->addColumn('integer', 'visao')->nullable();
-            $table->dropColumn('role');
+            $table->renameColumn('role', 'visao');
             $table->dropTimestamps();
         });
 

@@ -15,9 +15,9 @@ return new class extends Migration
         Schema::table('orders', function (Blueprint $table) {
             $table->renameColumn('id_area_responsavel', 'division_id');
             $table->renameColumn('id_servico', 'service_id');
-            $table->renameColumn('id_usuario_cliente', 'client_user_id');
+            $table->renameColumn('id_usuario_cliente', 'customer_user_id');
             $table->renameColumn('id_usuario_atendente', 'provider_user_id');
-            $table->renameColumn('id_usuario_indicado', 'assigned_user_id');
+            $table->dropColumn('id_usuario_indicado');
             $table->renameColumn('id_local', 'division_sig_id');
             $table->dropColumn('prioridade');
             $table->renameColumn('descricao', 'description');
@@ -34,7 +34,6 @@ return new class extends Migration
             $table->renameColumn('anexo', 'attachment');
             $table->renameColumn('local_sala', 'place');
             $table->timestamp('updated_at')->nullable();
-
         });
     }
 
@@ -47,7 +46,7 @@ return new class extends Migration
 
             $table->renameColumn('division_id', 'id_area_responsavel');
             $table->renameColumn('service_id', 'id_servico');
-            $table->renameColumn('client_user_id', 'id_usuario_cliente');
+            $table->renameColumn('customer_user_id', 'id_usuario_cliente');
             $table->renameColumn('division_sig_id', 'id_local');
             $table->char('prioridade', 1)->after('solucao')->nullable();
             $table->renameColumn('description', 'descricao');
@@ -60,7 +59,7 @@ return new class extends Migration
             $table->renameColumn('confirmed_at', 'data_fechamento_confirmado');
             $table->renameColumn('rating', 'avaliacao');
             $table->renameColumn('provider_user_id', 'id_usuario_atendente');
-            $table->renameColumn('assigned_user_id', 'id_usuario_indicado');
+            $table->integer('id_usuario_indicado')->nullable();
             $table->renameColumn('phone_number', 'ramal');
             $table->renameColumn('attachment', 'anexo');
             $table->renameColumn('place', 'local_sala');
