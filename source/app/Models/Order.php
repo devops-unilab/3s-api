@@ -14,10 +14,10 @@ class Order extends Model
     protected $table = 'orders';
 
     /**
-    * The database primary key value.
-    *
-    * @var string
-    */
+     * The database primary key value.
+     *
+     * @var string
+     */
     protected $primaryKey = 'id';
 
     /**
@@ -25,7 +25,16 @@ class Order extends Model
      *
      * @var array
      */
-    protected $fillable = ['service_id', 'description', 'attachment', 'campus', 'division_id', 'service_id', 'client_user_id', 'tag', 'phone_number', 'division', 'status', 'solution', 'rating', 'email', 'service_at', 'finished_at', 'confirmed_at', 'provider_user_id', 'assigned_user_id', 'place'];
-
-    
+    protected $fillable = [
+        'service_id',
+        'description',
+        'customer_user_id',
+        'attachment', 'campus',
+        'division_id',
+        'service_id',
+        'client_user_id',
+        'tag',
+        'phone_number', 'division', 'status', 'solution', 'rating', 'email', 'service_at', 'finished_at', 'confirmed_at', 'provider_user_id', 'assigned_user_id', 'place',
+        'division_sig_id'
+    ];
 }

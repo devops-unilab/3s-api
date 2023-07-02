@@ -8,10 +8,10 @@
                         <label for="select-demanda">Serviço*</label>
                     </div>
                     <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
-                        <select id="select-servicos" name="servico" required>
+                        <select id="select-servicos" name="service_id" required>
                             <option value="" selected="selected">Selecione um serviço</option>
                             @foreach ($services as $servico)
-                                <option value="{{ $servico->id }}">{{ $servico->nome }} - {{ $servico->descricao }}
+                                <option value="{{ $servico->id }}">{{ $servico->name }} - {{ $servico->description }}
                                 </option>
                             @endforeach
                         </select>
@@ -19,8 +19,8 @@
                 </div>
                 <div class="row">
                     <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
-                        <label for="descricao">Descrição*</label>
-                        <textarea class="form-control" rows="3" name="descricao" id="descricao" required></textarea>
+                        <label for="description">Descrição*</label>
+                        <textarea class="form-control" rows="3" name="description" id="description" required></textarea>
                     </div>
                 </div>
                 <br>
@@ -28,9 +28,9 @@
                 <div class="row">
                     <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
                         <div class="custom-file">
-                            <input type="file" class="custom-file-input" name="anexo" id="anexo"
+                            <input type="file" class="custom-file-input" name="attachment" id="attachment"
                                 accept="application/msword, application/vnd.ms-excel, application/vnd.ms-powerpoint, text/plain, application/pdf, image/*, application/zip,application/rar, .ovpn, .xlsx">
-                            <label class="custom-file-label" for="anexo" data-browse="Anexar">Anexar um
+                            <label class="custom-file-label" for="attachment" data-browse="Anexar">Anexar um
                                 Arquivo</label>
                         </div>
 
@@ -53,18 +53,18 @@
                 </div>
                 <div class="row">
                     <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12">
-                        <label for="local_sala">Local/Sala</label>
-                        <input class="form-control" type="text" name="local_sala" id="local_sala" value="">
+                        <label for="place">Local/Sala</label>
+                        <input class="form-control" type="text" name="place" id="place" value="">
                     </div>
                     <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12">
-                        <label for="patrimonio">Patrimônio</label>
-                        <input class="form-control" type="number" name="patrimonio" id="patrimonio" value="" />
+                        <label for="tag">Patrimônio</label>
+                        <input class="form-control" type="number" name="tag" id="tag" value="" />
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12">
-                        <label for="ramal">Ramal</label>
-                        <input class="form-control" type="number" name="ramal" id="ramal" value="">
+                        <label for="phone_number">Ramal</label>
+                        <input class="form-control" type="number" name="phone_number" id="phone_number" value="">
                     </div>
 
                     <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12">

@@ -38,6 +38,32 @@ class OcorrenciaController
 		$this->dao = new OcorrenciaDAO();
 	}
 
+	public function main()
+	{
+
+		echo '
+
+<div class="card mb-4">
+        <div class="card-body">';
+
+		if (isset($_GET['selecionar'])) {
+			$this->show();
+		} else if (isset($_GET['cadastrar'])) {
+			$this->store();
+			$this->create();
+		} else {
+			$this->index();
+		}
+
+
+
+		echo '
+	</div>
+</div>
+
+
+';
+	}
 	public function fimDeSemana($data)
 	{
 		$diaDaSemana = intval(date('w', strtotime($data)));
@@ -89,28 +115,24 @@ class OcorrenciaController
 			|| $order->customer_user_id === $user->id);
 	}
 
-	public function getColorStatus($siglaStatus)
+	public function getColorStatus($status)
 	{
 		$strCartao = ' alert-warning ';
-		if ($siglaStatus == 'a') {
+		if ($status === 'opened') {
 			$strCartao = '  notice-warning';
-		} else if ($siglaStatus == 'e') {
+		} else if ($status === 'in progress') {
 			$strCartao = '  notice-info ';
-		} else if ($siglaStatus == 'f') {
+		} else if ($status == 'closed') {
 			$strCartao = 'notice-success ';
-		} else if ($siglaStatus == 'g') {
+		} else if ($status === 'committed') {
 			$strCartao = 'notice-success ';
-		} else if ($siglaStatus == 'h') {
+		} else if ($status == 'canceled') {
 			$strCartao = ' notice-warning ';
-		} else if ($siglaStatus == 'r') {
+		} else if ($status == 'reserved') {
 			$strCartao = '  notice-warning ';
-		} else if ($siglaStatus == 'b') {
+		} else if ($status === 'pending customer response') {
 			$strCartao = '  notice-warning ';
-		} else if ($siglaStatus == 'c') {
-			$strCartao = '   notice-warning ';
-		} else if ($siglaStatus == 'd') {
-			$strCartao = '  notice-warning ';
-		} else if ($siglaStatus == 'i') {
+		} else if ($status == 'pending it resource') {
 			$strCartao = ' notice-warning';
 		}
 		return $strCartao;
@@ -152,6 +174,7 @@ class OcorrenciaController
 		$canEditTag = $this->possoEditarPatrimonio($order, $user);
 		$canEditSolution = $this->possoEditarSolucao($order, $user);
 		$service = Service::findOrFail($order->service_id);
+
 		$order->service_name = $service->name;
 		$canEditService = $this->possoEditarServico($order, $user);
 		$isClient = ($user->role === Sessao::NIVEL_COMUM);
@@ -165,7 +188,6 @@ class OcorrenciaController
 		$canRequestHelp = ($order->customer_user_id == $user->id && !isset($_SESSION['pediu_ajuda']) && !$isLate);
 		$customer = User::findOrFail($order->customer_user_id);
 		$order->client_name =  $customer->name;
-
 		$canEditDivision = $this->possoEditarAreaResponsavel($order, $user);
 
 		$providerName = '';
@@ -249,36 +271,6 @@ class OcorrenciaController
 	}
 
 
-	public function main()
-	{
-
-		echo '
-
-<div class="card mb-4">
-        <div class="card-body">';
-
-		if (isset($_GET['selecionar'])) {
-			$this->show();
-		} else if (isset($_GET['cadastrar'])) {
-			$this->addOrder();
-			$this->telaCadastro();
-		} else {
-			$this->index();
-		}
-
-
-
-		echo '
-
-
-	</div>
-</div>
-
-
-
-
-';
-	}
 	public function painel($lista, $strTitulo, $id, $strShow = "")
 	{
 		echo view(
@@ -476,7 +468,7 @@ class OcorrenciaController
 		';
 	}
 
-	public function telaCadastro()
+	public function create()
 	{
 		$this->sessao = new Sessao();
 
@@ -485,7 +477,7 @@ class OcorrenciaController
 
 
 		$listaNaoAvaliados = DB::table('orders')->where('customer_user_id', $this->sessao->getIdUsuario())->where('status', OcorrenciaController::STATUS_FECHADO)->get();
-
+		// dd(OcorrenciaController::STATUS_FECHADO);
 		echo '
             <div class="row">
                 <div class="col-md-12 blog-main">';
@@ -495,10 +487,15 @@ class OcorrenciaController
 		if ($this->sessao->getNivelAcesso() == Sessao::NIVEL_COMUM) {
 			$filterServices = ['customer'];
 		}
-		if ($this->sessao->getNivelAcesso() == Sessao::NIVEL_ADM || $this->sessao->getNivelAcesso() == Sessao::NIVEL_TECNICO) {
+		if (
+			$this->sessao->getNivelAcesso() == Sessao::NIVEL_ADM ||
+			$this->sessao->getNivelAcesso() == Sessao::NIVEL_TECNICO
+		) {
 			$filterServices = ['customer', 'provider'];
 		}
+
 		$services = Service::whereIn('role', $filterServices)->get();
+
 		if (count($listaNaoAvaliados) > 0) {
 			echo view(
 				'partials.index-orders',
@@ -519,7 +516,7 @@ class OcorrenciaController
 	}
 
 
-	public function addOrder()
+	public function store()
 	{
 
 		if (!isset($_POST['enviar_ocorrencia'])) {
@@ -527,29 +524,26 @@ class OcorrenciaController
 		}
 		$request = request();
 
-		if (!(isset($_POST['descricao']) &&
+		if (!(isset($_POST['description']) &&
 			isset($_POST['campus'])  &&
 			isset($_POST['email']) &&
-			isset($_POST['patrimonio']) &&
-			isset($_POST['ramal']) &&
-			isset($_POST['local_sala']) &&
-			isset($_POST['servico']))) {
+			isset($_POST['tag']) &&
+			isset($_POST['phone_number']) &&
+			isset($_POST['place']) &&
+			isset($_POST['service_id']))) {
 			echo ':incompleto';
 			return;
 		}
-
-		$sessao = new Sessao();
-
 		$novoNome = "";
-		if ($request->hasFile('anexo')) {
-			$anexo = $request->file('anexo');
+		if ($request->hasFile('attachment')) {
+			$attachment = $request->file('attachment');
 			if (!Storage::exists('public/uploads')) {
 				Storage::makeDirectory('public/uploads');
 			}
 
-			$novoNome = $anexo->getClientOriginalName();
+			$novoNome = $attachment->getClientOriginalName();
 
-			if (Storage::exists('public/uploads/' . $anexo->getClientOriginalName())) {
+			if (Storage::exists('public/uploads/' . $attachment->getClientOriginalName())) {
 				$novoNome = uniqid() . '_' . $novoNome;
 			}
 
@@ -569,101 +563,89 @@ class OcorrenciaController
 			}
 
 
-			if (!$anexo->storeAs('public/uploads/', $novoNome)) {
+			if (!$attachment->storeAs('public/uploads/', $novoNome)) {
 				echo ':falha:arquivo não pode ser enviado';
 				return;
 			}
 		}
 
-		$user = DB::table('usuario')->where('id', $sessao->getIdUsuario())->first();
+		$user = request()->user();
 
-		$service = DB::table('servico')
+		$service = DB::table('services')
 			->select(
-				'servico.*',
-				'area_responsavel.nome as area_responsavel_nome',
-				'area_responsavel.descricao as area_responsavel_descricao'
+				'services.*',
+				'divisions.name as area_responsavel_nome',
+				'divisions.description as area_responsavel_descricao'
 			)->join(
-				'area_responsavel',
-				'servico.id_area_responsavel',
+				'divisions',
+				'services.division_id',
 				'=',
-				'area_responsavel.id'
+				'divisions.id'
 			)
-			->where('servico.id', '=', $_POST['servico'])
+			->where('services.id', '=', $request->service_id)
 			->first();
 
 
 		try {
 			DB::beginTransaction();
-
 			$data =
 				[
-					'id_area_responsavel' =>  $service->id_area_responsavel,
-					'id_servico' => $service->id,
-					'id_local' => $sessao->getIDUnidade(),
-					'customer_user_id' => $sessao->getIdUsuario(),
-					'descricao' => $request->descricao,
+					'division_id' =>  $service->division_id,
+					'service_id' => $service->id,
+					'division_sig_id' => $user->division_sig_id,
+					'division_sig' => $user->division_sig,
+					'customer_user_id' => $user->id,
+					'description' => $request->description,
 					'campus' => $request->campus,
-					'patrimonio' => $request->patrimonio,
-					'ramal' => $request->ramal,
-					'local' => $request->local,
-					'status' => 'a',
+					'tag' => $request->tag,
+					'phone_number' => $request->phone_number,
+					'status' => 'opened',
 					'email' => $request->email,
-					'anexo' => $novoNome,
-					'local_sala' => $request->local_sala,
-					'data_abertura' => date("Y-m-d H:i:s")
+					'attachment' => $novoNome,
+					'place' => $request->place
 				];
 
+			// dd($data);
+			$order = Order::create($data);
+			$ocorrenciaInsertedId = $order->id;
 
-			$ocorrenciaInsertedId = DB::table('orders')->insertGetId($data);
-
-			DB::table('status_ocorrencia')->insert([
-				'id_ocorrencia' => $ocorrenciaInsertedId,
-				'id_status' => 2,
-				'mensagem' => "Ocorrência liberada para que qualquer técnico possa atender.",
-				'id_usuario' => $user->id,
-				'data_mudanca' => date("Y-m-d H:i:s"),
+			DB::table('order_status_logs')->insert([
+				'order_id' => $ocorrenciaInsertedId,
+				'status' => 'opened',
+				'message' => "Ocorrência liberada para que qualquer técnico possa atender.",
+				'user_id' => $user->id
 			]);
 
-			$mail = new Mail();
-
-			$assunto = "[3S] - Chamado Nº " . $ocorrenciaInsertedId;
-			$corpo =  '<p>Prezado(a) ' . $user->nome . ' ,</p>';
-			$corpo .= '<p>Sua solicitação foi realizada com sucesso, solicitação
-			<a href="https://3s.unilab.edu.br/?page=ocorrencia&selecionar='
-				. $ocorrenciaInsertedId . '">Nº' . $ocorrenciaInsertedId . '</a></p>';
-			$corpo .= '<ul>
-							<li>Serviço Solicitado: ' . $service->nome . '</li>
-							<li>Descrição do Problema: ' . $request->descricao . '</li>
-							<li>Setor Responsável: ' . $service->area_responsavel_nome .
-				' - ' . $service->area_responsavel_descricao . '</li>
-					</ul><br><p>Mensagem enviada pelo sistema 3S. Favor não responder.</p>';
-
-			$send = $mail->enviarEmail($user->email, $user->nome, $assunto, $corpo);
-
-			if ($send) {
-				DB::commit();
-				echo '<div class="alert alert-success" role="alert">
+			DB::commit();
+			echo '<div class="alert alert-success" role="alert">
 						Ocorrência adicionada com sucesso!
-			  			</div>';
-				echo '<META HTTP-EQUIV="REFRESH" CONTENT="1; URL=?page=ocorrencia&selecionar=' . $ocorrenciaInsertedId . '">';
-			} else {
-				echo '
-				<div class="alert alert-danger" role="alert">
-  					Falha ao tentar cadastrar ocorrência.
-				</div>
-				';
-				DB::rollBack();
-				echo '<META HTTP-EQUIV="REFRESH" CONTENT="1; URL=?page=ocorrencia&cadastrar=1">';
-			}
+			  </div>';
 		} catch (\Exception $e) {
+			$message = $e->getMessage();
 			echo '
 				<div class="alert alert-danger" role="alert">
-  					Falha ao tentar cadastrar ocorrência.
+  					Falha ao tentar cadastrar ocorrência. ' . $message . '
 				</div>
 				';
 			DB::rollBack();
-			echo '<META HTTP-EQUIV="REFRESH" CONTENT="1; URL=?page=ocorrencia&cadastrar=1">';
+			// echo '<META HTTP-EQUIV="REFRESH" CONTENT="1; URL=?page=ocorrencia&cadastrar=1">';
 		}
+		$mail = new Mail();
+
+		$assunto = "[3S] - Chamado Nº " . $ocorrenciaInsertedId;
+		$corpo =  '<p>Prezado(a) ' . $user->name . ' ,</p>';
+		$corpo .= '<p>Sua solicitação foi realizada com sucesso, solicitação
+			<a href="https://3s.unilab.edu.br/?page=ocorrencia&selecionar='
+			. $ocorrenciaInsertedId . '">Nº' . $ocorrenciaInsertedId . '</a></p>';
+		$corpo .= '<ul>
+							<li>Serviço Solicitado: ' . $service->name . '</li>
+							<li>Descrição do Problema: ' . $request->description . '</li>
+							<li>Setor Responsável: ' . $service->area_responsavel_nome .
+			' - ' . $service->area_responsavel_descricao . '</li>
+					</ul><br><p>Mensagem enviada pelo sistema 3S. Favor não responder.</p>';
+
+		$mail->enviarEmail($user->email, $user->nome, $assunto, $corpo);
+		echo '<META HTTP-EQUIV="REFRESH" CONTENT="1; URL=?page=ocorrencia&selecionar=' . $ocorrenciaInsertedId . '">';
 	}
 
 
@@ -1125,6 +1107,7 @@ class OcorrenciaController
 
 	public function ajaxReservar()
 	{
+		$user = request()->user();
 		if (!isset($_POST['tecnico'])) {
 			echo ':falha:Técnico especificado';
 			return false;
@@ -1140,10 +1123,9 @@ class OcorrenciaController
 		$usuario = new Usuario();
 		$usuario->setId($_POST['tecnico']);
 
-		$usuarioDao = new UsuarioDAO($this->dao->getConnection());
-		$usuarioDao->fillById($usuario);
 
-		$this->selecionado->getAreaResponsavel()->setId($usuario->getIdSetor());
+
+		$this->selecionado->getAreaResponsavel()->setId($user->division_id);
 		$this->selecionado->setStatus(self::STATUS_RESERVADO);
 
 		$status = new Status();
@@ -1155,13 +1137,13 @@ class OcorrenciaController
 		$this->statusOcorrencia->setOcorrencia($this->selecionado);
 		$this->statusOcorrencia->setStatus($status);
 		$this->statusOcorrencia->setDataMudanca(date("Y-m-d G:i:s"));
-		$this->statusOcorrencia->getUsuario()->setId($this->sessao->getIdUsuario());
+		$this->statusOcorrencia->getUsuario()->setId($user->id);
 		$this->statusOcorrencia->setMensagem('Atendimento reservado para ' . $usuario->getNome());
 
 
 		$ocorrenciaDao->getConnection()->beginTransaction();
-		$this->selecionado->setIdUsuarioIndicado($usuario->getId());
-		$this->selecionado->getAreaResponsavel()->setId($usuario->getIdSetor());
+		$this->selecionado->setIdUsuarioIndicado($user->id);
+		$this->selecionado->getAreaResponsavel()->setId($user->division_id);
 
 
 		if (!$ocorrenciaDao->update($this->selecionado)) {
@@ -1600,11 +1582,6 @@ class OcorrenciaController
 				'servico.descricao as descricao_servico'
 			)
 			->where('servico.id', $_POST['id_servico'])->first();
-
-
-		dd($servico);
-
-
 
 		$ocorrenciaDao = new OcorrenciaDAO($this->dao->getConnection());
 

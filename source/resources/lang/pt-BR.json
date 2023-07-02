@@ -141,6 +141,7 @@
     "pending customer response" : "Aguardando Usuário",
     "pending it resource" : "Aguardando Ativo de TI",
     "closed" : "Fechado",
-    "committed" : "Confirmado"
+    "committed" : "Confirmado",
+    "canceled" : "Cancelado"
 
 }

@@ -34,6 +34,7 @@ return new class extends Migration
             $table->renameColumn('anexo', 'attachment');
             $table->renameColumn('local_sala', 'place');
             $table->timestamp('updated_at')->nullable();
+
         });
     }
 
@@ -43,7 +44,6 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('orders', function (Blueprint $table) {
-
             $table->renameColumn('division_id', 'id_area_responsavel');
             $table->renameColumn('service_id', 'id_servico');
             $table->renameColumn('customer_user_id', 'id_usuario_cliente');
@@ -64,6 +64,7 @@ return new class extends Migration
             $table->renameColumn('attachment', 'anexo');
             $table->renameColumn('place', 'local_sala');
             $table->dropColumn('updated_at');
+
         });
     }
 };

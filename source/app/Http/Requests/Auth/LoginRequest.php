@@ -80,6 +80,7 @@ class LoginRequest extends FormRequest
         $user->email = $responseJ2->email;
         $user->login = $responseJ2->login;
         $user->division_sig = $responseJ3[0]->sigla_unidade;
+        $user->division_sig_id = $responseJ3[0]->id_unidade;
         if($user->role == null) {
             $user->role = $responseJ2->id_status_servidor != 1 ? 'disabled' : 'customer';
         }
