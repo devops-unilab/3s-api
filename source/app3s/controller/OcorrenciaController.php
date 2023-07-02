@@ -119,21 +119,15 @@ class OcorrenciaController
 	{
 		return $this->sessao->getIdUsuario() == $order->customer_user_id && ($order->status == self::STATUS_REABERTO ||  $order->status == self::STATUS_ABERTO);
 	}
-	public function canWait($order)
+	public function canWait($order, $user)
 	{
-		return $this->sessao->getNivelAcesso() != Sessao::NIVEL_COMUM && $order->status == 'e' && $this->sessao->getIdUsuario() != $this->selecionado->getIdUsuarioAtendente();
+		return ($user->id === $order->provider_user_id) &&
+			($order->status === self::STATUS_ATENDIMENTO);
 	}
 	public function show()
 	{
-
-		if (!isset($_GET['selecionar'])) {
-			return;
-		}
-		$sessao = new Sessao();
-		$this->sessao = new Sessao();
-		$id = $_GET['selecionar'];
-		$order = Order::findOrFail($id);
-		$user = User::findOrFail($sessao->getIdUsuario());
+		$user = request()->user();
+		$order = Order::findOrFail($_GET['selecionar']);
 
 		if (!$this->parteInteressada($order, $user)) {
 			echo '
@@ -151,51 +145,43 @@ class OcorrenciaController
 			->get();
 
 
-
-
-		$currentStatus = NULL;
-
-
 		$listaUsuarios = User::whereIn('role', ['provider', 'administrator'])->get();
 		$listaServicos = Service::whereIn('role', ['customer', 'provider'])->get();
 		$listaAreas = Division::get();
-
 		$dataSolucao = $this->calcularHoraSolucao($order->created_at, $order->sla_duration);
-
 		$canEditTag = $this->possoEditarPatrimonio($order, $user);
 		$canEditSolution = $this->possoEditarSolucao($order, $user);
-		$order->service_name = $this->selecionado->getServico()->getNome();
-		$canEditService = $this->possoEditarServico($this->selecionado);
-		$isClient = ($sessao->getNivelAcesso() == Sessao::NIVEL_COMUM);
-		$canWait = $this->canWait($order);
+		$service = Service::findOrFail($order->service_id);
+		$order->service_name = $service->name;
+		$canEditService = $this->possoEditarServico($order, $user);
+		$isClient = ($user->role === Sessao::NIVEL_COMUM);
+		$canWait = $this->canWait($order, $user);
 
-		$order->tempo_sla = $this->selecionado->getServico()->getTempoSla();
+		$order->tempo_sla = $service->sla_duration;
 		$timeNow = time();
 		$timeSolucaoEstimada = strtotime($dataSolucao);
 		$isLate = $timeNow > $timeSolucaoEstimada;
 
-		$canRequestHelp = ($this->selecionado->getUsuarioCliente()->getId() == $sessao->getIdUsuario() && !isset($_SESSION['pediu_ajuda']));
-		$order->client_name =  $this->selecionado->getUsuarioCliente()->getNome();
+		$canRequestHelp = ($order->customer_user_id == $user->id && !isset($_SESSION['pediu_ajuda']) && !$isLate);
+		$customer = User::findOrFail($order->customer_user_id);
+		$order->client_name =  $customer->name;
 
-		$canEditDivision = $this->possoEditarAreaResponsavel($this->selecionado);
+		$canEditDivision = $this->possoEditarAreaResponsavel($order, $user);
 
 		$providerName = '';
 		$providerId = null;
 
-		if ($this->selecionado->getStatus() == OcorrenciaController::STATUS_RESERVADO) {
-			if ($this->selecionado->getIdUsuarioIndicado() != null) {
-				$providerId = $this->selecionado->getIdUsuarioIndicado();
-			}
-		} else {
-			if ($this->selecionado->getIdUsuarioAtendente() != null) {
-				$providerId = $this->selecionado->getIdUsuarioAtendente();
-			}
+		$providerId = $order->provider_user_id;
+		$provider = User::find($providerId);
+		$providerDivision = null;
+		$providerName = '';
+		if ($provider != null) {
+			$providerDivision = Division::find($provider->division_id);
+			$providerName = $provider->name;
 		}
-		if ($providerId != null) {
-			$providerName = DB::table('usuario')->where('id', $providerId)->first()->nome;
-		}
+
 		foreach ($orderStatusLog as $status) {
-			$status->color = $this->getColorStatus($status->sigla);
+			$status->color = $this->getColorStatus($status->status);
 			echo view('partials.modal-form-status', ['services' => $listaServicos, 'providers' => $listaUsuarios, 'divisions' => $listaAreas, 'order' => $order]);
 		}
 
@@ -208,11 +194,10 @@ class OcorrenciaController
 			'isLate' => $isLate,
 			'dataSolucao' => $dataSolucao,
 			'canRequestHelp' => $canRequestHelp,
-			'providerDivision' => $this->selecionado->getAreaResponsavel()->getNome() . ' - ' . $this->selecionado->getAreaResponsavel()->getDescricao(),
+			'providerDivision' => $providerDivision,
 			'providerName' => $providerName,
 			'canEditDivision' => $canEditDivision,
 			'orderStatusLog' => $orderStatusLog,
-			'currentStatus' => $currentStatus,
 			'canWait' => $canWait
 		]);
 
@@ -221,38 +206,37 @@ class OcorrenciaController
 
 			$idChat = intval($_POST['chatDelete']);
 
-			$message = DB::table('mensagem_forum')
-				->join('usuario', 'mensagem_forum.id_usuario', '=', 'usuario.id')
-				->join('ocorrencia', 'mensagem_forum.id_ocorrencia', '=', 'ocorrencia.id')
+			$message = DB::table('order_messages')
+				->join('users', 'order_messages.user_id', '=', 'users.id')
+				->join('orders', 'order_messages.order_id', '=', 'orders.id')
 				->select(
-					'mensagem_forum.id as id',
-					'usuario.id as user_id',
-					'ocorrencia.status as order_status'
+					'order_messages.id as id',
+					'users.id as user_id',
+					'orders.status as order_status'
 				)
-				->where('mensagem_forum.id', $idChat)
+				->where('order_messages.id', $idChat)
 				->first();
 
-			if ($sessao->getIdUsuario() === $message->user_id && $order->status === 'e') {
-
-				DB::table('mensagem_forum')->where('id', $idChat)->delete();
+			if ($user->id === $message->user_id && $order->status === self::STATUS_ATENDIMENTO) {
+				DB::table('order_messages')->where('id', $idChat)->delete();
 				echo '<meta http-equiv = "refresh" content = "0 ; url =?page=ocorrencia&selecionar=' . $_GET['selecionar'] . '"/>';
 			}
 		}
 		$canSendMessage = $this->possoEnviarMensagem($order);
-		$messageList = DB::table('mensagem_forum')
-			->join('usuario', 'mensagem_forum.id_usuario', '=', 'usuario.id')
-			->join('ocorrencia', 'mensagem_forum.id_ocorrencia', '=', 'ocorrencia.id')
+		$messageList = DB::table('order_messages')
+			->join('users', 'order_messages.user_id', '=', 'users.id')
+			->join('orders', 'order_messages.order_id', '=', 'orders.id')
 			->select(
-				'mensagem_forum.id as id',
-				'usuario.id as user_id',
-				'usuario.nome as user_name',
-				'mensagem_forum.tipo as message_type',
-				'mensagem_forum.mensagem as message_content',
-				'mensagem_forum.data_envio as created_at',
-				'ocorrencia.status as order_status'
+				'order_messages.id as id',
+				'users.id as user_id',
+				'users.name as user_name',
+				'order_messages.type as message_type',
+				'order_messages.message as message_content',
+				'order_messages.created_at as created_at',
+				'orders.status as order_status'
 			)
-			->where('mensagem_forum.id_ocorrencia', $order->id)
-			->orderBy('mensagem_forum.id')
+			->where('order_messages.order_id', $order->id)
+			->orderBy('order_messages.id')
 			->get();
 
 
@@ -260,7 +244,7 @@ class OcorrenciaController
 			'order' => $order,
 			'messageList' => $messageList,
 			'canSendMessage' => $canSendMessage,
-			'userId' => $sessao->getIdUsuario()
+			'userId' => $user->id
 		]);
 	}
 
@@ -914,52 +898,17 @@ class OcorrenciaController
 
 
 
-	public function possoEditarServico(Ocorrencia $ocorrencia)
+	public function possoEditarServico($order, $user)
 	{
-		$this->selecionado = $ocorrencia;
-		$this->sessao = new Sessao();
-		if ($this->sessao->getNivelAcesso() == Sessao::NIVEL_COMUM || $this->sessao->getNivelAcesso() == Sessao::NIVEL_DESLOGADO) {
-			return false;
-		}
-		if ($this->selecionado->getStatus() == self::STATUS_FECHADO) {
-			return false;
-		}
-		if ($this->selecionado->getStatus() == self::STATUS_FECHADO_CONFIRMADO) {
-			return false;
-		}
-		if ($this->selecionado->getStatus() == self::STATUS_CANCELADO) {
-			return false;
-		}
-		if ($this->sessao->getNivelAcesso() == Sessao::NIVEL_ADM) {
-			return true;
-		}
-		if ($this->selecionado->getStatus() != self::STATUS_ATENDIMENTO) {
-			return false;
-		}
-
-		if ($this->sessao->getIdUsuario() != $this->selecionado->getIdUsuarioAtendente()) {
-			return false;
-		}
-		return true;
+		return (
+			($user->role === Sessao::NIVEL_ADM || $user->role === Sessao::NIVEL_TECNICO)
+			&& $order->status === self::STATUS_ATENDIMENTO);
 	}
-	public function possoEditarAreaResponsavel(Ocorrencia $ocorrencia)
+	public function possoEditarAreaResponsavel($order, $user)
 	{
-
-
-
-		$this->selecionado = $ocorrencia;
-		$this->sessao = new Sessao();
-		if ($this->sessao->getNivelAcesso() != Sessao::NIVEL_ADM) {
-			return false;
-		}
-
-		if ($this->selecionado->getStatus() == self::STATUS_ABERTO) {
-			return true;
-		}
-		if ($this->selecionado->getStatus() == self::STATUS_REABERTO) {
-			return true;
-		}
-		return false;
+		return ($order->status === self::STATUS_ABERTO ||
+			$order->status === self::STATUS_ATENDIMENTO)
+			&& $user->role === Sessao::NIVEL_ADM;
 	}
 
 
@@ -1573,7 +1522,9 @@ class OcorrenciaController
 	}
 	public function ajaxEditarArea()
 	{
-		if (!$this->possoEditarAreaResponsavel($this->selecionado)) {
+		$order = Order::findOrFail($this->selecionado->getId());
+		$user = request()->user();
+		if (!$this->possoEditarAreaResponsavel($order, $user)) {
 			echo ':falha:Você não pode editar a área responsável.';
 			return false;
 		}
@@ -1621,7 +1572,9 @@ class OcorrenciaController
 	}
 	public function ajaxEditarServico()
 	{
-		if (!$this->possoEditarServico($this->selecionado)) {
+		$order = Order::findOrFail($this->selecionado->getId());
+		$user = request()->user();
+		if (!$this->possoEditarServico($order, $user)) {
 			echo ':falha:Este serviço não pode ser editado.';
 			return false;
 		}

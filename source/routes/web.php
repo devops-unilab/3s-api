@@ -10,11 +10,14 @@ use app3s\controller\MainIndex;
 use app3s\util\Sessao;
 use Illuminate\Support\Facades\Route;
 
-
+$user = request()->user();
+if($user === null) {
+    $s = new Sessao();
+    $s->mataSessao();
+}
 Route::middleware('auth')->group(function () {
 
-    // $s = new Sessao();
-    // dd($_SESSION);
+
     Route::get('/', function () {
         $main = new MainIndex();
         $main->main();

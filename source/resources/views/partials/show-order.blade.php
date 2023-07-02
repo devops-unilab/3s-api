@@ -57,7 +57,7 @@
                             </div>
                         </div>
                         <button class="btn btn-light btn-lg p-2" type="button" disabled>
-                            Status: {{ $currentStatus->nome }}
+                            Status: {{ $order->status }}
                         </button>
                     </div>
                 </div>
@@ -212,15 +212,16 @@
         <div class="container">
             @foreach ($orderStatusLog as $status)
                 <div class="notice {{ $status->color }}">
-                    <strong>{{ $status->nome }}</strong><br>
-                    @if ($status->sigla == 'g')
+                    <strong>{{ $status->status }}</strong><br>
+                    @if ($status->status == 'commited')
                         <br>
                         @for ($i = 0; $i < intval($order->avaliacao); $i++)
                             <img class="m-2 estrela-1" nota="1" src="img/star1.png" alt="1">
                         @endfor
                     @endif
-                    <br>{{ $status->mensagem }}<br>
-                    <strong>{{ $status->nome_usuario }}<br>{{ date('d/m/Y - H:i', strtotime($status->data_mudanca)) }}</strong>
+
+                    <br>{{ $status->message }}<br>
+                    <strong>{{ $status->nome_usuario }}<br>{{ date('d/m/Y - H:i', strtotime($status->updated_at)) }}</strong>
                 </div>
             @endforeach
         </div>
