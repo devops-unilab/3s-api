@@ -24,8 +24,8 @@ Route::middleware('auth')->group(function () {
     })->name('root-post');
 
     // Route::get('/',[ OrdersController::class, 'index']);
-    // Route::resource('divisions', DivisionsController::class);
-    // Route::resource('users', UsersController::class);
+    Route::resource('divisions', DivisionsController::class);
+    Route::resource('users', UsersController::class);
     Route::resource('services', ServicesController::class);
     // Route::resource('orders', OrdersController::class);
     Route::post('/change-level', [UsersController::class, 'changeRole'])->name('change-level');

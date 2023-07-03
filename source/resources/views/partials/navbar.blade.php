@@ -41,12 +41,12 @@
                         Gerenciamento
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" href="?page=servico">Serviços</a>
+                        <a class="dropdown-item" href={{ route('services.index') }}>Serviços</a>
 
 
                         <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="?page=area_responsavel">Unidades</a>
-                        <a class="dropdown-item" href="?page=usuario">Usuários</a>
+                        <a class="dropdown-item" href={{ route('divisions.index') }}>Unidades</a>
+                        <a class="dropdown-item" href={{ route('users.index') }}>Usuários</a>
                     </div>
                 </li>
             @endif

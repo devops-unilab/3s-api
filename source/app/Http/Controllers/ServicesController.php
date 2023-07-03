@@ -31,9 +31,7 @@ class ServicesController extends Controller
             $services = Service::latest()->paginate($perPage);
         }
 
-        return view('services.index', [
-            'services' => $services,
-            'role' => $sessao->getNivelAcesso()]);
+        return view('services.index', compact('services'));
     }
 
     /**

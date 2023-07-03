@@ -9,19 +9,20 @@
     <meta http-equiv="expires" content="Tue, 01 Jan 1980 1:00:00 GMT" />
     <meta http-equiv="pragma" content="no-cache" />
 
-    <link rel="icon" type="image/x-icon" href="img/favicon.ico">
+    <link rel="icon" type="image/x-icon" href="{{ env('APP_URL') }}/img/favicon.ico">
     <meta charset="utf-8">
     <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="vendor/bootstrap-4.6.0/css/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" href="css/style.css?a=123" />
-    <link rel="stylesheet" type="text/css" href="css/style_kamban.css" />
-    <link rel="stylesheet" type="text/css" href="css/list.css" />
-    <link rel="stylesheet" type="text/css" href="css/chat.css" />
-    <link rel="stylesheet" type="text/css" href="css/selectize.default.css" />
-    <link href="plugins/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="{{ env('APP_URL') }}/vendor/bootstrap-4.6.0/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="{{ env('APP_URL') }}/css/style.css?a=123" />
+    <link rel="stylesheet" type="text/css" href="{{ env('APP_URL') }}/css/style_kamban.css" />
+    <link rel="stylesheet" type="text/css" href="{{ env('APP_URL') }}/css/list.css" />
+    <link rel="stylesheet" type="text/css" href="{{ env('APP_URL') }}/css/chat.css" />
+    <link rel="stylesheet" type="text/css" href="{{ env('APP_URL') }}/css/selectize.default.css" />
+    <link href="{{ env('APP_URL') }}/plugins/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet"
+        type="text/css">
 
-    <link href="vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
-    <link href="css/style_form_login.css" rel="stylesheet">
+    <link href="{{ env('APP_URL') }}/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
+    <link href="{{ env('APP_URL') }}/css/style_form_login.css" rel="stylesheet">
     <!-- Desenvolvido por Jefferson Uchôa Ponte-->
     <meta http-equiv="Cache-control" content="no-cache">
 
@@ -76,7 +77,17 @@
         @if (auth()->check())
             @include('partials.navbar')
         @endif
-        @yield('content')
+        <div class="card mb-4">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                        @yield('content')
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </main>
     <footer class="blog-footer">
         <p>Desenvolvido pela <a href="https://dti.unilab.edu.br/"> Diretoria de Tecnologia da Informação DTI </a> / <a
@@ -108,28 +119,28 @@
         </div>
     </div>
 </body>
-<script src="js/barra_2.0.js"></script>
-<script src="js/jquery-3.5.1.min.js"></script>
-<script src="vendor/popper.min.js"></script>
-<script src="vendor/bootstrap-4.6.0/js/bootstrap.min.js"></script>
-<script src="vendor/datatables/jquery.dataTables.min.js"></script>
-<script src="vendor/datatables/dataTables.bootstrap4.min.js"></script>
-<script src="js/demo/datatables-demo.js"></script>
-<script src="js/selectize.js"></script>
-<script src="js/login_load.js?a=12"></script>
-<script src="js/change-contraste.js?a=1"></script>
-<script src="js/ocorrencia_selectize.js?a=1"></script>
-<script src="js/jquery.easyPaginate.js?a=1"></script>
-<script src="js/ocorrencia.js?a=14513"></script>
+<script src="{{ env('APP_URL') }}/js/barra_2.0.js"></script>
+<script src="{{ env('APP_URL') }}/js/jquery-3.5.1.min.js"></script>
+<script src="{{ env('APP_URL') }}/vendor/popper.min.js"></script>
+<script src="{{ env('APP_URL') }}/vendor/bootstrap-4.6.0/js/bootstrap.min.js"></script>
+<script src="{{ env('APP_URL') }}/vendor/datatables/jquery.dataTables.min.js"></script>
+<script src="{{ env('APP_URL') }}/vendor/datatables/dataTables.bootstrap4.min.js"></script>
+<script src="{{ env('APP_URL') }}/js/demo/datatables-demo.js"></script>
+<script src="{{ env('APP_URL') }}/js/selectize.js"></script>
+<script src="{{ env('APP_URL') }}/js/login_load.js?a=12"></script>
+<script src="{{ env('APP_URL') }}/js/change-contraste.js?a=1"></script>
+<script src="{{ env('APP_URL') }}/js/ocorrencia_selectize.js?a=1"></script>
+<script src="{{ env('APP_URL') }}/js/jquery.easyPaginate.js?a=1"></script>
+<script src="{{ env('APP_URL') }}/js/ocorrencia.js?a=14513"></script>
 @if (isset(request()->page) && request()->page == 'ocorrencia' && isset(request()->selecionar))
-    <script src="js/mensagem_forum.js?a=172"></script>
+    <script src="{{ env('APP_URL') }}/js/mensagem_forum.js?a=172"></script>
 @endif
 @if (isset($_GET['page']) && $_GET['page'] == 'painel_kamban')
-    <script src="js/painel_kamban.js?123=a"></script>
+    <script src="{{ env('APP_URL') }}/js/painel_kamban.js?123=a"></script>
 @endif
 @if (isset($_GET['page']) && $_GET['page'] == 'painel_tabela')
-    <script src="js/painel_tabela.js"></script>
+    <script src="{{ env('APP_URL') }}/js/painel_tabela.js"></script>
 @endif
-<script src="js/status_ocorrencia.js?a=1"></script>
+<script src="{{ env('APP_URL') }}/js/status_ocorrencia.js?a=1"></script>
 
 </html>
