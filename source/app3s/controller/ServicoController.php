@@ -9,6 +9,7 @@ namespace app3s\controller;
 
 use app3s\model\Servico;
 use app3s\util\Sessao;
+use App\Http\Controllers\ServicesController;
 use Illuminate\Support\Facades\DB;
 
 class ServicoController
@@ -22,47 +23,11 @@ class ServicoController
 
 	public function main()
 	{
-		$sessao = new Sessao();
-		if ($sessao->getNivelAcesso() != Sessao::NIVEL_ADM) {
-			return;
-		}
-
 
 		if (isset($_GET['edit'])) {
 			$this->edit();
 		} else if (isset($_GET['delete'])) {
 			$this->delete();
-		} else {
-			echo '
-
-        <div class="card mb-4">
-            <div class="card-body">
-				<div class="row">
-					<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">';
-			$this->add();
-			$services = DB::table('servico')
-				->join('area_responsavel', 'servico.id_area_responsavel', '=', 'area_responsavel.id')
-				->join('grupo_servico', 'servico.id_grupo_servico', '=', 'grupo_servico.id')
-				->join('tipo_atividade', 'servico.id_tipo_atividade', '=', 'tipo_atividade.id')
-				->select(
-					'servico.id',
-					'servico.tempo_sla',
-					'servico.visao',
-					'servico.nome AS nome',
-					'servico.descricao AS descricao',
-					'area_responsavel.nome AS area_responsavel',
-					'grupo_servico.nome AS grupo_servico',
-					'tipo_atividade.nome AS tipo_atividade'
-				)
-				->get();
-			foreach ($services as $service) {
-				$service->visao = $this->toStringVisao($service->visao);
-			}
-			echo view('partials.index-service', ['services' => $services]);
-			echo '		</div>
-				</div>
-			</div>
-		</div>';
 		}
 	}
 

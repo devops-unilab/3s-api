@@ -449,7 +449,7 @@ class OcorrenciaController
 			$sessao = new Sessao();
 			$currentUser = DB::table('users')->where('id', $sessao->getIdUsuario())->first();
 			$userDivision = DB::table('divisions')->where('id', $currentUser->division_id)->first();
-			$attendents = DB::table('users')->where('role', 'a')->orWhere('role', 't')->get();
+			$attendents = DB::table('users')->whereIn('role', ['administrator', 'provider'])->get();
 			$allUsers = DB::table('users')->get();
 			$applicants = DB::table('orders')->select('division_sig', 'division_sig_id')->distinct()->limit(400)->get();
 			$divisions = DB::table('divisions')->select('id', 'name')->get();
@@ -457,7 +457,9 @@ class OcorrenciaController
 			echo '
                 <div class="p-4 mb-3 bg-light rounded">
                     <h4 class="font-italic">Filtros</h4>';
-			echo view('partials.form-basic-filter', ['userDivision' => $userDivision, 'attendents' => $attendents, 'allUsers' => $allUsers]);
+			echo view('partials.form-basic-filter', [
+				'userDivision' => $userDivision, 'attendents' => $attendents, 'allUsers' => $allUsers
+			]);
 			echo view('partials.form-advanced-filter', ['divisions' => $divisions, 'applicants' => $applicants]);
 			echo view('partials.form-campus-filter');
 			echo '</div>';
@@ -604,8 +606,6 @@ class OcorrenciaController
 					'attachment' => $novoNome,
 					'place' => $request->place
 				];
-
-			// dd($data);
 			$order = Order::create($data);
 			$ocorrenciaInsertedId = $order->id;
 
@@ -628,7 +628,7 @@ class OcorrenciaController
 				</div>
 				';
 			DB::rollBack();
-			// echo '<META HTTP-EQUIV="REFRESH" CONTENT="1; URL=?page=ocorrencia&cadastrar=1">';
+			echo '<META HTTP-EQUIV="REFRESH" CONTENT="1; URL=?page=ocorrencia&cadastrar=1">';
 		}
 		$mail = new Mail();
 

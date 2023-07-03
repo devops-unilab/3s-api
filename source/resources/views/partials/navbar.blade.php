@@ -1,3 +1,11 @@
+@php
+    $userFirstName = auth()->user()->name;
+    $arr = explode(' ', auth()->user()->name);
+    if (isset($arr[0])) {
+        $userFirstName = $arr[0];
+    }
+    $userFirstName = ucfirst(strtolower($userFirstName));
+@endphp
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
 
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
@@ -14,7 +22,7 @@
                 <a class="nav-link" href="?page=ocorrencia&cadastrar=1">Abrir Chamado</a>
             </li>
 
-            @if ($role === 'administrator' || $role === 'provider')
+            @if (request()->session()->get('role') === 'administrator' || request()->session()->get('role') === 'provider')
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
                         data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -26,8 +34,7 @@
                     </div>
                 </li>
             @endif
-
-            @if ($role === 'administrator')
+            @if (request()->session()->get('role') === 'administrator')
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
                         data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -67,25 +74,25 @@
             </button>
             <div class="dropdown-menu dropright">
                 <button type="button" disabled class="dropdown-item">
-                    Setor: {{ $divisionSig }}
+                    Setor: {{ auth()->user()->division_sig }}
                 </button>
                 <hr>
-                @if ($originalRole === 'administrator')
+                @if (auth()->user()->role === 'administrator')
                     <form method="POST" action="/change-level">
                         @csrf
                         <input type="hidden" name="role" value="administrator" />
                         <button type="submit" class="dropdown-item change-level"
-                            {{ $role === 'administrator' ? 'disabled' : '' }}>
+                            {{ request()->session()->get('role') === 'administrator' ? 'disabled' : '' }}>
                             Perfil Admin
                         </button>
                     </form>
                 @endif
-                @if ($originalRole === 'provider' || $originalRole === 'administrator')
+                @if (auth()->user()->role === 'provider' || auth()->user()->role === 'administrator')
                     <form method="POST" action="/change-level">
                         @csrf
                         <input type="hidden" name="role" value="provider" />
                         <button type="submit" class="dropdown-item change-level"
-                            {{ $role === 'provider' ? 'disabled' : '' }}>
+                            {{ request()->session()->get('role') === 'provider' ? 'disabled' : '' }}>
                             Perfil Técnico
                         </button>
                     </form>
@@ -94,7 +101,7 @@
                     @csrf
                     <input type="hidden" name="role" value="customer" />
                     <button type="submit" class="dropdown-item change-level"
-                        {{ $role === 'customer' ? 'disabled' : '' }}>
+                        {{ request()->session()->get('role') === 'customer' ? 'disabled' : '' }}>
                         Perfil Comum
                     </button>
                 </form>

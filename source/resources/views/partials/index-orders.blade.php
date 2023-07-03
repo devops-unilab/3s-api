@@ -23,34 +23,17 @@
                 @forelse ($orders as $order)
                     @php
                         $strClass = 'alert-warning';
-                        if ($order->status == 'a') {
+                        if ($order->status == 'opened' || $order->status == 'reserved') {
                             $strClass = 'alert-warning';
-                        } elseif ($order->status == 'e') {
-                            //Em atendimento
+                        } elseif ($order->status == 'in progress') {
                             $strClass = 'alert-info';
-                        } elseif ($order->status == 'f') {
-                            //Fechado
+                        } elseif ($order->status == 'closed') {
                             $strClass = 'alert-success';
-                        } elseif ($order->status == 'g') {
-                            //Fechado confirmado
+                        } elseif ($order->status == 'committed') {
                             $strClass = 'alert-success';
-                        } elseif ($order->status == 'h') {
-                            //Cancelado
+                        } elseif ($order->status == 'canceled') {
                             $strClass = 'alert-secondary';
-                        } elseif ($order->status == 'r') {
-                            //reaberto
-                            $strClass = 'alert-warning';
-                        } elseif ($order->status == 'b') {
-                            //reservado
-                            $strClass = 'alert-warning';
-                        } elseif ($order->status == 'c') {
-                            //em espera
-                            $strClass = 'alert-info';
-                        } elseif ($order->status == 'd') {
-                            //Aguardando usuario
-                            $strClass = 'alert-danger';
-                        } elseif ($order->status == 'i') {
-                            //Aguardando ativo
+                        } elseif ($order->status == 'pending customer response' || $order->status == 'pending it resource') {
                             $strClass = 'alert-danger';
                         }
                     @endphp

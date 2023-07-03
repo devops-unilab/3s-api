@@ -104,6 +104,7 @@ class LoginRequest extends FormRequest
         $sessao->criaSessao($user->id, $user->role, $user->login, $user->name, $user->email);
         $sessao->setIDUnidade($user->division_sig_id);
         $sessao->setUnidade($user->division_sig);
+        $this->session()->put('role', $user->role);
         //Apaga até aqui
 
         RateLimiter::clear($this->throttleKey());

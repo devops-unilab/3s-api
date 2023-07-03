@@ -2,9 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use app3s\util\Sessao;
 use App\Http\Controllers\Controller;
-use App\Http\Requests;
-
 use App\Models\Service;
 use Illuminate\Http\Request;
 
@@ -17,8 +16,9 @@ class ServicesController extends Controller
      */
     public function index(Request $request)
     {
+        $sessao = new Sessao();
         $keyword = $request->get('search');
-        $perPage = 25;
+        $perPage = 5;
 
         if (!empty($keyword)) {
             $services = Service::where('name', 'LIKE', "%$keyword%")
@@ -31,7 +31,9 @@ class ServicesController extends Controller
             $services = Service::latest()->paginate($perPage);
         }
 
-        return view('services.index', compact('services'));
+        return view('services.index', [
+            'services' => $services,
+            'role' => $sessao->getNivelAcesso()]);
     }
 
     /**
@@ -57,7 +59,7 @@ class ServicesController extends Controller
 			'name' => 'required|max:255'
 		]);
         $requestData = $request->all();
-        
+
         Service::create($requestData);
 
         return redirect('services')->with('flash_message', 'Service added!');
@@ -105,7 +107,7 @@ class ServicesController extends Controller
 			'name' => 'required|max:255'
 		]);
         $requestData = $request->all();
-        
+
         $service = Service::findOrFail($id);
         $service->update($requestData);
 

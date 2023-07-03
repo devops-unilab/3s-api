@@ -132,11 +132,10 @@ class UsersController extends Controller
         $this->validate($request, [
 			'role' => 'required|max:255'
 		]);
-        $sessao = new Sessao();
 
-		if ($sessao->getNivelOriginal() == Sessao::NIVEL_ADM || $sessao->getNivelOriginal() == Sessao::NIVEL_TECNICO)
+		if (auth()->user()->role == 'administrator' || auth()->user()->role == 'provider')
         {
-			$sessao->setNivelDeAcesso($request->role);
+            $request->session()->put('role', $request->role);
 			return redirect('/');
 		}
         return redirect('/');

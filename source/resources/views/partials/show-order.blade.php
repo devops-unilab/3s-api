@@ -57,7 +57,7 @@
                             </div>
                         </div>
                         <button class="btn btn-light btn-lg p-2" type="button" disabled>
-                            Status: {{ $order->status }}
+                            Status: {{ __($order->status) }}
                         </button>
                     </div>
                 </div>

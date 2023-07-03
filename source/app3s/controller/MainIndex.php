@@ -12,14 +12,14 @@ class MainIndex
     $sessao = new Sessao();
     $user = request()->user();
 
-    if($sessao->getNivelAcesso() === null) {
+    if ($sessao->getNivelAcesso() === null) {
       $sessao = new Sessao();
       $sessao->criaSessao($user->id, $user->role, $user->login, $user->name, $user->email);
       $sessao->setIDUnidade($user->division_sig_id);
       $sessao->setUnidade($user->division_sig);
       redirect('/');
     }
-    // dd($sessao->getNivelAcesso());
+
 
     if (isset($_GET['ajax'])) {
       $mainAjax = new MainAjax();
@@ -41,10 +41,8 @@ class MainIndex
     }
     $primeiroNome = ucfirst(strtolower($primeiroNome));
     echo view('partials.navbar', [
-      'role' => $sessao->getNivelAcesso(),
-      'originalRole' => $user->role,
-      'userFirstName' => $primeiroNome,
-      'divisionSig' => $sessao->getUnidade()]);
+      'role' => $sessao->getNivelAcesso()
+    ]);
 
     $sessao = new Sessao();
     if ($sessao->getNivelAcesso() == Sessao::NIVEL_DESLOGADO) {
@@ -65,7 +63,6 @@ class MainIndex
       case Sessao::NIVEL_DISABLED:
         echo view('partials.diabled');
         break;
-
     }
     echo view('partials.footer');
   }
