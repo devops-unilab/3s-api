@@ -8,6 +8,8 @@ use App\Http\Controllers\ServicesController;
 use App\Http\Controllers\UsersController;
 use app3s\controller\MainIndex;
 use app3s\util\Sessao;
+use App\Http\Controllers\KambanController;
+use App\Http\Controllers\TableOrdersController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -27,6 +29,8 @@ Route::middleware('auth')->group(function () {
     Route::resource('divisions', DivisionsController::class);
     Route::resource('users', UsersController::class);
     Route::resource('services', ServicesController::class);
+    Route::get('kamban', KambanController::class)->name('kamban');
+    Route::get('table', TableOrdersController::class)->name('table');
     // Route::resource('orders', OrdersController::class);
     Route::post('/change-level', [UsersController::class, 'changeRole'])->name('change-level');
 });

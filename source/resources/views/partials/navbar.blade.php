@@ -29,8 +29,8 @@
                         Paineis
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" href="?page=painel_kamban">Kanban</a>
-                        <a class="dropdown-item" href="?page=painel_tabela">Tabela</a>
+                        <a class="dropdown-item" href="{{route('kamban')}}">Kanban</a>
+                        <a class="dropdown-item" href="{{route('table')}}">Tabela</a>
                     </div>
                 </li>
             @endif

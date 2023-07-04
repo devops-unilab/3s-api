@@ -284,27 +284,6 @@ class OcorrenciaController
 		);
 	}
 
-	public function arrayStatusPendente()
-	{
-		$arrStatus = array();
-		$arrStatus[] = OcorrenciaController::STATUS_ABERTO;
-		$arrStatus[] = OcorrenciaController::STATUS_AGUARDANDO_ATIVO;
-		$arrStatus[] = OcorrenciaController::STATUS_AGUARDANDO_USUARIO;
-		$arrStatus[] = OcorrenciaController::STATUS_ATENDIMENTO;
-		$arrStatus[] = OcorrenciaController::STATUS_REABERTO;
-		$arrStatus[] = OcorrenciaController::STATUS_RESERVADO;
-		return $arrStatus;
-	}
-	public function arrayStatusFinalizado()
-	{
-
-		$arrStatus = array();
-		$arrStatus[] = OcorrenciaController::STATUS_FECHADO;
-		$arrStatus[] = OcorrenciaController::STATUS_FECHADO_CONFIRMADO;
-		$arrStatus[] = OcorrenciaController::STATUS_CANCELADO;
-		return $arrStatus;
-	}
-
 	public function atrasado($order)
 	{
 		if ($order->sla_duration < 1) {
@@ -727,15 +706,15 @@ class OcorrenciaController
 			}
 		}
 		if (
-			$this->selecionado->getStatus() == self::STATUS_AGUARDANDO_ATIVO
-			|| $this->selecionado->getStatus() == self::STATUS_AGUARDANDO_USUARIO
-			|| $this->selecionado->getStatus() == self::STATUS_EM_ESPERA
+			$this->selecionado->getStatus() == 'pending it resource'
+			|| $this->selecionado->getStatus() == 'pending customer response'
+			|| $this->selecionado->getStatus() == 'opened'
 		) {
 			if ($this->sessao->getIdUsuario() != $this->selecionado->getIdUsuarioAtendente()) {
 				return false;
 			}
 		}
-		if ($this->selecionado->getStatus() == self::STATUS_ABERTO || $this->selecionado->getStatus() == self::STATUS_REABERTO) {
+		if ($this->selecionado->getStatus() == 'opened') {
 			return true;
 		}
 
@@ -743,9 +722,7 @@ class OcorrenciaController
 	}
 	public function possoCancelar()
 	{
-		return $this->sessao->getIdUsuario() === $this->selecionado->getUsuarioCliente()->getId()
-			&&
-			($this->selecionado->getStatus() == self::STATUS_REABERTO || $this->selecionado->getStatus() == self::STATUS_ABERTO);
+		return ($this->sessao->getIdUsuario() === $this->selecionado->getUsuarioCliente()->getId()) && ($this->selecionado->getStatus() == 'opened');
 	}
 
 	public function passwordVerify()
@@ -1861,7 +1838,6 @@ class OcorrenciaController
 	const TIPO_TEXTO = 1;
 	const STATUS_ABERTO = 'opened';
 	const STATUS_RESERVADO = 'reserved';
-	const STATUS_EM_ESPERA = 'opened';
 	const STATUS_AGUARDANDO_USUARIO = 'pending customer response';
 	const STATUS_ATENDIMENTO = 'in progress';
 	const STATUS_FECHADO = 'closed';

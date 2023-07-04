@@ -12,14 +12,6 @@ class MainIndex
     $sessao = new Sessao();
     $user = request()->user();
 
-    if ($sessao->getNivelAcesso() === null) {
-      $sessao = new Sessao();
-      $sessao->criaSessao($user->id, $user->role, $user->login, $user->name, $user->email);
-      $sessao->setIDUnidade($user->division_sig_id);
-      $sessao->setUnidade($user->division_sig);
-      redirect('/');
-    }
-
 
     if (isset($_GET['ajax'])) {
       $mainAjax = new MainAjax();
@@ -40,9 +32,7 @@ class MainIndex
       $primeiroNome = $arr[0];
     }
     $primeiroNome = ucfirst(strtolower($primeiroNome));
-    echo view('partials.navbar', [
-      'role' => $sessao->getNivelAcesso()
-    ]);
+    echo view('partials.navbar');
 
     $sessao = new Sessao();
     if ($sessao->getNivelAcesso() == Sessao::NIVEL_DESLOGADO) {
@@ -93,26 +83,6 @@ class MainIndex
       switch ($_GET['page']) {
         case 'ocorrencia':
           $controller = new OcorrenciaController();
-          $controller->main();
-          break;
-        case 'servico':
-          $controller = new ServicoController();
-          $controller->main();
-          break;
-        case 'area_responsavel':
-          $controller = new AreaResponsavelController();
-          $controller->main();
-          break;
-        case 'usuario':
-          $controller = new UsuarioController();
-          $controller->main();
-          break;
-        case 'painel_kamban':
-          $controller = new PainelKambanController();
-          $controller->main();
-          break;
-        case 'painel_tabela':
-          $controller = new PainelTabelaController();
           $controller->main();
           break;
         default:
