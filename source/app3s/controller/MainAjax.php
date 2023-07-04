@@ -16,14 +16,6 @@ class MainAjax
                 $controller = new OcorrenciaController();
                 $controller->ajaxPedirAjuda();
                 break;
-            case 'painel_kamban':
-                $controller = new PainelKambanController();
-                $controller->quadroKamban();
-                break;
-            case 'painel_tabela':
-                $controller = new PainelTabelaController();
-                $controller->tabelaChamados();
-                break;
             default:
                 echo ':falha';
                 break;

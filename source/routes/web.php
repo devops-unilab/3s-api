@@ -25,11 +25,11 @@ Route::middleware('auth')->group(function () {
         $main->main();
     })->name('root-post');
 
-    // Route::get('/',[ OrdersController::class, 'index']);
+    // Route::get('/',[ OrdersController::class, 'index'])->name('home');
     Route::resource('divisions', DivisionsController::class);
     Route::resource('users', UsersController::class);
     Route::resource('services', ServicesController::class);
-    // Route::resource('orders', OrdersController::class);
+    Route::resource('orders', OrdersController::class);
     Route::post('/change-level', [UsersController::class, 'changeRole'])->name('change-level');
 });
 

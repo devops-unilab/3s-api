@@ -39,82 +39,8 @@ class MainIndex
       echo view('partials.form-login');
       return;
     }
-
-    switch ($user->role) {
-      case Sessao::NIVEL_TECNICO:
-        $this->contentTec();
-        break;
-      case Sessao::NIVEL_ADM:
-        $this->contentAdmin();
-        break;
-      case Sessao::NIVEL_COMUM:
-        $this->contentComum();
-        break;
-      case Sessao::NIVEL_DISABLED:
-        echo view('partials.diabled');
-        break;
-    }
+    $controller = new OcorrenciaController();
+    $controller->main();
     echo view('partials.footer');
-  }
-
-
-  public function contentComum()
-  {
-    if (isset($_GET['page'])) {
-      switch ($_GET['page']) {
-        case 'ocorrencia':
-          $controller = new OcorrenciaController();
-          $controller->main();
-          break;
-        default:
-          echo '<p>Página solicitada não encontrada.</p>';
-          break;
-      }
-    } else {
-      $controller = new OcorrenciaController();
-      $controller->main();
-    }
-  }
-
-
-  public function contentAdmin()
-  {
-    if (isset($_GET['page'])) {
-      switch ($_GET['page']) {
-        case 'ocorrencia':
-          $controller = new OcorrenciaController();
-          $controller->main();
-          break;
-        default:
-          echo '<p>Página solicitada não encontrada.</p>';
-          break;
-      }
-    } else {
-      $controller = new OcorrenciaController();
-      $controller->main();
-    }
-  }
-
-
-  public function contentTec()
-  {
-    if (isset($_GET['page'])) {
-      switch ($_GET['page']) {
-        case 'ocorrencia':
-          $controller = new OcorrenciaController();
-          $controller->main();
-          break;
-        case 'painel_tabela':
-          $controller = new PainelTabelaController();
-          $controller->main();
-          break;
-        default:
-          echo '<p>Página solicitada não encontrada.</p>';
-          break;
-      }
-    } else {
-      $controller = new OcorrenciaController();
-      $controller->main();
-    }
   }
 }
