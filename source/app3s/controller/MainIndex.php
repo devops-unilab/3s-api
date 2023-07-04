@@ -104,10 +104,6 @@ class MainIndex
           $controller = new OcorrenciaController();
           $controller->main();
           break;
-        case 'painel_kamban':
-          $controller = new PainelKambanController();
-          $controller->main();
-          break;
         case 'painel_tabela':
           $controller = new PainelTabelaController();
           $controller->main();

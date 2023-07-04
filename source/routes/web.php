@@ -29,8 +29,6 @@ Route::middleware('auth')->group(function () {
     Route::resource('divisions', DivisionsController::class);
     Route::resource('users', UsersController::class);
     Route::resource('services', ServicesController::class);
-    Route::get('kamban', KambanController::class)->name('kamban');
-    Route::get('table', TableOrdersController::class)->name('table');
     // Route::resource('orders', OrdersController::class);
     Route::post('/change-level', [UsersController::class, 'changeRole'])->name('change-level');
 });

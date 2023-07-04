@@ -135,12 +135,7 @@
 @if (isset(request()->page) && request()->page == 'ocorrencia' && isset(request()->selecionar))
     <script src="{{ env('APP_URL') }}/js/mensagem_forum.js?a=172"></script>
 @endif
-@if (isset($_GET['page']) && $_GET['page'] == 'painel_kamban')
-    <script src="{{ env('APP_URL') }}/js/painel_kamban.js?123=a"></script>
-@endif
-@if (isset($_GET['page']) && $_GET['page'] == 'painel_tabela')
-    <script src="{{ env('APP_URL') }}/js/painel_tabela.js"></script>
-@endif
 <script src="{{ env('APP_URL') }}/js/status_ocorrencia.js?a=1"></script>
+@yield('scripts')
 
 </html>
