@@ -1,10 +1,47 @@
 @extends('layouts.app')
 
 @section('content')
-    <h3 class="pb-4 mb-4 font-italic border-bottom">
-        {{ __('Orders') }}
-    </h3>
-    <div class="card">
+    <div class="row">
+        <div class="col-md-8">
+            <div class="panel-group" id="accordion">
+                @if(session()->get('role') != 'customer')
+                    @include('partials.index-orders',
+                    [
+                        'orders' => $ordersLate,
+                        'id' => 'collapseAtraso',
+                        'title' => 'Ocorrências Em Atraso(' . count($ordersLate) . ')',
+                        'strShow' => "show"
+                    ])
+                @endif
+
+                @include('partials.index-orders',
+                [
+                    'orders' => $ordersNotLate,
+                    'title' => 'Ocorrências Em Aberto(' . count($ordersNotLate) . ')',
+                    'id' => 'collapseAberto',
+                    'strShow' => 'show'
+                ])
+                @include('partials.index-orders',
+                [
+                    'orders' => $ordersFinished,
+                    'title' => "Ocorrências Encerradas",
+                    'id' => 'collapseEncerrada',
+                    'strShow' => ''
+                ])
+            </div>
+        </div>
+		<aside class="col-md-4 blog-sidebar">
+            <div class="p-4 mb-3 bg-light rounded">
+                <h4 class="font-italic">Filtros</h4>
+                @include('partials.form-basic-filter')
+                @include('partials.form-advanced-filter')
+                @include('partials.form-campus-filter')
+                @include('partials.card-info')
+            </div>
+        </aside>
+    </div>
+
+    {{-- <div class="card">
         <div class="card-body">
             <a href="{{ url('/orders/create') }}"
             class="btn btn-primary m-3" role="button
@@ -33,7 +70,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                    @foreach($orders as $item)
+                    @foreach ($orders as $item)
                         <tr>
                             <td>{{ $loop->iteration }}</td>
                             <td>{{ $item->service_id }}</td><td>{{ $item->description }}</td><td>{{ $item->attachment }}</td>
@@ -61,6 +98,5 @@
             </div>
 
         </div>
-    </div>
-
+    </div> --}}
 @endsection

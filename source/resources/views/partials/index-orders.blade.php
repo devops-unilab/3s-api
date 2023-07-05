@@ -3,7 +3,6 @@
     if (isset($id) && $id != '') {
         $strId = ' id = easyPaginate' . $id;
     }
-
 @endphp
 <div class="panel panel-default" id="panel1">
     <div class="panel-heading">

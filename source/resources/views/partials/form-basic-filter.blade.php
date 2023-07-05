@@ -30,7 +30,7 @@
         <label for="select-tecnico">Técnico Responsável</label>
         <select id="select-tecnico">
             <option value="">Selecione um atendente</option>';
-            @foreach ($attendents as $tecnico)
+            @foreach ($providers as $tecnico)
                 @php
                     $selectedAtt = '';
                     if (isset($_GET['tecnico'])) {

@@ -38,23 +38,16 @@ class OcorrenciaController
 
 	public function main()
 	{
-		echo '
-<div class="card mb-4">
-        <div class="card-body">';
+
 
 		if (isset($_GET['selecionar'])) {
 			$this->show();
 		} else if (isset($_GET['cadastrar'])) {
 			$this->store();
 			$this->create();
-		} else {
-			$this->index();
 		}
 
-		echo '
-	</div>
-</div>
-';
+
 	}
 	public function isWeekend($data)
 	{
@@ -263,175 +256,19 @@ class OcorrenciaController
 	}
 
 
-	public function painel($lista, $strTitulo, $id, $strShow = "")
-	{
-	}
-
-	public function isLate($order)
-	{
-		if ($order->sla < 1) {
-			return false;
-		}
-		$horaEstimada = $this->getDatetimeBySla($order->created_at, $order->sla);
-		$timeHoje = time();
-		$timeSolucaoEstimada = strtotime($horaEstimada);
-		return $timeHoje > $timeSolucaoEstimada;
-	}
-
-	public function applyFilters($query)
-	{
-		if (isset($_GET['setor'])) {
-			$divisionId = intval($_GET['setor']);
-			$query = $query->where('orders.division_id', $divisionId);
-		}
-		if (isset($_GET['demanda'])) {
-			$query = $query->where('provider_user_id', auth()->user()->id);
-		}
-		if (isset($_GET['solicitacao'])) {
-			$query = $query->where('customer_user_id', auth()->user()->id);
-		}
-		if (isset($_GET['tecnico'])) {
-			$query = $query->where('provider_user_id', intval($_GET['tecnico']));
-		}
-		if (isset($_GET['requisitante'])) {
-			$query = $query->where('customer_user_id', intval($_GET['requisitante']));
-		}
-		if (isset($_GET['data_abertura1'])) {
-			$data1 = date("Y-m-d", strtotime($_GET['data_abertura1']));
-			$query = $query->where('created_at', '>=', $data1);
-		}
-		if (isset($_GET['data_abertura2'])) {
-			$data2 = date("Y-m-d", strtotime($_GET['data_abertura2']));
-			$query = $query->where('created_at', '<=', $data2);
-		}
-		if (isset($_GET['campus'])) {
-			$campusArr = explode(",", $_GET['campus']);
-			$query = $query->whereIn('campus', $campusArr);
-		}
-		if (isset($_GET['setores_responsaveis'])) {
-			$divisions = explode(",", $_GET['setores_responsaveis']);
-			$query = $query->whereIn('orders.division_id', $divisions);
-		}
-		if (isset($_GET['setores_requisitantes'])) {
-			$divisionsSig = explode(",", $_GET['setores_requisitantes']);
-			$query = $query->whereIn('division_sig_id', $divisionsSig);
-		}
-
-		return $query;
-	}
 	public function index()
 	{
-		$statusPendding = [
-			'opened',
-			'pending it resource',
-			'pending customer response',
-			'in progress',
-			'reserved'
-		];
-		$statusFinished = [
-			'closed',
-			'committed',
-			'canceled'
-		];
-		$queryPendding = Order::with('service')
-			->whereIn(
-				'status',
-				$statusPendding
-			)->orderByDesc('orders.id')->limit(300);
 
-		$queryFinished = Order::with('service')
-			->whereIn('status', $statusFinished)
-			->orderByDesc('orders.id')->limit(300);
 
-		$queryPendding = $this->applyFilters($queryPendding);
-		$queryFinished = $this->applyFilters($queryFinished);
 
-		if (request()->session()->get('role') == 'customer') {
-			$queryPendding = $queryPendding->where('customer_user_id', auth()->user()->id);
-			$queryFinished = $queryFinished->where('customer_user_id', auth()->user()->id);
-		}
-		$lista = $queryPendding->get();
-		$lista2 = $queryFinished->get();
-		$listaAtrasados = array();
 
-		$notLate = array();
-
-		//Para os cards de filtros.
-		$userDivision = Division::where('id', auth()->user()->division_id)->first();
-		$attendents = User::whereIn('role', ['administrator', 'provider'])->get();
-		$allUsers = User::get();
-		$divisionCustomers = DB::table('orders')->select('division_sig', 'division_sig_id')->distinct()->limit(400)->get();
-		$divisions = Division::select('id', 'name')->get();
-
-		$ordersLate = [];
-		foreach ($lista as $order) {
-			if ($this->isLate($order)) {
-				$ordersLate[] = $order;
-			} else {
-				$notLate[] = $order;
-			}
-		}
-
-		//Painel principal
 		echo '
-
-		<div class="row">
-			<div class="col-md-8 blog-main">
-				<div class="panel-group" id="accordion">';
-
-		if (count($ordersLate) > 0) {
-
-			echo view(
-				'partials.index-orders',
-				[
-					'orders' => $listaAtrasados,
-					'id' => 'collapseAtraso',
-					'title' => 'Ocorrências Em Atraso (' . count($listaAtrasados) . ')',
-					'strShow' => "show"
-				]
-			);
-		}
-
-		echo view(
-			'partials.index-orders',
-			[
-				'orders' => $notLate,
-				'title' => 'Ocorrências Em Aberto(' . count($notLate) . ')',
-				'id' => 'collapseAberto',
-				'strShow' => 'show'
-			]
-		);
-
-		echo view(
-			'partials.index-orders',
-			[
-				'orders' => $lista2,
-				'title' => "Ocorrências Encerradas",
-				'id' => 'collapseEncerrada',
-				'strShow' => ''
-			]
-		);
-		echo '
-			</div>
-		</div>
-		<aside class="col-md-4 blog-sidebar">';
+';
 		if (request()->session()->get('role') == 'administrator' || request()->session()->get('role') == 'provider') {
 
-
-			echo '
-                <div class="p-4 mb-3 bg-light rounded">
-                    <h4 class="font-italic">Filtros</h4>';
-			echo view('partials.form-basic-filter', [
-				'userDivision' => $userDivision, 'attendents' => $attendents, 'allUsers' => $allUsers
-			]);
-			echo view('partials.form-advanced-filter', ['divisions' => $divisions, 'divisionCustomers' => $divisionCustomers]);
-			echo view('partials.form-campus-filter');
-			echo '</div>';
 		}
-		echo view('partials.card-info');
-		echo '</aside>
-		</div>
-		';
+
+
 	}
 
 	public function create()
