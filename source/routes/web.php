@@ -14,17 +14,7 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::middleware('auth')->group(function () {
-    Route::get('/', function () {
-        $main = new MainIndex();
-        $main->main();
-    })->name('root');
-
-    Route::post('/', function () {
-        $main = new MainIndex();
-        $main->main();
-    })->name('root-post');
-
-    // Route::get('/',[ OrdersController::class, 'index'])->name('home');
+    Route::get('/',[ OrdersController::class, 'index'])->name('home');
     Route::resource('divisions', DivisionsController::class);
     Route::resource('users', UsersController::class);
     Route::resource('services', ServicesController::class);

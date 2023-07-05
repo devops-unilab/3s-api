@@ -126,8 +126,8 @@ class OcorrenciaController
 	}
 	public function show()
 	{
-		$user = request()->user();
-		$order = Order::findOrFail($_GET['selecionar']);
+
+
 
 		$orderStatusLog = DB::table('order_status_logs')
 			->join('users', 'order_status_logs.user_id', '=', 'users.id')

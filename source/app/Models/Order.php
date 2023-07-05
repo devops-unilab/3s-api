@@ -42,4 +42,20 @@ class Order extends Model
     {
         return $this->belongsTo(Service::class);
     }
+    public function messages()
+    {
+        return $this->hasMany(OrderMessage::class);
+    }
+    public function statusLogs()
+    {
+        return $this->hasMany(OrderStatusLog::class);
+    }
+    public function customer()
+    {
+        return $this->belongsTo(User::class, 'customer_user_id');
+    }
+    public function provider()
+    {
+        return $this->belongsTo(User::class, 'provider_user_id');
+    }
 }

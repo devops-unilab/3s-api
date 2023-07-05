@@ -322,7 +322,6 @@ class OrdersController extends Controller
 					</ul><br><p>Mensagem enviada pelo sistema 3S. Favor não responder.</p>';
 
             $mail->enviarEmail(auth()->user()->email, auth()->user()->nome, $assunto, $corpo);
-            // echo '<META HTTP-EQUIV="REFRESH" CONTENT="1; URL=">';
             return redirect('?page=ocorrencia&selecionar=' . $order->id)->with('flash_message', 'Order added!');
         } catch (\Exception $e) {
             DB::rollback();
@@ -337,9 +336,9 @@ class OrdersController extends Controller
      *
      * @return \Illuminate\View\View
      */
-    public function show($id)
+    public function show(Order $order)
     {
-        $order = Order::findOrFail($id);
+        $order->load('messages.user', 'statusLogs.user', 'customer', 'provider', 'service');
 
         return view('orders.show', compact('order'));
     }
@@ -370,24 +369,9 @@ class OrdersController extends Controller
     {
 
         $requestData = $request->all();
-
         $order = Order::findOrFail($id);
         $order->update($requestData);
 
         return redirect('orders')->with('flash_message', 'Order updated!');
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     *
-     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
-     */
-    public function destroy($id)
-    {
-        Order::destroy($id);
-
-        return redirect('orders')->with('flash_message', 'Order deleted!');
     }
 }
