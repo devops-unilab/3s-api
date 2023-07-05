@@ -44,7 +44,6 @@ class OcorrenciaController
 			$this->show();
 		} else if (isset($_GET['cadastrar'])) {
 			$this->store();
-			$this->create();
 		}
 
 
@@ -256,66 +255,11 @@ class OcorrenciaController
 	}
 
 
-	public function index()
-	{
 
-
-
-
-		echo '
-';
-		if (request()->session()->get('role') == 'administrator' || request()->session()->get('role') == 'provider') {
-
-		}
-
-
-	}
 
 	public function create()
 	{
 
-
-		$ocorrencia = new Ocorrencia();
-		$ocorrencia->getUsuarioCliente()->setId(auth()->user()->id);
-
-
-		$listaNaoAvaliados = DB::table('orders')->where('customer_user_id', auth()->user()->id)->where('status', OcorrenciaController::STATUS_FECHADO)->get();
-		// dd(OcorrenciaController::STATUS_FECHADO);
-		echo '
-            <div class="row">
-                <div class="col-md-12 blog-main">';
-
-
-		$services = [];
-		if (request()->session()->get('role') == 'customer') {
-			$filterServices = ['customer'];
-		}
-		if (
-			request()->session()->get('role') == 'administrator' ||
-			request()->session()->get('role') == 'provider'
-		) {
-			$filterServices = ['customer', 'provider'];
-		}
-
-		$services = Service::whereIn('role', $filterServices)->get();
-
-		if (count($listaNaoAvaliados) > 0) {
-			echo view(
-				'partials.index-orders',
-				[
-					'orders' => $listaNaoAvaliados,
-					'title' => 'Para continuar confirme os chamados fechados.',
-					'id' => 'collapseToConfirm',
-					'strShow' => 'show'
-				]
-			);
-		} else {
-			echo '<h3 class="pb-4 mb-4 font-italic border-bottom">Cadastrar Ocorrência</h3>';
-			echo view('partials.form-insert-order', ['services' => $services, 'email' => auth()->user()->email]);
-		}
-		echo '
-                </div>
-            </div>';
 	}
 
 

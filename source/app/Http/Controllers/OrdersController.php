@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests;
 use App\Models\Division;
 use App\Models\Order;
+use App\Models\Service;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -54,59 +55,59 @@ class OrdersController extends Controller
         return $query;
     }
 
-	public function isWeekend($data)
-	{
-		$week = intval(date('w', strtotime($data)));
-		return ($week == 6 || $week == 0);
-	}
+    public function isWeekend($data)
+    {
+        $week = intval(date('w', strtotime($data)));
+        return ($week == 6 || $week == 0);
+    }
 
-	public function outOfHours($data)
-	{
-		$hora = intval(date('H', strtotime($data)));
-		return ($hora >= 17 || $hora < 8 || $hora == 11);
-	}
-	public function getDatetimeBySla($dataAbertura, $tempoSla)
-	{
-		if ($dataAbertura == null) {
-			return "Indefinido";
-		}
-		while ($this->isWeekend($dataAbertura)) {
-			$dataAbertura = date("Y-m-d 08:00:00", strtotime('+1 day', strtotime($dataAbertura)));
-		}
-		while ($this->outOfHours($dataAbertura)) {
-			$dataAbertura = date("Y-m-d H:00:00", strtotime('+1 hour', strtotime($dataAbertura)));
-		}
-		$timeEstimado = strtotime($dataAbertura);
-		$tempoSla++;
-		for ($i = 0; $i < $tempoSla; $i++) {
-			$timeEstimado = strtotime('+' . $i . ' hour', strtotime($dataAbertura));
-			$horaEstimada = date("Y-m-d H:i:s", $timeEstimado);
-			while ($this->isWeekend($horaEstimada)) {
-				$horaEstimada = date("Y-m-d 08:00:00", strtotime('+1 day', strtotime($horaEstimada)));
-				$i = $i + 24;
-				$tempoSla += 24;
-			}
+    public function outOfHours($data)
+    {
+        $hora = intval(date('H', strtotime($data)));
+        return ($hora >= 17 || $hora < 8 || $hora == 11);
+    }
+    public function getDatetimeBySla($dataAbertura, $tempoSla)
+    {
+        if ($dataAbertura == null) {
+            return "Indefinido";
+        }
+        while ($this->isWeekend($dataAbertura)) {
+            $dataAbertura = date("Y-m-d 08:00:00", strtotime('+1 day', strtotime($dataAbertura)));
+        }
+        while ($this->outOfHours($dataAbertura)) {
+            $dataAbertura = date("Y-m-d H:00:00", strtotime('+1 hour', strtotime($dataAbertura)));
+        }
+        $timeEstimado = strtotime($dataAbertura);
+        $tempoSla++;
+        for ($i = 0; $i < $tempoSla; $i++) {
+            $timeEstimado = strtotime('+' . $i . ' hour', strtotime($dataAbertura));
+            $horaEstimada = date("Y-m-d H:i:s", $timeEstimado);
+            while ($this->isWeekend($horaEstimada)) {
+                $horaEstimada = date("Y-m-d 08:00:00", strtotime('+1 day', strtotime($horaEstimada)));
+                $i = $i + 24;
+                $tempoSla += 24;
+            }
 
-			while ($this->outOfHours($horaEstimada)) {
-				$horaEstimada = date("Y-m-d H:i:s", strtotime('+1 hour', strtotime($horaEstimada)));
-				$i++;
-				$tempoSla++;
-			}
-		}
-		$horaEstimada = date('Y-m-d H:i:s', $timeEstimado);
-		return $horaEstimada;
-	}
+            while ($this->outOfHours($horaEstimada)) {
+                $horaEstimada = date("Y-m-d H:i:s", strtotime('+1 hour', strtotime($horaEstimada)));
+                $i++;
+                $tempoSla++;
+            }
+        }
+        $horaEstimada = date('Y-m-d H:i:s', $timeEstimado);
+        return $horaEstimada;
+    }
 
     public function isLate($order)
-	{
-		if ($order->sla < 1) {
-			return false;
-		}
-		$horaEstimada = $this->getDatetimeBySla($order->created_at, $order->sla);
-		$timeHoje = time();
-		$timeSolucaoEstimada = strtotime($horaEstimada);
-		return $timeHoje > $timeSolucaoEstimada;
-	}
+    {
+        if ($order->sla < 1) {
+            return false;
+        }
+        $horaEstimada = $this->getDatetimeBySla($order->created_at, $order->sla);
+        $timeHoje = time();
+        $timeSolucaoEstimada = strtotime($horaEstimada);
+        return $timeHoje > $timeSolucaoEstimada;
+    }
     /**
      * Display a listing of the resource.
      *
@@ -168,30 +169,30 @@ class OrdersController extends Controller
         $queryPendding = $this->applyFilters($queryPendding);
         $queryFinished = $this->applyFilters($queryFinished);
         if (request()->session()->get('role') == 'customer') {
-			$queryPendding = $queryPendding->where('customer_user_id', auth()->user()->id);
-			$queryFinished = $queryFinished->where('customer_user_id', auth()->user()->id);
-		}
+            $queryPendding = $queryPendding->where('customer_user_id', auth()->user()->id);
+            $queryFinished = $queryFinished->where('customer_user_id', auth()->user()->id);
+        }
 
-		$ordersPendding = $queryPendding->get();
-		$ordersFinished = $queryFinished->get();
+        $ordersPendding = $queryPendding->get();
+        $ordersFinished = $queryFinished->get();
         $ordersLate = [];
         $ordersNotLate = [];
         $data = [];
-		foreach ($ordersPendding as $order) {
-            if(auth()->user() != 'customer' && $this->isLate($order)) {
+        foreach ($ordersPendding as $order) {
+            if (auth()->user() != 'customer' && $this->isLate($order)) {
                 $ordersLate[] = $order;
             } else {
                 $ordersNotLate[] = $order;
             }
-		}
+        }
 
 
 
-		$data['userDivision'] = Division::where('id', auth()->user()->division_id)->first();
-		$data['providers'] = User::whereIn('role', ['administrator', 'provider'])->get();
-		$data['allUsers'] = User::get();
-		$data['divisionCustomers'] = Order::select('division_sig', 'division_sig_id')->distinct()->limit(100)->get();
-		$data['divisions'] = Division::select('id', 'name')->get();
+        $data['userDivision'] = Division::where('id', auth()->user()->division_id)->first();
+        $data['providers'] = User::whereIn('role', ['administrator', 'provider'])->get();
+        $data['allUsers'] = User::get();
+        $data['divisionCustomers'] = Order::select('division_sig', 'division_sig_id')->distinct()->limit(100)->get();
+        $data['divisions'] = Division::select('id', 'name')->get();
         $data['ordersFinished'] = $ordersFinished;
         $data['ordersLate'] = $ordersLate;
         $data['ordersNotLate'] = $ordersNotLate;
@@ -206,7 +207,25 @@ class OrdersController extends Controller
      */
     public function create()
     {
-        return view('orders.create');
+
+
+        $ordersNotCommited = Order::where('customer_user_id', auth()->user()->id)->where('status', 'closed')->get();
+        $services = [];
+        if (session()->get('role') == 'customer') {
+            $filterServices = ['customer'];
+        } else if (
+            session()->get('role') == 'administrator' ||
+            session()->get('role') == 'provider'
+        ) {
+            $filterServices = ['customer', 'provider'];
+        }
+        $services = Service::whereIn('role', $filterServices)->get();
+        $data = [
+            'ordersNotCommited' => $ordersNotCommited,
+            'services' => $services
+        ];
+
+        return view('orders.create', $data);
     }
 
     /**
