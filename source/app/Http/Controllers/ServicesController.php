@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use app3s\util\Sessao;
 use App\Http\Controllers\Controller;
 use App\Models\Service;
 use Illuminate\Http\Request;
@@ -16,7 +15,6 @@ class ServicesController extends Controller
      */
     public function index(Request $request)
     {
-        $sessao = new Sessao();
         $keyword = $request->get('search');
         $perPage = 5;
 

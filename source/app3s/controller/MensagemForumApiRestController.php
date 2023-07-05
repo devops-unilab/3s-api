@@ -7,7 +7,6 @@
 
 namespace app3s\controller;
 
-use app3s\util\Sessao;
 use app3s\dao\OcorrenciaDAO;
 use app3s\model\Ocorrencia;
 use Illuminate\Support\Facades\DB;
@@ -17,26 +16,8 @@ class MensagemForumApiRestController
 
     public function main()
     {
-        $sessao = new Sessao();
-        if ($sessao->getNivelAcesso() == Sessao::NIVEL_DESLOGADO) {
-            return;
-        }
         header('Content-type: application/json');
         $this->get();
-    }
-
-    public function parteInteressada(Ocorrencia $selecionado)
-    {
-        $sessao = new Sessao();
-        if ($sessao->getNivelAcesso() == Sessao::NIVEL_TECNICO) {
-            return true;
-        } else if ($sessao->getNivelAcesso() == Sessao::NIVEL_ADM) {
-            return true;
-        } else if ($selecionado->getUsuarioCliente()->getId() == $sessao->getIdUsuario()) {
-            return true;
-        } else {
-            return false;
-        }
     }
 
     public function get()
@@ -74,10 +55,6 @@ class MensagemForumApiRestController
         $ocorrenciaDao = new OcorrenciaDAO();
         $ocorrenciaDao->fillById($ocorrencia);
 
-        if (!$this->parteInteressada($ocorrencia)) {
-            echo "{Acesso Negado}";
-            return;
-        }
 
         $messageQuery = DB::table('mensagem_forum')
             ->join('usuario', 'mensagem_forum.id_usuario', '=', 'usuario.id')

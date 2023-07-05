@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use app3s\util\Sessao;
 use App\Http\Controllers\Controller;
 use App\Http\Requests;
 

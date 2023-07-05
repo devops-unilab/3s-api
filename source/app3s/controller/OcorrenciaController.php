@@ -8,7 +8,6 @@
 namespace app3s\controller;
 
 use app3s\dao\OcorrenciaDAO;
-use app3s\dao\UsuarioDAO;
 use app3s\model\MensagemForum;
 use app3s\model\Ocorrencia;
 use app3s\model\Status;
@@ -40,9 +39,7 @@ class OcorrenciaController
 
 	public function main()
 	{
-
 		echo '
-
 <div class="card mb-4">
         <div class="card-body">';
 
@@ -55,13 +52,9 @@ class OcorrenciaController
 			$this->index();
 		}
 
-
-
 		echo '
 	</div>
 </div>
-
-
 ';
 	}
 	public function fimDeSemana($data)
@@ -110,8 +103,8 @@ class OcorrenciaController
 
 	public function parteInteressada($order, $user)
 	{
-		return ($user->role === Sessao::NIVEL_ADM
-			|| $user->role === Sessao::NIVEL_TECNICO
+		return ($user->role === 'administrator'
+			|| $user->role === 'provider'
 			|| $order->customer_user_id === $user->id);
 	}
 
@@ -139,7 +132,7 @@ class OcorrenciaController
 	}
 	public function canCancel($order)
 	{
-		return $this->sessao->getIdUsuario() == $order->customer_user_id && ($order->status == self::STATUS_REABERTO ||  $order->status == self::STATUS_ABERTO);
+		return auth()->user()->id == $order->customer_user_id && ($order->status == self::STATUS_REABERTO ||  $order->status == self::STATUS_ABERTO);
 	}
 	public function canWait($order, $user)
 	{
@@ -177,7 +170,7 @@ class OcorrenciaController
 
 		$order->service_name = $service->name;
 		$canEditService = $this->possoEditarServico($order, $user);
-		$isClient = ($user->role === Sessao::NIVEL_COMUM);
+		$isClient = ($user->role === 'customer');
 		$canWait = $this->canWait($order, $user);
 
 		$order->tempo_sla = $service->sla_duration;
@@ -273,15 +266,7 @@ class OcorrenciaController
 
 	public function painel($lista, $strTitulo, $id, $strShow = "")
 	{
-		echo view(
-			'partials.index-orders',
-			[
-				'orders' => $lista,
-				'id' => $id,
-				'title' => $strTitulo,
-				'strShow' => $strShow
-			]
-		);
+
 	}
 
 	public function atrasado($order)
@@ -338,14 +323,6 @@ class OcorrenciaController
 	}
 	public function index()
 	{
-
-		$sessao = new Sessao();
-
-		$this->sessao = new Sessao();
-
-
-
-		$lista = array();
 		$fields = [
 			'orders.id as id',
 			'orders.description as description',
@@ -377,22 +354,23 @@ class OcorrenciaController
 		$queryPendding = $this->applyFilters($queryPendding);
 		$queryFinished = $this->applyFilters($queryFinished);
 
-		if ($this->sessao->getNivelAcesso() == Sessao::NIVEL_COMUM) {
+		if (request()->session()->get('role') == 'customer') {
 			$queryPendding = $queryPendding->where('customer_user_id', $this->sessao->getIdUsuario());
 			$queryFinished = $queryFinished->where('customer_user_id', $this->sessao->getIdUsuario());
 		}
 		$lista = $queryPendding->get();
 		$lista2 = $queryFinished->get();
-
-		//Painel principal
-		echo '
-
-		<div class="row">
-			<div class="col-md-8 blog-main">
-				<div class="panel-group" id="accordion">';
 		$listaAtrasados = array();
 
 		$notLate = array();
+
+		//Para os cards de filtros.
+		$userDivision = Division::where('id', auth()->user()->division_id)->first();
+		$attendents = User::whereIn('role', ['administrator', 'provider'])->get();
+		$allUsers = User::get();
+		$applicants = DB::table('orders')->select('division_sig', 'division_sig_id')->distinct()->limit(400)->get();
+		$divisions = Division::select('id', 'name')->get();
+
 
 		foreach ($lista as $order) {
 			if ($this->atrasado($order)) {
@@ -401,10 +379,13 @@ class OcorrenciaController
 				$notLate[] = $order;
 			}
 		}
-		if ($sessao->getNivelAcesso() === Sessao::NIVEL_COMUM) {
-			$listaAtrasados = array();
-			$notLate = $lista;
-		}
+
+		//Painel principal
+		echo '
+
+		<div class="row">
+			<div class="col-md-8 blog-main">
+				<div class="panel-group" id="accordion">';
 
 		if (count($listaAtrasados) > 0) {
 
@@ -418,20 +399,32 @@ class OcorrenciaController
 				]
 			);
 		}
-		$this->painel($notLate, 'Ocorrências Em Aberto(' . count($notLate) . ')', 'collapseAberto', 'show');
-		$this->painel($lista2, "Ocorrências Encerradas", 'collapseEncerrada');
+
+		echo view(
+			'partials.index-orders',
+			[
+				'orders' => $notLate,
+				'title' => 'Ocorrências Em Aberto(' . count($notLate) . ')',
+				'id' => 'collapseAberto',
+				'strShow' => 'show'
+			]
+		);
+
+		echo view(
+			'partials.index-orders',
+			[
+				'orders' => $lista2,
+				'title' => "Ocorrências Encerradas",
+				'id' => 'collapseEncerrada',
+				'strShow' => ''
+			]
+		);
 		echo '
 			</div>
 		</div>
 		<aside class="col-md-4 blog-sidebar">';
-		if ($sessao->getNivelAcesso() == Sessao::NIVEL_ADM || $sessao->getNivelAcesso() == Sessao::NIVEL_TECNICO) {
-			$sessao = new Sessao();
-			$currentUser = DB::table('users')->where('id', $sessao->getIdUsuario())->first();
-			$userDivision = DB::table('divisions')->where('id', $currentUser->division_id)->first();
-			$attendents = DB::table('users')->whereIn('role', ['administrator', 'provider'])->get();
-			$allUsers = DB::table('users')->get();
-			$applicants = DB::table('orders')->select('division_sig', 'division_sig_id')->distinct()->limit(400)->get();
-			$divisions = DB::table('divisions')->select('id', 'name')->get();
+		if (request()->session()->get('role') == 'administrator' || request()->session()->get('role') == 'provider') {
+
 
 			echo '
                 <div class="p-4 mb-3 bg-light rounded">
@@ -465,12 +458,12 @@ class OcorrenciaController
 
 
 		$services = [];
-		if ($this->sessao->getNivelAcesso() == Sessao::NIVEL_COMUM) {
+		if (request()->session()->get('role') == 'customer') {
 			$filterServices = ['customer'];
 		}
 		if (
-			$this->sessao->getNivelAcesso() == Sessao::NIVEL_ADM ||
-			$this->sessao->getNivelAcesso() == Sessao::NIVEL_TECNICO
+			request()->session()->get('role') == 'administrator' ||
+			request()->session()->get('role') == 'provider'
 		) {
 			$filterServices = ['customer', 'provider'];
 		}
@@ -673,7 +666,7 @@ class OcorrenciaController
 
 
 		foreach ($usersList as $adm) {
-			if ($adm->nivel == Sessao::NIVEL_ADM) {
+			if ($adm->nivel == 'administrator') {
 				$saudacao =  '<p>Prezado(a) ' . $adm->nome . ' ,</p>';
 				$mail->enviarEmail($adm->email, $adm->nome, $assunto, $saudacao . $corpo);
 			}
@@ -686,8 +679,8 @@ class OcorrenciaController
 	public function possoAtender()
 	{
 		if (
-			$this->sessao->getNivelAcesso() == Sessao::NIVEL_DESLOGADO
-			|| $this->sessao->getNivelAcesso() == Sessao::NIVEL_COMUM
+			request()->session()->get('role') == Sessao::NIVEL_DESLOGADO
+			|| request()->session()->get('role') == 'customer'
 		) {
 			return false;
 		}
@@ -859,14 +852,14 @@ class OcorrenciaController
 	public function possoEditarServico($order, $user)
 	{
 		return (
-			($user->role === Sessao::NIVEL_ADM || $user->role === Sessao::NIVEL_TECNICO)
+			($user->role === 'administrator' || $user->role === 'provider')
 			&& $order->status === self::STATUS_ATENDIMENTO);
 	}
 	public function possoEditarAreaResponsavel($order, $user)
 	{
 		return ($order->status === self::STATUS_ABERTO ||
 			$order->status === self::STATUS_ATENDIMENTO)
-			&& $user->role === Sessao::NIVEL_ADM;
+			&& $user->role === 'administrator';
 	}
 
 
@@ -878,8 +871,8 @@ class OcorrenciaController
 	public function possoEditarPatrimonio($order, $user)
 	{
 		return (
-			($user->role === Sessao::NIVEL_ADM
-				|| $user->role === Sessao::NIVEL_TECNICO
+			($user->role === 'administrator'
+				|| $user->role === 'provider'
 				&& $order->provider_user_id === $user->id
 				&& $order->status === self::STATUS_ATENDIMENTO)
 			||
@@ -916,10 +909,10 @@ class OcorrenciaController
 		if (trim($this->selecionado->getSolucao()) == "") {
 			return false;
 		}
-		if ($this->sessao->getNivelAcesso() == Sessao::NIVEL_COMUM) {
+		if (request()->session()->get('role') == 'customer') {
 			return false;
 		}
-		if ($this->sessao->getNivelAcesso() == Sessao::NIVEL_DESLOGADO) {
+		if (request()->session()->get('role') == Sessao::NIVEL_DESLOGADO) {
 			return false;
 		}
 
@@ -933,7 +926,7 @@ class OcorrenciaController
 	}
 	public function possoReservar()
 	{
-		if ($this->sessao->getNivelAcesso() != Sessao::NIVEL_ADM) {
+		if (request()->session()->get('role') != 'administrator') {
 			return false;
 		}
 		if ($this->selecionado->getStatus() == Self::STATUS_FECHADO) {
@@ -1301,11 +1294,7 @@ class OcorrenciaController
 
 		$destinatario = $this->statusOcorrencia->getOcorrencia()->getEmail();
 		$nome = $this->statusOcorrencia->getOcorrencia()->getUsuarioCliente()->getNome();
-		//Cliente do chamado
 		$mail->enviarEmail($destinatario, $nome, $assunto, $saldacao . $corpo);
-
-		$usuarioDao = new UsuarioDAO($this->dao->getConnection());
-
 
 		$destinatario = $this->statusOcorrencia->getOcorrencia()->getAreaResponsavel()->getEmail();
 		$nome = $this->statusOcorrencia->getOcorrencia()->getAreaResponsavel()->getNome();
@@ -1313,25 +1302,9 @@ class OcorrenciaController
 
 
 		if ($this->statusOcorrencia->getOcorrencia()->getIdUsuarioAtendente() != null) {
-
-			$atendente = new Usuario();
-			$atendente->setId($this->statusOcorrencia->getOcorrencia()->getIdUsuarioAtendente());
-			$usuarioDao->fillById($atendente);
-			$destinatario = $atendente->getEmail();
-			$nome = $atendente->getNome();
-
+			$provider = User::find($this->statusOcorrencia->getOcorrencia()->getIdUsuarioAtendente());
 			$saldacao =  '<p>Prezado(a) ' . $nome . ' ,</p>';
-			$mail->enviarEmail($destinatario, $nome, $assunto, $saldacao . $corpo);
-		} else if ($this->statusOcorrencia->getOcorrencia()->getIdUsuarioIndicado() != null) {
-
-			$indicado = new Usuario();
-			$indicado->setId($this->statusOcorrencia->getOcorrencia()->getIdUsuarioIndicado());
-			$usuarioDao->fillById($indicado);
-			$destinatario = $indicado->getEmail();
-			$nome = $indicado->getNome();
-
-			$saldacao =  '<p>Prezado(a) ' . $nome . ' ,</p>';
-			$mail->enviarEmail($destinatario, $nome, $assunto, $saldacao . $corpo);
+			$mail->enviarEmail($provider->email, $provider->name, $assunto, $saldacao . $corpo);
 		}
 	}
 
@@ -1602,7 +1575,7 @@ class OcorrenciaController
 	}
 	public function possoLiberar()
 	{
-		if ($this->sessao->getNivelAcesso() != Sessao::NIVEL_ADM) {
+		if (request()->session()->get('role') != 'administrator') {
 			return false;
 		}
 		if ($this->selecionado->getStatus() == self::STATUS_REABERTO) {
@@ -1680,12 +1653,12 @@ class OcorrenciaController
 			return false;
 		}
 		$sessao = new Sessao();
-		if ($sessao->getNivelAcesso() == SESSAO::NIVEL_COMUM) {
+		if (request()->session()->get('role') == 'customer') {
 			if ($sessao->getIdUsuario() != $order->customer_user_id) {
 				return false;
 			}
 		}
-		if ($sessao->getNivelAcesso() == Sessao::NIVEL_TECNICO) {
+		if (request()->session()->get('role') == 'provider') {
 			if ($order->id_usuario_atendente != $sessao->getIdUsuario()) {
 				if ($sessao->getIdUsuario() != $order->customer_user_id) {
 					return false;
@@ -1726,27 +1699,12 @@ class OcorrenciaController
 		$mail->enviarEmail($destinatario, $nome, $assunto, $saldacao . $corpo);
 
 
-		$usuarioDao = new UsuarioDAO();
+
 		if ($ocorrencia->getIdUsuarioAtendente() != null) {
 
-			$atendente = new Usuario();
-			$atendente->setId($ocorrencia->getIdUsuarioAtendente());
-			$usuarioDao->fillById($atendente);
-			$destinatario = $atendente->getEmail();
-			$nome = $atendente->getNome();
-
-			$saldacao =  '<p>Prezado(a) ' . $nome . ' ,</p>';
-			$mail->enviarEmail($destinatario, $nome, $assunto, $saldacao . $corpo);
-		} else if ($ocorrencia->getIdUsuarioIndicado() != null) {
-
-			$indicado = new Usuario();
-			$indicado->setId($ocorrencia->getIdUsuarioIndicado());
-			$usuarioDao->fillById($indicado);
-			$destinatario = $indicado->getEmail();
-			$nome = $indicado->getNome();
-
-			$saldacao =  '<p>Prezado(a) ' . $nome . ' ,</p>';
-			$mail->enviarEmail($destinatario, $nome, $assunto, $saldacao . $corpo);
+			$provider = User::find($ocorrencia->getIdUsuarioAtendente());
+			$saldacao =  '<p>Prezado(a) ' . $provider->name . ' ,</p>';
+			$mail->enviarEmail($provider->email, $provider->name, $assunto, $saldacao . $corpo);
 		}
 	}
 
