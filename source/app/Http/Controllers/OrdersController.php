@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use app3s\util\Mail;
 use App\Http\Controllers\Controller;
 use App\Http\Requests;
 use App\Models\Division;
@@ -9,6 +10,8 @@ use App\Models\Order;
 use App\Models\Service;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class OrdersController extends Controller
 {
@@ -237,12 +240,94 @@ class OrdersController extends Controller
      */
     public function store(Request $request)
     {
+        $allowedExtensions = [
+            'image/jpeg', 'image/png', 'application/pdf',
+            'xlsx', 'xlsm', 'xlsb', 'xltx', 'xltm', 'xls',
+            'xlt', 'xls', 'xml', 'xml', 'xlam', 'xla',
+            'xlw', 'xlr', 'doc', 'docm', 'docx', 'docx',
+            'dot', 'dotm', 'dotx', 'odt', 'pdf', 'rtf',
+            'txt', 'wps', 'xml', 'zip', 'rar', 'ovpn',
+            'xml', 'xps', 'jpg', 'gif', 'png', 'pdf',
+            'jpeg'
+        ];
 
-        $requestData = $request->all();
+        $request->validate([
+            'description' => ['required', 'max:255'],
+            'campus' => ['required', 'max:100'],
+            'email' => ['required', 'max:100'],
+            'service_id' => ['required', 'max:100'],
+            'attachment' => ['nullable', 'mimetypes:' . implode(',', $allowedExtensions)],
+            'tag' => ['nullable', 'max:12'],
+            'phone_number' => ['nullable', 'max:12'],
+            'place' => ['nullable', 'max:12'],
+        ]);
+        $fileName = "";
+        if ($request->hasFile('attachment')) {
+            $attachment = $request->file('attachment');
+            if (!Storage::exists('public/uploads')) {
+                Storage::makeDirectory('public/uploads');
+            }
+            $fileName = $attachment->getClientOriginalName();
+            if (Storage::exists('public/uploads/' . $attachment->getClientOriginalName())) {
+                $fileName = uniqid() . '_' . $fileName;
+            }
+            $path = $attachment->storeAs('public/uploads/', $fileName);
+            if (!$path) {
+                return redirect()->back()->withErrors(['attachment' => 'Erro ao salvar o arquivo.']);
+            }
+        }
 
-        Order::create($requestData);
+        $service = Service::find($request->service_id);
+        DB::beginTransaction();
+        try {
+            $data =
+                [
+                    'division_id' =>  $service->division->id,
+                    'service_id' => $service->id,
+                    'division_sig_id' => auth()->user()->division_sig_id,
+                    'division_sig' => auth()->user()->division_sig,
+                    'customer_user_id' => auth()->user()->id,
+                    'description' => $request->description,
+                    'campus' => $request->campus,
+                    'tag' => $request->tag,
+                    'phone_number' => $request->phone_number,
+                    'status' => 'opened',
+                    'email' => $request->email,
+                    'attachment' => $fileName,
+                    'place' => $request->place
+                ];
+            $order = Order::create($data);
+            DB::table('order_status_logs')->insert([
+                'order_id' => $order->id,
+                'status' => 'opened',
+                'message' => "Ocorrência liberada para que qualquer técnico possa atender.",
+                'user_id' => auth()->user()->id
+            ]);
 
-        return redirect('orders')->with('flash_message', 'Order added!');
+            DB::commit();
+
+
+            $mail = new Mail();
+
+            $assunto = "[3S] - Chamado Nº " . $order->id;
+            $corpo =  '<p>Prezado(a) ' . auth()->user()->name . ' ,</p>';
+            $corpo .= '<p>Sua solicitação foi realizada com sucesso, solicitação
+			<a href="https://3s.unilab.edu.br/?page=ocorrencia&selecionar='
+                . $order->id . '">Nº' . $order->id . '</a></p>';
+            $corpo .= '<ul>
+							<li>Serviço Solicitado: ' . $service->name . '</li>
+							<li>Descrição do Problema: ' . $request->description . '</li>
+							<li>Setor Responsável: ' . $service->division->name .
+                ' - ' . $service->division->description . '</li>
+					</ul><br><p>Mensagem enviada pelo sistema 3S. Favor não responder.</p>';
+
+            $mail->enviarEmail(auth()->user()->email, auth()->user()->nome, $assunto, $corpo);
+            // echo '<META HTTP-EQUIV="REFRESH" CONTENT="1; URL=">';
+            return redirect('?page=ocorrencia&selecionar=' . $order->id)->with('flash_message', 'Order added!');
+        } catch (\Exception $e) {
+            DB::rollback();
+            return redirect()->back()->withErrors(['flash_message' => 'Falha ao inserir dados.']);
+        }
     }
 
     /**

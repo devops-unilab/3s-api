@@ -29,7 +29,7 @@ class Service extends Model
 
     public function division()
     {
-        return $this->belongsTo('App\Models\Division');
+        return $this->belongsTo(Division::class);
     }
     public function orders()
     {

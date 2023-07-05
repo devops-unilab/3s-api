@@ -1,5 +1,5 @@
 <div class="card card-body">
-    <form method="post" action="" enctype="multipart/form-data">
+    <form method="post" action="{{route('orders.store')}}" enctype="multipart/form-data">
         <span class="titulo medio">Informe os dados para cadastro</span><br>
         <div class="row">
             <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12">
@@ -76,14 +76,9 @@
                 </div>
             </div>
         </div>
-        <input type="hidden" name="enviar_ocorrencia" value="1">
-
-
-
-
-</div><br><br>
+</div>
 <div class="d-flex justify-content-center m-3">
     <button type="submit" class="btn btn-primary">
         Cadastrar Ocorrência</button>
     </form>
-</div><br><br>
+</div>

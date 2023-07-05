@@ -38,15 +38,9 @@ class OcorrenciaController
 
 	public function main()
 	{
-
-
 		if (isset($_GET['selecionar'])) {
 			$this->show();
-		} else if (isset($_GET['cadastrar'])) {
-			$this->store();
 		}
-
-
 	}
 	public function isWeekend($data)
 	{
@@ -134,15 +128,6 @@ class OcorrenciaController
 	{
 		$user = request()->user();
 		$order = Order::findOrFail($_GET['selecionar']);
-
-		if (!$this->parteInteressada($order, $user)) {
-			echo '
-            <div class="alert alert-danger" role="alert">
-                Você não é cliente deste chamado, nem técnico para atendê-lo.
-            </div>
-            ';
-			return;
-		}
 
 		$orderStatusLog = DB::table('order_status_logs')
 			->join('users', 'order_status_logs.user_id', '=', 'users.id')
@@ -255,143 +240,6 @@ class OcorrenciaController
 	}
 
 
-
-
-	public function create()
-	{
-
-	}
-
-
-	public function store()
-	{
-
-		if (!isset($_POST['enviar_ocorrencia'])) {
-			return;
-		}
-		$request = request();
-
-		if (!(isset($_POST['description']) &&
-			isset($_POST['campus'])  &&
-			isset($_POST['email']) &&
-			isset($_POST['tag']) &&
-			isset($_POST['phone_number']) &&
-			isset($_POST['place']) &&
-			isset($_POST['service_id']))) {
-			echo ':incompleto';
-			return;
-		}
-		$novoNome = "";
-		if ($request->hasFile('attachment')) {
-			$attachment = $request->file('attachment');
-			if (!Storage::exists('public/uploads')) {
-				Storage::makeDirectory('public/uploads');
-			}
-
-			$novoNome = $attachment->getClientOriginalName();
-
-			if (Storage::exists('public/uploads/' . $attachment->getClientOriginalName())) {
-				$novoNome = uniqid() . '_' . $novoNome;
-			}
-
-			$extensaoArr = explode('.', $novoNome);
-			$extensao = strtolower(end($extensaoArr));
-
-			$extensoes_permitidas = [
-				'xlsx', 'xlsm', 'xlsb', 'xltx', 'xltm', 'xls', 'xlt', 'xls', 'xml', 'xml', 'xlam', 'xla', 'xlw', 'xlr',
-				'doc', 'docm', 'docx', 'docx', 'dot', 'dotm', 'dotx', 'odt', 'pdf', 'rtf', 'txt', 'wps', 'xml', 'zip', 'rar', 'ovpn',
-				'xml', 'xps', 'jpg', 'gif', 'png', 'pdf', 'jpeg'
-			];
-
-			if (!in_array($extensao, $extensoes_permitidas)) {
-				echo ':falha:Extensão não permitida. Lista de extensões permitidas a seguir. ';
-				echo '(' . implode(", ", $extensoes_permitidas) . ')';
-				return;
-			}
-
-
-			if (!$attachment->storeAs('public/uploads/', $novoNome)) {
-				echo ':falha:arquivo não pode ser enviado';
-				return;
-			}
-		}
-
-		$user = request()->user();
-
-		$service = DB::table('services')
-			->select(
-				'services.*',
-				'divisions.name as area_responsavel_nome',
-				'divisions.description as area_responsavel_descricao'
-			)->join(
-				'divisions',
-				'services.division_id',
-				'=',
-				'divisions.id'
-			)
-			->where('services.id', '=', $request->service_id)
-			->first();
-
-
-		try {
-			DB::beginTransaction();
-			$data =
-				[
-					'division_id' =>  $service->division_id,
-					'service_id' => $service->id,
-					'division_sig_id' => $user->division_sig_id,
-					'division_sig' => $user->division_sig,
-					'customer_user_id' => $user->id,
-					'description' => $request->description,
-					'campus' => $request->campus,
-					'tag' => $request->tag,
-					'phone_number' => $request->phone_number,
-					'status' => 'opened',
-					'email' => $request->email,
-					'attachment' => $novoNome,
-					'place' => $request->place
-				];
-			$order = Order::create($data);
-			$ocorrenciaInsertedId = $order->id;
-
-			DB::table('order_status_logs')->insert([
-				'order_id' => $ocorrenciaInsertedId,
-				'status' => 'opened',
-				'message' => "Ocorrência liberada para que qualquer técnico possa atender.",
-				'user_id' => $user->id
-			]);
-
-			DB::commit();
-			echo '<div class="alert alert-success" role="alert">
-						Ocorrência adicionada com sucesso!
-			  </div>';
-		} catch (\Exception $e) {
-			$message = $e->getMessage();
-			echo '
-				<div class="alert alert-danger" role="alert">
-  					Falha ao tentar cadastrar ocorrência. ' . $message . '
-				</div>
-				';
-			DB::rollBack();
-			echo '<META HTTP-EQUIV="REFRESH" CONTENT="1; URL=?page=ocorrencia&cadastrar=1">';
-		}
-		$mail = new Mail();
-
-		$assunto = "[3S] - Chamado Nº " . $ocorrenciaInsertedId;
-		$corpo =  '<p>Prezado(a) ' . $user->name . ' ,</p>';
-		$corpo .= '<p>Sua solicitação foi realizada com sucesso, solicitação
-			<a href="https://3s.unilab.edu.br/?page=ocorrencia&selecionar='
-			. $ocorrenciaInsertedId . '">Nº' . $ocorrenciaInsertedId . '</a></p>';
-		$corpo .= '<ul>
-							<li>Serviço Solicitado: ' . $service->name . '</li>
-							<li>Descrição do Problema: ' . $request->description . '</li>
-							<li>Setor Responsável: ' . $service->area_responsavel_nome .
-			' - ' . $service->area_responsavel_descricao . '</li>
-					</ul><br><p>Mensagem enviada pelo sistema 3S. Favor não responder.</p>';
-
-		$mail->enviarEmail($user->email, $user->nome, $assunto, $corpo);
-		echo '<META HTTP-EQUIV="REFRESH" CONTENT="1; URL=?page=ocorrencia&selecionar=' . $ocorrenciaInsertedId . '">';
-	}
 
 
 	public function ajaxPedirAjuda()
