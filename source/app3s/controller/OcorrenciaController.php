@@ -14,7 +14,6 @@ use app3s\model\Status;
 use app3s\model\StatusOcorrencia;
 use app3s\model\Usuario;
 use app3s\util\Mail;
-use app3s\util\Sessao;
 use App\Models\Division;
 use App\Models\Order;
 use App\Models\Service;
@@ -57,26 +56,26 @@ class OcorrenciaController
 </div>
 ';
 	}
-	public function fimDeSemana($data)
+	public function isWeekend($data)
 	{
 		$diaDaSemana = intval(date('w', strtotime($data)));
 		return ($diaDaSemana == 6 || $diaDaSemana == 0);
 	}
 
-	public function foraDoExpediente($data)
+	public function outOfHours($data)
 	{
 		$hora = intval(date('H', strtotime($data)));
 		return ($hora >= 17 || $hora < 8 || $hora == 11);
 	}
-	public function calcularHoraSolucao($dataAbertura, $tempoSla)
+	public function getDatetimeBySla($dataAbertura, $tempoSla)
 	{
 		if ($dataAbertura == null) {
 			return "Indefinido";
 		}
-		while ($this->fimDeSemana($dataAbertura)) {
+		while ($this->isWeekend($dataAbertura)) {
 			$dataAbertura = date("Y-m-d 08:00:00", strtotime('+1 day', strtotime($dataAbertura)));
 		}
-		while ($this->foraDoExpediente($dataAbertura)) {
+		while ($this->outOfHours($dataAbertura)) {
 			$dataAbertura = date("Y-m-d H:00:00", strtotime('+1 hour', strtotime($dataAbertura)));
 		}
 		$timeEstimado = strtotime($dataAbertura);
@@ -84,13 +83,13 @@ class OcorrenciaController
 		for ($i = 0; $i < $tempoSla; $i++) {
 			$timeEstimado = strtotime('+' . $i . ' hour', strtotime($dataAbertura));
 			$horaEstimada = date("Y-m-d H:i:s", $timeEstimado);
-			while ($this->fimDeSemana($horaEstimada)) {
+			while ($this->isWeekend($horaEstimada)) {
 				$horaEstimada = date("Y-m-d 08:00:00", strtotime('+1 day', strtotime($horaEstimada)));
 				$i = $i + 24;
 				$tempoSla += 24;
 			}
 
-			while ($this->foraDoExpediente($horaEstimada)) {
+			while ($this->outOfHours($horaEstimada)) {
 				$horaEstimada = date("Y-m-d H:i:s", strtotime('+1 hour', strtotime($horaEstimada)));
 				$i++;
 				$tempoSla++;
@@ -163,7 +162,7 @@ class OcorrenciaController
 		$listaUsuarios = User::whereIn('role', ['provider', 'administrator'])->get();
 		$listaServicos = Service::whereIn('role', ['customer', 'provider'])->get();
 		$listaAreas = Division::get();
-		$dataSolucao = $this->calcularHoraSolucao($order->created_at, $order->sla_duration);
+		$dataSolucao = $this->getDatetimeBySla($order->created_at, $order->sla_duration);
 		$canEditTag = $this->possoEditarPatrimonio($order, $user);
 		$canEditSolution = $this->possoEditarSolucao($order, $user);
 		$service = Service::findOrFail($order->service_id);
@@ -266,7 +265,6 @@ class OcorrenciaController
 
 	public function painel($lista, $strTitulo, $id, $strShow = "")
 	{
-
 	}
 
 	public function atrasado($order)
@@ -274,7 +272,7 @@ class OcorrenciaController
 		if ($order->sla_duration < 1) {
 			return false;
 		}
-		$horaEstimada = $this->calcularHoraSolucao($order->created_at, $order->sla_duration);
+		$horaEstimada = $this->getDatetimeBySla($order->created_at, $order->sla_duration);
 		$timeHoje = time();
 		$timeSolucaoEstimada = strtotime($horaEstimada);
 		return $timeHoje > $timeSolucaoEstimada;
@@ -287,10 +285,10 @@ class OcorrenciaController
 			$query = $query->where('orders.division_id', $divisionId);
 		}
 		if (isset($_GET['demanda'])) {
-			$query = $query->where('provider_user_id', $this->sessao->getIdUsuario());
+			$query = $query->where('provider_user_id', auth()->user()->id);
 		}
 		if (isset($_GET['solicitacao'])) {
-			$query = $query->where('customer_user_id', $this->sessao->getIdUsuario());
+			$query = $query->where('customer_user_id', auth()->user()->id);
 		}
 		if (isset($_GET['tecnico'])) {
 			$query = $query->where('provider_user_id', intval($_GET['tecnico']));
@@ -337,6 +335,11 @@ class OcorrenciaController
 			'in progress',
 			'reserved'
 		];
+		$statusFinished = [
+			'closed',
+			'committed',
+			'canceled'
+		];
 		$queryPendding = DB::table('orders')
 			->select($fields)
 			->join('services', 'orders.service_id', '=', 'services.id')
@@ -348,15 +351,15 @@ class OcorrenciaController
 		$queryFinished = DB::table('orders')
 			->select($fields)
 			->join('services', 'orders.service_id', '=', 'services.id')
-			->whereIn('status', ['closed', 'committed', 'canceled'])
+			->whereIn('status', $statusFinished)
 			->orderByDesc('orders.id')->limit(300);
 
 		$queryPendding = $this->applyFilters($queryPendding);
 		$queryFinished = $this->applyFilters($queryFinished);
 
 		if (request()->session()->get('role') == 'customer') {
-			$queryPendding = $queryPendding->where('customer_user_id', $this->sessao->getIdUsuario());
-			$queryFinished = $queryFinished->where('customer_user_id', $this->sessao->getIdUsuario());
+			$queryPendding = $queryPendding->where('customer_user_id', auth()->user()->id);
+			$queryFinished = $queryFinished->where('customer_user_id', auth()->user()->id);
 		}
 		$lista = $queryPendding->get();
 		$lista2 = $queryFinished->get();
@@ -444,13 +447,13 @@ class OcorrenciaController
 
 	public function create()
 	{
-		$this->sessao = new Sessao();
+
 
 		$ocorrencia = new Ocorrencia();
-		$ocorrencia->getUsuarioCliente()->setId($this->sessao->getIdUsuario());
+		$ocorrencia->getUsuarioCliente()->setId(auth()->user()->id);
 
 
-		$listaNaoAvaliados = DB::table('orders')->where('customer_user_id', $this->sessao->getIdUsuario())->where('status', OcorrenciaController::STATUS_FECHADO)->get();
+		$listaNaoAvaliados = DB::table('orders')->where('customer_user_id', auth()->user()->id)->where('status', OcorrenciaController::STATUS_FECHADO)->get();
 		// dd(OcorrenciaController::STATUS_FECHADO);
 		echo '
             <div class="row">
@@ -482,7 +485,7 @@ class OcorrenciaController
 			);
 		} else {
 			echo '<h3 class="pb-4 mb-4 font-italic border-bottom">Cadastrar Ocorrência</h3>';
-			echo view('partials.form-insert-order', ['services' => $services, 'email' => $this->sessao->getEmail()]);
+			echo view('partials.form-insert-order', ['services' => $services, 'email' => auth()->user()->email]);
 		}
 		echo '
                 </div>
@@ -621,16 +624,9 @@ class OcorrenciaController
 	}
 
 
-	public function possoPedirAjuda()
-	{
-		if ($this->sessao == Sessao::NIVEL_DESLOGADO) {
-			return false;
-		}
-		return true;
-	}
 	public function ajaxPedirAjuda()
 	{
-		$this->sessao = new Sessao();
+
 
 
 		if (!isset($_POST['pedir_ajuda'])) {
@@ -646,10 +642,6 @@ class OcorrenciaController
 
 		$this->dao->fillById($ocorrencia);
 
-		if (!$this->possoPedirAjuda()) {
-			echo ':falha:';
-			return;
-		}
 
 		$usersList = DB::table('usuario')->where('id_setor', $ocorrencia->getAreaResponsavel()->getId())->get();
 
@@ -676,55 +668,17 @@ class OcorrenciaController
 	}
 
 
-	public function possoAtender()
-	{
-		if (
-			request()->session()->get('role') == Sessao::NIVEL_DESLOGADO
-			|| request()->session()->get('role') == 'customer'
-		) {
-			return false;
-		}
-		if ($this->selecionado->getStatus() == self::STATUS_ATENDIMENTO) {
-			return false;
-		}
-		if ($this->selecionado->getStatus() == self::STATUS_CANCELADO) {
-			return false;
-		}
-		if ($this->selecionado->getStatus() == self::STATUS_FECHADO || $this->selecionado->getStatus() == self::STATUS_FECHADO_CONFIRMADO) {
-			return false;
-		}
-		if ($this->selecionado->getStatus() == self::STATUS_RESERVADO) {
-			if ($this->sessao->getIdUsuario() != $this->selecionado->getIdUsuarioIndicado()) {
-				return false;
-			}
-		}
-		if (
-			$this->selecionado->getStatus() == 'pending it resource'
-			|| $this->selecionado->getStatus() == 'pending customer response'
-			|| $this->selecionado->getStatus() == 'opened'
-		) {
-			if ($this->sessao->getIdUsuario() != $this->selecionado->getIdUsuarioAtendente()) {
-				return false;
-			}
-		}
-		if ($this->selecionado->getStatus() == 'opened') {
-			return true;
-		}
-
-		return true;
-	}
 	public function possoCancelar()
 	{
-		return ($this->sessao->getIdUsuario() === $this->selecionado->getUsuarioCliente()->getId()) && ($this->selecionado->getStatus() == 'opened');
+		return (auth()->user()->id === $this->selecionado->getUsuarioCliente()->getId()) && ($this->selecionado->getStatus() == 'opened');
 	}
 
 	public function passwordVerify()
 	{
-		$this->sessao = new Sessao();
 		if (!isset($_POST['senha'])) {
 			return false;
 		}
-		$login = $this->sessao->getLoginUsuario();
+		$login = auth()->user()->login;
 		$senha = $_POST['senha'];
 		$data = ['login' =>  $login, 'senha' => $senha];
 		$response = Http::post(env('UNILAB_API_ORIGIN') . '/authenticate', $data);
@@ -738,8 +692,7 @@ class OcorrenciaController
 		if ($idUsuario === 0) {
 			return false;
 		}
-		if ($responseJ->id != $this->sessao->getIdUsuario()) {
-			echo ":falha:Senha Incorreta.";
+		if ($responseJ->id != auth()->user()->id) {
 			return false;
 		}
 		return true;
@@ -747,12 +700,6 @@ class OcorrenciaController
 	public function ajaxAtender($order, $user, $sigla)
 	{
 
-		if (!$this->possoAtender()) {
-			echo ':falha:Não é possível atender este chamado.';
-			return false;
-		}
-
-		$this->sessao = new Sessao();
 
 		$status = DB::table('status')
 			->select('id', 'sigla', 'nome')->where('sigla', $sigla)->get()->first();
@@ -826,7 +773,7 @@ class OcorrenciaController
 		$this->statusOcorrencia->setOcorrencia($this->selecionado);
 		$this->statusOcorrencia->setStatus($status);
 		$this->statusOcorrencia->setDataMudanca(date("Y-m-d G:i:s"));
-		$this->statusOcorrencia->getUsuario()->setId($this->sessao->getIdUsuario());
+		$this->statusOcorrencia->getUsuario()->setId(auth()->user()->id);
 		$this->statusOcorrencia->setMensagem("Ocorrência cancelada pelo usuário");
 
 
@@ -883,7 +830,7 @@ class OcorrenciaController
 	{
 		//Só permitir isso se o usuário for cliente do chamado
 		//O chamado deve estar fechado.
-		if ($this->sessao->getIdUsuario() != $this->selecionado->getUsuarioCliente()->getId()) {
+		if (auth()->user()->id != $this->selecionado->getUsuarioCliente()->getId()) {
 			return false;
 		}
 		if ($this->selecionado->getStatus() != self::STATUS_FECHADO) {
@@ -895,7 +842,7 @@ class OcorrenciaController
 	{
 		//Só permitir isso se o usuário for cliente do chamado
 		//O chamado deve estar fechado.
-		if ($this->sessao->getIdUsuario() != $this->selecionado->getUsuarioCliente()->getId()) {
+		if (auth()->user()->id != $this->selecionado->getUsuarioCliente()->getId()) {
 			return false;
 		}
 		if ($this->selecionado->getStatus() != self::STATUS_FECHADO) {
@@ -912,15 +859,9 @@ class OcorrenciaController
 		if (request()->session()->get('role') == 'customer') {
 			return false;
 		}
-		if (request()->session()->get('role') == Sessao::NIVEL_DESLOGADO) {
-			return false;
-		}
 
-		if ($this->selecionado->getStatus() == Self::STATUS_ATENDIMENTO) {
-			if ($this->sessao->getIdUsuario() == $this->selecionado->getIdUsuarioAtendente()) {
-				return true;
-			}
-		}
+
+
 
 		return false;
 	}
@@ -1005,7 +946,7 @@ class OcorrenciaController
 		$this->statusOcorrencia->setOcorrencia($this->selecionado);
 		$this->statusOcorrencia->setStatus($status);
 		$this->statusOcorrencia->setDataMudanca(date("Y-m-d G:i:s"));
-		$this->statusOcorrencia->getUsuario()->setId($this->sessao->getIdUsuario());
+		$this->statusOcorrencia->getUsuario()->setId(auth()->user()->id);
 		$this->statusOcorrencia->setMensagem("Atendimento avaliado pelo cliente");
 
 		$this->selecionado->setDataFechamentoConfirmado(date("Y-m-d H:i:s"));
@@ -1048,7 +989,7 @@ class OcorrenciaController
 		$this->statusOcorrencia->setOcorrencia($this->selecionado);
 		$this->statusOcorrencia->setStatus($status);
 		$this->statusOcorrencia->setDataMudanca(date("Y-m-d G:i:s"));
-		$this->statusOcorrencia->getUsuario()->setId($this->sessao->getIdUsuario());
+		$this->statusOcorrencia->getUsuario()->setId(auth()->user()->id);
 		$this->statusOcorrencia->setMensagem("Ocorrência Reaberta pelo cliente");
 		if (isset($_POST['mensagem-status'])) {
 			$this->statusOcorrencia->setMensagem($_POST['mensagem-status']);
@@ -1144,7 +1085,7 @@ class OcorrenciaController
 			return;
 		}
 
-		$this->sessao = new Sessao();
+
 		$this->selecionado = new Ocorrencia();
 		$this->selecionado->setId($_POST['id_ocorrencia']);
 		$ocorrenciaDao = new OcorrenciaDAO($this->dao->getConnection());
@@ -1153,7 +1094,7 @@ class OcorrenciaController
 		$mensagem = "";
 
 		$order = DB::table('orders')->where('id', $_POST['id_ocorrencia'])->first();
-		$user = DB::table('usuario')->where('id', $this->sessao->getIdUsuario())->first();
+		$user = DB::table('usuario')->where('id', auth()->user()->id)->first();
 
 
 		switch ($_POST['status_acao']) {
@@ -1220,10 +1161,9 @@ class OcorrenciaController
 	}
 	public function ajaxEditarPatrimonio()
 	{
-		$sessao = new Sessao();
-		$userId = $sessao->getIdUsuario();
+
 		$order = Order::findOrFail($this->selecionado->getId());
-		$user = User::findOrFail($userId);
+		$user = auth()->user();
 		if (!$this->possoEditarPatrimonio($order, $user)) {
 			echo ':falha:Este patrimônio não pode ser editado.';
 			return false;
@@ -1249,7 +1189,7 @@ class OcorrenciaController
 		$this->statusOcorrencia->setOcorrencia($this->selecionado);
 		$this->statusOcorrencia->setStatus($status);
 		$this->statusOcorrencia->setDataMudanca(date("Y-m-d G:i:s"));
-		$this->statusOcorrencia->getUsuario()->setId($this->sessao->getIdUsuario());
+		$this->statusOcorrencia->getUsuario()->setId(auth()->user()->id);
 		$this->statusOcorrencia->setMensagem('Técnico editou o Patrimônio para: ' . $_POST['patrimonio'] . '.');
 
 		$this->selecionado->setPatrimonio(strip_tags($_POST['patrimonio']));
@@ -1312,9 +1252,7 @@ class OcorrenciaController
 	{
 
 		$order = Order::findOrFail($this->selecionado->getId());
-		$sessao = new Sessao();
-		$idUser = $sessao->getIdUsuario();
-		$user = User::findOrFail($idUser);
+		$user = auth()->user();
 
 		if (!$this->possoEditarSolucao($order, $user)) {
 			echo ':falha:Esta solução não pode ser editada.';
@@ -1322,10 +1260,10 @@ class OcorrenciaController
 		}
 
 		$ocorrenciaDao = new OcorrenciaDAO($this->dao->getConnection());
-		$this->selecionado->setStatus(self::STATUS_AGUARDANDO_ATIVO);
+		$this->selecionado->setStatus('pending it resource');
 
 		$status = new Status();
-		$status->setSigla(self::STATUS_AGUARDANDO_ATIVO);
+		$status->setSigla('pending it resource');
 
 		$this->dao->fillStatusBySigla($status);
 
@@ -1333,7 +1271,7 @@ class OcorrenciaController
 		$this->statusOcorrencia->setOcorrencia($this->selecionado);
 		$this->statusOcorrencia->setStatus($status);
 		$this->statusOcorrencia->setDataMudanca(date("Y-m-d G:i:s"));
-		$this->statusOcorrencia->getUsuario()->setId($this->sessao->getIdUsuario());
+		$this->statusOcorrencia->getUsuario()->setId(auth()->user()->id);
 		$this->statusOcorrencia->setMensagem("Aguardando ativo de TI");
 
 
@@ -1356,9 +1294,9 @@ class OcorrenciaController
 	public function ajaxAguardandoUsuario()
 	{
 		$order = Order::findOrFail($this->selecionado->getId());
-		$sessao = new Sessao();
-		$idUser = $sessao->getIdUsuario();
-		$user = User::findOrFail($idUser);
+
+
+		$user = auth()->user();
 
 		if (!$this->possoEditarSolucao($order, $user)) {
 			echo ':falha:Esta solução não pode ser editada.';
@@ -1376,7 +1314,7 @@ class OcorrenciaController
 		$this->statusOcorrencia->setOcorrencia($this->selecionado);
 		$this->statusOcorrencia->setStatus($status);
 		$this->statusOcorrencia->setDataMudanca(date("Y-m-d G:i:s"));
-		$this->statusOcorrencia->getUsuario()->setId($this->sessao->getIdUsuario());
+		$this->statusOcorrencia->getUsuario()->setId(auth()->user()->id);
 		$this->statusOcorrencia->setMensagem("Aguardando Usuário");
 
 
@@ -1400,9 +1338,7 @@ class OcorrenciaController
 	public function ajaxEditarSolucao()
 	{
 		$order = Order::findOrFail($this->selecionado->getId());
-		$sessao = new Sessao();
-		$idUser = $sessao->getIdUsuario();
-		$user = User::findOrFail($idUser);
+		$user = auth()->user();
 
 		if (!$this->possoEditarSolucao($order, $user)) {
 			echo ':falha:Esta solução não pode ser editada.';
@@ -1429,7 +1365,7 @@ class OcorrenciaController
 		$this->statusOcorrencia->setOcorrencia($this->selecionado);
 		$this->statusOcorrencia->setStatus($status);
 		$this->statusOcorrencia->setDataMudanca(date("Y-m-d G:i:s"));
-		$this->statusOcorrencia->getUsuario()->setId($this->sessao->getIdUsuario());
+		$this->statusOcorrencia->getUsuario()->setId(auth()->user()->id);
 		$this->statusOcorrencia->setMensagem('Técnico editou a solução. ');
 
 		$this->selecionado->setSolucao(strip_tags($_POST['solucao']));
@@ -1481,7 +1417,7 @@ class OcorrenciaController
 		$this->statusOcorrencia->setOcorrencia($this->selecionado);
 		$this->statusOcorrencia->setStatus($status);
 		$this->statusOcorrencia->setDataMudanca(date("Y-m-d G:i:s"));
-		$this->statusOcorrencia->getUsuario()->setId($this->sessao->getIdUsuario());
+		$this->statusOcorrencia->getUsuario()->setId(auth()->user()->id);
 		$this->statusOcorrencia->setMensagem('Chamado encaminhado para setor: ' . $division->nome);
 
 		$ocorrenciaDao->getConnection()->beginTransaction();
@@ -1545,7 +1481,7 @@ class OcorrenciaController
 		$this->statusOcorrencia->setOcorrencia($this->selecionado);
 		$this->statusOcorrencia->setStatus($status);
 		$this->statusOcorrencia->setDataMudanca(date("Y-m-d G:i:s"));
-		$this->statusOcorrencia->getUsuario()->setId($this->sessao->getIdUsuario());
+		$this->statusOcorrencia->getUsuario()->setId(auth()->user()->id);
 		$this->statusOcorrencia->setMensagem('Alteração do Serviço');
 
 		$this->selecionado->getAreaResponsavel()->setId($servico->division_id);
@@ -1614,7 +1550,7 @@ class OcorrenciaController
 		$this->statusOcorrencia->setOcorrencia($this->selecionado);
 		$this->statusOcorrencia->setStatus($status);
 		$this->statusOcorrencia->setDataMudanca(date("Y-m-d G:i:s"));
-		$this->statusOcorrencia->getUsuario()->setId($this->sessao->getIdUsuario());
+		$this->statusOcorrencia->getUsuario()->setId(auth()->user()->id);
 		$this->statusOcorrencia->setMensagem('Liberado para atendimento');
 
 
@@ -1642,25 +1578,14 @@ class OcorrenciaController
 
 	public function possoEnviarMensagem($order)
 	{
-
-		if ($order->status == OcorrenciaController::STATUS_FECHADO) {
-			return false;
-		}
-		if ($order->status == OcorrenciaController::STATUS_FECHADO_CONFIRMADO) {
-			return false;
-		}
-		if ($order->status == OcorrenciaController::STATUS_CANCELADO) {
-			return false;
-		}
-		$sessao = new Sessao();
 		if (request()->session()->get('role') == 'customer') {
-			if ($sessao->getIdUsuario() != $order->customer_user_id) {
+			if (auth()->user()->id != $order->customer_user_id) {
 				return false;
 			}
 		}
 		if (request()->session()->get('role') == 'provider') {
-			if ($order->id_usuario_atendente != $sessao->getIdUsuario()) {
-				if ($sessao->getIdUsuario() != $order->customer_user_id) {
+			if ($order->id_usuario_atendente != auth()->user()->id) {
+				if (auth()->user()->id != $order->customer_user_id) {
 					return false;
 				}
 			}
@@ -1711,7 +1636,7 @@ class OcorrenciaController
 	public function ajaxAddMessage()
 	{
 
-		$sessao = new Sessao();
+
 		if (!isset($_POST['enviar_mensagem_forum'])) {
 			return;
 		}
@@ -1764,7 +1689,7 @@ class OcorrenciaController
 
 		$mensagemForum->setDataEnvio(date("Y-m-d G:i:s"));
 
-		$mensagemForum->getUsuario()->setId($sessao->getIdUsuario());
+		$mensagemForum->getUsuario()->setId(auth()->user()->id);
 		$ocorrencia = new Ocorrencia();
 		$ocorrencia->setId($_POST['ocorrencia']);
 		$order = DB::table('orders')->where('id', $ocorrencia->getId())->first();
@@ -1778,7 +1703,7 @@ class OcorrenciaController
 		$result = DB::table('mensagem_forum')->insert([
 			'tipo' => $_POST['tipo'],
 			'mensagem' => $_POST['mensagem'],
-			'id_usuario' => $sessao->getIdUsuario(),
+			'id_usuario' => auth()->user()->id,
 			'data_envio' => date("Y-m-d G:i:s"),
 			'id_ocorrencia' => $order->id
 		]);

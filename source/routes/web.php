@@ -7,7 +7,6 @@ use App\Http\Controllers\OrderStatusLogsController;
 use App\Http\Controllers\ServicesController;
 use App\Http\Controllers\UsersController;
 use app3s\controller\MainIndex;
-use app3s\util\Sessao;
 use App\Http\Controllers\KambanController;
 use App\Http\Controllers\TableOrdersController;
 use Illuminate\Support\Facades\Route;
