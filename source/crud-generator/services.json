@@ -9,7 +9,7 @@
             "type": "text"
         },
         {
-            "name": "sla_duration",
+            "name": "sla",
             "type": "number"
         },
         {

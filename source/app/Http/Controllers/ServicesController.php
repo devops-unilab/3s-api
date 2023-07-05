@@ -21,7 +21,7 @@ class ServicesController extends Controller
         if (!empty($keyword)) {
             $services = Service::where('name', 'LIKE', "%$keyword%")
                 ->orWhere('description', 'LIKE', "%$keyword%")
-                ->orWhere('sla_duration', 'LIKE', "%$keyword%")
+                ->orWhere('sla', 'LIKE', "%$keyword%")
                 ->orWhere('role', 'LIKE', "%$keyword%")
                 ->orWhere('division_id', 'LIKE', "%$keyword%")
                 ->latest()->paginate($perPage);

@@ -58,8 +58,8 @@ class OcorrenciaController
 	}
 	public function isWeekend($data)
 	{
-		$diaDaSemana = intval(date('w', strtotime($data)));
-		return ($diaDaSemana == 6 || $diaDaSemana == 0);
+		$week = intval(date('w', strtotime($data)));
+		return ($week == 6 || $week == 0);
 	}
 
 	public function outOfHours($data)
@@ -162,7 +162,7 @@ class OcorrenciaController
 		$listaUsuarios = User::whereIn('role', ['provider', 'administrator'])->get();
 		$listaServicos = Service::whereIn('role', ['customer', 'provider'])->get();
 		$listaAreas = Division::get();
-		$dataSolucao = $this->getDatetimeBySla($order->created_at, $order->sla_duration);
+		$dataSolucao = $this->getDatetimeBySla($order->created_at, $order->sla);
 		$canEditTag = $this->possoEditarPatrimonio($order, $user);
 		$canEditSolution = $this->possoEditarSolucao($order, $user);
 		$service = Service::findOrFail($order->service_id);
@@ -172,7 +172,7 @@ class OcorrenciaController
 		$isClient = ($user->role === 'customer');
 		$canWait = $this->canWait($order, $user);
 
-		$order->tempo_sla = $service->sla_duration;
+		$order->tempo_sla = $service->sla;
 		$timeNow = time();
 		$timeSolucaoEstimada = strtotime($dataSolucao);
 		$isLate = $timeNow > $timeSolucaoEstimada;
@@ -267,12 +267,12 @@ class OcorrenciaController
 	{
 	}
 
-	public function atrasado($order)
+	public function isLate($order)
 	{
-		if ($order->sla_duration < 1) {
+		if ($order->sla < 1) {
 			return false;
 		}
-		$horaEstimada = $this->getDatetimeBySla($order->created_at, $order->sla_duration);
+		$horaEstimada = $this->getDatetimeBySla($order->created_at, $order->sla);
 		$timeHoje = time();
 		$timeSolucaoEstimada = strtotime($horaEstimada);
 		return $timeHoje > $timeSolucaoEstimada;
@@ -321,13 +321,6 @@ class OcorrenciaController
 	}
 	public function index()
 	{
-		$fields = [
-			'orders.id as id',
-			'orders.description as description',
-			'services.sla_duration as sla_duration',
-			'orders.created_at as created_at',
-			'orders.status as status'
-		];
 		$statusPendding = [
 			'opened',
 			'pending it resource',
@@ -340,17 +333,13 @@ class OcorrenciaController
 			'committed',
 			'canceled'
 		];
-		$queryPendding = DB::table('orders')
-			->select($fields)
-			->join('services', 'orders.service_id', '=', 'services.id')
+		$queryPendding = Order::with('service')
 			->whereIn(
 				'status',
 				$statusPendding
 			)->orderByDesc('orders.id')->limit(300);
 
-		$queryFinished = DB::table('orders')
-			->select($fields)
-			->join('services', 'orders.service_id', '=', 'services.id')
+		$queryFinished = Order::with('service')
 			->whereIn('status', $statusFinished)
 			->orderByDesc('orders.id')->limit(300);
 
@@ -371,13 +360,13 @@ class OcorrenciaController
 		$userDivision = Division::where('id', auth()->user()->division_id)->first();
 		$attendents = User::whereIn('role', ['administrator', 'provider'])->get();
 		$allUsers = User::get();
-		$applicants = DB::table('orders')->select('division_sig', 'division_sig_id')->distinct()->limit(400)->get();
+		$divisionCustomers = DB::table('orders')->select('division_sig', 'division_sig_id')->distinct()->limit(400)->get();
 		$divisions = Division::select('id', 'name')->get();
 
-
+		$ordersLate = [];
 		foreach ($lista as $order) {
-			if ($this->atrasado($order)) {
-				$listaAtrasados[] = $order;
+			if ($this->isLate($order)) {
+				$ordersLate[] = $order;
 			} else {
 				$notLate[] = $order;
 			}
@@ -390,7 +379,7 @@ class OcorrenciaController
 			<div class="col-md-8 blog-main">
 				<div class="panel-group" id="accordion">';
 
-		if (count($listaAtrasados) > 0) {
+		if (count($ordersLate) > 0) {
 
 			echo view(
 				'partials.index-orders',
@@ -435,7 +424,7 @@ class OcorrenciaController
 			echo view('partials.form-basic-filter', [
 				'userDivision' => $userDivision, 'attendents' => $attendents, 'allUsers' => $allUsers
 			]);
-			echo view('partials.form-advanced-filter', ['divisions' => $divisions, 'applicants' => $applicants]);
+			echo view('partials.form-advanced-filter', ['divisions' => $divisions, 'divisionCustomers' => $divisionCustomers]);
 			echo view('partials.form-campus-filter');
 			echo '</div>';
 		}

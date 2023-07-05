@@ -18,7 +18,7 @@ return new class extends Migration
         Schema::table('services', function (Blueprint $table) {
             $table->renameColumn('nome', 'name');
             $table->renameColumn('descricao', 'description');
-            $table->renameColumn('tempo_sla', 'sla_duration');
+            $table->renameColumn('tempo_sla', 'sla');
             $table->renameColumn('id_area_responsavel', 'division_id');
             $table->renameColumn('visao', 'role');
             $table->timestamps();
@@ -35,7 +35,7 @@ return new class extends Migration
         Schema::table('services', function (Blueprint $table) {
             $table->renameColumn('name', 'nome');
             $table->renameColumn('description', 'descricao');
-            $table->renameColumn('sla_duration', 'tempo_sla');
+            $table->renameColumn('sla', 'tempo_sla');
             $table->renameColumn('division_id', 'id_area_responsavel');
             $table->renameColumn('role', 'visao');
             $table->dropTimestamps();

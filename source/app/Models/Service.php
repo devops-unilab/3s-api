@@ -25,11 +25,14 @@ class Service extends Model
      *
      * @var array
      */
-    protected $fillable = ['name', 'description', 'sla_duration', 'role', 'division_id'];
+    protected $fillable = ['name', 'description', 'sla', 'role', 'division_id'];
 
     public function division()
     {
         return $this->belongsTo('App\Models\Division');
     }
-    
+    public function orders()
+    {
+        return $this->hasMany(Order::class);
+    }
 }

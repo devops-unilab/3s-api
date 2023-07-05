@@ -50,7 +50,7 @@
                                                 <td>{{ $item->id }}</td>
                                                 <td>{{ $item->name }}</td>
                                                 <td>{{ $item->description }}</td>
-                                                <td>{{ $item->sla_duration }}</td>
+                                                <td>{{ $item->sla }}</td>
                                                 <td>
                                                     <a href="{{ url('/services/' . $item->id . '/edit') }}" title="Edit Service"><button
                                                             class="btn btn-primary btn-sm"><i class="fa fa-pencil-square-o"

@@ -8,10 +8,10 @@
     {!! Form::textarea('description', null, ('' == 'required') ? ['class' => 'form-control', 'required' => 'required'] : ['class' => 'form-control']) !!}
     {!! $errors->first('description', '<p class="help-block">:message</p>') !!}
 </div>
-<div class="form-group {{ $errors->has('sla_duration') ? 'has-error' : ''}}">
-    {!! Form::label('sla_duration', 'Sla Duration', ['class' => 'control-label']) !!}
-    {!! Form::number('sla_duration', null, ('' == 'required') ? ['class' => 'form-control', 'required' => 'required'] : ['class' => 'form-control']) !!}
-    {!! $errors->first('sla_duration', '<p class="help-block">:message</p>') !!}
+<div class="form-group {{ $errors->has('sla') ? 'has-error' : ''}}">
+    {!! Form::label('sla', 'Sla Duration', ['class' => 'control-label']) !!}
+    {!! Form::number('sla', null, ('' == 'required') ? ['class' => 'form-control', 'required' => 'required'] : ['class' => 'form-control']) !!}
+    {!! $errors->first('sla', '<p class="help-block">:message</p>') !!}
 </div>
 <div class="form-group {{ $errors->has('role') ? 'has-error' : ''}}">
     {!! Form::label('role', 'Role', ['class' => 'control-label']) !!}
