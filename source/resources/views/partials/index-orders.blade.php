@@ -37,7 +37,7 @@
                         }
                     @endphp
                     <div class="alert {{ $strClass }} alert-dismissable">
-                        <a href="{{url('/orders/' . $order->id)}}" class="close"><i
+                        <a href="{{ route('orders.show', $order) }}" class="close"><i
                                 class="fa fa-search icone-maior"></i></a>
                         <strong>#{{ $order->id }}</strong> {{ substr($order->description, 0, 200) }}...
                     </div>

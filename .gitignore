@@ -503,3 +503,4 @@ composer.phar
 **/development
 /kubernetes/kustomize/*.yaml
 stress.sh
+*.dia
