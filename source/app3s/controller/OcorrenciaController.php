@@ -14,13 +14,10 @@ use app3s\model\Status;
 use app3s\model\StatusOcorrencia;
 use app3s\model\Usuario;
 use app3s\util\Mail;
-use App\Models\Division;
 use App\Models\Order;
-use App\Models\Service;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Storage;
 
 class OcorrenciaController
 {
@@ -34,63 +31,6 @@ class OcorrenciaController
 	public function __construct()
 	{
 		$this->dao = new OcorrenciaDAO();
-	}
-
-	public function main()
-	{
-		if (isset($_GET['selecionar'])) {
-			$this->show();
-		}
-	}
-	public function isWeekend($data)
-	{
-		$week = intval(date('w', strtotime($data)));
-		return ($week == 6 || $week == 0);
-	}
-
-	public function outOfHours($data)
-	{
-		$hora = intval(date('H', strtotime($data)));
-		return ($hora >= 17 || $hora < 8 || $hora == 11);
-	}
-	public function getDatetimeBySla($dataAbertura, $tempoSla)
-	{
-		if ($dataAbertura == null) {
-			return "Indefinido";
-		}
-		while ($this->isWeekend($dataAbertura)) {
-			$dataAbertura = date("Y-m-d 08:00:00", strtotime('+1 day', strtotime($dataAbertura)));
-		}
-		while ($this->outOfHours($dataAbertura)) {
-			$dataAbertura = date("Y-m-d H:00:00", strtotime('+1 hour', strtotime($dataAbertura)));
-		}
-		$timeEstimado = strtotime($dataAbertura);
-		$tempoSla++;
-		for ($i = 0; $i < $tempoSla; $i++) {
-			$timeEstimado = strtotime('+' . $i . ' hour', strtotime($dataAbertura));
-			$horaEstimada = date("Y-m-d H:i:s", $timeEstimado);
-			while ($this->isWeekend($horaEstimada)) {
-				$horaEstimada = date("Y-m-d 08:00:00", strtotime('+1 day', strtotime($horaEstimada)));
-				$i = $i + 24;
-				$tempoSla += 24;
-			}
-
-			while ($this->outOfHours($horaEstimada)) {
-				$horaEstimada = date("Y-m-d H:i:s", strtotime('+1 hour', strtotime($horaEstimada)));
-				$i++;
-				$tempoSla++;
-			}
-		}
-		$horaEstimada = date('Y-m-d H:i:s', $timeEstimado);
-		return $horaEstimada;
-	}
-
-
-	public function parteInteressada($order, $user)
-	{
-		return ($user->role === 'administrator'
-			|| $user->role === 'provider'
-			|| $order->customer_user_id === $user->id);
 	}
 
 	public function getColorStatus($status)
@@ -114,129 +54,6 @@ class OcorrenciaController
 			$strCartao = ' notice-warning';
 		}
 		return $strCartao;
-	}
-	public function canCancel($order)
-	{
-		return auth()->user()->id == $order->customer_user_id && ($order->status == self::STATUS_REABERTO ||  $order->status == self::STATUS_ABERTO);
-	}
-	public function canWait($order, $user)
-	{
-		return ($user->id === $order->provider_user_id) &&
-			($order->status === self::STATUS_ATENDIMENTO);
-	}
-	public function show()
-	{
-
-
-
-		$orderStatusLog = DB::table('order_status_logs')
-			->join('users', 'order_status_logs.user_id', '=', 'users.id')
-			->select('order_status_logs.message', 'order_status_logs.status', 'users.name as nome_usuario', 'order_status_logs.updated_at')
-			->where('order_status_logs.order_id', $order->id)
-			->get();
-
-
-		$listaUsuarios = User::whereIn('role', ['provider', 'administrator'])->get();
-		$listaServicos = Service::whereIn('role', ['customer', 'provider'])->get();
-		$listaAreas = Division::get();
-		$dataSolucao = $this->getDatetimeBySla($order->created_at, $order->sla);
-		$canEditTag = $this->possoEditarPatrimonio($order, $user);
-		$canEditSolution = $this->possoEditarSolucao($order, $user);
-		$service = Service::findOrFail($order->service_id);
-
-		$order->service_name = $service->name;
-		$canEditService = $this->possoEditarServico($order, $user);
-		$isClient = ($user->role === 'customer');
-		$canWait = $this->canWait($order, $user);
-
-		$order->tempo_sla = $service->sla;
-		$timeNow = time();
-		$timeSolucaoEstimada = strtotime($dataSolucao);
-		$isLate = $timeNow > $timeSolucaoEstimada;
-
-		$canRequestHelp = ($order->customer_user_id == $user->id && !isset($_SESSION['pediu_ajuda']) && !$isLate);
-		$customer = User::findOrFail($order->customer_user_id);
-		$order->client_name =  $customer->name;
-		$canEditDivision = $this->possoEditarAreaResponsavel($order, $user);
-
-		$providerName = '';
-		$providerId = null;
-
-		$providerId = $order->provider_user_id;
-		$provider = User::find($providerId);
-		$providerDivision = null;
-		$providerName = '';
-		if ($provider != null) {
-			$providerDivision = Division::find($provider->division_id);
-			$providerName = $provider->name;
-		}
-
-		foreach ($orderStatusLog as $status) {
-			$status->color = $this->getColorStatus($status->status);
-			echo view('partials.modal-form-status', ['services' => $listaServicos, 'providers' => $listaUsuarios, 'divisions' => $listaAreas, 'order' => $order]);
-		}
-
-		echo view('partials.show-order', [
-			'order' => $order,
-			'canEditTag' => $canEditTag,
-			'canEditSolution' => $canEditSolution,
-			'canEditService' => $canEditService,
-			'isLevelClient' => $isClient,
-			'isLate' => $isLate,
-			'dataSolucao' => $dataSolucao,
-			'canRequestHelp' => $canRequestHelp,
-			'providerDivision' => $providerDivision,
-			'providerName' => $providerName,
-			'canEditDivision' => $canEditDivision,
-			'orderStatusLog' => $orderStatusLog,
-			'canWait' => $canWait
-		]);
-
-
-		if (isset($_POST['chatDelete'])) {
-
-			$idChat = intval($_POST['chatDelete']);
-
-			$message = DB::table('order_messages')
-				->join('users', 'order_messages.user_id', '=', 'users.id')
-				->join('orders', 'order_messages.order_id', '=', 'orders.id')
-				->select(
-					'order_messages.id as id',
-					'users.id as user_id',
-					'orders.status as order_status'
-				)
-				->where('order_messages.id', $idChat)
-				->first();
-
-			if ($user->id === $message->user_id && $order->status === self::STATUS_ATENDIMENTO) {
-				DB::table('order_messages')->where('id', $idChat)->delete();
-				echo '<meta http-equiv = "refresh" content = "0 ; url =?page=ocorrencia&selecionar=' . $_GET['selecionar'] . '"/>';
-			}
-		}
-		$canSendMessage = $this->possoEnviarMensagem($order);
-		$messageList = DB::table('order_messages')
-			->join('users', 'order_messages.user_id', '=', 'users.id')
-			->join('orders', 'order_messages.order_id', '=', 'orders.id')
-			->select(
-				'order_messages.id as id',
-				'users.id as user_id',
-				'users.name as user_name',
-				'order_messages.type as message_type',
-				'order_messages.message as message_content',
-				'order_messages.created_at as created_at',
-				'orders.status as order_status'
-			)
-			->where('order_messages.order_id', $order->id)
-			->orderBy('order_messages.id')
-			->get();
-
-
-		echo view('partials.index-messages-order', [
-			'order' => $order,
-			'messageList' => $messageList,
-			'canSendMessage' => $canSendMessage,
-			'userId' => $user->id
-		]);
 	}
 
 

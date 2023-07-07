@@ -322,7 +322,8 @@ class OrdersController extends Controller
 					</ul><br><p>Mensagem enviada pelo sistema 3S. Favor não responder.</p>';
 
             $mail->enviarEmail(auth()->user()->email, auth()->user()->nome, $assunto, $corpo);
-            return redirect('?page=ocorrencia&selecionar=' . $order->id)->with('flash_message', 'Order added!');
+            return redirect()->route('orders.show', ['order' => $order]);
+
         } catch (\Exception $e) {
             DB::rollback();
             return redirect()->back()->withErrors(['flash_message' => 'Falha ao inserir dados.']);
@@ -340,21 +341,26 @@ class OrdersController extends Controller
     {
         $order->load('messages.user', 'statusLogs.user', 'customer', 'provider', 'service');
 
-        return view('orders.show', compact('order'));
-    }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     *
-     * @return \Illuminate\View\View
-     */
-    public function edit($id)
-    {
-        $order = Order::findOrFail($id);
+        //Isto para os formulários de UPDATE.
+        $providers = User::whereIn('role', ['provider', 'administrator'])->get();
+        $services = Service::whereIn('role', ['customer', 'provider'])->get();
+        $divisions = Division::get();
 
-        return view('orders.edit', compact('order'));
+
+
+        $dataSolucao = $this->getDatetimeBySla($order->created_at, $order->sla);
+        $timeNow = time();
+		$timeSolucaoEstimada = strtotime($dataSolucao);
+		$isLate = $timeNow > $timeSolucaoEstimada;
+        $order->isLate = ($order->customer_user_id === auth()->user()->id && !$isLate); //Adicionar condição relacionada a Session
+        $data =[
+            'order' => $order,
+            'solutionDate' => $dataSolucao,
+            'providers' =>  $providers,
+            'divisions' => $divisions,
+            'services' => $services];
+        return view('orders.show', $data);
     }
 
     /**

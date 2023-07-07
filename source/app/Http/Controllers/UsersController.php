@@ -35,15 +35,6 @@ class UsersController extends Controller
         return view('users.index', compact('users'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\View\View
-     */
-    public function create()
-    {
-        return view('users.create');
-    }
 
     /**
      * Store a newly created resource in storage.
