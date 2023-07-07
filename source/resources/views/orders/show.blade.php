@@ -17,7 +17,7 @@
                                     <div class="btn-group">
                                         <button class="btn btn-light btn-lg dropdown-toggle p-2" type="button"
                                             data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                            Chamado {{ $order->id }}
+                                            {{ __('Order') }} {{ $order->id }}
                                         </button>
                                         <div class="dropdown-menu">
                                             <button type="button" acao="cancelar" class="dropdown-item  botao-status"
@@ -225,12 +225,33 @@
                     <h4 class="font-italic">Histórico</h4>
                     <div class="container">
                         @foreach ($order->statusLogs as $status)
-                            <div class="notice {{ $status->color }}">
+                            @php
+                                $strCartao = ' alert-warning ';
+                                if ($status->status === 'opened') {
+                                    $strCartao = '  notice-warning';
+                                } elseif ($status->status === 'in progress') {
+                                    $strCartao = '  notice-info ';
+                                } elseif ($status->status == 'closed') {
+                                    $strCartao = 'notice-success ';
+                                } elseif ($status->status === 'committed') {
+                                    $strCartao = 'notice-success ';
+                                } elseif ($status->status == 'canceled') {
+                                    $strCartao = ' notice-warning ';
+                                } elseif ($status->status == 'reserved') {
+                                    $strCartao = '  notice-warning ';
+                                } elseif ($status->status === 'pending customer response') {
+                                    $strCartao = '  notice-warning ';
+                                } elseif ($status->status == 'pending it resource') {
+                                    $strCartao = ' notice-warning';
+                                }
+                            @endphp
+                            <div class="notice {{ $strCartao }}">
                                 <strong>{{ __($status->status) }} </strong><br>
                                 @if ($status->status == 'commited')
                                     <br>
                                     @for ($i = 0; $i < intval($order->avaliacao); $i++)
-                                        <img class="m-2 estrela-1" nota="1" src="{{ asset('img/star1.png') }}" alt="1">
+                                        <img class="m-2 estrela-1" nota="1" src="{{ asset('img/star1.png') }}"
+                                            alt="1">
                                     @endfor
                                 @endif
 
@@ -245,85 +266,86 @@
         </div>
     </div>
 
- <!-- Modal -->
- <div class="modal fade" id="modalDeleteChat" tabindex="-1" aria-labelledby="modalDeleteChatLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="modalDeleteChatLabel">Apagar Mensagem</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                Tem certeza que deseja apagar esta mensagem?
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                <form action="" method="post">
-                    <input type="hidden" id="chatDelete" name="chatDelete" value="" />
-                    <button type="submit" class="btn btn-primary">Confirmar</button>
-                </form>
+    <!-- Modal -->
+    <div class="modal fade" id="modalDeleteChat" tabindex="-1" aria-labelledby="modalDeleteChatLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalDeleteChatLabel">Apagar Mensagem</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    Tem certeza que deseja apagar esta mensagem?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                    <form action="" method="post">
+                        <input type="hidden" id="chatDelete" name="chatDelete" value="" />
+                        <button type="submit" class="btn btn-primary">Confirmar</button>
+                    </form>
 
+                </div>
             </div>
         </div>
     </div>
-</div>
 
 
-<div class="container">
-    <div class="row">
-        <div class="chatbox chatbox22">
-            <div class="chatbox__title">
-                <h5 class="text-white">#<span id="id-ocorrencia">{{ $order->id }}</span></h5>
-                <button class="chatbox__title__tray"><span></span></button>
-            </div>
-            <div id="corpo-chat" class="chatbox__body">
+    <div class="container">
+        <div class="row">
+            <div class="chatbox chatbox22">
+                <div class="chatbox__title">
+                    <h5 class="text-white">#<span id="id-ocorrencia">{{ $order->id }}</span></h5>
+                    <button class="chatbox__title__tray"><span></span></button>
+                </div>
+                <div id="corpo-chat" class="chatbox__body">
 
 
-                @foreach ($order->messages as $mensagemForum)
-                    <div class="chatbox__body__message chatbox__body__message--left">
+                    @foreach ($order->messages as $mensagemForum)
+                        <div class="chatbox__body__message chatbox__body__message--left">
 
-                        <div class="chatbox_timing">
-                            <ul>
-                                <li><a href="#"><i class="fa fa-calendar"></i>
-                                        {{ date('d/m/Y', strtotime($mensagemForum->created_at)) }}</a></li>
-                                <li><a href="#"><i class="fa fa-clock-o"></i>
-                                        {{ date('H:i', strtotime($mensagemForum->created_at)) }}</a></a></li>
-                                @if ($canDelete = $mensagemForum->user_id == $userId && $mensagemForum->order_status === 'e')
-                                    <li><button data-toggle="modal" onclick="changeField(' . $mensagemForum->id . ')"
-                                            data-target="#modalDeleteChat"><i class="fa fa-trash-o"></i> Apagar
-                                            </a></button></li>
-                                @endif
+                            <div class="chatbox_timing">
+                                <ul>
+                                    <li><a href="#"><i class="fa fa-calendar"></i>
+                                            {{ date('d/m/Y', strtotime($mensagemForum->created_at)) }}</a></li>
+                                    <li><a href="#"><i class="fa fa-clock-o"></i>
+                                            {{ date('H:i', strtotime($mensagemForum->created_at)) }}</a></a></li>
+                                    @if ($canDelete = $mensagemForum->user_id == $userId && $mensagemForum->order_status === 'e')
+                                        <li><button data-toggle="modal" onclick="changeField(' . $mensagemForum->id . ')"
+                                                data-target="#modalDeleteChat"><i class="fa fa-trash-o"></i> Apagar
+                                                </a></button></li>
+                                    @endif
 
-                            </ul>
-                        </div>
-                        <!-- <img src="https://www.gstatic.com/webp/gallery/2.jpg"
-           alt="Picture">-->
-                        <div class="clearfix"></div>
-                        <div class="ul_section_full">
-                            <ul class="ul_msg">
-                                <li><strong>{{ substr(ucwords(mb_strtolower($mensagemForum->user_name, 'UTF-8')), 0, 14) . (strlen($mensagemForum->user_name) > 14 ? '...' : '') }}</strong>
-                                </li>
-                                @if ($mensagemForum->message_type == 2)
-                                    <li>Anexo: <a href="uploads/{{ $mensagemForum->message_content }}">Clique aqui</a>
-                                    </li>
-                                @else
-                                    <li>{{ strip_tags($mensagemForum->message_content) }}</li>
-                                @endif
-
-                            </ul>
+                                </ul>
+                            </div>
+                            <!-- <img src="https://www.gstatic.com/webp/gallery/2.jpg"
+               alt="Picture">-->
                             <div class="clearfix"></div>
+                            <div class="ul_section_full">
+                                <ul class="ul_msg">
+                                    <li><strong>{{ substr(ucwords(mb_strtolower($mensagemForum->user_name, 'UTF-8')), 0, 14) . (strlen($mensagemForum->user_name) > 14 ? '...' : '') }}</strong>
+                                    </li>
+                                    @if ($mensagemForum->message_type == 2)
+                                        <li>Anexo: <a href="uploads/{{ $mensagemForum->message_content }}">Clique aqui</a>
+                                        </li>
+                                    @else
+                                        <li>{{ strip_tags($mensagemForum->message_content) }}</li>
+                                    @endif
+
+                                </ul>
+                                <div class="clearfix"></div>
+
+                            </div>
 
                         </div>
-
-                    </div>
-                    @if ($loop->last)
-                        <span id="ultimo-id-post" class="escondido">{{ $mensagemForum->id }}</span>
-                    @endif
-                @endforeach
-            </div>
-            <div class="panel-footer">
+                        @if ($loop->last)
+                            <span id="ultimo-id-post" class="escondido">{{ $mensagemForum->id }}</span>
+                        @endif
+                    @endforeach
+                </div>
+                <div class="panel-footer">
 
                     <form id="insert_form_mensagem_forum" class="user" method="post">
                         <input type="hidden" name="enviar_mensagem_forum" value="1">
@@ -349,16 +371,16 @@
                         </div>
                     </form>
 
+                </div>
             </div>
         </div>
     </div>
-</div>
 
-<script>
-    function changeField(id) {
-        document.getElementById('chatDelete').value = id;
-    }
-</script>
+    <script>
+        function changeField(id) {
+            document.getElementById('chatDelete').value = id;
+        }
+    </script>
 
 
 
@@ -431,11 +453,16 @@
 
                         <div id="container-avaliacao" class="form-group escondido">
                             Faça sua avaliação:<br>
-                            <img class="m-2 star estrela-1" nota="1" src="{{ asset('img/star0.png') }}" alt="1">
-                            <img class="m-2 star estrela-2" nota="2" src="{{ asset('img/star0.png') }}" alt="1">
-                            <img class="m-2 star estrela-3" nota="3" src="{{ asset('img/star0.png') }}" alt="1">
-                            <img class="m-2 star estrela-4" nota="4" src="{{ asset('img/star0.png') }}" alt="1">
-                            <img class="m-2 star estrela-5" nota="5" src="{{ asset('img/star0.png') }}" alt="1">
+                            <img class="m-2 star estrela-1" nota="1" src="{{ asset('img/star0.png') }}"
+                                alt="1">
+                            <img class="m-2 star estrela-2" nota="2" src="{{ asset('img/star0.png') }}"
+                                alt="1">
+                            <img class="m-2 star estrela-3" nota="3" src="{{ asset('img/star0.png') }}"
+                                alt="1">
+                            <img class="m-2 star estrela-4" nota="4" src="{{ asset('img/star0.png') }}"
+                                alt="1">
+                            <img class="m-2 star estrela-5" nota="5" src="{{ asset('img/star0.png') }}"
+                                alt="1">
 
                             <input type="hidden" value="0" name="avaliacao" id="campo-avaliacao">
 

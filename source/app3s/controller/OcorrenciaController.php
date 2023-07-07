@@ -35,24 +35,7 @@ class OcorrenciaController
 
 	public function getColorStatus($status)
 	{
-		$strCartao = ' alert-warning ';
-		if ($status === 'opened') {
-			$strCartao = '  notice-warning';
-		} else if ($status === 'in progress') {
-			$strCartao = '  notice-info ';
-		} else if ($status == 'closed') {
-			$strCartao = 'notice-success ';
-		} else if ($status === 'committed') {
-			$strCartao = 'notice-success ';
-		} else if ($status == 'canceled') {
-			$strCartao = ' notice-warning ';
-		} else if ($status == 'reserved') {
-			$strCartao = '  notice-warning ';
-		} else if ($status === 'pending customer response') {
-			$strCartao = '  notice-warning ';
-		} else if ($status == 'pending it resource') {
-			$strCartao = ' notice-warning';
-		}
+
 		return $strCartao;
 	}
 
@@ -230,93 +213,6 @@ class OcorrenciaController
 	}
 
 
-
-	public function possoEditarServico($order, $user)
-	{
-		return (
-			($user->role === 'administrator' || $user->role === 'provider')
-			&& $order->status === self::STATUS_ATENDIMENTO);
-	}
-	public function possoEditarAreaResponsavel($order, $user)
-	{
-		return ($order->status === self::STATUS_ABERTO ||
-			$order->status === self::STATUS_ATENDIMENTO)
-			&& $user->role === 'administrator';
-	}
-
-
-	public function possoEditarSolucao($order, $user)
-	{
-		return true;
-	}
-
-	public function possoEditarPatrimonio($order, $user)
-	{
-		return (
-			($user->role === 'administrator'
-				|| $user->role === 'provider'
-				&& $order->provider_user_id === $user->id
-				&& $order->status === self::STATUS_ATENDIMENTO)
-			||
-			($user->id === $order->customer_user_id
-				&& $order->status === self::STATUS_ATENDIMENTO));
-	}
-	public function possoAvaliar()
-	{
-		//Só permitir isso se o usuário for cliente do chamado
-		//O chamado deve estar fechado.
-		if (auth()->user()->id != $this->selecionado->getUsuarioCliente()->getId()) {
-			return false;
-		}
-		if ($this->selecionado->getStatus() != self::STATUS_FECHADO) {
-			return false;
-		}
-		return true;
-	}
-	public function possoReabrir()
-	{
-		//Só permitir isso se o usuário for cliente do chamado
-		//O chamado deve estar fechado.
-		if (auth()->user()->id != $this->selecionado->getUsuarioCliente()->getId()) {
-			return false;
-		}
-		if ($this->selecionado->getStatus() != self::STATUS_FECHADO) {
-			return false;
-		}
-		return true;
-	}
-
-	public function possoFechar()
-	{
-		if (trim($this->selecionado->getSolucao()) == "") {
-			return false;
-		}
-		if (request()->session()->get('role') == 'customer') {
-			return false;
-		}
-
-
-
-
-		return false;
-	}
-	public function possoReservar()
-	{
-		if (request()->session()->get('role') != 'administrator') {
-			return false;
-		}
-		if ($this->selecionado->getStatus() == Self::STATUS_FECHADO) {
-			return false;
-		}
-		if ($this->selecionado->getStatus() == Self::STATUS_FECHADO_CONFIRMADO) {
-			return false;
-		}
-		if ($this->selecionado->getStatus() == Self::STATUS_CANCELADO) {
-			return false;
-		}
-
-		return true;
-	}
 	public function ajaxFechar($order, $user, $sigla, $message)
 	{
 		if (!$this->possoFechar()) {
