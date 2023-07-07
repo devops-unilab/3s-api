@@ -22,7 +22,7 @@
                     <option value="">Selecione a Unidade</option>
                     @foreach ($divisions as $area)
                         <option value="{{ $area->id }}"
-                            {{ $user->id_setor === $area->id ? 'selected' : '' }}>{{ $area->nome }}
+                            {{ $user->division_id === $area->id ? 'selected' : '' }}>{{ $area->nome }}
                         </option>
                     @endforeach
 

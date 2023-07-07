@@ -14,7 +14,7 @@
         <label for="filtro-data-1">Setor Requisitante</label>
         <select id="select-setores-filtro">
             <option value="">Selecione o Setor</option>';
-            @foreach ($applicants as $requester)
+            @foreach ($divisionCustomers as $requester)
                 <option value="{{ $requester->division_sig_id }}">{{ $requester->division_sig }}</option>
             @endforeach
         </select>

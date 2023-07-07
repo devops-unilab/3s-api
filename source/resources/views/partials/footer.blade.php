@@ -41,20 +41,19 @@
 <script src="js/demo/datatables-demo.js"></script>
 <script src="js/selectize.js"></script>
 <script src="js/login_load.js?a=12"></script>
-<script src="js/mudar_nivel.js?a=12"></script>
 <script src="js/change-contraste.js?a=1"></script>
 <script src="js/ocorrencia_selectize.js?a=1"></script>
 <script src="js/jquery.easyPaginate.js?a=1"></script>
-<script src="js/ocorrencia.js?a=1451"></script>
+<script src="js/ocorrencia.js?a=14513"></script>
 @if (isset($_GET['page']) && $_GET['page'] == 'ocorrencia' && isset($_GET['selecionar']))
-    <script src="js/mensagem_forum.js?a=174"></script>
+    <script src="js/mensagem_forum.js?a=172"></script>
 @endif
 @if (isset($_GET['page']) && $_GET['page'] == 'painel_kamban')
-    <script src="js/painel_kamban.js?123=123"></script>
+    <script src="js/painel_kamban.js?123=a"></script>
 @endif
 @if (isset($_GET['page']) && $_GET['page'] == 'painel_tabela')
-    <script src="js/painel_tabela.js?a=12"></script>
+    <script src="js/painel_tabela.js"></script>
 @endif
-<script src="js/status_ocorrencia.js"></script>
+<script src="js/status_ocorrencia.js?a=1"></script>
 
 </html>

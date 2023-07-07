@@ -7,16 +7,36 @@
  */
 
 namespace app3s\dao;
-
-use app3s\controller\StatusOcorrenciaController;
 use PDO;
 use PDOException;
 use app3s\model\Ocorrencia;
-use app3s\model\MensagemForum;
-use app3s\util\Sessao;
+use app3s\model\Status;
+use app3s\model\StatusOcorrencia;
 
 class OcorrenciaDAO extends DAO
 {
+    public function insertStatus(StatusOcorrencia $statusOcorrencia)
+    {
+        $sql = "INSERT INTO status_ocorrencia(id_ocorrencia, id_status, mensagem, id_usuario, data_mudanca) VALUES (:ocorrencia, :status, :mensagem, :usuario, :dataMudanca);";
+        $ocorrencia = $statusOcorrencia->getOcorrencia()->getId();
+        $status = $statusOcorrencia->getStatus()->getId();
+        $mensagem = $statusOcorrencia->getMensagem();
+        $usuario = $statusOcorrencia->getUsuario()->getId();
+        $dataMudanca = $statusOcorrencia->getDataMudanca();
+        try {
+            $db = $this->getConnection();
+            $stmt = $db->prepare($sql);
+            $stmt->bindParam(":ocorrencia", $ocorrencia, PDO::PARAM_INT);
+            $stmt->bindParam(":status", $status, PDO::PARAM_INT);
+            $stmt->bindParam(":mensagem", $mensagem, PDO::PARAM_STR);
+            $stmt->bindParam(":usuario", $usuario, PDO::PARAM_INT);
+            $stmt->bindParam(":dataMudanca", $dataMudanca, PDO::PARAM_STR);
+            return $stmt->execute();
+        } catch (PDOException $e) {
+            echo '{"error":{"text":' . $e->getMessage() . '}}';
+        }
+    }
+
 
     public function update(Ocorrencia $ocorrencia)
     {
@@ -98,63 +118,33 @@ class OcorrenciaDAO extends DAO
         }
     }
 
-    public function insert(Ocorrencia $ocorrencia)
+    public function fillStatusBySigla(Status $status)
     {
-        $sql = "INSERT INTO ocorrencia(id_area_responsavel, id_servico, id_local, id_usuario_cliente, descricao, campus, patrimonio, ramal, local, status, solucao, prioridade, avaliacao, email, id_usuario_atendente, id_usuario_indicado, anexo, local_sala, data_abertura, data_atendimento, data_fechamento, data_fechamento_confirmado) VALUES (:areaResponsavel, :servico, :idLocal, :usuarioCliente, :descricao, :campus, :patrimonio, :ramal, :local, :status, :solucao, :prioridade, :avaliacao, :email, :idUsuarioAtendente, :idUsuarioIndicado, :anexo, :localSala, :dataAbertura, :dataAtendimento, :dataFechamento, :dataFechamentoConfirmado);";
-        $areaResponsavel = $ocorrencia->getAreaResponsavel()->getId();
-        $servico = $ocorrencia->getServico()->getId();
-        $idLocal = $ocorrencia->getIdLocal();
-        $usuarioCliente = $ocorrencia->getUsuarioCliente()->getId();
-        $descricao = $ocorrencia->getDescricao();
-        $campus = $ocorrencia->getCampus();
-        $patrimonio = $ocorrencia->getPatrimonio();
-        $ramal = $ocorrencia->getRamal();
-        $local = $ocorrencia->getLocal();
-        $status = $ocorrencia->getStatus();
-        $solucao = $ocorrencia->getSolucao();
-        $prioridade = $ocorrencia->getPrioridade();
-        $avaliacao = $ocorrencia->getAvaliacao();
-        $email = $ocorrencia->getEmail();
-        $idUsuarioAtendente = $ocorrencia->getIdUsuarioAtendente();
-        $idUsuarioIndicado = $ocorrencia->getIdUsuarioIndicado();
-        $anexo = $ocorrencia->getAnexo();
-        $localSala = $ocorrencia->getLocalSala();
-        $dataAbertura = $ocorrencia->getDataAbertura();
-        $dataAtendimento = $ocorrencia->getDataAtendimento();
-        $dataFechamento = $ocorrencia->getDataFechamento();
-        $dataFechamentoConfirmado = $ocorrencia->getDataFechamentoConfirmado();
+
+        $sigla = $status->getSigla();
+        $sql = "SELECT status.id, status.sigla, status.nome FROM status
+                WHERE status.sigla = :sigla
+                 LIMIT 1000";
+
         try {
-            $db = $this->getConnection();
-            $stmt = $db->prepare($sql);
-            $stmt->bindParam(":areaResponsavel", $areaResponsavel, PDO::PARAM_INT);
-            $stmt->bindParam(":servico", $servico, PDO::PARAM_INT);
-            $stmt->bindParam(":idLocal", $idLocal, PDO::PARAM_INT);
-            $stmt->bindParam(":usuarioCliente", $usuarioCliente, PDO::PARAM_INT);
-            $stmt->bindParam(":descricao", $descricao, PDO::PARAM_STR);
-            $stmt->bindParam(":campus", $campus, PDO::PARAM_STR);
-            $stmt->bindParam(":patrimonio", $patrimonio, PDO::PARAM_STR);
-            $stmt->bindParam(":ramal", $ramal, PDO::PARAM_STR);
-            $stmt->bindParam(":local", $local, PDO::PARAM_STR);
-            $stmt->bindParam(":status", $status, PDO::PARAM_STR);
-            $stmt->bindParam(":solucao", $solucao, PDO::PARAM_STR);
-            $stmt->bindParam(":prioridade", $prioridade, PDO::PARAM_STR);
-            $stmt->bindParam(":avaliacao", $avaliacao, PDO::PARAM_STR);
-            $stmt->bindParam(":email", $email, PDO::PARAM_STR);
-            $stmt->bindParam(":idUsuarioAtendente", $idUsuarioAtendente, PDO::PARAM_INT);
-            $stmt->bindParam(":idUsuarioIndicado", $idUsuarioIndicado, PDO::PARAM_INT);
-            $stmt->bindParam(":anexo", $anexo, PDO::PARAM_STR);
-            $stmt->bindParam(":localSala", $localSala, PDO::PARAM_STR);
-            $stmt->bindParam(":dataAbertura", $dataAbertura, PDO::PARAM_STR);
-            $stmt->bindParam(":dataAtendimento", $dataAtendimento, PDO::PARAM_STR);
-            $stmt->bindParam(":dataFechamento", $dataFechamento, PDO::PARAM_STR);
-            $stmt->bindParam(":dataFechamentoConfirmado", $dataFechamentoConfirmado, PDO::PARAM_STR);
-            return $stmt->execute();
+            $stmt = $this->connection->prepare($sql);
+
+            if (!$stmt) {
+                echo "<br>Mensagem de erro retornada: " . $this->connection->errorInfo()[2] . "<br>";
+            }
+            $stmt->bindParam(":sigla", $sigla, PDO::PARAM_STR);
+            $stmt->execute();
+            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            foreach ($result as $row) {
+                $status->setId($row['id']);
+                $status->setSigla($row['sigla']);
+                $status->setNome($row['nome']);
+            }
         } catch (PDOException $e) {
-            echo '{"error":{"text":' . $e->getMessage() . '}}';
+            echo $e->getMessage();
         }
+        return $status;
     }
-
-
 
     public function fillById(Ocorrencia $ocorrencia)
     {
@@ -220,78 +210,4 @@ class OcorrenciaDAO extends DAO
     }
 
 
-
-    public function fetchMensagens(Ocorrencia $ocorrencia)
-    {
-        $id = $ocorrencia->getId();
-        $sql = "SELECT mensagem_forum.id, mensagem_forum.tipo, mensagem_forum.mensagem, mensagem_forum.data_envio, usuario.id as id_usuario_usuario, usuario.nome as nome_usuario_usuario, usuario.email as email_usuario_usuario, usuario.login as login_usuario_usuario, usuario.senha as senha_usuario_usuario, usuario.nivel as nivel_usuario_usuario, usuario.id_setor as id_setor_usuario_usuario FROM mensagem_forum LEFT JOIN usuario as usuario ON usuario.id = mensagem_forum.id_usuario
-            WHERE id_ocorrencia = :id ORDER BY mensagem_forum.id ASC;";
-        try {
-
-            $stmt = $this->connection->prepare($sql);
-            $stmt->bindParam(":id", $id, PDO::PARAM_INT);
-            $stmt->execute();
-            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            foreach ($result as $row) {
-
-                $mensagemForum = new MensagemForum();
-
-                $mensagemForum->setId($row['id']);
-                $mensagemForum->setTipo($row['tipo']);
-                $mensagemForum->setMensagem($row['mensagem']);
-                $mensagemForum->getUsuario()->setId($row['id_usuario_usuario']);
-                $mensagemForum->getUsuario()->setNome($row['nome_usuario_usuario']);
-                $mensagemForum->getUsuario()->setEmail($row['email_usuario_usuario']);
-                $mensagemForum->getUsuario()->setLogin($row['login_usuario_usuario']);
-                $mensagemForum->getUsuario()->setSenha($row['senha_usuario_usuario']);
-                $mensagemForum->getUsuario()->setNivel($row['nivel_usuario_usuario']);
-                $mensagemForum->getUsuario()->setIdSetor($row['id_setor_usuario_usuario']);
-                $mensagemForum->setDataEnvio($row['data_envio']);
-                $ocorrencia->addMensagemForum($mensagemForum);
-            }
-        } catch (PDOException $e) {
-            echo $e->getMessage();
-        }
-    }
-
-    /**
-     * Traz as mensagens a partir de um id pra frente.
-     *
-     * @param Ocorrencia $ocorrencia
-     * @param int $idMinimo
-     */
-    public function fetchMensagensPag(Ocorrencia $ocorrencia, $idMinimo)
-    {
-        $id = $ocorrencia->getId();
-        $sql = "SELECT mensagem_forum.id, mensagem_forum.tipo, mensagem_forum.mensagem, mensagem_forum.data_envio, usuario.id as id_usuario_usuario, usuario.nome as nome_usuario_usuario, usuario.email as email_usuario_usuario, usuario.login as login_usuario_usuario, usuario.senha as senha_usuario_usuario, usuario.nivel as nivel_usuario_usuario, usuario.id_setor as id_setor_usuario_usuario FROM mensagem_forum LEFT JOIN usuario as usuario ON usuario.id = mensagem_forum.id_usuario
-            WHERE id_ocorrencia = :id
-            AND mensagem_forum.id > $idMinimo
-            ORDER BY mensagem_forum.id ASC;";
-        try {
-
-            $stmt = $this->connection->prepare($sql);
-            $stmt->bindParam(":id", $id, PDO::PARAM_INT);
-            $stmt->execute();
-            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            foreach ($result as $row) {
-
-                $mensagemForum = new MensagemForum();
-
-                $mensagemForum->setId($row['id']);
-                $mensagemForum->setTipo($row['tipo']);
-                $mensagemForum->setMensagem($row['mensagem']);
-                $mensagemForum->getUsuario()->setId($row['id_usuario_usuario']);
-                $mensagemForum->getUsuario()->setNome($row['nome_usuario_usuario']);
-                $mensagemForum->getUsuario()->setEmail($row['email_usuario_usuario']);
-                $mensagemForum->getUsuario()->setLogin($row['login_usuario_usuario']);
-                $mensagemForum->getUsuario()->setSenha($row['senha_usuario_usuario']);
-                $mensagemForum->getUsuario()->setNivel($row['nivel_usuario_usuario']);
-                $mensagemForum->getUsuario()->setIdSetor($row['id_setor_usuario_usuario']);
-                $mensagemForum->setDataEnvio($row['data_envio']);
-                $ocorrencia->addMensagemForum($mensagemForum);
-            }
-        } catch (PDOException $e) {
-            echo $e->getMessage();
-        }
-    }
 }

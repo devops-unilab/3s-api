@@ -16,7 +16,7 @@
     <input type="hidden" value="{{$userDivision->id}}" id="meu-setor" name="meu-setor">
     <div class="custom-control custom-switch">
         <input type="checkbox" class="custom-control-input" id="filtro-meu-setor" {{ $checkedSetor }}>
-        <label class="custom-control-label" for="filtro-meu-setor">Demandas ({{ $userDivision->nome }}) </label>
+        <label class="custom-control-label" for="filtro-meu-setor">Demandas ({{ $userDivision->name }}) </label>
     </div>
     <div class="custom-control custom-switch">
         <input type="checkbox" class="custom-control-input" id="filtro-minhas-demandas" {{ $checkedDemanda }}>
@@ -30,7 +30,7 @@
         <label for="select-tecnico">Técnico Responsável</label>
         <select id="select-tecnico">
             <option value="">Selecione um atendente</option>';
-            @foreach ($attendents as $tecnico)
+            @foreach ($providers as $tecnico)
                 @php
                     $selectedAtt = '';
                     if (isset($_GET['tecnico'])) {
@@ -39,7 +39,7 @@
                         }
                     }
                 @endphp
-                <option value="{{ $tecnico->id }}" {{ $selectedAtt }}>{{ $tecnico->nome }}</option>
+                <option value="{{ $tecnico->id }}" {{ $selectedAtt }}>{{ $tecnico->name }}</option>
             @endforeach
         </select>
     </div>
@@ -56,7 +56,7 @@
                         }
                     }
                 @endphp
-                <option value="{{ $userElement->id }}" {{ $selectedAtt }}>{{ $userElement->nome }}</option>
+                <option value="{{ $userElement->id }}" {{ $selectedAtt }}>{{ $userElement->name }}</option>
             @endforeach
         </select>
     </div>

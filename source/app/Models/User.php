@@ -21,6 +21,9 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'role',
+        'division_sig',
+        'division_sig_id',
     ];
 
     /**
@@ -40,5 +43,10 @@ class User extends Authenticatable
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'password' => 'hashed',
     ];
+    public function division()
+    {
+        return $this->belongsTo(Division::class);
+    }
 }
