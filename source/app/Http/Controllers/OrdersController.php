@@ -339,7 +339,7 @@ class OrdersController extends Controller
      */
     public function show(Order $order)
     {
-        $order->load('messages.user', 'statusLogs.user', 'customer', 'provider', 'service');
+        $order->load('messages.user', 'statusLogs.user', 'customer', 'provider.division', 'service.division');
 
 
         //Isto para os formulários de UPDATE.

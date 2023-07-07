@@ -230,7 +230,7 @@
                                 @if ($status->status == 'commited')
                                     <br>
                                     @for ($i = 0; $i < intval($order->avaliacao); $i++)
-                                        <img class="m-2 estrela-1" nota="1" src="img/star1.png" alt="1">
+                                        <img class="m-2 estrela-1" nota="1" src="{{ asset('img/star1.png') }}" alt="1">
                                     @endfor
                                 @endif
 
@@ -431,11 +431,11 @@
 
                         <div id="container-avaliacao" class="form-group escondido">
                             Faça sua avaliação:<br>
-                            <img class="m-2 star estrela-1" nota="1" src="img/star0.png" alt="1">
-                            <img class="m-2 star estrela-2" nota="2" src="img/star0.png" alt="1">
-                            <img class="m-2 star estrela-3" nota="3" src="img/star0.png" alt="1">
-                            <img class="m-2 star estrela-4" nota="4" src="img/star0.png" alt="1">
-                            <img class="m-2 star estrela-5" nota="5" src="img/star0.png" alt="1">
+                            <img class="m-2 star estrela-1" nota="1" src="{{ asset('img/star0.png') }}" alt="1">
+                            <img class="m-2 star estrela-2" nota="2" src="{{ asset('img/star0.png') }}" alt="1">
+                            <img class="m-2 star estrela-3" nota="3" src="{{ asset('img/star0.png') }}" alt="1">
+                            <img class="m-2 star estrela-4" nota="4" src="{{ asset('img/star0.png') }}" alt="1">
+                            <img class="m-2 star estrela-5" nota="5" src="{{ asset('img/star0.png') }}" alt="1">
 
                             <input type="hidden" value="0" name="avaliacao" id="campo-avaliacao">
 
