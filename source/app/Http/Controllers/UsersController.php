@@ -7,6 +7,7 @@ use App\Http\Requests;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
 
 class UsersController extends Controller
 {
@@ -35,6 +36,31 @@ class UsersController extends Controller
         return view('users.index', compact('users'));
     }
 
+
+	public function passwordVerify()
+	{
+		if (!isset($_POST['senha'])) {
+			return false;
+		}
+		$login = auth()->user()->login;
+		$senha = $_POST['senha'];
+		$data = ['login' =>  $login, 'senha' => $senha];
+		$response = Http::post(env('UNILAB_API_ORIGIN') . '/authenticate', $data);
+		$responseJ = json_decode($response->body());
+
+		$idUsuario  = 0;
+
+		if (isset($responseJ->id)) {
+			$idUsuario = intval($responseJ->id);
+		}
+		if ($idUsuario === 0) {
+			return false;
+		}
+		if ($responseJ->id != auth()->user()->id) {
+			return false;
+		}
+		return true;
+	}
 
     /**
      * Store a newly created resource in storage.
