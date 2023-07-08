@@ -7,44 +7,94 @@
 
 namespace app3s\controller;
 
-use app3s\dao\OcorrenciaDAO;
-use app3s\model\MensagemForum;
-use app3s\model\Ocorrencia;
-use app3s\model\Status;
-use app3s\model\StatusOcorrencia;
-use app3s\model\Usuario;
 use app3s\util\Mail;
 use App\Models\Order;
 use App\Models\User;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 
 class OcorrenciaController
 {
-
-	protected $selecionado;
-	protected $sessao;
-	protected  $view;
-	protected $dao;
-	private $statusOcorrencia;
-
-	public function __construct()
-	{
-		$this->dao = new OcorrenciaDAO();
-	}
-
-	public function getColorStatus($status)
+	public function updateOrder()
 	{
 
-		return $strCartao;
+
+		$this->selecionado = new Ocorrencia();
+		$this->selecionado->setId($_POST['id_ocorrencia']);
+		$ocorrenciaDao = new OcorrenciaDAO($this->dao->getConnection());
+		$ocorrenciaDao->fillById($this->selecionado);
+		$status = false;
+		$mensagem = "";
+
+		$order = DB::table('orders')->where('id', $_POST['id_ocorrencia'])->first();
+		$user = DB::table('usuario')->where('id', auth()->user()->id)->first();
+
+
+		switch ($_POST['status_acao']) {
+			case 'cancelar':
+				$status = $this->ajaxCancelar();
+				$mensagem = '<p>Chamado cancelado</p>';
+				break;
+			case 'atender':
+				$status = $this->ajaxAtender($order, $user, self::STATUS_ATENDIMENTO);
+				$mensagem = '<p>Chamado em atendimento</p>';
+				break;
+			case 'fechar':
+				$status = $this->ajaxFechar($order, $user, self::STATUS_FECHADO, "Ocorrência fechada pelo atendente");
+				$mensagem = '<p>Chamado fechado</p>';
+				break;
+			case 'reservar':
+				$status = $this->ajaxReservar();
+				$mensagem = '<p>Chamado reservado</p>';
+				break;
+			case 'liberar_atendimento':
+				$status = $this->ajaxLiberar();
+				$mensagem = '<p>Chamado Liberado para atendimento</p>';
+				break;
+			case 'avaliar':
+				$status = $this->ajaxAvaliar();
+				$mensagem = '<p>Chamado avaliado</p>';
+				break;
+			case 'reabrir':
+				$status = $this->ajaxReabrir();
+				$mensagem = '<p>Chamado reaberto</p>';
+				break;
+			case 'editar_servico':
+				$status = $this->ajaxEditarServico();
+				$mensagem = '<p>Serviço alterado</p>';
+				break;
+			case 'editar_solucao':
+				$status = $this->ajaxEditarSolucao();
+				$mensagem = '<p>Solução editada</p>';
+				break;
+			case 'editar_area':
+				$status = $this->ajaxEditarArea();
+				$mensagem = '<p>Área Editada Com Sucesso</p>';
+				break;
+			case 'aguardar_ativos':
+				$status = $this->ajaxAguardandoAtivo();
+				$mensagem = '<p>Aguardando ativo de TI</p>';
+				break;
+			case 'aguardar_usuario':
+				$status = $this->ajaxAguardandoUsuario();
+				$mensagem = '<p>Aguardando resposta do cliente</p>';
+				break;
+			case 'editar_patrimonio':
+				$status = $this->ajaxEditarPatrimonio();
+				$mensagem = '<p>Patrimônio editado.</p>';
+				break;
+			default:
+				echo ':falha:Ação não encontrada';
+
+				break;
+		}
+		if ($status) {
+			$this->sendNotfyChange($mensagem);
+		}
 	}
-
-
 
 
 	public function ajaxPedirAjuda()
 	{
-
 
 
 		if (!isset($_POST['pedir_ajuda'])) {
@@ -55,23 +105,21 @@ class OcorrenciaController
 			echo ':falha:Falta ocorrencia';
 			return;
 		}
-		$ocorrencia = new Ocorrencia();
-		$ocorrencia->setId($_POST['ocorrencia']);
 
-		$this->dao->fillById($ocorrencia);
+		$order = Order::findOrFail($_POST['ocorrencia']);
 
+		$usersList = User::where('id_setor', $order->division->id)->get();
 
-		$usersList = DB::table('usuario')->where('id_setor', $ocorrencia->getAreaResponsavel()->getId())->get();
 
 		$mail = new Mail();
 
-		$assunto = "[3S] - Chamado Nº " . $ocorrencia->getId();
-		$corpo = '<p>A solicitação Nº' . $ocorrencia->getId() . ' está com atraso em relação ao SLA e o cliente solicitou ajuda</p>';
+		$assunto = "[3S] - Chamado Nº " . $order->id;
+		$corpo = '<p>A solicitação Nº' . $order->id . ' está com atraso em relação ao SLA e o cliente solicitou ajuda</p>';
 		$corpo .= '<ul>
-                        <li>Serviço Solicitado: ' . $ocorrencia->getServico()->getNome() . '</li>
-                        <li>Descrição do Problema: ' . $ocorrencia->getDescricao() . '</li>
-                        <li>Setor Responsável: ' . $ocorrencia->getServico()->getAreaResponsavel()->getNome() . ' -
-                        ' . $ocorrencia->getServico()->getAreaResponsavel()->getDescricao() . '</li>
+                        <li>Serviço Solicitado: ' . $order->service->name . '</li>
+                        <li>Descrição do Problema: ' . $order->description . '</li>
+                        <li>Setor Responsável: ' . $order->division->name . ' -
+                        ' . $order->division->description . '</li>
                 </ul><br><p>Mensagem enviada pelo sistema 3S. Favor não responder.</p>';
 
 
@@ -85,36 +133,42 @@ class OcorrenciaController
 		echo ':sucesso:UM e-mail foi enviado aos chefes:';
 	}
 
-
-	public function possoCancelar()
+	public function sendNotfyChange($mensagem = "")
 	{
-		return (auth()->user()->id === $this->selecionado->getUsuarioCliente()->getId()) && ($this->selecionado->getStatus() == 'opened');
+		$mail = new Mail();
+		$assunto = "[3S] - Chamado Nº " . $this->statusOcorrencia->getOcorrencia()->getId();
+
+
+
+		$saldacao =  '<p>Prezado(a) ' . $this->statusOcorrencia->getUsuario()->getNome() . ' ,</p>';
+
+		$corpo = '<p>Avisamos que houve uma mudança no status da solicitação <a href="https://3s.unilab.edu.br/?page=ocorrencia&selecionar=' . $this->statusOcorrencia->getOcorrencia()->getId() . '">Nº' . $this->statusOcorrencia->getOcorrencia()->getId() . '</a></p>';
+		$corpo .= $mensagem;
+		$corpo .= '<ul>
+                        <li>Serviço Solicitado: ' . $this->statusOcorrencia->getOcorrencia()->getServico()->getNome() . '</li>
+                        <li>Descrição do Problema: ' . $this->statusOcorrencia->getOcorrencia()->getDescricao() . '</li>
+                        <li>Setor Responsável: ' . $this->statusOcorrencia->getOcorrencia()->getAreaResponsavel()->getNome() . ' -
+                        ' . $this->statusOcorrencia->getOcorrencia()->getAreaResponsavel()->getDescricao() . '</li>
+                        <li>Cliente: ' . $this->selecionado->getUsuarioCliente()->getNome() . '</li>
+                </ul><br><p>Mensagem enviada pelo sistema 3S. Favor não responder.</p>';
+
+
+		$destinatario = $this->statusOcorrencia->getOcorrencia()->getEmail();
+		$nome = $this->statusOcorrencia->getOcorrencia()->getUsuarioCliente()->getNome();
+		$mail->enviarEmail($destinatario, $nome, $assunto, $saldacao . $corpo);
+
+		$destinatario = $this->statusOcorrencia->getOcorrencia()->getAreaResponsavel()->getEmail();
+		$nome = $this->statusOcorrencia->getOcorrencia()->getAreaResponsavel()->getNome();
+		$mail->enviarEmail($destinatario, $nome, $assunto, $saldacao . $corpo); //Email para area responsavel
+
+
+		if ($this->statusOcorrencia->getOcorrencia()->getIdUsuarioAtendente() != null) {
+			$provider = User::find($this->statusOcorrencia->getOcorrencia()->getIdUsuarioAtendente());
+			$saldacao =  '<p>Prezado(a) ' . $nome . ' ,</p>';
+			$mail->enviarEmail($provider->email, $provider->name, $assunto, $saldacao . $corpo);
+		}
 	}
 
-	public function passwordVerify()
-	{
-		if (!isset($_POST['senha'])) {
-			return false;
-		}
-		$login = auth()->user()->login;
-		$senha = $_POST['senha'];
-		$data = ['login' =>  $login, 'senha' => $senha];
-		$response = Http::post(env('UNILAB_API_ORIGIN') . '/authenticate', $data);
-		$responseJ = json_decode($response->body());
-
-		$idUsuario  = 0;
-
-		if (isset($responseJ->id)) {
-			$idUsuario = intval($responseJ->id);
-		}
-		if ($idUsuario === 0) {
-			return false;
-		}
-		if ($responseJ->id != auth()->user()->id) {
-			return false;
-		}
-		return true;
-	}
 	public function ajaxAtender($order, $user, $sigla)
 	{
 
@@ -157,32 +211,12 @@ class OcorrenciaController
 
 	public function ajaxCancelar()
 	{
-		if (!isset($_POST['status_acao'])) {
-			return false;
-		}
-		if ($_POST['status_acao'] != 'cancelar') {
-			return false;
-		}
-		if (!isset($_POST['id_ocorrencia'])) {
-			return false;
-		}
-		if (!isset($_POST['senha'])) {
-			return false;
-		}
-
-
-
-		if (!$this->possoCancelar()) {
-			echo ":falha:Este chamado não pode ser cancelado.";
-			return false;
-		}
-
 
 		$ocorrenciaDao = new OcorrenciaDAO($this->dao->getConnection());
-		$this->selecionado->setStatus(self::STATUS_CANCELADO);
+		$this->selecionado->setStatus('canceled');
 
 		$status = new Status();
-		$status->setSigla(self::STATUS_CANCELADO);
+		$status->setSigla('canceled');
 
 		$this->dao->fillStatusBySigla($status);
 
@@ -215,10 +249,6 @@ class OcorrenciaController
 
 	public function ajaxFechar($order, $user, $sigla, $message)
 	{
-		if (!$this->possoFechar()) {
-			echo ':falha:Não é possível fechar este chamado.';
-			return false;
-		}
 		$status = DB::table('status')->select('id', 'sigla', 'nome')
 			->where('sigla', $sigla)
 			->get()
@@ -257,19 +287,13 @@ class OcorrenciaController
 	}
 	public function ajaxAvaliar()
 	{
-		if (!isset($_POST['avaliacao'])) {
-			echo ':falha:Faça uma avaliação';
-			return false;
-		}
-		if (!$this->possoAvaliar()) {
-			return false;
-		}
+
 
 		$ocorrenciaDao = new OcorrenciaDAO($this->dao->getConnection());
-		$this->selecionado->setStatus(self::STATUS_FECHADO_CONFIRMADO);
+		$this->selecionado->setStatus('committed');
 
 		$status = new Status();
-		$status->setSigla(self::STATUS_FECHADO_CONFIRMADO);
+		$status->setSigla('committed');
 
 		$this->dao->fillStatusBySigla($status);
 
@@ -368,10 +392,10 @@ class OcorrenciaController
 
 
 		$this->selecionado->getAreaResponsavel()->setId($user->division_id);
-		$this->selecionado->setStatus(self::STATUS_RESERVADO);
+		$this->selecionado->setStatus('reserved');
 
 		$status = new Status();
-		$status->setSigla(self::STATUS_RESERVADO);
+		$status->setSigla('reserved');
 
 		$this->dao->fillStatusBySigla($status);
 
@@ -403,93 +427,7 @@ class OcorrenciaController
 		echo ':sucesso:' . $this->selecionado->getId() . ':Reservado com sucesso!';
 		return true;
 	}
-	public function updateOrder()
-	{
-		//Verifica-se qual o form que foi submetido.
 
-		if (!isset($_POST['status_acao'])) {
-			echo ':falha:Ação não especificada';
-			return;
-		}
-		if (!$this->passwordVerify()) {
-			echo ':falha:Senha incorreta';
-			return;
-		}
-
-
-		$this->selecionado = new Ocorrencia();
-		$this->selecionado->setId($_POST['id_ocorrencia']);
-		$ocorrenciaDao = new OcorrenciaDAO($this->dao->getConnection());
-		$ocorrenciaDao->fillById($this->selecionado);
-		$status = false;
-		$mensagem = "";
-
-		$order = DB::table('orders')->where('id', $_POST['id_ocorrencia'])->first();
-		$user = DB::table('usuario')->where('id', auth()->user()->id)->first();
-
-
-		switch ($_POST['status_acao']) {
-			case 'cancelar':
-				$status = $this->ajaxCancelar();
-				$mensagem = '<p>Chamado cancelado</p>';
-				break;
-			case 'atender':
-				$status = $this->ajaxAtender($order, $user, self::STATUS_ATENDIMENTO);
-				$mensagem = '<p>Chamado em atendimento</p>';
-				break;
-			case 'fechar':
-				$status = $this->ajaxFechar($order, $user, self::STATUS_FECHADO, "Ocorrência fechada pelo atendente");
-				$mensagem = '<p>Chamado fechado</p>';
-				break;
-			case 'reservar':
-				$status = $this->ajaxReservar();
-				$mensagem = '<p>Chamado reservado</p>';
-				break;
-			case 'liberar_atendimento':
-				$status = $this->ajaxLiberar();
-				$mensagem = '<p>Chamado Liberado para atendimento</p>';
-				break;
-			case 'avaliar':
-				$status = $this->ajaxAvaliar();
-				$mensagem = '<p>Chamado avaliado</p>';
-				break;
-			case 'reabrir':
-				$status = $this->ajaxReabrir();
-				$mensagem = '<p>Chamado reaberto</p>';
-				break;
-			case 'editar_servico':
-				$status = $this->ajaxEditarServico();
-				$mensagem = '<p>Serviço alterado</p>';
-				break;
-			case 'editar_solucao':
-				$status = $this->ajaxEditarSolucao();
-				$mensagem = '<p>Solução editada</p>';
-				break;
-			case 'editar_area':
-				$status = $this->ajaxEditarArea();
-				$mensagem = '<p>Área Editada Com Sucesso</p>';
-				break;
-			case 'aguardar_ativos':
-				$status = $this->ajaxAguardandoAtivo();
-				$mensagem = '<p>Aguardando ativo de TI</p>';
-				break;
-			case 'aguardar_usuario':
-				$status = $this->ajaxAguardandoUsuario();
-				$mensagem = '<p>Aguardando resposta do cliente</p>';
-				break;
-			case 'editar_patrimonio':
-				$status = $this->ajaxEditarPatrimonio();
-				$mensagem = '<p>Patrimônio editado.</p>';
-				break;
-			default:
-				echo ':falha:Ação não encontrada';
-
-				break;
-		}
-		if ($status) {
-			$this->sendNotfyChange($mensagem);
-		}
-	}
 	public function ajaxEditarPatrimonio()
 	{
 
@@ -543,41 +481,7 @@ class OcorrenciaController
 		return true;
 	}
 
-	public function sendNotfyChange($mensagem = "")
-	{
-		$mail = new Mail();
-		$assunto = "[3S] - Chamado Nº " . $this->statusOcorrencia->getOcorrencia()->getId();
 
-
-
-		$saldacao =  '<p>Prezado(a) ' . $this->statusOcorrencia->getUsuario()->getNome() . ' ,</p>';
-
-		$corpo = '<p>Avisamos que houve uma mudança no status da solicitação <a href="https://3s.unilab.edu.br/?page=ocorrencia&selecionar=' . $this->statusOcorrencia->getOcorrencia()->getId() . '">Nº' . $this->statusOcorrencia->getOcorrencia()->getId() . '</a></p>';
-		$corpo .= $mensagem;
-		$corpo .= '<ul>
-                        <li>Serviço Solicitado: ' . $this->statusOcorrencia->getOcorrencia()->getServico()->getNome() . '</li>
-                        <li>Descrição do Problema: ' . $this->statusOcorrencia->getOcorrencia()->getDescricao() . '</li>
-                        <li>Setor Responsável: ' . $this->statusOcorrencia->getOcorrencia()->getAreaResponsavel()->getNome() . ' -
-                        ' . $this->statusOcorrencia->getOcorrencia()->getAreaResponsavel()->getDescricao() . '</li>
-                        <li>Cliente: ' . $this->selecionado->getUsuarioCliente()->getNome() . '</li>
-                </ul><br><p>Mensagem enviada pelo sistema 3S. Favor não responder.</p>';
-
-
-		$destinatario = $this->statusOcorrencia->getOcorrencia()->getEmail();
-		$nome = $this->statusOcorrencia->getOcorrencia()->getUsuarioCliente()->getNome();
-		$mail->enviarEmail($destinatario, $nome, $assunto, $saldacao . $corpo);
-
-		$destinatario = $this->statusOcorrencia->getOcorrencia()->getAreaResponsavel()->getEmail();
-		$nome = $this->statusOcorrencia->getOcorrencia()->getAreaResponsavel()->getNome();
-		$mail->enviarEmail($destinatario, $nome, $assunto, $saldacao . $corpo); //Email para area responsavel
-
-
-		if ($this->statusOcorrencia->getOcorrencia()->getIdUsuarioAtendente() != null) {
-			$provider = User::find($this->statusOcorrencia->getOcorrencia()->getIdUsuarioAtendente());
-			$saldacao =  '<p>Prezado(a) ' . $nome . ' ,</p>';
-			$mail->enviarEmail($provider->email, $provider->name, $assunto, $saldacao . $corpo);
-		}
-	}
 
 	public function ajaxAguardandoAtivo()
 	{
@@ -634,10 +538,10 @@ class OcorrenciaController
 			return false;
 		}
 		$ocorrenciaDao = new OcorrenciaDAO($this->dao->getConnection());
-		$this->selecionado->setStatus(self::STATUS_AGUARDANDO_USUARIO);
+		$this->selecionado->setStatus('pending customer response');
 
 		$status = new Status();
-		$status->setSigla(self::STATUS_AGUARDANDO_USUARIO);
+		$status->setSigla('pending customer response');
 
 		$this->dao->fillStatusBySigla($status);
 
@@ -740,7 +644,7 @@ class OcorrenciaController
 		$ocorrenciaDao = new OcorrenciaDAO($this->dao->getConnection());
 
 		$status = new Status();
-		$status->setSigla(self::STATUS_ABERTO);
+		$status->setSigla('opened');
 
 		$this->dao->fillStatusBySigla($status);
 
@@ -840,28 +744,7 @@ class OcorrenciaController
 		echo ':sucesso:' . $this->selecionado->getId() . ':Serviço editado com sucesso!';
 		return true;
 	}
-	public function possoLiberar()
-	{
-		if (request()->session()->get('role') != 'administrator') {
-			return false;
-		}
-		if ($this->selecionado->getStatus() == self::STATUS_REABERTO) {
-			return false;
-		}
-		if ($this->selecionado->getStatus() == self::STATUS_FECHADO) {
-			return false;
-		}
-		if ($this->selecionado->getStatus() == self::STATUS_CANCELADO) {
-			return false;
-		}
-		if ($this->selecionado->getStatus() == self::STATUS_FECHADO_CONFIRMADO) {
-			return false;
-		}
-		if ($this->selecionado->getStatus() == self::STATUS_ABERTO) {
-			return false;
-		}
-		return true;
-	}
+
 	public function ajaxLiberar()
 	{
 		if (!$this->possoLiberar()) {
@@ -870,10 +753,10 @@ class OcorrenciaController
 		}
 
 		$ocorrenciaDao = new OcorrenciaDAO($this->dao->getConnection());
-		$this->selecionado->setStatus(self::STATUS_ABERTO);
+		$this->selecionado->setStatus('opened');
 
 		$status = new Status();
-		$status->setSigla(self::STATUS_ABERTO);
+		$status->setSigla('opened');
 
 		$this->dao->fillStatusBySigla($status);
 
@@ -903,24 +786,6 @@ class OcorrenciaController
 
 		echo ':sucesso:' . $this->selecionado->getId() . ':Liberado com sucesso!';
 
-		return true;
-	}
-
-
-	public function possoEnviarMensagem($order)
-	{
-		if (request()->session()->get('role') == 'customer') {
-			if (auth()->user()->id != $order->customer_user_id) {
-				return false;
-			}
-		}
-		if (request()->session()->get('role') == 'provider') {
-			if ($order->id_usuario_atendente != auth()->user()->id) {
-				if (auth()->user()->id != $order->customer_user_id) {
-					return false;
-				}
-			}
-		}
 		return true;
 	}
 
@@ -1052,11 +917,6 @@ class OcorrenciaController
 	const TIPO_TEXTO = 1;
 	const STATUS_ABERTO = 'opened';
 	const STATUS_RESERVADO = 'reserved';
-	const STATUS_AGUARDANDO_USUARIO = 'pending customer response';
-	const STATUS_ATENDIMENTO = 'in progress';
-	const STATUS_FECHADO = 'closed';
-	const STATUS_FECHADO_CONFIRMADO = 'committed';
-	const STATUS_CANCELADO = 'canceled';
 	const STATUS_AGUARDANDO_ATIVO = 'pending it resource';
 	const STATUS_REABERTO = 'opened';
 }
