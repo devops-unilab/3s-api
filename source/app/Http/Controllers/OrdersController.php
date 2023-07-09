@@ -2,15 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use app3s\util\Mail;
 use App\Http\Controllers\Controller;
 use App\Http\Requests;
+use App\Mail\OrderUpdated;
 use App\Models\Division;
 use App\Models\Order;
 use App\Models\Service;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 
 class OrdersController extends Controller
@@ -116,36 +117,8 @@ class OrdersController extends Controller
      *
      * @return \Illuminate\View\View
      */
-    public function index(Request $request)
+    public function index()
     {
-        // $keyword = $request->get('search');
-        // $perPage = 25;
-
-        // if (!empty($keyword)) {
-        //     $orders = Order::where('service_id', 'LIKE', "%$keyword%")
-        //         ->orWhere('description', 'LIKE', "%$keyword%")
-        //         ->orWhere('attachment', 'LIKE', "%$keyword%")
-        //         ->orWhere('campus', 'LIKE', "%$keyword%")
-        //         ->orWhere('division_id', 'LIKE', "%$keyword%")
-        //         ->orWhere('service_id', 'LIKE', "%$keyword%")
-        //         ->orWhere('client_user_id', 'LIKE', "%$keyword%")
-        //         ->orWhere('tag', 'LIKE', "%$keyword%")
-        //         ->orWhere('phone_number', 'LIKE', "%$keyword%")
-        //         ->orWhere('division', 'LIKE', "%$keyword%")
-        //         ->orWhere('status', 'LIKE', "%$keyword%")
-        //         ->orWhere('solution', 'LIKE', "%$keyword%")
-        //         ->orWhere('rating', 'LIKE', "%$keyword%")
-        //         ->orWhere('email', 'LIKE', "%$keyword%")
-        //         ->orWhere('service_at', 'LIKE', "%$keyword%")
-        //         ->orWhere('finished_at', 'LIKE', "%$keyword%")
-        //         ->orWhere('confirmed_at', 'LIKE', "%$keyword%")
-        //         ->orWhere('provider_user_id', 'LIKE', "%$keyword%")
-        //         ->orWhere('assigned_user_id', 'LIKE', "%$keyword%")
-        //         ->orWhere('place', 'LIKE', "%$keyword%")
-        //         ->latest()->paginate($perPage);
-        // } else {
-        //     $orders = Order::latest()->paginate($perPage);
-        // }
 
         $queryPendding = Order::with('service')
             ->whereIn(
@@ -305,23 +278,7 @@ class OrdersController extends Controller
             ]);
 
             DB::commit();
-
-
-            $mail = new Mail();
-
-            $assunto = "[3S] - Chamado Nº " . $order->id;
-            $corpo =  '<p>Prezado(a) ' . auth()->user()->name . ' ,</p>';
-            $corpo .= '<p>Sua solicitação foi realizada com sucesso, solicitação
-			<a href="https://3s.unilab.edu.br/?page=ocorrencia&selecionar='
-                . $order->id . '">Nº' . $order->id . '</a></p>';
-            $corpo .= '<ul>
-							<li>Serviço Solicitado: ' . $service->name . '</li>
-							<li>Descrição do Problema: ' . $request->description . '</li>
-							<li>Setor Responsável: ' . $service->division->name .
-                ' - ' . $service->division->description . '</li>
-					</ul><br><p>Mensagem enviada pelo sistema 3S. Favor não responder.</p>';
-
-            $mail->enviarEmail(auth()->user()->email, auth()->user()->nome, $assunto, $corpo);
+            Mail::to(auth()->user()->email)->send(new OrderUpdated(auth()->user()->name, $order, "Sua solicitação foi realizada com sucesso."));
             return redirect()->route('orders.show', ['order' => $order]);
 
         } catch (\Exception $e) {
