@@ -104,10 +104,10 @@ class OrdersController extends Controller
 
     public function isLate($order)
     {
-        if ($order->sla < 1) {
+        if ($order->service->sla < 1) {
             return false;
         }
-        $horaEstimada = $this->getDatetimeBySla($order->created_at, $order->sla);
+        $horaEstimada = $this->getDatetimeBySla($order->created_at, $order->service->sla);
         $timeHoje = time();
         $timeSolucaoEstimada = strtotime($horaEstimada);
         return $timeHoje > $timeSolucaoEstimada;
@@ -154,9 +154,11 @@ class OrdersController extends Controller
         $ordersLate = [];
         $ordersNotLate = [];
         $data = [];
+
         foreach ($ordersPendding as $order) {
             if (auth()->user() != 'customer' && $this->isLate($order)) {
                 $ordersLate[] = $order;
+
             } else {
                 $ordersNotLate[] = $order;
             }
