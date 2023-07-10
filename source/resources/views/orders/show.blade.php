@@ -88,7 +88,7 @@
                                 <div class="card-body">
                                     <b> Descricao: </b>{{ $order->description }}<br>
 
-                                    @if (trim($order->attachment ) != '')
+                                    @if (trim($order->attachment) != '')
                                         <b>Anexo: </b><a target="_blank"
                                             href="{{ asset('storage/uploads/' . $order->attachment) }}">Clique aqui</a><br>
                                     @endif
@@ -121,7 +121,7 @@
                         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
                             <div class="card mb-4">
                                 <div class="card-body">
-                                    <b>Serviço: </b>{{ $order->service->name }} - {{$order->service->description}}<br>
+                                    <b>Serviço: </b>{{ $order->service->name }} - {{ $order->service->description }}<br>
 
                                     <button type="button" id="botao-editar-servico" acao="editar_servico"
                                         class="dropdown-item text-right" data-toggle="modal" data-target="#modalStatus">
@@ -319,7 +319,7 @@
                                 </ul>
                             </div>
                             <!-- <img src="https://www.gstatic.com/webp/gallery/2.jpg"
-               alt="Picture">-->
+                   alt="Picture">-->
                             <div class="clearfix"></div>
                             <div class="ul_section_full">
                                 <ul class="ul_msg">
@@ -395,7 +395,10 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form method="post" id="form_status_alterar" class="form_status">
+
+                    <form action="{{ route('orders.update', $order) }}" method="POST">
+                        @csrf
+                        @method('PUT')
                         <div id="container-editar-servico" class="form-group escondido">
 
                             <label for="select-servico">Selecione um Serviço</label>
@@ -440,12 +443,10 @@
                             <label for="select-area">Selecione um Setor</label>
                             <select name="area_responsavel" id="select-area">
                                 <option value="" selected>Selecione um Setor</option>
-                                @foreach ($divisions as $area)
-                                    <option value="{{ $area->id }}">{{ $area->nome }} - {{ $area->descricao }}
+                                @foreach ($divisions as $division)
+                                    <option value="{{ $division->id }}">{{ $division->name }} - {{ $division->description }}
                                     </option>
                                 @endforeach
-
-                                echo '
                             </select>
                         </div>
 
@@ -476,10 +477,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Sair</button>
-                    <button id="botao-status" form="form_status_alterar" type="submit" class="btn btn-primary">
-                        <span id="spinner-status" class="escondido spinner-border spinner-border-sm" role="status"
-                            aria-hidden="true"></span>Confirmar
-                    </button>
+                    <button id="botao-status" form="form_status_alterar" type="submit" class="btn btn-primary">Confirmar</button>
                 </div>
             </div>
         </div>

@@ -330,13 +330,11 @@ class OrdersController extends Controller
      *
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Order $order)
     {
-
-        $requestData = $request->all();
-        $order = Order::findOrFail($id);
-        $order->update($requestData);
-
-        return redirect('orders')->with('flash_message', 'Order updated!');
+        dd($request);
+        $order->status = $request->input('status');
+        $order->save();
+        return redirect()->route('orders.show', ['order' => $order]);
     }
 }
