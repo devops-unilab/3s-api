@@ -86,24 +86,22 @@
 
                             <div class="card mb-4">
                                 <div class="card-body">
-                                    <b> Descricao: </b>{{ $order->descricao }}<br>
+                                    <b> Descricao: </b>{{ $order->description }}<br>
 
-                                    @if (trim($order->anexo) != '')
+                                    @if (trim($order->attachment ) != '')
                                         <b>Anexo: </b><a target="_blank"
-                                            href="{{ asset('storage/uploads/' . $order->anexo) }}">Clique aqui</a><br>
+                                            href="{{ asset('storage/uploads/' . $order->attachment) }}">Clique aqui</a><br>
                                     @endif
                                 </div>
                             </div>
                             <div class="card mb-4">
                                 <div class="card-body">
-                                    <b>Patrimônio: </b>{{ $order->patrimonio }}<br>
+                                    <b>Patrimônio: </b>{{ $order->tag }}<br>
 
                                     <button id="botao-editar-patrimonio" type="button" acao="editar_patrimonio"
                                         class="dropdown-item text-right" data-toggle="modal" data-target="#modalStatus">
                                         Editar Patrimônio
                                     </button>
-
-
                                 </div>
                             </div>
                             <div class="card mb-4">
@@ -123,7 +121,7 @@
                         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
                             <div class="card mb-4">
                                 <div class="card-body">
-                                    <b>Classificação do Chamado: </b>{{ $order->service_name }}<br>
+                                    <b>Serviço: </b>{{ $order->service->name }} - {{$order->service->description}}<br>
 
                                     <button type="button" id="botao-editar-servico" acao="editar_servico"
                                         class="dropdown-item text-right" data-toggle="modal" data-target="#modalStatus">
