@@ -8,6 +8,10 @@ use Illuminate\Http\Request;
 
 class ServicesController extends Controller
 {
+    public function __construct()
+    {
+        $this->authorizeResource(Service::class, 'service');
+    }
     /**
      * Display a listing of the resource.
      *

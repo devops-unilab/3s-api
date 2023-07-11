@@ -19,6 +19,10 @@ use Illuminate\Support\Facades\Storage;
 class OrdersController extends Controller
 {
 
+    public function __construct()
+    {
+        $this->authorizeResource(Order::class, 'order');
+    }
     public function applyFilters($query)
     {
         if (isset($_GET['setor'])) {
@@ -348,10 +352,55 @@ class OrdersController extends Controller
             'solution' => ['nullable', 'max:12']
         ]);
 
-        // $user = auth()->user();
-        // $password = $request->input('password');
-        // dd(Hash::check($password, $user->password));
-        dd($request);
+
+        // switch ($_POST['status_acao']) {
+		// 	case 'cancelar':
+		// 		$mensagem = '<p>Chamado cancelado</p>';
+		// 		break;
+		// 	case 'atender':
+		// 		$mensagem = '<p>Chamado em atendimento</p>';
+		// 		break;
+		// 	case 'fechar':
+		// 		$mensagem = '<p>Chamado fechado</p>';
+		// 		break;
+		// 	case 'reservar':
+		// 		$mensagem = '<p>Chamado reservado</p>';
+		// 		break;
+		// 	case 'liberar_atendimento':
+		// 		$mensagem = '<p>Chamado Liberado para atendimento</p>';
+		// 		break;
+		// 	case 'avaliar':
+		// 		$mensagem = '<p>Chamado avaliado</p>';
+		// 		break;
+		// 	case 'reabrir':
+		// 		$mensagem = '<p>Chamado reaberto</p>';
+		// 		break;
+		// 	case 'editar_servico':
+		// 		$mensagem = '<p>Serviço alterado</p>';
+		// 		break;
+		// 	case 'editar_solucao':
+		// 		$mensagem = '<p>Solução editada</p>';
+		// 		break;
+		// 	case 'editar_area':
+		// 		$mensagem = '<p>Área Editada Com Sucesso</p>';
+		// 		break;
+		// 	case 'aguardar_ativos':
+		// 		$mensagem = '<p>Aguardando ativo de TI</p>';
+		// 		break;
+		// 	case 'aguardar_usuario':
+		// 		$mensagem = '<p>Aguardando resposta do cliente</p>';
+		// 		break;
+		// 	case 'editar_patrimonio':
+		// 		$mensagem = '<p>Patrimônio editado.</p>';
+		// 		break;
+		// }
+
+        $mailMessage = "Avisamos que houve uma mudança no status da solicitação.";
+        if($order->provider != null) {
+            Mail::to($order->provider->email)->send(new OrderUpdated($order->provider->name, $order, $mailMessage));
+        }
+        Mail::to($order->customer->email)->send(new OrderUpdated($order->customer->name, $order, $mailMessage));
+
         $order->status = $request->input('status');
         $order->save();
         return redirect()->route('orders.show', ['order' => $order]);

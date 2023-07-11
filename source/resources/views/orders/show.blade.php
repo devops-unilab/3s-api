@@ -310,11 +310,11 @@
                                             {{ date('d/m/Y', strtotime($mensagemForum->created_at)) }}</a></li>
                                     <li><a href="#"><i class="fa fa-clock-o"></i>
                                             {{ date('H:i', strtotime($mensagemForum->created_at)) }}</a></a></li>
-                                    @if ($canDelete = $mensagemForum->user_id == $userId && $mensagemForum->order_status === 'e')
+                                    {{-- @if ($canDelete = $mensagemForum->user_id == $userId && $mensagemForum->order_status === 'e')
                                         <li><button data-toggle="modal" onclick="changeField(' . $mensagemForum->id . ')"
                                                 data-target="#modalDeleteChat"><i class="fa fa-trash-o"></i> Apagar
                                                 </a></button></li>
-                                    @endif
+                                    @endif --}}
 
                                 </ul>
                             </div>
@@ -419,11 +419,6 @@
                             <input class="form-control" id="tag" type="number" name="patrimonio"
                                 value="" />
                         </div>
-                        <div id="container-mensagem-status" class="form-group escondido">
-                            <label for="mensagem-status">Mensagem</label>
-                            <textarea class="form-control" id="mensagem-status" name="mensagem-status" rows="2"></textarea>
-                        </div>
-
                         <div id="container-reservar" class="form-group escondido">
 
                             <label for="select-tecnico">Selecione um Técnico</label>
@@ -441,7 +436,7 @@
                         <div id="container-editar-area" class="form-group escondido">
 
                             <label for="select-area">Selecione um Setor</label>
-                            <select name="area_responsavel" id="select-area">
+                            <select name="division" id="select-area">
                                 <option value="" selected>Selecione um Setor</option>
                                 @foreach ($divisions as $division)
                                     <option value="{{ $division->id }}">{{ $division->name }} -

@@ -11,6 +11,10 @@ use Illuminate\Support\Facades\Http;
 
 class UsersController extends Controller
 {
+    public function __construct()
+    {
+        $this->authorizeResource(User::class, 'user');
+    }
     /**
      * Display a listing of the resource.
      *

@@ -10,6 +10,10 @@ use Illuminate\Http\Request;
 
 class DivisionsController extends Controller
 {
+    public function __construct()
+    {
+        $this->authorizeResource(Division::class, 'division');
+    }
     /**
      * Display a listing of the resource.
      *
@@ -57,7 +61,7 @@ class DivisionsController extends Controller
 			'email' => 'required|max:255'
 		]);
         $requestData = $request->all();
-        
+
         Division::create($requestData);
 
         return redirect('divisions')->with('flash_message', 'Division added!');
@@ -107,7 +111,7 @@ class DivisionsController extends Controller
 			'email' => 'required|max:255'
 		]);
         $requestData = $request->all();
-        
+
         $division = Division::findOrFail($id);
         $division->update($requestData);
 
