@@ -355,6 +355,9 @@ class OrdersController extends Controller
             'open' => OrderStatus::opened(),
             'pendingResource' => OrderStatus::pendingItResource(),
             'pendingCustomer' => OrderStatus::pendingCustomerResponse(),
+            'editSolution' => $order->status,
+            'editTag' => $order->status
+
         ];
 
         $validActions = array_keys($statusMap);
@@ -372,6 +375,9 @@ class OrdersController extends Controller
             'open' => 'Chamado reaberto',
             'pendingResource' => 'Aguardando ativo de TI',
             'pendingCustomer' => 'Aguardando resposta do cliente',
+            'editSolution' => 'Técnico editou a solução',
+            'editTag' => 'Técnico editou o patrimônio'
+
         ];
 
         $message = $messageMap[$action] ?? '';
@@ -413,6 +419,9 @@ class OrdersController extends Controller
                     break;
                 case 'requestHelp':
                     $request->session()->put('helpRequested', true);
+                    break;
+                case 'commit':
+                    $order->tag = intval($request->input('rating'));
                     break;
                 default:
                     break;

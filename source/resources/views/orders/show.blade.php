@@ -39,7 +39,7 @@
                     </div>
                     <div class="card mb-4">
                         <div class="card-body">
-                            <b>Solucao: </b>{{ $order->solucao }}<br>
+                            <b>Solucao: </b>{{ $order->solution }}<br>
                             @can('editSolution', $order)
                                 <button id="botao-editar-solucao" type="button" acao="editSolution"
                                     class="dropdown-item text-right" data-toggle="modal" data-target="#modalStatus">
@@ -123,5 +123,5 @@
         @include('orders.panel-status-logs')
     </div>
     @include('orders.modal-status')
-    @include('orders.chat-box')
+    {{-- @include('orders.chat-box') --}}
 @endsection
