@@ -2,6 +2,7 @@
 
 namespace App\Policies;
 
+use App\Enums\OrderStatus;
 use Illuminate\Auth\Access\Response;
 use App\Models\Order;
 use App\Models\User;
@@ -37,23 +38,139 @@ class OrderPolicy
      */
     public function update(User $user, Order $order): Response
     {
-        // dd($order);
-        $request = request();
-        dd($request);
-        if($user->id === $order->provider_user_id){
-            return Response::allow();
-        }
-
-        return Response::deny('Você precisa ter permissão de admin');
+        return Response::deny('Não é possível editar uma ocorrência');
     }
 
     /**
      * Determine whether the user can delete the model.
      */
-    public function delete(User $user, Order $order): bool
+    public function delete(User $user, Order $order): Response
     {
-        return false;
+        return Response::deny('Não é possível apagar uma ocorrência');
     }
 
+    public function open(User $user, Order $order): Response
+    {
+        if ($order->customer->id === $user->id && $order->status === 'closed') {
+            return Response::allow();
+        }
+        return Response::deny('Esta ocorrência não pode ser cancelada.');
+    }
+    /**
+     * Determine whether the user can delete the model.
+     */
+    public function cancel(User $user, Order $order): Response
+    {
+        if ($order->customer->id === $user->id && $order->status === 'opened') {
+            return Response::allow();
+        }
+        return Response::deny('Esta ocorrência não pode ser cancelada.');
+    }
+    public function editTag(User $user, Order $order): Response
+    {
+        if (
+            ($order->customer->id === $user->id
+                || $order->provider && $order->provider->id === $user->id)
+            && $order->status === 'in progress'
+        ) {
+            return Response::allow();
+        }
+        return Response::deny('Esta ocorrência não pode ser cancelada.');
+    }
+    public function editSolution(User $user, Order $order): Response
+    {
+        if (
+            ($order->provider && $order->provider->id === $user->id)
+            && $order->status === 'in progress'
+        ) {
+            return Response::allow();
+        }
+        return Response::deny('Esta ocorrência não pode ser cancelada.');
+    }
+    public function editService(User $user, Order $order): Response
+    {
+        $role = request()->session()->get('role');
+        if (
+            ($order->provider && $order->provider->id === $user->id)
+            && $order->status === 'in progress'
+            && $role != 'cutomer'
+        ) {
+            return Response::allow();
+        }
+        return Response::deny('Esta ocorrência não pode ser cancelada.');
+    }
 
+    public function inProgress(User $user, Order $order): Response
+    {
+        if (
+            ($order->provider && $order->provider->id === $user->id || $order->provider === null)
+            &&
+            ($order->status === OrderStatus::opened()
+                || $order->status === OrderStatus::pendingCustomerResponse()
+                || $order->status === OrderStatus::pendingItResource())
+        ) {
+            return Response::allow();
+        }
+        return Response::deny('Esta ocorrência não pode ser cancelada.');
+    }
+    public function close(User $user, Order $order): Response
+    {
+        if (
+            $order->provider && $order->provider->id === $user->id
+            && $order->status === 'in progress'
+        ) {
+            return Response::allow();
+        }
+        return Response::deny('Esta ocorrência não pode ser cancelada.');
+    }
+    public function commit(User $user, Order $order): Response
+    {
+        if (
+            $order->customer->id === $user->id && $order->status === 'closed'
+        ) {
+            return Response::allow();
+        }
+        return Response::deny('Esta ocorrência não pode ser cancelada.');
+    }
+    public function reserve(User $user, Order $order): Response
+    {
+        if (
+            $order->provider && $order->provider->id === $user->id
+            && $order->status === 'in progress'
+        ) {
+            return Response::allow();
+        }
+        return Response::deny('Esta ocorrência não pode ser cancelada.');
+    }
+    public function pendingCustomer(User $user, Order $order): Response
+    {
+        if (
+            $order->provider && $order->provider->id === $user->id
+            && $order->status === 'in progress'
+        ) {
+            return Response::allow();
+        }
+        return Response::deny('Esta ocorrência não pode ser cancelada.');
+    }
+    public function pendingResource(User $user, Order $order): Response
+    {
+        if (
+            $order->provider && $order->provider->id === $user->id
+            && $order->status === 'in progress'
+        ) {
+            return Response::allow();
+        }
+        return Response::deny('Esta ocorrência não pode ser cancelada.');
+    }
+    public function requestHelp(User $user, Order $order): Response
+    {
+        if (
+            $order->customer->id === $user->id
+            && $order->status === 'opened' && $order->isLate
+            && !request()->session()->get('helpRequested')
+        ) {
+            return Response::allow();
+        }
+        return Response::deny('Esta ocorrência não pode ser cancelada.');
+    }
 }

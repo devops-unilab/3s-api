@@ -8,6 +8,7 @@ use App\Http\Requests;
 use App\Mail\OrderUpdated;
 use App\Models\Division;
 use App\Models\Order;
+use App\Models\OrderStatusLog;
 use App\Models\Service;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -18,11 +19,6 @@ use Illuminate\Support\Facades\Storage;
 
 class OrdersController extends Controller
 {
-
-    public function __construct()
-    {
-        $this->authorizeResource(Order::class, 'order');
-    }
     public function applyFilters($query)
     {
         if (isset($_GET['setor'])) {
@@ -164,7 +160,6 @@ class OrdersController extends Controller
         foreach ($ordersPendding as $order) {
             if (auth()->user() != 'customer' && $this->isLate($order)) {
                 $ordersLate[] = $order;
-
             } else {
                 $ordersNotLate[] = $order;
             }
@@ -278,17 +273,15 @@ class OrdersController extends Controller
                     'place' => $request->place
                 ];
             $order = Order::create($data);
-            DB::table('order_status_logs')->insert([
+            OrderStatusLog::create([
                 'order_id' => $order->id,
                 'status' => 'opened',
                 'message' => "Ocorrência liberada para que qualquer técnico possa atender.",
                 'user_id' => auth()->user()->id
             ]);
-
             DB::commit();
             Mail::to(auth()->user()->email)->send(new OrderUpdated(auth()->user()->name, $order, "Sua solicitação foi realizada com sucesso."));
             return redirect()->route('orders.show', ['order' => $order]);
-
         } catch (\Exception $e) {
             DB::rollback();
             return redirect()->back()->withErrors(['flash_message' => 'Falha ao inserir dados.']);
@@ -304,38 +297,37 @@ class OrdersController extends Controller
      */
     public function show(Order $order)
     {
-        $order->load('messages.user', 'statusLogs.user', 'customer', 'provider.division', 'service.division');
+        $order->load([
+            'messages.user' => function ($query) {
+                $query->orderBy('id', 'asc');
+            },
+            'statusLogs' => function ($query) {
+                $query->orderBy('id', 'asc');
+            },
+            'customer',
+            'provider.division',
+            'service.division'
+        ]);
 
-
-        //Isto para os formulários de UPDATE.
         $providers = User::whereIn('role', ['provider', 'administrator'])->get();
         $services = Service::whereIn('role', ['customer', 'provider'])->get();
         $divisions = Division::get();
 
-
-
         $dataSolucao = $this->getDatetimeBySla($order->created_at, $order->sla);
         $timeNow = time();
-		$timeSolucaoEstimada = strtotime($dataSolucao);
-		$isLate = $timeNow > $timeSolucaoEstimada;
+        $timeSolucaoEstimada = strtotime($dataSolucao);
+        $isLate = $timeNow > $timeSolucaoEstimada;
         $order->isLate = ($order->customer_user_id === auth()->user()->id && !$isLate); //Adicionar condição relacionada a Session
-        $data =[
+        $data = [
             'order' => $order,
             'solutionDate' => $dataSolucao,
             'providers' =>  $providers,
             'divisions' => $divisions,
-            'services' => $services];
+            'services' => $services
+        ];
         return view('orders.show', $data);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param \Illuminate\Http\Request $request
-     * @param  int  $id
-     *
-     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
-     */
     public function update(Request $request, Order $order)
     {
         $request->validate([
@@ -347,62 +339,101 @@ class OrdersController extends Controller
                     }
                 },
             ],
-            'status' => ['required', 'enum:' . OrderStatus::class],
             'tag' => ['nullable', 'max:12'],
             'solution' => ['nullable', 'max:12']
         ]);
+        dd($request);
+        $this->authorize($request->input('action'), $order);
+        $action = $request->input('action');
+
+        $statusMap = [
+            'cancel' => OrderStatus::canceled(),
+            'inProgress' => OrderStatus::inProgress(),
+            'close' => OrderStatus::closed(),
+            'reserve' => OrderStatus::reserved(),
+            'commit' => OrderStatus::committed(),
+            'open' => OrderStatus::opened(),
+            'pendingResource' => OrderStatus::pendingItResource(),
+            'pendingCustomer' => OrderStatus::pendingCustomerResponse(),
+        ];
+
+        $validActions = array_keys($statusMap);
+        if (!in_array($action, $validActions)) {
+            return redirect()->route('orders.show', ['order' => $order]);
+        }
+
+        $status = $statusMap[$action];
+        $messageMap = [
+            'cancel' => 'Chamado cancelado',
+            'inProgress' => 'Chamado em atendimento',
+            'close' => 'Chamado fechado',
+            'reserve' => 'Chamado reservado',
+            'commit' => 'Chamado avaliado',
+            'open' => 'Chamado reaberto',
+            'pendingResource' => 'Aguardando ativo de TI',
+            'pendingCustomer' => 'Aguardando resposta do cliente',
+        ];
+
+        $message = $messageMap[$action] ?? '';
+
+        $mailMessage = "Avisamos que houve uma mudança no status da solicitação. " . $message;
 
 
-        // switch ($_POST['status_acao']) {
-		// 	case 'cancelar':
-		// 		$mensagem = '<p>Chamado cancelado</p>';
-		// 		break;
-		// 	case 'atender':
-		// 		$mensagem = '<p>Chamado em atendimento</p>';
-		// 		break;
-		// 	case 'fechar':
-		// 		$mensagem = '<p>Chamado fechado</p>';
-		// 		break;
-		// 	case 'reservar':
-		// 		$mensagem = '<p>Chamado reservado</p>';
-		// 		break;
-		// 	case 'liberar_atendimento':
-		// 		$mensagem = '<p>Chamado Liberado para atendimento</p>';
-		// 		break;
-		// 	case 'avaliar':
-		// 		$mensagem = '<p>Chamado avaliado</p>';
-		// 		break;
-		// 	case 'reabrir':
-		// 		$mensagem = '<p>Chamado reaberto</p>';
-		// 		break;
-		// 	case 'editar_servico':
-		// 		$mensagem = '<p>Serviço alterado</p>';
-		// 		break;
-		// 	case 'editar_solucao':
-		// 		$mensagem = '<p>Solução editada</p>';
-		// 		break;
-		// 	case 'editar_area':
-		// 		$mensagem = '<p>Área Editada Com Sucesso</p>';
-		// 		break;
-		// 	case 'aguardar_ativos':
-		// 		$mensagem = '<p>Aguardando ativo de TI</p>';
-		// 		break;
-		// 	case 'aguardar_usuario':
-		// 		$mensagem = '<p>Aguardando resposta do cliente</p>';
-		// 		break;
-		// 	case 'editar_patrimonio':
-		// 		$mensagem = '<p>Patrimônio editado.</p>';
-		// 		break;
-		// }
-
-        $mailMessage = "Avisamos que houve uma mudança no status da solicitação.";
-        if($order->provider != null) {
+        if ($order->provider !== null) {
             Mail::to($order->provider->email)->send(new OrderUpdated($order->provider->name, $order, $mailMessage));
         }
-        Mail::to($order->customer->email)->send(new OrderUpdated($order->customer->name, $order, $mailMessage));
 
-        $order->status = $request->input('status');
-        $order->save();
-        return redirect()->route('orders.show', ['order' => $order]);
+        Mail::to($order->customer->email)->send(new OrderUpdated($order->customer->name, $order, $mailMessage));
+        Mail::to($order->service->division->email)->send(new OrderUpdated($order->service->division->name, $order, $mailMessage));
+
+        // $usersList = User::where('division_id', $order->division_id)
+        //     ->where('role', 'administrator')
+        //     ->get();
+
+        // foreach ($usersList as $adm) {
+        //     Mail::to($adm->email)->send(new OrderUpdated($adm->name, $order, $mailMessage));
+        // }
+        function updateOrderFields($order, $action, $request)
+        {
+            switch ($action) {
+                case 'editService':
+                    $order->service = $request->input('service');
+                    break;
+                case 'editSolution':
+                    $order->solution = $request->input('solution');
+                    break;
+                case 'editDivision':
+                    $order->division_id = $request->input('division');
+                    break;
+                case 'editTag':
+                    $order->tag = $request->input('tag');
+                    break;
+                case 'requestHelp':
+                    $request->session()->put('helpRequested', true);
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        updateOrderFields($order, $action, $request);
+        DB::beginTransaction();
+        try {
+
+
+            OrderStatusLog::create([
+                'order_id' => $order->id,
+                'status' => $status,
+                'message' => $message,
+                'user_id' => auth()->user()->id
+            ]);
+            $order->status = $status;
+            $order->save();
+            DB::commit();
+            return redirect()->route('orders.show', ['order' => $order]);
+        } catch (\Exception $e) {
+            DB::rollback();
+            return redirect()->back()->withErrors(['flash_message' => 'Falha ao atualizar o pedido.']);
+        }
     }
 }
