@@ -30,7 +30,7 @@
                         <div class="card-body">
                             <b>Patrimônio: </b>{{ $order->tag }}<br>
                             @can('editTag', $order)
-                                <button id="botao-editar-patrimonio" type="button" acao="editar_patrimonio"
+                                <button id="botao-editar-patrimonio" type="button" acao="editTag"
                                     class="dropdown-item text-right" data-toggle="modal" data-target="#modalStatus">
                                     Editar Patrimônio
                                 </button>
@@ -41,7 +41,7 @@
                         <div class="card-body">
                             <b>Solucao: </b>{{ $order->solucao }}<br>
                             @can('editSolution', $order)
-                                <button id="botao-editar-solucao" type="button" acao="in progress"
+                                <button id="botao-editar-solucao" type="button" acao="editSolution"
                                     class="dropdown-item text-right" data-toggle="modal" data-target="#modalStatus">
                                     Editar Solução
                                 </button>

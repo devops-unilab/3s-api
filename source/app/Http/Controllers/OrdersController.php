@@ -342,7 +342,7 @@ class OrdersController extends Controller
             'tag' => ['nullable', 'max:12'],
             'solution' => ['nullable', 'max:12']
         ]);
-        dd($request);
+
         $this->authorize($request->input('action'), $order);
         $action = $request->input('action');
 
@@ -407,6 +407,9 @@ class OrdersController extends Controller
                     break;
                 case 'editTag':
                     $order->tag = $request->input('tag');
+                    break;
+                case 'inProgress':
+                    $order->provider_user_id = $request->user()->id;
                     break;
                 case 'requestHelp':
                     $request->session()->put('helpRequested', true);

@@ -102,12 +102,13 @@ class OrderPolicy
 
     public function inProgress(User $user, Order $order): Response
     {
+
         if (
             ($order->provider && $order->provider->id === $user->id || $order->provider === null)
             &&
-            ($order->status === OrderStatus::opened()
-                || $order->status === OrderStatus::pendingCustomerResponse()
-                || $order->status === OrderStatus::pendingItResource())
+            ($order->status === OrderStatus::opened()->value
+                || $order->status === OrderStatus::pendingCustomerResponse()->value
+                || $order->status === OrderStatus::pendingItResource()->value)
         ) {
             return Response::allow();
         }
@@ -117,7 +118,7 @@ class OrderPolicy
     {
         if (
             $order->provider && $order->provider->id === $user->id
-            && $order->status === 'in progress'
+            && $order->status === 'in progress' && $order->solution != null
         ) {
             return Response::allow();
         }
