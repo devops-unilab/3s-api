@@ -37,7 +37,9 @@ class Order extends Model
         'phone_number', 'division', 'status', 'solution', 'rating', 'email', 'service_at', 'finished_at', 'confirmed_at', 'provider_user_id', 'assigned_user_id', 'place',
         'division_sig_id'
     ];
-
+    protected $enums = [
+        'status' => OrderStatus::class,
+    ];
     public function service()
     {
         return $this->belongsTo(Service::class);

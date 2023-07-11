@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\OrderStatus;
 use App\Http\Controllers\Controller;
 use App\Http\Requests;
 use App\Mail\OrderUpdated;
@@ -11,6 +12,7 @@ use App\Models\Service;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 
@@ -332,6 +334,23 @@ class OrdersController extends Controller
      */
     public function update(Request $request, Order $order)
     {
+        $request->validate([
+            'password' => [
+                'required',
+                function ($attribute, $value, $fail) use ($request) {
+                    if (!Hash::check($value, $request->user()->password)) {
+                        $fail(__('Senha inválida.'));
+                    }
+                },
+            ],
+            'status' => ['required', 'enum:' . OrderStatus::class],
+            'tag' => ['nullable', 'max:12'],
+            'solution' => ['nullable', 'max:12']
+        ]);
+
+        // $user = auth()->user();
+        // $password = $request->input('password');
+        // dd(Hash::check($password, $user->password));
         dd($request);
         $order->status = $request->input('status');
         $order->save();

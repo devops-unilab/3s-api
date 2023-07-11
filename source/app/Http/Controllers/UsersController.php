@@ -37,31 +37,6 @@ class UsersController extends Controller
     }
 
 
-	public function passwordVerify()
-	{
-		if (!isset($_POST['senha'])) {
-			return false;
-		}
-		$login = auth()->user()->login;
-		$senha = $_POST['senha'];
-		$data = ['login' =>  $login, 'senha' => $senha];
-		$response = Http::post(env('UNILAB_API_ORIGIN') . '/authenticate', $data);
-		$responseJ = json_decode($response->body());
-
-		$idUsuario  = 0;
-
-		if (isset($responseJ->id)) {
-			$idUsuario = intval($responseJ->id);
-		}
-		if ($idUsuario === 0) {
-			return false;
-		}
-		if ($responseJ->id != auth()->user()->id) {
-			return false;
-		}
-		return true;
-	}
-
     /**
      * Store a newly created resource in storage.
      *

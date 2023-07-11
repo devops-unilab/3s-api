@@ -20,35 +20,35 @@
                                             {{ __('Order') }} {{ $order->id }}
                                         </button>
                                         <div class="dropdown-menu">
-                                            <button type="button" acao="cancelar" class="dropdown-item  botao-status"
+                                            <button type="button" acao="canceled" class="dropdown-item  botao-status"
                                                 data-toggle="modal" data-target="#modalStatus">
                                                 Cancelar
                                             </button>
-                                            <button type="button" acao="atender" class="dropdown-item  botao-status"
+                                            <button type="button" acao="in progress" class="dropdown-item  botao-status"
                                                 data-toggle="modal" data-target="#modalStatus">
                                                 Atender
                                             </button>
 
-                                            <button type="button" acao="fechar" class="dropdown-item  botao-status"
+                                            <button type="button" acao="closed" class="dropdown-item  botao-status"
                                                 data-toggle="modal" data-target="#modalStatus">
                                                 Fechar
                                             </button>
-                                            <button type="button" id="avaliar-btn" acao="avaliar" class="dropdown-item"
+                                            <button type="button" id="avaliar-btn" acao="committed" class="dropdown-item"
                                                 data-toggle="modal" data-target="#modalStatus">
                                                 Confirmar
                                             </button>
 
-                                            <button id="botao-reabrir" type="button" acao="reabrir" class="dropdown-item"
+                                            <button id="botao-reabrir" type="button" acao="opened" class="dropdown-item"
                                                 data-toggle="modal" data-target="#modalStatus">
                                                 Reabrir
                                             </button>
 
-                                            <button type="button" acao="reservar" id="botao-reservar" class="dropdown-item"
+                                            <button type="button" acao="reserved" id="botao-reservar" class="dropdown-item"
                                                 data-toggle="modal" data-target="#modalStatus">
                                                 Reservar
                                             </button>
 
-                                            <button type="button" acao="liberar_atendimento"
+                                            <button type="button" acao="opened"
                                                 class="dropdown-item  botao-status" data-toggle="modal"
                                                 data-target="#modalStatus">
                                                 Liberar Ocorrência
@@ -56,12 +56,12 @@
 
                                             <div class="dropdown-divider"></div>
 
-                                            <button type="button" acao="aguardar_usuario"
+                                            <button type="button" acao="pending customer response"
                                                 class="dropdown-item  botao-status" data-toggle="modal"
                                                 data-target="#modalStatus">
                                                 Aguardar Usuário
                                             </button>
-                                            <button type="button" acao="aguardar_ativos"
+                                            <button type="button" acao="pending it resource"
                                                 class="dropdown-item  botao-status" data-toggle="modal"
                                                 data-target="#modalStatus">
                                                 Aguardar Ativos de TI
@@ -108,7 +108,7 @@
                                 <div class="card-body">
                                     <b>Solucao: </b>{{ $order->solucao }}<br>
 
-                                    <button id="botao-editar-solucao" type="button" acao="editar_solucao"
+                                    <button id="botao-editar-solucao" type="button" acao="in progress"
                                         class="dropdown-item text-right" data-toggle="modal" data-target="#modalStatus">
                                         Editar Solução
                                     </button>
@@ -123,7 +123,7 @@
                                 <div class="card-body">
                                     <b>Serviço: </b>{{ $order->service->name }} - {{ $order->service->description }}<br>
 
-                                    <button type="button" id="botao-editar-servico" acao="editar_servico"
+                                    <button type="button" id="botao-editar-servico" acao="{{$order->status}}"
                                         class="dropdown-item text-right" data-toggle="modal" data-target="#modalStatus">
                                         Editar Serviço
                                     </button>
@@ -319,7 +319,7 @@
                                 </ul>
                             </div>
                             <!-- <img src="https://www.gstatic.com/webp/gallery/2.jpg"
-                   alt="Picture">-->
+                       alt="Picture">-->
                             <div class="clearfix"></div>
                             <div class="ul_section_full">
                                 <ul class="ul_msg">
@@ -396,13 +396,13 @@
                 </div>
                 <div class="modal-body">
 
-                    <form action="{{ route('orders.update', $order) }}" method="POST">
+                    <form action="{{ route('orders.update', $order) }}" id="form_status_alterar" method="POST">
                         @csrf
                         @method('PUT')
                         <div id="container-editar-servico" class="form-group escondido">
 
                             <label for="select-servico">Selecione um Serviço</label>
-                            <select name="id_servico" id="select-servico">
+                            <select name="service" id="select-servico">
                                 <option value="" selected>Selecione um Serviço</option>
                                 @foreach ($services as $servico)
                                     <option value="{{ $servico->id }}">{{ $servico->nome }} - {{ $servico->descricao }}
@@ -412,11 +412,11 @@
                         </div>
                         <div id="container-editar-solucao" class="form-group escondido">
                             <label for="solucao">Solução</label>
-                            <textarea class="form-control" id="solucao" name="solucao" rows="2">{{ strip_tags($order->solucao) }}</textarea>
+                            <textarea class="form-control" id="solucao" name="solution" rows="2">{{ strip_tags($order->solucao) }}</textarea>
                         </div>
                         <div id="container-editar-patrimonio" class="form-group escondido">
-                            <label for="solucao">Patrimônio</label>
-                            <input class="form-control" id="patrimonio" type="number" name="patrimonio"
+                            <label for="tag">Patrimônio</label>
+                            <input class="form-control" id="tag" type="number" name="patrimonio"
                                 value="" />
                         </div>
                         <div id="container-mensagem-status" class="form-group escondido">
@@ -427,7 +427,7 @@
                         <div id="container-reservar" class="form-group escondido">
 
                             <label for="select-tecnico">Selecione um Técnico</label>
-                            <select name="tecnico" id="select-tecnico">
+                            <select name="provider" id="select-tecnico">
                                 <option value="" selected>Selecione um Técnico</option>
                                 @foreach ($providers as $tecnico)
                                     <option value="{{ $tecnico->id }}">{{ $tecnico->nome }}</option>
@@ -444,7 +444,8 @@
                             <select name="area_responsavel" id="select-area">
                                 <option value="" selected>Selecione um Setor</option>
                                 @foreach ($divisions as $division)
-                                    <option value="{{ $division->id }}">{{ $division->name }} - {{ $division->description }}
+                                    <option value="{{ $division->id }}">{{ $division->name }} -
+                                        {{ $division->description }}
                                     </option>
                                 @endforeach
                             </select>
@@ -463,21 +464,21 @@
                             <img class="m-2 star estrela-5" nota="5" src="{{ asset('img/star0.png') }}"
                                 alt="1">
 
-                            <input type="hidden" value="0" name="avaliacao" id="campo-avaliacao">
+                            <input type="hidden" value="0" name="rating" id="campo-avaliacao">
 
                         </div>
                         <div class="form-group">
-                            <input type="hidden" id="campo_acao" name="status_acao" value="">
-                            <input type="hidden" name="id_ocorrencia" value="{{ $order->id }}">
-                            <label for="senha">Confirme Com Sua Senha</label>
-                            <input type="password" id="senha" name="senha" class="form-control"
+                            <input type="hidden" id="campo_acao" name="status" value="">
+                            <label for="password">Confirme Com Sua Senha</label>
+                            <input type="password" id="password" name="password" class="form-control" required
                                 autocomplete="on">
                         </div>
                     </form>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Sair</button>
-                    <button id="botao-status" form="form_status_alterar" type="submit" class="btn btn-primary">Confirmar</button>
+                    <button id="botao-status" form="form_status_alterar" type="submit"
+                        class="btn btn-primary">Confirmar</button>
                 </div>
             </div>
         </div>
