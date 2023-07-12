@@ -37,7 +37,7 @@ ENV COMPOSER_ALLOW_SUPERUSER=1
 
 ENV DEBIAN_FRONTEND noninteractive
 
-RUN apt-get update && apt-get install -y --no-install-recommends libpq-dev curl nano unzip \
+RUN apt-get update && apt-get install -y --no-install-recommends libpq-dev locales curl nano unzip \
   && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* 
 
 RUN docker-php-ext-install pdo pdo_pgsql
@@ -56,6 +56,9 @@ RUN rm -f /lib/systemd/system/multi-user.target.wants/* \
   /lib/systemd/system/sysinit.target.wants/systemd-tmpfiles-setup* \
   /lib/systemd/system/systemd-update-utmp*
 
+RUN echo "pt_BR.UTF-8 UTF-8" > /etc/locale.gen && locale-gen pt_BR.UTF-8 && \
+    update-locale LANG=pt_BR.UTF-8
+
 ARG COMMIT_SHA
 ARG VERSION
 ENV TZ America/Fortaleza
@@ -63,7 +66,6 @@ ENV LANG pt_BR.UTF-8
 ENV LC_CTYPE pt_BR.UTF-8
 ENV LC_ALL pt_BR.UTF-8
 ENV LANGUAGE pt_BR:pt:en
-
 ENV APACHE_RUN_USER www-data
 ENV APACHE_RUN_GROUP www-data
 
