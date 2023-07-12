@@ -37,7 +37,27 @@ class PainelKambanView
     {
         $this->dao = new UsuarioDAO();
         $this->matrixStatus = array();
-
+        $i = 0;
+        foreach ($listaDeChamados as $chamado) {
+            if (
+                $chamado->getStatus() == StatusOcorrenciaController::STATUS_ABERTO
+                || $chamado->getStatus() == StatusOcorrenciaController::STATUS_REABERTO
+                || $chamado->getStatus() == StatusOcorrenciaController::STATUS_RESERVADO
+            ) {
+                $i++;
+            }
+        }
+        $inProgress = 0;
+        foreach ($listaDeChamados as $chamado) {
+            if (
+                $chamado->getStatus() == StatusOcorrenciaController::STATUS_ATENDIMENTO
+                || $chamado->getStatus() == StatusOcorrenciaController::STATUS_EM_ESPERA
+                ||  $chamado->getStatus() == StatusOcorrenciaController::STATUS_AGUARDANDO_ATIVO
+                ||  $chamado->getStatus() == StatusOcorrenciaController::STATUS_AGUARDANDO_USUARIO
+            ) {
+                $inProgress++;
+            }
+        }
         echo '
 
 <div class="container-fluid pt-3" >
@@ -48,7 +68,7 @@ class PainelKambanView
         echo '
             <div class="card bg-light">
                 <div class="card-body">
-                    <h6 class="card-title text-uppercase text-truncate py-2">Chamados Abertos</h6>
+                    <h6 class="card-title text-uppercase text-truncate py-2">Chamados Abertos ('. $i.')</h6>
                     <div class="items border border-light">';
         echo '
                         <div class="row">';
@@ -77,7 +97,7 @@ class PainelKambanView
         echo '<div class="col-sm-6 col-md-4 col-xl-4">';
         echo '<div class="card bg-light">
                 <div class="card-body">
-                    <h6 class="card-title text-uppercase text-truncate py-2">Em Atendimento</h6>
+                    <h6 class="card-title text-uppercase text-truncate py-2">Em Atendimento ('.$inProgress.')</h6>
                     <div class="items border border-light">';
 
 

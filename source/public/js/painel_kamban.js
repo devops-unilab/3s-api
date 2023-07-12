@@ -38,7 +38,7 @@ $(document).ready(function(e){
     }
     setInterval (function () {
         carregarDados(urlSelecionada);
-    }, 60000);
+    }, 2000);
 
 });
 
