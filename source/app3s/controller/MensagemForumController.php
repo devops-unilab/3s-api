@@ -330,9 +330,9 @@ class MensagemForumController
                     return;
                 }
             }
+            $mensagemForum->setMensagem($novoNome);
         }
 
-        $mensagemForum->setMensagem($novoNome);
         $mensagemForum->setDataEnvio(date("Y-m-d G:i:s"));
 
         $mensagemForum->getUsuario()->setId($sessao->getIdUsuario());
