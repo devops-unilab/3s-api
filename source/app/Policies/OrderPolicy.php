@@ -71,7 +71,7 @@ class OrderPolicy
         if (
             ($order->customer->id === $user->id
                 || $order->provider && $order->provider->id === $user->id)
-            && $order->status === 'in progress'
+            && $order->status === OrderStatus::inProgress()->value
         ) {
             return Response::allow();
         }
@@ -81,7 +81,7 @@ class OrderPolicy
     {
         if (
             ($order->provider && $order->provider->id === $user->id)
-            && $order->status === 'in progress'
+            && $order->status === OrderStatus::inProgress()->value
         ) {
             return Response::allow();
         }
@@ -92,7 +92,7 @@ class OrderPolicy
         $role = request()->session()->get('role');
         if (
             ($order->provider && $order->provider->id === $user->id)
-            && $order->status === 'in progress'
+            && $order->status === OrderStatus::inProgress()->value
             && $role != 'cutomer'
         ) {
             return Response::allow();
@@ -118,7 +118,7 @@ class OrderPolicy
     {
         if (
             $order->provider && $order->provider->id === $user->id
-            && $order->status === 'in progress' && $order->solution != null
+            && $order->status === OrderStatus::inProgress()->value && $order->solution != null
         ) {
             return Response::allow();
         }
@@ -137,7 +137,8 @@ class OrderPolicy
     {
         if (
             $order->provider && $order->provider->id === $user->id
-            && $order->status === 'in progress'
+            && $order->status === OrderStatus::inProgress()->value
+            || $order->status === OrderStatus::reserved()->value && $user->role === 'administrator'
         ) {
             return Response::allow();
         }
@@ -147,7 +148,7 @@ class OrderPolicy
     {
         if (
             $order->provider && $order->provider->id === $user->id
-            && $order->status === 'in progress'
+            && $order->status === OrderStatus::inProgress()->value
         ) {
             return Response::allow();
         }
@@ -157,7 +158,7 @@ class OrderPolicy
     {
         if (
             $order->provider && $order->provider->id === $user->id
-            && $order->status === 'in progress'
+            && $order->status === OrderStatus::inProgress()->value
         ) {
             return Response::allow();
         }
@@ -167,7 +168,7 @@ class OrderPolicy
     {
         if (
             $order->customer->id === $user->id
-            && $order->status === 'opened' && $order->isLate
+            && $order->status === OrderStatus::opened()->value && $order->isLate
             && !request()->session()->get('helpRequested')
         ) {
             return Response::allow();
