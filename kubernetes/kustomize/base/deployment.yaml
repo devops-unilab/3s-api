@@ -22,7 +22,6 @@ spec:
         - |
           mkdir -p /var/www/html/storage/framework/{sessions,views,cache}
           chown -R www-data:www-data /var/www/html/storage
-        resources: {}
         volumeMounts:
         - name: app3s-storage
           mountPath: /var/www/html/storage
@@ -32,6 +31,7 @@ spec:
       containers:
       - name: app3s-laravel
         image: dti-registro.unilab.edu.br/unilab/app-3s:main
+        resources: {}
         imagePullPolicy: Always
         command:
         - /bin/bash
@@ -40,7 +40,6 @@ spec:
           source /vault/secrets/config
           php artisan config:clear
           apache2-foreground
-        resources: {}
         ports:
         - containerPort: 80
           name: http
@@ -49,7 +48,7 @@ spec:
         envFrom:
         - configMapRef:
             name: app3s-config
-
+            
         livenessProbe:
           exec:
             command:
@@ -57,9 +56,9 @@ spec:
             - -c
             - /health-check.sh
           failureThreshold: 3
-          initialDelaySeconds: 10
+          initialDelaySeconds: 20
           periodSeconds: 15
-          timeoutSeconds: 5
+          timeoutSeconds: 8
 
         readinessProbe:
           exec:
@@ -68,15 +67,15 @@ spec:
             - -c
             - /health-check.sh
           failureThreshold: 3
-          initialDelaySeconds: 5
+          initialDelaySeconds: 10
           periodSeconds: 10
+          timeoutSeconds: 7
 
         volumeMounts:
         - name: tz-america
           mountPath: /etc/localtime
         - name: app3s-storage
           mountPath: /var/www/html/storage
-          readOnly: false
       volumes:
       - name: tz-america
         hostPath:
@@ -84,6 +83,6 @@ spec:
           type: File
       - name: app3s-storage
         persistentVolumeClaim:
-          claimName: pvc-3s-storage
+          claimName: pvc-3s-laravel
       imagePullSecrets:
       - name: harbor-regcred
