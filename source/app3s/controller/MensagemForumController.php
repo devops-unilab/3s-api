@@ -161,7 +161,7 @@ class MensagemForumController
             					<ul class="ul_msg">
                                     <li><strong>' . $nome . '</strong></li>';
             if ($mensagemForum->getTipo() == self::TIPO_ARQUIVO) {
-                echo '<li>Anexo: <a href="uploads/' . $mensagemForum->getMensagem() . '">Clique aqui</a></li>';
+                echo '<li>Anexo: <a href="'.asset('storage/uploads/'.$mensagemForum->getMensagem()).'">Clique aqui</a></li>';
             } else {
                 echo '
                         <li>' . strip_tags($mensagemForum->getMensagem()) . '</li>';
