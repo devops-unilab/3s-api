@@ -4,8 +4,6 @@ metadata:
   name: pvc-3s-storage
   labels:
     app: app3s-laravel
-  annotations:
-    nfs.io/storage-path: "storage"
 spec:
   storageClassName: nfs-storage-k8s
   accessModes:
