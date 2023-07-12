@@ -5,7 +5,7 @@
 # Description: Este Dockerfile cria uma imagem para 3s, um aplicativo da Web escrito em PHP.
 #
 # Build instructions:
-#   docker build -t dti-registro.unilab.edu.br/unilab/app-3s:latest --build-arg 'VERSION=1.0.0 COMMIT_SHA=$(git rev-parse --short HEAD)' .
+#   docker build -t dti-registro.unilab.edu.br/unilab/app-3s:latest --build-arg VERSION=1.0.0 --build-arg COMMIT_SHA=$(git rev-parse HEAD) .
 #   docker push dti-registro.unilab.edu.br/unilab/app-3s:latest
 #
 # Usage:
@@ -37,19 +37,16 @@ ENV COMPOSER_ALLOW_SUPERUSER=1
 
 ENV DEBIAN_FRONTEND noninteractive
 
-RUN apt-get update && apt-get install -y --no-install-recommends curl nano \
-  && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install -y --no-install-recommends libpq-dev curl nano unzip \
+  && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* 
+
+RUN docker-php-ext-install pdo pdo_pgsql
+RUN docker-php-ext-configure opcache --enable-opcache
+RUN curl -fsSLk https://deb.nodesource.com/setup_18.x | bash - && apt-get install -y nodejs
 
 RUN curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl" && \
   curl -LO "https://dl.k8s.io/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl.sha256" && \
-  chmod u+x ./kubectl && \
-  install -o root -g root -m 0755 kubectl /usr/bin/kubectl
-
-RUN apt-get dist-upgrade -y && \
-  apt-get upgrade -y && \
-  apt-get clean && \
-  rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* && \
-  apt-get autoremove -y
+  chmod u+x ./kubectl && install -o root -g root -m 0755 kubectl /usr/bin/kubectl
 
 RUN rm -f /lib/systemd/system/multi-user.target.wants/* \
   /etc/systemd/system/*.wants/* \
@@ -58,9 +55,6 @@ RUN rm -f /lib/systemd/system/multi-user.target.wants/* \
   /lib/systemd/system/sockets.target.wants/*initctl* \
   /lib/systemd/system/sysinit.target.wants/systemd-tmpfiles-setup* \
   /lib/systemd/system/systemd-update-utmp*
-
-RUN docker-php-ext-install pdo pdo_pgsql pgsql
-RUN docker-php-ext-configure opcache --enable-opcache
 
 ARG COMMIT_SHA
 ARG VERSION
