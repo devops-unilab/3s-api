@@ -63,7 +63,6 @@ class DivisionsController extends Controller
         $requestData = $request->all();
 
         Division::create($requestData);
-
         return redirect('divisions')->with('flash_message', 'Division added!');
     }
 

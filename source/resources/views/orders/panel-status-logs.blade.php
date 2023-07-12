@@ -33,7 +33,7 @@
                 @endif
 
                 <br>{{ $status->message }}<br>
-                <strong>{{ $status->nome_usuario }}<br>{{ date('d/m/Y - H:i', strtotime($status->created_at)) }}</strong>
+                <strong>{{ $status->user->name }}<br>{{ date('d/m/Y - H:i', strtotime($status->created_at)) }}</strong>
             </div>
         @endforeach
     </div>
