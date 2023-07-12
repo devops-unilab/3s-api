@@ -37,18 +37,7 @@ ENV COMPOSER_ALLOW_SUPERUSER=1
 
 ENV DEBIAN_FRONTEND noninteractive
 
-RUN apt-get update && apt-get install -y --no-install-recommends \
-  openssh-server \
-  locales \
-  rsync \
-  nano \
-  git \
-  unzip \
-  libpq-dev \
-  iputils-ping \
-  telnet \
-  sudo \
-  postgresql-client \
+RUN apt-get update && apt-get install -y --no-install-recommends curl nano \
   && rm -rf /var/lib/apt/lists/*
 
 RUN curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl" && \
@@ -78,10 +67,8 @@ ARG VERSION
 ENV TZ America/Fortaleza
 ENV LANG pt_BR.UTF-8
 ENV LC_CTYPE pt_BR.UTF-8
-ENV LC_ALL C
+ENV LC_ALL pt_BR.UTF-8
 ENV LANGUAGE pt_BR:pt:en
-RUN locale-gen pt_BR.UTF-8
-RUN dpkg-reconfigure locales tzdata -f noninteractive
 
 ENV APACHE_RUN_USER www-data
 ENV APACHE_RUN_GROUP www-data
@@ -102,11 +89,6 @@ RUN cp bash/apache/000-default.conf /etc/apache2/sites-available/000-default.con
 
 RUN adduser --no-create-home --disabled-password --shell /bin/bash --gecos "" --force-badname 3s \
   && echo "3s ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
-RUN sed -i "s/#Port 22/Port 22/g" /etc/ssh/sshd_config
-RUN sed -i "s/#PermitRootLogin prohibit-password/PermitRootLogin no/g" /etc/ssh/sshd_config
-RUN sed -i "s/#PasswordAuthentication yes/PasswordAuthentication no/g" /etc/ssh/sshd_config
-RUN [ -f ~/.ssh/id_rsa ] || ssh-keygen -t rsa -b 4096 -C "3s@3s.unilab.edu.br" -f ~/.ssh/id_rsa -q -N "" && chmod -R 600 ~/.ssh
-RUN update-rc.d ssh enable
 
 RUN php artisan config:clear && \
   php artisan config:cache && \
@@ -144,7 +126,7 @@ RUN php artisan route:cache && \
   php artisan key:generate && \
   a2enmod rewrite
 
-EXPOSE 80 22
+EXPOSE 80
 
 LABEL \
   org.opencontainers.image.vendor="UNILAB" \
