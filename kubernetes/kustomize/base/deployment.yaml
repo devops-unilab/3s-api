@@ -43,22 +43,19 @@ spec:
         ports:
         - containerPort: 80
           name: http
-        - containerPort: 22
-          name: ssh
+          
         envFrom:
         - configMapRef:
             name: app3s-config
-            
+
         livenessProbe:
           exec:
             command:
             - /bin/bash
             - -c
             - /health-check.sh
-          failureThreshold: 3
-          initialDelaySeconds: 20
-          periodSeconds: 15
-          timeoutSeconds: 8
+          initialDelaySeconds: 5
+          periodSeconds: 5
 
         readinessProbe:
           exec:
@@ -66,10 +63,8 @@ spec:
             - /bin/bash
             - -c
             - /health-check.sh
-          failureThreshold: 3
-          initialDelaySeconds: 10
-          periodSeconds: 10
-          timeoutSeconds: 7
+          initialDelaySeconds: 5
+          periodSeconds: 5
 
         volumeMounts:
         - name: tz-america
