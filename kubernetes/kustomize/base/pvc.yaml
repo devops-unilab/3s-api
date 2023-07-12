@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: pvc-3s-storage
+  name: pvc-3s-laravel
   labels:
     app: app3s-laravel
 spec:
