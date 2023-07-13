@@ -438,18 +438,28 @@ class OcorrenciaController
 		$lista = $queryPendding->limit(300)->get();
 		$lista2 = $queryFinished->limit(300)->get();
 
+		$listNoLate = array();
+		$listaAtrasados = array();
+		if ($this->sessao->getNivelAcesso() == Sessao::NIVEL_COMUM) {
+			$listNoLate = $lista;
+		} else {
+			foreach ($lista as $ocorrencia) {
+				if ($this->atrasado($ocorrencia)) {
+					$listaAtrasados[] = $ocorrencia;
+				} else {
+					$listaNoLate[] = $ocorrencia;
+				}
+			}
+		}
+
+
 		//Painel principal
 		echo '
 
 		<div class="row">
 			<div class="col-md-8 blog-main">
 				<div class="panel-group" id="accordion">';
-		$listaAtrasados = array();
-		foreach ($lista as $ocorrencia) {
-			if ($this->atrasado($ocorrencia)) {
-				$listaAtrasados[] = $ocorrencia;
-			}
-		}
+
 
 		if (count($listaAtrasados) > 0) {
 
@@ -463,7 +473,7 @@ class OcorrenciaController
 				]
 			);
 		}
-		$this->painel($lista, 'Ocorrências Em Aberto(' . count($lista) . ')', 'collapseAberto', 'show');
+		$this->painel($listNoLate, 'Ocorrências Em Aberto(' . count($listNoLate) . ')', 'collapseAberto', 'show');
 		$this->painel($lista2, "Ocorrências Encerradas", 'collapseEncerrada');
 		echo '
 			</div>
